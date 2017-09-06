@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">FriendlyPos</string>
+    <string name="title_activity_login">Login</string>
+
+
+    <string name="username">Usuario</string>
+    <string name="password">Contraseña</string>
+    <string name="login">INICIAR SESION</string>
 </resources>
