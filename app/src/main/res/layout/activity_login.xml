@@ -1,91 +1,39 @@
-<?xml version="1.0" encoding="utf-8"?><!-- TODO: Refactor main view -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
-    android:orientation="vertical"
-    android:paddingEnd="20dp"
-    android:paddingLeft="20dp"
-    android:paddingTop="50dp"
-    android:paddingBottom="30dp"
- >
+    tools:context="com.example.app.savior.activity.LogActivity">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@android:color/white"
-        android:orientation="vertical"
-        android:paddingEnd="20dp"
-        android:paddingLeft="20dp"
-        android:paddingTop="200dp"
-
-        >
-
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/your_email_wrapper"
-            style="@style/TextInputLayout"
-            android:theme="@style/ThemeLabelDark"
-            app:hintTextAppearance="@style/TextAppearence.App.TextInputLayout.Dark">
-
-            <EditText
-                android:id="@+id/your_email"
-                style="@style/Register_EditText"
-                android:singleLine="true"
-                android:hint="@string/your_email_hint" />
-            <View
-                android:id="@+id/UnderLine"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_below="@+id/editText1"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="1dp"
-                android:background="#212121" />
-        </android.support.design.widget.TextInputLayout>
-
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/your_password_wrapper"
-            style="@style/TextInputLayout"
-            android:layout_marginBottom="30dp"
-            android:theme="@style/ThemeLabelDark"
-            app:hintTextAppearance="@style/TextAppearence.App.TextInputLayout.Dark">
-
-            <EditText
-                android:id="@+id/your_password"
-                style="@style/Register_EditText"
-                android:hint="@string/your_password_hint"
-                android:inputType="textPassword" />
-            <View
-                android:id="@+id/UnderLine1"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_below="@+id/editText1"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="1dp"
-                android:background="#212121" />
-        </android.support.design.widget.TextInputLayout>
-
-
-        <Button
-            android:id="@+id/register"
-            style="@style/MainButton"
-
-            android:text="@string/Submit_button_text" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:orientation="vertical"
-        android:paddingTop="10dp"
-
-        >
-    <org.sufficientlysecure.htmltextview.HtmlTextView
-        android:id="@+id/copyright"
+    <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="right"
-        android:textAppearance="@style/TextAppearence.App.TextInputLayout"
-        android:textSize="12sp" />
-    </LinearLayout>
-</LinearLayout>
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay">
+
+            <TextView
+                android:id="@+id/toolbar_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
+
+        </android.support.v7.widget.Toolbar>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <LinearLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:orientation="vertical"></LinearLayout>
+
+</android.support.design.widget.CoordinatorLayout>
