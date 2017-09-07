@@ -80,12 +80,5 @@
         android:paddingTop="10dp"
 
         >
-        <org.sufficientlysecure.htmltextview.HtmlTextView
-            android:id="@+id/copyright"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="right"
-            android:textAppearance="@style/TextAppearence.App.TextInputLayout"
-            android:textSize="12sp" />
     </LinearLayout>
 </LinearLayout>

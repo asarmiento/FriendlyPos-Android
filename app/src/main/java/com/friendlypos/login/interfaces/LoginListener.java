@@ -7,11 +7,11 @@ public interface LoginListener {
 
     void onLoginError(String errorMessage);
 
-    void onRegisterSuccess(AppResponse appResponse);
+   void onRegisterSuccess(AppResponse appResponse);
 
     void onRegisterError(String errorMessage);
 
     void doLogin(String user, String password, ServiceCallback callback);
 
-    void doRegister(String email, String password, ServiceCallback callback);
+  /*  void doRegister(String email, String password, ServiceCallback callback);*/
 }

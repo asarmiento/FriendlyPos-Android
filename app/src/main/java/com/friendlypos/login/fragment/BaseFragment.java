@@ -8,11 +8,8 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
-import com.example.app.savior.R;
+import com.friendlypos.R;
 
-/**
- * Created by juandiegoGL on 4/25/17.
- */
 
 public class BaseFragment extends Fragment {
 
