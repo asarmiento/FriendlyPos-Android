@@ -18,4 +18,58 @@
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 
+    <style name="ActionThemeDialog" parent="AppTheme">
+
+    </style>
+
+    <style name="TextAppearence.App.TextInputLayout" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/textinputlayout_hint_color</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColorHint">@color/textinputlayout_hint_color</item>
+    </style>
+
+    <style name="TextInputLayout">
+        <item name="android:minHeight">65dp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:clipToPadding">false</item>
+        <item name="android:gravity">bottom</item>
+        <item name="android:paddingTop">10dp</item>
+    </style>
+
+    <style name="Register_EditText" parent="Normal_EditText">
+        <item name="android:background">@android:color/white</item>
+    </style>
+
+
+    <style name="Normal_EditText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:minHeight">35dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textAppearance">@style/Base.TextAppearance.AppCompat.Small</item>
+        <item name="android:textColorHint">@color/hintColor</item>
+    </style>
+
+    <style name="TextAppearence.App.TextInputLayout.Dark" parent="TextAppearence.App.TextInputLayout">
+        <item name="android:textColor">@color/hintColor</item>
+    </style>
+
+    <style name="MainButton">
+        <item name="android:layout_width">200dp</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:background">@color/colorPrimary</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="ThemeLabelDark" parent="@style/AppTheme">
+        <item name="android:textColorHint">@color/label_dark</item>
+        <item name="android:textColorPrimary">@color/label_dark</item>
+        <item name="android:textColorSecondary">@color/label_dark</item>
+        <item name="colorControlNormal">@color/background</item>
+        <item name="colorControlActivated">@color/background</item>
+    </style>
+
 </resources>

@@ -7,6 +7,8 @@ import android.view.WindowManager;
 
 import com.friendlypos.R;
 
+import org.sufficientlysecure.htmltextview.HtmlTextView;
+
 public class LoginActivity extends AppCompatActivity {
 
     @Override
@@ -16,6 +18,10 @@ public class LoginActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_login);
+
+        HtmlTextView copy = (HtmlTextView) findViewById(R.id.copyright);
+        copy.setHtmlFromString("<font size=\"7sp\"><a href=\"http://www.sistemasamigables.com/\">" +"</a></font>", new HtmlTextView.LocalImageGetter());
+
     }
 
 

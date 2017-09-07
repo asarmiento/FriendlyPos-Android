@@ -3,7 +3,9 @@
     <string name="title_activity_login">Login</string>
 
 
-    <string name="username">Usuario</string>
-    <string name="password">Contraseña</string>
-    <string name="login">INICIAR SESION</string>
+    <string name="your_email_hint">Usuario</string>
+    <string name="email_hint">Usuario</string>
+    <string name="your_password_hint">Contraseña</string>
+    <string name="password_hint">Contraseña</string>
+    <string name="Submit_button_text">Iniciar Sesión</string>
 </resources>
