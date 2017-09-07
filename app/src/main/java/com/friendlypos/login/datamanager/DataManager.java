@@ -43,7 +43,7 @@ public class DataManager {
             }
         });
     }
-
+/*
     public void register(String user, String password, final ServiceCallback listener) {
         DataManagerInterface apiService =
             BaseManager.getClient(mBaseUrl).create(DataManagerInterface.class);
@@ -116,5 +116,5 @@ public class DataManager {
                 listener.onError(t.getMessage());
             }
         });
-    }
+    }*/
 }

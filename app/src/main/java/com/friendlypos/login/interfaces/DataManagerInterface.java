@@ -6,6 +6,7 @@ import com.example.app.savior.model.GetColumnResponse;
 import com.example.app.savior.model.GetStypeResponse;
 import com.example.app.savior.model.GetTemperatureResponse;
 import com.example.app.savior.model.SaviorResponse;
+import com.friendlypos.login.modelo.AppResponse;
 
 import retrofit2.Call;
 import retrofit2.http.Field;
@@ -20,16 +21,13 @@ import retrofit2.http.Query;
 
 public interface DataManagerInterface {
     @FormUrlEncoded
-    @POST("logU")
-    Call<SaviorResponse> login(@Field("U") String user, @Field("P") String password);
+    @POST("api/login")
+    Call<AppResponse> login(@Field("U") String user, @Field("P") String password);
 
-    @FormUrlEncoded
-    @POST("regU")
-    Call<SaviorResponse> register(@Field("U") String user, @Field("P") String password);
-
+/*
     @FormUrlEncoded
     @POST("AsUMac")
-    Call<SaviorResponse> assignMacAddress(@Field("U") String user, @Field("MAC") String mac_address);
+    Call<AppResponse> assignMacAddress(@Field("U") String user, @Field("MAC") String mac_address);
 
     @GET("GetT")
     Call<GetTemperatureResponse> getTemperature(@Query("U") String user, @Query("MAC") String mac_address, @Query("UTCT") String date);
@@ -44,5 +42,5 @@ public interface DataManagerInterface {
     Call<GetColumnPlusResponse> getColumnsPlus(@Query("U") String user, @Query("MACList") String mac_address_list, @Query("UTCT") String date);
 
     @GET("GetStype")
-    Call<GetStypeResponse> getStype(@Query("U") String user, @Query("MACList") String mac_address_list);
+    Call<GetStypeResponse> getStype(@Query("U") String user, @Query("MACList") String mac_address_list);*/
 }

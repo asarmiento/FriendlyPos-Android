@@ -143,7 +143,7 @@ public class LoginActivity extends BaseActivity implements InitHelper, NetworkSt
         Log.e(TAG, errorMessage);
     }
 
-    @Override
+ /*   @Override
     public void doRegister(String email, String password, ServiceCallback callback) {
         if (isNetworkAvailable()) {
             new DataManager(this).register(email, password, callback);
@@ -151,7 +151,7 @@ public class LoginActivity extends BaseActivity implements InitHelper, NetworkSt
         else {
             showNoInternetConnectionMessage(TAG);
         }
-    }
+    }*/
 
     @Override
     public void onRegisterSuccess(AppResponse saviorResponse) {
@@ -171,11 +171,13 @@ public class LoginActivity extends BaseActivity implements InitHelper, NetworkSt
     }
 
     private void goToPrincipalScreen(String user, boolean firstTime) {
-        Toast.makeText(this, "login sucess", Toast.LENGTH_LONG).show();
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     private void goToLoginScreen() {
-        Intent intent = new Intent(this, LogActivity.class);
+        Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
         finish();
     }
