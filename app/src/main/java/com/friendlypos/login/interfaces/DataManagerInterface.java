@@ -9,10 +9,6 @@ import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
 
-/**
- * Created by juandiegoGL on 4/6/17.
- */
-
 public interface DataManagerInterface {
     @FormUrlEncoded
     @POST("api/login")

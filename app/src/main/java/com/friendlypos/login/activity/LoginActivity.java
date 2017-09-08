@@ -8,6 +8,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 import com.friendlypos.R;
 import com.friendlypos.app.broadcastreceiver.NetworkStateChangeReceiver;
+import com.friendlypos.login.controller.RealmController;
 import com.friendlypos.login.datamanager.DataManager;
 import com.friendlypos.login.fragment.LoginFragment;
 import com.friendlypos.login.helper.InitHelper;
@@ -67,6 +68,7 @@ public class LoginActivity extends BaseActivity implements InitHelper, NetworkSt
     }
 
     public boolean isValidPassword(String pass, EditText password) {
+        pass = "123";
         boolean result;
         if (!TextUtils.isEmpty(pass)) {
             password.setError(null);
@@ -80,6 +82,7 @@ public class LoginActivity extends BaseActivity implements InitHelper, NetworkSt
     }
 
     public boolean isValidEmail(String email_address, EditText email) {
+        email_address = "anwarsarmiento@gmail.com";
         boolean result;
         if (!TextUtils.isEmpty(email_address) && android.util.Patterns.EMAIL_ADDRESS.matcher(email_address).matches()) {
             email.setError(null);
@@ -169,9 +172,9 @@ public class LoginActivity extends BaseActivity implements InitHelper, NetworkSt
     }
 
     private void goToPrincipalScreen(String user, boolean firstTime) {
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
-        finish();
+
+        Toast.makeText(this, "login success", Toast.LENGTH_SHORT).show();
+
     }
 
     private void goToLoginScreen() {

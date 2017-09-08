@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+
+    >
+
+    <item
+        android:id="@+id/navigation_header"
+        android:title="Acciones"
+
+        >
+        <menu>
+            <item
+
+                android:id="@+id/nav_menu1"
+                android:icon="@mipmap/ic_direcsale"
+                android:title="Distribución" />
+            <item
+                android:id="@+id/nav_menu2"
+                android:icon="@mipmap/ic_launcher"
+                android:title="Ventas" />
+            <item
+                android:id="@+id/nav_menu3"
+                android:icon="@mipmap/ic_launcher"
+                android:title="Preventa" />
+            <item
+                android:id="@+id/nav_menu4"
+                android:icon="@mipmap/ic_print"
+                android:title="Reportes" />
+            <item
+
+                android:id="@+id/nav_menu5"
+                android:icon="@mipmap/ic_config"
+                android:title="Configuración" />
+        </menu>
+    </item>
+
+</menu>
