@@ -1,20 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:openDrawer="start"
-    >
+    tools:openDrawer="start">
 
     <include
         layout="@layout/app_bar_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <android.support.design.widget.NavigationView
+    <!--<android.support.design.widget.NavigationView
         android:id="@+id/nav_view"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
@@ -22,5 +20,272 @@
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_header_main"
         app:menu="@menu/activity_main_drawer" />
+-->
 
+    <LinearLayout
+        android:background="@color/divider"
+        android:id="@+id/drawer"
+        android:layout_width="280dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:orientation="vertical">
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:orientation="vertical"
+                    android:background="@color/background"
+                    >
+                    <ImageView
+                        android:onClick="ClickNavigation"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:drawablePadding="5dp"
+                        android:padding="10dp"
+                        android:src="@mipmap/ic_logo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="22dp" />
+
+                    <TextView
+                        android:id="@+id/textView2"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:gravity="center"
+                        android:paddingTop="15dp"
+                        android:text="USUARIO"
+                        android:textAppearance="?android:textAppearanceLarge"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginBottom="10dp" />
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/txtAcciones"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="17dp"
+                    android:layout_marginStart="17dp"
+                    android:text="Acciones"
+                    android:textColor="@color/item_background" />
+
+                <LinearLayout
+                    android:id="@+id/click1"
+                    android:onClick="ClickNavigation"
+                    android:layout_width="match_parent"
+                    android:background="@color/divider"
+                    android:layout_height="80dp"
+                    android:gravity="center"
+
+                    android:orientation="vertical">
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="75dp"
+                        android:background="@color/background"
+                        android:layout_marginTop="2dp"
+                        >
+
+                        <ImageView
+                            android:tint="@color/icons"
+                            android:padding="10dp"
+                            android:src="@mipmap/ic_direcsale"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:text="Home"
+                            android:id="@+id/imageView2" />
+
+                        <TextView
+                            android:id="@+id/textView4"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="Distribución"
+                            android:textColor="@color/icons"
+                            android:layout_centerVertical="true"
+                            android:layout_toRightOf="@+id/imageView2"
+                            android:layout_toEndOf="@+id/imageView2"
+                            android:layout_marginLeft="17dp"
+                            android:layout_marginStart="17dp" />
+                    </RelativeLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/click2"
+                    android:onClick="ClickNavigation"
+                    android:background="@color/divider"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="75dp"
+                        android:background="@color/background"
+                        >
+
+                        <ImageView
+                            android:tint="@color/icons"
+                            android:padding="10dp"
+                            android:src="@mipmap/ic_trans"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:text="Home"
+                            android:id="@+id/imageView3" />
+
+                        <TextView
+                            android:id="@+id/textView5"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="Venta directa"
+                            android:textColor="@color/icons"
+                            android:layout_centerVertical="true"
+                            android:layout_toRightOf="@+id/imageView3"
+                            android:layout_toEndOf="@+id/imageView3"
+                            android:layout_marginLeft="17dp"
+                            android:layout_marginStart="17dp" />
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/click3"
+                    android:onClick="ClickNavigation"
+                    android:background="@color/divider"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="75dp"
+                        android:background="@color/background"
+                        >
+
+                        <ImageView
+                            android:tint="@color/icons"
+                            android:padding="10dp"
+                            android:src="@mipmap/ic_trans"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:text="Home"
+                            android:id="@+id/imageView4" />
+
+                        <TextView
+                            android:id="@+id/textView6"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="Preventa"
+                            android:textColor="@color/icons"
+                            android:layout_centerVertical="true"
+                            android:layout_toRightOf="@+id/imageView4"
+                            android:layout_toEndOf="@+id/imageView4"
+                            android:layout_marginLeft="17dp"
+                            android:layout_marginStart="17dp" />
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/click4"
+                    android:onClick="ClickNavigation"
+                    android:background="@color/divider"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="75dp"
+                        android:background="@color/background"
+                        >
+
+                        <ImageView
+                            android:tint="@color/icons"
+                            android:padding="10dp"
+                            android:src="@mipmap/ic_print"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:text="Home"
+                            android:id="@+id/imageView5" />
+
+                        <TextView
+                            android:id="@+id/textView7"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="Reportes"
+                            android:textColor="@color/icons"
+                            android:layout_centerVertical="true"
+                            android:layout_toRightOf="@+id/imageView5"
+
+                            android:layout_toEndOf="@+id/imageView5"
+                            android:layout_marginLeft="17dp"
+                            android:layout_marginStart="17dp" />
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/clickConfig"
+                    android:onClick="ClickNavigation"
+                    android:background="@color/divider"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="75dp"
+                        android:background="@color/background"
+                        >
+
+                        <ImageView
+                            android:tint="@color/icons"
+                            android:padding="10dp"
+                            android:src="@mipmap/ic_config"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:text="Home"
+                            android:id="@+id/imageView6" />
+
+                        <TextView
+                            android:id="@+id/textView8"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="Configuraciones"
+                            android:textColor="@color/icons"
+                            android:layout_centerVertical="true"
+                            android:layout_toRightOf="@+id/imageView6"
+                            android:layout_toEndOf="@+id/imageView6"
+                            android:layout_marginLeft="17dp"
+                            android:layout_marginStart="17dp" />
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+
+
+            </LinearLayout>
+
+        </ScrollView>
+    </LinearLayout>
 </android.support.v4.widget.DrawerLayout>

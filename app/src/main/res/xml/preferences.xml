@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android" >
+        <CheckBoxPreference
+            android:key="pref_usar_impresora"
+            android:title="Usar Impresora?"
+            android:summary="Imprimir las Facturas luego de guardarlas, para entregar copias al cliente"
+            android:defaultValue="true"
+          />
+
+        <ListPreference
+            android:key="pref_selec_impresora"
+            android:title="Seleccione la impresora a usar"
+            android:dependency="pref_usar_impresora"
+            android:entries="@array/listentries"
+            android:entryValues="@array/listvalues"
+            android:defaultValue="1"
+            />
+
+
+        <ListPreference
+            android:key="pref_conectar_bluetooth"
+            android:title="Conecte la impresora por bluetooth"
+            android:dependency="pref_usar_impresora" />
+
+        <ListPreference
+            android:key="pref_conectar_red"
+            android:title="Conecte la impresora por red"
+            android:dependency="pref_usar_impresora" />
+
+
+        <PreferenceScreen
+        android:title="Desvincular Impresora"
+        android:key="pref_desvincular_impresora"
+        android:dependency="pref_usar_impresora"/>
+
+
+
+
+</PreferenceScreen>

@@ -6,6 +6,8 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:itemBackground">@color/background</item>
+        <item name="android:itemTextAppearance">@style/MyActionBar.MenuTextStyle</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -70,6 +72,17 @@
         <item name="android:textColorSecondary">@color/label_dark</item>
         <item name="colorControlNormal">@color/background</item>
         <item name="colorControlActivated">@color/background</item>
+    </style>
+
+    <style name="MyActionBarTitle" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textColor">@color/colorAccent</item>
+    </style>
+
+    <style name="MyActionBar.MenuTextStyle"
+        parent="style/TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textColor">@color/icons</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textSize">16sp</item>
     </style>
 
 </resources>

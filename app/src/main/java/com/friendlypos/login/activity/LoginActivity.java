@@ -68,7 +68,6 @@ public class LoginActivity extends BaseActivity implements InitHelper, NetworkSt
     }
 
     public boolean isValidPassword(String pass, EditText password) {
-        pass = "123";
         boolean result;
         if (!TextUtils.isEmpty(pass)) {
             password.setError(null);
@@ -82,7 +81,6 @@ public class LoginActivity extends BaseActivity implements InitHelper, NetworkSt
     }
 
     public boolean isValidEmail(String email_address, EditText email) {
-        email_address = "anwarsarmiento@gmail.com";
         boolean result;
         if (!TextUtils.isEmpty(email_address) && android.util.Patterns.EMAIL_ADDRESS.matcher(email_address).matches()) {
             email.setError(null);

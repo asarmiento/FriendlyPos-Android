@@ -33,7 +33,7 @@
         </receiver>
 
         <activity
-            android:name=".menuprincipal.activity.MenuPrincipal"
+            android:name=".principal.activity.MenuPrincipal"
             android:launchMode="singleTop"
 
             android:screenOrientation="portrait"

@@ -41,13 +41,18 @@
     <string name="reprintr">Reimpresion Recibos</string>
     <string name="reports">Reportes</string>
 
-    <string-array name="navigation_drawer_items_array">
-        <item>Distribución</item>
-        <item>Venta Directa</item>
-        <item>Preventa</item>
-        <item>Reportes</item>
-        <item>Configuración</item>
+    <string-array name="listentries">
+        <item>Impresora Zebra</item>
+        <item>Otra Impresora</item>
 
     </string-array>
+    <string-array name="listvalues">
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
+    <string name="action_sincronizar">Sincronizar</string>
+    <string name="action_cerrarsesion">Cerrar sesion</string>
+
 
 </resources>
