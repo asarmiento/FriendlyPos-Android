@@ -132,14 +132,23 @@ public class MenuPrincipal extends AppCompatActivity implements PopupMenu.OnMenu
                 Toast.makeText(MenuPrincipal.this, "CerrarSesion", Toast.LENGTH_SHORT).show();
                 break;
 
-            case R.id.pmnuDelete:
-                Toast.makeText(MenuPrincipal.this, "You clicked delete", Toast.LENGTH_SHORT).show();
+            case R.id.btn_descargar_catalogo:
+                Toast.makeText(MenuPrincipal.this, "descargar_catalogo", Toast.LENGTH_SHORT).show();
                 break;
-            case R.id.pmnuEdit:
-                Toast.makeText(MenuPrincipal.this, "You clicked edit", Toast.LENGTH_SHORT).show();
+            case R.id.btn_descargar_inventario:
+                Toast.makeText(MenuPrincipal.this, "descargar_inventario", Toast.LENGTH_SHORT).show();
                 break;
-            case R.id.pmnuShare:
-                Toast.makeText(MenuPrincipal.this, "You clicked share", Toast.LENGTH_SHORT).show();
+            case R.id.btn_descargar_deudas:
+                Toast.makeText(MenuPrincipal.this, "descargar_deudas", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.btn_subir_recibos:
+                Toast.makeText(MenuPrincipal.this, "subir_recibos", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.btn_subir_ventas:
+                Toast.makeText(MenuPrincipal.this, "subir_ventas", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.btn_devolver_inventario:
+                Toast.makeText(MenuPrincipal.this, "devolver_inventario", Toast.LENGTH_SHORT).show();
                 break;
 
 

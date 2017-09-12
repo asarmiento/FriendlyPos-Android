@@ -1,18 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:background="@color/colorAccent"
+        android:id="@+id/btn_descargar_catalogo"
+        android:icon="@mipmap/ic_menu_desc_sub"
+        android:title="Descargar Catalogo"/>
+    <item
+        android:id="@+id/btn_descargar_inventario"
+        android:icon="@mipmap/ic_menu_desc_sub"
+        android:title="Descargar Inventario" />
+    <item
+        android:id="@+id/btn_descargar_deudas"
+        android:icon="@mipmap/ic_menu_desc_sub"
+        android:title="Descargar Deudas" />
 
-        android:id="@+id/pmnuShare"
-        android:icon="@mipmap/ic_menu_desc_sub"
-        android:title="Share"
-        />
     <item
-        android:id="@+id/pmnuDelete"
+        android:id="@+id/btn_subir_ventas"
         android:icon="@mipmap/ic_menu_desc_sub"
-        android:title="Delete" />
+        android:title="Subir Ventas"/>
     <item
-        android:id="@+id/pmnuEdit"
+        android:id="@+id/btn_subir_recibos"
         android:icon="@mipmap/ic_menu_desc_sub"
-        android:title="Edit" />
+        android:title="Subir Recibos" />
+    <item
+        android:id="@+id/btn_devolver_inventario"
+        android:icon="@mipmap/ic_menu_desc_sub"
+        android:title="Devolver Inventario" />
 </menu>
