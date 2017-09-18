@@ -5,10 +5,10 @@ import com.google.gson.annotations.SerializedName;
 
 public class AppResponse {
 
-    @SerializedName("Message")
+    @SerializedName("message")
     String mMessage;
 
-    @SerializedName("Error")
+    @SerializedName("error")
     String mError;
 
     public String getError() {

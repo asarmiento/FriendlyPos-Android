@@ -72,6 +72,95 @@
                 </RelativeLayout>
 
                 <TextView
+                    android:id="@+id/txtConsulta"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="17dp"
+                    android:layout_marginStart="17dp"
+                    android:text="Consulta"
+                    android:textColor="@color/item_background" />
+
+                <LinearLayout
+                    android:id="@+id/clickClientes"
+                    android:onClick="onClickGo"
+                    android:layout_width="match_parent"
+                    android:background="@color/divider"
+                    android:layout_height="80dp"
+                    android:gravity="center"
+
+                    android:orientation="vertical">
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="75dp"
+                        android:background="@color/background"
+                        android:layout_marginTop="2dp"
+                        >
+
+                        <ImageView
+                            android:tint="@color/icons"
+                            android:padding="10dp"
+                            android:src="@mipmap/ic_trans"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:text="Home"
+                            android:id="@+id/imageView01" />
+
+                        <TextView
+                            android:id="@+id/textView01"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="Clientes"
+                            android:textColor="@color/icons"
+                            android:layout_centerVertical="true"
+                            android:layout_toRightOf="@+id/imageView01"
+                            android:layout_toEndOf="@+id/imageView01"
+                            android:layout_marginLeft="17dp"
+                            android:layout_marginStart="17dp" />
+                    </RelativeLayout>
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/clickProductos"
+                    android:onClick="onClickGo"
+                    android:layout_width="match_parent"
+                    android:background="@color/divider"
+                    android:layout_height="80dp"
+                    android:gravity="center"
+
+                    android:orientation="vertical">
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="75dp"
+                        android:background="@color/background"
+                        android:layout_marginTop="2dp"
+                        >
+
+                        <ImageView
+                            android:tint="@color/icons"
+                            android:padding="10dp"
+                            android:src="@mipmap/ic_trans"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:text="Home"
+                            android:id="@+id/imageView02" />
+
+                        <TextView
+                            android:id="@+id/textView02"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="Productos"
+                            android:textColor="@color/icons"
+                            android:layout_centerVertical="true"
+                            android:layout_toRightOf="@+id/imageView02"
+                            android:layout_toEndOf="@+id/imageView02"
+                            android:layout_marginLeft="17dp"
+                            android:layout_marginStart="17dp" />
+                    </RelativeLayout>
+                </LinearLayout>
+
+                <TextView
                     android:id="@+id/txtAcciones"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -82,7 +171,7 @@
                     android:textColor="@color/item_background" />
 
                 <LinearLayout
-                    android:id="@+id/click1"
+                    android:id="@+id/clickDistribucion"
                     android:onClick="ClickNavigation"
                     android:layout_width="match_parent"
                     android:background="@color/divider"
@@ -122,7 +211,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/click2"
+                    android:id="@+id/clickVentaDirecta"
                     android:onClick="ClickNavigation"
                     android:background="@color/divider"
                     android:layout_width="match_parent"
@@ -162,7 +251,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/click3"
+                    android:id="@+id/clickPreventa"
                     android:onClick="ClickNavigation"
                     android:background="@color/divider"
                     android:layout_width="match_parent"
@@ -202,7 +291,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/click4"
+                    android:id="@+id/clickReportes"
                     android:onClick="ClickNavigation"
                     android:background="@color/divider"
                     android:layout_width="match_parent"

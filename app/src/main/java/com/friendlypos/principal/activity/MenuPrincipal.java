@@ -3,16 +3,10 @@ package com.friendlypos.principal.activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.content.res.ResourcesCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.PopupMenu;
-import android.util.Log;
 import android.view.View;
-import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -20,21 +14,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.friendlypos.R;
 import com.friendlypos.principal.fragment.ConfiguracionFragment;
-import com.friendlypos.principal.fragment.FragmentA;
 
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.net.Socket;
-import java.net.UnknownHostException;
 
 import butterknife.Bind;
 
@@ -43,17 +30,23 @@ public class MenuPrincipal extends AppCompatActivity implements PopupMenu.OnMenu
     private static String POPUP_CONSTANT = "mPopup";
     private static String POPUP_FORCE_SHOW_ICON = "setForceShowIcon";
 
-    @Bind(R.id.click1)
-    LinearLayout clk1;
+    @Bind(R.id.clickClientes)
+    LinearLayout clickClientes;
 
-    @Bind(R.id.click2)
-    LinearLayout clk2;
+    @Bind(R.id.clickProductos)
+    LinearLayout clickProductos;
 
-    @Bind(R.id.click3)
-    LinearLayout clk3;
+    @Bind(R.id.clickDistribucion)
+    LinearLayout clickDistribucion;
 
-    @Bind(R.id.click4)
-    LinearLayout clk4;
+    @Bind(R.id.clickVentaDirecta)
+    LinearLayout clickVentaDirecta;
+
+    @Bind(R.id.clickPreventa)
+    LinearLayout clickPreventa;
+
+    @Bind(R.id.clickReportes)
+    LinearLayout clickReportes;
 
     @Bind(R.id.clickConfig)
     LinearLayout clickConfig;
@@ -183,7 +176,7 @@ public class MenuPrincipal extends AppCompatActivity implements PopupMenu.OnMenu
 /*
     public void Initializing(){
         Fragment fragment = null;
-        Class fragmentClass =  FragmentA.class;
+        Class fragmentClass =  ProductosFragment.class;
         try {
             fragment = (Fragment) fragmentClass.newInstance();
         } catch (Exception e) {
@@ -194,31 +187,50 @@ public class MenuPrincipal extends AppCompatActivity implements PopupMenu.OnMenu
     }*/
     public void ClickNavigation(View view){
         Fragment fragment = null;
-        Class fragmentClass =  FragmentA.class;
+        Class fragmentClass =  ConfiguracionFragment.class;
 
         switch (view.getId()){
-            case R.id.click1:
-                fragmentClass = FragmentA.class;
-           /*  clk1.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.button_clickb, null));
+
+            case R.id.clickClientes:
+                Toast.makeText(this, "distribucion", Toast.LENGTH_SHORT).show();
+
+              /*   fragmentClass = BlankFragment.class;
+            clk1.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.button_clickb, null));
                 clk2.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.button_click, null));
                 clk3.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.button_click, null));
                 clk4.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.button_click, null));*/
                 break;
-            case R.id.click2:
+
+            case R.id.clickDistribucion:
+                Toast.makeText(this, "distribucion", Toast.LENGTH_SHORT).show();
+
+               /*  fragmentClass = ProductosFragment.class;
+            clk1.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.button_clickb, null));
+                clk2.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.button_click, null));
+                clk3.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.button_click, null));
+                clk4.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.button_click, null));*/
+                break;
+            case R.id.clickVentaDirecta:
+                Toast.makeText(this, "ventadirecta", Toast.LENGTH_SHORT).show();
+
                 /*fragmentClass = FragmentB.class;
                 clk1.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.button_click, null));
                 clk2.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.button_clickb, null));
                 clk3.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.button_click, null));
                 clk4.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.button_click, null));*/
                 break;
-            case R.id.click3:
+            case R.id.clickPreventa:
+                Toast.makeText(this, "preventa", Toast.LENGTH_SHORT).show();
+
              /*   fragmentClass = FragmentC.class;
               clk1.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.button_click, null));
                 clk2.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.button_click, null));
                 clk3.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.button_clickb, null));
                 clk4.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.button_click, null));*/
                 break;
-            case R.id.click4:
+            case R.id.clickReportes:
+                Toast.makeText(this, "reportes", Toast.LENGTH_SHORT).show();
+
                 /*fragmentClass = FragmentD.class;
                clk1.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.button_click, null));
                 clk2.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.button_click, null));
@@ -246,5 +258,25 @@ public class MenuPrincipal extends AppCompatActivity implements PopupMenu.OnMenu
         drawer.closeDrawer(GravityCompat.START);
     }
 
+    public void onClickGo(View component) {
+
+        switch (component.getId()){
+
+            case R.id.clickClientes:
+                Toast.makeText(this, "clientes", Toast.LENGTH_SHORT).show();
+
+
+                break;
+            case R.id.clickProductos:
+                Toast.makeText(this, "productos", Toast.LENGTH_SHORT).show();
+
+                Intent productos;
+                productos = new Intent(MenuPrincipal.this, ProductosActivity.class);
+                startActivity(productos);
+                finish();
+                break;
+
+        }
+    }
 
 }

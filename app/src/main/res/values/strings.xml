@@ -2,6 +2,7 @@
     <string name="app_name">FriendlyPos</string>
     <string name="title_activity_login">Login</string>
     <string name="back_button_label">Back</string>
+    <string name="title_activity_productos">ProductosActivity</string>
 
     <string name="base_url">http://friendlyaccount.com</string>
 
@@ -20,7 +21,6 @@
     <string name="Invalid_Password">Invalid Password</string>
     <string name="Invalid_Email_Address">Nombre de Usuario incorrecto</string>
     <string name="error_login">Error Login</string>
-    <string name="error_register">Error register</string>
     <string name="no_internet_connection">No Internet Connection available</string>
     <string name="unknown_error">Listener is null</string>
     <string name="title_activity_menu_principal">MenuPrincipal</string>

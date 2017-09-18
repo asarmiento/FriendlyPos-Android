@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.friendlypos.R;
+import com.friendlypos.application.datamanager.BaseManager;
 import com.friendlypos.login.interfaces.DataManagerInterface;
 import com.friendlypos.login.interfaces.ServiceCallback;
 import com.friendlypos.login.modelo.AppResponse;
@@ -23,8 +24,7 @@ public class DataManager {
     }
 
     public void login(String user, String password, final ServiceCallback listener) {
-        DataManagerInterface apiService =
-            BaseManager.getClient(mBaseUrl).create(DataManagerInterface.class);
+        DataManagerInterface apiService = BaseManager.getClient(mBaseUrl).create(DataManagerInterface.class);
         Call<AppResponse> call = apiService.login(user, password);
         Log.d(TAG, call.request().toString());
         Log.d(TAG, call.request().body().toString());

@@ -20,6 +20,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".login.activity.LoginActivity"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
 
@@ -34,15 +35,23 @@
 
         <activity
             android:name=".principal.activity.MenuPrincipal"
-            android:launchMode="singleTop"
-
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".principal.activity.ProductosActivity"
+            android:label="@string/title_activity_productos"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
+
+
         </activity>
     </application>
 

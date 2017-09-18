@@ -16,6 +16,7 @@ import com.friendlypos.login.interfaces.LoginListener;
 import com.friendlypos.login.interfaces.ServiceCallback;
 import com.friendlypos.login.modelo.AppResponse;
 import com.friendlypos.login.util.SecurePreferences;
+import com.friendlypos.principal.activity.MenuPrincipal;
 
 import butterknife.ButterKnife;
 
@@ -165,14 +166,16 @@ public class LoginActivity extends BaseActivity implements InitHelper, NetworkSt
 
     @Override
     public void onRegisterError(String errorMessage) {
-        Toast.makeText(this, getString(R.string.error_register), Toast.LENGTH_SHORT).show();
-        Log.e(TAG, errorMessage);
+        /*Toast.makeText(this, getString(R.string.error_register), Toast.LENGTH_SHORT).show();
+        Log.e(TAG, errorMessage);*/
     }
 
     private void goToPrincipalScreen(String user, boolean firstTime) {
 
         Toast.makeText(this, "login success", Toast.LENGTH_SHORT).show();
-
+        Intent intent = new Intent(this, MenuPrincipal.class);
+        startActivity(intent);
+        finish();
     }
 
     private void goToLoginScreen() {
