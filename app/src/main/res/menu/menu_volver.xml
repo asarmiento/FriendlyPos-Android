@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    >
+
+    <item
+        android:id="@+id/menu_cerrarsesion"
+        android:icon="@mipmap/ic_menu_cerrar_sesion"
+        android:onClick="onOptionsItemSelected"
+        android:title="List"
+        android:gravity ="left"
+        android:layout_gravity="left"
+        app:showAsAction="always" />
+</menu>

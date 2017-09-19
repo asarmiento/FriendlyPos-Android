@@ -78,8 +78,7 @@
         <item name="android:textColor">@color/colorAccent</item>
     </style>
 
-    <style name="MyActionBar.MenuTextStyle"
-        parent="style/TextAppearance.AppCompat.Widget.ActionBar.Title">
+    <style name="MyActionBar.MenuTextStyle" parent="style/TextAppearance.AppCompat.Widget.ActionBar.Title">
         <item name="android:textColor">@color/icons</item>
         <item name="android:textSize">14sp</item>
     </style>

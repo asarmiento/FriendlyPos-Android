@@ -22,9 +22,7 @@
             android:name=".login.activity.LoginActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar">
-
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <receiver android:name=".app.broadcastreceiver.NetworkStateChangeReceiver">
             <intent-filter>
@@ -37,22 +35,23 @@
             android:name=".principal.activity.MenuPrincipal"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".principal.activity.ProductosActivity"
             android:label="@string/title_activity_productos"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar" />
 
-
-        </activity>
+        <activity
+            android:name=".principal.activity.ClientesActivity"
+            android:label="@string/title_activity_clientes"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

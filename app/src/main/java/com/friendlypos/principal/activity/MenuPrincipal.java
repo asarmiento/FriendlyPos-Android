@@ -18,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.friendlypos.R;
+import com.friendlypos.principal.fragment.BlankFragment;
 import com.friendlypos.principal.fragment.ConfiguracionFragment;
 
 import java.lang.reflect.Field;
@@ -191,15 +192,15 @@ public class MenuPrincipal extends AppCompatActivity implements PopupMenu.OnMenu
 
         switch (view.getId()){
 
-            case R.id.clickClientes:
+          /*   case R.id.clickClientes:
                 Toast.makeText(this, "distribucion", Toast.LENGTH_SHORT).show();
 
-              /*   fragmentClass = BlankFragment.class;
-            clk1.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.button_clickb, null));
+                 fragmentClass = BlankFragment.class;
+           clk1.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.button_clickb, null));
                 clk2.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.button_click, null));
                 clk3.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.button_click, null));
-                clk4.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.button_click, null));*/
-                break;
+                clk4.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.button_click, null));
+                break;*/
 
             case R.id.clickDistribucion:
                 Toast.makeText(this, "distribucion", Toast.LENGTH_SHORT).show();
@@ -264,7 +265,10 @@ public class MenuPrincipal extends AppCompatActivity implements PopupMenu.OnMenu
 
             case R.id.clickClientes:
                 Toast.makeText(this, "clientes", Toast.LENGTH_SHORT).show();
-
+                Intent clientes;
+                clientes = new Intent(MenuPrincipal.this, ClientesActivity.class);
+                startActivity(clientes);
+                finish();
 
                 break;
             case R.id.clickProductos:
