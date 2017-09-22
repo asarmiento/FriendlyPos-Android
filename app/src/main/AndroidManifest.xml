@@ -41,17 +41,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".principal.activity.ProductosActivity"
-            android:label="@string/title_activity_productos"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
 
-        <activity
-            android:name=".principal.activity.ClientesActivity"
-            android:label="@string/title_activity_clientes"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

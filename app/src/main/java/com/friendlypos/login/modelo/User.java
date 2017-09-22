@@ -9,8 +9,8 @@ import io.realm.annotations.PrimaryKey;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class User extends RealmObject{
-
+public class User/* extends RealmObject*/{
+/*
     @SerializedName("username")
     @Expose
     private String username;
@@ -40,7 +40,7 @@ public class User extends RealmObject{
                 "username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 '}';
-    }
+    }*/
 }
 /*public class User extends RealmObject {
 

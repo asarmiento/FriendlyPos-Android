@@ -18,7 +18,6 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.friendlypos.R;
-import com.friendlypos.principal.fragment.BlankFragment;
 import com.friendlypos.principal.fragment.ConfiguracionFragment;
 
 import java.lang.reflect.Field;
@@ -264,7 +263,6 @@ public class MenuPrincipal extends AppCompatActivity implements PopupMenu.OnMenu
         switch (component.getId()){
 
             case R.id.clickClientes:
-                Toast.makeText(this, "clientes", Toast.LENGTH_SHORT).show();
                 Intent clientes;
                 clientes = new Intent(MenuPrincipal.this, ClientesActivity.class);
                 startActivity(clientes);

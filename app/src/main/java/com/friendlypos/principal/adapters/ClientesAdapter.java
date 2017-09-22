@@ -6,48 +6,70 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-
 import com.friendlypos.R;
 import com.friendlypos.principal.modelo.Clientes;
 
 import java.util.List;
 
-public class ClientesAdapter extends RecyclerView.Adapter<ClientesAdapter.ViewHolder> {
-    private List<Clientes.Client> android;
+/**
+ * Created by Podisto on 15/05/2016.
+ */
+public class ClientesAdapter extends RecyclerView.Adapter<ClientesAdapter.CharacterViewHolder> {
 
-    public ClientesAdapter(List<Clientes.Client> android) {
-        this.android = android;
+    private List<Clientes> contentList;
+
+    public ClientesAdapter(List<Clientes> contentList) {
+        this.contentList = contentList;
     }
 
     @Override
-    public ClientesAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.lista_clientes, viewGroup, false);
-        return new ViewHolder(view);
+    public CharacterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.lista_clientes, parent, false);
+
+        return new CharacterViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(ClientesAdapter.ViewHolder viewHolder, int i) {
+    public void onBindViewHolder(CharacterViewHolder holder, int position) {
+        Clientes content = contentList.get(position);
 
-        viewHolder.tv_name.setText(android.get(i).getName());
-        viewHolder.tv_version.setText(android.get(i).getFantasyName());
-        viewHolder.tv_api_level.setText(android.get(i).getCompanyName());
+        holder.txt_cliente_card.setText(content.getCard());
+        holder.txt_cliente_fantasyname.setText(content.getFantasyName());
+        holder.txt_cliente_companyname.setText(content.getCompanyName());
+        holder.txt_cliente_address.setText(content.getAddress());
+        holder.txt_cliente_creditlimit.setText(content.getCreditLimit());
+        holder.txt_cliente_fixeddescount.setText(content.getFixedDiscount());
+        holder.txt_cliente_due.setText(content.getDue());
+        holder.txt_cliente_credittime.setText(content.getCreditTime());
     }
 
     @Override
     public int getItemCount() {
-        return android.size();
+        return contentList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
-        private TextView tv_name,tv_version,tv_api_level;
-        public ViewHolder(View view) {
+    public static class CharacterViewHolder extends RecyclerView.ViewHolder {
+
+        private TextView txt_cliente_card,txt_cliente_fantasyname,txt_cliente_companyname, txt_cliente_address,txt_cliente_creditlimit,
+                txt_cliente_fixeddescount, txt_cliente_due,txt_cliente_credittime;
+
+        public CharacterViewHolder(View view) {
             super(view);
+            txt_cliente_card = (TextView)view.findViewById(R.id.txt_cliente_card);
+            txt_cliente_fantasyname = (TextView)view.findViewById(R.id.txt_cliente_fantasyname);
+            txt_cliente_companyname = (TextView)view.findViewById(R.id.txt_cliente_companyname);
+            txt_cliente_address = (TextView)view.findViewById(R.id.txt_cliente_address);
 
-            tv_name = (TextView)view.findViewById(R.id.tv_name);
-            tv_version = (TextView)view.findViewById(R.id.tv_version);
-            tv_api_level = (TextView)view.findViewById(R.id.tv_api_level);
-
+            txt_cliente_creditlimit = (TextView)view.findViewById(R.id.txt_cliente_creditlimit);
+            txt_cliente_fixeddescount = (TextView)view.findViewById(R.id.txt_cliente_fixeddescount);
+            txt_cliente_due = (TextView)view.findViewById(R.id.txt_cliente_due);
+            txt_cliente_credittime = (TextView)view.findViewById(R.id.txt_cliente_credittime);
         }
     }
 
+    @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+    }
 }

@@ -1,9 +1,8 @@
-package com.friendlypos.login.controller;
+package com.friendlypos.application.controller;
 
 import android.app.Activity;
 import android.app.Application;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 
 import com.friendlypos.login.modelo.User;
 
@@ -58,15 +57,21 @@ public class RealmController {
         realm.refresh();
     }
 
-    public RealmResults<User> getUsers() {
+   /* public RealmResults<User> getUsers() {
         return realm.where(User.class).findAll();
     }
 
 
     public RealmResults<User> getUsersByParam(String param) {
         return realm.where(User.class).equalTo(param, true).findAll();
-    }
+    }*/
 
+    //find all objects in the Book.class
+   /* public RealmResults<ClientesDB> getClientesDB() {
+
+        return realm.where(ClientesDB.class).findAll();
+    }
+/*
     public User getUserByName(String mac_address) {
         return realm.where(User.class).equalTo("name", mac_address).findFirst();
     }
@@ -101,6 +106,6 @@ public class RealmController {
         else {
             realm.cancelTransaction();
         }
-    }
+    }*/
 
 }

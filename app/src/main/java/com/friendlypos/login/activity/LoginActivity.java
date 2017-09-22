@@ -8,7 +8,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 import com.friendlypos.R;
 import com.friendlypos.app.broadcastreceiver.NetworkStateChangeReceiver;
-import com.friendlypos.login.controller.RealmController;
 import com.friendlypos.login.datamanager.DataManager;
 import com.friendlypos.login.fragment.LoginFragment;
 import com.friendlypos.login.helper.InitHelper;
