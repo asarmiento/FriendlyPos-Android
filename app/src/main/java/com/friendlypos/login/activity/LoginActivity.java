@@ -126,13 +126,13 @@ public class LoginActivity extends BaseActivity implements InitHelper, NetworkSt
 
     @Override
     public void onLoginSuccess(AppResponse response, String user, String pass) {
-        if (response.getError() == null) {
+        if (response.getExpires_in() == null) {
             saveCurrentUser(user, pass);
             Log.d(TAG, response.toString());
             goToPrincipalScreen(user, true);
         }
         else {
-            onLoginError(response.getError());
+            onLoginError(response.getExpires_in());
         }
     }
 
@@ -154,12 +154,12 @@ public class LoginActivity extends BaseActivity implements InitHelper, NetworkSt
 
     @Override
     public void onRegisterSuccess(AppResponse saviorResponse) {
-        if (saviorResponse.getError() == null) {
+        if (saviorResponse.getExpires_in() == null) {
             Log.d(TAG, saviorResponse.toString());
             goToLoginScreen();
         }
         else {
-            onLoginError(saviorResponse.getError());
+            onLoginError(saviorResponse.getExpires_in());
         }
     }
 

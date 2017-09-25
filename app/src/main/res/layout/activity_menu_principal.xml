@@ -172,7 +172,7 @@
 
                 <LinearLayout
                     android:id="@+id/clickDistribucion"
-                    android:onClick="ClickNavigation"
+                    android:onClick="onClickGo"
                     android:layout_width="match_parent"
                     android:background="@color/divider"
                     android:layout_height="80dp"

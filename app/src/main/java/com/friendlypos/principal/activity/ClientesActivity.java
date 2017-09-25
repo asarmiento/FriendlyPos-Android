@@ -1,24 +1,30 @@
 package com.friendlypos.principal.activity;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.friendlypos.R;
 import com.friendlypos.application.datamanager.BaseManager;
+import com.friendlypos.login.activity.BaseActivity;
 import com.friendlypos.principal.adapters.ClientesAdapter;
 import com.friendlypos.principal.interfaces.RequestInterface;
 import com.friendlypos.principal.modelo.Clientes;
 
 import java.util.ArrayList;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
@@ -30,9 +36,13 @@ import com.friendlypos.principal.modelo.ClientesResponse;
 
 public class ClientesActivity extends AppCompatActivity {
 
+    @Bind(R.id.toolbar)
+    Toolbar toolbar;
+
+    @Bind(R.id.recyclerView)
+    RecyclerView recyclerView;
+
     private ProgressDialog progress;
-    private RecyclerView recyclerView;
-    private TextView mTvTitle;
     private ArrayList<Clientes> mContentsArray = new ArrayList<>();
     private ClientesAdapter adapter;
 
@@ -43,25 +53,27 @@ public class ClientesActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_clientes);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        ButterKnife.bind(this);
+
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
 
         progress = new ProgressDialog(this);
         progress.setMessage("Cargando lista de clientes");
         progress.setCanceledOnTouchOutside(false);
         progress.show();
 
-        Fresco.initialize(this);
-
         // Init Realm
-        RealmConfiguration realmConfiguration = new RealmConfiguration.Builder(this)
+        realm.init(this);
+        RealmConfiguration realmConfiguration = new RealmConfiguration.Builder()
                 .name("Clientes.realm")
+                .deleteRealmIfMigrationNeeded()
                 .build();
         // Create a new empty instance of Realm
         realm = Realm.getInstance(realmConfiguration);
 
-        mTvTitle = (TextView) findViewById(R.id.tv_title);
-        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
 
@@ -85,7 +97,7 @@ public class ClientesActivity extends AppCompatActivity {
                     // Open a transaction to store items into the realm
                     // Use copyToRealm() to convert the objects into proper RealmObjects managed by Realm.
                     realm.beginTransaction();
-                    realm.copyToRealm(mContentsArray);
+                    realm.copyToRealmOrUpdate(mContentsArray);
                     realm.commitTransaction();
 
                     Toast.makeText(ClientesActivity.this, getString(R.string.success), Toast.LENGTH_SHORT).show();
@@ -109,5 +121,20 @@ public class ClientesActivity extends AppCompatActivity {
             }
         });
 
+}
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+
+                Intent intent = new Intent(ClientesActivity.this, MenuPrincipal.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                finish();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

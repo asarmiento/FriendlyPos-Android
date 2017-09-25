@@ -37,7 +37,7 @@ public class ProductosAdapter extends RecyclerView.Adapter<ProductosAdapter.Char
         Productos productos = productosList.get(position);
         holder.tv_name.setText(productos.getDescription());
         holder.tv_version.setText(productos.getBarcode());
-        holder.tv_api_level.setText(productos.getSalePrice());
+        holder.tv_api_level.setText(productos.getSale_price());
     }
 
     @Override

@@ -33,6 +33,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="?attr/actionBarSize"
-        android:orientation="vertical"></LinearLayout>
+        android:orientation="vertical">
+
+
+
+    </LinearLayout>
 
 </android.support.design.widget.CoordinatorLayout>

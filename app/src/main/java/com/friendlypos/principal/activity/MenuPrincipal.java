@@ -18,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.friendlypos.R;
+import com.friendlypos.distribucion.activity.DistribucionActivity;
 import com.friendlypos.principal.fragment.ConfiguracionFragment;
 
 import java.lang.reflect.Field;
@@ -201,15 +202,15 @@ public class MenuPrincipal extends AppCompatActivity implements PopupMenu.OnMenu
                 clk4.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.button_click, null));
                 break;*/
 
-            case R.id.clickDistribucion:
+           /* case R.id.clickDistribucion:
                 Toast.makeText(this, "distribucion", Toast.LENGTH_SHORT).show();
 
                /*  fragmentClass = ProductosFragment.class;
             clk1.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.button_clickb, null));
                 clk2.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.button_click, null));
                 clk3.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.button_click, null));
-                clk4.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.button_click, null));*/
-                break;
+                clk4.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.button_click, null));
+                break;*/
             case R.id.clickVentaDirecta:
                 Toast.makeText(this, "ventadirecta", Toast.LENGTH_SHORT).show();
 
@@ -276,6 +277,14 @@ public class MenuPrincipal extends AppCompatActivity implements PopupMenu.OnMenu
                 productos = new Intent(MenuPrincipal.this, ProductosActivity.class);
                 startActivity(productos);
                 finish();
+                break;
+
+            case R.id.clickDistribucion:
+                Intent dist;
+                dist = new Intent(MenuPrincipal.this, DistribucionActivity.class);
+                startActivity(dist);
+                finish();
+
                 break;
 
         }

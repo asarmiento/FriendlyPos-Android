@@ -129,11 +129,26 @@
     <string name="pref_title_vibrate">Vibrate</string>
 
 
+    <string name="error">Ha ocurrido un error, intente nuevamente</string>
+    <string name="failed">No hay conexión a Internet</string>
+    <string name="success">Se han cargado los datos correctamente.</string>
 
-    <string name="error">An Error occurred. Trying to add data from Realm</string>
-    <string name="failed">Check your network. Trying to add data from Realm</string>
-    <string name="success">Data Loaded.</string>
-    <string name="sync">Sync</string>
+   <!-- DISTRIBUCION -->
+
+    <string name="title_activity_distribucion">DistribucionActivity</string>
+
+
+    <string name="seleccionecliente">Seleccionar cliente</string>
+    <string name="resumen">Resumen</string>
+    <string name="seleccioneproductos">Seleccionar productos</string>
+    <string name="totalizar">Totalizar</string>
+
+    <!-- DISTRIBUCION TOTALIZAR -->
+    <string name="save">Aplicar</string>
+    <string name="print">Imprimir</string>
+    <string name="notes">Notas?</string>
+    <string name="paywith">Cancela con</string>
+    <string name="total">Total</string>
 
 
 </resources>

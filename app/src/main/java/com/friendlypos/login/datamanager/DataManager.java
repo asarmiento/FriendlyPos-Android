@@ -8,6 +8,8 @@ import com.friendlypos.application.datamanager.BaseManager;
 import com.friendlypos.login.interfaces.DataManagerInterface;
 import com.friendlypos.login.interfaces.ServiceCallback;
 import com.friendlypos.login.modelo.AppResponse;
+import com.friendlypos.principal.interfaces.RequestInterface;
+import com.friendlypos.principal.modelo.ClientesResponse;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -15,15 +17,18 @@ import retrofit2.Response;
 
 public class DataManager {
 
-    public static final String TAG = DataManager.class.getSimpleName();
+   public static final String TAG = DataManager.class.getSimpleName();
 
     private String mBaseUrl;
-
+    private DataManagerInterface api;
     public DataManager(Context context) {
         mBaseUrl = context.getString(R.string.base_url);
     }
 
     public void login(String user, String password, final ServiceCallback listener) {
+
+
+
         DataManagerInterface apiService = BaseManager.getClient(mBaseUrl).create(DataManagerInterface.class);
         Call<AppResponse> call = apiService.login(user, password);
         Log.d(TAG, call.request().toString());

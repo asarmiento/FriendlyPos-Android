@@ -1,6 +1,7 @@
 package com.friendlypos.principal.adapters;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,6 +43,9 @@ public class ClientesAdapter extends RecyclerView.Adapter<ClientesAdapter.Charac
         holder.txt_cliente_fixeddescount.setText(content.getFixedDiscount());
         holder.txt_cliente_due.setText(content.getDue());
         holder.txt_cliente_credittime.setText(content.getCreditTime());
+
+        Log.d("nombre", content.getFantasyName()+ "");
+        Log.d("idasd", content.getId()+ "");
     }
 
     @Override

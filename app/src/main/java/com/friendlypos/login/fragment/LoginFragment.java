@@ -83,6 +83,8 @@ public class LoginFragment extends BaseFragment implements InitHelper {
     public void onLoginClick(View v) {
         String email = mEmail.getText().toString();
         String pass = mPassword.getText().toString();
+
+
         if (((LoginActivity) getActivity()).isValidEmail(email, mEmail)) {
             if (((LoginActivity) getActivity()).isValidPassword(pass, mPassword)) {
                 login(email, pass);
@@ -104,7 +106,7 @@ public class LoginFragment extends BaseFragment implements InitHelper {
             @Override
             public void onError(Object networkError) {
                 progressDialog.dismiss();
-                loginListener.onLoginError(((AppResponse) networkError).getError());
+                loginListener.onLoginError(((AppResponse) networkError).getExpires_in());
             }
 
             @Override

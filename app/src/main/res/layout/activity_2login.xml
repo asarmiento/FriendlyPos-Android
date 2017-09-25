@@ -11,6 +11,8 @@
     android:paddingBottom="30dp"
     >
 
+
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -51,7 +53,7 @@
 
             <EditText
                 android:id="@+id/contraseña"
-                style="@style/Register_EditText1"
+                style="@style/Register_EditText"
                 android:hint="@string/your_password_hint"
                 android:inputType="textPassword" />
             <View
@@ -64,11 +66,16 @@
                 android:background="#212121" />
         </android.support.design.widget.TextInputLayout>
 
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TextView" />
 
         <Button
             android:id="@+id/login"
             style="@style/MainButton"
-
+            android:onClick="onClickGo"
             android:text="@string/Submit_button_text" />
     </LinearLayout>
 

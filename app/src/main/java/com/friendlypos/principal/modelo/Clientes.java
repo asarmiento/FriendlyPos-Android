@@ -2,9 +2,6 @@ package com.friendlypos.principal.modelo;
 
 import io.realm.RealmObject;
 
-/**
- * Created by Podisto on 15/05/2016.
- */
 public class Clientes extends RealmObject {
 
     private String id;
@@ -12,16 +9,16 @@ public class Clientes extends RealmObject {
     private String placa;
     private String doors;
     private String name;
-    private String fantasyName;
-    private String companyName;
+    private String fantasy_name;
+    private String company_name;
     private String phone;
-    private String creditLimit;
+    private String credit_limit;
     private String due;
     private String address;
     private String zoneId;
-    private String fixedDiscount;
-    private String creditTime;
-    private String updatedAt;
+    private String fixed_discount;
+    private String credit_time;
+    private String updated_at;
 
 
     public String getId() {
@@ -65,19 +62,19 @@ public class Clientes extends RealmObject {
     }
 
     public String getFantasyName() {
-        return fantasyName;
+        return fantasy_name;
     }
 
     public void setFantasyName(String fantasyName) {
-        this.fantasyName = fantasyName;
+        this.fantasy_name = fantasyName;
     }
 
     public String getCompanyName() {
-        return companyName;
+        return company_name;
     }
 
     public void setCompanyName(String companyName) {
-        this.companyName = companyName;
+        this.company_name = companyName;
     }
 
     public String getPhone() {
@@ -89,11 +86,11 @@ public class Clientes extends RealmObject {
     }
 
     public String getCreditLimit() {
-        return creditLimit;
+        return credit_limit;
     }
 
     public void setCreditLimit(String creditLimit) {
-        this.creditLimit = creditLimit;
+        this.credit_limit = creditLimit;
     }
 
     public String getDue() {
@@ -121,27 +118,27 @@ public class Clientes extends RealmObject {
     }
 
     public String getFixedDiscount() {
-        return fixedDiscount;
+        return fixed_discount;
     }
 
     public void setFixedDiscount(String fixedDiscount) {
-        this.fixedDiscount = fixedDiscount;
+        this.fixed_discount = fixedDiscount;
     }
 
     public String getCreditTime() {
-        return creditTime;
+        return credit_time;
     }
 
     public void setCreditTime(String creditTime) {
-        this.creditTime = creditTime;
+        this.credit_time = creditTime;
     }
 
     public String getUpdatedAt() {
-        return updatedAt;
+        return updated_at;
     }
 
     public void setUpdatedAt(String updatedAt) {
-        this.updatedAt = updatedAt;
+        this.updated_at = updatedAt;
     }
 
    /* private String id;

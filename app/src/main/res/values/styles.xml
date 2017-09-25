@@ -44,6 +44,10 @@
         <item name="android:background">@android:color/white</item>
     </style>
 
+    <style name="Register_EditText1" parent="Normal_EditText">
+        <item name="android:background">@color/colorPrimary</item>
+
+    </style>
 
     <style name="Normal_EditText">
         <item name="android:layout_width">match_parent</item>
@@ -55,6 +59,10 @@
 
     <style name="TextAppearence.App.TextInputLayout.Dark" parent="TextAppearence.App.TextInputLayout">
         <item name="android:textColor">@color/hintColor</item>
+    </style>
+
+    <style name="TextAppearence.App.TextInputLayout.Dark1" parent="TextAppearence.App.TextInputLayout">
+        <item name="android:textColor">@android:color/white</item>
     </style>
 
     <style name="MainButton">

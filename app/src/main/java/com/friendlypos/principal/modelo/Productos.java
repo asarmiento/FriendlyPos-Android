@@ -9,29 +9,29 @@ import io.realm.RealmObject;
 public class Productos extends RealmObject {
 
     private Integer id;
-    private String stockMin;
-    private String stockMax;
+    private String stock_min;
+    private String stock_max;
     private String barcode;
     private String code;
-    private String unitsPerBox;
+    private String units_per_box;
     private String description;
-    private String productCategoryId;
-    private String productTypeId;
+    private String product_category_id;
+    private String product_type_id;
     private String cost;
     private String utility;
-    private String percentageOfUtility;
-    private String salePrice;
-    private String salePrice2;
-    private String salePrice3;
-    private String salePrice4;
-    private String salePrice5;
-    private String brandId;
+    private String percentage_of_utility;
+    private String sale_price;
+    private String sale_price2;
+    private String sale_price3;
+    private String sale_price4;
+    private String sale_price5;
+    private String brand_id;
     private String family;
-    private String subFamily;
+    private String sub_family;
     private String type;
-    private String saleMethodId;
+    private String sale_method_id;
     private String status;
-    private String updatedAt;
+    private String updated_at;
 
     public Integer getId() {
         return id;
@@ -41,20 +41,20 @@ public class Productos extends RealmObject {
         this.id = id;
     }
 
-    public String getStockMin() {
-        return stockMin;
+    public String getStock_min() {
+        return stock_min;
     }
 
-    public void setStockMin(String stockMin) {
-        this.stockMin = stockMin;
+    public void setStock_min(String stock_min) {
+        this.stock_min = stock_min;
     }
 
-    public String getStockMax() {
-        return stockMax;
+    public String getStock_max() {
+        return stock_max;
     }
 
-    public void setStockMax(String stockMax) {
-        this.stockMax = stockMax;
+    public void setStock_max(String stock_max) {
+        this.stock_max = stock_max;
     }
 
     public String getBarcode() {
@@ -73,12 +73,12 @@ public class Productos extends RealmObject {
         this.code = code;
     }
 
-    public String getUnitsPerBox() {
-        return unitsPerBox;
+    public String getUnits_per_box() {
+        return units_per_box;
     }
 
-    public void setUnitsPerBox(String unitsPerBox) {
-        this.unitsPerBox = unitsPerBox;
+    public void setUnits_per_box(String units_per_box) {
+        this.units_per_box = units_per_box;
     }
 
     public String getDescription() {
@@ -89,20 +89,20 @@ public class Productos extends RealmObject {
         this.description = description;
     }
 
-    public String getProductCategoryId() {
-        return productCategoryId;
+    public String getProduct_category_id() {
+        return product_category_id;
     }
 
-    public void setProductCategoryId(String productCategoryId) {
-        this.productCategoryId = productCategoryId;
+    public void setProduct_category_id(String product_category_id) {
+        this.product_category_id = product_category_id;
     }
 
-    public String getProductTypeId() {
-        return productTypeId;
+    public String getProduct_type_id() {
+        return product_type_id;
     }
 
-    public void setProductTypeId(String productTypeId) {
-        this.productTypeId = productTypeId;
+    public void setProduct_type_id(String product_type_id) {
+        this.product_type_id = product_type_id;
     }
 
     public String getCost() {
@@ -121,60 +121,60 @@ public class Productos extends RealmObject {
         this.utility = utility;
     }
 
-    public String getPercentageOfUtility() {
-        return percentageOfUtility;
+    public String getPercentage_of_utility() {
+        return percentage_of_utility;
     }
 
-    public void setPercentageOfUtility(String percentageOfUtility) {
-        this.percentageOfUtility = percentageOfUtility;
+    public void setPercentage_of_utility(String percentage_of_utility) {
+        this.percentage_of_utility = percentage_of_utility;
     }
 
-    public String getSalePrice() {
-        return salePrice;
+    public String getSale_price() {
+        return sale_price;
     }
 
-    public void setSalePrice(String salePrice) {
-        this.salePrice = salePrice;
+    public void setSale_price(String sale_price) {
+        this.sale_price = sale_price;
     }
 
-    public String getSalePrice2() {
-        return salePrice2;
+    public String getSale_price2() {
+        return sale_price2;
     }
 
-    public void setSalePrice2(String salePrice2) {
-        this.salePrice2 = salePrice2;
+    public void setSale_price2(String sale_price2) {
+        this.sale_price2 = sale_price2;
     }
 
-    public String getSalePrice3() {
-        return salePrice3;
+    public String getSale_price3() {
+        return sale_price3;
     }
 
-    public void setSalePrice3(String salePrice3) {
-        this.salePrice3 = salePrice3;
+    public void setSale_price3(String sale_price3) {
+        this.sale_price3 = sale_price3;
     }
 
-    public String getSalePrice4() {
-        return salePrice4;
+    public String getSale_price4() {
+        return sale_price4;
     }
 
-    public void setSalePrice4(String salePrice4) {
-        this.salePrice4 = salePrice4;
+    public void setSale_price4(String sale_price4) {
+        this.sale_price4 = sale_price4;
     }
 
-    public String getSalePrice5() {
-        return salePrice5;
+    public String getSale_price5() {
+        return sale_price5;
     }
 
-    public void setSalePrice5(String salePrice5) {
-        this.salePrice5 = salePrice5;
+    public void setSale_price5(String sale_price5) {
+        this.sale_price5 = sale_price5;
     }
 
-    public String getBrandId() {
-        return brandId;
+    public String getBrand_id() {
+        return brand_id;
     }
 
-    public void setBrandId(String brandId) {
-        this.brandId = brandId;
+    public void setBrand_id(String brand_id) {
+        this.brand_id = brand_id;
     }
 
     public String getFamily() {
@@ -185,12 +185,12 @@ public class Productos extends RealmObject {
         this.family = family;
     }
 
-    public String getSubFamily() {
-        return subFamily;
+    public String getSub_family() {
+        return sub_family;
     }
 
-    public void setSubFamily(String subFamily) {
-        this.subFamily = subFamily;
+    public void setSub_family(String sub_family) {
+        this.sub_family = sub_family;
     }
 
     public String getType() {
@@ -201,12 +201,12 @@ public class Productos extends RealmObject {
         this.type = type;
     }
 
-    public String getSaleMethodId() {
-        return saleMethodId;
+    public String getSale_method_id() {
+        return sale_method_id;
     }
 
-    public void setSaleMethodId(String saleMethodId) {
-        this.saleMethodId = saleMethodId;
+    public void setSale_method_id(String sale_method_id) {
+        this.sale_method_id = sale_method_id;
     }
 
     public String getStatus() {
@@ -217,14 +217,13 @@ public class Productos extends RealmObject {
         this.status = status;
     }
 
-    public String getUpdatedAt() {
-        return updatedAt;
+    public String getUpdated_at() {
+        return updated_at;
     }
 
-    public void setUpdatedAt(String updatedAt) {
-        this.updatedAt = updatedAt;
+    public void setUpdated_at(String updated_at) {
+        this.updated_at = updated_at;
     }
-
 }
 
 
