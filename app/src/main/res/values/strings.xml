@@ -7,11 +7,7 @@
 
     <string name="base_url">http://friendlyaccount.com</string>
 
-    <string name="your_email_hint">Usuario</string>
-    <string name="email_hint">Usuario</string>
-    <string name="your_password_hint">Contraseña</string>
-    <string name="password_hint">Contraseña</string>
-    <string name="Submit_button_text">Iniciar Sesión</string>
+
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -133,11 +129,24 @@
     <string name="failed">No hay conexión a Internet</string>
     <string name="success">Se han cargado los datos correctamente.</string>
 
+    <!-- LOGIN -->
+    <string name="your_email_hint">Usuario</string>
+    <string name="email_hint">Usuario</string>
+    <string name="your_password_hint">Contraseña</string>
+    <string name="password_hint">Contraseña</string>
+    <string name="Submit_button_text">Iniciar Sesión</string>
+    <string name="action_sign_in_short">Iniciar Sesión</string>
+    <string name="error_invalid_user_id">Usuario inválido</string>
+    <string name="error_incorrect_password">La contraseña es incorrecta</string>
+    <string name="error_field_required">Este campo es requerido</string>
+    <string name="error_server">Error en el servidor</string>
+    <string name="error_incorrect_user_id">Usuario no registrado</string>
+    <string name="error_network">Conexión de red no disponible</string>
+    <string name="error_invalid_password">Contraseña inválida</string>
+
    <!-- DISTRIBUCION -->
 
     <string name="title_activity_distribucion">DistribucionActivity</string>
-
-
     <string name="seleccionecliente">Seleccionar cliente</string>
     <string name="resumen">Resumen</string>
     <string name="seleccioneproductos">Seleccionar productos</string>

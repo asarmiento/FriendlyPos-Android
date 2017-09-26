@@ -27,7 +27,7 @@
         </receiver>
 
         <activity
-            android:name=".login.activity.Login2Activity"
+            android:name=".login.activity.LoginActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">

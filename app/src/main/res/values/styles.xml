@@ -91,4 +91,15 @@
         <item name="android:textSize">14sp</item>
     </style>
 
+    <style name="LoginTextField" parent="AppTheme">
+        <item name="colorAccent">@color/hintColor</item>
+        <item name="android:textColorHint">@color/hintColor</item>
+        <item name="colorControlNormal">@color/hintColor</item>
+        <item name="colorControlActivated">@color/hintColor</item>
+        <item name="colorControlHighlight">@color/hintColor</item>
+    </style>
+
+    <style name="WhiteProgress">
+        <item name="colorAccent">@android:color/white</item>
+    </style>
 </resources>

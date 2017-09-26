@@ -1,14 +1,22 @@
 package com.friendlypos.login.modelo;
 
-import com.google.gson.annotations.SerializedName;
+/**
+ * Created by DelvoM on 25/09/2017.
+ */
 
-
-public class AppResponse {
+public class UserResponse {
 
     String token_type;
     String expires_in;
     String access_token;
     String refresh_token;
+
+    public UserResponse(String token_type, String expires_in, String access_token, String refresh_token) {
+        this.token_type = token_type;
+        this.expires_in = expires_in;
+        this.access_token = access_token;
+        this.refresh_token = refresh_token;
+    }
 
     public String getToken_type() {
         return token_type;

@@ -7,11 +7,21 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.friendlypos.principal.activity.MenuPrincipal"
-    tools:showIn="@layout/app_bar_main">
+    tools:showIn="@layout/app_bar_main"
+    android:background="@android:color/white">
 <FrameLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/frame">
+
+    <ImageView
+        android:id="@+id/image_logoContenedor"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="16dp"
+        android:layout_marginTop="8dp"
+        app:srcCompat="@drawable/logo_contenedor"
+        android:layout_gravity="center"/>
 
 </FrameLayout>
 </RelativeLayout>

@@ -8,17 +8,14 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.facebook.drawee.backends.pipeline.Fresco;
 import com.friendlypos.R;
 import com.friendlypos.application.datamanager.BaseManager;
-import com.friendlypos.distribucion.activity.DistribucionActivity;
 import com.friendlypos.principal.adapters.ProductosAdapter;
-import com.friendlypos.principal.interfaces.RequestInterface;
+import com.friendlypos.application.interfaces.RequestInterface;
 import com.friendlypos.principal.modelo.Productos;
 import com.friendlypos.principal.modelo.ProductosResponse;
 

@@ -1,42 +1,129 @@
-<?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:background="@color/background"
+    android:orientation="vertical"
+    android:paddingEnd="20dp"
+    android:paddingLeft="20dp"
+    android:paddingTop="50dp"
+    android:paddingBottom="30dp"
     >
 
-    <android.support.design.widget.AppBarLayout
-        android:layout_width="match_parent"
+    <!-- Login progress -->
+    <ProgressBar
+        android:id="@+id/login_progress"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay">
-
-            <TextView
-                android:id="@+id/toolbar_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
-
-        </android.support.v7.widget.Toolbar>
-
-    </android.support.design.widget.AppBarLayout>
+        android:layout_marginBottom="8dp"
+        android:theme="@style/WhiteProgress"
+        android:visibility="gone" />
 
     <LinearLayout
-        android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="?attr/actionBarSize"
-        android:orientation="vertical">
+        android:background="@android:color/white"
+        android:orientation="vertical"
+        android:paddingEnd="20dp"
+        android:paddingLeft="20dp"
+        android:paddingTop="30dp"
 
+        >
 
+        <ImageView
+            android:id="@+id/image_logo"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_marginBottom="16dp"
+            android:layout_marginTop="8dp"
+            app:srcCompat="@drawable/logo"
+            android:layout_gravity="center"/>
 
+        <ScrollView
+            android:id="@+id/login_form"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:id="@+id/email_login_form"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/float_label_user_id"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/TextInputLayout"
+                    android:theme="@style/LoginTextField"
+                    >
+
+                    <EditText
+                        android:id="@+id/usuario"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/your_email_hint"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        />
+
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/float_label_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/TextInputLayout"
+                    android:theme="@style/LoginTextField"
+                    app:passwordToggleEnabled="true">
+
+                    <EditText
+                        android:id="@+id/contraseña"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/your_password_hint"
+                        android:imeActionId="@+id/login"
+                        android:imeActionLabel="@string/action_sign_in_short"
+                        android:imeOptions="actionUnspecified"
+                        android:inputType="textPassword"
+                        android:maxLines="1"
+                        />
+
+                </android.support.design.widget.TextInputLayout>
+
+                <Button
+                    android:id="@+id/email_sign_in_button"
+                    style="@style/MainButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/Submit_button_text"
+                    />
+
+            </LinearLayout>
+        </ScrollView>
     </LinearLayout>
 
-</android.support.design.widget.CoordinatorLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:orientation="vertical"
+        android:paddingTop="5dp"
+        android:layout_gravity="center"
+        >
+        <TextView
+            android:id="@+id/txtVersionLogin"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:text="TextViewadsdasdasdasa"
+            android:textColor="@color/hintColor"
+            android:textSize="14sp"
+            />
+    </LinearLayout>
+
+
+
+
+</LinearLayout>

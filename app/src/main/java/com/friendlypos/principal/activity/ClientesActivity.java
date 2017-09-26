@@ -3,22 +3,17 @@ package com.friendlypos.principal.activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.friendlypos.R;
 import com.friendlypos.application.datamanager.BaseManager;
-import com.friendlypos.login.activity.BaseActivity;
 import com.friendlypos.principal.adapters.ClientesAdapter;
-import com.friendlypos.principal.interfaces.RequestInterface;
+import com.friendlypos.application.interfaces.RequestInterface;
 import com.friendlypos.principal.modelo.Clientes;
 
 import java.util.ArrayList;
@@ -31,7 +26,7 @@ import io.realm.RealmResults;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import com.facebook.drawee.backends.pipeline.Fresco;
+
 import com.friendlypos.principal.modelo.ClientesResponse;
 
 public class ClientesActivity extends AppCompatActivity {

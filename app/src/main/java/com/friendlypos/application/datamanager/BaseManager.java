@@ -1,6 +1,6 @@
 package com.friendlypos.application.datamanager;
 
-import com.friendlypos.principal.interfaces.RequestInterface;
+import com.friendlypos.application.interfaces.RequestInterface;
 import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
@@ -75,7 +75,7 @@ public class BaseManager {
 
     private static Retrofit retrofit = null;
 
-
+/*
     public static Retrofit getClient(String baseURL) {
         OkHttpClient httpClient = new OkHttpClient.Builder()
                 .addInterceptor(new Interceptor() {
@@ -97,5 +97,5 @@ public class BaseManager {
                     .build();
         }
         return retrofit;
-    }
+    }*/
 }
