@@ -30,7 +30,8 @@
             android:name=".login.activity.LoginActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustPan|adjustResize">
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
 
