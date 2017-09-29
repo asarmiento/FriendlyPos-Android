@@ -8,6 +8,7 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:itemBackground">@color/background</item>
         <item name="android:itemTextAppearance">@style/MyActionBar.MenuTextStyle</item>
+        <item name="android:windowActionBarOverlay">true</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
