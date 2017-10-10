@@ -9,6 +9,7 @@ import com.friendlypos.principal.modelo.ProductosResponse;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.POST;
 
 public interface RequestInterface {
@@ -17,10 +18,10 @@ public interface RequestInterface {
     Call<UserResponse> loginUser(@Body User user);
 
     @GET("api/donwload-info-business")
-    Call<ClientesResponse> getJSON();
+    Call<ClientesResponse> getJSON(@Header("Authorization") String token);
 
     @GET("api/donwload-info-business")
-    Call<ProductosResponse> getProducts();
+    Call<ProductosResponse> getProducts(@Header("Authorization") String token);
 
 
 }

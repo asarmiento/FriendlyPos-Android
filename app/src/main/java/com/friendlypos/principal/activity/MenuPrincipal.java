@@ -1,8 +1,10 @@
 package com.friendlypos.principal.activity;
 
+import android.app.ActivityManager;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.PopupMenu;
@@ -19,14 +21,18 @@ import android.widget.Toast;
 
 import com.friendlypos.R;
 import com.friendlypos.distribucion.activity.DistribucionActivity;
+import com.friendlypos.login.util.SessionPrefes;
 import com.friendlypos.principal.fragment.ConfiguracionFragment;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.List;
 
 import butterknife.Bind;
 
-public class MenuPrincipal extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener
+import static com.friendlypos.login.util.SessionPrefes.*;
+
+public class MenuPrincipal  extends BluetoothActivity implements PopupMenu.OnMenuItemClickListener
        /* implements NavigationView.OnNavigationItemSelectedListener*/ {
     private static String POPUP_CONSTANT = "mPopup";
     private static String POPUP_FORCE_SHOW_ICON = "setForceShowIcon";
@@ -55,15 +61,16 @@ public class MenuPrincipal extends AppCompatActivity implements PopupMenu.OnMenu
     @Bind(R.id.drawer)
     DrawerLayout drawer;
 
-
+    SessionPrefes session;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu_principal);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
        /* Initializing();*/
+        session = new SessionPrefes(getApplicationContext());
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -124,6 +131,7 @@ public class MenuPrincipal extends AppCompatActivity implements PopupMenu.OnMenu
         switch (item.getItemId()) {
             case R.id.menu_cerrarsesion:
                 Toast.makeText(MenuPrincipal.this, "CerrarSesion", Toast.LENGTH_SHORT).show();
+                session.logoutUser();
                 break;
 
             case R.id.btn_descargar_catalogo:
@@ -289,5 +297,16 @@ public class MenuPrincipal extends AppCompatActivity implements PopupMenu.OnMenu
 
         }
     }
+    //Check if the printing service is running
+    public boolean isServiceRunning(String serviceClassName) {
+        final ActivityManager activityManager = (ActivityManager) getApplicationContext().getSystemService(Context.ACTIVITY_SERVICE);
+        final List<ActivityManager.RunningServiceInfo> services = activityManager.getRunningServices(Integer.MAX_VALUE);
 
+        for (ActivityManager.RunningServiceInfo runningServiceInfo : services) {
+            if (runningServiceInfo.service.getClassName().equals(serviceClassName)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

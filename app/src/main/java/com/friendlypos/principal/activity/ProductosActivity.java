@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.friendlypos.R;
 import com.friendlypos.application.datamanager.BaseManager;
+import com.friendlypos.login.util.SessionPrefes;
 import com.friendlypos.principal.adapters.ProductosAdapter;
 import com.friendlypos.application.interfaces.RequestInterface;
 import com.friendlypos.principal.modelo.Productos;
@@ -53,10 +54,13 @@ public class ProductosActivity extends AppCompatActivity {
         progress.setCanceledOnTouchOutside(false);
         progress.show();
 
+        // Obtener token de usuario
+        String token = "Bearer " + SessionPrefes.get(this).getToken();
+        Log.d("tokenProdu", token);
         // Init Realm
         realm.init(this);
         RealmConfiguration realmConfiguration = new RealmConfiguration.Builder()
-                .name("Productos1.realm")
+                .name("Productos.realm")
                 .build();
         // Create a new empty instance of Realm
         realm = Realm.getInstance(realmConfiguration);
@@ -70,7 +74,7 @@ public class ProductosActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
 
         api = BaseManager.getApi();
-        Call<ProductosResponse> call = api.getProducts();
+        Call<ProductosResponse> call = api.getProducts(token);
 
         call.enqueue(new Callback<ProductosResponse>() {
             @Override

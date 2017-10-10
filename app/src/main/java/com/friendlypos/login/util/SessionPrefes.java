@@ -1,17 +1,14 @@
 package com.friendlypos.login.util;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
 
+import com.friendlypos.login.activity.LoginActivity;
 import com.friendlypos.login.modelo.UserResponse;
 
 public class SessionPrefes {
-
-    String token_type;
-    String expires_in;
-    String access_token;
-    String refresh_token;
 
     public static final String PREFS_NAME = "LOGIN_PREFS";
     public static final String PREF_USER_TOKEN_TYPE = "PREF_USER_TOKEN_TYPE";
@@ -25,6 +22,8 @@ public class SessionPrefes {
 
     private static SessionPrefes INSTANCE;
 
+    Context _context;
+
     public static SessionPrefes get(Context context) {
         if (INSTANCE == null) {
             INSTANCE = new SessionPrefes(context);
@@ -32,12 +31,15 @@ public class SessionPrefes {
         return INSTANCE;
     }
 
-    private SessionPrefes(Context context) {
-        mPrefs = context.getApplicationContext()
+    public SessionPrefes(Context context) {
+        this._context = context;
+        mPrefs = _context.getApplicationContext()
                 .getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
 
         mIsLoggedIn = !TextUtils.isEmpty(mPrefs.getString(PREF_USER_ACCESS_TOKEN, null));
     }
+
+
 
     public boolean isLoggedIn() {
         return mIsLoggedIn;
@@ -55,6 +57,29 @@ public class SessionPrefes {
             mIsLoggedIn = true;
         }
     }
+    public String getToken(){
+        return mPrefs.getString(PREF_USER_ACCESS_TOKEN, null);
+    }
+
+
+    public void logoutUser(){
+        // Clearing all data from Shared Preferences
+        SharedPreferences.Editor editor = mPrefs.edit();
+        editor.clear();
+        editor.commit();
+
+        // After logout redirect user to Loing Activity
+        Intent i = new Intent(_context, LoginActivity.class);
+        // Closing all the Activities
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+        // Add new Flag to start new Activity
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        // Staring Login Activity
+        _context.startActivity(i);
+    }
+
 
     public void logOut(){
         mIsLoggedIn = false;

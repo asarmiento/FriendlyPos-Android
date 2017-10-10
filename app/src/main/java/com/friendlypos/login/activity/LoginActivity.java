@@ -183,7 +183,6 @@ public class LoginActivity extends AppCompatActivity {
                     // Guardar afiliado en preferencias
                     SessionPrefes.get(LoginActivity.this).saveAffiliate(response.body());
 
-                    // Ir a la citas médicas
                     showAppointmentsScreen();
                 }
 

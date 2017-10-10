@@ -14,7 +14,7 @@ import android.view.MenuItem;
 import com.friendlypos.R;
 import com.friendlypos.distribucion.fragment.DistTotalizarFragment;
 import com.friendlypos.distribucion.fragment.OneFragment;
-import com.friendlypos.distribucion.fragment.ThreeFragment;
+import com.friendlypos.distribucion.fragment.DistSelecProductoFragment;
 import com.friendlypos.distribucion.fragment.TwoFragment;
 import com.friendlypos.principal.activity.MenuPrincipal;
 
@@ -49,7 +49,7 @@ public class DistribucionActivity extends AppCompatActivity {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFrag(new OneFragment(), "Seleccionar Cliente");
         adapter.addFrag(new TwoFragment(), "Resumen");
-        adapter.addFrag(new ThreeFragment(), "Seleccionar productos");
+        adapter.addFrag(new DistSelecProductoFragment(), "Seleccionar productos");
         adapter.addFrag(new DistTotalizarFragment(), "Totalizar");
         viewPager.setAdapter(adapter);
     }

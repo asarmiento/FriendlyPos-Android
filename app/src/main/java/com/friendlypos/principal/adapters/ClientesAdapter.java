@@ -44,8 +44,6 @@ public class ClientesAdapter extends RecyclerView.Adapter<ClientesAdapter.Charac
         holder.txt_cliente_due.setText(content.getDue());
         holder.txt_cliente_credittime.setText(content.getCreditTime());
 
-        Log.d("nombre", content.getFantasyName()+ "");
-        Log.d("idasd", content.getId()+ "");
     }
 
     @Override

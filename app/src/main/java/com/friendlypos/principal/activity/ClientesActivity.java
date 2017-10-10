@@ -7,11 +7,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.friendlypos.R;
 import com.friendlypos.application.datamanager.BaseManager;
+import com.friendlypos.login.activity.LoginActivity;
+import com.friendlypos.login.util.SessionPrefes;
 import com.friendlypos.principal.adapters.ClientesAdapter;
 import com.friendlypos.application.interfaces.RequestInterface;
 import com.friendlypos.principal.modelo.Clientes;
@@ -50,6 +53,13 @@ public class ClientesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_clientes);
         ButterKnife.bind(this);
 
+        // Redirección al Login
+        if (!SessionPrefes.get(this).isLoggedIn()) {
+            startActivity(new Intent(this, LoginActivity.class));
+            finish();
+            return;
+        }
+
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -60,6 +70,9 @@ public class ClientesActivity extends AppCompatActivity {
         progress.setCanceledOnTouchOutside(false);
         progress.show();
 
+        // Obtener token de usuario
+        String token = "Bearer " + SessionPrefes.get(this).getToken();
+        Log.d("tokenCliente", token +" ");
         // Init Realm
         realm.init(this);
         RealmConfiguration realmConfiguration = new RealmConfiguration.Builder()
@@ -76,7 +89,7 @@ public class ClientesActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
 
         api = BaseManager.getApi();
-        Call<ClientesResponse> call = api.getJSON();
+        Call<ClientesResponse> call = api.getJSON(token);
 
         call.enqueue(new Callback<ClientesResponse>() {
             @Override
