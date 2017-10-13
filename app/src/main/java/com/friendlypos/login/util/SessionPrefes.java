@@ -45,7 +45,7 @@ public class SessionPrefes {
         return mIsLoggedIn;
     }
 
-    public void saveAffiliate(UserResponse userresp) {
+    public void guardarDatosUsuario(UserResponse userresp) {
         if (userresp != null) {
             SharedPreferences.Editor editor = mPrefs.edit();
             editor.putString(PREF_USER_TOKEN_TYPE, userresp.getToken_type());
@@ -62,32 +62,17 @@ public class SessionPrefes {
     }
 
 
-    public void logoutUser(){
-        // Clearing all data from Shared Preferences
+    public void cerrarSesion(){
+        // Limpiar todos los datos guardados del Usuario
         SharedPreferences.Editor editor = mPrefs.edit();
         editor.clear();
         editor.commit();
 
-        // After logout redirect user to Loing Activity
         Intent i = new Intent(_context, LoginActivity.class);
-        // Closing all the Activities
+        // Cerrar todas las actividades
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
-        // Add new Flag to start new Activity
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-        // Staring Login Activity
         _context.startActivity(i);
-    }
-
-
-    public void logOut(){
-        mIsLoggedIn = false;
-        SharedPreferences.Editor editor = mPrefs.edit();
-        editor.putString(PREF_USER_TOKEN_TYPE, null);
-        editor.putString(PREF_USER_EXPIRES_IN, null);
-        editor.putString(PREF_USER_ACCESS_TOKEN, null);
-        editor.putString(PREF_USER_REFRESH_TOKEN, null);
-        editor.apply();
     }
 }

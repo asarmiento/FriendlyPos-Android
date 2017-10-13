@@ -131,7 +131,7 @@ public class MenuPrincipal  extends BluetoothActivity implements PopupMenu.OnMen
         switch (item.getItemId()) {
             case R.id.menu_cerrarsesion:
                 Toast.makeText(MenuPrincipal.this, "CerrarSesion", Toast.LENGTH_SHORT).show();
-                session.logoutUser();
+                session.cerrarSesion();
                 break;
 
             case R.id.btn_descargar_catalogo:

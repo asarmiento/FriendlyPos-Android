@@ -73,14 +73,8 @@ public class ClientesActivity extends AppCompatActivity {
         // Obtener token de usuario
         String token = "Bearer " + SessionPrefes.get(this).getToken();
         Log.d("tokenCliente", token +" ");
-        // Init Realm
-        realm.init(this);
-        RealmConfiguration realmConfiguration = new RealmConfiguration.Builder()
-                .name("Clientes.realm")
-                .deleteRealmIfMigrationNeeded()
-                .build();
-        // Create a new empty instance of Realm
-        realm = Realm.getInstance(realmConfiguration);
+
+        realm = Realm.getDefaultInstance();
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
@@ -104,8 +98,9 @@ public class ClientesActivity extends AppCompatActivity {
                     // Add content to the realm DB
                     // Open a transaction to store items into the realm
                     // Use copyToRealm() to convert the objects into proper RealmObjects managed by Realm.
+
                     realm.beginTransaction();
-                    realm.copyToRealmOrUpdate(mContentsArray);
+                    realm.copyToRealm(mContentsArray);
                     realm.commitTransaction();
 
                     Toast.makeText(ClientesActivity.this, getString(R.string.success), Toast.LENGTH_SHORT).show();
