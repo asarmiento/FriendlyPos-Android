@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.friendlypos.R;
 import com.friendlypos.application.datamanager.BaseManager;
+import com.friendlypos.login.activity.LoginActivity;
 import com.friendlypos.login.util.SessionPrefes;
 import com.friendlypos.principal.adapters.ProductosAdapter;
 import com.friendlypos.application.interfaces.RequestInterface;
@@ -22,6 +23,8 @@ import com.friendlypos.principal.modelo.ProductosResponse;
 
 import java.util.ArrayList;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
@@ -31,9 +34,14 @@ import retrofit2.Response;
 
 public class ProductosActivity extends AppCompatActivity {
 
+
+    @Bind(R.id.toolbar)
+    Toolbar toolbar;
+
+    @Bind(R.id.recyclerView)
+    RecyclerView recyclerView;
+
     private ProgressDialog progress;
-    private RecyclerView recyclerView;
-    private TextView mTvTitle;
     private ArrayList<Productos> mContentsArray = new ArrayList<>();
     private ProductosAdapter adapter;
 
@@ -44,7 +52,15 @@ public class ProductosActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_productos);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        ButterKnife.bind(this);
+
+        // Redirección al Login
+        if (!SessionPrefes.get(this).isLoggedIn()) {
+            startActivity(new Intent(this, LoginActivity.class));
+            finish();
+            return;
+        }
+
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -58,18 +74,10 @@ public class ProductosActivity extends AppCompatActivity {
         String token = "Bearer " + SessionPrefes.get(this).getToken();
         Log.d("tokenProdu", token);
         // Init Realm
-        realm.init(this);
-        RealmConfiguration realmConfiguration = new RealmConfiguration.Builder()
-                .name("Productos.realm")
-                .build();
-        // Create a new empty instance of Realm
-        realm = Realm.getInstance(realmConfiguration);
+        realm = Realm.getDefaultInstance();
 
-        mTvTitle = (TextView) findViewById(R.id.tv_title);
-        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
-
         adapter = new ProductosAdapter(mContentsArray);
         recyclerView.setAdapter(adapter);
 
@@ -84,18 +92,15 @@ public class ProductosActivity extends AppCompatActivity {
                 if(response.isSuccessful()) {
                     progress.dismiss();
 
-                    // Set title
-                    String title = response.body().getCode();
-                    Log.d("asdasdasda", title + "");
-                    mTvTitle.setText(title);
                     mContentsArray.addAll(response.body().getProductos());
 
                     // Add content to the realm DB
                     // Open a transaction to store items into the realm
                     // Use copyToRealm() to convert the objects into proper RealmObjects managed by Realm.
                     realm.beginTransaction();
-                    realm.copyToRealmOrUpdate(mContentsArray);
+                    realm.copyToRealm(mContentsArray);
                     realm.commitTransaction();
+                    realm.close();
 
                     Toast.makeText(ProductosActivity.this, getString(R.string.success), Toast.LENGTH_SHORT).show();
                 } else {

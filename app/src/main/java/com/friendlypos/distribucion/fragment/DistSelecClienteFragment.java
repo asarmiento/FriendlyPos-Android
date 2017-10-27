@@ -26,10 +26,11 @@ import io.realm.RealmResults;
 import static com.friendlypos.R.id.recyclerView;
 
 
-public class DistSelecProductoFragment extends Fragment {
+public class DistSelecClienteFragment extends Fragment {
     private Realm realm;
     RecyclerView recyclerView;
-    private ProductosAdapter adapter;
+
+    private ClientesAdapter adapter;
 
     public static DistSelecProductoFragment getInstance() {
         return new DistSelecProductoFragment();
@@ -43,14 +44,13 @@ public class DistSelecProductoFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
 
-        View rootView = inflater.inflate(R.layout.fragment_distribucion_selecproduct, container,
+        View rootView = inflater.inflate(R.layout.fragment_distribucion_seleccliente, container,
                 false);
-        recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerViewDistrSeleccProducto);
+        recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerViewDistrSeleccCliente);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setHasFixedSize(true);
-        adapter = new ProductosAdapter(getList());
+        adapter = new ClientesAdapter(getList());
         recyclerView.setAdapter(adapter);
 
         Log.d("lista", getList() + "");
@@ -58,10 +58,10 @@ public class DistSelecProductoFragment extends Fragment {
         return rootView;
     }
 
-    private List<Productos> getList(){
+    private List<Clientes> getList(){
         realm = Realm.getDefaultInstance();
-        RealmQuery<Productos> query = realm.where(Productos.class);
-        RealmResults<Productos> result1 = query.findAll();
+        RealmQuery<Clientes> query = realm.where(Clientes.class);
+        RealmResults<Clientes> result1 = query.findAll();
 
         return result1;
     }

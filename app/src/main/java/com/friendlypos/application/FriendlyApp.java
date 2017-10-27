@@ -12,9 +12,15 @@ public class FriendlyApp extends Application {
         super.onCreate();
 
         // Configure Realm for the application
+
         Realm.init(this);
-        RealmConfiguration realmConfiguration = new RealmConfiguration.Builder().build();
-        Realm.deleteRealm(realmConfiguration); // Clean slate
-        Realm.setDefaultConfiguration(realmConfiguration); // Make this Realm the default
+
+        RealmConfiguration config = new RealmConfiguration.Builder()
+                .name("app.realm")
+                .schemaVersion(1)
+                .deleteRealmIfMigrationNeeded()
+                .build();
+        Realm.setDefaultConfiguration(config);
+
     }
 }

@@ -78,7 +78,6 @@ public class ClientesActivity extends AppCompatActivity {
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
-
         adapter = new ClientesAdapter(mContentsArray);
         recyclerView.setAdapter(adapter);
 
@@ -102,6 +101,7 @@ public class ClientesActivity extends AppCompatActivity {
                     realm.beginTransaction();
                     realm.copyToRealm(mContentsArray);
                     realm.commitTransaction();
+                    realm.close();
 
                     Toast.makeText(ClientesActivity.this, getString(R.string.success), Toast.LENGTH_SHORT).show();
                 } else {
