@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.friendlypos.R;
+import com.friendlypos.distribucion.adapters.DistrProductosAdapter;
 import com.friendlypos.principal.adapters.ClientesAdapter;
 import com.friendlypos.principal.adapters.ProductosAdapter;
 import com.friendlypos.principal.modelo.Clientes;
@@ -29,7 +30,7 @@ import static com.friendlypos.R.id.recyclerView;
 public class DistSelecProductoFragment extends Fragment {
     private Realm realm;
     RecyclerView recyclerView;
-    private ProductosAdapter adapter;
+    private DistrProductosAdapter adapter;
 
     public static DistSelecProductoFragment getInstance() {
         return new DistSelecProductoFragment();
@@ -50,7 +51,7 @@ public class DistSelecProductoFragment extends Fragment {
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerViewDistrSeleccProducto);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setHasFixedSize(true);
-        adapter = new ProductosAdapter(getList());
+        adapter = new DistrProductosAdapter(getList());
         recyclerView.setAdapter(adapter);
 
         Log.d("lista", getList() + "");

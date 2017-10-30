@@ -1,8 +1,7 @@
-package com.friendlypos.principal.adapters;
+package com.friendlypos.distribucion.adapters;
 
 
-import android.app.Activity;
-import android.app.Fragment;
+import android.graphics.Color;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -20,11 +19,11 @@ import java.util.List;
  * Created by DelvoM on 21/09/2017.
  */
 
-public class ProductosAdapter extends RecyclerView.Adapter<ProductosAdapter.CharacterViewHolder> {
+public class DistrProductosAdapter extends RecyclerView.Adapter<DistrProductosAdapter.CharacterViewHolder> {
 
     private List<Productos> productosList;
 
-    public ProductosAdapter(List<Productos> productosList) {
+    public DistrProductosAdapter(List<Productos> productosList) {
 
         this.productosList = productosList;
     }
@@ -35,15 +34,29 @@ public class ProductosAdapter extends RecyclerView.Adapter<ProductosAdapter.Char
 
       //  CharacterViewHolder placeViewHolder = new CharacterViewHolder(view);
        // placeViewHolder.cardView.setOnClickListener(new ProductosAdapter(placeViewHolder, parent));
-        return new ProductosAdapter.CharacterViewHolder(view);
+        return new DistrProductosAdapter.CharacterViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(ProductosAdapter.CharacterViewHolder holder, final  int position) {
+    public void onBindViewHolder(DistrProductosAdapter.CharacterViewHolder holder, final  int position) {
         Productos productos = productosList.get(position);
         holder.tv_name.setText(productos.getDescription());
         holder.tv_version.setText(productos.getBarcode());
         holder.tv_api_level.setText(productos.getSale_price());
+
+        holder.cardView.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                //Here goes your desired onClick behaviour. Like:
+                view.setBackgroundColor(Color.parseColor("#607d8b"));
+                Toast.makeText(view.getContext(), "You have clicked " + position, Toast.LENGTH_SHORT).show(); //you can add data to the tag of your cardview in onBind... and retrieve it here with with.getTag().toString()..
+                //You can change the fragment, something like this, not tested, please correct for your desired output:
+            //    Activity activity = view.getContext();
+             //   Fragment CityName = new CityName();
+                //Create a bundle to pass data, add data, set the bundle to your fragment and:
+             //   activity.getFragmentManager().beginTransaction().replace(R.id.fragment_container, cityName).addToBackStack(null).commit();     //Here m getting error
+            }
+        });
     }
 
     @Override
@@ -61,7 +74,7 @@ public class ProductosAdapter extends RecyclerView.Adapter<ProductosAdapter.Char
         return 0;
     }
 
-    public static class CharacterViewHolder extends RecyclerView.ViewHolder {
+    public static class CharacterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView tv_name,tv_version,tv_api_level;
         protected CardView cardView;
@@ -72,8 +85,13 @@ public class ProductosAdapter extends RecyclerView.Adapter<ProductosAdapter.Char
             tv_name = (TextView)view.findViewById(R.id.tv_name);
             tv_version = (TextView)view.findViewById(R.id.tv_version);
             tv_api_level = (TextView)view.findViewById(R.id.tv_api_level);
+            view.setOnClickListener(this);
         }
 
+        @Override
+        public void onClick(View view) {
+            Toast.makeText(view.getContext(), "position = " + getPosition(), Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override

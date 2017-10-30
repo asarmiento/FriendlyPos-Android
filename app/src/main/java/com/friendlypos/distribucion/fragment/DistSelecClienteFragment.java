@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.friendlypos.R;
+import com.friendlypos.distribucion.adapters.DistrClientesAdapter;
 import com.friendlypos.principal.adapters.ClientesAdapter;
 import com.friendlypos.principal.adapters.ProductosAdapter;
 import com.friendlypos.principal.modelo.Clientes;
@@ -30,7 +31,7 @@ public class DistSelecClienteFragment extends Fragment {
     private Realm realm;
     RecyclerView recyclerView;
 
-    private ClientesAdapter adapter;
+    private DistrClientesAdapter adapter;
 
     public static DistSelecProductoFragment getInstance() {
         return new DistSelecProductoFragment();
@@ -50,7 +51,7 @@ public class DistSelecClienteFragment extends Fragment {
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerViewDistrSeleccCliente);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setHasFixedSize(true);
-        adapter = new ClientesAdapter(getList());
+        adapter = new DistrClientesAdapter(getList());
         recyclerView.setAdapter(adapter);
 
         Log.d("lista", getList() + "");
