@@ -5,8 +5,11 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.PopupMenu;
 import android.view.View;
 import android.support.v4.view.GravityCompat;
@@ -20,6 +23,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.friendlypos.R;
+import com.friendlypos.app.broadcastreceiver.NetworkStateChangeReceiver;
 import com.friendlypos.distribucion.activity.DistribucionActivity;
 import com.friendlypos.login.util.SessionPrefes;
 import com.friendlypos.principal.fragment.ConfiguracionFragment;
@@ -36,6 +40,7 @@ public class MenuPrincipal  extends BluetoothActivity implements PopupMenu.OnMen
        /* implements NavigationView.OnNavigationItemSelectedListener*/ {
     private static String POPUP_CONSTANT = "mPopup";
     private static String POPUP_FORCE_SHOW_ICON = "setForceShowIcon";
+    private NetworkStateChangeReceiver networkStateChangeReceiver;
 
     @Bind(R.id.clickClientes)
     LinearLayout clickClientes;
@@ -70,6 +75,8 @@ public class MenuPrincipal  extends BluetoothActivity implements PopupMenu.OnMen
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
        /* Initializing();*/
+        networkStateChangeReceiver = new NetworkStateChangeReceiver();
+
         session = new SessionPrefes(getApplicationContext());
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
@@ -131,11 +138,44 @@ public class MenuPrincipal  extends BluetoothActivity implements PopupMenu.OnMen
         switch (item.getItemId()) {
             case R.id.menu_cerrarsesion:
                 Toast.makeText(MenuPrincipal.this, "CerrarSesion", Toast.LENGTH_SHORT).show();
-                session.cerrarSesion();
+
+                AlertDialog alertDialog = new AlertDialog.Builder(
+                        getApplicationContext()).setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Write your code here to execute after dialog closed
+                        session.cerrarSesion();
+                        finish();
+                    }
+
+                }).setNegativeButton(
+                        "No", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Write your code here to execute after dialog closed
+                                //customer = cust;
+                                dialog.cancel();
+                                //new getDataClient().execute();
+                            }
+
+                        }
+                ).create();
+
+                alertDialog.setMessage("Seguro que quiere cerrar Sesion?");
+
+                // Showing Alert Message
+                alertDialog.show();
+
                 break;
 
             case R.id.btn_descargar_catalogo:
                 Toast.makeText(MenuPrincipal.this, "descargar_catalogo", Toast.LENGTH_SHORT).show();
+
+                if (!isOnline()) {
+                    Toast.makeText(MenuPrincipal.this, getString(R.string.failed), Toast.LENGTH_LONG).show();
+                }
+               /* DownloadData download = new DownloadData(getApplicationContext());
+                download.execute();*/
+
+
                 break;
             case R.id.btn_descargar_inventario:
                 Toast.makeText(MenuPrincipal.this, "descargar_inventario", Toast.LENGTH_SHORT).show();
@@ -309,4 +349,9 @@ public class MenuPrincipal  extends BluetoothActivity implements PopupMenu.OnMen
         }
         return false;
     }
+
+    private boolean isOnline() {
+        return networkStateChangeReceiver.isNetworkAvailable(this);
+    }
+
 }

@@ -43,7 +43,7 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
         holder.txt_cliente_due.setText(content.getDue());
         holder.txt_cliente_credittime.setText(content.getCreditTime());
 
-        holder.cardView.setOnClickListener(new View.OnClickListener(){
+   /*     holder.cardView.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
                 //Here goes your desired onClick behaviour. Like:
@@ -55,7 +55,7 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
                 //Create a bundle to pass data, add data, set the bundle to your fragment and:
                 //   activity.getFragmentManager().beginTransaction().replace(R.id.fragment_container, cityName).addToBackStack(null).commit();     //Here m getting error
             }
-        });
+        });*/
 
     }
 

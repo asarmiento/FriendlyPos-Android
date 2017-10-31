@@ -23,5 +23,10 @@ public interface RequestInterface {
     @GET("api/donwload-info-business")
     Call<ProductosResponse> getProducts(@Header("Authorization") String token);
 
+    @GET("api/donwload-inventory-products")
+    Call<ProductosResponse> getInventory(@Header("Authorization") String token);
+
+
+
 
 }

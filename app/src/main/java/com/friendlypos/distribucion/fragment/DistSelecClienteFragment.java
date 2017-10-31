@@ -1,5 +1,6 @@
 package com.friendlypos.distribucion.fragment;
 
+import android.graphics.Color;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,8 +10,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.friendlypos.R;
+import com.friendlypos.distribucion.activity.RecyclerTouchListener;
 import com.friendlypos.distribucion.adapters.DistrClientesAdapter;
 import com.friendlypos.principal.adapters.ClientesAdapter;
 import com.friendlypos.principal.adapters.ProductosAdapter;
@@ -25,6 +28,7 @@ import io.realm.RealmQuery;
 import io.realm.RealmResults;
 
 import static com.friendlypos.R.id.recyclerView;
+import static io.realm.internal.SyncObjectServerFacade.getApplicationContext;
 
 
 public class DistSelecClienteFragment extends Fragment {
@@ -53,6 +57,20 @@ public class DistSelecClienteFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         adapter = new DistrClientesAdapter(getList());
         recyclerView.setAdapter(adapter);
+
+        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView, new RecyclerTouchListener.ClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+                view.setBackgroundColor(Color.parseColor("#607d8b"));
+                Clientes movie = getList().get(position);
+                Toast.makeText(getApplicationContext(), movie.getName() + " is selected!", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onLongClick(View view, int position) {
+
+            }
+        }));
 
         Log.d("lista", getList() + "");
 
