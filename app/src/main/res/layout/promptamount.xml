@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:layout_marginTop="5dp"
+    android:layout_marginBottom="5dp"
+    android:background="@color/colorPrimary">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:text="Ingrese una cantidad, maximo de 20 Unidades, minimo 1"
+        android:gravity="center"
+        android:id="@+id/promtClabel"/>
+
+    <TextView
+        android:id="@+id/lblPrecios"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:text="Precios: "
+        android:layout_below="@id/promtClabel"
+        />
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/lblPrecios"
+        android:id="@+id/spPrices"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:inputType="numberDecimal"
+        android:layout_marginTop="5dp"
+        android:layout_margin="10dp"
+        android:padding="10dp"
+        style="@style/TextAppearance.AppCompat.Medium"
+        android:hint="Ingrese la cantidad"
+        android:layout_height="50dp"
+        android:layout_below="@+id/spPrices"
+        android:id="@+id/promtCtext"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:inputType="numberDecimal"
+        android:layout_marginTop="5dp"
+        android:layout_margin="10dp"
+        android:padding="10dp"
+        style="@style/TextAppearance.AppCompat.Medium"
+        android:hint="Ingrese el descuento"
+        android:layout_height="50dp"
+        android:layout_below="@+id/promtCtext"
+        android:id="@+id/promtCDesc"/>
+
+</RelativeLayout>

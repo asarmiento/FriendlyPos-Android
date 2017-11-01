@@ -1,12 +1,16 @@
 package com.friendlypos.distribucion.adapters;
 
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,6 +26,7 @@ import java.util.List;
 
 public class DistrProductosInvAdapter extends RecyclerView.Adapter<DistrProductosInvAdapter.CharacterViewHolder> {
 
+    private Context context;
     private List<Inventario> productosList;
 
     public DistrProductosInvAdapter(List<Inventario> productosList) {
@@ -33,6 +38,7 @@ public class DistrProductosInvAdapter extends RecyclerView.Adapter<DistrProducto
     public CharacterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.lista_productos, parent, false);
 
+        context = parent.getContext();
       //  CharacterViewHolder placeViewHolder = new CharacterViewHolder(view);
        // placeViewHolder.cardView.setOnClickListener(new ProductosAdapter(placeViewHolder, parent));
         return new DistrProductosInvAdapter.CharacterViewHolder(view);
@@ -41,11 +47,20 @@ public class DistrProductosInvAdapter extends RecyclerView.Adapter<DistrProducto
     @Override
     public void onBindViewHolder(DistrProductosInvAdapter.CharacterViewHolder holder, final  int position) {
         Inventario productos = productosList.get(position);
+
+        holder.cardView.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                addProduct();
+            }
+        });
+
         holder.tv_name.setText(productos.getProduct_id());
         holder.tv_version.setText(productos.getAmount());
         holder.tv_api_level.setText(productos.getAmount_dist());
 
-        holder.cardView.setOnClickListener(new View.OnClickListener(){
+     /*   holder.cardView.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
                 //Here goes your desired onClick behaviour. Like:
@@ -57,7 +72,40 @@ public class DistrProductosInvAdapter extends RecyclerView.Adapter<DistrProducto
                 //Create a bundle to pass data, add data, set the bundle to your fragment and:
              //   activity.getFragmentManager().beginTransaction().replace(R.id.fragment_container, cityName).addToBackStack(null).commit();     //Here m getting error
             }
-        });
+        });*/
+    }
+
+
+    public void addProduct() {
+
+        LayoutInflater layoutInflater = LayoutInflater.from(context);
+
+        View promptView = layoutInflater.inflate(R.layout.promptamount, null);
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+        alertDialogBuilder.setView(promptView);
+
+
+        // setup a dialog window
+        alertDialogBuilder
+                .setCancelable(false)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int id) {
+                        // get user input and set it to result
+                    }
+                })
+                .setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+        AlertDialog alertD = alertDialogBuilder.create();
+        alertD.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        alertD.show();
     }
 
     @Override
