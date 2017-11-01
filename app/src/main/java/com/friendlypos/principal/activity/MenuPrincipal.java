@@ -313,7 +313,7 @@ public class MenuPrincipal  extends BluetoothActivity implements PopupMenu.OnMen
 
             case R.id.clickClientes:
                 Intent clientes;
-                clientes = new Intent(MenuPrincipal.this, ClientesActivity.class);
+                clientes = new Intent(MenuPrincipal.this, DescargarInventario.class);
                 startActivity(clientes);
                 finish();
 

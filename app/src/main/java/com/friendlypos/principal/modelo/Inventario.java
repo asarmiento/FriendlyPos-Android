@@ -1,10 +1,12 @@
 package com.friendlypos.principal.modelo;
 
+import io.realm.RealmObject;
+
 /**
  * Created by DelvoM on 31/10/2017.
  */
 
-public class Inventario {
+public class Inventario extends RealmObject {
 
     private String id;
     private String product_id;

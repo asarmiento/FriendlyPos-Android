@@ -8,14 +8,14 @@
     <item
 
         android:id="@+id/menu_sincronizar"
-        android:icon="@mipmap/ic_menu_desc_sub"
+        android:icon="@mipmap/ic_print"
         android:title="List"
         app:showAsAction="always"
         android:onClick="onMenuItemSelect"
         />
     <item
         android:id="@+id/menu_cerrarsesion"
-        android:icon="@mipmap/ic_menu_cerrar_sesion"
+        android:icon="@mipmap/ic_print"
         android:title="List"
         app:showAsAction="always"
         android:onClick="onMenuItemClick"

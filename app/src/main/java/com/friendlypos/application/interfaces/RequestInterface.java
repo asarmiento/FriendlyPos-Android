@@ -4,6 +4,7 @@ package com.friendlypos.application.interfaces;
 import com.friendlypos.login.modelo.User;
 import com.friendlypos.login.modelo.UserResponse;
 import com.friendlypos.principal.modelo.ClientesResponse;
+import com.friendlypos.principal.modelo.InventarioResponse;
 import com.friendlypos.principal.modelo.ProductosResponse;
 
 import retrofit2.Call;
@@ -24,7 +25,7 @@ public interface RequestInterface {
     Call<ProductosResponse> getProducts(@Header("Authorization") String token);
 
     @GET("api/donwload-inventory-products")
-    Call<ProductosResponse> getInventory(@Header("Authorization") String token);
+    Call<InventarioResponse> getInventory(@Header("Authorization") String token);
 
 
 
