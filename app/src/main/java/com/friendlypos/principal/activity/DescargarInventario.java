@@ -1,7 +1,10 @@
 package com.friendlypos.principal.activity;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,13 +18,16 @@ import com.friendlypos.R;
 import com.friendlypos.application.datamanager.BaseManager;
 import com.friendlypos.application.interfaces.RequestInterface;
 import com.friendlypos.distribucion.adapters.DistrProductosInvAdapter;
+import com.friendlypos.distribucion.modelo.Facturas;
+import com.friendlypos.distribucion.modelo.FacturasResponse;
 import com.friendlypos.login.activity.LoginActivity;
 import com.friendlypos.login.util.SessionPrefes;
-import com.friendlypos.principal.adapters.ClientesAdapter;
+import com.friendlypos.distribucion.modelo.Inventario;
+import com.friendlypos.distribucion.modelo.InventarioResponse;
 import com.friendlypos.principal.modelo.Clientes;
 import com.friendlypos.principal.modelo.ClientesResponse;
-import com.friendlypos.principal.modelo.Inventario;
-import com.friendlypos.principal.modelo.InventarioResponse;
+import com.friendlypos.principal.modelo.Productos;
+import com.friendlypos.principal.modelo.ProductosResponse;
 
 import java.util.ArrayList;
 
@@ -37,56 +43,32 @@ import retrofit2.Response;
  * Created by DelvoM on 31/10/2017.
  */
 
-public class DescargarInventario  extends AppCompatActivity {
+public class DescargarInventario extends AsyncTask<Void, Integer, Boolean> {
 
-    @Bind(R.id.toolbar)
-    Toolbar toolbar;
+    private Activity activity;
 
-    @Bind(R.id.recyclerView)
-    RecyclerView recyclerView;
-
-    private ProgressDialog progress;
     private ArrayList<Inventario> mContentsArray = new ArrayList<>();
-    private DistrProductosInvAdapter adapter;
+    private ArrayList<Facturas> mContentsArray2 = new ArrayList<>();
+
+    private ProgressDialog pDialog;
+    private Context mContext;
 
     private Realm realm;
     private RequestInterface api;
 
+    public DescargarInventario(Activity activity){
+        this.activity = activity;
+        this.mContext = activity;
+
+    }
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_clientes);
-        ButterKnife.bind(this);
+    protected Boolean doInBackground(Void... params) {
 
-        // Redirección al Login
-        if (!SessionPrefes.get(this).isLoggedIn()) {
-            startActivity(new Intent(this, LoginActivity.class));
-            finish();
-            return;
-        }
-
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-
-        progress = new ProgressDialog(this);
-        progress.setMessage("Cargando lista de inventarios");
-        progress.setCanceledOnTouchOutside(false);
-        progress.show();
-
-        // Obtener token de usuario
-        String token = "Bearer " + SessionPrefes.get(this).getToken();
+        String token = "Bearer " + SessionPrefes.get(mContext).getToken();
         Log.d("tokenCliente", token +" ");
 
-        realm = Realm.getDefaultInstance();
-
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setHasFixedSize(true);
-        adapter = new DistrProductosInvAdapter(mContentsArray);
-        recyclerView.setAdapter(adapter);
-
         api = BaseManager.getApi();
+
         Call<InventarioResponse> call = api.getInventory(token);
 
         call.enqueue(new Callback<InventarioResponse>() {
@@ -95,54 +77,112 @@ public class DescargarInventario  extends AppCompatActivity {
                 mContentsArray.clear();
 
                 if(response.isSuccessful()) {
-                    progress.dismiss();
 
                     mContentsArray.addAll(response.body().getInventarios());
 
-                    // Add content to the realm DB
-                    // Open a transaction to store items into the realm
-                    // Use copyToRealm() to convert the objects into proper RealmObjects managed by Realm.
+                    try {
+                        // Work with Realm
+                        realm.beginTransaction();
+                        realm.copyToRealm(mContentsArray);
+                        realm.commitTransaction();
+                        //realm.close();
+                    } finally {
+                        realm.close();
+                    }
 
-                    realm.beginTransaction();
-                    realm.copyToRealm(mContentsArray);
-                    realm.commitTransaction();
-                    realm.close();
-
-                    Toast.makeText(DescargarInventario.this, getString(R.string.success), Toast.LENGTH_SHORT).show();
+                  //  Toast.makeText(DescargarInventario.this, getString(R.string.success), Toast.LENGTH_SHORT).show();
                 } else {
-                    progress.dismiss();
-                    Toast.makeText(DescargarInventario.this, getString(R.string.error) + " CODE: " +response.code(), Toast.LENGTH_LONG).show();
+                  //  Toast.makeText(DescargarInventario.this, getString(R.string.error) + " CODE: " +response.code(), Toast.LENGTH_LONG).show();
                     RealmResults<Inventario> results = realm.where(Inventario.class).findAll();
                     mContentsArray.addAll(results);
                 }
 
-                adapter.notifyDataSetChanged();
             }
 
             @Override
             public void onFailure(Call<InventarioResponse> call, Throwable t) {
-                progress.dismiss();
-                Toast.makeText(DescargarInventario.this, getString(R.string.failed), Toast.LENGTH_LONG).show();
+               // Toast.makeText(DescargarInventario.this, getString(R.string.failed), Toast.LENGTH_LONG).show();
                 RealmResults<Inventario> results = realm.where(Inventario.class).findAll();
                 mContentsArray.addAll(results);
-                adapter.notifyDataSetChanged();
             }
         });
 
+
+        Call<FacturasResponse> call2 = api.getFacturas(token);
+
+        call2.enqueue(new Callback<FacturasResponse>() {
+            @Override
+            public void onResponse(Call<FacturasResponse> call2, Response<FacturasResponse> response2) {
+                mContentsArray2.clear();
+
+                if(response2.isSuccessful()) {
+
+                    mContentsArray2.addAll(response2.body().getFacturas());
+                    realm = Realm.getDefaultInstance();
+                    try {
+                        realm.beginTransaction();
+                        realm.copyToRealm(mContentsArray2);
+                        realm.commitTransaction();
+                    } finally {
+                        realm.close();
+                    }
+
+                    Log.d("finish", mContentsArray2 +" ");
+
+                    //Toast.makeText(ProductosActivity.this, getString(R.string.success), Toast.LENGTH_SHORT).show();
+                } else {
+                    // Toast.makeText(ProductosActivity.this, getString(R.string.error) + " CODE: " +response.code(), Toast.LENGTH_LONG).show();
+                    RealmResults<Facturas> results2 = realm.where(Facturas.class).findAll();
+                    mContentsArray2.addAll(results2);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<FacturasResponse> call2, Throwable t) {
+                //  Toast.makeText(ProductosActivity.this, getString(R.string.failed), Toast.LENGTH_LONG).show();
+                RealmResults<Facturas> results2 = realm.where(Facturas.class).findAll();
+                mContentsArray2.addAll(results2);
+            }
+        });
+
+        return true;
     }
+
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
+    protected void onProgressUpdate(Integer... values) {
+        int progreso = values[0].intValue();
 
-                Intent intent = new Intent(DescargarInventario.this, MenuPrincipal.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-                finish();
-                return true;
+        pDialog.setProgress(progreso);
+    }
 
-            default:
-                return super.onOptionsItemSelected(item);
+    @Override
+    protected void onPreExecute() {
+        this.pDialog = new ProgressDialog(activity);
+        this.pDialog.setMessage("Cargando lista de inventarios");
+        if(!this.pDialog.isShowing()){
+            this.pDialog.show();
+        }
+     /*  pDialog = new ProgressDialog(get);
+        pDialog.setMessage("Cargando lista de inventarios");
+        pDialog.setCanceledOnTouchOutside(false);
+        pDialog.setProgress(0);
+        pDialog.show();*/
+    }
+
+    @Override
+    protected void onPostExecute(Boolean result) {
+        if(result)
+        {
+            pDialog.dismiss();
+            // Toast.makeText(DescargarCatalogo.this, "Tarea finalizada!", Toast.LENGTH_SHORT).show();
         }
     }
+
+    @Override
+    protected void onCancelled() {
+        //Toast.makeText(DescargarCatalogo.this, "Tarea cancelada!", Toast.LENGTH_SHORT).show();
+    }
 }
+
+
+

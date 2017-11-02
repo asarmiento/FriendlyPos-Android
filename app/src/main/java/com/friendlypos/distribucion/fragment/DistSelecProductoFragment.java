@@ -1,41 +1,24 @@
 package com.friendlypos.distribucion.fragment;
 
-import android.content.DialogInterface;
-import android.content.res.Configuration;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.friendlypos.R;
 import com.friendlypos.distribucion.adapters.DistrProductosAdapter;
-import com.friendlypos.principal.adapters.ClientesAdapter;
-import com.friendlypos.principal.adapters.ProductosAdapter;
-import com.friendlypos.principal.modelo.Clientes;
-import com.friendlypos.principal.modelo.Inventario;
 import com.friendlypos.principal.modelo.Productos;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
 import io.realm.Realm;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
 
-import static com.friendlypos.R.id.recyclerView;
 import static java.lang.String.valueOf;
 
 

@@ -143,6 +143,7 @@
     <string name="error_incorrect_user_id">Usuario no registrado</string>
     <string name="error_network">Conexión de red no disponible</string>
     <string name="error_invalid_password">Contraseña inválida</string>
+    <string name="credits">Sistemas Amigables de Costa Rica S.A</string>
 
    <!-- DISTRIBUCION -->
 

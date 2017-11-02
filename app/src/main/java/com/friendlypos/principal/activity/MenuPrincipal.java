@@ -137,10 +137,9 @@ public class MenuPrincipal  extends BluetoothActivity implements PopupMenu.OnMen
     public boolean onMenuItemClick(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_cerrarsesion:
-                Toast.makeText(MenuPrincipal.this, "CerrarSesion", Toast.LENGTH_SHORT).show();
 
                 AlertDialog alertDialog = new AlertDialog.Builder(
-                        getApplicationContext()).setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                        MenuPrincipal.this).setPositiveButton("Si", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         // Write your code here to execute after dialog closed
                         session.cerrarSesion();
@@ -163,7 +162,6 @@ public class MenuPrincipal  extends BluetoothActivity implements PopupMenu.OnMen
 
                 // Showing Alert Message
                 alertDialog.show();
-
                 break;
 
             case R.id.btn_descargar_catalogo:
@@ -172,9 +170,8 @@ public class MenuPrincipal  extends BluetoothActivity implements PopupMenu.OnMen
                 if (!isOnline()) {
                     Toast.makeText(MenuPrincipal.this, getString(R.string.failed), Toast.LENGTH_LONG).show();
                 }
-               /* DownloadData download = new DownloadData(getApplicationContext());
-                download.execute();*/
-
+                DescargarCatalogo download = new DescargarCatalogo(MenuPrincipal.this);
+                download.execute();
 
                 break;
             case R.id.btn_descargar_inventario:
@@ -313,14 +310,12 @@ public class MenuPrincipal  extends BluetoothActivity implements PopupMenu.OnMen
 
             case R.id.clickClientes:
                 Intent clientes;
-                clientes = new Intent(MenuPrincipal.this, DescargarInventario.class);
+                clientes = new Intent(MenuPrincipal.this, ClientesActivity.class);
                 startActivity(clientes);
                 finish();
 
                 break;
             case R.id.clickProductos:
-                Toast.makeText(this, "productos", Toast.LENGTH_SHORT).show();
-
                 Intent productos;
                 productos = new Intent(MenuPrincipal.this, ProductosActivity.class);
                 startActivity(productos);

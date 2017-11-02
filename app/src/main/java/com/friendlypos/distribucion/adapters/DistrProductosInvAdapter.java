@@ -3,7 +3,6 @@ package com.friendlypos.distribucion.adapters;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Color;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -15,8 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.friendlypos.R;
-import com.friendlypos.principal.modelo.Inventario;
-import com.friendlypos.principal.modelo.Productos;
+import com.friendlypos.distribucion.modelo.Inventario;
 
 import java.util.List;
 

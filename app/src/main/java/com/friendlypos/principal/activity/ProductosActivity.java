@@ -16,17 +16,20 @@ import com.friendlypos.R;
 import com.friendlypos.application.datamanager.BaseManager;
 import com.friendlypos.login.activity.LoginActivity;
 import com.friendlypos.login.util.SessionPrefes;
+import com.friendlypos.principal.adapters.ClientesAdapter;
 import com.friendlypos.principal.adapters.ProductosAdapter;
 import com.friendlypos.application.interfaces.RequestInterface;
 import com.friendlypos.principal.modelo.Productos;
 import com.friendlypos.principal.modelo.ProductosResponse;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
+import io.realm.RealmQuery;
 import io.realm.RealmResults;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -65,7 +68,16 @@ public class ProductosActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        progress = new ProgressDialog(this);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setHasFixedSize(true);
+        adapter = new ProductosAdapter(getList());
+        recyclerView.setAdapter(adapter);
+
+        Log.d("lista", getList() + "");
+
+
+
+       /* progress = new ProgressDialog(this);
         progress.setMessage("Cargando lista de productos");
         progress.setCanceledOnTouchOutside(false);
         progress.show();
@@ -122,7 +134,15 @@ public class ProductosActivity extends AppCompatActivity {
                 adapter.notifyDataSetChanged();
             }
         });
+*/
+    }
 
+    private List<Productos> getList(){
+        realm = Realm.getDefaultInstance();
+        RealmQuery<Productos> query = realm.where(Productos.class);
+        RealmResults<Productos> result1 = query.findAll();
+
+        return result1;
     }
 
     @Override

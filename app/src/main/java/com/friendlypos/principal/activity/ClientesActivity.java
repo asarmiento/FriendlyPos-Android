@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.friendlypos.R;
 import com.friendlypos.application.datamanager.BaseManager;
+import com.friendlypos.distribucion.adapters.DistrProductosAdapter;
 import com.friendlypos.login.activity.LoginActivity;
 import com.friendlypos.login.util.SessionPrefes;
 import com.friendlypos.principal.adapters.ClientesAdapter;
@@ -20,17 +21,20 @@ import com.friendlypos.application.interfaces.RequestInterface;
 import com.friendlypos.principal.modelo.Clientes;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
+import io.realm.RealmQuery;
 import io.realm.RealmResults;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 import com.friendlypos.principal.modelo.ClientesResponse;
+import com.friendlypos.principal.modelo.Productos;
 
 public class ClientesActivity extends AppCompatActivity {
 
@@ -64,8 +68,40 @@ public class ClientesActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setHasFixedSize(true);
+        adapter = new ClientesAdapter(getList());
+        recyclerView.setAdapter(adapter);
 
-        progress = new ProgressDialog(this);
+        Log.d("lista", getList() + "");
+    }
+
+
+
+        private List<Clientes> getList(){
+            realm = Realm.getDefaultInstance();
+            RealmQuery<Clientes> query = realm.where(Clientes.class);
+            RealmResults<Clientes> result1 = query.findAll();
+
+            return result1;
+        }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+
+                Intent intent = new Intent(ClientesActivity.this, MenuPrincipal.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                finish();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+     /*   progress = new ProgressDialog(this);
         progress.setMessage("Cargando lista de clientes");
         progress.setCanceledOnTouchOutside(false);
         progress.show();
@@ -122,22 +158,7 @@ public class ClientesActivity extends AppCompatActivity {
                 mContentsArray.addAll(results);
                 adapter.notifyDataSetChanged();
             }
-        });
+        });*/
 
-}
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
 
-                Intent intent = new Intent(ClientesActivity.this, MenuPrincipal.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-                finish();
-                return true;
-
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
 }

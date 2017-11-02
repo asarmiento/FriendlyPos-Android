@@ -7,6 +7,7 @@ import android.text.TextUtils;
 
 import com.friendlypos.login.activity.LoginActivity;
 import com.friendlypos.login.modelo.UserResponse;
+import com.friendlypos.principal.activity.DescargarCatalogo;
 
 public class SessionPrefes {
 

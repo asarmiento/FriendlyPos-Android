@@ -1,5 +1,7 @@
 package com.friendlypos.login.activity;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
@@ -20,11 +22,14 @@ import com.friendlypos.R;
 import com.friendlypos.app.broadcastreceiver.NetworkStateChangeReceiver;
 import com.friendlypos.application.datamanager.BaseManager;
 import com.friendlypos.application.interfaces.RequestInterface;
+import com.friendlypos.application.util.Functions;
 import com.friendlypos.login.modelo.User;
 import com.friendlypos.login.modelo.UserError;
 import com.friendlypos.login.modelo.UserResponse;
 import com.friendlypos.login.util.SessionPrefes;
 import com.friendlypos.principal.activity.MenuPrincipal;
+
+import org.sufficientlysecure.htmltextview.HtmlTextView;
 
 import java.io.IOException;
 
@@ -38,9 +43,8 @@ public class LoginActivity extends AppCompatActivity {
 
     private RequestInterface api;
     private NetworkStateChangeReceiver networkStateChangeReceiver;
+    private ProgressDialog progress;
 
-    @Bind(R.id.txtVersionLogin)
-    TextView textView3;
 
     @Bind(R.id.usuario)
     EditText mUserIdView;
@@ -66,12 +70,18 @@ public class LoginActivity extends AppCompatActivity {
     @Bind(R.id.email_sign_in_button)
     Button mSignInButton;
 
+    Context context =null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         ButterKnife.bind(this);
+        context = this;
+
+        HtmlTextView copy = (HtmlTextView) findViewById(R.id.copyright);
+        copy.setHtmlFromString("<font size=\"7sp\"><a href=\"http://www.sistemasamigables.com/\">" + Functions.getVesionNaveCode(context)+" "+context.getString(R.string.credits) +"</a></font>", new HtmlTextView.LocalImageGetter());
 
         networkStateChangeReceiver = new NetworkStateChangeReceiver();
         // Setup
@@ -144,7 +154,10 @@ public class LoginActivity extends AppCompatActivity {
             focusView.requestFocus();
         } else {
             // Mostrar el indicador de carga y luego iniciar la petición asíncrona.
-            showProgress(true);
+            progress = new ProgressDialog(this);
+            progress.setMessage("Iniciando sesión");
+            progress.setCanceledOnTouchOutside(false);
+            progress.show();
 
         api = BaseManager.getApi();
         Call<UserResponse> call = api.loginUser(new User(userId, password));
@@ -153,8 +166,6 @@ public class LoginActivity extends AppCompatActivity {
 
                 @Override
                 public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
-                    // Mostrar progreso
-                    showProgress(false);
 
                     // Procesar errores
                     if (!response.isSuccessful()) {
@@ -176,7 +187,11 @@ public class LoginActivity extends AppCompatActivity {
                             }
                         }
 
+                        progress.dismiss();
+
+
                         showLoginError(error);
+
                         return;
                     }
                     Log.d("fsdfsdfs", response.body().getToken_type() + " " + response.body().getAccess_token() + "");
@@ -188,7 +203,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<UserResponse> call, Throwable t) {
-                    showProgress(false);
+                    progress.dismiss();
                     showLoginError(t.getMessage());
                 }
             });

@@ -1,10 +1,11 @@
 package com.friendlypos.application.interfaces;
 
 
+import com.friendlypos.distribucion.modelo.FacturasResponse;
 import com.friendlypos.login.modelo.User;
 import com.friendlypos.login.modelo.UserResponse;
 import com.friendlypos.principal.modelo.ClientesResponse;
-import com.friendlypos.principal.modelo.InventarioResponse;
+import com.friendlypos.distribucion.modelo.InventarioResponse;
 import com.friendlypos.principal.modelo.ProductosResponse;
 
 import retrofit2.Call;
@@ -27,7 +28,7 @@ public interface RequestInterface {
     @GET("api/donwload-inventory-products")
     Call<InventarioResponse> getInventory(@Header("Authorization") String token);
 
-
-
+    @GET("api/donwload-inventory-products")
+    Call<FacturasResponse> getFacturas(@Header("Authorization") String token);
 
 }
