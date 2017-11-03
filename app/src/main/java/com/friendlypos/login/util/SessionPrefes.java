@@ -7,7 +7,6 @@ import android.text.TextUtils;
 
 import com.friendlypos.login.activity.LoginActivity;
 import com.friendlypos.login.modelo.UserResponse;
-import com.friendlypos.principal.activity.DescargarCatalogo;
 
 public class SessionPrefes {
 
@@ -48,6 +47,8 @@ public class SessionPrefes {
 
     public void guardarDatosUsuario(UserResponse userresp) {
         if (userresp != null) {
+            //todo revisar que es PREF_USER_EXPIRES_IN
+            // referencia https://www.timecalculator.net/milliseconds-to-date
             SharedPreferences.Editor editor = mPrefs.edit();
             editor.putString(PREF_USER_TOKEN_TYPE, userresp.getToken_type());
             editor.putString(PREF_USER_EXPIRES_IN, userresp.getExpires_in());

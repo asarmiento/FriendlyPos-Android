@@ -49,10 +49,10 @@ public class DistribucionActivity extends AppCompatActivity  {
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
 
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+       /* tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
 
             @Override
-            public void onTabSelected(TabLayout.Tab tab) {
+           public void onTabSelected(TabLayout.Tab tab) {
                 if (tab.getPosition() != 0) {
 
                     Functions.CreateMessage(DistribucionActivity.this, "Distribución", "Seleccione una factura.");
@@ -80,7 +80,7 @@ public class DistribucionActivity extends AppCompatActivity  {
             public void onTabReselected(TabLayout.Tab tab) {
 
             }
-        });
+        });*/
     }
 
     private void setupViewPager(ViewPager viewPager) {

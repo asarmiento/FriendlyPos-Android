@@ -141,7 +141,28 @@ public class Clientes extends RealmObject {
         this.updated_at = updatedAt;
     }
 
-   /* private String id;
+    @Override
+    public String toString() {
+        return "Clientes{" +
+                "id='" + id + '\'' +
+                ", card='" + card + '\'' +
+                ", placa='" + placa + '\'' +
+                ", doors='" + doors + '\'' +
+                ", name='" + name + '\'' +
+                ", fantasy_name='" + fantasy_name + '\'' +
+                ", company_name='" + company_name + '\'' +
+                ", phone='" + phone + '\'' +
+                ", credit_limit='" + credit_limit + '\'' +
+                ", due='" + due + '\'' +
+                ", address='" + address + '\'' +
+                ", zoneId='" + zoneId + '\'' +
+                ", fixed_discount='" + fixed_discount + '\'' +
+                ", credit_time='" + credit_time + '\'' +
+                ", updated_at='" + updated_at + '\'' +
+                '}';
+    }
+
+    /* private String id;
     private String title;
     private String image;
 

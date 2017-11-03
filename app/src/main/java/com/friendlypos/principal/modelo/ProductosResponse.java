@@ -8,6 +8,7 @@ import java.util.List;
 public class ProductosResponse {
     private boolean result;
     private String code;
+
     @SerializedName("products")
     private List<Productos> products;
 

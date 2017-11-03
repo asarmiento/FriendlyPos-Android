@@ -1,9 +1,12 @@
 package com.friendlypos.principal.modelo;
 
+import com.friendlypos.distribucion.modelo.Pivot;
+import com.google.gson.annotations.Expose;
+
 import io.realm.RealmObject;
 
 /**
- * Created by DelvoM on 21/09/2017.
+ * Created by DelvoM on 21/09/2017.an
  */
 
 public class Productos extends RealmObject {
@@ -32,6 +35,7 @@ public class Productos extends RealmObject {
     private String sale_method_id;
     private String status;
     private String updated_at;
+    private Pivot pivot;
 
     public Integer getId() {
         return id;
@@ -223,6 +227,37 @@ public class Productos extends RealmObject {
 
     public void setUpdated_at(String updated_at) {
         this.updated_at = updated_at;
+    }
+
+    @Override
+    public String toString() {
+        return "Productos{" +
+                "id=" + id +
+                ", stock_min='" + stock_min + '\'' +
+                ", stock_max='" + stock_max + '\'' +
+                ", barcode='" + barcode + '\'' +
+                ", code='" + code + '\'' +
+                ", units_per_box='" + units_per_box + '\'' +
+                ", description='" + description + '\'' +
+                ", product_category_id='" + product_category_id + '\'' +
+                ", product_type_id='" + product_type_id + '\'' +
+                ", cost='" + cost + '\'' +
+                ", utility='" + utility + '\'' +
+                ", percentage_of_utility='" + percentage_of_utility + '\'' +
+                ", sale_price='" + sale_price + '\'' +
+                ", sale_price2='" + sale_price2 + '\'' +
+                ", sale_price3='" + sale_price3 + '\'' +
+                ", sale_price4='" + sale_price4 + '\'' +
+                ", sale_price5='" + sale_price5 + '\'' +
+                ", brand_id='" + brand_id + '\'' +
+                ", family='" + family + '\'' +
+                ", sub_family='" + sub_family + '\'' +
+                ", type='" + type + '\'' +
+                ", sale_method_id='" + sale_method_id + '\'' +
+                ", status='" + status + '\'' +
+                ", updated_at='" + updated_at + '\'' +
+                ", pivot=" + pivot +
+                '}';
     }
 }
 

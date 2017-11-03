@@ -62,4 +62,17 @@ public class Inventario extends RealmObject {
     public void setDistributor(String distributor) {
         this.distributor = distributor;
     }
+
+
+    @Override
+    public String toString() {
+        return "Inventario{" +
+            "id='" + id + '\'' +
+            ", product_id='" + product_id + '\'' +
+            ", initial='" + initial + '\'' +
+            ", amount='" + amount + '\'' +
+            ", amount_dist='" + amount_dist + '\'' +
+            ", distributor='" + distributor + '\'' +
+            '}';
+    }
 }

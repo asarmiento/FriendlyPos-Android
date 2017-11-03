@@ -40,9 +40,13 @@ public class DistrProductosAdapter extends RecyclerView.Adapter<DistrProductosAd
     @Override
     public void onBindViewHolder(DistrProductosAdapter.CharacterViewHolder holder, final  int position) {
         Productos productos = productosList.get(position);
-        holder.tv_name.setText(productos.getDescription());
-        holder.tv_version.setText(productos.getBarcode());
-        holder.tv_api_level.setText(productos.getSale_price());
+        holder.txt_producto_nombre.setText(productos.getDescription());
+        holder.txt_producto_codbarras.setText(productos.getBarcode());
+        holder.txt_producto_marca.setText(productos.getSale_price());
+        holder.txt_producto_tipo.setText(productos.getDescription());
+        holder.txt_producto_stock.setText(productos.getStock_max());
+        holder.txt_producto_inventario.setText(productos.getSale_price());
+        holder.txt_producto_precio.setText(productos.getSale_price());
 
         holder.cardView.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -76,15 +80,19 @@ public class DistrProductosAdapter extends RecyclerView.Adapter<DistrProductosAd
 
     public static class CharacterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private TextView tv_name,tv_version,tv_api_level;
+        private TextView txt_producto_nombre,txt_producto_codbarras,txt_producto_marca, txt_producto_tipo, txt_producto_stock, txt_producto_inventario, txt_producto_precio;
         protected CardView cardView;
 
         public CharacterViewHolder(View view) {
             super(view);
-            cardView = (CardView) view.findViewById(R.id.cardView);
-            tv_name = (TextView)view.findViewById(R.id.tv_name);
-            tv_version = (TextView)view.findViewById(R.id.tv_version);
-            tv_api_level = (TextView)view.findViewById(R.id.tv_api_level);
+            cardView = (CardView) view.findViewById(R.id.cardViewProductos);
+            txt_producto_nombre = (TextView)view.findViewById(R.id.txt_producto_nombre);
+            txt_producto_codbarras = (TextView)view.findViewById(R.id.txt_producto_codbarras);
+            txt_producto_marca = (TextView)view.findViewById(R.id.txt_producto_marca);
+            txt_producto_tipo = (TextView)view.findViewById(R.id.txt_producto_tipo);
+            txt_producto_stock = (TextView)view.findViewById(R.id.txt_producto_stock);
+            txt_producto_inventario = (TextView)view.findViewById(R.id.txt_producto_inventario);
+            txt_producto_precio = (TextView)view.findViewById(R.id.txt_producto_precio);
             view.setOnClickListener(this);
         }
 

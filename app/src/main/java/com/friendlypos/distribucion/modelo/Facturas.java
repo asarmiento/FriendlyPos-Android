@@ -1,13 +1,15 @@
 package com.friendlypos.distribucion.modelo;
 
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by DelvoM on 02/11/2017.
  */
 
 public class Facturas extends RealmObject {
-
+//TODO REVISAR ESTAS KEYS
+    @PrimaryKey
     private String id;
     private String branch_office_id;
     private String numeration;
@@ -29,7 +31,6 @@ public class Facturas extends RealmObject {
     private String paid_up;
     private String paid;
     private String created_at;
-
     private String user_id;
     private String user_id_applied;
     private String invoice_type_id;
@@ -233,5 +234,36 @@ public class Facturas extends RealmObject {
 
     public void setPayment_method_id(String payment_method_id) {
         this.payment_method_id = payment_method_id;
+    }
+
+    @Override
+    public String toString() {
+        return "Facturas{" +
+                "id='" + id + '\'' +
+                ", branch_office_id='" + branch_office_id + '\'' +
+                ", numeration='" + numeration + '\'' +
+                ", date='" + date + '\'' +
+                ", times='" + times + '\'' +
+                ", date_presale='" + date_presale + '\'' +
+                ", time_presale='" + time_presale + '\'' +
+                ", due_date='" + due_date + '\'' +
+                ", subtotal='" + subtotal + '\'' +
+                ", subtotal_taxed='" + subtotal_taxed + '\'' +
+                ", subtotal_exempt='" + subtotal_exempt + '\'' +
+                ", discount='" + discount + '\'' +
+                ", percent_discount='" + percent_discount + '\'' +
+                ", tax='" + tax + '\'' +
+                ", total='" + total + '\'' +
+                ", changing='" + changing + '\'' +
+                ", note='" + note + '\'' +
+                ", canceled='" + canceled + '\'' +
+                ", paid_up='" + paid_up + '\'' +
+                ", paid='" + paid + '\'' +
+                ", created_at='" + created_at + '\'' +
+                ", user_id='" + user_id + '\'' +
+                ", user_id_applied='" + user_id_applied + '\'' +
+                ", invoice_type_id='" + invoice_type_id + '\'' +
+                ", payment_method_id='" + payment_method_id + '\'' +
+                '}';
     }
 }

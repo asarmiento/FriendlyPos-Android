@@ -4,39 +4,48 @@ import android.app.ActivityManager;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.PopupMenu;
-import android.view.View;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.friendlypos.R;
 import com.friendlypos.app.broadcastreceiver.NetworkStateChangeReceiver;
+import com.friendlypos.application.datamanager.BaseManager;
+import com.friendlypos.application.interfaces.RequestInterface;
 import com.friendlypos.distribucion.activity.DistribucionActivity;
+import com.friendlypos.distribucion.modelo.Inventario;
+import com.friendlypos.distribucion.modelo.InventarioResponse;
 import com.friendlypos.login.util.SessionPrefes;
 import com.friendlypos.principal.fragment.ConfiguracionFragment;
+import com.friendlypos.principal.helpers.DescargasHelper;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
+import io.realm.Realm;
+import io.realm.RealmResults;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
-import static com.friendlypos.login.util.SessionPrefes.*;
-
-public class MenuPrincipal  extends BluetoothActivity implements PopupMenu.OnMenuItemClickListener
+public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenuItemClickListener
        /* implements NavigationView.OnNavigationItemSelectedListener*/ {
     private static String POPUP_CONSTANT = "mPopup";
     private static String POPUP_FORCE_SHOW_ICON = "setForceShowIcon";
@@ -67,6 +76,7 @@ public class MenuPrincipal  extends BluetoothActivity implements PopupMenu.OnMen
     DrawerLayout drawer;
 
     SessionPrefes session;
+    DescargasHelper download1;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -79,9 +89,10 @@ public class MenuPrincipal  extends BluetoothActivity implements PopupMenu.OnMen
 
         session = new SessionPrefes(getApplicationContext());
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        download1 = new DescargasHelper(MenuPrincipal.this);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+            this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
     }
@@ -94,13 +105,13 @@ public class MenuPrincipal  extends BluetoothActivity implements PopupMenu.OnMen
     }
 
 
-
     @Override
     public void onBackPressed() {
 
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else {
+        }
+        else {
             super.onBackPressed();
         }
     }
@@ -125,7 +136,8 @@ public class MenuPrincipal  extends BluetoothActivity implements PopupMenu.OnMen
                     break;
                 }
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             e.printStackTrace();
         }
         popup.getMenuInflater().inflate(R.menu.popup_menu, popup.getMenu());
@@ -139,7 +151,8 @@ public class MenuPrincipal  extends BluetoothActivity implements PopupMenu.OnMen
             case R.id.menu_cerrarsesion:
 
                 AlertDialog alertDialog = new AlertDialog.Builder(
-                        MenuPrincipal.this).setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                    MenuPrincipal.this).setPositiveButton("Si", new DialogInterface.OnClickListener() {
+
                     public void onClick(DialogInterface dialog, int which) {
                         // Write your code here to execute after dialog closed
                         session.cerrarSesion();
@@ -147,15 +160,16 @@ public class MenuPrincipal  extends BluetoothActivity implements PopupMenu.OnMen
                     }
 
                 }).setNegativeButton(
-                        "No", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                // Write your code here to execute after dialog closed
-                                //customer = cust;
-                                dialog.cancel();
-                                //new getDataClient().execute();
-                            }
+                    "No", new DialogInterface.OnClickListener() {
 
+                        public void onClick(DialogInterface dialog, int which) {
+                            // Write your code here to execute after dialog closed
+                            //customer = cust;
+                            dialog.cancel();
+                            //new getDataClient().execute();
                         }
+
+                    }
                 ).create();
 
                 alertDialog.setMessage("Seguro que quiere cerrar Sesion?");
@@ -167,15 +181,16 @@ public class MenuPrincipal  extends BluetoothActivity implements PopupMenu.OnMen
             case R.id.btn_descargar_catalogo:
                 Toast.makeText(MenuPrincipal.this, "descargar_catalogo", Toast.LENGTH_SHORT).show();
 
-                if (!isOnline()) {
-                    Toast.makeText(MenuPrincipal.this, getString(R.string.failed), Toast.LENGTH_LONG).show();
-                }
-                DescargarCatalogo download = new DescargarCatalogo(MenuPrincipal.this);
-                download.execute();
+                download1.descargarCatalogo(MenuPrincipal.this);
 
                 break;
             case R.id.btn_descargar_inventario:
                 Toast.makeText(MenuPrincipal.this, "descargar_inventario", Toast.LENGTH_SHORT).show();
+                //TODO REVISAR SI ES NECESARIO MANTENER EL ASYNCTASK
+                download1.descargarInventario(MenuPrincipal.this);
+
+                //   DescargarInventario descargarInventario = new DescargarInventario(MenuPrincipal.this);
+                //   descargarInventario.execute();
                 break;
             case R.id.btn_descargar_deudas:
                 Toast.makeText(MenuPrincipal.this, "descargar_deudas", Toast.LENGTH_SHORT).show();
@@ -195,30 +210,33 @@ public class MenuPrincipal  extends BluetoothActivity implements PopupMenu.OnMen
         return false;
     }
 
-   /* @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
 
-        } else if (id == R.id.nav_slideshow) {
 
-        } else if (id == R.id.nav_manage) {
+    /* @SuppressWarnings("StatementWithEmptyBody")
+     @Override
+     public boolean onNavigationItemSelected(MenuItem item) {
+         // Handle navigation view item clicks here.
+         int id = item.getItemId();
 
-        } else if (id == R.id.nav_share) {
+         if (id == R.id.nav_camera) {
+             // Handle the camera action
+         } else if (id == R.id.nav_gallery) {
 
-        } else if (id == R.id.nav_send) {
+         } else if (id == R.id.nav_slideshow) {
 
-        }
+         } else if (id == R.id.nav_manage) {
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
-    }*/
+         } else if (id == R.id.nav_share) {
+
+         } else if (id == R.id.nav_send) {
+
+         }
+
+         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+         drawer.closeDrawer(GravityCompat.START);
+         return true;
+     }*/
 /*
     public void Initializing(){
         Fragment fragment = null;
@@ -231,11 +249,11 @@ public class MenuPrincipal  extends BluetoothActivity implements PopupMenu.OnMen
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.frame, fragment).commit();
     }*/
-    public void ClickNavigation(View view){
+    public void ClickNavigation(View view) {
         Fragment fragment = null;
-        Class fragmentClass =  ConfiguracionFragment.class;
+        Class fragmentClass = ConfiguracionFragment.class;
 
-        switch (view.getId()){
+        switch (view.getId()) {
 
           /*   case R.id.clickClientes:
                 Toast.makeText(this, "distribucion", Toast.LENGTH_SHORT).show();
@@ -293,7 +311,8 @@ public class MenuPrincipal  extends BluetoothActivity implements PopupMenu.OnMen
         }
         try {
             fragment = (Fragment) fragmentClass.newInstance();
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             e.printStackTrace();
         }// Insert the fragment by replacing any existing fragment
         FragmentManager fragmentManager = getFragmentManager();
@@ -306,7 +325,7 @@ public class MenuPrincipal  extends BluetoothActivity implements PopupMenu.OnMen
 
     public void onClickGo(View component) {
 
-        switch (component.getId()){
+        switch (component.getId()) {
 
             case R.id.clickClientes:
                 Intent clientes;
@@ -332,6 +351,7 @@ public class MenuPrincipal  extends BluetoothActivity implements PopupMenu.OnMen
 
         }
     }
+
     //Check if the printing service is running
     public boolean isServiceRunning(String serviceClassName) {
         final ActivityManager activityManager = (ActivityManager) getApplicationContext().getSystemService(Context.ACTIVITY_SERVICE);

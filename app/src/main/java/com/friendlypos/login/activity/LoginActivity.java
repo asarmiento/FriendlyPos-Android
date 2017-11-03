@@ -10,7 +10,6 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
@@ -70,22 +69,22 @@ public class LoginActivity extends AppCompatActivity {
     @Bind(R.id.email_sign_in_button)
     Button mSignInButton;
 
-    Context context =null;
+    Context context = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         ButterKnife.bind(this);
         context = this;
-
+        initProgressbar();
         HtmlTextView copy = (HtmlTextView) findViewById(R.id.copyright);
-        copy.setHtmlFromString("<font size=\"7sp\"><a href=\"http://www.sistemasamigables.com/\">" + Functions.getVesionNaveCode(context)+" "+context.getString(R.string.credits) +"</a></font>", new HtmlTextView.LocalImageGetter());
+        copy.setHtmlFromString("<font size=\"7sp\"><a href=\"http://www.sistemasamigables.com/\">" + Functions.getVesionNaveCode(context) + " " + context.getString(R.string.credits) + "</a></font>", new HtmlTextView.LocalImageGetter());
 
         networkStateChangeReceiver = new NetworkStateChangeReceiver();
         // Setup
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
                 if (id == R.id.login || id == EditorInfo.IME_NULL) {
@@ -101,6 +100,7 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         mSignInButton.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View view) {
                 if (!isOnline()) {
@@ -113,8 +113,14 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void attemptLogin() {
+    private void initProgressbar() {
+        progress = new ProgressDialog(this);
+        progress.setMessage("Iniciando sesión");
+        progress.setCanceledOnTouchOutside(false);
+    }
 
+    private void attemptLogin() {
+        progress.show();
         // Reset errors.
         mFloatLabelUserId.setError(null);
         mFloatLabelPassword.setError(null);
@@ -131,7 +137,8 @@ public class LoginActivity extends AppCompatActivity {
             mFloatLabelPassword.setError(getString(R.string.error_field_required));
             focusView = mFloatLabelPassword;
             cancel = true;
-        } else if (!isPasswordValid(password)) {
+        }
+        else if (!isPasswordValid(password)) {
             mFloatLabelPassword.setError(getString(R.string.error_invalid_password));
             focusView = mFloatLabelPassword;
             cancel = true;
@@ -142,7 +149,8 @@ public class LoginActivity extends AppCompatActivity {
             mFloatLabelUserId.setError(getString(R.string.error_field_required));
             focusView = mFloatLabelUserId;
             cancel = true;
-        } else if (!isUserIdValid(userId)) {
+        }
+        else if (!isUserIdValid(userId)) {
             mFloatLabelUserId.setError(getString(R.string.error_invalid_user_id));
             focusView = mFloatLabelUserId;
             cancel = true;
@@ -152,43 +160,39 @@ public class LoginActivity extends AppCompatActivity {
             // There was an error; don't attempt login and focus the first
             // form field with an error.
             focusView.requestFocus();
-        } else {
+        }
+        else {
             // Mostrar el indicador de carga y luego iniciar la petición asíncrona.
-            progress = new ProgressDialog(this);
-            progress.setMessage("Iniciando sesión");
-            progress.setCanceledOnTouchOutside(false);
-            progress.show();
 
-        api = BaseManager.getApi();
-        Call<UserResponse> call = api.loginUser(new User(userId, password));
+            api = BaseManager.getApi();
+            Call<UserResponse> call = api.loginUser(new User(userId, password));
 
-        call.enqueue(new Callback<UserResponse>() {
+            call.enqueue(new Callback<UserResponse>() {
 
                 @Override
                 public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
-
+                    progress.dismiss();
                     // Procesar errores
                     if (!response.isSuccessful()) {
                         String error = "Ha ocurrido un error. Contacte al administrador";
                         if (response.errorBody()
-                                .contentType()
-                                .subtype()
-                                .equals("json")) {
+                            .contentType()
+                            .subtype()
+                            .equals("json")) {
                             UserError userError = UserError.fromResponseBody(response.errorBody());
 
                             error = userError.getMessage();
                             Log.d("LoginActivity", userError.getMessage());
-                        } else {
+                        }
+                        else {
                             try {
                                 // Reportar causas de error no relacionado con la API
                                 Log.d("LoginActivity", response.errorBody().string());
-                            } catch (IOException e) {
+                            }
+                            catch (IOException e) {
                                 e.printStackTrace();
                             }
                         }
-
-                        progress.dismiss();
-
 
                         showLoginError(error);
 

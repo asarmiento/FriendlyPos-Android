@@ -15,8 +15,11 @@ import android.widget.Toast;
 
 import com.friendlypos.R;
 import com.friendlypos.distribucion.modelo.Inventario;
+import com.friendlypos.principal.modelo.Productos;
 
 import java.util.List;
+
+import io.realm.Realm;
 
 /**
  * Created by DelvoM on 21/09/2017.
@@ -37,14 +40,14 @@ public class DistrProductosInvAdapter extends RecyclerView.Adapter<DistrProducto
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.lista_productos, parent, false);
 
         context = parent.getContext();
-      //  CharacterViewHolder placeViewHolder = new CharacterViewHolder(view);
-       // placeViewHolder.cardView.setOnClickListener(new ProductosAdapter(placeViewHolder, parent));
+        //  CharacterViewHolder placeViewHolder = new CharacterViewHolder(view);
+        // placeViewHolder.cardView.setOnClickListener(new ProductosAdapter(placeViewHolder, parent));
         return new DistrProductosInvAdapter.CharacterViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(DistrProductosInvAdapter.CharacterViewHolder holder, final  int position) {
-        Inventario productos = productosList.get(position);
+    public void onBindViewHolder(DistrProductosInvAdapter.CharacterViewHolder holder, final int position) {
+        Inventario inventario = productosList.get(position);
 
         holder.cardView.setOnClickListener(new View.OnClickListener() {
 
@@ -54,9 +57,15 @@ public class DistrProductosInvAdapter extends RecyclerView.Adapter<DistrProducto
             }
         });
 
-        holder.tv_name.setText(productos.getProduct_id());
-        holder.tv_version.setText(productos.getAmount());
-        holder.tv_api_level.setText(productos.getAmount_dist());
+        //todo repasar esto
+        Realm realm = Realm.getDefaultInstance();
+        String description = realm.where(Productos.class).equalTo("id", inventario.getProduct_id()).findFirst().getDescription();
+        realm.close();
+
+        holder.tv_name.setText(description);
+        holder.tv_version.setText(inventario.getAmount());
+        holder.tv_api_level.setText(inventario.getAmount_dist());
+
 
      /*   holder.cardView.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -86,20 +95,20 @@ public class DistrProductosInvAdapter extends RecyclerView.Adapter<DistrProducto
 
         // setup a dialog window
         alertDialogBuilder
-                .setCancelable(false)
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            .setCancelable(false)
+            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+                public void onClick(DialogInterface dialog, int id) {
+                    // get user input and set it to result
+                }
+            })
+            .setNegativeButton("Cancel",
+                new DialogInterface.OnClickListener() {
 
                     public void onClick(DialogInterface dialog, int id) {
-                        // get user input and set it to result
+                        dialog.cancel();
                     }
-                })
-                .setNegativeButton("Cancel",
-                        new DialogInterface.OnClickListener() {
-
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                            }
-                        });
+                });
 
         AlertDialog alertD = alertDialogBuilder.create();
         alertD.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
@@ -123,15 +132,15 @@ public class DistrProductosInvAdapter extends RecyclerView.Adapter<DistrProducto
 
     public static class CharacterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private TextView tv_name,tv_version,tv_api_level;
+        private TextView tv_name, tv_version, tv_api_level;
         protected CardView cardView;
 
         public CharacterViewHolder(View view) {
             super(view);
-            cardView = (CardView) view.findViewById(R.id.cardView);
-            tv_name = (TextView)view.findViewById(R.id.tv_name);
-            tv_version = (TextView)view.findViewById(R.id.tv_version);
-            tv_api_level = (TextView)view.findViewById(R.id.tv_api_level);
+            cardView = (CardView) view.findViewById(R.id.cardViewProductos);
+            tv_name = (TextView) view.findViewById(R.id.txt_producto_nombre);
+            tv_version = (TextView) view.findViewById(R.id.txt_producto_codbarras);
+            tv_api_level = (TextView) view.findViewById(R.id.txt_producto_precio);
             view.setOnClickListener(this);
         }
 
