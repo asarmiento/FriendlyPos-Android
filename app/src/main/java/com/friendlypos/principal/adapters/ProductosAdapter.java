@@ -12,9 +12,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.friendlypos.R;
+import com.friendlypos.distribucion.modelo.Inventario;
+import com.friendlypos.distribucion.modelo.Marcas;
+import com.friendlypos.distribucion.modelo.TipoProducto;
 import com.friendlypos.principal.modelo.Productos;
 
 import java.util.List;
+
+import io.realm.Realm;
 
 /**
  * Created by DelvoM on 21/09/2017.
@@ -40,14 +45,36 @@ public class ProductosAdapter extends RecyclerView.Adapter<ProductosAdapter.Char
 
     @Override
     public void onBindViewHolder(ProductosAdapter.CharacterViewHolder holder, final  int position) {
-        Productos productos = productosList.get(position);
-        holder.txt_producto_nombre.setText(productos.getDescription());
-        holder.txt_producto_codbarras.setText(productos.getBarcode());
-        holder.txt_producto_marca.setText(productos.getSale_price());
-        holder.txt_producto_tipo.setText(productos.getDescription());
-        holder.txt_producto_stock.setText(productos.getStock_max());
-        holder.txt_producto_inventario.setText(productos.getSale_price());
-        holder.txt_producto_precio.setText(productos.getSale_price());
+        Productos producto = productosList.get(position);
+        //todo repasar esto
+        Realm realm = Realm.getDefaultInstance();
+        String marca = realm.where(Marcas.class).equalTo("id", producto.getBrand_id()).findFirst().getName();
+        String tipoProducto = realm.where(TipoProducto.class).equalTo("id", producto.getProduct_type_id()).findFirst().getName();
+
+        // TODO Revisar como poner el inventario,ya que el campo 1 es null y se cae la app
+        String inventario = realm.where(Inventario.class).equalTo("product_id", "5").findFirst().getInitial();
+
+
+        //String inventario2 = realm.where(Inventario.class).equalTo(producto.getId(), "product_id").findFirst().getInitial();
+
+/*
+        {
+            "id": 359,
+                "product_id": "5",
+                "initial": "30",
+                "amount": "0",
+                "amount_dist": "30",
+                "distributor": "0"
+        },*/
+        realm.close();
+
+        holder.txt_producto_nombre.setText(producto.getDescription());
+        holder.txt_producto_codbarras.setText(producto.getBarcode());
+        holder.txt_producto_marca.setText(marca);
+        holder.txt_producto_tipo.setText(tipoProducto);
+        holder.txt_producto_stock.setText(producto.getStock_max());
+        holder.txt_producto_inventario.setText(inventario);
+        holder.txt_producto_precio.setText(producto.getSale_price());
 
     }
 

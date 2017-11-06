@@ -11,6 +11,7 @@ public class Facturas extends RealmObject {
 //TODO REVISAR ESTAS KEYS
     @PrimaryKey
     private String id;
+
     private String branch_office_id;
     private String numeration;
     private String date;

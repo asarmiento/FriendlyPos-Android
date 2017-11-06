@@ -1,6 +1,7 @@
 package com.friendlypos.distribucion.modelo;
 
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by DelvoM on 31/10/2017.
@@ -8,12 +9,14 @@ import io.realm.RealmObject;
 
 public class Inventario extends RealmObject {
 
-    private String id;
-    private String product_id;
-    private String initial;
-    private String amount;
-    private String amount_dist;
-    private String distributor;
+    @PrimaryKey
+    String id;
+
+    String product_id;
+    String initial;
+    String amount;
+    String amount_dist;
+    String distributor;
 
     public String getId() {
         return id;

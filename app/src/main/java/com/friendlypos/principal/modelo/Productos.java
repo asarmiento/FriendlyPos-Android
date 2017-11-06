@@ -4,6 +4,7 @@ import com.friendlypos.distribucion.modelo.Pivot;
 import com.google.gson.annotations.Expose;
 
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by DelvoM on 21/09/2017.an
@@ -11,37 +12,39 @@ import io.realm.RealmObject;
 
 public class Productos extends RealmObject {
 
-    private Integer id;
-    private String stock_min;
-    private String stock_max;
-    private String barcode;
-    private String code;
-    private String units_per_box;
-    private String description;
-    private String product_category_id;
-    private String product_type_id;
-    private String cost;
-    private String utility;
-    private String percentage_of_utility;
-    private String sale_price;
-    private String sale_price2;
-    private String sale_price3;
-    private String sale_price4;
-    private String sale_price5;
-    private String brand_id;
-    private String family;
-    private String sub_family;
-    private String type;
-    private String sale_method_id;
-    private String status;
-    private String updated_at;
-    private Pivot pivot;
+    @PrimaryKey
+    String id;
 
-    public Integer getId() {
+    String stock_min;
+    String stock_max;
+    String barcode;
+    String code;
+    String units_per_box;
+    String description;
+    String product_category_id;
+    String product_type_id;
+    String cost;
+    String utility;
+    String percentage_of_utility;
+    String sale_price;
+    String sale_price2;
+    String sale_price3;
+    String sale_price4;
+    String sale_price5;
+    String brand_id;
+    String family;
+    String sub_family;
+    String type;
+    String sale_method_id;
+    String status;
+    String updated_at;
+    Pivot pivot;
+
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 

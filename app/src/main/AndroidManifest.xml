@@ -32,18 +32,18 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustPan|adjustResize">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <activity
             android:name=".principal.activity.MenuPrincipal"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".principal.activity.ClientesActivity"
@@ -65,16 +65,6 @@
 
         </activity>
 
-        <activity
-            android:name=".principal.activity.DescargarInventario"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:parentActivityName=".principal.activity.MenuPrincipal">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".principal.activity.MenuPrincipal" />
-
-        </activity>
         <activity
             android:name=".distribucion.activity.DistribucionActivity"
             android:label="@string/title_activity_distribucion"

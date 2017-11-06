@@ -1,10 +1,12 @@
 package com.friendlypos.principal.modelo;
 
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 public class Clientes extends RealmObject {
-
+    @PrimaryKey
     private String id;
+
     private String card;
     private String placa;
     private String doors;

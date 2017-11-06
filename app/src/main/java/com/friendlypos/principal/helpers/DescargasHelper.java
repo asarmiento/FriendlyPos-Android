@@ -12,6 +12,10 @@ import com.friendlypos.distribucion.modelo.Facturas;
 import com.friendlypos.distribucion.modelo.FacturasResponse;
 import com.friendlypos.distribucion.modelo.Inventario;
 import com.friendlypos.distribucion.modelo.InventarioResponse;
+import com.friendlypos.distribucion.modelo.Marcas;
+import com.friendlypos.distribucion.modelo.MarcasResponse;
+import com.friendlypos.distribucion.modelo.TipoProducto;
+import com.friendlypos.distribucion.modelo.TipoProductoResponse;
 import com.friendlypos.login.util.SessionPrefes;
 import com.friendlypos.principal.modelo.Clientes;
 import com.friendlypos.principal.modelo.ClientesResponse;
@@ -34,7 +38,7 @@ public class DescargasHelper {
     private NetworkStateChangeReceiver networkStateChangeReceiver;
     private Activity activity;
     private Context mContext;
-    private Realm realm, realm2;
+    private Realm realm, realm2, realmMarcas, realmTipoProducto;
 
     public DescargasHelper(Activity activity) {
         this.activity = activity;
@@ -42,6 +46,8 @@ public class DescargasHelper {
         networkStateChangeReceiver = new NetworkStateChangeReceiver();
         realm = Realm.getDefaultInstance();
         realm2 = Realm.getDefaultInstance();
+        realmMarcas = Realm.getDefaultInstance();
+        realmTipoProducto = Realm.getDefaultInstance();
     }
 
     public void descargarCatalogo(Context context) {
@@ -51,11 +57,15 @@ public class DescargasHelper {
         final RequestInterface api = BaseManager.getApi();
         final ArrayList<Clientes> mContentsArray = new ArrayList<>();
         final ArrayList<Productos> mContentsArray2 = new ArrayList<>();
+        final ArrayList<Marcas> mContentsArrayMarcas = new ArrayList<>();
+        final ArrayList<TipoProducto> mContentsArrayTipoProducto = new ArrayList<>();
         final ProgressDialog dialog = new ProgressDialog(context);
         dialog.setMessage("Cargando lista de catálogo");
 
         if (isOnline()) {
             dialog.show();
+
+            // TODO descarga Clientes
             Call<ClientesResponse> call = api.getJSON(token);
 
             call.enqueue(new Callback<ClientesResponse>() {
@@ -80,7 +90,7 @@ public class DescargasHelper {
                         finally {
                             realm.close();
                         }
-                        Log.d(DescargasHelper.class.getName(), mContentsArray.toString());
+                        Log.d(DescargasHelper.class.getName()+ "CLIENTES", mContentsArray.toString());
                         //  Toast.makeText(DescargarInventario.this, getString(R.string.success), Toast.LENGTH_SHORT).show();
                     }
                     else {
@@ -96,6 +106,86 @@ public class DescargasHelper {
                 }
             });
 
+            // TODO descarga Marcas
+            Call<MarcasResponse> callMarcas = api.getMarcas(token);
+            callMarcas.enqueue(new Callback<MarcasResponse>() {
+
+                @Override
+                public void onResponse(Call<MarcasResponse> callMarcas, Response<MarcasResponse> response) {
+                    mContentsArrayMarcas.clear();
+
+
+                    if (response.isSuccessful()) {
+                        mContentsArrayMarcas.addAll(response.body().getMarca());
+
+                        try {
+                            realmMarcas = Realm.getDefaultInstance();
+
+                            // Work with Realm
+                            realmMarcas.beginTransaction();
+                            realmMarcas.copyToRealmOrUpdate(mContentsArrayMarcas);
+                            realmMarcas.commitTransaction();
+                            //realm.close();
+                        }
+                        finally {
+                            realmMarcas.close();
+                        }
+                        Log.d(DescargasHelper.class.getName()+"MARCAS", mContentsArrayMarcas.toString());
+                        //  Toast.makeText(DescargarInventario.this, getString(R.string.success), Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        //  Toast.makeText(DescargarInventario.this, getString(R.string.error) + " CODE: " +response.code(), Toast.LENGTH_LONG).show();
+                        RealmResults<Marcas> results = realmMarcas.where(Marcas.class).findAll();
+                        mContentsArrayMarcas.addAll(results);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<MarcasResponse> callMarcas, Throwable t) {
+                    // Toast.makeText(context, getString(R.string.error), Toast.LENGTH_LONG).show();
+                }
+            });
+
+            // TODO descarga Tipo Productos
+            Call<TipoProductoResponse> callTipoProducto = api.getTipoProducto(token);
+            callTipoProducto.enqueue(new Callback<TipoProductoResponse>() {
+
+                @Override
+                public void onResponse(Call<TipoProductoResponse> callMarcas, Response<TipoProductoResponse> response) {
+                    mContentsArrayTipoProducto.clear();
+
+
+                    if (response.isSuccessful()) {
+                        mContentsArrayTipoProducto.addAll(response.body().getTipoProducto());
+
+                        try {
+                            realmTipoProducto = Realm.getDefaultInstance();
+
+                            // Work with Realm
+                            realmTipoProducto.beginTransaction();
+                            realmTipoProducto.copyToRealmOrUpdate(mContentsArrayTipoProducto);
+                            realmTipoProducto.commitTransaction();
+                            //realm.close();
+                        }
+                        finally {
+                            realmTipoProducto.close();
+                        }
+                        Log.d(DescargasHelper.class.getName()+"TIPOPROD", mContentsArrayTipoProducto.toString());
+                        //  Toast.makeText(DescargarInventario.this, getString(R.string.success), Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        //  Toast.makeText(DescargarInventario.this, getString(R.string.error) + " CODE: " +response.code(), Toast.LENGTH_LONG).show();
+                        RealmResults<TipoProducto> results = realmTipoProducto.where(TipoProducto.class).findAll();
+                        mContentsArrayTipoProducto.addAll(results);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<TipoProductoResponse> callMarcas, Throwable t) {
+                    // Toast.makeText(context, getString(R.string.error), Toast.LENGTH_LONG).show();
+                }
+            });
+            // TODO descarga Productos
             Call<ProductosResponse> call2 = api.getProducts(token);
 
             call2.enqueue(new Callback<ProductosResponse>() {
@@ -119,7 +209,7 @@ public class DescargasHelper {
                             realm2.close();
                         }
 
-                        Log.d("finish", mContentsArray2 + " ");
+                        Log.d(DescargasHelper.class.getName()+"PRODUCTOS", mContentsArray2.toString());
 
                         //Toast.makeText(ProductosActivity.this, getString(R.string.success), Toast.LENGTH_SHORT).show();
                     }
@@ -158,6 +248,8 @@ public class DescargasHelper {
 
         if (isOnline()) {
             dialog.show();
+
+            // TODO descarga Inventario
             Call<InventarioResponse> call = api.getInventory(token);
 
             call.enqueue(new Callback<InventarioResponse>() {
@@ -198,6 +290,7 @@ public class DescargasHelper {
                 }
             });
 
+            // TODO descarga Facturas
             Call<FacturasResponse> call2 = api.getFacturas(token);
 
             call2.enqueue(new Callback<FacturasResponse>() {
