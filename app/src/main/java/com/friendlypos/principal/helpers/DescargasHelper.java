@@ -16,6 +16,8 @@ import com.friendlypos.distribucion.modelo.Marcas;
 import com.friendlypos.distribucion.modelo.MarcasResponse;
 import com.friendlypos.distribucion.modelo.TipoProducto;
 import com.friendlypos.distribucion.modelo.TipoProductoResponse;
+import com.friendlypos.distribucion.modelo.Venta;
+import com.friendlypos.distribucion.modelo.VentaResponse;
 import com.friendlypos.login.util.SessionPrefes;
 import com.friendlypos.principal.modelo.Clientes;
 import com.friendlypos.principal.modelo.ClientesResponse;
@@ -38,7 +40,7 @@ public class DescargasHelper {
     private NetworkStateChangeReceiver networkStateChangeReceiver;
     private Activity activity;
     private Context mContext;
-    private Realm realm, realm2, realmMarcas, realmTipoProducto;
+    private Realm realm, realm2, realmMarcas, realmTipoProducto, realmVentas;
 
     public DescargasHelper(Activity activity) {
         this.activity = activity;
@@ -48,6 +50,7 @@ public class DescargasHelper {
         realm2 = Realm.getDefaultInstance();
         realmMarcas = Realm.getDefaultInstance();
         realmTipoProducto = Realm.getDefaultInstance();
+        realmVentas = Realm.getDefaultInstance();
     }
 
     public void descargarCatalogo(Context context) {
@@ -106,7 +109,7 @@ public class DescargasHelper {
                 }
             });
 
-            // TODO descarga Marcas
+           /* // TODO descarga Marcas
             Call<MarcasResponse> callMarcas = api.getMarcas(token);
             callMarcas.enqueue(new Callback<MarcasResponse>() {
 
@@ -229,7 +232,7 @@ public class DescargasHelper {
                     //  Toast.makeText(ProductosActivity.this, getString(R.string.failed), Toast.LENGTH_LONG).show();
 
                 }
-            });
+            });*/
         }
         else {
             //     Toast.makeText(context, getString(R.string.failed), Toast.LENGTH_LONG).show();
@@ -243,6 +246,7 @@ public class DescargasHelper {
         final RequestInterface api = BaseManager.getApi();
         final ArrayList<Inventario> mContentsArray = new ArrayList<>();
         final ArrayList<Facturas> mContentsArray2 = new ArrayList<>();
+        final ArrayList<Venta> mContentsArrayVenta = new ArrayList<>();
         final ProgressDialog dialog = new ProgressDialog(context);
         dialog.setMessage("Cargando lista de inventarios");
 
@@ -263,7 +267,6 @@ public class DescargasHelper {
                         mContentsArray.addAll(response.body().getInventarios());
 
                         try {
-                            realm = Realm.getDefaultInstance();
 
                             // Work with Realm
                             realm.beginTransaction();
@@ -290,6 +293,47 @@ public class DescargasHelper {
                 }
             });
 
+         /*   // TODO descarga Ventas
+            Call<VentaResponse> callVentas = api.getVentas(token);
+
+            callVentas.enqueue(new Callback<VentaResponse>() {
+
+                @Override
+                public void onResponse(Call<VentaResponse> call, Response<VentaResponse> response) {
+                    mContentsArrayVenta.clear();
+
+
+                    if (response.isSuccessful()) {
+                        mContentsArrayVenta.addAll(response.body().getVenta());
+
+                        try {
+                            realmVentas = Realm.getDefaultInstance();
+
+                            // Work with Realm
+                            realmVentas.beginTransaction();
+                            realmVentas.copyToRealmOrUpdate(mContentsArrayVenta);
+                            realmVentas.commitTransaction();
+                            //realm.close();
+                        }
+                        finally {
+                            realmVentas.close();
+                        }
+                        Log.d(DescargasHelper.class.getName(), mContentsArrayVenta.toString());
+                        //  Toast.makeText(DescargarInventario.this, getString(R.string.success), Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        //  Toast.makeText(DescargarInventario.this, getString(R.string.error) + " CODE: " +response.code(), Toast.LENGTH_LONG).show();
+                        RealmResults<Venta> results = realmVentas.where(Venta.class).findAll();
+                        mContentsArrayVenta.addAll(results);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<VentaResponse> call, Throwable t) {
+                    // Toast.makeText(context, getString(R.string.error), Toast.LENGTH_LONG).show();
+                }
+            });
+*/
             // TODO descarga Facturas
             Call<FacturasResponse> call2 = api.getFacturas(token);
 

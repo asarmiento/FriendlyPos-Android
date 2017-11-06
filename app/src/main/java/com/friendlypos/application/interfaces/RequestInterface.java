@@ -4,6 +4,7 @@ package com.friendlypos.application.interfaces;
 import com.friendlypos.distribucion.modelo.FacturasResponse;
 import com.friendlypos.distribucion.modelo.MarcasResponse;
 import com.friendlypos.distribucion.modelo.TipoProductoResponse;
+import com.friendlypos.distribucion.modelo.VentaResponse;
 import com.friendlypos.login.modelo.User;
 import com.friendlypos.login.modelo.UserResponse;
 import com.friendlypos.principal.modelo.ClientesResponse;
@@ -39,6 +40,8 @@ public interface RequestInterface {
     @GET("api/donwload-inventory-products")
     Call<FacturasResponse> getFacturas(@Header("Authorization") String token);
 
+    @GET("api/donwload-inventory-products")
+    Call<VentaResponse> getVentas(@Header("Authorization") String token);
 
 
 }

@@ -1,39 +1,34 @@
 package com.friendlypos.distribucion.fragment;
 
-import android.graphics.Color;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.friendlypos.R;
-import com.friendlypos.distribucion.activity.RecyclerTouchListener;
 import com.friendlypos.distribucion.adapters.DistrClientesAdapter;
-import com.friendlypos.principal.adapters.ClientesAdapter;
-import com.friendlypos.principal.adapters.ProductosAdapter;
+import com.friendlypos.distribucion.modelo.Facturas;
+import com.friendlypos.distribucion.modelo.Venta;
 import com.friendlypos.principal.modelo.Clientes;
-import com.friendlypos.principal.modelo.Productos;
 
 import java.util.List;
 
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import io.realm.Realm;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
 
-import static com.friendlypos.R.id.recyclerView;
-import static io.realm.internal.SyncObjectServerFacade.getApplicationContext;
-
 
 public class DistSelecClienteFragment extends Fragment {
     private Realm realm;
-    RecyclerView recyclerView;
+
+    @Bind(R.id.recyclerViewDistrCliente)
+    public RecyclerView recyclerView;
 
     private DistrClientesAdapter adapter;
 
@@ -50,15 +45,24 @@ public class DistSelecClienteFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.fragment_distribucion_seleccliente, container,
+        View rootView = inflater.inflate(R.layout.fragment_distribucion_cliente, container,
                 false);
-        recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerViewDistrSeleccCliente);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setHasFixedSize(true);
+        ButterKnife.bind(this, rootView);
+
+        return rootView;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
         adapter = new DistrClientesAdapter(getList());
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
         recyclerView.setAdapter(adapter);
 
-        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView, new RecyclerTouchListener.ClickListener() {
+    /*    recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView, new RecyclerTouchListener.ClickListener() {
             @Override
             public void onClick(View view, int position) {
                 view.setBackgroundColor(Color.parseColor("#607d8b"));
@@ -72,15 +76,14 @@ public class DistSelecClienteFragment extends Fragment {
             }
         }));
 
-        Log.d("lista", getList() + "");
+        Log.d("lista", getList() + "");*/
 
-        return rootView;
     }
 
-    private List<Clientes> getList(){
+    private List<Venta> getList(){
         realm = Realm.getDefaultInstance();
-        RealmQuery<Clientes> query = realm.where(Clientes.class);
-        RealmResults<Clientes> result1 = query.findAll();
+        RealmQuery<Venta> query = realm.where(Venta.class);
+        RealmResults<Venta> result1 = query.findAll();
 
         return result1;
     }

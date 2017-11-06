@@ -1,5 +1,10 @@
 package com.friendlypos.distribucion.modelo;
 
+import com.google.gson.annotations.SerializedName;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
@@ -36,6 +41,8 @@ public class Facturas extends RealmObject {
     private String user_id_applied;
     private String invoice_type_id;
     private String payment_method_id;
+    @SerializedName("sale")
+    private Venta venta;
 
     public String getId() {
         return id;
@@ -237,6 +244,16 @@ public class Facturas extends RealmObject {
         this.payment_method_id = payment_method_id;
     }
 
+   public Venta getVenta() {
+        return venta;
+    }
+
+    public void setVenta(Venta venta) {
+        this.venta = venta;
+    }
+
+
+
     @Override
     public String toString() {
         return "Facturas{" +
@@ -265,6 +282,7 @@ public class Facturas extends RealmObject {
                 ", user_id_applied='" + user_id_applied + '\'' +
                 ", invoice_type_id='" + invoice_type_id + '\'' +
                 ", payment_method_id='" + payment_method_id + '\'' +
+                ", venta=" + venta +
                 '}';
     }
 }
