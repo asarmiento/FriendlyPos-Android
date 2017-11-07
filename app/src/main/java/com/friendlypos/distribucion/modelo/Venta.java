@@ -1,5 +1,7 @@
 package com.friendlypos.distribucion.modelo;
 
+import com.friendlypos.principal.modelo.Clientes;
+
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
@@ -35,6 +37,7 @@ public class Venta extends RealmObject {
     String created_at;
     String updated_at;
     String reserved;
+    public Clientes clientes;
 
     public String getId() {
         return id;

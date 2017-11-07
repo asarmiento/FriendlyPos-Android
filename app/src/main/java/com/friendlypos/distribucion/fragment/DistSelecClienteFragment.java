@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import com.friendlypos.distribucion.modelo.Facturas;
 import com.friendlypos.distribucion.modelo.Venta;
 import com.friendlypos.principal.modelo.Clientes;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -24,13 +26,14 @@ import io.realm.RealmQuery;
 import io.realm.RealmResults;
 
 
-public class DistSelecClienteFragment extends Fragment {
+public class DistSelecClienteFragment extends Fragment  implements SearchView.OnQueryTextListener{
     private Realm realm;
 
     @Bind(R.id.recyclerViewDistrCliente)
     public RecyclerView recyclerView;
 
     private DistrClientesAdapter adapter;
+    private static List<Venta> mSales = new ArrayList<>();
 
     public static DistSelecProductoFragment getInstance() {
         return new DistSelecProductoFragment();
@@ -51,6 +54,7 @@ public class DistSelecClienteFragment extends Fragment {
 
         return rootView;
     }
+
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -87,18 +91,6 @@ public class DistSelecClienteFragment extends Fragment {
 
         return result1;
     }
-/*
-    private void readStories(){
-        RealmQuery<StoryRealm> query = realm.where(StoryRealm.class);
-        RealmResults<StoryRealm> resultAllStories = query.findAll();
-        arrayListStories = new ArrayList<>();
-        for(StoryRealm storyRealm : resultAllStories){
-            arrayListStories.add(new Story(storyRealm));
-        }
-        adapter = new AdapterComment(arrayListStories);
-        commentsRecList.setAdapter(adapter);
-        //adapter.notifyDataSetChanged();
-    }*/
 
 
     @Override
@@ -106,30 +98,37 @@ public class DistSelecClienteFragment extends Fragment {
         super.onDestroyView();
         realm.close();
     }
-/*
-
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public boolean onQueryTextChange(String query) {
+        System.out.println("mSales size = " + mSales.size());
+        final List<Venta> filteredModelList = filter(mSales, query);
+        adapter.animateTo(filteredModelList);
+        recyclerView.scrollToPosition(0);
+        return true;
+    }
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(
-                getActivity());
-        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        mRecyclerView.setLayoutManager(layoutManager);
+    private List<Venta> filter(List<Venta> models, String query) {
+        query = query.toLowerCase();
 
-
-        String[] dataset = new String[100];
-        for (int i = 0; i < dataset.length; i++) {
-            dataset[i] = "item" + i;
+        final List<Venta> filteredModelList = new ArrayList<>();
+        for (Venta model : models) {
+            Clientes custumers = model.clientes;
+            String text = custumers.getCompanyName().toLowerCase();
+            String text2 = custumers.getFantasyName().toLowerCase();
+            String text3 = custumers.getName().toLowerCase();
+            String text4 = custumers.getCard().toLowerCase();
+            if (text.contains(query) || text2.contains(query) || text3.contains(query) || text4.contains(query)) {
+                filteredModelList.add(model);
+            }
         }
+        return filteredModelList;
+    }
 
-       adapter = new ClientesAdapter(mContentsArray);
-        mRecyclerView.setAdapter(adapter);
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
 
-        adapter = new RecyclerAdapter(dataset, getActivity());
-        mRecyclerView.setAdapter(adapter);
 
-        super.onViewCreated(view, savedInstanceState);
-    }*/
-
-}
+    }

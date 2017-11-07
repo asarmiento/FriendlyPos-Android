@@ -15,6 +15,9 @@ import android.widget.Toast;
 
 import com.friendlypos.R;
 import com.friendlypos.distribucion.modelo.Inventario;
+import com.friendlypos.distribucion.modelo.Marcas;
+import com.friendlypos.distribucion.modelo.TipoProducto;
+import com.friendlypos.principal.adapters.ProductosAdapter;
 import com.friendlypos.principal.modelo.Productos;
 
 import java.util.List;
@@ -25,28 +28,28 @@ import io.realm.Realm;
  * Created by DelvoM on 21/09/2017.
  */
 
-public class DistrProductosInvAdapter extends RecyclerView.Adapter<DistrProductosInvAdapter.CharacterViewHolder> {
+public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<DistrSeleccionarProductosAdapter.CharacterViewHolder> {
 
     private Context context;
     private List<Inventario> productosList;
 
-    public DistrProductosInvAdapter(List<Inventario> productosList) {
+    public DistrSeleccionarProductosAdapter(List<Inventario> productosList) {
 
         this.productosList = productosList;
     }
 
     @Override
     public CharacterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.lista_productos, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.lista_distribucion_productos, parent, false);
 
         context = parent.getContext();
         //  CharacterViewHolder placeViewHolder = new CharacterViewHolder(view);
         // placeViewHolder.cardView.setOnClickListener(new ProductosAdapter(placeViewHolder, parent));
-        return new DistrProductosInvAdapter.CharacterViewHolder(view);
+        return new DistrSeleccionarProductosAdapter.CharacterViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(DistrProductosInvAdapter.CharacterViewHolder holder, final int position) {
+    public void onBindViewHolder(DistrSeleccionarProductosAdapter.CharacterViewHolder holder, final int position) {
         Inventario inventario = productosList.get(position);
 
         holder.cardView.setOnClickListener(new View.OnClickListener() {
@@ -60,11 +63,21 @@ public class DistrProductosInvAdapter extends RecyclerView.Adapter<DistrProducto
         //todo repasar esto
         Realm realm = Realm.getDefaultInstance();
         String description = realm.where(Productos.class).equalTo("id", inventario.getProduct_id()).findFirst().getDescription();
+        String marca = realm.where(Productos.class).equalTo("id", inventario.getProduct_id()).findFirst().getBrand_id();
+        String tipo = realm.where(Productos.class).equalTo("id", inventario.getProduct_id()).findFirst().getProduct_type_id();
+        String precio = realm.where(Productos.class).equalTo("id", inventario.getProduct_id()).findFirst().getSale_price();
+
+        String marca2 = realm.where(Marcas.class).equalTo("id", marca).findFirst().getName();
+        String tipoProducto = realm.where(TipoProducto.class).equalTo("id", tipo).findFirst().getName();
+
         realm.close();
 
-        holder.tv_name.setText(description);
-        holder.tv_version.setText(inventario.getAmount());
-        holder.tv_api_level.setText(inventario.getAmount_dist());
+        holder.txt_producto_factura_nombre.setText(description);
+        holder.txt_producto_factura_marca.setText("Marca: " + marca2);
+        holder.txt_producto_factura_tipo.setText("Tipo: " + tipoProducto);
+        holder.txt_producto_factura_precio.setText(precio);
+        holder.txt_producto_factura_disponible.setText("Disp: " + inventario.getAmount_dist());
+        holder.txt_producto_factura_seleccionado.setText("Selec: " + "0.0");
 
 
      /*   holder.cardView.setOnClickListener(new View.OnClickListener(){
@@ -132,15 +145,18 @@ public class DistrProductosInvAdapter extends RecyclerView.Adapter<DistrProducto
 
     public static class CharacterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private TextView tv_name, tv_version, tv_api_level;
+        private TextView txt_producto_factura_nombre, txt_producto_factura_marca,txt_producto_factura_tipo, txt_producto_factura_precio, txt_producto_factura_disponible, txt_producto_factura_seleccionado;
         protected CardView cardView;
 
         public CharacterViewHolder(View view) {
             super(view);
-            cardView = (CardView) view.findViewById(R.id.cardViewProductos);
-            tv_name = (TextView) view.findViewById(R.id.txt_producto_nombre);
-            tv_version = (TextView) view.findViewById(R.id.txt_producto_codbarras);
-            tv_api_level = (TextView) view.findViewById(R.id.txt_producto_precio);
+            cardView = (CardView) view.findViewById(R.id.cardViewSeleccionarProductos);
+            txt_producto_factura_nombre = (TextView) view.findViewById(R.id.txt_producto_factura_nombre);
+            txt_producto_factura_marca = (TextView) view.findViewById(R.id.txt_producto_factura_marca);
+            txt_producto_factura_tipo = (TextView) view.findViewById(R.id.txt_producto_factura_tipo);
+            txt_producto_factura_precio = (TextView) view.findViewById(R.id.txt_producto_factura_precio);
+            txt_producto_factura_disponible = (TextView) view.findViewById(R.id.txt_producto_factura_disponible);
+            txt_producto_factura_seleccionado = (TextView) view.findViewById(R.id.txt_producto_factura_seleccionado);
             view.setOnClickListener(this);
         }
 

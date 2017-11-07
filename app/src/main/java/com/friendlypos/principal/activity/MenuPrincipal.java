@@ -181,9 +181,10 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
             case R.id.btn_descargar_catalogo:
                 Toast.makeText(MenuPrincipal.this, "descargar_catalogo", Toast.LENGTH_SHORT).show();
 
-               // download1.descargarCatalogo(MenuPrincipal.this);
-                DescargarCatalogo descargarInventario = new DescargarCatalogo(MenuPrincipal.this);
-                 descargarInventario.execute();
+
+                download1.descargarCatalogo(MenuPrincipal.this);
+                /*DescargarCatalogo descargarInventario = new DescargarCatalogo(MenuPrincipal.this);
+                 descargarInventario.execute();*/
                 break;
             case R.id.btn_descargar_inventario:
                 Toast.makeText(MenuPrincipal.this, "descargar_inventario", Toast.LENGTH_SHORT).show();

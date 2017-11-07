@@ -109,7 +109,7 @@ public class DescargasHelper {
                 }
             });
 
-           /* // TODO descarga Marcas
+            // TODO descarga Marcas
             Call<MarcasResponse> callMarcas = api.getMarcas(token);
             callMarcas.enqueue(new Callback<MarcasResponse>() {
 
@@ -232,7 +232,7 @@ public class DescargasHelper {
                     //  Toast.makeText(ProductosActivity.this, getString(R.string.failed), Toast.LENGTH_LONG).show();
 
                 }
-            });*/
+            });
         }
         else {
             //     Toast.makeText(context, getString(R.string.failed), Toast.LENGTH_LONG).show();

@@ -1,7 +1,9 @@
 package com.friendlypos.principal.modelo;
 
 import com.friendlypos.distribucion.modelo.Pivot;
+import com.friendlypos.distribucion.modelo.Venta;
 import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
@@ -38,7 +40,8 @@ public class Productos extends RealmObject {
     String sale_method_id;
     String status;
     String updated_at;
-    Pivot pivot;
+    @SerializedName("pivot")
+    private Pivot pivot;
 
     public String getId() {
         return id;
@@ -230,6 +233,14 @@ public class Productos extends RealmObject {
 
     public void setUpdated_at(String updated_at) {
         this.updated_at = updated_at;
+    }
+
+    public Pivot getPivot() {
+        return pivot;
+    }
+
+    public void setPivot(Pivot pivot) {
+        this.pivot = pivot;
     }
 
     @Override

@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 
 import com.friendlypos.R;
 import com.friendlypos.distribucion.adapters.DistrProductosAdapter;
+import com.friendlypos.distribucion.adapters.DistrSeleccionarProductosAdapter;
+import com.friendlypos.distribucion.modelo.Inventario;
 import com.friendlypos.principal.modelo.Productos;
 
 import java.util.List;
@@ -25,7 +27,7 @@ import static java.lang.String.valueOf;
 public class DistSelecProductoFragment extends Fragment {
     private Realm realm;
     RecyclerView recyclerView;
-    private DistrProductosAdapter adapter;
+    private DistrSeleccionarProductosAdapter adapter;
 
     public static DistSelecProductoFragment getInstance() {
         return new DistSelecProductoFragment();
@@ -46,7 +48,7 @@ public class DistSelecProductoFragment extends Fragment {
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerViewDistrSeleccProducto);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setHasFixedSize(true);
-        adapter = new DistrProductosAdapter(getList());
+        adapter = new DistrSeleccionarProductosAdapter(getList());
         recyclerView.setAdapter(adapter);
 
         Log.d("lista", getList() + "");
@@ -54,10 +56,10 @@ public class DistSelecProductoFragment extends Fragment {
         return rootView;
     }
 
-    private List<Productos> getList(){
+    private List<Inventario> getList(){
         realm = Realm.getDefaultInstance();
-        RealmQuery<Productos> query = realm.where(Productos.class);
-        RealmResults<Productos> result1 = query.findAll();
+        RealmQuery<Inventario> query = realm.where(Inventario.class);
+        RealmResults<Inventario> result1 = query.findAll();
 
         return result1;
     }
