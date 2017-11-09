@@ -13,7 +13,6 @@ import android.widget.Toast;
 
 import com.friendlypos.R;
 import com.friendlypos.application.datamanager.BaseManager;
-import com.friendlypos.distribucion.adapters.DistrProductosAdapter;
 import com.friendlypos.login.activity.LoginActivity;
 import com.friendlypos.login.util.SessionPrefes;
 import com.friendlypos.principal.adapters.ClientesAdapter;

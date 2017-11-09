@@ -8,22 +8,27 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import com.friendlypos.R;
+import com.friendlypos.distribucion.adapters.DistrResumenAdapter;
 import com.friendlypos.distribucion.adapters.DistrSeleccionarProductosAdapter;
 import com.friendlypos.distribucion.modelo.Inventario;
+import com.friendlypos.distribucion.modelo.Pivot;
+
 import java.util.List;
+
 import io.realm.Realm;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
 
 
-public class DistSelecProductoFragment extends Fragment {
+public class DistResumenFragment extends Fragment {
     private Realm realm;
     RecyclerView recyclerView;
-    private DistrSeleccionarProductosAdapter adapter;
+    private DistrResumenAdapter adapter;
 
-    public static DistSelecProductoFragment getInstance() {
-        return new DistSelecProductoFragment();
+    public static DistResumenFragment getInstance() {
+        return new DistResumenFragment();
     }
 
     @Override
@@ -36,12 +41,12 @@ public class DistSelecProductoFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-        View rootView = inflater.inflate(R.layout.fragment_distribucion_selecproduct, container,
+        View rootView = inflater.inflate(R.layout.fragment_distribucion_resumen, container,
                 false);
-        recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerViewDistrSeleccProducto);
+        recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerViewDistrResumen);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setHasFixedSize(true);
-        adapter = new DistrSeleccionarProductosAdapter(getList());
+        adapter = new DistrResumenAdapter(getList());
         recyclerView.setAdapter(adapter);
 
         Log.d("lista", getList() + "");
@@ -49,10 +54,10 @@ public class DistSelecProductoFragment extends Fragment {
         return rootView;
     }
 
-    private List<Inventario> getList(){
+    private List<Pivot> getList(){
         realm = Realm.getDefaultInstance();
-        RealmQuery<Inventario> query = realm.where(Inventario.class);
-        RealmResults<Inventario> result1 = query.findAll();
+        RealmQuery<Pivot> query = realm.where(Pivot.class);
+        RealmResults<Pivot> result1 = query.findAll();
 
         return result1;
     }

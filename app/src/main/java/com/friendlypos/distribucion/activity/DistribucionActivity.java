@@ -1,26 +1,21 @@
 package com.friendlypos.distribucion.activity;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.friendlypos.R;
-import com.friendlypos.application.util.Functions;
+import com.friendlypos.distribucion.fragment.DistResumenFragment;
 import com.friendlypos.distribucion.fragment.DistTotalizarFragment;
 import com.friendlypos.distribucion.fragment.DistSelecClienteFragment;
 import com.friendlypos.distribucion.fragment.DistSelecProductoFragment;
-import com.friendlypos.distribucion.fragment.TwoFragment;
 import com.friendlypos.principal.activity.MenuPrincipal;
 
 import java.util.ArrayList;
@@ -86,7 +81,7 @@ public class DistribucionActivity extends AppCompatActivity  {
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFrag(new DistSelecClienteFragment(), "Seleccionar Cliente");
-        adapter.addFrag(new TwoFragment(), "Resumen");
+        adapter.addFrag(new DistResumenFragment(), "Resumen");
         adapter.addFrag(new DistSelecProductoFragment(), "Seleccionar productos");
         adapter.addFrag(new DistTotalizarFragment(), "Totalizar");
         viewPager.setAdapter(adapter);
