@@ -44,7 +44,7 @@ public class DistSelecProductoFragment extends Fragment {
         adapter = new DistrSeleccionarProductosAdapter(getList());
         recyclerView.setAdapter(adapter);
 
-        Log.d("lista", getList() + "");
+        Log.d("listaProducto", getList() + "");
 
         return rootView;
     }

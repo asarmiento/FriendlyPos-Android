@@ -43,6 +43,9 @@ public class Facturas extends RealmObject {
     private String payment_method_id;
     @SerializedName("sale")
     private Venta venta;
+    @SerializedName("pivot")
+    private Pivot pivot;
+
 
     public String getId() {
         return id;
@@ -252,7 +255,13 @@ public class Facturas extends RealmObject {
         this.venta = venta;
     }
 
+    public Pivot getPivot() {
+        return pivot;
+    }
 
+    public void setPivot(Pivot pivot) {
+        this.pivot = pivot;
+    }
 
     @Override
     public String toString() {
@@ -283,6 +292,7 @@ public class Facturas extends RealmObject {
                 ", invoice_type_id='" + invoice_type_id + '\'' +
                 ", payment_method_id='" + payment_method_id + '\'' +
                 ", venta=" + venta +
+                ", pivot=" + pivot +
                 '}';
     }
 }

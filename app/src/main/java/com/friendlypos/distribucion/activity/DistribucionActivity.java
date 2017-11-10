@@ -16,12 +16,13 @@ import com.friendlypos.distribucion.fragment.DistResumenFragment;
 import com.friendlypos.distribucion.fragment.DistTotalizarFragment;
 import com.friendlypos.distribucion.fragment.DistSelecClienteFragment;
 import com.friendlypos.distribucion.fragment.DistSelecProductoFragment;
+import com.friendlypos.distribucion.interfaces.ComunicadorFragment;
 import com.friendlypos.principal.activity.MenuPrincipal;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class DistribucionActivity extends AppCompatActivity  {
+public class DistribucionActivity extends AppCompatActivity {
 
 
     private Toolbar toolbar;
@@ -82,6 +83,7 @@ public class DistribucionActivity extends AppCompatActivity  {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFrag(new DistSelecClienteFragment(), "Seleccionar Cliente");
         adapter.addFrag(new DistResumenFragment(), "Resumen");
+
         adapter.addFrag(new DistSelecProductoFragment(), "Seleccionar productos");
         adapter.addFrag(new DistTotalizarFragment(), "Totalizar");
         viewPager.setAdapter(adapter);

@@ -52,7 +52,7 @@ public class ProductosAdapter extends RecyclerView.Adapter<ProductosAdapter.Char
         String tipoProducto = realm.where(TipoProducto.class).equalTo("id", producto.getProduct_type_id()).findFirst().getName();
 
         // TODO Revisar como poner el inventario,ya que el campo 1 es null y se cae la app
-        String inventario = realm.where(Inventario.class).equalTo("product_id", "5").findFirst().getInitial();
+        //String inventario = realm.where(Inventario.class).equalTo("product_id", "5").findFirst().getInitial();
 
 
         //String inventario2 = realm.where(Inventario.class).equalTo(producto.getId(), "product_id").findFirst().getInitial();
@@ -73,7 +73,7 @@ public class ProductosAdapter extends RecyclerView.Adapter<ProductosAdapter.Char
         holder.txt_producto_marca.setText(marca);
         holder.txt_producto_tipo.setText(tipoProducto);
         holder.txt_producto_stock.setText(producto.getStock_max());
-        holder.txt_producto_inventario.setText(inventario);
+        holder.txt_producto_inventario.setText(tipoProducto);
         holder.txt_producto_precio.setText(producto.getSale_price());
 
     }

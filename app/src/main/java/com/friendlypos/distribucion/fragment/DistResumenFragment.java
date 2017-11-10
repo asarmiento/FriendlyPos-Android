@@ -11,8 +11,6 @@ import android.view.ViewGroup;
 
 import com.friendlypos.R;
 import com.friendlypos.distribucion.adapters.DistrResumenAdapter;
-import com.friendlypos.distribucion.adapters.DistrSeleccionarProductosAdapter;
-import com.friendlypos.distribucion.modelo.Inventario;
 import com.friendlypos.distribucion.modelo.Pivot;
 
 import java.util.List;
@@ -39,71 +37,31 @@ public class DistResumenFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-
         View rootView = inflater.inflate(R.layout.fragment_distribucion_resumen, container,
                 false);
+
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerViewDistrResumen);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setHasFixedSize(true);
-        adapter = new DistrResumenAdapter(getList());
+        adapter = new DistrResumenAdapter(getList1());
         recyclerView.setAdapter(adapter);
 
-        Log.d("lista", getList() + "");
+        Log.d("listaResumen", getList1() + "");
 
         return rootView;
     }
 
-    private List<Pivot> getList(){
+    private List<Pivot> getList1(){
         realm = Realm.getDefaultInstance();
         RealmQuery<Pivot> query = realm.where(Pivot.class);
         RealmResults<Pivot> result1 = query.findAll();
 
         return result1;
     }
-/*
-    private void readStories(){
-        RealmQuery<StoryRealm> query = realm.where(StoryRealm.class);
-        RealmResults<StoryRealm> resultAllStories = query.findAll();
-        arrayListStories = new ArrayList<>();
-        for(StoryRealm storyRealm : resultAllStories){
-            arrayListStories.add(new Story(storyRealm));
-        }
-        adapter = new AdapterComment(arrayListStories);
-        commentsRecList.setAdapter(adapter);
-        //adapter.notifyDataSetChanged();
-    }*/
-
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         realm.close();
     }
-/*
-
-
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-
-        LinearLayoutManager layoutManager = new LinearLayoutManager(
-                getActivity());
-        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        mRecyclerView.setLayoutManager(layoutManager);
-
-
-        String[] dataset = new String[100];
-        for (int i = 0; i < dataset.length; i++) {
-            dataset[i] = "item" + i;
-        }
-
-       adapter = new ClientesAdapter(mContentsArray);
-        mRecyclerView.setAdapter(adapter);
-
-        adapter = new RecyclerAdapter(dataset, getActivity());
-        mRecyclerView.setAdapter(adapter);
-
-        super.onViewCreated(view, savedInstanceState);
-    }*/
 
 }

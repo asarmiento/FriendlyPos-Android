@@ -8,13 +8,13 @@ import java.util.List;
  * Created by DelvoM on 06/11/2017.
  */
 
-public class VentaResponse {
+public class PivotResponse {
 
     private boolean result;
     private String code;
     private String message;
-    @SerializedName("sale")
-    private List<Venta> venta;
+    @SerializedName("pivot")
+    private List<Pivot> pivot;
 
     public boolean isResult() {
         return result;
@@ -40,11 +40,11 @@ public class VentaResponse {
         this.message = message;
     }
 
-  public List<Venta> getVenta() {
-        return venta;
+    public List<Pivot> getPivot() {
+        return pivot;
     }
 
-    public void setVenta(List<Venta> venta) {
-        this.venta = venta;
+    public void setPivot(List<Pivot> pivot) {
+        this.pivot = pivot;
     }
 }

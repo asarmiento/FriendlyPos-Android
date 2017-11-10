@@ -14,10 +14,10 @@ import com.friendlypos.distribucion.modelo.Inventario;
 import com.friendlypos.distribucion.modelo.InventarioResponse;
 import com.friendlypos.distribucion.modelo.Marcas;
 import com.friendlypos.distribucion.modelo.MarcasResponse;
+import com.friendlypos.distribucion.modelo.Pivot;
 import com.friendlypos.distribucion.modelo.TipoProducto;
 import com.friendlypos.distribucion.modelo.TipoProductoResponse;
 import com.friendlypos.distribucion.modelo.Venta;
-import com.friendlypos.distribucion.modelo.VentaResponse;
 import com.friendlypos.login.util.SessionPrefes;
 import com.friendlypos.principal.modelo.Clientes;
 import com.friendlypos.principal.modelo.ClientesResponse;
@@ -40,7 +40,7 @@ public class DescargasHelper {
     private NetworkStateChangeReceiver networkStateChangeReceiver;
     private Activity activity;
     private Context mContext;
-    private Realm realm, realm2, realmMarcas, realmTipoProducto, realmVentas;
+    private Realm realm, realm2, realmMarcas, realmTipoProducto, realmVentas, realmPivot;
 
     public DescargasHelper(Activity activity) {
         this.activity = activity;
@@ -51,6 +51,7 @@ public class DescargasHelper {
         realmMarcas = Realm.getDefaultInstance();
         realmTipoProducto = Realm.getDefaultInstance();
         realmVentas = Realm.getDefaultInstance();
+        realmPivot = Realm.getDefaultInstance();
     }
 
     public void descargarCatalogo(Context context) {
@@ -247,6 +248,7 @@ public class DescargasHelper {
         final ArrayList<Inventario> mContentsArray = new ArrayList<>();
         final ArrayList<Facturas> mContentsArray2 = new ArrayList<>();
         final ArrayList<Venta> mContentsArrayVenta = new ArrayList<>();
+        final ArrayList<Pivot> mContentsArrayPivot = new ArrayList<>();
         final ProgressDialog dialog = new ProgressDialog(context);
         dialog.setMessage("Cargando lista de inventarios");
 
@@ -293,7 +295,7 @@ public class DescargasHelper {
                 }
             });
 
-         /*   // TODO descarga Ventas
+        /*    // TODO descarga Ventas
             Call<VentaResponse> callVentas = api.getVentas(token);
 
             callVentas.enqueue(new Callback<VentaResponse>() {
@@ -384,6 +386,47 @@ public class DescargasHelper {
         else {
             //     Toast.makeText(context, getString(R.string.failed), Toast.LENGTH_LONG).show();
         }
+/*
+        // TODO descarga Pivot
+        Call<PivotResponse> callPivot = api.getPivot(token);
+
+        callPivot.enqueue(new Callback<PivotResponse>() {
+
+            @Override
+            public void onResponse(Call<PivotResponse> call, Response<PivotResponse> response) {
+                mContentsArrayPivot.clear();
+
+
+                if (response.isSuccessful()) {
+                    mContentsArrayPivot.addAll(response.body().getPivot());
+
+                    try {
+                        realmPivot = Realm.getDefaultInstance();
+
+                        // Work with Realm
+                        realmPivot.beginTransaction();
+                        realmPivot.copyToRealmOrUpdate(mContentsArrayPivot);
+                        realmPivot.commitTransaction();
+                        //realm.close();
+                    }
+                    finally {
+                        realmPivot.close();
+                    }
+                    Log.d(DescargasHelper.class.getName(), mContentsArrayPivot.toString());
+                    //  Toast.makeText(DescargarInventario.this, getString(R.string.success), Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    //  Toast.makeText(DescargarInventario.this, getString(R.string.error) + " CODE: " +response.code(), Toast.LENGTH_LONG).show();
+                    RealmResults<Pivot> results = realmVentas.where(Pivot.class).findAll();
+                    mContentsArrayPivot.addAll(results);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PivotResponse> call, Throwable t) {
+                // Toast.makeText(context, getString(R.string.error), Toast.LENGTH_LONG).show();
+            }
+        });*/
     }
 
     private boolean isOnline() {

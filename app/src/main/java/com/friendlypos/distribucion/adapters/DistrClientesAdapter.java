@@ -20,7 +20,7 @@ import io.realm.Realm;
 
 public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdapter.CharacterViewHolder> {
 
-    private List<Venta> contentList;
+    public List<Venta> contentList;
 
     public DistrClientesAdapter(List<Venta> contentList) {
         this.contentList = contentList;
@@ -48,20 +48,6 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
        holder.txt_cliente_factura_fantasyname.setText(fantasyCliente);
         holder.txt_cliente_factura_companyname.setText(companyCliente);
         holder.txt_cliente_factura_numeracion.setText("Factura: " + numeracionFactura);
-
-       holder.cardView.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view){
-                //Here goes your desired onClick behaviour. Like:
-                view.setBackgroundColor(Color.parseColor("#607d8b"));
-                Toast.makeText(view.getContext(), "You have clicked " + cardCliente + position, Toast.LENGTH_SHORT).show(); //you can add data to the tag of your cardview in onBind... and retrieve it here with with.getTag().toString()..
-                //You can change the fragment, something like this, not tested, please correct for your desired output:
-                //    Activity activity = view.getContext();
-                //   Fragment CityName = new CityName();
-                //Create a bundle to pass data, add data, set the bundle to your fragment and:
-                //   activity.getFragmentManager().beginTransaction().replace(R.id.fragment_container, cityName).addToBackStack(null).commit();     //Here m getting error
-            }
-        });
 
     }
 
@@ -105,7 +91,7 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
 
     }
 
-    public static class CharacterViewHolder extends RecyclerView.ViewHolder {
+    public class CharacterViewHolder extends RecyclerView.ViewHolder {
 
         private TextView txt_cliente_factura_card,txt_cliente_factura_fantasyname,txt_cliente_factura_companyname, txt_cliente_factura_numeracion;
         protected CardView cardView;
@@ -117,8 +103,35 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
             txt_cliente_factura_companyname = (TextView)view.findViewById(R.id.txt_cliente_factura_companyname);
             txt_cliente_factura_numeracion = (TextView)view.findViewById(R.id.txt_cliente_factura_numeracion);
 
+            cardView.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View view){
+
+                    int pos = getAdapterPosition();
+
+                    // check if item still exists
+                    if(pos != RecyclerView.NO_POSITION){
+                        view.setBackgroundColor(Color.parseColor("#607d8b"));
+                        Venta clickedDataItem = contentList.get(pos);
+                        String facturaID =  clickedDataItem.getId();
+                        Toast.makeText(view.getContext(), "You clicked " + facturaID, Toast.LENGTH_SHORT).show();
+                    }
+
+                    //Here goes your desired onClick behaviour. Like:
+
+               //     Toast.makeText(view.getContext(), "You have clicked " + cardCliente + position, Toast.LENGTH_SHORT).show(); //you can add data to the tag of your cardview in onBind... and retrieve it here with with.getTag().toString()..
+                    //You can change the fragment, something like this, not tested, please correct for your desired output:
+                    //    Activity activity = view.getContext();
+                    //   Fragment CityName = new CityName();
+                    //Create a bundle to pass data, add data, set the bundle to your fragment and:
+                    //   activity.getFragmentManager().beginTransaction().replace(R.id.fragment_container, cityName).addToBackStack(null).commit();     //Here m getting error
+                }
+            });
+
         }
     }
+
+
 
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
