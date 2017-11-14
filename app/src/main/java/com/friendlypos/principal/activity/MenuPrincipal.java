@@ -15,7 +15,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,11 +23,9 @@ import android.widget.Toast;
 
 import com.friendlypos.R;
 import com.friendlypos.app.broadcastreceiver.NetworkStateChangeReceiver;
-import com.friendlypos.application.datamanager.BaseManager;
-import com.friendlypos.application.interfaces.RequestInterface;
+
 import com.friendlypos.distribucion.activity.DistribucionActivity;
-import com.friendlypos.distribucion.modelo.Inventario;
-import com.friendlypos.distribucion.modelo.InventarioResponse;
+
 import com.friendlypos.login.util.SessionPrefes;
 import com.friendlypos.principal.fragment.ConfiguracionFragment;
 import com.friendlypos.principal.helpers.DescargasHelper;
@@ -45,12 +42,14 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.friendlypos.R.id.btn_descargar_datosempresa;
+
 public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenuItemClickListener
        /* implements NavigationView.OnNavigationItemSelectedListener*/ {
     private static String POPUP_CONSTANT = "mPopup";
     private static String POPUP_FORCE_SHOW_ICON = "setForceShowIcon";
     private NetworkStateChangeReceiver networkStateChangeReceiver;
-
+int bloquear = 0;
     @Bind(R.id.clickClientes)
     LinearLayout clickClientes;
 
@@ -142,8 +141,22 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
         }
         popup.getMenuInflater().inflate(R.menu.popup_menu, popup.getMenu());
         popup.setOnMenuItemClickListener(this);
+        Menu popupMenu = popup.getMenu();
+
+        if (bloquear == 0){
+            //bloqueados
+            popupMenu.findItem(R.id.btn_descargar_catalogo).setEnabled(false);
+            popupMenu.findItem(R.id.btn_descargar_inventario).setEnabled(false);
+        }
+        else if(bloquear == 1) {
+            //desbloqueados
+            popupMenu.findItem(R.id.btn_descargar_catalogo).setEnabled(true);
+            popupMenu.findItem(R.id.btn_descargar_inventario).setEnabled(true);
+        }
         popup.show();
     }
+
+
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
@@ -178,22 +191,26 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                 alertDialog.show();
                 break;
 
+            case btn_descargar_datosempresa:
+                bloquear = 1;
+                Toast.makeText(MenuPrincipal.this, "descargar_datosEmpresa", Toast.LENGTH_SHORT).show();
+                download1.descargarDatosEmpresa(MenuPrincipal.this);
+
+                break;
+
             case R.id.btn_descargar_catalogo:
+
                 Toast.makeText(MenuPrincipal.this, "descargar_catalogo", Toast.LENGTH_SHORT).show();
-
-
                 download1.descargarCatalogo(MenuPrincipal.this);
-                /*DescargarCatalogo descargarInventario = new DescargarCatalogo(MenuPrincipal.this);
-                 descargarInventario.execute();*/
+
                 break;
             case R.id.btn_descargar_inventario:
+
                 Toast.makeText(MenuPrincipal.this, "descargar_inventario", Toast.LENGTH_SHORT).show();
-                //TODO REVISAR SI ES NECESARIO MANTENER EL ASYNCTASK
                 download1.descargarInventario(MenuPrincipal.this);
 
-                //   DescargarInventario descargarInventario = new DescargarInventario(MenuPrincipal.this);
-                //   descargarInventario.execute();
                 break;
+
             case R.id.btn_descargar_deudas:
                 Toast.makeText(MenuPrincipal.this, "descargar_deudas", Toast.LENGTH_SHORT).show();
                 break;

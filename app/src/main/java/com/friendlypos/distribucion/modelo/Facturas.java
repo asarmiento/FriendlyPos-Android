@@ -5,6 +5,7 @@ import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
@@ -43,9 +44,8 @@ public class Facturas extends RealmObject {
     private String payment_method_id;
     @SerializedName("sale")
     private Venta venta;
-    @SerializedName("pivot")
-    private Pivot pivot;
-
+    @SerializedName("products")
+    private RealmList<ProductoFactura> productofacturas;
 
     public String getId() {
         return id;
@@ -255,15 +255,14 @@ public class Facturas extends RealmObject {
         this.venta = venta;
     }
 
-    public Pivot getPivot() {
-        return pivot;
+    public RealmList<ProductoFactura> getProductofacturas() {
+        return productofacturas;
     }
 
-    public void setPivot(Pivot pivot) {
-        this.pivot = pivot;
+    public void setProductofacturas(RealmList<ProductoFactura> productofacturas) {
+        this.productofacturas = productofacturas;
     }
 
-    @Override
     public String toString() {
         return "Facturas{" +
                 "id='" + id + '\'' +
@@ -292,7 +291,7 @@ public class Facturas extends RealmObject {
                 ", invoice_type_id='" + invoice_type_id + '\'' +
                 ", payment_method_id='" + payment_method_id + '\'' +
                 ", venta=" + venta +
-                ", pivot=" + pivot +
+                ", productofacturas=" + productofacturas +
                 '}';
     }
 }

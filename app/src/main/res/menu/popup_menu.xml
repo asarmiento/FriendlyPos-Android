@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
+        android:id="@+id/btn_descargar_datosempresa"
+        android:icon="@mipmap/ic_config"
+        android:title="Desc. Info. Empresa"/>
+    <item
         android:id="@+id/btn_descargar_catalogo"
         android:icon="@mipmap/ic_config"
         android:title="Descargar Catalogo"/>

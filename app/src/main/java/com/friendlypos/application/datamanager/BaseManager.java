@@ -1,6 +1,12 @@
 package com.friendlypos.application.datamanager;
 
+import android.app.Activity;
+import android.content.Context;
+import android.util.Log;
+
+import com.friendlypos.app.broadcastreceiver.NetworkStateChangeReceiver;
 import com.friendlypos.application.interfaces.RequestInterface;
+import com.friendlypos.login.util.Properties;
 import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
@@ -8,6 +14,7 @@ import com.google.gson.GsonBuilder;
 
 import java.io.IOException;
 
+import io.realm.Realm;
 import io.realm.RealmObject;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
@@ -15,15 +22,20 @@ import okhttp3.Request;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-/**
- * Created by juandiegoGL on 4/6/17.
- */
-
 public class BaseManager {
-
+    private Activity activity;
+    private Context mContext;
     private static RequestInterface api;
+    static Properties properties;
+
+    public BaseManager(Activity activity) {
+        this.activity = activity;
+        this.mContext = activity;
+        properties = new Properties(mContext);
+    }
 
     public static RequestInterface getApi() {
+
 
         if(api == null) {
 
@@ -59,9 +71,16 @@ public class BaseManager {
                     })
                     .build();
 
+            // TODO REVISAR LA PROPIEDAD VIENE NULL
+
+        /*    String urlRequest = properties.getUrlWebsrv();
+
+            Log.d("urlRequest", urlRequest);*/
+
             Retrofit retrofit = new Retrofit.Builder()
                     /*.baseUrl(appAPI.ENDPOINT)*/
                     .baseUrl("http://friendlyaccount.com")
+                   // .baseUrl(properties.getUrlWebsrv())
                     .client(httpClient)
                     .addConverterFactory(GsonConverterFactory.create(gson))
                     .build();

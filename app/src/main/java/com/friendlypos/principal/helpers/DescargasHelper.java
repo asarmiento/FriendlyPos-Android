@@ -14,7 +14,7 @@ import com.friendlypos.distribucion.modelo.Inventario;
 import com.friendlypos.distribucion.modelo.InventarioResponse;
 import com.friendlypos.distribucion.modelo.Marcas;
 import com.friendlypos.distribucion.modelo.MarcasResponse;
-import com.friendlypos.distribucion.modelo.Pivot;
+import com.friendlypos.distribucion.modelo.ProductoFactura;
 import com.friendlypos.distribucion.modelo.TipoProducto;
 import com.friendlypos.distribucion.modelo.TipoProductoResponse;
 import com.friendlypos.distribucion.modelo.Venta;
@@ -23,6 +23,8 @@ import com.friendlypos.principal.modelo.Clientes;
 import com.friendlypos.principal.modelo.ClientesResponse;
 import com.friendlypos.principal.modelo.Productos;
 import com.friendlypos.principal.modelo.ProductosResponse;
+import com.friendlypos.principal.modelo.Sysconf;
+import com.friendlypos.principal.modelo.SysconfResponse;
 
 import java.util.ArrayList;
 
@@ -40,7 +42,7 @@ public class DescargasHelper {
     private NetworkStateChangeReceiver networkStateChangeReceiver;
     private Activity activity;
     private Context mContext;
-    private Realm realm, realm2, realmMarcas, realmTipoProducto, realmVentas, realmPivot;
+    private Realm realm, realm2, realmSysconfig, realmMarcas, realmTipoProducto, realmVentas, realmPivot;
 
     public DescargasHelper(Activity activity) {
         this.activity = activity;
@@ -52,6 +54,7 @@ public class DescargasHelper {
         realmTipoProducto = Realm.getDefaultInstance();
         realmVentas = Realm.getDefaultInstance();
         realmPivot = Realm.getDefaultInstance();
+        realmSysconfig = Realm.getDefaultInstance();
     }
 
     public void descargarCatalogo(Context context) {
@@ -248,7 +251,7 @@ public class DescargasHelper {
         final ArrayList<Inventario> mContentsArray = new ArrayList<>();
         final ArrayList<Facturas> mContentsArray2 = new ArrayList<>();
         final ArrayList<Venta> mContentsArrayVenta = new ArrayList<>();
-        final ArrayList<Pivot> mContentsArrayPivot = new ArrayList<>();
+        final ArrayList<ProductoFactura> mContentsArrayPivot = new ArrayList<>();
         final ProgressDialog dialog = new ProgressDialog(context);
         dialog.setMessage("Cargando lista de inventarios");
 
@@ -347,6 +350,11 @@ public class DescargasHelper {
 
                     if (response2.isSuccessful()) {
 
+
+                       /* int id =response.body().getId();
+                        String userName = response.body().getUsername();
+                        String level = response.body().getLevel();
+*/
                         mContentsArray2.addAll(response2.body().getFacturas());
 
                         try {
@@ -360,7 +368,7 @@ public class DescargasHelper {
                             realm2.close();
                         }
 
-                        Log.d("finish", mContentsArray2 + " ");
+                       Log.d("finish", mContentsArray2 + " ");
 
                         //Toast.makeText(ProductosActivity.this, getString(R.string.success), Toast.LENGTH_SHORT).show();
                     }
@@ -386,19 +394,19 @@ public class DescargasHelper {
         else {
             //     Toast.makeText(context, getString(R.string.failed), Toast.LENGTH_LONG).show();
         }
-/*
-        // TODO descarga Pivot
-        Call<PivotResponse> callPivot = api.getPivot(token);
 
-        callPivot.enqueue(new Callback<PivotResponse>() {
+      /*  // TODO descarga Pivot
+        Call<ProductoFacturaResponse> callPivot = api.getPivot(token);
+
+        callPivot.enqueue(new Callback<ProductoFacturaResponse>() {
 
             @Override
-            public void onResponse(Call<PivotResponse> call, Response<PivotResponse> response) {
+            public void onResponse(Call<ProductoFacturaResponse> call, Response<ProductoFacturaResponse> response) {
                 mContentsArrayPivot.clear();
 
 
                 if (response.isSuccessful()) {
-                    mContentsArrayPivot.addAll(response.body().getPivot());
+                    mContentsArrayPivot.addAll(response.body().getProductofacturas());
 
                     try {
                         realmPivot = Realm.getDefaultInstance();
@@ -412,21 +420,88 @@ public class DescargasHelper {
                     finally {
                         realmPivot.close();
                     }
-                    Log.d(DescargasHelper.class.getName(), mContentsArrayPivot.toString());
+                    Log.d(DescargasHelper.class.getName()+"pivot", mContentsArrayPivot.toString());
                     //  Toast.makeText(DescargarInventario.this, getString(R.string.success), Toast.LENGTH_SHORT).show();
                 }
                 else {
                     //  Toast.makeText(DescargarInventario.this, getString(R.string.error) + " CODE: " +response.code(), Toast.LENGTH_LONG).show();
-                    RealmResults<Pivot> results = realmVentas.where(Pivot.class).findAll();
+                    RealmResults<ProductoFactura> results = realmVentas.where(ProductoFactura.class).findAll();
                     mContentsArrayPivot.addAll(results);
                 }
             }
 
             @Override
-            public void onFailure(Call<PivotResponse> call, Throwable t) {
+            public void onFailure(Call<ProductoFacturaResponse> call, Throwable t) {
                 // Toast.makeText(context, getString(R.string.error), Toast.LENGTH_LONG).show();
             }
         });*/
+    }
+
+    public void descargarDatosEmpresa(Context context) {
+        String token = "Bearer " + SessionPrefes.get(context).getToken();
+        Log.d("tokenCliente", token + " ");
+
+        final RequestInterface api = BaseManager.getApi();
+        final ArrayList<Sysconf> mContentsArraySys = new ArrayList<>();
+        final ProgressDialog dialog = new ProgressDialog(context);
+        dialog.setMessage("Cargando datos de Empresa");
+
+        if (isOnline()) {
+            dialog.show();
+
+            // TODO descarga DatosEmpresa
+            Call<SysconfResponse> call2 = api.getSysconf(token);
+
+            call2.enqueue(new Callback<SysconfResponse>() {
+
+                @Override
+                public void onResponse(Call<SysconfResponse> call2, Response<SysconfResponse> response2) {
+                    mContentsArraySys.clear();
+
+                    if (response2.isSuccessful()) {
+
+
+                       /* int id =response.body().getId();
+                        String userName = response.body().getUsername();
+                        String level = response.body().getLevel();
+*/
+                        mContentsArraySys.addAll(response2.body().getSysconf());
+
+                        try {
+                            realmSysconfig.beginTransaction();
+                            //TODO verificar cada cuanto se va a actualizar el inventario.
+                            //realm.copyToRealm(mContentsArray2);
+                            realmSysconfig.copyToRealmOrUpdate(mContentsArraySys);
+                            realmSysconfig.commitTransaction();
+                        }
+                        finally {
+                            realmSysconfig.close();
+                        }
+
+                        Log.d("finishSysconf", mContentsArraySys + " ");
+
+                        //Toast.makeText(ProductosActivity.this, getString(R.string.success), Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        // Toast.makeText(ProductosActivity.this, getString(R.string.error) + " CODE: " +response.code(), Toast.LENGTH_LONG).show();
+                        RealmResults<Sysconf> results2 = realmSysconfig.where(Sysconf.class).findAll();
+                        mContentsArraySys.addAll(results2);
+                    }
+                    dialog.dismiss();
+
+                }
+
+                @Override
+                public void onFailure(Call<SysconfResponse> call2, Throwable t) {
+                    dialog.dismiss();
+
+                }
+            });
+        }
+        else {
+            //     Toast.makeText(context, getString(R.string.failed), Toast.LENGTH_LONG).show();
+        }
+
     }
 
     private boolean isOnline() {

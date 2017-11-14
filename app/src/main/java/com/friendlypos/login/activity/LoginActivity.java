@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -14,6 +15,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,6 +29,7 @@ import com.friendlypos.login.modelo.UserError;
 import com.friendlypos.login.modelo.UserResponse;
 import com.friendlypos.login.util.SessionPrefes;
 import com.friendlypos.principal.activity.MenuPrincipal;
+import com.friendlypos.principal.fragment.ConfiguracionFragment;
 
 import org.sufficientlysecure.htmltextview.HtmlTextView;
 
@@ -69,6 +72,10 @@ public class LoginActivity extends AppCompatActivity {
     @Bind(R.id.email_sign_in_button)
     Button mSignInButton;
 
+    @Bind(R.id.RLLogin)
+    RelativeLayout RLLogin;
+
+
     Context context = null;
 
     @Override
@@ -82,6 +89,15 @@ public class LoginActivity extends AppCompatActivity {
         copy.setHtmlFromString("<font size=\"7sp\"><a href=\"http://www.sistemasamigables.com/\">" + Functions.getVesionNaveCode(context) + " " + context.getString(R.string.credits) + "</a></font>", new HtmlTextView.LocalImageGetter());
 
         networkStateChangeReceiver = new NetworkStateChangeReceiver();
+
+        mLogoView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                ShowOpenSettings();
+                return false;
+            }
+        });
+
         // Setup
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 
@@ -237,6 +253,21 @@ public class LoginActivity extends AppCompatActivity {
 
     private void showLoginError(String error) {
         Toast.makeText(this, error, Toast.LENGTH_LONG).show();
+    }
+
+    private void ShowOpenSettings(){
+        Snackbar show = Snackbar.make(RLLogin,"Abrir Configuraciones?", Snackbar.LENGTH_INDEFINITE).setAction("Abrir",
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent i = new Intent(getApplicationContext(), ConfiguracionActivity.class);
+                        startActivity(i);
+                    }
+                });
+        View colorNoti= show.getView();
+
+        colorNoti.setBackgroundColor(context.getResources().getColor(R.color.colorPrimaryDark));
+        show.show();
     }
 
     private boolean isOnline() {

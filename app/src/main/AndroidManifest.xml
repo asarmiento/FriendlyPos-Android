@@ -18,7 +18,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <receiver android:name="app.broadcastreceiver.NetworkStateChangeReceiver">
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
@@ -33,8 +32,8 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustPan|adjustResize">
 
-        </activity>
 
+        </activity>
         <activity
             android:name=".principal.activity.MenuPrincipal"
             android:screenOrientation="portrait"
@@ -44,38 +43,39 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
         <activity
             android:name=".principal.activity.ClientesActivity"
+            android:parentActivityName=".principal.activity.MenuPrincipal"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:parentActivityName=".principal.activity.MenuPrincipal">
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".principal.activity.MenuPrincipal" />
         </activity>
         <activity
             android:name=".principal.activity.ProductosActivity"
+            android:parentActivityName=".principal.activity.MenuPrincipal"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:parentActivityName=".principal.activity.MenuPrincipal">
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".principal.activity.MenuPrincipal" />
-
         </activity>
-
         <activity
             android:name=".distribucion.activity.DistribucionActivity"
             android:label="@string/title_activity_distribucion"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:parentActivityName=".principal.activity.MenuPrincipal">
+            android:parentActivityName=".principal.activity.MenuPrincipal"
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".principal.activity.MenuPrincipal" />
         </activity>
-
-
+        <activity
+            android:name=".login.activity.ConfiguracionActivity"
+            android:label="@string/title_activity_configuracion"
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>

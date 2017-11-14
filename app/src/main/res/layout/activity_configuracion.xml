@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main_content"
+    android:fitsSystemWindows="true">
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        style="@style/CardView.Dark"
+        android:id="@+id/cardview">
+        <RelativeLayout
+            android:padding="5dp"
+            android:id="@+id/relative"
+            android:layout_width="match_parent"
+            android:layout_marginBottom="20dp"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/URL_Webservice"
+                android:id="@+id/textView" />
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/URl_HInt_WEBSERVICE"
+                android:layout_below="@+id/textView"
+                android:layout_alignParentLeft="true"
+                android:singleLine="true"
+                android:inputType="textUri"
+                android:textSize="13sp"
+                android:id="@+id/txtwebservice"
+                android:layout_alignParentStart="true" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/colorPrimary"
+                android:layout_below="@+id/txtwebservice"
+                />
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+
+    <android.support.design.widget.FloatingActionButton
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        app:layout_anchor="@id/cardview"
+        app:layout_anchorGravity="bottom|right|end"
+        android:src="@android:drawable/ic_menu_save"
+        android:layout_margin="@dimen/fab_margin"
+        android:id="@+id/floating"
+        android:clickable="true"/>
+
+
+</android.support.design.widget.CoordinatorLayout>

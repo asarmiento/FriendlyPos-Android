@@ -8,7 +8,6 @@
     <string name="base_url">http://friendlyaccount.com</string>
 
 
-
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_main">MainActivity</string>
@@ -144,8 +143,10 @@
     <string name="error_network">Conexión de red no disponible</string>
     <string name="error_invalid_password">Contraseña inválida</string>
     <string name="credits">Sistemas Amigables de Costa Rica S.A</string>
+    <string name="URL_Webservice">URL del web Service:</string>
+    <string name="URl_HInt_WEBSERVICE">Escriba aca el URL</string>
 
-   <!-- DISTRIBUCION -->
+    <!-- DISTRIBUCION -->
 
     <string name="title_activity_distribucion">DistribucionActivity</string>
     <string name="seleccionecliente">Seleccionar cliente</string>
@@ -159,6 +160,7 @@
     <string name="notes">Notas?</string>
     <string name="paywith">Cancela con</string>
     <string name="total">Total</string>
+    <string name="title_activity_configuracion">ConfiguracionActivity</string>
 
 
 </resources>
