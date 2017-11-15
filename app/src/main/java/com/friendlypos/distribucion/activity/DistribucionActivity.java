@@ -83,7 +83,6 @@ public class DistribucionActivity extends AppCompatActivity {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFrag(new DistSelecClienteFragment(), "Seleccionar Cliente");
         adapter.addFrag(new DistResumenFragment(), "Resumen");
-
         adapter.addFrag(new DistSelecProductoFragment(), "Seleccionar productos");
         adapter.addFrag(new DistTotalizarFragment(), "Totalizar");
         viewPager.setAdapter(adapter);

@@ -114,6 +114,7 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
                         view.setBackgroundColor(Color.parseColor("#607d8b"));
                         Venta clickedDataItem = contentList.get(pos);
                         String facturaID =  clickedDataItem.getId();
+
                         Toast.makeText(view.getContext(), "You clicked " + facturaID, Toast.LENGTH_SHORT).show();
                     }
 

@@ -16,7 +16,7 @@ public class ProductoFacturaResponse {
     private String code;
     private String message;
     @SerializedName("products")
-    private RealmList<ProductoFactura> facturas;
+    private List<ProductoFactura> facturas;
 
     public boolean isResult() {
         return result;
@@ -42,11 +42,11 @@ public class ProductoFacturaResponse {
         this.message = message;
     }
 
-    public RealmList<ProductoFactura> getFacturas() {
+    public List<ProductoFactura> getProductofactura() {
         return facturas;
     }
 
-    public void setFacturas(RealmList<ProductoFactura> facturas) {
+    public void setProductofactura(List<ProductoFactura> facturas) {
         this.facturas = facturas;
     }
 }

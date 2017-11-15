@@ -3,6 +3,7 @@ package com.friendlypos.distribucion.adapters;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -10,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,6 +19,7 @@ import com.friendlypos.R;
 import com.friendlypos.distribucion.modelo.Inventario;
 import com.friendlypos.distribucion.modelo.Marcas;
 import com.friendlypos.distribucion.modelo.TipoProducto;
+import com.friendlypos.distribucion.modelo.Venta;
 import com.friendlypos.principal.adapters.ProductosAdapter;
 import com.friendlypos.principal.modelo.Productos;
 
@@ -31,7 +34,7 @@ import io.realm.Realm;
 public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<DistrSeleccionarProductosAdapter.CharacterViewHolder> {
 
     private Context context;
-    private List<Inventario> productosList;
+    public List<Inventario> productosList;
 
     public DistrSeleccionarProductosAdapter(List<Inventario> productosList) {
 
@@ -40,26 +43,26 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
 
     @Override
     public CharacterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.lista_distribucion_productos, parent, false);
-
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.lista_distribucion_productos, parent, false);
         context = parent.getContext();
         //  CharacterViewHolder placeViewHolder = new CharacterViewHolder(view);
         // placeViewHolder.cardView.setOnClickListener(new ProductosAdapter(placeViewHolder, parent));
-        return new DistrSeleccionarProductosAdapter.CharacterViewHolder(view);
+        return new CharacterViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(DistrSeleccionarProductosAdapter.CharacterViewHolder holder, final int position) {
         Inventario inventario = productosList.get(position);
-
+/*
         holder.cardView.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                addProduct();
+                addProduct(inventario);
             }
         });
-
+*/
         //todo repasar esto
         Realm realm = Realm.getDefaultInstance();
         String description = realm.where(Productos.class).equalTo("id", inventario.getProduct_id()).findFirst().getDescription();
@@ -95,16 +98,20 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
         });*/
     }
 
+    public void addProduct(String posicion) {
 
-    public void addProduct() {
+        final Inventario inv = new Inventario();
 
         LayoutInflater layoutInflater = LayoutInflater.from(context);
-
         View promptView = layoutInflater.inflate(R.layout.promptamount, null);
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
         alertDialogBuilder.setView(promptView);
 
+        final TextView label = (TextView) promptView.findViewById(R.id.promtClabel);
+        label.setText("Escriba una cantidad maxima de " + posicion + " minima de 1");
+        final EditText input = (EditText) promptView.findViewById(R.id.promtCtext);
+        final EditText desc = (EditText) promptView.findViewById(R.id.promtCDesc);
 
         // setup a dialog window
         alertDialogBuilder
@@ -143,7 +150,7 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
         return 0;
     }
 
-    public static class CharacterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class CharacterViewHolder extends RecyclerView.ViewHolder {
 
         private TextView txt_producto_factura_nombre, txt_producto_factura_marca,txt_producto_factura_tipo, txt_producto_factura_precio, txt_producto_factura_disponible, txt_producto_factura_seleccionado;
         protected CardView cardView;
@@ -157,12 +164,34 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
             txt_producto_factura_precio = (TextView) view.findViewById(R.id.txt_producto_factura_precio);
             txt_producto_factura_disponible = (TextView) view.findViewById(R.id.txt_producto_factura_disponible);
             txt_producto_factura_seleccionado = (TextView) view.findViewById(R.id.txt_producto_factura_seleccionado);
-            view.setOnClickListener(this);
-        }
+            cardView.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View view){
 
-        @Override
-        public void onClick(View view) {
-            Toast.makeText(view.getContext(), "position = " + getPosition(), Toast.LENGTH_SHORT).show();
+                    int pos = getAdapterPosition();
+
+                    // check if item still exists
+                    if(pos != RecyclerView.NO_POSITION){
+                        view.setBackgroundColor(Color.parseColor("#607d8b"));
+                        Inventario clickedDataItem = productosList.get(pos);
+                        String ProductoID =  clickedDataItem.getId();
+                        String ProductoID2 =  clickedDataItem.getProduct_id();
+                        String ProductoAmount =  clickedDataItem.getAmount_dist();
+                        Toast.makeText(view.getContext(), "You clicked " + ProductoID + ProductoID2, Toast.LENGTH_SHORT).show();
+                        addProduct(ProductoAmount);
+                    }
+
+                    //Here goes your desired onClick behaviour. Like:
+
+                    //     Toast.makeText(view.getContext(), "You have clicked " + cardCliente + position, Toast.LENGTH_SHORT).show(); //you can add data to the tag of your cardview in onBind... and retrieve it here with with.getTag().toString()..
+                    //You can change the fragment, something like this, not tested, please correct for your desired output:
+                    //    Activity activity = view.getContext();
+                    //   Fragment CityName = new CityName();
+                    //Create a bundle to pass data, add data, set the bundle to your fragment and:
+                    //   activity.getFragmentManager().beginTransaction().replace(R.id.fragment_container, cityName).addToBackStack(null).commit();     //Here m getting error
+                }
+            });
+
         }
     }
 

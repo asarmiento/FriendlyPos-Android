@@ -255,11 +255,11 @@ public class Facturas extends RealmObject {
         this.venta = venta;
     }
 
-    public RealmList<ProductoFactura> getProductofacturas() {
+    public RealmList<ProductoFactura> getProductofactura() {
         return productofacturas;
     }
 
-    public void setProductofacturas(RealmList<ProductoFactura> productofacturas) {
+    public void setProductofactura(RealmList<ProductoFactura> productofacturas) {
         this.productofacturas = productofacturas;
     }
 
