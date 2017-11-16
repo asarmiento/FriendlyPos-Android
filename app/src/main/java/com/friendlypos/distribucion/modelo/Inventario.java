@@ -1,5 +1,7 @@
 package com.friendlypos.distribucion.modelo;
 
+import com.friendlypos.principal.modelo.Productos;
+
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
@@ -11,7 +13,6 @@ public class Inventario extends RealmObject {
 
     @PrimaryKey
     String id;
-
     String product_id;
     String initial;
     String amount;

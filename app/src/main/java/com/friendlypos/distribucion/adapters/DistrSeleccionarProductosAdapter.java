@@ -3,15 +3,19 @@ package com.friendlypos.distribucion.adapters;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +27,7 @@ import com.friendlypos.distribucion.modelo.Venta;
 import com.friendlypos.principal.adapters.ProductosAdapter;
 import com.friendlypos.principal.modelo.Productos;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
@@ -35,6 +40,7 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
 
     private Context context;
     public List<Inventario> productosList;
+
 
     public DistrSeleccionarProductosAdapter(List<Inventario> productosList) {
 
@@ -54,21 +60,14 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
     @Override
     public void onBindViewHolder(DistrSeleccionarProductosAdapter.CharacterViewHolder holder, final int position) {
         Inventario inventario = productosList.get(position);
-/*
-        holder.cardView.setOnClickListener(new View.OnClickListener() {
 
-            @Override
-            public void onClick(View v) {
-                addProduct(inventario);
-            }
-        });
-*/
         //todo repasar esto
         Realm realm = Realm.getDefaultInstance();
         String description = realm.where(Productos.class).equalTo("id", inventario.getProduct_id()).findFirst().getDescription();
         String marca = realm.where(Productos.class).equalTo("id", inventario.getProduct_id()).findFirst().getBrand_id();
         String tipo = realm.where(Productos.class).equalTo("id", inventario.getProduct_id()).findFirst().getProduct_type_id();
         String precio = realm.where(Productos.class).equalTo("id", inventario.getProduct_id()).findFirst().getSale_price();
+
 
         String marca2 = realm.where(Marcas.class).equalTo("id", marca).findFirst().getName();
         String tipoProducto = realm.where(TipoProducto.class).equalTo("id", tipo).findFirst().getName();
@@ -98,7 +97,7 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
         });*/
     }
 
-    public void addProduct(String posicion) {
+    public void addProduct(String posicion, String Precio1, String Precio2) {
 
         final Inventario inv = new Inventario();
 
@@ -112,6 +111,33 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
         label.setText("Escriba una cantidad maxima de " + posicion + " minima de 1");
         final EditText input = (EditText) promptView.findViewById(R.id.promtCtext);
         final EditText desc = (EditText) promptView.findViewById(R.id.promtCDesc);
+
+       /* if (inv.product.salemethod.id == 2) {
+            input.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
+            input.setRawInputType(Configuration.KEYBOARD_QWERTY);
+        }*/
+
+        final Spinner spPrices = (Spinner) promptView.findViewById(R.id.spPrices);
+        ArrayList<Double> pricesList = new ArrayList<>();
+        Double precio1 = Double.valueOf(Precio1);
+        Double precio2 = Double.valueOf(Precio2);
+        pricesList.add(precio1);
+
+        if (precio2 != 0)
+            pricesList.add(precio2);
+/*
+        if (inv.product.sale_price3 != 0)
+            pricesList.add(inv.product.sale_price3);
+
+        if (inv.product.sale_price4 != 0)
+            pricesList.add(inv.product.sale_price4);
+
+        if (inv.product.sale_price5 != 0)
+            pricesList.add(inv.product.sale_price5);*/
+
+        ArrayAdapter<Double> pricesAdapter = new ArrayAdapter<Double>(label.getContext(), android.R.layout.simple_spinner_item, pricesList);
+        spPrices.setAdapter(pricesAdapter);
+        spPrices.setSelection(0);
 
         // setup a dialog window
         alertDialogBuilder
@@ -176,9 +202,13 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
                         Inventario clickedDataItem = productosList.get(pos);
                         String ProductoID =  clickedDataItem.getId();
                         String ProductoID2 =  clickedDataItem.getProduct_id();
+                        Realm realm = Realm.getDefaultInstance();
+                        String precio = realm.where(Productos.class).equalTo("id", ProductoID2).findFirst().getSale_price();
+                        String precio2 = realm.where(Productos.class).equalTo("id", ProductoID2).findFirst().getSale_price2();
+
                         String ProductoAmount =  clickedDataItem.getAmount_dist();
-                        Toast.makeText(view.getContext(), "You clicked " + ProductoID + ProductoID2, Toast.LENGTH_SHORT).show();
-                        addProduct(ProductoAmount);
+                        Toast.makeText(view.getContext(), "You clicked " + ProductoID, Toast.LENGTH_SHORT).show();
+                        addProduct(ProductoAmount, precio, precio2);
                     }
 
                     //Here goes your desired onClick behaviour. Like:
