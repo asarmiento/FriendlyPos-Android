@@ -17,6 +17,7 @@ import com.friendlypos.R;
 import com.friendlypos.distribucion.modelo.Inventario;
 import com.friendlypos.distribucion.modelo.Marcas;
 import com.friendlypos.distribucion.modelo.Pivot;
+import com.friendlypos.distribucion.modelo.ProductoFactura;
 import com.friendlypos.distribucion.modelo.TipoProducto;
 import com.friendlypos.principal.modelo.Clientes;
 import com.friendlypos.principal.modelo.Productos;
@@ -34,9 +35,9 @@ import io.realm.RealmResults;
 public class DistrResumenAdapter extends RecyclerView.Adapter<DistrResumenAdapter.CharacterViewHolder> {
 
     private Context context;
-    private List<Pivot> productosList;
+    private List<ProductoFactura> productosList;
 
-    public DistrResumenAdapter(List<Pivot> productosList) {
+    public DistrResumenAdapter(List<ProductoFactura> productosList) {
 
         this.productosList = productosList;
     }
@@ -53,31 +54,22 @@ public class DistrResumenAdapter extends RecyclerView.Adapter<DistrResumenAdapte
 
     @Override
     public void onBindViewHolder(DistrResumenAdapter.CharacterViewHolder holder, final int position) {
-        Pivot pivot = productosList.get(position);
-
-        holder.cardView.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                addProduct();
-            }
-        });
+        ProductoFactura pivot = productosList.get(position);
 
         //todo repasar esto
         Realm realm = Realm.getDefaultInstance();
-        String description = realm.where(Productos.class).equalTo("id", pivot.getProduct_id()).findFirst().getDescription();
-
+        String description = realm.where(Productos.class).equalTo("id", pivot.getPivot().getProduct_id()).findFirst().getDescription();
         realm.close();
 
         holder.txt_resumen_factura_nombre.setText(description);
-        holder.txt_resumen_factura_descuento.setText("Descuento de: " + pivot.getDiscount());
-        holder.txt_resumen_factura_precio.setText("P: " + pivot.getPrice());
-        holder.txt_resumen_factura_cantidad.setText("C: " + pivot.getAmount());
+      /*  holder.txt_resumen_factura_descuento.setText("Descuento de: " + pivot.getPivot().getDiscount());
+        holder.txt_resumen_factura_precio.setText("P: " + pivot.getPivot().getPrice());
+        holder.txt_resumen_factura_cantidad.setText("C: " + pivot.getPivot().getAmount());
 
-        String pivotTotal = pivot.getAmount() + pivot.getPrice();
+        String pivotTotal = pivot.getPivot().getAmount() + pivot.getPivot().getPrice();
 
         holder.txt_resumen_factura_total.setText("T: " + pivotTotal);
-
+*/
 
      /*   holder.cardView.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -94,38 +86,6 @@ public class DistrResumenAdapter extends RecyclerView.Adapter<DistrResumenAdapte
         });*/
     }
 
-
-    public void addProduct() {
-
-        LayoutInflater layoutInflater = LayoutInflater.from(context);
-
-        View promptView = layoutInflater.inflate(R.layout.promptamount, null);
-
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
-        alertDialogBuilder.setView(promptView);
-
-
-        // setup a dialog window
-        alertDialogBuilder
-            .setCancelable(false)
-            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-
-                public void onClick(DialogInterface dialog, int id) {
-                    // get user input and set it to result
-                }
-            })
-            .setNegativeButton("Cancel",
-                new DialogInterface.OnClickListener() {
-
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
-
-        AlertDialog alertD = alertDialogBuilder.create();
-        alertD.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-        alertD.show();
-    }
 
     @Override
     public long getItemId(int position) {

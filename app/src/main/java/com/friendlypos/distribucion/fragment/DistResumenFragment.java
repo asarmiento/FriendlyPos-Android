@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import com.friendlypos.R;
 import com.friendlypos.distribucion.adapters.DistrResumenAdapter;
 import com.friendlypos.distribucion.modelo.Pivot;
+import com.friendlypos.distribucion.modelo.ProductoFactura;
 
 import java.util.List;
 
@@ -24,15 +25,6 @@ public class DistResumenFragment extends Fragment {
     private Realm realm;
     RecyclerView recyclerView;
     private DistrResumenAdapter adapter;
-
-    public static DistResumenFragment getInstance() {
-        return new DistResumenFragment();
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -51,12 +43,16 @@ public class DistResumenFragment extends Fragment {
         return rootView;
     }
 
-    private List<Pivot> getList1(){
+    private List<ProductoFactura> getList1(){
         realm = Realm.getDefaultInstance();
-        RealmQuery<Pivot> query = realm.where(Pivot.class);
-        RealmResults<Pivot> result1 = query.findAll();
+        RealmQuery<ProductoFactura> query = realm.where(ProductoFactura.class);
+        RealmResults<ProductoFactura> result1 = query.findAll();
 
         return result1;
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
     }
     @Override
     public void onDestroyView() {

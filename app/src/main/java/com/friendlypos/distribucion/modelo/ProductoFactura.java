@@ -13,8 +13,8 @@ public class ProductoFactura extends RealmObject {
 
     @PrimaryKey
     String id;
-  /*  @SerializedName("pivot")
-    private Pivot pivot;*/
+  @SerializedName("pivot")
+    private Pivot pivot;
 
 
     public String getId() {
@@ -25,20 +25,20 @@ public class ProductoFactura extends RealmObject {
         this.id = id;
     }
 
-/*
+
     public Pivot getPivot() {
         return pivot;
     }
 
     public void setPivot(Pivot pivot) {
         this.pivot = pivot;
-    }*/
+    }
 
     @Override
     public String toString() {
         return "Productos{" +
                 "id=" + id +
-
+               "pivot=" + pivot +
                 '}';
     }
 }

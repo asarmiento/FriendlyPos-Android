@@ -26,14 +26,13 @@ import io.realm.RealmQuery;
 import io.realm.RealmResults;
 
 
-public class DistSelecClienteFragment extends Fragment  implements SearchView.OnQueryTextListener{
+public class DistSelecClienteFragment extends Fragment{
     private Realm realm;
 
     @Bind(R.id.recyclerViewDistrCliente)
     public RecyclerView recyclerView;
 
     private DistrClientesAdapter adapter;
-    private static List<Venta> mSales = new ArrayList<>();
 
     public static DistSelecProductoFragment getInstance() {
         return new DistSelecProductoFragment();
@@ -47,14 +46,11 @@ public class DistSelecClienteFragment extends Fragment  implements SearchView.On
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         View rootView = inflater.inflate(R.layout.fragment_distribucion_cliente, container,
                 false);
         ButterKnife.bind(this, rootView);
-
         return rootView;
     }
-
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -63,25 +59,7 @@ public class DistSelecClienteFragment extends Fragment  implements SearchView.On
         adapter = new DistrClientesAdapter(getList());
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
         recyclerView.setAdapter(adapter);
-
-    /*    recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView, new RecyclerTouchListener.ClickListener() {
-            @Override
-            public void onClick(View view, int position) {
-                view.setBackgroundColor(Color.parseColor("#607d8b"));
-                Clientes movie = getList().get(position);
-                Toast.makeText(getApplicationContext(), movie.getName() + " is selected!", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onLongClick(View view, int position) {
-
-            }
-        }));
-
-        Log.d("lista", getList() + "");*/
-
     }
 
     private List<Venta> getList(){
@@ -98,37 +76,5 @@ public class DistSelecClienteFragment extends Fragment  implements SearchView.On
         super.onDestroyView();
         realm.close();
     }
-
-    @Override
-    public boolean onQueryTextChange(String query) {
-        System.out.println("mSales size = " + mSales.size());
-        final List<Venta> filteredModelList = filter(mSales, query);
-        adapter.animateTo(filteredModelList);
-        recyclerView.scrollToPosition(0);
-        return true;
-    }
-
-    private List<Venta> filter(List<Venta> models, String query) {
-        query = query.toLowerCase();
-
-        final List<Venta> filteredModelList = new ArrayList<>();
-        for (Venta model : models) {
-            Clientes custumers = model.clientes;
-            String text = custumers.getCompanyName().toLowerCase();
-            String text2 = custumers.getFantasyName().toLowerCase();
-            String text3 = custumers.getName().toLowerCase();
-            String text4 = custumers.getCard().toLowerCase();
-            if (text.contains(query) || text2.contains(query) || text3.contains(query) || text4.contains(query)) {
-                filteredModelList.add(model);
-            }
-        }
-        return filteredModelList;
-    }
-
-    @Override
-    public boolean onQueryTextSubmit(String query) {
-        return false;
-    }
-
 
     }

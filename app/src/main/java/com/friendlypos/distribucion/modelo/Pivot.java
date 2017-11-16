@@ -80,4 +80,17 @@ public class Pivot extends RealmObject {
     public void setDelivered(String delivered) {
         this.delivered = delivered;
     }
+
+    @Override
+    public String toString() {
+        return "Pivot{" +
+                "id=" + id +
+                ", invoice_id='" + invoice_id + '\'' +
+                ", product_id='" + product_id + '\'' +
+                ", price='" + price + '\'' +
+                ", amount='" + amount + '\'' +
+                ", discount='" + discount + '\'' +
+                ", delivered='" + delivered + '\'' +
+                '}';
+    }
 }

@@ -3,6 +3,7 @@ package com.friendlypos.distribucion.adapters;
 import android.graphics.Color;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,12 +12,16 @@ import android.widget.Toast;
 
 import com.friendlypos.R;
 import com.friendlypos.distribucion.modelo.Facturas;
+import com.friendlypos.distribucion.modelo.Inventario;
+import com.friendlypos.distribucion.modelo.ProductoFactura;
 import com.friendlypos.distribucion.modelo.Venta;
 import com.friendlypos.principal.modelo.Clientes;
+import com.friendlypos.principal.modelo.Productos;
 
 import java.util.List;
 
 import io.realm.Realm;
+import io.realm.RealmResults;
 
 public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdapter.CharacterViewHolder> {
 
@@ -50,45 +55,9 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
         holder.txt_cliente_factura_numeracion.setText("Factura: " + numeracionFactura);
 
     }
-
     @Override
     public int getItemCount() {
         return contentList.size();
-    }
-
-    public void animateTo(List<Venta> models) {
-        applyAndAnimateRemovals(models);
-        applyAndAnimateAdditions(models);
-        applyAndAnimateMovedItems(models);
-    }
-
-    private void applyAndAnimateRemovals(List<Venta> newModels) {
-        for (int i = contentList.size() - 1; i >= 0; i--) {
-            final Venta model = contentList.get(i);
-            if (!newModels.contains(model)) {
-                //removeItem(i);
-            }
-        }
-    }
-
-    private void applyAndAnimateAdditions(List<Venta> newModels) {
-        for (int i = 0, count = newModels.size(); i < count; i++) {
-            final Venta model = newModels.get(i);
-            if (!contentList.contains(model)) {
-               // addItem(i, model);
-            }
-        }
-    }
-
-    private void applyAndAnimateMovedItems(List<Venta> newModels) {
-        for (int toPosition = newModels.size() - 1; toPosition >= 0; toPosition--) {
-            final Venta model = newModels.get(toPosition);
-            final int fromPosition = contentList.indexOf(model);
-            if (fromPosition >= 0 && fromPosition != toPosition) {
-              //  moveItem(fromPosition, toPosition);
-            }
-        }
-
     }
 
     public class CharacterViewHolder extends RecyclerView.ViewHolder {
@@ -113,9 +82,16 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
                     if(pos != RecyclerView.NO_POSITION){
                         view.setBackgroundColor(Color.parseColor("#607d8b"));
                         Venta clickedDataItem = contentList.get(pos);
-                        String facturaID =  clickedDataItem.getId();
+                        String facturaID =  clickedDataItem.getInvoice_id();
+
+                        Realm realm = Realm.getDefaultInstance();
+                       String facturaid = String.valueOf(realm.where(ProductoFactura.class).equalTo("id", facturaID).findFirst().getId());
+                       RealmResults<ProductoFactura> facturaid1 = realm.where(ProductoFactura.class).equalTo("id", facturaID).findAll();
+
+                        realm.close();
 
                         Toast.makeText(view.getContext(), "You clicked " + facturaID, Toast.LENGTH_SHORT).show();
+                        Log.d("PRODUCTOSFACTURA", facturaid1 +"");
                     }
 
                     //Here goes your desired onClick behaviour. Like:
