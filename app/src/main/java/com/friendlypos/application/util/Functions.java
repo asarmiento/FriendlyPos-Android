@@ -51,6 +51,7 @@ public class Functions {
         alert11.show();
     }
 
+
     public static void createNotification(Context context, int id, String title, String message) {
         NotificationManager mNotifyManager =
                 (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -100,6 +101,20 @@ public class Functions {
 
         }
         return send;
+    }
+
+    public static double sGetDecimalStringAnyLocaleAsDouble(String value) {
+
+        Locale theLocale = Locale.getDefault();
+        NumberFormat numberFormat = DecimalFormat.getInstance(theLocale);
+        Number theNumber;
+        try {
+            theNumber = numberFormat.parse(value);
+            return theNumber.doubleValue();
+        } catch (ParseException e) {
+            String valueWithDot = value.replaceAll(",", ".");
+            return Double.valueOf(valueWithDot);
+        }
     }
 
 }
