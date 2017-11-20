@@ -1,5 +1,6 @@
 package com.friendlypos.distribucion.fragment;
 
+import android.content.Context;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.friendlypos.R;
+import com.friendlypos.distribucion.activity.DistribucionActivity;
 import com.friendlypos.distribucion.adapters.DistrClientesAdapter;
 import com.friendlypos.distribucion.modelo.Facturas;
 import com.friendlypos.distribucion.modelo.Venta;
@@ -26,7 +28,7 @@ import io.realm.RealmQuery;
 import io.realm.RealmResults;
 
 
-public class DistSelecClienteFragment extends Fragment{
+public class DistSelecClienteFragment extends BaseFragment{
     private Realm realm;
 
     @Bind(R.id.recyclerViewDistrCliente)
@@ -40,6 +42,7 @@ public class DistSelecClienteFragment extends Fragment{
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
     }
 
@@ -56,7 +59,7 @@ public class DistSelecClienteFragment extends Fragment{
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        adapter = new DistrClientesAdapter(getList());
+        adapter = new DistrClientesAdapter(getContext(), ((DistribucionActivity)getActivity()), getList());
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);
@@ -77,4 +80,8 @@ public class DistSelecClienteFragment extends Fragment{
         realm.close();
     }
 
+    @Override
+    public void updateData() {
+
     }
+}

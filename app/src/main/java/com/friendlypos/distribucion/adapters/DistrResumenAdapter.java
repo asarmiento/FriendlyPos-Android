@@ -35,11 +35,16 @@ import io.realm.RealmResults;
 public class DistrResumenAdapter extends RecyclerView.Adapter<DistrResumenAdapter.CharacterViewHolder> {
 
     private Context context;
-    private List<ProductoFactura> productosList;
+    private List<Pivot> productosList;
 
-    public DistrResumenAdapter(List<ProductoFactura> productosList) {
+    public DistrResumenAdapter(List<Pivot> productosList) {
 
         this.productosList = productosList;
+    }
+
+    public void updateData(List<Pivot> productosList){
+        this.productosList = productosList;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -54,23 +59,22 @@ public class DistrResumenAdapter extends RecyclerView.Adapter<DistrResumenAdapte
 
     @Override
     public void onBindViewHolder(DistrResumenAdapter.CharacterViewHolder holder, final int position) {
-        ProductoFactura pivot = productosList.get(position);
+        Pivot pivot = productosList.get(position);
 
         //todo repasar esto
         Realm realm = Realm.getDefaultInstance();
-        String description = realm.where(Productos.class).equalTo("id", pivot.getPivot().getProduct_id()).findFirst().getDescription();
-        realm.close();
+        String description = realm.where(Productos.class).equalTo("id", pivot.getProduct_id()).findFirst().getDescription();
 
         holder.txt_resumen_factura_nombre.setText(description);
-      /*  holder.txt_resumen_factura_descuento.setText("Descuento de: " + pivot.getPivot().getDiscount());
-        holder.txt_resumen_factura_precio.setText("P: " + pivot.getPivot().getPrice());
-        holder.txt_resumen_factura_cantidad.setText("C: " + pivot.getPivot().getAmount());
+        holder.txt_resumen_factura_descuento.setText("Descuento de: " + pivot.getDiscount());
+        holder.txt_resumen_factura_precio.setText("P: " + pivot.getPrice());
+        holder.txt_resumen_factura_cantidad.setText("C: " + pivot.getAmount());
 
-        String pivotTotal = pivot.getPivot().getAmount() + pivot.getPivot().getPrice();
+        String pivotTotal = pivot.getAmount() + pivot.getPrice();
 
         holder.txt_resumen_factura_total.setText("T: " + pivotTotal);
-*/
 
+        realm.close();
      /*   holder.cardView.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
@@ -102,7 +106,7 @@ public class DistrResumenAdapter extends RecyclerView.Adapter<DistrResumenAdapte
         return 0;
     }
 
-    public static class CharacterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public static class CharacterViewHolder extends RecyclerView.ViewHolder{
 
         private TextView txt_resumen_factura_nombre, txt_resumen_factura_descuento,txt_resumen_factura_precio, txt_resumen_factura_cantidad, txt_resumen_factura_total;
         protected CardView cardView;
@@ -115,13 +119,8 @@ public class DistrResumenAdapter extends RecyclerView.Adapter<DistrResumenAdapte
             txt_resumen_factura_precio = (TextView) view.findViewById(R.id.txt_producto_factura_tipo);
             txt_resumen_factura_cantidad = (TextView) view.findViewById(R.id.txt_producto_factura_precio);
             txt_resumen_factura_total = (TextView) view.findViewById(R.id.txt_producto_factura_disponible);
-            view.setOnClickListener(this);
         }
 
-        @Override
-        public void onClick(View view) {
-            Toast.makeText(view.getContext(), "position = " + getPosition(), Toast.LENGTH_SHORT).show();
-        }
     }
 
     @Override

@@ -12,11 +12,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.friendlypos.R;
+import com.friendlypos.distribucion.fragment.BaseFragment;
 import com.friendlypos.distribucion.fragment.DistResumenFragment;
-import com.friendlypos.distribucion.fragment.DistTotalizarFragment;
 import com.friendlypos.distribucion.fragment.DistSelecClienteFragment;
 import com.friendlypos.distribucion.fragment.DistSelecProductoFragment;
-import com.friendlypos.distribucion.interfaces.ComunicadorFragment;
+import com.friendlypos.distribucion.fragment.DistTotalizarFragment;
 import com.friendlypos.distribucion.util.Adapter;
 import com.friendlypos.principal.activity.MenuPrincipal;
 
@@ -25,10 +25,19 @@ import java.util.List;
 
 public class DistribucionActivity extends AppCompatActivity {
 
-
     private Toolbar toolbar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
+
+    private String invoiceId;
+
+    public String getInvoiceId() {
+        return invoiceId;
+    }
+
+    public void setInvoiceId(String invoiceId) {
+        this.invoiceId = invoiceId;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,11 +91,33 @@ public class DistribucionActivity extends AppCompatActivity {
 
     private void setupViewPager(ViewPager viewPager) {
         Adapter adapter = new Adapter(getSupportFragmentManager());
-        adapter.addFragment(new DistSelecClienteFragment(), "Seleccionar Cliente");
-        adapter.addFragment(new DistResumenFragment(), "Resumen");
-        adapter.addFragment(new DistSelecProductoFragment(), "Seleccionar productos");
-        adapter.addFragment(new DistTotalizarFragment(), "Totalizar");
+        final List<BaseFragment> list = new ArrayList<>();
+        list.add(new DistSelecClienteFragment());
+        list.add(new DistResumenFragment());
+        list.add(new DistSelecProductoFragment());
+        list.add(new DistTotalizarFragment());
+        adapter.addFragment(list.get(0), "Seleccionar Cliente");
+        adapter.addFragment(list.get(1), "Resumen");
+        adapter.addFragment(list.get(2), "Seleccionar productos");
+        adapter.addFragment(list.get(3), "Totalizar");
         viewPager.setAdapter(adapter);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                list.get(position).updateData();
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 
     @Override

@@ -17,7 +17,7 @@ import io.realm.RealmQuery;
 import io.realm.RealmResults;
 
 
-public class DistSelecProductoFragment extends Fragment {
+public class DistSelecProductoFragment extends BaseFragment {
     private Realm realm;
     RecyclerView recyclerView;
     private DistrSeleccionarProductosAdapter adapter;
@@ -74,6 +74,11 @@ public class DistSelecProductoFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         realm.close();
+    }
+
+    @Override
+    public void updateData() {
+
     }
 /*
 

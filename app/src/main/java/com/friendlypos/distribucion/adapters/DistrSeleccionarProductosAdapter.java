@@ -3,12 +3,10 @@ package com.friendlypos.distribucion.adapters;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.res.Configuration;
 import android.graphics.Color;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,8 +21,6 @@ import com.friendlypos.R;
 import com.friendlypos.distribucion.modelo.Inventario;
 import com.friendlypos.distribucion.modelo.Marcas;
 import com.friendlypos.distribucion.modelo.TipoProducto;
-import com.friendlypos.distribucion.modelo.Venta;
-import com.friendlypos.principal.adapters.ProductosAdapter;
 import com.friendlypos.principal.modelo.Productos;
 
 import java.util.ArrayList;
@@ -50,7 +46,7 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
     @Override
     public CharacterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.lista_distribucion_productos, parent, false);
+            .inflate(R.layout.lista_distribucion_productos, parent, false);
         context = parent.getContext();
         //  CharacterViewHolder placeViewHolder = new CharacterViewHolder(view);
         // placeViewHolder.cardView.setOnClickListener(new ProductosAdapter(placeViewHolder, parent));
@@ -63,10 +59,14 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
 
         //todo repasar esto
         Realm realm = Realm.getDefaultInstance();
-        String description = realm.where(Productos.class).equalTo("id", inventario.getProduct_id()).findFirst().getDescription();
-        String marca = realm.where(Productos.class).equalTo("id", inventario.getProduct_id()).findFirst().getBrand_id();
-        String tipo = realm.where(Productos.class).equalTo("id", inventario.getProduct_id()).findFirst().getProduct_type_id();
-        String precio = realm.where(Productos.class).equalTo("id", inventario.getProduct_id()).findFirst().getSale_price();
+
+        Productos producto = realm.where(Productos.class).equalTo("id", inventario.getProduct_id()).findFirst();
+
+
+        String description = producto.getDescription();
+        String marca = producto.getBrand_id();
+        String tipo = producto.getProduct_type_id();
+        String precio = producto.getSale_price();
 
 
         String marca2 = realm.where(Marcas.class).equalTo("id", marca).findFirst().getName();
@@ -74,6 +74,7 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
 
         realm.close();
 
+        holder.fillData(producto);
         holder.txt_producto_factura_nombre.setText(description);
         holder.txt_producto_factura_marca.setText("Marca: " + marca2);
         holder.txt_producto_factura_tipo.setText("Tipo: " + tipoProducto);
@@ -178,7 +179,7 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
 
     public class CharacterViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView txt_producto_factura_nombre, txt_producto_factura_marca,txt_producto_factura_tipo, txt_producto_factura_precio, txt_producto_factura_disponible, txt_producto_factura_seleccionado;
+        private TextView txt_producto_factura_nombre, txt_producto_factura_marca, txt_producto_factura_tipo, txt_producto_factura_precio, txt_producto_factura_disponible, txt_producto_factura_seleccionado;
         protected CardView cardView;
 
         public CharacterViewHolder(View view) {
@@ -190,23 +191,31 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
             txt_producto_factura_precio = (TextView) view.findViewById(R.id.txt_producto_factura_precio);
             txt_producto_factura_disponible = (TextView) view.findViewById(R.id.txt_producto_factura_disponible);
             txt_producto_factura_seleccionado = (TextView) view.findViewById(R.id.txt_producto_factura_seleccionado);
-            cardView.setOnClickListener(new View.OnClickListener(){
+
+        }
+
+        void fillData(final Productos producto){
+            cardView.setOnClickListener(new View.OnClickListener() {
+
                 @Override
-                public void onClick(View view){
+                public void onClick(View view) {
 
                     int pos = getAdapterPosition();
 
                     // check if item still exists
-                    if(pos != RecyclerView.NO_POSITION){
+                    if (pos != RecyclerView.NO_POSITION) {
                         view.setBackgroundColor(Color.parseColor("#607d8b"));
                         Inventario clickedDataItem = productosList.get(pos);
-                        String ProductoID =  clickedDataItem.getId();
-                        String ProductoID2 =  clickedDataItem.getProduct_id();
-                        Realm realm = Realm.getDefaultInstance();
-                        String precio = realm.where(Productos.class).equalTo("id", ProductoID2).findFirst().getSale_price();
-                        String precio2 = realm.where(Productos.class).equalTo("id", ProductoID2).findFirst().getSale_price2();
+                        String ProductoID = clickedDataItem.getId();
+                        String ProductoID2 = clickedDataItem.getProduct_id();
 
-                        String ProductoAmount =  clickedDataItem.getAmount_dist();
+
+                      //  Realm realm = Realm.getDefaultInstance();
+
+                        String precio = producto.getSale_price();
+                        String precio2 = producto.getSale_price2();
+
+                        String ProductoAmount = clickedDataItem.getAmount_dist();
                         Toast.makeText(view.getContext(), "You clicked " + ProductoID, Toast.LENGTH_SHORT).show();
                         addProduct(ProductoAmount, precio, precio2);
                     }
@@ -221,7 +230,6 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
                     //   activity.getFragmentManager().beginTransaction().replace(R.id.fragment_container, cityName).addToBackStack(null).commit();     //Here m getting error
                 }
             });
-
         }
     }
 

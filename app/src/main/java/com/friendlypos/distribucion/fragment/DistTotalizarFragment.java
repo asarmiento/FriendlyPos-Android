@@ -17,7 +17,7 @@ import com.friendlypos.R;
 import static java.lang.String.valueOf;
 
 
-public class DistTotalizarFragment extends Fragment {
+public class DistTotalizarFragment extends BaseFragment {
 
     private static TextView subGra;
     private static TextView subExe;
@@ -141,6 +141,11 @@ public class DistTotalizarFragment extends Fragment {
         }*/
 
         return rootView;
+    }
+
+    @Override
+    public void updateData() {
+
     }
 
    /* public void update_fields() {
