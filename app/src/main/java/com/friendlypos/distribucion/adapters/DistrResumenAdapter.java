@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.friendlypos.R;
+import com.friendlypos.distribucion.activity.DistribucionActivity;
 import com.friendlypos.distribucion.modelo.Pivot;
 import com.friendlypos.distribucion.modelo.Venta;
 import com.friendlypos.principal.modelo.Clientes;
@@ -26,9 +27,9 @@ import io.realm.Realm;
  */
 
 public class DistrResumenAdapter extends RecyclerView.Adapter<DistrResumenAdapter.CharacterViewHolder> {
-    private ArrayList<Pivot> data;
     private Context context;
     private List<Pivot> productosList;
+    private DistribucionActivity activity;
 
     private static double iva = 13.0;
     private static int apply_done = 0;
@@ -49,14 +50,22 @@ public class DistrResumenAdapter extends RecyclerView.Adapter<DistrResumenAdapte
     private static Double descuento= 0.0;
     private static Double clienteFixedDescuento = 0.0;
 
-    public DistrResumenAdapter(List<Pivot> productosList) {
+
+    private static String subTotalGrabado, subTotalGrabadoM, subTotalExento, descuentoCliente, subTotal, Total;
+
+    private static Context QuickContext = null;
+
+    public DistrResumenAdapter(Context context, DistribucionActivity activity, List<Pivot> productosList) {
+        this.productosList = productosList;
+        this.activity = activity;
+        this.QuickContext = context;
+    }
+
+  /*  public DistrResumenAdapter(List<Pivot> productosList) {
 
         this.productosList = productosList;
-    }
+    }*/
 
-    public ArrayList<Pivot> getData() {
-        return data;
-    }
 
     public void updateData(List<Pivot> productosList){
         this.productosList = productosList;
@@ -140,19 +149,19 @@ public class DistrResumenAdapter extends RecyclerView.Adapter<DistrResumenAdapte
 
     }
 
-   public static void totalize() {
+   public void totalize() {
 
       if (tipo.equals("1")) {
             // subGrab = subGrab + (Functions.sGetDecimalStringAnyLocaleAsDouble(dbill.price) * Functions.sGetDecimalStringAnyLocaleAsDouble(dbill.quantity));
             Log.d("tipoProdcuto", tipo + "gr");
             subGrab = subGrab + (precio) * (cantidad);
-            String subTotalGrabado = String.format("%,.2f", subGrab);
+            subTotalGrabado = String.format("%,.2f", subGrab);
             Log.d("subGrab", subGrab + "");
             Log.d("subTotalGrabado", subTotalGrabado);
 
             // subGrabm = subGrabm + ((Functions.sGetDecimalStringAnyLocaleAsDouble(dbill.price) * Functions.sGetDecimalStringAnyLocaleAsDouble(dbill.quantity) - ((((Functions.sGetDecimalStringAnyLocaleAsDouble(dbill.descount) / 100) * Functions.sGetDecimalStringAnyLocaleAsDouble(dbill.price))) * Functions.sGetDecimalStringAnyLocaleAsDouble(dbill.quantity))));
             subGrabm = subGrabm + ((precio) * (cantidad) - ((descuento / 100) * (precio) * (cantidad)));
-            String subTotalGrabadoM = String.format("%,.2f", subGrabm);
+           subTotalGrabadoM = String.format("%,.2f", subGrabm);
             Log.d("subGrabm", subGrabm + "");
             Log.d("subTotalGrabadoM", subTotalGrabadoM);
         }
@@ -160,7 +169,7 @@ public class DistrResumenAdapter extends RecyclerView.Adapter<DistrResumenAdapte
         else {
             Log.d("tipoProdcuto", tipo + "ex");
             subExen = subExen + ((precio) * (cantidad));
-            String subTotalExento= String.format("%,.2f", subExen);
+            subTotalExento= String.format("%,.2f", subExen);
 
             Log.d("subExen", subExen + "");
             Log.d("subTotalExento", subTotalExento);
@@ -176,7 +185,7 @@ public class DistrResumenAdapter extends RecyclerView.Adapter<DistrResumenAdapte
 
         //  TODO REVISAR ANDROIDPOS EL IF QUE REVISA SI ESTA LLENO O NO
       // discountBill += ((subExen * (clienteFixedDescuento / 100.00)) + (subGrabm * (clienteFixedDescuento / 100.00)));
-        String descuentoCliente= String.format("%,.2f", discountBill);
+        descuentoCliente= String.format("%,.2f", discountBill);
         Log.d("discountBill", discountBill + "");
         Log.d("descuentoCliente", descuentoCliente);
 
@@ -195,9 +204,22 @@ public class DistrResumenAdapter extends RecyclerView.Adapter<DistrResumenAdapte
        }
 
        subt = subGrab + subExen;
+       subTotal= String.format("%,.2f", subt);
        Log.d("subt", subt + "");
        total = (subt + IvaT) - discountBill;
+       Total = String.format("%,.2f", total);
        Log.d("total", total + "");
+
+
+
+       activity.setTotalizarSubGrabado(subTotalGrabado);
+       activity.setTotalizarSubExento(subTotalExento);
+
+       activity.setTotalizarSubTotal(subTotal);
+       activity.setTotalizarDescuento(descuentoCliente);
+
+       activity.setTotalizarImpuestoIVA(impuestoIVA);
+       activity.setTotalizarTotal(Total);
 
     }
 

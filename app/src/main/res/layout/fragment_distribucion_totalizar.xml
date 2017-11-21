@@ -100,7 +100,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:gravity="end"
-                    android:text="Subtotal excento"
+                    android:text="Subtotal exento"
                     android:textAppearance="?android:attr/textAppearanceMedium" />
 
                 <TextView

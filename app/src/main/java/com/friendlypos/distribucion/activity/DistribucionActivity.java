@@ -31,12 +31,68 @@ public class DistribucionActivity extends AppCompatActivity {
 
     private String invoiceId;
 
+    private String totalizarSubGrabado;
+    private String totalizarSubExento;
+    private String totalizarSubTotal;
+    private String totalizarDescuento;
+    private String totalizarImpuestoIVA;
+    private String totalizarTotal;
+
+
     public String getInvoiceId() {
         return invoiceId;
     }
 
     public void setInvoiceId(String invoiceId) {
         this.invoiceId = invoiceId;
+    }
+
+    public String getTotalizarSubGrabado() {
+        return totalizarSubGrabado;
+    }
+
+    public void setTotalizarSubGrabado(String totalizarSubGrabado) {
+        this.totalizarSubGrabado = totalizarSubGrabado;
+    }
+
+    public String getTotalizarSubExento() {
+        return totalizarSubExento;
+    }
+
+    public void setTotalizarSubExento(String totalizarSubExento) {
+        this.totalizarSubExento = totalizarSubExento;
+    }
+
+    public String getTotalizarSubTotal() {
+        return totalizarSubTotal;
+    }
+
+    public void setTotalizarSubTotal(String totalizarSubTotal) {
+        this.totalizarSubTotal = totalizarSubTotal;
+    }
+
+    public String getTotalizarDescuento() {
+        return totalizarDescuento;
+    }
+
+    public void setTotalizarDescuento(String totalizarDescuento) {
+        this.totalizarDescuento = totalizarDescuento;
+    }
+
+    public String getTotalizarImpuestoIVA() {
+        return totalizarImpuestoIVA;
+    }
+
+    public void setTotalizarImpuestoIVA(String totalizarImpuestoIVA) {
+        this.totalizarImpuestoIVA = totalizarImpuestoIVA;
+    }
+
+    public String getTotalizarTotal() {
+        return totalizarTotal;
+    }
+
+    public void setTotalizarTotal(String totalizarTotal) {
+        this.totalizarTotal = totalizarTotal;
     }
 
     @Override

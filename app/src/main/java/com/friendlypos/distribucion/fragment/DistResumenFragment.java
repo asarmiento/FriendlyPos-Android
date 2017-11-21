@@ -33,7 +33,7 @@ public class DistResumenFragment extends BaseFragment {
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerViewDistrResumen);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setHasFixedSize(true);
-        adapter = new DistrResumenAdapter(getList1());
+        adapter = new DistrResumenAdapter(getContext(), ((DistribucionActivity)getActivity()), getList1());
         recyclerView.setAdapter(adapter);
 
         Log.d("listaResumen", getList1() + "");
