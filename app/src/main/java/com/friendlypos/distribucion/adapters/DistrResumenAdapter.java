@@ -2,25 +2,17 @@ package com.friendlypos.distribucion.adapters;
 
 
 import android.content.Context;
-import android.content.DialogInterface;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.friendlypos.R;
-import com.friendlypos.application.util.Functions;
-import com.friendlypos.distribucion.modelo.Inventario;
-import com.friendlypos.distribucion.modelo.Marcas;
 import com.friendlypos.distribucion.modelo.Pivot;
-import com.friendlypos.distribucion.modelo.ProductoFactura;
-import com.friendlypos.distribucion.modelo.TipoProducto;
+import com.friendlypos.distribucion.modelo.Venta;
 import com.friendlypos.principal.modelo.Clientes;
 import com.friendlypos.principal.modelo.Productos;
 
@@ -28,8 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
-import io.realm.RealmQuery;
-import io.realm.RealmResults;
 
 /**
  * Created by DelvoM on 21/09/2017.
@@ -50,6 +40,14 @@ public class DistrResumenAdapter extends RecyclerView.Adapter<DistrResumenAdapte
     private static Double subt = 0.0;
     private static Double discountBill = 0.0;
     private static Double total = 0.0;
+
+    private static String description;
+    private static String tipo;
+    private static String impuestoIVA;
+    private static Double cantidad = 0.0;
+    private static Double precio = 0.0;
+    private static Double descuento= 0.0;
+    private static Double clienteFixedDescuento = 0.0;
 
     public DistrResumenAdapter(List<Pivot> productosList) {
 
@@ -81,10 +79,20 @@ public class DistrResumenAdapter extends RecyclerView.Adapter<DistrResumenAdapte
 
         //todo repasar esto
         Realm realm = Realm.getDefaultInstance();
-        String description = realm.where(Productos.class).equalTo("id", pivot.getProduct_id()).findFirst().getDescription();
-        Double cantidad = Double.parseDouble(pivot.getAmount());
-        Double precio = Double.valueOf(pivot.getPrice());
-        Double descuento = Double.valueOf(pivot.getDiscount());
+        Productos producto = realm.where(Productos.class).equalTo("id", pivot.getProduct_id()).findFirst();
+
+
+        Venta ventas = realm.where(Venta.class).equalTo("invoice_id", pivot.getInvoice_id()).findFirst();
+
+        Clientes clientes = realm.where(Clientes.class).equalTo("id", ventas.getCustomer_id()).findFirst();
+
+        description = producto.getDescription();
+        tipo = producto.getProduct_type_id();
+
+        cantidad = Double.parseDouble(pivot.getAmount());
+        precio = Double.valueOf(pivot.getPrice());
+        descuento = Double.valueOf(pivot.getDiscount());
+        clienteFixedDescuento = Double.valueOf(clientes.getFixedDiscount());
 
         holder.txt_resumen_factura_nombre.setText(description);
         holder.txt_resumen_factura_precio.setText("P: " + precio);
@@ -95,6 +103,8 @@ public class DistrResumenAdapter extends RecyclerView.Adapter<DistrResumenAdapte
         holder.txt_resumen_factura_total.setText("T: " + pivotTotal);
 
         realm.close();
+
+        totalize();
     }
 
 
@@ -130,48 +140,67 @@ public class DistrResumenAdapter extends RecyclerView.Adapter<DistrResumenAdapte
 
     }
 
-  /*  public static void totalize() {
-        if (mAdapterBill.getData() != null && !mAdapterBill.getData().isEmpty()) {
-            subGrab = 0.0;
-            subGrabm = 0.0;
-            subExen = 0.0;
-            discountBill = 0.0;
-            for (Pivot dbill : mAdapterBill.getData()) {
-                //DecimalFormat twoDForm = new DecimalFormat("%,.2f");
-                //System.out.println("Producto a ingresar " + product.getDescription() + " "+ product.getProductTypeId());
-                if (dbill.inventories.product.producttype.name.equals("Gravado")) {
-                    subGrab = subGrab + (Functions.sGetDecimalStringAnyLocaleAsDouble(dbill.price) * Functions.sGetDecimalStringAnyLocaleAsDouble(dbill.quantity));
-                    subGrabm = subGrabm + ((Functions.sGetDecimalStringAnyLocaleAsDouble(dbill.price) * Functions.sGetDecimalStringAnyLocaleAsDouble(dbill.quantity) - ((((Functions.sGetDecimalStringAnyLocaleAsDouble(dbill.descount) / 100) * Functions.sGetDecimalStringAnyLocaleAsDouble(dbill.price))) * Functions.sGetDecimalStringAnyLocaleAsDouble(dbill.quantity))));
-                }
-                else {
-                    subExen = subExen + (Functions.sGetDecimalStringAnyLocaleAsDouble(dbill.price) * Functions.sGetDecimalStringAnyLocaleAsDouble(dbill.quantity));
-                }
+   public static void totalize() {
 
-                discountBill += ((((Functions.sGetDecimalStringAnyLocaleAsDouble(dbill.descount) / 100) * Functions.sGetDecimalStringAnyLocaleAsDouble(dbill.price))) * Functions.sGetDecimalStringAnyLocaleAsDouble(dbill.quantity));
+      if (tipo.equals("1")) {
+            // subGrab = subGrab + (Functions.sGetDecimalStringAnyLocaleAsDouble(dbill.price) * Functions.sGetDecimalStringAnyLocaleAsDouble(dbill.quantity));
+            Log.d("tipoProdcuto", tipo + "gr");
+            subGrab = subGrab + (precio) * (cantidad);
+            String subTotalGrabado = String.format("%,.2f", subGrab);
+            Log.d("subGrab", subGrab + "");
+            Log.d("subTotalGrabado", subTotalGrabado);
 
-            }
-            discountBill += ((subExen * (CurrentSale.costumer.fixed_discount / 100.00)) + (subGrabm * (CurrentSale.costumer.fixed_discount / 100.00)));
-
-            if (subGrab > 0)
-                IvaT = Functions.sGetDecimalStringAnyLocaleAsDouble(String.format("%.2f", (subGrabm - (subGrabm * (CurrentSale.costumer.fixed_discount / 100.00))) * (iva / 100)));
-            else
-                IvaT = 0.0;
-
-            subt = subGrab + subExen;
-            total = (subt + IvaT) - discountBill;
+            // subGrabm = subGrabm + ((Functions.sGetDecimalStringAnyLocaleAsDouble(dbill.price) * Functions.sGetDecimalStringAnyLocaleAsDouble(dbill.quantity) - ((((Functions.sGetDecimalStringAnyLocaleAsDouble(dbill.descount) / 100) * Functions.sGetDecimalStringAnyLocaleAsDouble(dbill.price))) * Functions.sGetDecimalStringAnyLocaleAsDouble(dbill.quantity))));
+            subGrabm = subGrabm + ((precio) * (cantidad) - ((descuento / 100) * (precio) * (cantidad)));
+            String subTotalGrabadoM = String.format("%,.2f", subGrabm);
+            Log.d("subGrabm", subGrabm + "");
+            Log.d("subTotalGrabadoM", subTotalGrabadoM);
         }
+
         else {
-            subGrab = 0.0;
-            subExen = 0.0;
-            IvaT = 0.0;
-            discountBill = 0.0;
-            subt = subGrab + subExen;
-            total = subt + IvaT;
+            Log.d("tipoProdcuto", tipo + "ex");
+            subExen = subExen + ((precio) * (cantidad));
+            String subTotalExento= String.format("%,.2f", subExen);
+
+            Log.d("subExen", subExen + "");
+            Log.d("subTotalExento", subTotalExento);
         }
-        //if (mAdapterBill.getData().size()>0 && spinnerPaymentMethods.getSelectedItemId()==1)
-        //    paid.setEnabled(true);
-    }
+
+       /*discountBill += ((((Functions.sGetDecimalStringAnyLocaleAsDouble(dbill.descount) / 100) * Functions.sGetDecimalStringAnyLocaleAsDouble(dbill.price))) * Functions.sGetDecimalStringAnyLocaleAsDouble(dbill.quantity));
+
+   }
+    discountBill += ((subExen * (CurrentSale.costumer.fixed_discount / 100.00)) + (subGrabm * (CurrentSale.costumer.fixed_discount / 100.00)));
 */
+       discountBill += ((descuento / 100) * (precio) * (cantidad));
+
+
+        //  TODO REVISAR ANDROIDPOS EL IF QUE REVISA SI ESTA LLENO O NO
+      // discountBill += ((subExen * (clienteFixedDescuento / 100.00)) + (subGrabm * (clienteFixedDescuento / 100.00)));
+        String descuentoCliente= String.format("%,.2f", discountBill);
+        Log.d("discountBill", discountBill + "");
+        Log.d("descuentoCliente", descuentoCliente);
+
+
+       if (subGrab > 0){
+           IvaT = (subGrabm - (subGrabm * (clienteFixedDescuento / 100.00))) * (iva / 100);
+            impuestoIVA = String.format("%,.2f", IvaT);
+
+       Log.d("IvaT", IvaT + "mayor");
+       Log.d("impuestoIVA", impuestoIVA);}
+       else {
+           IvaT = 0.0;
+           impuestoIVA = String.format("%,.2f", IvaT);
+           Log.d("IvaT", IvaT + "else");
+           Log.d("impuestoIVA", impuestoIVA);
+       }
+
+       subt = subGrab + subExen;
+       Log.d("subt", subt + "");
+       total = (subt + IvaT) - discountBill;
+       Log.d("total", total + "");
+
+    }
+
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);

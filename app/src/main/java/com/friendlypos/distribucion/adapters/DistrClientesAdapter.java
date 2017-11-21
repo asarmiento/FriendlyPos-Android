@@ -61,6 +61,7 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
 
         Realm realm = Realm.getDefaultInstance();
 
+
         Clientes clientes = realm.where(Clientes.class).equalTo("id", venta.getCustomer_id()).findFirst();
         final Facturas facturas = realm.where(Facturas.class).equalTo("id", venta.getInvoice_id()).findFirst();
 
