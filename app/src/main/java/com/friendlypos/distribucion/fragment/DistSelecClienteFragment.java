@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import com.friendlypos.R;
 import com.friendlypos.distribucion.activity.DistribucionActivity;
 import com.friendlypos.distribucion.adapters.DistrClientesAdapter;
+import com.friendlypos.distribucion.adapters.DistrResumenAdapter;
 import com.friendlypos.distribucion.modelo.Facturas;
 import com.friendlypos.distribucion.modelo.Venta;
 import com.friendlypos.principal.modelo.Clientes;

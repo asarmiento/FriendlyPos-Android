@@ -1,6 +1,7 @@
 package com.friendlypos.distribucion.fragment;
 
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -25,8 +26,18 @@ public class DistResumenFragment extends BaseFragment {
     private DistrResumenAdapter adapter;
 
     @Override
+    public void onResume() {
+        super.onResume();
+        adapter.clearAll();
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+       /* FragmentTransaction ftr = getFragmentManager().beginTransaction();
+        ftr.detach(DistResumenFragment.this).attach(DistResumenFragment.this).commit();
+*/
         View rootView = inflater.inflate(R.layout.fragment_distribucion_resumen, container,
             false);
 
@@ -57,19 +68,18 @@ public class DistResumenFragment extends BaseFragment {
         //((DistribucionActivity) getActivity()).setInvoiceId(null);
         return facturaid1;
     }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
+/*
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        adapter.clearAll();
     }
+*/
 
     @Override
     public void updateData() {
         adapter.updateData(getList1());
     }
+
 }

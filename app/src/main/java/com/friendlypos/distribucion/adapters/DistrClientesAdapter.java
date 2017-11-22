@@ -131,15 +131,6 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
                         Log.d("PRODUCTOSFACTURA", facturaid1 + "");
                         activity.setInvoiceId(facturaID);
 
-
-                    //Here goes your desired onClick behaviour. Like:
-
-                    //     Toast.makeText(view.getContext(), "You have clicked " + cardCliente + position, Toast.LENGTH_SHORT).show(); //you can add data to the tag of your cardview in onBind... and retrieve it here with with.getTag().toString()..
-                    //You can change the fragment, something like this, not tested, please correct for your desired output:
-                    //    Activity activity = view.getContext();
-                    //   Fragment CityName = new CityName();
-                    //Create a bundle to pass data, add data, set the bundle to your fragment and:
-                    //   activity.getFragmentManager().beginTransaction().replace(R.id.fragment_container, cityName).addToBackStack(null).commit();     //Here m getting error
                 }
             });
 
@@ -154,6 +145,8 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+
+
                       /*  sendReturnSales(rSale);
                         refreshSalesList();*/
                         Functions.CreateMessage(QuickContext, "Devolución", " Se devolvió la factura " + facturas.getNumeration() + " .");

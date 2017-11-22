@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.friendlypos.R;
+import com.friendlypos.distribucion.activity.DistribucionActivity;
+import com.friendlypos.distribucion.adapters.DistrResumenAdapter;
 import com.friendlypos.distribucion.adapters.DistrSeleccionarProductosAdapter;
 import com.friendlypos.distribucion.modelo.Inventario;
 import java.util.List;
@@ -26,10 +28,7 @@ public class DistSelecProductoFragment extends BaseFragment {
         return new DistSelecProductoFragment();
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -41,7 +40,7 @@ public class DistSelecProductoFragment extends BaseFragment {
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerViewDistrSeleccProducto);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setHasFixedSize(true);
-        adapter = new DistrSeleccionarProductosAdapter(getList());
+        adapter = new DistrSeleccionarProductosAdapter(((DistribucionActivity)getActivity()),getList());
         recyclerView.setAdapter(adapter);
 
         Log.d("listaProducto", getList() + "");
@@ -53,57 +52,17 @@ public class DistSelecProductoFragment extends BaseFragment {
         realm = Realm.getDefaultInstance();
         RealmQuery<Inventario> query = realm.where(Inventario.class);
         RealmResults<Inventario> result1 = query.findAll();
+        realm.close();
 
         return result1;
+
     }
-/*
-    private void readStories(){
-        RealmQuery<StoryRealm> query = realm.where(StoryRealm.class);
-        RealmResults<StoryRealm> resultAllStories = query.findAll();
-        arrayListStories = new ArrayList<>();
-        for(StoryRealm storyRealm : resultAllStories){
-            arrayListStories.add(new Story(storyRealm));
-        }
-        adapter = new AdapterComment(arrayListStories);
-        commentsRecList.setAdapter(adapter);
-        //adapter.notifyDataSetChanged();
-    }*/
-
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        realm.close();
     }
 
     @Override
     public void updateData() {
-
     }
-/*
-
-
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-
-        LinearLayoutManager layoutManager = new LinearLayoutManager(
-                getActivity());
-        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        mRecyclerView.setLayoutManager(layoutManager);
-
-
-        String[] dataset = new String[100];
-        for (int i = 0; i < dataset.length; i++) {
-            dataset[i] = "item" + i;
-        }
-
-       adapter = new ClientesAdapter(mContentsArray);
-        mRecyclerView.setAdapter(adapter);
-
-        adapter = new RecyclerAdapter(dataset, getActivity());
-        mRecyclerView.setAdapter(adapter);
-
-        super.onViewCreated(view, savedInstanceState);
-    }*/
-
 }
