@@ -41,6 +41,8 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
     private int selected_position = -1;
     private static Context QuickContext = null;
 
+
+
     public DistrClientesAdapter(Context context, DistribucionActivity activity, List<Venta> contentList) {
         this.contentList = contentList;
         this.activity = activity;

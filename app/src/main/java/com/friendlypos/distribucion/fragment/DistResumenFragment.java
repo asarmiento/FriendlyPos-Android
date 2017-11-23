@@ -44,15 +44,15 @@ public class DistResumenFragment extends BaseFragment {
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerViewDistrResumen);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setHasFixedSize(true);
-        adapter = new DistrResumenAdapter(getContext(), ((DistribucionActivity)getActivity()), getList1());
+        adapter = new DistrResumenAdapter(getContext(), ((DistribucionActivity)getActivity()), getListResumen());
         recyclerView.setAdapter(adapter);
 
-        Log.d("listaResumen", getList1() + "");
+        Log.d("listaResumen", getListResumen() + "");
 
         return rootView;
     }
 
-    private List<Pivot> getList1() {
+    private List<Pivot> getListResumen() {
         String facturaId = ((DistribucionActivity) getActivity()).getInvoiceId();
         Realm realm = Realm.getDefaultInstance();
         //String facturaid = String.valueOf(realm.where(ProductoFactura.class).equalTo("id", facturaID).findFirst().getId());
@@ -79,7 +79,7 @@ public class DistResumenFragment extends BaseFragment {
 
     @Override
     public void updateData() {
-        adapter.updateData(getList1());
+        adapter.updateData(getListResumen());
     }
 
 }

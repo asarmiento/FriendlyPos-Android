@@ -36,15 +36,16 @@ public class DistSelecClienteFragment extends BaseFragment{
     public RecyclerView recyclerView;
 
     private DistrClientesAdapter adapter;
+    private DistrResumenAdapter adapter2;
 
     public static DistSelecProductoFragment getInstance() {
         return new DistSelecProductoFragment();
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-
-        super.onCreate(savedInstanceState);
+    public void onResume() {
+        super.onResume();
+        adapter2.clearAll();
     }
 
     @Override
@@ -60,13 +61,16 @@ public class DistSelecClienteFragment extends BaseFragment{
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        adapter = new DistrClientesAdapter(getContext(), ((DistribucionActivity)getActivity()), getList());
+        adapter = new DistrClientesAdapter(getContext(), ((DistribucionActivity)getActivity()), getListClientes());
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);
+
+        adapter2 = new DistrResumenAdapter();
+        adapter2.clearAll();
     }
 
-    private List<Venta> getList(){
+    private List<Venta> getListClientes(){
         realm = Realm.getDefaultInstance();
         RealmQuery<Venta> query = realm.where(Venta.class);
         RealmResults<Venta> result1 = query.findAll();
@@ -78,6 +82,7 @@ public class DistSelecClienteFragment extends BaseFragment{
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        adapter2.clearAll();
         realm.close();
     }
 

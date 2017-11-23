@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
+import io.realm.RealmResults;
 
 /**
  * Created by DelvoM on 21/09/2017.
@@ -69,6 +71,9 @@ public class DistrResumenAdapter extends RecyclerView.Adapter<DistrResumenAdapte
         this.QuickContext = context;
         this.data = aListdata;
     }
+    public DistrResumenAdapter() {
+
+    }
 
 
     public void updateData(List<Pivot> productosList){
@@ -88,16 +93,14 @@ public class DistrResumenAdapter extends RecyclerView.Adapter<DistrResumenAdapte
 
     @Override
     public void onBindViewHolder(DistrResumenAdapter.CharacterViewHolder holder, final int position) {
-        Pivot pivot = productosList.get(position);
+        final Pivot pivot = productosList.get(position);
 
         //todo repasar esto
         Realm realm = Realm.getDefaultInstance();
         Productos producto = realm.where(Productos.class).equalTo("id", pivot.getProduct_id()).findFirst();
-
-
         Venta ventas = realm.where(Venta.class).equalTo("invoice_id", pivot.getInvoice_id()).findFirst();
-
         Clientes clientes = realm.where(Clientes.class).equalTo("id", ventas.getCustomer_id()).findFirst();
+        realm.close();
 
         description = producto.getDescription();
         tipo = producto.getProduct_type_id();
@@ -114,8 +117,6 @@ public class DistrResumenAdapter extends RecyclerView.Adapter<DistrResumenAdapte
 
         String pivotTotal = String.format("%,.2f", (precio * cantidad));
         holder.txt_resumen_factura_total.setText("T: " + pivotTotal);
-
-        realm.close();
 
         totalize();
     }
@@ -140,6 +141,7 @@ public class DistrResumenAdapter extends RecyclerView.Adapter<DistrResumenAdapte
 
         private TextView txt_resumen_factura_nombre, txt_resumen_factura_descuento,txt_resumen_factura_precio, txt_resumen_factura_cantidad, txt_resumen_factura_total;
         protected CardView cardView;
+        ImageButton btnEliminarResumen;
 
         public CharacterViewHolder(View view) {
             super(view);
@@ -149,8 +151,104 @@ public class DistrResumenAdapter extends RecyclerView.Adapter<DistrResumenAdapte
             txt_resumen_factura_precio = (TextView) view.findViewById(R.id.txt_resumen_factura_precio);
             txt_resumen_factura_cantidad = (TextView) view.findViewById(R.id.txt_resumen_factura_cantidad);
             txt_resumen_factura_total = (TextView) view.findViewById(R.id.txt_resumen_factura_total);
+            btnEliminarResumen = (ImageButton) view.findViewById(R.id.btnEliminarResumen);
+
+            btnEliminarResumen.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View view) {
+                    int pos = getAdapterPosition();
+                   // if (pos == RecyclerView.NO_POSITION) return;
+                    Log.d("posBorrar", pos+"");
+                    // Updating old as well as new positions
+                  /*  notifyItemChanged(selected_position);
+                    selected_position = getAdapterPosition();
+                    notifyItemChanged(selected_position);
+
+
+                    Venta clickedDataItem = contentList.get(pos);
+                    String facturaID = clickedDataItem.getInvoice_id();
+
+                    Realm realm = Realm.getDefaultInstance();
+                    //String facturaid = String.valueOf(realm.where(ProductoFactura.class).equalTo("id", facturaID).findFirst().getId());
+                    RealmResults<Pivot> facturaid1 = realm.where(Pivot.class).equalTo("invoice_id", facturaID).findAll();
+
+                    realm.close();
+
+                    Toast.makeText(view.getContext(), "You clicked " + facturaID, Toast.LENGTH_SHORT).show();
+                    Log.d("PRODUCTOSFACTURA", facturaid1 + "");
+                    activity.setInvoiceId(facturaID);*/
+
+                }
+            });
         }
 
+    }
+
+    public void removeItem(Pivot position) {
+
+    /*   if (position.sonsList != null) {
+            for (int a : position.sonsList)
+                System.out.println("Son Id" + a);
+
+            for (int a : position.sonsList) {
+                removeItem(data.get(a));
+
+            }
+
+        }*/
+
+        int pos = data.indexOf(position);
+        Log.d("posBorrrar", pos + "");
+        /*
+        notifyItemRemoved(pos);
+        data.remove(pos);
+        Double amountDevolver = ProductsBill.get(position.id) - Functions.sGetDecimalStringAnyLocaleAsDouble(position.quantity);
+        if (amountDevolver > 0) {
+            ProductsBill.put(position.id, ProductsBill.get(position.id) - Integer.parseInt(position.quantity));
+        }
+        else {
+
+            ProductsBill.remove(position.id);
+
+
+            // double SUMA2 = position.inventories.amount +  Double.parseDouble(position.quantity);
+
+
+        }
+
+        Inventories inventory = new Select().all().from(Inventories.class)
+                .where(Condition.column(Inventories$Table.PRODUCT_PRODUCT).eq(position.inventories.product.id))
+                .querySingle();
+
+        //TODO SUMA PARA DEVOLVER EL INVENTARIO
+
+        inventory.amount = inventory.amount + Double.parseDouble(position.quantity);
+        inventory.save();
+
+        new Delete().from(ProductByInvoices.class)
+                .where(Condition.column(ProductByInvoices$Table.PRODUCT_PRODUCT).eq(position.inventories.product.id))
+                .and(Condition.column(ProductByInvoices$Table.INVOICE_INVOICE).eq(currentInvoice.id))
+                .query();
+
+        getDataInventories getdata1 = new getDataInventories();
+        getdata1.execute();
+
+        adapterI.notifyDataSetChanged();
+        totalize();
+
+        try {
+            if (bill_type == 2) {
+                creditLm.setText("C.Disponible: " + String.format("%,.2f", getCustomerCreditPending()));
+            }
+            setTotalFields();
+        }
+        catch (Exception e) {
+        }
+
+        //inventory.put(position.id, inventory.get(position.id) + Integer.parseInt(position.quantity));
+        //textExistencia.setText("Existencia en Inv. " + inventory.get(position.id));
+        //restotalize(position);*/
     }
 
    public void totalize() {
@@ -206,6 +304,8 @@ public class DistrResumenAdapter extends RecyclerView.Adapter<DistrResumenAdapte
        activity.setTotalizarTotal(Total);
 
     }
+
+
 
     public void clearAll() {
             subGrab = 0.0;

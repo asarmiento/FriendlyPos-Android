@@ -23,12 +23,16 @@ public class DistSelecProductoFragment extends BaseFragment {
     private Realm realm;
     RecyclerView recyclerView;
     private DistrSeleccionarProductosAdapter adapter;
-
+    private DistrResumenAdapter adapter2;
     public static DistSelecProductoFragment getInstance() {
         return new DistSelecProductoFragment();
     }
 
-
+    @Override
+    public void onResume() {
+        super.onResume();
+        adapter2.clearAll();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -40,19 +44,20 @@ public class DistSelecProductoFragment extends BaseFragment {
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerViewDistrSeleccProducto);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setHasFixedSize(true);
-        adapter = new DistrSeleccionarProductosAdapter(((DistribucionActivity)getActivity()),getList());
+        adapter = new DistrSeleccionarProductosAdapter(((DistribucionActivity)getActivity()),getListProductos());
         recyclerView.setAdapter(adapter);
 
-        Log.d("listaProducto", getList() + "");
+        Log.d("listaProducto", getListProductos() + "");
 
+        adapter2 = new DistrResumenAdapter();
+        adapter2.clearAll();
         return rootView;
     }
 
-    private List<Inventario> getList(){
+    private List<Inventario> getListProductos(){
         realm = Realm.getDefaultInstance();
         RealmQuery<Inventario> query = realm.where(Inventario.class);
         RealmResults<Inventario> result1 = query.findAll();
-        realm.close();
 
         return result1;
 
@@ -60,9 +65,11 @@ public class DistSelecProductoFragment extends BaseFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        adapter2.clearAll();
+        realm.close();
     }
-
     @Override
     public void updateData() {
+        adapter.updateData(getListProductos());
     }
 }

@@ -56,10 +56,10 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
         this.productosList = productosList;
     }
 
-    public DistrSeleccionarProductosAdapter() {
-
+    public void updateData(List<Inventario> productosList){
+        this.productosList = productosList;
+        notifyDataSetChanged();
     }
-
     @Override
     public CharacterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
@@ -71,8 +71,8 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
     }
 
     @Override
-    public void onBindViewHolder(DistrSeleccionarProductosAdapter.CharacterViewHolder holder, final int position) {
-        Inventario inventario = productosList.get(position);
+    public void onBindViewHolder(final DistrSeleccionarProductosAdapter.CharacterViewHolder holder, final int position) {
+        final Inventario inventario = productosList.get(position);
 
         //todo repasar esto
 
@@ -101,13 +101,11 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
 
     }
 
-    public void addProduct(final String producto_id, final Double cantidadDisponible, String Precio1, String Precio2, String Precio3, String Precio4, String Precio5) {
+    public void addProduct(final String inventario_id, final String producto_id, final Double cantidadDisponible, String Precio1, String Precio2, String Precio3, String Precio4, String Precio5) {
+
         final String idFacturaSeleccionada = (activity).getInvoiceId();
         Log.d("idFacturaSeleccionada", idFacturaSeleccionada+"");
-
-
         Log.d("idProductoSeleccionado", producto_id+"");
-
 
 
         LayoutInflater layoutInflater = LayoutInflater.from(context);
@@ -200,7 +198,10 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
                                     pivotnuevo.setDiscount(String.valueOf(producto_descuento_add));
                                     pivotnuevo.setDelivered(String.valueOf(producto_amount_dist_add));
 
-                                    realm.insertOrUpdate(pivotnuevo); // using insert API
+                                    realm2.insertOrUpdate(pivotnuevo); // using insert API
+
+
+
 
                                     /*Pivot pivotnuevo = realm2.createObject(Pivot.class, nextId);
 
@@ -209,7 +210,26 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
                                 }
                             });
 
+                            final Double nuevoAmount =  cantidadDisponible - producto_amount_dist_add;
+                            Log.d("nuevoAmount",nuevoAmount+"");
+
+                            final Realm realm3 = Realm.getDefaultInstance();
+
+                            realm3.executeTransaction(new Realm.Transaction() {
+                                @Override
+                                public void execute(Realm realm) {
+
+                                    Inventario inv_actualizado = realm3.where(Inventario.class).equalTo("id", inventario_id).findFirst();
+                                    inv_actualizado.setAmount_dist(String.valueOf(nuevoAmount));
+
+                                    realm3.insertOrUpdate(inv_actualizado); // using insert API
+
+
+                                }
+                            });
                             Toast.makeText(context, nextId + "agregocanti ", Toast.LENGTH_LONG).show();
+
+
                         } else {
                             Toast.makeText(context, "El producto no se agrego, verifique la cantidad que esta ingresando", Toast.LENGTH_LONG).show();
                         }
@@ -218,85 +238,8 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
                         Toast.makeText(context, "El producto no se agrego, El descuento debe ser >0 <11", Toast.LENGTH_LONG).show();
                     }
 
+                    notifyDataSetChanged();
 
-                    /*    amount = Functions.sGetDecimalStringAnyLocaleAsDouble(((input.getText().toString().isEmpty()) ? "0" : input.getText().toString()));
-                        Double des = Functions.sGetDecimalStringAnyLocaleAsDouble((desc.getText().toString().isEmpty()) ? "0" : desc.getText().toString());
-
-                        if (des >= 0 && des <= 10) {
-                            if (amount > 0 && amount <= releasedExceptCurrInventory) {
-
-                                DetailBill detailBill = new DetailBill();
-                                detailBill.inventories = cur;
-
-
-
-                                cur.product.sale_price = (double) spPrices.getSelectedItem();
-                                detailBill.price = String.format("%,.2f", cur.product.sale_price);
-                                detailBill.descount = valueOf(des);
-                                detailBill.quantity = valueOf(amount);
-                                detailBill.total = String.format("%,.2f", (cur.product.sale_price * amount));
-                                detailBill.id = cur.id;
-                                detailBill.isSon = false;
-
-                                double addtobill = cur.product.sale_price * amount;
-                                addtobill = (addtobill - (addtobill * (des / 100)));
-                                addtobill += ((detailBill.inventories.product.producttype.id == 1) ? ((cur.product.sale_price * amount) * (iva / 100)) : 0);
-
-                                //  System.out.println("agregar a factura " + addtobill);
-                                if (ProductsBill.get(detailBill.id) == null) {
-                                    ProductsBill.put(detailBill.id, Functions.sGetDecimalStringAnyLocaleAsDouble(detailBill.quantity));
-                                    Inventories inventory = new Select().all().from(Inventories.class)
-                                            .where(Condition.column(Inventories$Table.PRODUCT_PRODUCT).eq(detailBill.inventories.product.id))
-                                            .querySingle();
-
-                                    //TODO RESTA PARA SUMAR EL INVENTARIO
-
-                                    inventory.amount = inventory.amount - Double.parseDouble(detailBill.quantity);
-                                    inventory.save();
-
-
-                                }
-                                else {
-
-                                    if (ProductsBillNewReserved.get(detailBill.id) != null) {
-                                        ProductsBillNewReserved.remove(detailBill.id);
-                                    }
-
-                                    ProductsBill.remove(detailBill.id);
-                                    ProductsBill.put(detailBill.id, Functions.sGetDecimalStringAnyLocaleAsDouble(detailBill.quantity));
-
-                                    for (int i = 0; i < aListdata.size(); i++) {
-                                        if (aListdata.get(i).id == detailBill.id) {
-                                            aListdata.remove(aListdata.get(i));
-                                        }
-                                    }
-                                }
-                                //  ProductsBillNewReserved.put(detailBill.id, reservedExceptCurrInventory + Functions.sGetDecimalStringAnyLocaleAsDouble(detailBill.quantity));
-
-                                ProductsBillNewReserved.put(detailBill.id, reservedExceptCurrInventory + Functions.sGetDecimalStringAnyLocaleAsDouble(detailBill.quantity));
-
-                                aListdata.add(detailBill);
-                                adapterI.notifyDataSetChanged();
-                                mAdapterBill.notifyDataSetChanged();
-                                totalize();
-                                setTotalFields();
-
-                                if (bill_type == 2) {
-                                    try {
-                                        creditLm.setText("C.Disponible: " + String.format("%,.2f", getCustomerCreditPending()));
-                                    }
-                                    catch (Exception e) {
-                                    }
-                                }
-
-                            }
-                            else {
-                                Functions.createSnackBar(QuickContext, coordinatorLayout, "El producto no se agrego, verifique la cantidad que esta ingresando", 2, Snackbar.LENGTH_LONG);
-                            }
-                        }
-                        else {
-                            Functions.createSnackBar(QuickContext, coordinatorLayout, "El producto no se agrego, El descuento debe ser >0 <11", 2, Snackbar.LENGTH_LONG);
-                        }*/
                 } catch (Exception e) {
                     e.printStackTrace();
                        /* Functions.createSnackBar(QuickContext, coordinatorLayout, "Sucedio un error Revise que el producto y sus dependientes tengan existencias", 2, Snackbar.LENGTH_LONG);
@@ -362,7 +305,7 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
                         view.setBackgroundColor(Color.parseColor("#607d8b"));
                         Inventario clickedDataItem = productosList.get(pos);
                         String ProductoID = clickedDataItem.getProduct_id();
-
+                        String InventarioID = clickedDataItem.getId();
 
                         String precio = producto.getSale_price();
                         String precio2 = producto.getSale_price2();
@@ -372,8 +315,9 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
 
                         Double ProductoAmount = Double.valueOf(clickedDataItem.getAmount_dist());
 
+
                         Toast.makeText(view.getContext(), "You clicked " + ProductoID, Toast.LENGTH_SHORT).show();
-                        addProduct(ProductoID, ProductoAmount, precio, precio2, precio3, precio4, precio5);
+                        addProduct(InventarioID, ProductoID, ProductoAmount, precio, precio2, precio3, precio4, precio5);
                     }
 
                 }
