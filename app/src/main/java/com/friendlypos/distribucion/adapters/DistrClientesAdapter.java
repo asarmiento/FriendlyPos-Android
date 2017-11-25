@@ -21,6 +21,7 @@ import com.friendlypos.R;
 import com.friendlypos.application.util.Functions;
 import com.friendlypos.distribucion.activity.DistribucionActivity;
 import com.friendlypos.distribucion.modelo.Facturas;
+import com.friendlypos.distribucion.modelo.Inventario;
 import com.friendlypos.distribucion.modelo.Pivot;
 import com.friendlypos.distribucion.modelo.Venta;
 import com.friendlypos.principal.modelo.Clientes;
@@ -128,6 +129,8 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
                         RealmResults<Pivot> facturaid1 = realm.where(Pivot.class).equalTo("invoice_id", facturaID).findAll();
 
                         realm.close();
+
+
 
                         Toast.makeText(view.getContext(), "You clicked " + facturaID, Toast.LENGTH_SHORT).show();
                         Log.d("PRODUCTOSFACTURA", facturaid1 + "");

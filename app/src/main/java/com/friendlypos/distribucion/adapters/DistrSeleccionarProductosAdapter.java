@@ -47,7 +47,8 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
     private DistribucionActivity activity;
     private static double producto_amount_dist_add = 0;
     private static double producto_descuento_add = 0;
-   // private static String productoAmountDistAdd, productoDescuentoAdd, subTotalExento, descuentoCliente, subTotal, Total;
+    private int selected_position = -1;
+    // private static String productoAmountDistAdd, productoDescuentoAdd, subTotalExento, descuentoCliente, subTotal, Total;
     String idProducto;
     int nextId;
 
@@ -56,14 +57,15 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
         this.productosList = productosList;
     }
 
-    public void updateData(List<Inventario> productosList){
+    public void updateData(List<Inventario> productosList) {
         this.productosList = productosList;
         notifyDataSetChanged();
     }
+
     @Override
     public CharacterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-            .inflate(R.layout.lista_distribucion_productos, parent, false);
+                .inflate(R.layout.lista_distribucion_productos, parent, false);
         context = parent.getContext();
         //  CharacterViewHolder placeViewHolder = new CharacterViewHolder(view);
         // placeViewHolder.cardView.setOnClickListener(new ProductosAdapter(placeViewHolder, parent));
@@ -98,14 +100,16 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
         holder.txt_producto_factura_precio.setText(precio);
         holder.txt_producto_factura_disponible.setText("Disp: " + inventario.getAmount_dist());
         holder.txt_producto_factura_seleccionado.setText("Selec: " + "0.0");
+        holder.cardView.setBackgroundColor(selected_position == position ? Color.parseColor("#607d8b") : Color.parseColor("#009688"));
+
 
     }
 
     public void addProduct(final String inventario_id, final String producto_id, final Double cantidadDisponible, String Precio1, String Precio2, String Precio3, String Precio4, String Precio5) {
 
         final String idFacturaSeleccionada = (activity).getInvoiceId();
-        Log.d("idFacturaSeleccionada", idFacturaSeleccionada+"");
-        Log.d("idProductoSeleccionado", producto_id+"");
+        Log.d("idFacturaSeleccionada", idFacturaSeleccionada + "");
+        Log.d("idProductoSeleccionado", producto_id + "");
 
 
         LayoutInflater layoutInflater = LayoutInflater.from(context);
@@ -183,7 +187,7 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
                                     // increment index
                                     Number currentIdNum = realm.where(Pivot.class).max("id");
 
-                                    if(currentIdNum == null) {
+                                    if (currentIdNum == null) {
                                         nextId = 1;
                                     } else {
                                         nextId = currentIdNum.intValue() + 1;
@@ -210,8 +214,8 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
                                 }
                             });
 
-                            final Double nuevoAmount =  cantidadDisponible - producto_amount_dist_add;
-                            Log.d("nuevoAmount",nuevoAmount+"");
+                            final Double nuevoAmount = cantidadDisponible - producto_amount_dist_add;
+                            Log.d("nuevoAmount", nuevoAmount + "");
 
                             final Realm realm3 = Realm.getDefaultInstance();
 
@@ -292,33 +296,33 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
 
         }
 
-        void fillData(final Productos producto){
+        void fillData(final Productos producto) {
             cardView.setOnClickListener(new View.OnClickListener() {
 
                 @Override
                 public void onClick(View view) {
 
                     int pos = getAdapterPosition();
+                    if (pos == RecyclerView.NO_POSITION) return;
 
-                    // check if item still exists
-                    if (pos != RecyclerView.NO_POSITION) {
-                        view.setBackgroundColor(Color.parseColor("#607d8b"));
-                        Inventario clickedDataItem = productosList.get(pos);
-                        String ProductoID = clickedDataItem.getProduct_id();
-                        String InventarioID = clickedDataItem.getId();
+                    notifyItemChanged(selected_position);
+                    selected_position = getAdapterPosition();
+                    notifyItemChanged(selected_position);
 
-                        String precio = producto.getSale_price();
-                        String precio2 = producto.getSale_price2();
-                        String precio3 = producto.getSale_price3();
-                        String precio4 = producto.getSale_price4();
-                        String precio5 = producto.getSale_price5();
+                    Inventario clickedDataItem = productosList.get(pos);
+                    String ProductoID = clickedDataItem.getProduct_id();
+                    String InventarioID = clickedDataItem.getId();
 
-                        Double ProductoAmount = Double.valueOf(clickedDataItem.getAmount_dist());
+                    String precio = producto.getSale_price();
+                    String precio2 = producto.getSale_price2();
+                    String precio3 = producto.getSale_price3();
+                    String precio4 = producto.getSale_price4();
+                    String precio5 = producto.getSale_price5();
 
+                    Double ProductoAmount = Double.valueOf(clickedDataItem.getAmount_dist());
 
-                        Toast.makeText(view.getContext(), "You clicked " + ProductoID, Toast.LENGTH_SHORT).show();
-                        addProduct(InventarioID, ProductoID, ProductoAmount, precio, precio2, precio3, precio4, precio5);
-                    }
+                    Toast.makeText(view.getContext(), "You clicked " + ProductoID, Toast.LENGTH_SHORT).show();
+                    addProduct(InventarioID, ProductoID, ProductoAmount, precio, precio2, precio3, precio4, precio5);
 
                 }
             });
