@@ -76,7 +76,6 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
         String companyCliente = clientes.getCompanyName();
         String fantasyCliente = clientes.getFantasyName();
         String numeracionFactura = facturas.getNumeration();
-        String idFactura = facturas.getId();
 
         holder.txt_cliente_factura_card.setText(cardCliente);
         holder.txt_cliente_factura_fantasyname.setText(fantasyCliente);

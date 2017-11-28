@@ -15,11 +15,14 @@ import com.friendlypos.application.runModelo.RunSale;
 import com.friendlypos.distribucion.modelo.Facturas;
 import com.friendlypos.distribucion.modelo.Inventario;
 import com.friendlypos.distribucion.modelo.Venta;
+import com.friendlypos.principal.modelo.Clientes;
 import com.friendlypos.principal.modelo.Sysconf;
+
+import io.realm.Realm;
 
 
 public class PrinterFunctions {
-
+/*
     public static void printBillPrinter(Context QuickContext, RunSale sale, Sysconf company, int type, int ptype) {
         String stype = "";
         String payment = "";
@@ -82,13 +85,20 @@ public class PrinterFunctions {
             QuickContext.sendBroadcast(intent2);
 
         }
-
-
-
-    }
+    }*/
 
     public static void datosImprimir(int type, Venta invoices, Context QuickContext, int ptype) {
 
+        Realm realm = Realm.getDefaultInstance();
+
+
+        Clientes clientes = realm.where(Clientes.class).equalTo("id", invoices.getCustomer_id()).findFirst();
+        final Facturas facturas = realm.where(Facturas.class).equalTo("id", invoices.getInvoice_id()).findFirst();
+
+        final String cardCliente = clientes.getCard();
+        String companyCliente = clientes.getCompanyName();
+        String fantasyCliente = clientes.getFantasyName();
+        String numeracionFactura = facturas.getNumeration();
 
         String stype = "";
         String payment = "";
@@ -130,10 +140,10 @@ public class PrinterFunctions {
                     String.format("%s", billptype) + "\r\n" +
                     "! U1 LMARGIN 150\r\n" +
                     "! U1 SETLP 7 0 14\r\n" + "\r\n" +
-                    "N# Factura: " + invoices.invoices.getNumeration() + "\r\n" +
+                    "N# Factura: " + numeracionFactura + "\r\n" +
                     "! U1 LMARGIN 120\r\n" +
                     "Factura de: ! U1 LMARGIN 350 " + payment + "\r\n" +
-                    ((invoices.invoices.getPayment_method_id() == "2") ? "! U1 LMARGIN 120\r\n" +
+                    ((facturas.getPayment_method_id() == "2") ? "! U1 LMARGIN 120\r\n" +
                             "Fecha Limite: ! U1 LMARGIN 350 " + messageC + "\r\n" : "\r\n") +
                     "! U1 LMARGIN 0\r\n" +
                     "! U1 SETLP 5 1 35\r\n" +

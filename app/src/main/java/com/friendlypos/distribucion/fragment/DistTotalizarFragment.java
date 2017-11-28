@@ -213,7 +213,7 @@ public class DistTotalizarFragment extends BaseFragment {
         realm3.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm3) {
-                 = realm3.where(Venta.class).equalTo("id", facturaId).findFirst();
+                venta_actualizada = realm3.where(Venta.class).equalTo("id", facturaId).findFirst();
 
                 venta_actualizada.setCustomer_name(client_name.getText().toString());
                 venta_actualizada.setSale_type("1");
