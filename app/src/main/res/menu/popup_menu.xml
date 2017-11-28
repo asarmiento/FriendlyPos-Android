@@ -7,7 +7,7 @@
     <item
         android:id="@+id/btn_descargar_catalogo"
         android:icon="@mipmap/ic_config"
-        android:title="Descargar Catalogo"/>
+        android:title="Descargar Catálogo"/>
     <item
         android:id="@+id/btn_descargar_inventario"
         android:icon="@mipmap/ic_config"
@@ -29,4 +29,9 @@
         android:id="@+id/btn_devolver_inventario"
         android:icon="@mipmap/ic_config"
         android:title="Devolver Inventario" />
+    <item
+        android:id="@+id/btn_imprimir_liquidacion"
+        android:icon="@mipmap/ic_config"
+        android:title="Imprimir Liquidación" />
+
 </menu>

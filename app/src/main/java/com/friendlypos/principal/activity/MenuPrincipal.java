@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.friendlypos.R;
 import com.friendlypos.app.broadcastreceiver.NetworkStateChangeReceiver;
 
+import com.friendlypos.application.util.PrinterFunctions;
 import com.friendlypos.distribucion.activity.DistribucionActivity;
 
 import com.friendlypos.login.util.SessionPrefes;
@@ -222,6 +223,11 @@ int bloquear = 0;
                 break;
             case R.id.btn_devolver_inventario:
                 Toast.makeText(MenuPrincipal.this, "devolver_inventario", Toast.LENGTH_SHORT).show();
+                break;
+
+            case R.id.btn_imprimir_liquidacion:
+                PrinterFunctions.imprimirLiquidacionMenu(MenuPrincipal.this);
+                Toast.makeText(MenuPrincipal.this, "imprimir liquidacion", Toast.LENGTH_SHORT).show();
                 break;
 
 

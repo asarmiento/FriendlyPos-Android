@@ -119,19 +119,9 @@ public class Functions {
         return (dateFormat.format(cal.getTime())); //16:00:22
     }
 
- /*   public static List<Pivot> getProducsByBillForPrinting(long invoice_id) {
-        List<ProductByInvoices> products = getProductsByInvoice(invoice_id);
-        List<PrintProduct> send = new ArrayList<>();
-        PrintProduct runsale;
-        for (ProductByInvoices sale : products) {
-            runsale = new PrintProduct(sale);
-            runsale.amount = sale.amount;
-            runsale.price = sale.price;
-            send.add(runsale);
-        }
-
-        return send;
-    }*/
+    public static String doubleToString(double number) {
+        return String.format(Locale.getDefault(), "%,.2f", number);
+    }
 
 
 }
