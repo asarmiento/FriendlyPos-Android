@@ -12,18 +12,18 @@ import io.realm.annotations.PrimaryKey;
 public class Inventario extends RealmObject {
 
     @PrimaryKey
-    String id;
+    int id;
     String product_id;
     String initial;
     String amount;
     String amount_dist;
     String distributor;
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 

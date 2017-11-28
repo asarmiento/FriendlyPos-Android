@@ -38,7 +38,7 @@ public class DistrResumenAdapter extends RecyclerView.Adapter<DistrResumenAdapte
     private static ArrayList<Pivot> aListdata = new ArrayList<Pivot>();
     private int selected_position1 = -1;
     Double amount_dist_inventario = 0.0;
-    String idInvetarioSelec = null;
+    int idInvetarioSelec;
     public ArrayList<Pivot> getData() {
         return data;
     }

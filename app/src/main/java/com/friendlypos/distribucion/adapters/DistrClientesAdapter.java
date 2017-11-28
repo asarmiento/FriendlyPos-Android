@@ -43,9 +43,10 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
     private int selected_position = -1;
     private static Context QuickContext = null;
     RealmResults<Pivot> facturaid1;
-    String idInvetarioSelec = null;
+    int idInvetarioSelec;
     Double amount_dist_inventario = 0.0;
     String facturaID;
+    int nextId;
 
     public DistrClientesAdapter(Context context, DistribucionActivity activity, List<Venta> contentList) {
         this.contentList = contentList;
@@ -75,6 +76,7 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
         String companyCliente = clientes.getCompanyName();
         String fantasyCliente = clientes.getFantasyName();
         String numeracionFactura = facturas.getNumeration();
+        String idFactura = facturas.getId();
 
         holder.txt_cliente_factura_card.setText(cardCliente);
         holder.txt_cliente_factura_fantasyname.setText(fantasyCliente);
@@ -170,11 +172,36 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
                                 public void execute(Realm realm3) {
 
                                     Inventario inventario = realm3.where(Inventario.class).equalTo("product_id", eventRealm.getProduct_id()).findFirst();
-                                    idInvetarioSelec = inventario.getId();
-                                    amount_dist_inventario = Double.valueOf(inventario.getAmount_dist());
-                                    Log.d("idinventario", idInvetarioSelec+"");
-                                    realm3.close();
 
+                                        if (inventario != null) {
+                                            idInvetarioSelec = inventario.getId();
+                                            amount_dist_inventario = Double.valueOf(inventario.getAmount_dist());
+                                            Log.d("idinventario", idInvetarioSelec+"");
+
+                                        } else {
+                                            amount_dist_inventario = 0.0;
+                                            // increment index
+                                            Number currentIdNum = realm3.where(Inventario.class).max("id");
+
+                                            if (currentIdNum == null) {
+                                                nextId = 1;
+                                            } else {
+                                                nextId = currentIdNum.intValue() + 1;
+                                            }
+
+                                            Inventario invnuevo= new Inventario(); // unmanaged
+                                            invnuevo.setId(nextId);
+                                            invnuevo.setProduct_id(eventRealm.getProduct_id());
+                                            invnuevo.setInitial(String.valueOf(cantidadDevolver));
+                                            invnuevo.setAmount(String.valueOf("0"));
+                                            invnuevo.setAmount_dist(String.valueOf(cantidadDevolver));
+                                            invnuevo.setDistributor(String.valueOf("0"));
+
+                                            realm3.insertOrUpdate(invnuevo);
+                                            Log.d("idinvNUEVOCREADO", invnuevo +"");
+                                        }
+
+                                    realm3.close();
                                 }
                             });
 

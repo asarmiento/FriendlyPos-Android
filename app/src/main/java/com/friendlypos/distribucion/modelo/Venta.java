@@ -38,6 +38,7 @@ public class Venta extends RealmObject {
     String updated_at;
     String reserved;
     public Clientes clientes;
+    public Facturas facturas;
 
     public String getId() {
         return id;

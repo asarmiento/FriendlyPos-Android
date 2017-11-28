@@ -105,7 +105,7 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
 
     }
 
-    public void addProduct(final String inventario_id, final String producto_id, final Double cantidadDisponible, String Precio1, String Precio2, String Precio3, String Precio4, String Precio5) {
+    public void addProduct(final int inventario_id, final String producto_id, final Double cantidadDisponible, String Precio1, String Precio2, String Precio3, String Precio4, String Precio5) {
 
         final String idFacturaSeleccionada = (activity).getInvoiceId();
         Log.d("idFacturaSeleccionada", idFacturaSeleccionada + "");
@@ -311,7 +311,7 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
 
                     Inventario clickedDataItem = productosList.get(pos);
                     String ProductoID = clickedDataItem.getProduct_id();
-                    String InventarioID = clickedDataItem.getId();
+                    int InventarioID = clickedDataItem.getId();
 
                     String precio = producto.getSale_price();
                     String precio2 = producto.getSale_price2();
