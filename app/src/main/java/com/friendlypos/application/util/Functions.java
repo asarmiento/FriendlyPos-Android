@@ -16,6 +16,7 @@ import android.webkit.URLUtil;
 import android.widget.TextView;
 
 import com.friendlypos.R;
+import com.friendlypos.distribucion.modelo.Pivot;
 
 import java.net.URL;
 import java.security.MessageDigest;
@@ -25,8 +26,10 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 import java.util.regex.Matcher;
@@ -115,6 +118,20 @@ public class Functions {
         Calendar cal = Calendar.getInstance();
         return (dateFormat.format(cal.getTime())); //16:00:22
     }
+
+ /*   public static List<Pivot> getProducsByBillForPrinting(long invoice_id) {
+        List<ProductByInvoices> products = getProductsByInvoice(invoice_id);
+        List<PrintProduct> send = new ArrayList<>();
+        PrintProduct runsale;
+        for (ProductByInvoices sale : products) {
+            runsale = new PrintProduct(sale);
+            runsale.amount = sale.amount;
+            runsale.price = sale.price;
+            send.add(runsale);
+        }
+
+        return send;
+    }*/
 
 
 }

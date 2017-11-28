@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.friendlypos.R;
 import com.friendlypos.application.util.Functions;
+import com.friendlypos.application.util.PrinterFunctions;
 import com.friendlypos.distribucion.activity.DistribucionActivity;
 import com.friendlypos.distribucion.modelo.Facturas;
 import com.friendlypos.distribucion.modelo.Inventario;
@@ -90,6 +91,19 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
                 devolverFactura();
             }
         });
+
+        holder.btnImprimirFacturaCliente.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                try {
+                    PrinterFunctions.imprimirProductosDistrSelecCliente(venta, QuickContext);
+                }
+                catch (Exception e) {
+                    Functions.CreateMessage(QuickContext, "Error", e.getMessage() + "\n" + e.getStackTrace().toString());
+                }
+            }
+        });
     }
 
     @Override
@@ -102,6 +116,7 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
         private TextView txt_cliente_factura_card, txt_cliente_factura_fantasyname, txt_cliente_factura_companyname, txt_cliente_factura_numeracion;
         protected CardView cardView;
         Button btnDevolverFacturaCliente;
+        ImageButton btnImprimirFacturaCliente;
 
         public CharacterViewHolder(View view) {
             super(view);
@@ -111,6 +126,7 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
             txt_cliente_factura_companyname = (TextView) view.findViewById(R.id.txt_cliente_factura_companyname);
             txt_cliente_factura_numeracion = (TextView) view.findViewById(R.id.txt_cliente_factura_numeracion);
             btnDevolverFacturaCliente = (Button) view.findViewById(R.id.btnDevolverFacturaCliente);
+            btnImprimirFacturaCliente = (ImageButton) view.findViewById(R.id.btnImprimirFacturaCliente);
 
             cardView.setOnClickListener(new View.OnClickListener() {
 
