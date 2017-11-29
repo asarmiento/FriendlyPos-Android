@@ -15,6 +15,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -97,6 +98,9 @@ int bloquear = 0;
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         connectToPrinter();
+// TODO OBTENER USUARIO
+       String usuer =  session.getUsuarioPrefs();
+        Log.d("usuer",usuer);
     }
 
     @Override

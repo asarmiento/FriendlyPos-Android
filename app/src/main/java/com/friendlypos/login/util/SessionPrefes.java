@@ -82,6 +82,11 @@ public class SessionPrefes {
         return mPrefs.getString(PREF_USER_ACCESS_TOKEN, null);
     }
 
+    public String getUsuarioPrefs(){
+        String usuario = mPrefs.getString(PREF_USER_NAME, null);
+        return usuario;
+    }
+
 
     public void cerrarSesion(){
         // Limpiar todos los datos guardados del Usuario
