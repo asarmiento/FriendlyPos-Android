@@ -47,6 +47,7 @@ public class LoginActivity extends AppCompatActivity {
     private NetworkStateChangeReceiver networkStateChangeReceiver;
     private ProgressDialog progress;
 
+    SessionPrefes session;
 
     @Bind(R.id.usuario)
     EditText mUserIdView;
@@ -84,6 +85,12 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
         context = this;
+        session = new SessionPrefes(getApplicationContext());
+
+        if (session.isLoggedIn()){
+            startActivity(new Intent(this, LoginActivity.class));
+            finish();
+        }
         initProgressbar();
         HtmlTextView copy = (HtmlTextView) findViewById(R.id.copyright);
         copy.setHtmlFromString("<font size=\"7sp\"><a href=\"http://www.sistemasamigables.com/\">" + Functions.getVesionNaveCode(context) + " " + context.getString(R.string.credits) + "</a></font>", new HtmlTextView.LocalImageGetter());
@@ -142,8 +149,8 @@ public class LoginActivity extends AppCompatActivity {
         mFloatLabelPassword.setError(null);
 
         // Store values at the time of the login attempt.
-        String userId = mUserIdView.getText().toString();
-        String password = mPasswordView.getText().toString();
+        final String userId = mUserIdView.getText().toString();
+        final String password = mPasswordView.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
@@ -217,7 +224,7 @@ public class LoginActivity extends AppCompatActivity {
                     Log.d("fsdfsdfs", response.body().getToken_type() + " " + response.body().getAccess_token() + "");
                     // Guardar afiliado en preferencias
                     SessionPrefes.get(LoginActivity.this).guardarDatosUsuario(response.body());
-
+                    SessionPrefes.get(LoginActivity.this).guardarDatosUsuarioas(userId, password);
                     showAppointmentsScreen();
                 }
 

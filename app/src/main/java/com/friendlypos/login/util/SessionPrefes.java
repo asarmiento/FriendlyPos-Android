@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.text.TextUtils;
 
 import com.friendlypos.login.activity.LoginActivity;
+import com.friendlypos.login.modelo.User;
 import com.friendlypos.login.modelo.UserResponse;
 
 public class SessionPrefes {
@@ -15,6 +16,9 @@ public class SessionPrefes {
     public static final String PREF_USER_EXPIRES_IN = "PREF_USER_EXPIRES_IN";
     public static final String PREF_USER_ACCESS_TOKEN = "PREF_USER_ACCESS_TOKEN";
     public static final String PREF_USER_REFRESH_TOKEN = "PREF_USER_REFRESH_TOKEN";
+
+    public static final String PREF_USER_NAME = "PREF_USER_NAME";
+    public static final String PREF_USER_PASS = "PREF_USER_PASS";
 
     private final SharedPreferences mPrefs;
 
@@ -54,6 +58,21 @@ public class SessionPrefes {
             editor.putString(PREF_USER_EXPIRES_IN, userresp.getExpires_in());
             editor.putString(PREF_USER_ACCESS_TOKEN, userresp.getAccess_token());
             editor.putString(PREF_USER_REFRESH_TOKEN, userresp.getRefresh_token());
+            editor.apply();
+
+            mIsLoggedIn = true;
+        }
+    }
+
+    public void guardarDatosUsuarioas(String userName, String passWord) {
+        if (userName != null && passWord != null ) {
+            //todo revisar que es PREF_USER_EXPIRES_IN
+            // referencia https://www.timecalculator.net/milliseconds-to-date
+            SharedPreferences.Editor editor = mPrefs.edit();
+            editor.putString(PREF_USER_NAME, userName);
+            editor.putString(PREF_USER_PASS, passWord);
+           /* editor.putString(PREF_USER_ACCESS_TOKEN, userresp.getAccess_token());
+            editor.putString(PREF_USER_REFRESH_TOKEN, userresp.getRefresh_token());*/
             editor.apply();
 
             mIsLoggedIn = true;
