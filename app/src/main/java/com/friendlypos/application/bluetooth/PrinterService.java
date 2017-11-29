@@ -15,6 +15,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 
+import com.friendlypos.application.FriendlyApp;
 import com.friendlypos.principal.activity.MenuPrincipal;
 
 import java.io.IOException;
@@ -24,14 +25,11 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.Vector;
 
-/**
- * Created by Brian on 11/2/16.
- */
 
 public class PrinterService extends Service {
 
-    public static final String CLASS_NAME = "com.friendlyaccount.friendlyaccount.bluetooth.PrinterService";
-    public static final String BROADCAST_CLASS = "com.friendlyaccount.friendlyaccount.printbill";
+    public static final String CLASS_NAME = "com.friendlypos.application.bluetooth.PrinterService";
+    public static final String BROADCAST_CLASS = "com.friendlypos.printbill";
     private static final UUID UUID_SPP = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
     public static boolean stop(MenuPrincipal context){
@@ -93,7 +91,6 @@ public class PrinterService extends Service {
     @Override
     public IBinder onBind(Intent intent) {
         Log.d(TAG, "ONBIND");
-        /*mHandler = ((FriendlyApp) getApplication()).getHandler();*/
         return mBinder;
     }
 

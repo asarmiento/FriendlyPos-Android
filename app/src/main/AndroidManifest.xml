@@ -76,6 +76,15 @@
             android:name=".login.activity.ConfiguracionActivity"
             android:label="@string/title_activity_configuracion"
             android:theme="@style/AppTheme"></activity>
+
+        <service
+            android:name=".application.bluetooth.PrinterService"
+            android:exported="false"
+            android:label="BestCart Printer Service">
+            <intent-filter>
+                <action android:name="com.friendlypos.application.bluetooth.PrinterService" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

@@ -19,8 +19,8 @@ public class BluetoothActivity extends AppCompatActivity implements NetworkState
 
     public void getPreferences() {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-        printer_enabled = sharedPref.getBoolean("pref_results_display", true);
-        printer = sharedPref.getString("pref_external_display", "");
+        printer_enabled = sharedPref.getBoolean("pref_usar_impresora", true);
+        printer = sharedPref.getString("pref_conectar_bluetooth", "");
     }
 
     @Override

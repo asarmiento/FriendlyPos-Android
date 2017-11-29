@@ -419,7 +419,7 @@ public class PrinterFunctions {
 
     }
 
-    public static void datosImprimirLiquidacion(Context QuickContext) {
+    /*public static void datosImprimirLiquidacion(Context QuickContext) {
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(QuickContext);
         String prefList = sharedPreferences.getString("pref_selec_impresora","Impresora Zebra");
@@ -512,7 +512,7 @@ public class PrinterFunctions {
     public static void imprimirLiquidacionMenu(final Context QuickContext) {
         /*if(!Functions.blueToothDevicePair(QuickContext)){
             Functions.CreateMessage(QuickContext,"Impresión","Porfavor conecte una impresora para imprimir.");
-        }else {*/
+        }else {
         AlertDialog.Builder builder = new AlertDialog.Builder(QuickContext);
         builder.setTitle("¿Desea imprimir la lista de liquidación?");
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -530,8 +530,8 @@ public class PrinterFunctions {
         });
         builder.show();
         //}
-    }
-
+    }*/
+/*
     private static String getPrintSalesCash()
     {
         String send = "";
@@ -624,5 +624,5 @@ public class PrinterFunctions {
             }
         }
         return send;
-    }
+    }*/
 }

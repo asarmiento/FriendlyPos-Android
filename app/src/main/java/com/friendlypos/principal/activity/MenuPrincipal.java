@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.friendlypos.R;
 import com.friendlypos.app.broadcastreceiver.NetworkStateChangeReceiver;
 
+import com.friendlypos.application.bluetooth.PrinterService;
 import com.friendlypos.application.util.PrinterFunctions;
 import com.friendlypos.distribucion.activity.DistribucionActivity;
 
@@ -95,6 +96,7 @@ int bloquear = 0;
             this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+        connectToPrinter();
     }
 
     @Override
@@ -103,7 +105,22 @@ int bloquear = 0;
         getMenuInflater().inflate(R.menu.menu_principal, menu);
         return true;
     }
-
+    private void connectToPrinter() {
+        getPreferences();
+        if (printer_enabled) {
+            if (printer == null || printer.equals("")) {
+//                AlertDialog d = new AlertDialog.Builder(context)
+//                        .setTitle(getResources().getString(R.string.printer_alert))
+//                        .setMessage(getResources().getString(R.string.message_printer_not_found))
+//                        .setNegativeButton(getString(android.R.string.ok), null)
+//                        .show();
+            } else {
+                if (!isServiceRunning(PrinterService.CLASS_NAME)) {
+                    PrinterService.startRDService(getApplicationContext(), printer);
+                }
+            }
+        }
+    }
 
     @Override
     public void onBackPressed() {
@@ -226,7 +243,7 @@ int bloquear = 0;
                 break;
 
             case R.id.btn_imprimir_liquidacion:
-                PrinterFunctions.imprimirLiquidacionMenu(MenuPrincipal.this);
+                /*PrinterFunctions.imprimirLiquidacionMenu(MenuPrincipal.this);*/
                 Toast.makeText(MenuPrincipal.this, "imprimir liquidacion", Toast.LENGTH_SHORT).show();
                 break;
 
