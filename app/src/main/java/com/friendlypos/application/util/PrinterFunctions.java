@@ -23,6 +23,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import io.realm.Realm;
+import io.realm.RealmList;
 import io.realm.RealmResults;
 
 public class PrinterFunctions {
@@ -419,15 +420,15 @@ public class PrinterFunctions {
 
     }
 
-    /*public static void datosImprimirLiquidacion(Context QuickContext) {
+    public static void datosImprimirLiquidacion(Context QuickContext) {
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(QuickContext);
         String prefList = sharedPreferences.getString("pref_selec_impresora","Impresora Zebra");
         String preview = "";
 
-        String salesCash = getPrintSalesCash();
-        String salesCredit = getPrintSalesCredit();
-        String receipts = getPrintReceipts();
+        //String salesCash = getPrintSalesCash();
+            String salesCredit = getPrintProductInvoices();
+       // String receipts = getPrintReceipts();
         String billptype = "L i q u i d a c i o n";
 
         if (prefList.equals("1")){
@@ -445,11 +446,11 @@ public class PrinterFunctions {
                     "#     Factura           Fecha         Monto\r\n" +
                     "------------------------------------------------\r\n" +
                     "! U1 SETLP 7 0 10\r\n" +
-                    salesCash +
+               //     salesCash +
                     "\r\n" +
                     "\r\n" +
                     "------------------------------------------------\r\n" +
-                    "#     Total " + Functions.doubleToString(printSalesCashTotal) + "\r\n" +
+                  //  "#     Total " + Functions.doubleToString(printSalesCashTotal) + "\r\n" +
                     "\r\n" +
                     "\r\n" +
                     "Facturas al Credito \r\n" +
@@ -462,7 +463,7 @@ public class PrinterFunctions {
                     "\r\n" +
                     "\r\n" +
                     "------------------------------------------------\r\n" +
-                    "#     Total " + Functions.doubleToString(printSalesCreditTotal) + "\r\n" +
+                    "#     Total " + Functions.doubleToString(printSalesCashTotal) + "\r\n" +
                     "\r\n" +
                     "\r\n" +
                     "Recibos \r\n" +
@@ -472,15 +473,15 @@ public class PrinterFunctions {
                     "#     Recibo           Fecha         Monto\r\n" +
                     "------------------------------------------------\r\n" +
                     "! U1 SETLP 7 0 10\r\n" +
-                    receipts +
+                 //   receipts +
                     " \r\n" +
                     " \r\n" +
                     "------------------------------------------------\r\n" +
-                    "#     Total " + Functions.doubleToString(printReceiptsTotal) + "\r\n" +
+               //     "#     Total " + Functions.doubleToString(printReceiptsTotal) + "\r\n" +
                     "\r\n" +
                     "\r\n" +
                     "------------------------------------------------\r\n" +
-                    "#     Total " + Functions.doubleToString(printSalesCashTotal + printSalesCreditTotal + printReceiptsTotal) + "\r\n" +
+                //    "#     Total " + Functions.doubleToString(printSalesCashTotal + printSalesCreditTotal + printReceiptsTotal) + "\r\n" +
                     " \r\n" +
                     " \r\n" +
                     " \r\n" +
@@ -498,7 +499,7 @@ public class PrinterFunctions {
           //  preview += Html.fromHtml("<h1>") + "Usuario: " + getUserName(QuickContext) + Html.fromHtml("</h1><br/><br/>");
             preview += Html.fromHtml("<h1>") +  "#     Factura           Fecha         Monto" + Html.fromHtml("</h1></center><br/>");
             preview += Html.fromHtml("<h1>") +  "------------------------------------------------" + Html.fromHtml("</h1></center><br/>");
-            preview += Html.fromHtml("<h1>") +   receipts + Html.fromHtml("</h1></center><br/>");
+           // preview += Html.fromHtml("<h1>") +   receipts + Html.fromHtml("</h1></center><br/>");
             preview += Html.fromHtml("<h1>") +  "#     Total " + Functions.doubleToString(printReceiptsTotal) + Html.fromHtml("</h1><br/><br/><br/>");
             preview += Html.fromHtml("<h1>") +  "#     Total " + Functions.doubleToString(printSalesCashTotal + printSalesCreditTotal + printReceiptsTotal) + Html.fromHtml("</h1><br/><br/><br/>");
 
@@ -510,9 +511,7 @@ public class PrinterFunctions {
     }
 
     public static void imprimirLiquidacionMenu(final Context QuickContext) {
-        /*if(!Functions.blueToothDevicePair(QuickContext)){
-            Functions.CreateMessage(QuickContext,"Impresión","Porfavor conecte una impresora para imprimir.");
-        }else {
+
         AlertDialog.Builder builder = new AlertDialog.Builder(QuickContext);
         builder.setTitle("¿Desea imprimir la lista de liquidación?");
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -530,99 +529,40 @@ public class PrinterFunctions {
         });
         builder.show();
         //}
-    }*/
-/*
-    private static String getPrintSalesCash()
-    {
+    }
+
+    private static String getPrintProductInvoices() {
         String send = "";
+
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String currentDateandTime = sdf.format(new Date());
-        List<Sales> salesList1 = new Select().all().from(Sales.class).where(Condition.column(Sales$Table.SALE_TYPE).eq(1)).and
-                (Condition.column(Sales$Table.DATE).greaterThanOrEq(currentDateandTime))
-                .orderBy(false, Sales$Table.DATE).queryList();
 
-        int count = 0;
-        if (salesList1.isEmpty()) {
+        Realm realm = Realm.getDefaultInstance();
+        RealmResults<Facturas> result = realm.where(Facturas.class).equalTo("date", currentDateandTime).findAll();
+
+        if (result.isEmpty()) {
             send = "No hay facturas emitidas";
         } else {
             printSalesCashTotal= 0.0;
-            for (Sales model : salesList1) {
-                if (model.invoice.payment.id == 1) {
+            for (int i = 0; i < result.size(); i++) {
+                Facturas fact = realm.where(Facturas.class).equalTo("date", currentDateandTime).findFirst();
+                String factNum = fact.getNumeration();
+                String factFecha = fact.getDate();
+                String factTotal = fact.getTotal();
 
-
-                    if (model.distributor == Boolean.FALSE && model.returned == Boolean.FALSE) {
-                        count++;
-                        send += String.format("%s  %s  %-10s", model.invoice.numeration, Functions.getDateSpanishF(model.date), Functions.doubleToString(model.invoice.total)) + "\r\n";
-                        send += "------------------------------------------------\r\n";
-                        printSalesCashTotal = printSalesCashTotal + model.invoice.total;
-
-                    }
+                double parsed;
+                try {
+                    parsed = Double.parseDouble(factTotal);
+                } catch (NumberFormatException e) {
+                    parsed = 0.00;
                 }
 
-
-
-            }
-
-            if (count == 0) {
-                send = "No hay facturas emitidas al contado";
+               // double total = Double.parseDouble(factTotal);
+                send += String.format("%-5s      %.20s      %-6s", factNum, factFecha, factTotal) + "\r\n";
+                printSalesCashTotal = printSalesCashTotal + parsed;
+                Log.d("FACTPRODTODFAC", send + "");
             }
         }
         return send;
     }
-
-
-    private static String getPrintReceipts() {
-        String send = "";
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        String currentDateandTime = sdf.format(new Date());
-
-        List<Receipts> salesList1 = new Select().all().from(Receipts.class).
-                where(Condition.column(Receipts$Table.DATE).greaterThanOrEq(currentDateandTime)).orderBy(false, Receipts$Table.DATE).queryList();
-
-        if (salesList1.isEmpty()) {
-            send = "No hay recibos emitidos";
-        } else {
-            printReceiptsTotal= 0.0;
-            for (Receipts model : salesList1) {
-                send += String.format("%s  %s  %,.2f", model.reference, Functions.getDateSpanishF(model.date), model.balance) + "\r\n";
-                send += "------------------------------------------------\r\n";
-                printReceiptsTotal = printReceiptsTotal + model.balance;
-            }
-        }
-
-        return send;
-    }
-
-    private static String getPrintSalesCredit() {
-        String send = "";
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        String currentDateandTime = sdf.format(new Date());
-        List<Sales> salesList1 = new Select().all().from(Sales.class).where(
-                Condition.column(Sales$Table.SALE_TYPE).eq(1)).
-                and(Condition.column(Sales$Table.DATE).greaterThanOrEq(currentDateandTime))
-                .orderBy(false, Sales$Table.DATE).queryList();
-
-        int count = 0;
-        if (salesList1.isEmpty()) {
-            send = "No hay facturas emitidas";
-        } else {
-            printSalesCreditTotal= 0.0;
-            for (Sales model : salesList1) {
-                if (model.invoice.payment.id == 2) {
-                    if (model.distributor == Boolean.FALSE && model.returned == Boolean.FALSE) {
-                        count++;
-                        send += String.format("%s  %s  %-10s", model.invoice.numeration, Functions.getDateSpanishF(model.date), Functions.doubleToString(model.invoice.total)) + "\r\n";
-                        send += "------------------------------------------------\r\n";
-                        printSalesCreditTotal = printSalesCreditTotal + model.invoice.total;
-                    }
-                }
-
-            }
-
-            if (count == 0) {
-                send = "No hay facturas emitidas al contado";
-            }
-        }
-        return send;
-    }*/
 }

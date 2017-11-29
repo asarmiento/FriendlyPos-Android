@@ -243,7 +243,7 @@ int bloquear = 0;
                 break;
 
             case R.id.btn_imprimir_liquidacion:
-                /*PrinterFunctions.imprimirLiquidacionMenu(MenuPrincipal.this);*/
+                PrinterFunctions.imprimirLiquidacionMenu(MenuPrincipal.this);
                 Toast.makeText(MenuPrincipal.this, "imprimir liquidacion", Toast.LENGTH_SHORT).show();
                 break;
 
