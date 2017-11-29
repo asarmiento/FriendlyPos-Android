@@ -223,8 +223,8 @@ public class LoginActivity extends AppCompatActivity {
                     }
                     Log.d("fsdfsdfs", response.body().getToken_type() + " " + response.body().getAccess_token() + "");
                     // Guardar afiliado en preferencias
-                    SessionPrefes.get(LoginActivity.this).guardarDatosUsuario(response.body());
-                    SessionPrefes.get(LoginActivity.this).guardarDatosUsuarioas(userId, password);
+                    session.guardarDatosUsuario(response.body());
+                    session.guardarDatosUsuarioas(userId, password);
                     showAppointmentsScreen();
                 }
 

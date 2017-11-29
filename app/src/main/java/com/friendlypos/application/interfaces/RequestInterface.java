@@ -9,6 +9,7 @@ import com.friendlypos.distribucion.modelo.TipoProductoResponse;
 import com.friendlypos.distribucion.modelo.VentaResponse;
 import com.friendlypos.login.modelo.User;
 import com.friendlypos.login.modelo.UserResponse;
+import com.friendlypos.login.modelo.UsuariosResponse;
 import com.friendlypos.principal.modelo.ClientesResponse;
 import com.friendlypos.distribucion.modelo.InventarioResponse;
 import com.friendlypos.principal.modelo.ProductosResponse;
@@ -40,6 +41,9 @@ public interface RequestInterface {
 
     @GET("api/donwload-info-business")
     Call<TipoProductoResponse> getTipoProducto(@Header("Authorization") String token);
+
+    @GET("api/donwload-info-business")
+    Call<UsuariosResponse> getUsuariosRetrofit(@Header("Authorization") String token);
 
     @GET("api/donwload-inventory-products")
     Call<InventarioResponse> getInventory(@Header("Authorization") String token);
