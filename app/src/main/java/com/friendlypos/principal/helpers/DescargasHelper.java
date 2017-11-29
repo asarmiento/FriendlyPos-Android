@@ -141,7 +141,7 @@ public class DescargasHelper {
                         finally {
                             realmUsuarios.close();
                         }
-                        Log.d(DescargasHelper.class.getName()+"USUARIOS", mContentsArrayUsuarios.toString());
+                        Log.d(DescargasHelper.class.getName()+"USUARIOSRE", mContentsArrayUsuarios.toString());
                         //  Toast.makeText(DescargarInventario.this, getString(R.string.success), Toast.LENGTH_SHORT).show();
                     }
                     else {
