@@ -14,6 +14,8 @@ import com.friendlypos.distribucion.modelo.Inventario;
 import com.friendlypos.distribucion.modelo.InventarioResponse;
 import com.friendlypos.distribucion.modelo.Marcas;
 import com.friendlypos.distribucion.modelo.MarcasResponse;
+import com.friendlypos.distribucion.modelo.MetodoPago;
+import com.friendlypos.distribucion.modelo.MetodoPagoResponse;
 import com.friendlypos.distribucion.modelo.ProductoFactura;
 import com.friendlypos.distribucion.modelo.TipoProducto;
 import com.friendlypos.distribucion.modelo.TipoProductoResponse;
@@ -44,20 +46,12 @@ public class DescargasHelper {
     private NetworkStateChangeReceiver networkStateChangeReceiver;
     private Activity activity;
     private Context mContext;
-    private Realm realm, realm2, realmSysconfig, realmMarcas, realmTipoProducto, realmVentas, realmPivot, realmUsuarios;
+    private Realm realm, realm2, realmSysconfig, realmMarcas, realmTipoProducto,realmUsuarios, realmMetodoPago;
 
     public DescargasHelper(Activity activity) {
         this.activity = activity;
         this.mContext = activity;
         networkStateChangeReceiver = new NetworkStateChangeReceiver();
-        realm = Realm.getDefaultInstance();
-        realm2 = Realm.getDefaultInstance();
-        realmMarcas = Realm.getDefaultInstance();
-        realmTipoProducto = Realm.getDefaultInstance();
-        realmUsuarios = Realm.getDefaultInstance();
-        realmVentas = Realm.getDefaultInstance();
-        realmPivot = Realm.getDefaultInstance();
-        realmSysconfig = Realm.getDefaultInstance();
     }
 
     public void descargarCatalogo(Context context) {
@@ -69,6 +63,7 @@ public class DescargasHelper {
         final ArrayList<Productos> mContentsArray2 = new ArrayList<>();
         final ArrayList<Marcas> mContentsArrayMarcas = new ArrayList<>();
         final ArrayList<TipoProducto> mContentsArrayTipoProducto = new ArrayList<>();
+        final ArrayList<MetodoPago> mContentsArrayMetodoPago = new ArrayList<>();
         final ArrayList<Usuarios> mContentsArrayUsuarios = new ArrayList<>();
         final ProgressDialog dialog = new ProgressDialog(context);
         dialog.setMessage("Cargando lista de catálogo");
@@ -197,7 +192,45 @@ public class DescargasHelper {
                 }
             });
 
+// TODO descarga Usuarios
+            Call<MetodoPagoResponse> callMetodoPago = api.getMetodoPago(token);
+            callMetodoPago.enqueue(new Callback<MetodoPagoResponse>() {
 
+                @Override
+                public void onResponse(Call<MetodoPagoResponse> callMetodoPago, Response<MetodoPagoResponse> response) {
+                    mContentsArrayMetodoPago.clear();
+
+
+                    if (response.isSuccessful()) {
+                        mContentsArrayMetodoPago.addAll(response.body().getMetodoPago());
+
+                        try {
+                            realmMetodoPago = Realm.getDefaultInstance();
+
+                            // Work with Realm
+                            realmMetodoPago.beginTransaction();
+                            realmMetodoPago.copyToRealmOrUpdate(mContentsArrayUsuarios);
+                            realmMetodoPago.commitTransaction();
+                            //realm.close();
+                        }
+                        finally {
+                            realmMetodoPago.close();
+                        }
+                        Log.d(DescargasHelper.class.getName()+"USUARIOSRE", mContentsArrayMetodoPago.toString());
+                        //  Toast.makeText(DescargarInventario.this, getString(R.string.success), Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        //  Toast.makeText(DescargarInventario.this, getString(R.string.error) + " CODE: " +response.code(), Toast.LENGTH_LONG).show();
+                        RealmResults<MetodoPago> results = realmMetodoPago.where(MetodoPago.class).findAll();
+                        mContentsArrayMetodoPago.addAll(results);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<MetodoPagoResponse> callMarcas, Throwable t) {
+                    // Toast.makeText(context, getString(R.string.error), Toast.LENGTH_LONG).show();
+                }
+            });
 
             // TODO descarga Tipo Productos
             Call<TipoProductoResponse> callTipoProducto = api.getTipoProducto(token);
@@ -252,6 +285,9 @@ public class DescargasHelper {
                         mContentsArray2.addAll(response2.body().getProductos());
 
                         try {
+
+                            realm2 = Realm.getDefaultInstance();
+
                             realm2.beginTransaction();
                             //TODO verificar cada cuanto se va a actualizar el inventario.
                             //realm.copyToRealm(mContentsArray2);
@@ -514,6 +550,7 @@ public class DescargasHelper {
                         mContentsArraySys.addAll(response2.body().getSysconf());
 
                         try {
+                            realmSysconfig = Realm.getDefaultInstance();
                             realmSysconfig.beginTransaction();
                             //TODO verificar cada cuanto se va a actualizar el inventario.
                             //realm.copyToRealm(mContentsArray2);

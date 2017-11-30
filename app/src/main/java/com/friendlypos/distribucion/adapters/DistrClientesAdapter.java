@@ -140,7 +140,6 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
                     selected_position = getAdapterPosition();
                     notifyItemChanged(selected_position);
 
-
                         Venta clickedDataItem = contentList.get(pos);
                         facturaID = clickedDataItem.getInvoice_id();
 

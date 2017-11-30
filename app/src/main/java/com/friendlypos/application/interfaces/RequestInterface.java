@@ -3,6 +3,7 @@ package com.friendlypos.application.interfaces;
 
 import com.friendlypos.distribucion.modelo.FacturasResponse;
 import com.friendlypos.distribucion.modelo.MarcasResponse;
+import com.friendlypos.distribucion.modelo.MetodoPagoResponse;
 import com.friendlypos.distribucion.modelo.PivotResponse;
 import com.friendlypos.distribucion.modelo.ProductoFacturaResponse;
 import com.friendlypos.distribucion.modelo.TipoProductoResponse;
@@ -41,6 +42,9 @@ public interface RequestInterface {
 
     @GET("api/donwload-info-business")
     Call<TipoProductoResponse> getTipoProducto(@Header("Authorization") String token);
+
+    @GET("api/donwload-info-business")
+    Call<MetodoPagoResponse> getMetodoPago(@Header("Authorization") String token);
 
     @GET("api/donwload-info-business")
     Call<UsuariosResponse> getUsuariosRetrofit(@Header("Authorization") String token);
