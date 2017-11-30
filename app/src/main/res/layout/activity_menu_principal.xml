@@ -58,12 +58,11 @@
                         android:layout_marginTop="22dp" />
 
                     <TextView
-                        android:id="@+id/textView2"
+                        android:id="@+id/txtNombreUsuario"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
                         android:gravity="center"
                         android:paddingTop="15dp"
-                        android:text="USUARIO"
                         android:textAppearance="?android:textAppearanceLarge"
                         android:layout_alignParentBottom="true"
                         android:layout_alignParentLeft="true"
@@ -212,7 +211,7 @@
 
                 <LinearLayout
                     android:id="@+id/clickVentaDirecta"
-                    android:onClick="ClickNavigation"
+                    android:onClick="onClickGo"
                     android:background="@color/divider"
                     android:layout_width="match_parent"
                     android:layout_height="80dp"
@@ -252,7 +251,7 @@
 
                 <LinearLayout
                     android:id="@+id/clickPreventa"
-                    android:onClick="ClickNavigation"
+                    android:onClick="onClickGo"
                     android:background="@color/divider"
                     android:layout_width="match_parent"
                     android:layout_height="80dp"
@@ -292,7 +291,7 @@
 
                 <LinearLayout
                     android:id="@+id/clickReportes"
-                    android:onClick="ClickNavigation"
+                    android:onClick="onClickGo"
                     android:background="@color/divider"
                     android:layout_width="match_parent"
                     android:layout_height="80dp"

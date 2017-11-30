@@ -17,6 +17,9 @@ import com.friendlypos.login.util.SessionPrefes;
 import com.friendlypos.principal.modelo.Clientes;
 import com.friendlypos.principal.modelo.Sysconf;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -31,6 +34,7 @@ public class PrinterFunctions {
     private static double printSalesCashTotal;
     private static double printSalesCreditTotal;
     private static double printReceiptsTotal;
+    private static double printSalesCashTotal1;
 
     public static void datosImprimirDistrTotal(int type, Venta venta, Context QuickContext, int ptype) {
         String stype = "";
@@ -432,6 +436,7 @@ public class PrinterFunctions {
         String billptype = "L i q u i d a c i o n";
 
         if (prefList.equals("1")){
+
             String bill = "! U1 JOURNAl\r\n" +
                     "! U1 SETLP 0 0 0\r\n" +
                     "\r\n" +
@@ -446,19 +451,6 @@ public class PrinterFunctions {
                     "#     Factura           Fecha         Monto\r\n" +
                     "------------------------------------------------\r\n" +
                     "! U1 SETLP 7 0 10\r\n" +
-               //     salesCash +
-                    "\r\n" +
-                    "\r\n" +
-                    "------------------------------------------------\r\n" +
-                  //  "#     Total " + Functions.doubleToString(printSalesCashTotal) + "\r\n" +
-                    "\r\n" +
-                    "\r\n" +
-                    "Facturas al Credito \r\n" +
-                    "! U1 LMARGIN 0\r\n" +
-                    "! U1 SETSP 0\r\n" +
-                    "#     Factura           Fecha         Monto\r\n" +
-                    "------------------------------------------------\r\n" +
-                    "! U1 SETLP 7 0 10\r\n" +
                     salesCredit +
                     "\r\n" +
                     "\r\n" +
@@ -466,7 +458,7 @@ public class PrinterFunctions {
                     "#     Total " + Functions.doubleToString(printSalesCashTotal) + "\r\n" +
                     "\r\n" +
                     "\r\n" +
-                    "Recibos \r\n" +
+                   /* "Recibos \r\n" +
                     "! U1 LMARGIN 0\r\n" +
                     "! U1 SETSP 0\r\n" +
                     " \n\n" +
@@ -479,9 +471,9 @@ public class PrinterFunctions {
                     "------------------------------------------------\r\n" +
                //     "#     Total " + Functions.doubleToString(printReceiptsTotal) + "\r\n" +
                     "\r\n" +
-                    "\r\n" +
+                    "\r\n" +*/
                     "------------------------------------------------\r\n" +
-                //    "#     Total " + Functions.doubleToString(printSalesCashTotal + printSalesCreditTotal + printReceiptsTotal) + "\r\n" +
+                   "#     Total " + Functions.doubleToString(printSalesCashTotal + printSalesCreditTotal + printReceiptsTotal) + "\r\n" +
                     " \r\n" +
                     " \r\n" +
                     " \r\n" +
@@ -545,24 +537,20 @@ public class PrinterFunctions {
         } else {
             printSalesCashTotal= 0.0;
             for (int i = 0; i < result.size(); i++) {
-                Facturas fact = realm.where(Facturas.class).equalTo("date", currentDateandTime).findFirst();
-                String factNum = fact.getNumeration();
-                String factFecha = fact.getDate();
-                String factTotal = fact.getTotal();
 
-                double parsed;
-                try {
-                    parsed = Double.parseDouble(factTotal);
-                } catch (NumberFormatException e) {
-                    parsed = 0.00;
-                }
+                List<Facturas> salesList1 = realm.where(Facturas.class).equalTo("date", currentDateandTime).findAll();
 
-               // double total = Double.parseDouble(factTotal);
+                String factNum = salesList1.get(i).getNumeration();
+                String factFecha = salesList1.get(i).getDate();
+                double factTotal = Functions.sGetDecimalStringAnyLocaleAsDouble(salesList1.get(i).getTotal());
+
                 send += String.format("%-5s      %.20s      %-6s", factNum, factFecha, factTotal) + "\r\n";
-                printSalesCashTotal = printSalesCashTotal + parsed;
+                printSalesCashTotal = printSalesCashTotal + factTotal;
                 Log.d("FACTPRODTODFAC", send + "");
             }
         }
         return send;
     }
+
+
 }

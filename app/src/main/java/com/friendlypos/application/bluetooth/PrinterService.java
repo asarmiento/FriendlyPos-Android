@@ -72,7 +72,7 @@ public class PrinterService extends Service {
         if (prefExternalDisplay == null || prefExternalDisplay.equals("")) return;
 
         Intent serviceIntent = new Intent(context, PrinterService.class);
-        serviceIntent.putExtra(BT_DEVICE, prefExternalDisplay);
+     serviceIntent.putExtra(BT_DEVICE, prefExternalDisplay);
         context.startService(serviceIntent);
     }
 

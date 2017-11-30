@@ -20,6 +20,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.friendlypos.R;
@@ -29,6 +30,7 @@ import com.friendlypos.application.bluetooth.PrinterService;
 import com.friendlypos.application.util.PrinterFunctions;
 import com.friendlypos.distribucion.activity.DistribucionActivity;
 
+import com.friendlypos.login.activity.LoginActivity;
 import com.friendlypos.login.util.SessionPrefes;
 import com.friendlypos.principal.fragment.ConfiguracionFragment;
 import com.friendlypos.principal.helpers.DescargasHelper;
@@ -52,7 +54,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
     private static String POPUP_CONSTANT = "mPopup";
     private static String POPUP_FORCE_SHOW_ICON = "setForceShowIcon";
     private NetworkStateChangeReceiver networkStateChangeReceiver;
-int bloquear = 0;
+    int bloquear = 0;
     @Bind(R.id.clickClientes)
     LinearLayout clickClientes;
 
@@ -77,6 +79,9 @@ int bloquear = 0;
     @Bind(R.id.drawer)
     DrawerLayout drawer;
 
+    @Bind(R.id.txtNombreUsuario)
+    TextView txtNombreUsuario;
+
     SessionPrefes session;
     DescargasHelper download1;
 
@@ -94,13 +99,22 @@ int bloquear = 0;
         download1 = new DescargasHelper(MenuPrincipal.this);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-            this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         connectToPrinter();
+
+        // Redirección al Login
+        if (!session.isLoggedIn()) {
+            startActivity(new Intent(this, LoginActivity.class));
+            finish();
+        } else {
+
 // TODO OBTENER USUARIO
-       String usuer =  session.getUsuarioPrefs();
-        Log.d("usuer",usuer);
+            String usuer = session.getUsuarioPrefs();
+            Log.d("usuer", usuer);
+            //
+        }
     }
 
     @Override
@@ -109,6 +123,7 @@ int bloquear = 0;
         getMenuInflater().inflate(R.menu.menu_principal, menu);
         return true;
     }
+
     private void connectToPrinter() {
         getPreferences();
         if (printer_enabled) {
@@ -131,8 +146,8 @@ int bloquear = 0;
 
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        }
-        else {
+            txtNombreUsuario.setText("oscar");
+        } else {
             super.onBackPressed();
         }
     }
@@ -157,20 +172,18 @@ int bloquear = 0;
                     break;
                 }
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         popup.getMenuInflater().inflate(R.menu.popup_menu, popup.getMenu());
         popup.setOnMenuItemClickListener(this);
         Menu popupMenu = popup.getMenu();
 
-        if (bloquear == 0){
+        if (bloquear == 0) {
             //bloqueados
             popupMenu.findItem(R.id.btn_descargar_catalogo).setEnabled(false);
             popupMenu.findItem(R.id.btn_descargar_inventario).setEnabled(false);
-        }
-        else if(bloquear == 1) {
+        } else if (bloquear == 1) {
             //desbloqueados
             popupMenu.findItem(R.id.btn_descargar_catalogo).setEnabled(true);
             popupMenu.findItem(R.id.btn_descargar_inventario).setEnabled(true);
@@ -179,14 +192,13 @@ int bloquear = 0;
     }
 
 
-
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_cerrarsesion:
 
                 AlertDialog alertDialog = new AlertDialog.Builder(
-                    MenuPrincipal.this).setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                        MenuPrincipal.this).setPositiveButton("Si", new DialogInterface.OnClickListener() {
 
                     public void onClick(DialogInterface dialog, int which) {
                         // Write your code here to execute after dialog closed
@@ -195,16 +207,16 @@ int bloquear = 0;
                     }
 
                 }).setNegativeButton(
-                    "No", new DialogInterface.OnClickListener() {
+                        "No", new DialogInterface.OnClickListener() {
 
-                        public void onClick(DialogInterface dialog, int which) {
-                            // Write your code here to execute after dialog closed
-                            //customer = cust;
-                            dialog.cancel();
-                            //new getDataClient().execute();
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Write your code here to execute after dialog closed
+                                //customer = cust;
+                                dialog.cancel();
+                                //new getDataClient().execute();
+                            }
+
                         }
-
-                    }
                 ).create();
 
                 alertDialog.setMessage("Seguro que quiere cerrar Sesion?");
@@ -217,31 +229,30 @@ int bloquear = 0;
                 bloquear = 1;
                 Toast.makeText(MenuPrincipal.this, "descargar_datosEmpresa", Toast.LENGTH_SHORT).show();
                 download1.descargarDatosEmpresa(MenuPrincipal.this);
-
                 break;
 
             case R.id.btn_descargar_catalogo:
-
                 Toast.makeText(MenuPrincipal.this, "descargar_catalogo", Toast.LENGTH_SHORT).show();
                 download1.descargarCatalogo(MenuPrincipal.this);
-
                 break;
-            case R.id.btn_descargar_inventario:
 
+            case R.id.btn_descargar_inventario:
                 Toast.makeText(MenuPrincipal.this, "descargar_inventario", Toast.LENGTH_SHORT).show();
                 download1.descargarInventario(MenuPrincipal.this);
-
                 break;
 
             case R.id.btn_descargar_deudas:
-                Toast.makeText(MenuPrincipal.this, "descargar_deudas", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Botón no disponible por el momento", Toast.LENGTH_SHORT).show();
                 break;
+
             case R.id.btn_subir_recibos:
                 Toast.makeText(MenuPrincipal.this, "subir_recibos", Toast.LENGTH_SHORT).show();
                 break;
+
             case R.id.btn_subir_ventas:
                 Toast.makeText(MenuPrincipal.this, "subir_ventas", Toast.LENGTH_SHORT).show();
                 break;
+
             case R.id.btn_devolver_inventario:
                 Toast.makeText(MenuPrincipal.this, "devolver_inventario", Toast.LENGTH_SHORT).show();
                 break;
@@ -255,8 +266,6 @@ int bloquear = 0;
         }
         return false;
     }
-
-
 
 
     /* @SuppressWarnings("StatementWithEmptyBody")
@@ -301,64 +310,14 @@ int bloquear = 0;
 
         switch (view.getId()) {
 
-          /*   case R.id.clickClientes:
-                Toast.makeText(this, "distribucion", Toast.LENGTH_SHORT).show();
-
-                 fragmentClass = BlankFragment.class;
-           clk1.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.button_clickb, null));
-                clk2.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.button_click, null));
-                clk3.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.button_click, null));
-                clk4.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.button_click, null));
-                break;*/
-
-           /* case R.id.clickDistribucion:
-                Toast.makeText(this, "distribucion", Toast.LENGTH_SHORT).show();
-
-               /*  fragmentClass = ProductosFragment.class;
-            clk1.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.button_clickb, null));
-                clk2.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.button_click, null));
-                clk3.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.button_click, null));
-                clk4.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.button_click, null));
-                break;*/
-            case R.id.clickVentaDirecta:
-                Toast.makeText(this, "ventadirecta", Toast.LENGTH_SHORT).show();
-
-                /*fragmentClass = FragmentB.class;
-                clk1.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.button_click, null));
-                clk2.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.button_clickb, null));
-                clk3.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.button_click, null));
-                clk4.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.button_click, null));*/
-                break;
-            case R.id.clickPreventa:
-                Toast.makeText(this, "preventa", Toast.LENGTH_SHORT).show();
-
-             /*   fragmentClass = FragmentC.class;
-              clk1.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.button_click, null));
-                clk2.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.button_click, null));
-                clk3.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.button_clickb, null));
-                clk4.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.button_click, null));*/
-                break;
-            case R.id.clickReportes:
-                Toast.makeText(this, "reportes", Toast.LENGTH_SHORT).show();
-
-                /*fragmentClass = FragmentD.class;
-               clk1.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.button_click, null));
-                clk2.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.button_click, null));
-                clk3.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.button_click, null));
-                clk4.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.button_clickb, null));*/
-                break;
             case R.id.clickConfig:
                 fragmentClass = ConfiguracionFragment.class;
-            /*   clk1.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.button_click, null));
-                clk2.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.button_click, null));
-                clk3.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.button_click, null));
-                clk4.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.button_clickb, null));*/
+
                 break;
         }
         try {
             fragment = (Fragment) fragmentClass.newInstance();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }// Insert the fragment by replacing any existing fragment
         FragmentManager fragmentManager = getFragmentManager();
@@ -393,6 +352,18 @@ int bloquear = 0;
                 startActivity(dist);
                 finish();
 
+                break;
+
+            case R.id.clickVentaDirecta:
+                Toast.makeText(this, "Botón no disponible por el momento", Toast.LENGTH_SHORT).show();
+                break;
+
+            case R.id.clickPreventa:
+                Toast.makeText(this, "Botón no disponible por el momento", Toast.LENGTH_SHORT).show();
+                break;
+
+            case R.id.clickReportes:
+                Toast.makeText(this, "Botón no disponible por el momento", Toast.LENGTH_SHORT).show();
                 break;
 
         }

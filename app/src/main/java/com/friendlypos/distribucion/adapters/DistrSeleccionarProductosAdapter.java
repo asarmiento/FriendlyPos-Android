@@ -48,6 +48,8 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
     private static double producto_amount_dist_add = 0;
     private static double producto_descuento_add = 0;
     private int selected_position = -1;
+
+
     // private static String productoAmountDistAdd, productoDescuentoAdd, subTotalExento, descuentoCliente, subTotal, Total;
     String idProducto;
     int nextId;
@@ -94,6 +96,9 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
         realm.close();
 
         holder.fillData(producto);
+
+        holder.txt_producto_factura_nombre.setText(description);
+
         holder.txt_producto_factura_nombre.setText(description);
         holder.txt_producto_factura_marca.setText("Marca: " + marca2);
         holder.txt_producto_factura_tipo.setText("Tipo: " + tipoProducto);
@@ -281,7 +286,7 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
 
     public class CharacterViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView txt_producto_factura_nombre, txt_producto_factura_marca, txt_producto_factura_tipo, txt_producto_factura_precio, txt_producto_factura_disponible, txt_producto_factura_seleccionado;
+        private TextView creditoLimite, txt_producto_factura_nombre, txt_producto_factura_marca, txt_producto_factura_tipo, txt_producto_factura_precio, txt_producto_factura_disponible, txt_producto_factura_seleccionado;
         protected CardView cardView;
 
         public CharacterViewHolder(View view) {
@@ -293,6 +298,8 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
             txt_producto_factura_precio = (TextView) view.findViewById(R.id.txt_producto_factura_precio);
             txt_producto_factura_disponible = (TextView) view.findViewById(R.id.txt_producto_factura_disponible);
             txt_producto_factura_seleccionado = (TextView) view.findViewById(R.id.txt_producto_factura_seleccionado);
+            creditoLimite = (TextView) view.findViewById(R.id.restCredit);
+
 
         }
 

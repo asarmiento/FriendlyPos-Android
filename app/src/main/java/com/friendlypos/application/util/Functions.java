@@ -123,5 +123,18 @@ public class Functions {
         return String.format(Locale.getDefault(), "%,.2f", number);
     }
 
+    public static double sGetDecimalStringAnyLocaleAsDouble(String value) {
+
+        Locale theLocale = Locale.getDefault();
+        NumberFormat numberFormat = DecimalFormat.getInstance(theLocale);
+        Number theNumber;
+        try {
+            theNumber = numberFormat.parse(value);
+            return theNumber.doubleValue();
+        } catch (ParseException e) {
+            String valueWithDot = value.replaceAll(",", ".");
+            return Double.valueOf(valueWithDot);
+        }
+    }
 
 }
