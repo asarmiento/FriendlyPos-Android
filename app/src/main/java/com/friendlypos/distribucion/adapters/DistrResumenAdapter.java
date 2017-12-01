@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.friendlypos.R;
 import com.friendlypos.distribucion.activity.DistribucionActivity;
+import com.friendlypos.distribucion.modelo.Facturas;
 import com.friendlypos.distribucion.modelo.Inventario;
 import com.friendlypos.distribucion.modelo.Pivot;
 import com.friendlypos.distribucion.modelo.Venta;
@@ -42,7 +43,7 @@ public class DistrResumenAdapter extends RecyclerView.Adapter<DistrResumenAdapte
     public ArrayList<Pivot> getData() {
         return data;
     }
-
+    double credi = 0.0;
     private static double iva = 13.0;
     private static int apply_done = 0;
     //IVA
@@ -167,6 +168,15 @@ public class DistrResumenAdapter extends RecyclerView.Adapter<DistrResumenAdapte
 
                     final Pivot clickedDataItem = productosList.get(pos);
 
+                    //todo repasar esto
+              /*      Realm realm6 = Realm.getDefaultInstance();
+                    final Venta ventas = realm6.where(Venta.class).equalTo("invoice_id", clickedDataItem.getInvoice_id()).findFirst();
+                    Clientes clientes = realm6.where(Clientes.class).equalTo("id", ventas.getCustomer_id()).findFirst();
+                    double cantidadCreditoLimite = Double.valueOf(clientes.getCreditLimit());
+                    double cantidadDue = Double.valueOf(clientes.getDue());
+                    credi = (cantidadCreditoLimite - cantidadDue) + total;
+                    realm6.close();*/
+
                     final int resumenProductoId = clickedDataItem.getId();
                     final double cantidadProducto = Double.parseDouble(clickedDataItem.getAmount());
 
@@ -201,6 +211,18 @@ public class DistrResumenAdapter extends RecyclerView.Adapter<DistrResumenAdapte
                             realm2.close();
                         }
                     });
+
+                    // TRANSACCIÓN PARA ACTUALIZAR EL CAMPO CREDIT_LIMIT EN LA FACTURA
+                /*    final Realm realm5 = Realm.getDefaultInstance();
+                    realm5.executeTransaction(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm5) {
+                            Clientes inv_actualizado = realm5.where(Clientes.class).equalTo("id", ventas.getCustomer_id()).findFirst();
+                            inv_actualizado.setCreditLimit(String.valueOf(credi));
+                            realm5.insertOrUpdate(inv_actualizado);
+                            realm5.close();
+                        }
+                    });*/
 
                     // TRANSACCIÓN BD PARA BORRAR EL CAMPO
                       final Realm realm = Realm.getDefaultInstance();

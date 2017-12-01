@@ -78,7 +78,6 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
         String fantasyCliente = clientes.getFantasyName();
         String numeracionFactura = facturas.getNumeration();
 
-
         holder.txt_cliente_factura_card.setText(cardCliente);
         holder.txt_cliente_factura_fantasyname.setText(fantasyCliente);
         holder.txt_cliente_factura_companyname.setText(companyCliente);
@@ -151,8 +150,8 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
                         //String facturaid = String.valueOf(realm.where(ProductoFactura.class).equalTo("id", facturaID).findFirst().getId());
                         facturaid1 = realm.where(Pivot.class).equalTo("invoice_id", facturaID).findAll();
                         String metodoPago = facturas.getPayment_method_id();
-                    String creditoLimiteCliente = clientes.getCreditLimit();
-                    String dueCliente = clientes.getDue();
+                        String creditoLimiteCliente = clientes.getCreditLimit();
+                        String dueCliente = clientes.getDue();
                         realm.close();
 
 

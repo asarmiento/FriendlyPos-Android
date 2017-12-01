@@ -26,6 +26,7 @@ import com.friendlypos.distribucion.modelo.Inventario;
 import com.friendlypos.distribucion.modelo.Marcas;
 import com.friendlypos.distribucion.modelo.Pivot;
 import com.friendlypos.distribucion.modelo.TipoProducto;
+import com.friendlypos.distribucion.modelo.Venta;
 import com.friendlypos.principal.modelo.Clientes;
 import com.friendlypos.principal.modelo.Productos;
 
@@ -245,23 +246,24 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
                                 }
                             });
 
-                            double totalProducSlecc = precioSeleccionado * producto_amount_dist_add;
+                           double totalProducSlecc = precioSeleccionado * producto_amount_dist_add;
                             final double creditoLimiteCliente = Double.parseDouble(activity.getCreditoLimiteCliente());
                             final double ads = creditoLimiteCliente - totalProducSlecc;
-
-                            final Realm realm4 = Realm.getDefaultInstance();
+                            Log.d("ads", ads +"");
+                           final Realm realm4 = Realm.getDefaultInstance();
 
                             realm4.executeTransaction(new Realm.Transaction() {
                                 @Override
                                 public void execute(Realm realm4) {
 
+                                    final Venta ventas = realm4.where(Venta.class).equalTo("invoice_id", idFacturaSeleccionada).findFirst();
+                                    Clientes clientes = realm4.where(Clientes.class).equalTo("id", ventas.getCustomer_id()).findFirst();
+                                    Log.d("ads", clientes +"");
+                                   clientes.setCreditLimit(String.valueOf(ads));
 
-                                    Clientes clientes = realm4.where(Clientes.class).equalTo("id", idFacturaSeleccionada).findFirst();
-                                    clientes.setCreditLimit(String.valueOf(ads));
+                                    realm4.insertOrUpdate(clientes); // using insert API
 
-                                 realm4.insertOrUpdate(clientes); // using insert API
-
-
+                                    realm4.close();
                                 }
                             });
 
