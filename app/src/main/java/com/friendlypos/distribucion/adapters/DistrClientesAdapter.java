@@ -46,7 +46,7 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
     RealmResults<Pivot> facturaid1;
     int idInvetarioSelec;
     Double amount_dist_inventario = 0.0;
-    String facturaID;
+    String facturaID, clienteID;
     int nextId;
 
     public DistrClientesAdapter(Context context, DistribucionActivity activity, List<Venta> contentList) {
@@ -77,6 +77,7 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
         String companyCliente = clientes.getCompanyName();
         String fantasyCliente = clientes.getFantasyName();
         String numeracionFactura = facturas.getNumeration();
+
 
         holder.txt_cliente_factura_card.setText(cardCliente);
         holder.txt_cliente_factura_fantasyname.setText(fantasyCliente);
@@ -142,18 +143,27 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
 
                         Venta clickedDataItem = contentList.get(pos);
                         facturaID = clickedDataItem.getInvoice_id();
+                        clienteID = clickedDataItem.getCustomer_id();
 
                         Realm realm = Realm.getDefaultInstance();
+                        Facturas facturas = realm.where(Facturas.class).equalTo("id", facturaID).findFirst();
+                        Clientes clientes = realm.where(Clientes.class).equalTo("id", clienteID).findFirst();
                         //String facturaid = String.valueOf(realm.where(ProductoFactura.class).equalTo("id", facturaID).findFirst().getId());
                         facturaid1 = realm.where(Pivot.class).equalTo("invoice_id", facturaID).findAll();
-
+                        String metodoPago = facturas.getPayment_method_id();
+                    String creditoLimiteCliente = clientes.getCreditLimit();
+                    String dueCliente = clientes.getDue();
                         realm.close();
 
 
                         Toast.makeText(view.getContext(), "You clicked " + facturaID, Toast.LENGTH_SHORT).show();
                         Log.d("PRODUCTOSFACTURATO", facturaid1 + "");
+                         Log.d("metodoPago", metodoPago + "");
 
                         activity.setInvoiceId(facturaID);
+                        activity.setMetodoPagoCliente(metodoPago);
+                        activity.setCreditoLimiteCliente(creditoLimiteCliente);
+                        activity.setDueCliente(dueCliente);
 
                 }
             });

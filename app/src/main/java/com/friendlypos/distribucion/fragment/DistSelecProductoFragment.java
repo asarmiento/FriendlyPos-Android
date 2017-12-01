@@ -8,6 +8,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
 import com.friendlypos.R;
 import com.friendlypos.distribucion.activity.DistribucionActivity;
 import com.friendlypos.distribucion.adapters.DistrResumenAdapter;
@@ -24,6 +26,10 @@ public class DistSelecProductoFragment extends BaseFragment {
     RecyclerView recyclerView;
     private DistrSeleccionarProductosAdapter adapter;
     private DistrResumenAdapter adapter2;
+    private static int bill_type = 1;
+    TextView creditoLimite;
+
+
     public static DistSelecProductoFragment getInstance() {
         return new DistSelecProductoFragment();
     }
@@ -46,12 +52,38 @@ public class DistSelecProductoFragment extends BaseFragment {
         recyclerView.setHasFixedSize(true);
         adapter = new DistrSeleccionarProductosAdapter(((DistribucionActivity)getActivity()),getListProductos());
         recyclerView.setAdapter(adapter);
+        creditoLimite = (TextView) rootView.findViewById(R.id.restCredit);
 
         Log.d("listaProducto", getListProductos() + "");
 
         adapter2 = new DistrResumenAdapter();
         adapter2.clearAll();
+
+        final String metodoPagoCliente = ((DistribucionActivity)getActivity()).getMetodoPagoCliente();
+        final double creditoLimiteCliente = Double.parseDouble(((DistribucionActivity)getActivity()).getCreditoLimiteCliente());
+        final String dueCliente = ((DistribucionActivity)getActivity()).getDueCliente();
+
+        Log.d("PagoProductoSelec", metodoPagoCliente + "");
+        Log.d("PagoProductoSelec", creditoLimiteCliente + "");
+        Log.d("PagoProductoSelec", dueCliente + "");
+
+        if(metodoPagoCliente.equals("1")) {
+            bill_type = 1;
+            creditoLimite.setVisibility(View.GONE);
+        }
+        else if(metodoPagoCliente.equals("2")) {
+            bill_type = 2;
+            try {
+                creditoLimite.setVisibility(View.VISIBLE);
+                creditoLimite.setText("C.Disponible: " +  String.format("%,.2f", creditoLimiteCliente));
+            }
+            catch (Exception e) {
+                Log.d("JD", "Error " + e.getMessage());
+            }
+        }
+
         return rootView;
+
     }
 
     private List<Inventario> getListProductos(){

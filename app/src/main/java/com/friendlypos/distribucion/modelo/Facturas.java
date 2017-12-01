@@ -44,8 +44,8 @@ public class Facturas extends RealmObject {
     private String payment_method_id;
     @SerializedName("sale")
     private Venta venta;
-    @SerializedName("products")
-    private RealmList<ProductoFactura> productofacturas;
+    @SerializedName("product_invoice")
+    private RealmList<Pivot> productofacturas;
 
     public String getId() {
         return id;
@@ -255,11 +255,11 @@ public class Facturas extends RealmObject {
         this.venta = venta;
     }
 
-    public RealmList<ProductoFactura> getProductofactura() {
+    public RealmList<Pivot> getProductofactura() {
         return productofacturas;
     }
 
-    public void setProductofactura(RealmList<ProductoFactura> productofacturas) {
+    public void setProductofactura(RealmList<Pivot> productofacturas) {
         this.productofacturas = productofacturas;
     }
 

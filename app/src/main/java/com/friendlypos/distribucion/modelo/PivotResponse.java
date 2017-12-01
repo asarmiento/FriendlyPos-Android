@@ -13,7 +13,7 @@ public class PivotResponse {
     private boolean result;
     private String code;
     private String message;
-    @SerializedName("pivot")
+    @SerializedName("product_invoice")
     private List<Pivot> pivot;
 
     public boolean isResult() {

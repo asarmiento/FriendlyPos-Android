@@ -26,6 +26,7 @@ import com.friendlypos.distribucion.modelo.Inventario;
 import com.friendlypos.distribucion.modelo.Marcas;
 import com.friendlypos.distribucion.modelo.Pivot;
 import com.friendlypos.distribucion.modelo.TipoProducto;
+import com.friendlypos.principal.modelo.Clientes;
 import com.friendlypos.principal.modelo.Productos;
 
 import java.util.ArrayList;
@@ -76,6 +77,8 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
 
     @Override
     public void onBindViewHolder(final DistrSeleccionarProductosAdapter.CharacterViewHolder holder, final int position) {
+
+
         final Inventario inventario = productosList.get(position);
 
         //todo repasar esto
@@ -88,7 +91,6 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
         String marca = producto.getBrand_id();
         String tipo = producto.getProduct_type_id();
         String precio = producto.getSale_price();
-
 
         String marca2 = realm.where(Marcas.class).equalTo("id", marca).findFirst().getName();
         String tipoProducto = realm.where(TipoProducto.class).equalTo("id", tipo).findFirst().getName();
@@ -106,6 +108,8 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
         holder.txt_producto_factura_disponible.setText("Disp: " + inventario.getAmount_dist());
         holder.txt_producto_factura_seleccionado.setText("Selec: " + "0.0");
         holder.cardView.setBackgroundColor(selected_position == position ? Color.parseColor("#607d8b") : Color.parseColor("#009688"));
+
+
 
 
     }
@@ -222,11 +226,15 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
                             final Double nuevoAmount = cantidadDisponible - producto_amount_dist_add;
                             Log.d("nuevoAmount", nuevoAmount + "");
 
+
+
+
+
                             final Realm realm3 = Realm.getDefaultInstance();
 
                             realm3.executeTransaction(new Realm.Transaction() {
                                 @Override
-                                public void execute(Realm realm) {
+                                public void execute(Realm realm3) {
 
                                     Inventario inv_actualizado = realm3.where(Inventario.class).equalTo("id", inventario_id).findFirst();
                                     inv_actualizado.setAmount_dist(String.valueOf(nuevoAmount));
@@ -236,6 +244,27 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
 
                                 }
                             });
+
+                            double totalProducSlecc = precioSeleccionado * producto_amount_dist_add;
+                            final double creditoLimiteCliente = Double.parseDouble(activity.getCreditoLimiteCliente());
+                            final double ads = creditoLimiteCliente - totalProducSlecc;
+
+                            final Realm realm4 = Realm.getDefaultInstance();
+
+                            realm4.executeTransaction(new Realm.Transaction() {
+                                @Override
+                                public void execute(Realm realm4) {
+
+
+                                    Clientes clientes = realm4.where(Clientes.class).equalTo("id", idFacturaSeleccionada).findFirst();
+                                    clientes.setCreditLimit(String.valueOf(ads));
+
+                                 realm4.insertOrUpdate(clientes); // using insert API
+
+
+                                }
+                            });
+
                             Toast.makeText(context, nextId + "agregocanti ", Toast.LENGTH_LONG).show();
 
 
@@ -286,7 +315,7 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
 
     public class CharacterViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView creditoLimite, txt_producto_factura_nombre, txt_producto_factura_marca, txt_producto_factura_tipo, txt_producto_factura_precio, txt_producto_factura_disponible, txt_producto_factura_seleccionado;
+        private TextView txt_producto_factura_nombre, txt_producto_factura_marca, txt_producto_factura_tipo, txt_producto_factura_precio, txt_producto_factura_disponible, txt_producto_factura_seleccionado;
         protected CardView cardView;
 
         public CharacterViewHolder(View view) {
@@ -298,8 +327,6 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
             txt_producto_factura_precio = (TextView) view.findViewById(R.id.txt_producto_factura_precio);
             txt_producto_factura_disponible = (TextView) view.findViewById(R.id.txt_producto_factura_disponible);
             txt_producto_factura_seleccionado = (TextView) view.findViewById(R.id.txt_producto_factura_seleccionado);
-            creditoLimite = (TextView) view.findViewById(R.id.restCredit);
-
 
         }
 

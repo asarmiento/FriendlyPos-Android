@@ -15,7 +15,7 @@ public class ProductoFacturaResponse {
     private boolean result;
     private String code;
     private String message;
-    @SerializedName("products")
+    @SerializedName("product_invoice")
     private List<ProductoFactura> facturas;
 
     public boolean isResult() {

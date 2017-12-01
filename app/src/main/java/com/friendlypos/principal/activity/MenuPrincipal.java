@@ -183,6 +183,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
             //bloqueados
             popupMenu.findItem(R.id.btn_descargar_catalogo).setEnabled(false);
             popupMenu.findItem(R.id.btn_descargar_inventario).setEnabled(false);
+            Toast.makeText(MenuPrincipal.this,"Descargar datos de la empresa primero",Toast.LENGTH_LONG).show();
         } else if (bloquear == 1) {
             //desbloqueados
             popupMenu.findItem(R.id.btn_descargar_catalogo).setEnabled(true);

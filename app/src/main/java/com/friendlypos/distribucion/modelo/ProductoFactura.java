@@ -13,7 +13,7 @@ public class ProductoFactura extends RealmObject {
 
     @PrimaryKey
     String id;
-  @SerializedName("pivot")
+  @SerializedName("product_invoice")
     private Pivot pivot;
 
 

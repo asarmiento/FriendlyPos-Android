@@ -10,7 +10,7 @@
         android:id="@+id/restCredit"
         android:padding="10dp"
         android:textAppearance="?android:textAppearanceInverse"
-        android:text="C. Restante: "
+        android:visibility="gone"
         android:textStyle="bold"
         android:background="@color/colorPrimary"
         android:layout_alignParentTop="true"

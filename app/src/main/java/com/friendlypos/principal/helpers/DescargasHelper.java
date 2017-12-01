@@ -354,6 +354,7 @@ public class DescargasHelper {
                         mContentsArray.addAll(response.body().getInventarios());
 
                         try {
+                            realm = Realm.getDefaultInstance();
 
                             // Work with Realm
                             realm.beginTransaction();
@@ -380,47 +381,6 @@ public class DescargasHelper {
                 }
             });
 
-        /*    // TODO descarga Ventas
-            Call<VentaResponse> callVentas = api.getVentas(token);
-
-            callVentas.enqueue(new Callback<VentaResponse>() {
-
-                @Override
-                public void onResponse(Call<VentaResponse> call, Response<VentaResponse> response) {
-                    mContentsArrayVenta.clear();
-
-
-                    if (response.isSuccessful()) {
-                        mContentsArrayVenta.addAll(response.body().getVenta());
-
-                        try {
-                            realmVentas = Realm.getDefaultInstance();
-
-                            // Work with Realm
-                            realmVentas.beginTransaction();
-                            realmVentas.copyToRealmOrUpdate(mContentsArrayVenta);
-                            realmVentas.commitTransaction();
-                            //realm.close();
-                        }
-                        finally {
-                            realmVentas.close();
-                        }
-                        Log.d(DescargasHelper.class.getName(), mContentsArrayVenta.toString());
-                        //  Toast.makeText(DescargarInventario.this, getString(R.string.success), Toast.LENGTH_SHORT).show();
-                    }
-                    else {
-                        //  Toast.makeText(DescargarInventario.this, getString(R.string.error) + " CODE: " +response.code(), Toast.LENGTH_LONG).show();
-                        RealmResults<Venta> results = realmVentas.where(Venta.class).findAll();
-                        mContentsArrayVenta.addAll(results);
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<VentaResponse> call, Throwable t) {
-                    // Toast.makeText(context, getString(R.string.error), Toast.LENGTH_LONG).show();
-                }
-            });
-*/
             // TODO descarga Facturas
             Call<FacturasResponse> call2 = api.getFacturas(token);
 
@@ -440,6 +400,7 @@ public class DescargasHelper {
                         mContentsArray2.addAll(response2.body().getFacturas());
 
                         try {
+                            realm2 = Realm.getDefaultInstance();
                             realm2.beginTransaction();
                             //TODO verificar cada cuanto se va a actualizar el inventario.
                             //realm.copyToRealm(mContentsArray2);
@@ -477,46 +438,6 @@ public class DescargasHelper {
             //     Toast.makeText(context, getString(R.string.failed), Toast.LENGTH_LONG).show();
         }
 
-      /*  // TODO descarga Pivot
-        Call<ProductoFacturaResponse> callPivot = api.getPivot(token);
-
-        callPivot.enqueue(new Callback<ProductoFacturaResponse>() {
-
-            @Override
-            public void onResponse(Call<ProductoFacturaResponse> call, Response<ProductoFacturaResponse> response) {
-                mContentsArrayPivot.clear();
-
-
-                if (response.isSuccessful()) {
-                    mContentsArrayPivot.addAll(response.body().getProductofacturas());
-
-                    try {
-                        realmPivot = Realm.getDefaultInstance();
-
-                        // Work with Realm
-                        realmPivot.beginTransaction();
-                        realmPivot.copyToRealmOrUpdate(mContentsArrayPivot);
-                        realmPivot.commitTransaction();
-                        //realm.close();
-                    }
-                    finally {
-                        realmPivot.close();
-                    }
-                    Log.d(DescargasHelper.class.getName()+"pivot", mContentsArrayPivot.toString());
-                    //  Toast.makeText(DescargarInventario.this, getString(R.string.success), Toast.LENGTH_SHORT).show();
-                }
-                else {
-                    //  Toast.makeText(DescargarInventario.this, getString(R.string.error) + " CODE: " +response.code(), Toast.LENGTH_LONG).show();
-                    RealmResults<ProductoFactura> results = realmVentas.where(ProductoFactura.class).findAll();
-                    mContentsArrayPivot.addAll(results);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ProductoFacturaResponse> call, Throwable t) {
-                // Toast.makeText(context, getString(R.string.error), Toast.LENGTH_LONG).show();
-            }
-        });*/
     }
 
     public void descargarDatosEmpresa(Context context) {

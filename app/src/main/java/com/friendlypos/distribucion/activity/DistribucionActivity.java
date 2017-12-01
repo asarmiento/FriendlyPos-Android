@@ -32,6 +32,9 @@ public class DistribucionActivity extends AppCompatActivity {
     private ViewPager viewPager;
 
     private String invoiceId;
+    private String metodoPagoCliente;
+    private String creditoLimiteCliente;
+    private String dueCliente;
 
     private String totalizarSubGrabado;
     private String totalizarSubExento;
@@ -41,12 +44,37 @@ public class DistribucionActivity extends AppCompatActivity {
     private String totalizarTotal;
 
 
+
     public String getInvoiceId() {
         return invoiceId;
     }
 
     public void setInvoiceId(String invoiceId) {
         this.invoiceId = invoiceId;
+    }
+
+    public String getMetodoPagoCliente() {
+        return metodoPagoCliente;
+    }
+
+    public void setMetodoPagoCliente(String metodoPagoCliente) {
+        this.metodoPagoCliente = metodoPagoCliente;
+    }
+
+    public String getCreditoLimiteCliente() {
+        return creditoLimiteCliente;
+    }
+
+    public void setCreditoLimiteCliente(String creditoLimiteCliente) {
+        this.creditoLimiteCliente = creditoLimiteCliente;
+    }
+
+    public String getDueCliente() {
+        return dueCliente;
+    }
+
+    public void setDueCliente(String dueCliente) {
+        this.dueCliente = dueCliente;
     }
 
     public String getTotalizarSubGrabado() {
