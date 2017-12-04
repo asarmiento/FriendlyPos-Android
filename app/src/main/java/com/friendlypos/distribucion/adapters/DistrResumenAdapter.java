@@ -79,6 +79,8 @@ public class DistrResumenAdapter extends RecyclerView.Adapter<DistrResumenAdapte
     }
 
 
+
+
     public void updateData(List<Pivot> productosList){
         this.productosList = productosList;
         notifyDataSetChanged();
@@ -120,7 +122,6 @@ public class DistrResumenAdapter extends RecyclerView.Adapter<DistrResumenAdapte
 
         String pivotTotal = String.format("%,.2f", (precio * cantidad));
         holder.txt_resumen_factura_total.setText("T: " + pivotTotal);
-
         totalize();
     }
     @Override
@@ -245,7 +246,6 @@ public class DistrResumenAdapter extends RecyclerView.Adapter<DistrResumenAdapte
 
    public void totalize() {
 
-
            if (tipo.equals("1")) {
                subGrab = subGrab + (precio) * (cantidad);
                subTotalGrabado = String.format("%,.2f", subGrab);
@@ -294,6 +294,7 @@ public class DistrResumenAdapter extends RecyclerView.Adapter<DistrResumenAdapte
 
            activity.setTotalizarImpuestoIVA(impuestoIVA);
            activity.setTotalizarTotal(Total);
+           activity.setTotalizarTotalDouble(total);
 
     }
 

@@ -282,7 +282,6 @@
                     android:layout_marginLeft="5dp"
                     android:layout_toEndOf="@+id/textViewCa"
                     android:layout_toRightOf="@+id/textViewCa"
-                    android:enabled="false"
                     android:gravity="end"
                     android:hint="0"
                     android:inputType="numberDecimal"
@@ -320,7 +319,6 @@
                     android:gravity="end"
                     android:paddingLeft="5dp"
                     android:paddingRight="5dp"
-                    android:text="0"
                     android:textAppearance="?android:attr/textAppearanceMedium" />
 
             </RelativeLayout>

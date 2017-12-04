@@ -35,6 +35,9 @@ public class DistribucionActivity extends AppCompatActivity {
     private String metodoPagoCliente;
     private String creditoLimiteCliente;
     private String dueCliente;
+    private String creditoLimiteClienteSlecc;
+
+
 
     private String totalizarSubGrabado;
     private String totalizarSubExento;
@@ -42,7 +45,7 @@ public class DistribucionActivity extends AppCompatActivity {
     private String totalizarDescuento;
     private String totalizarImpuestoIVA;
     private String totalizarTotal;
-
+    private double totalizarTotalDouble;
 
 
     public String getInvoiceId() {
@@ -67,6 +70,14 @@ public class DistribucionActivity extends AppCompatActivity {
 
     public void setCreditoLimiteCliente(String creditoLimiteCliente) {
         this.creditoLimiteCliente = creditoLimiteCliente;
+    }
+
+    public String getCreditoLimiteClienteSlecc() {
+        return creditoLimiteClienteSlecc;
+    }
+
+    public void setCreditoLimiteClienteSlecc(String creditoLimiteClienteSlecc) {
+        this.creditoLimiteClienteSlecc = creditoLimiteClienteSlecc;
     }
 
     public String getDueCliente() {
@@ -115,6 +126,14 @@ public class DistribucionActivity extends AppCompatActivity {
 
     public void setTotalizarImpuestoIVA(String totalizarImpuestoIVA) {
         this.totalizarImpuestoIVA = totalizarImpuestoIVA;
+    }
+
+    public double getTotalizarTotalDouble() {
+        return totalizarTotalDouble;
+    }
+
+    public void setTotalizarTotalDouble(double totalizarTotalDouble) {
+        this.totalizarTotalDouble = totalizarTotalDouble;
     }
 
     public String getTotalizarTotal() {

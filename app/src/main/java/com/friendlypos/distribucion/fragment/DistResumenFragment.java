@@ -68,14 +68,6 @@ public class DistResumenFragment extends BaseFragment {
         //((DistribucionActivity) getActivity()).setInvoiceId(null);
         return facturaid1;
     }
-/*
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        adapter.clearAll();
-    }
-*/
 
     @Override
     public void updateData() {

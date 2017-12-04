@@ -4,7 +4,6 @@ package com.friendlypos.distribucion.adapters;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -20,8 +19,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.friendlypos.R;
-import com.friendlypos.application.util.Functions;
 import com.friendlypos.distribucion.activity.DistribucionActivity;
+import com.friendlypos.distribucion.fragment.BaseFragment;
 import com.friendlypos.distribucion.modelo.Inventario;
 import com.friendlypos.distribucion.modelo.Marcas;
 import com.friendlypos.distribucion.modelo.Pivot;
@@ -32,7 +31,6 @@ import com.friendlypos.principal.modelo.Productos;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import io.realm.Realm;
 
@@ -50,7 +48,9 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
     private static double producto_amount_dist_add = 0;
     private static double producto_descuento_add = 0;
     private int selected_position = -1;
-
+    private static int bill_type = 1;
+    static TextView creditoLimite;
+    static double creditoLimiteCliente;
 
     // private static String productoAmountDistAdd, productoDescuentoAdd, subTotalExento, descuentoCliente, subTotal, Total;
     String idProducto;
@@ -61,7 +61,7 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
         this.productosList = productosList;
     }
 
-    public void updateData(List<Inventario> productosList) {
+    public void updateData(List<Inventario> productosList ) {
         this.productosList = productosList;
         notifyDataSetChanged();
     }
@@ -109,11 +109,9 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
         holder.txt_producto_factura_disponible.setText("Disp: " + inventario.getAmount_dist());
         holder.txt_producto_factura_seleccionado.setText("Selec: " + "0.0");
         holder.cardView.setBackgroundColor(selected_position == position ? Color.parseColor("#607d8b") : Color.parseColor("#009688"));
-
-
-
-
     }
+
+
 
     public void addProduct(final int inventario_id, final String producto_id, final Double cantidadDisponible, String Precio1, String Precio2, String Precio3, String Precio4, String Precio5) {
 
@@ -241,8 +239,6 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
                                     inv_actualizado.setAmount_dist(String.valueOf(nuevoAmount));
 
                                     realm3.insertOrUpdate(inv_actualizado); // using insert API
-
-
                                 }
                             });
 
@@ -250,8 +246,8 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
                             final double creditoLimiteCliente = Double.parseDouble(activity.getCreditoLimiteCliente());
                             final double ads = creditoLimiteCliente - totalProducSlecc;
                             Log.d("ads", ads +"");
-                           final Realm realm4 = Realm.getDefaultInstance();
 
+                           final Realm realm4 = Realm.getDefaultInstance();
                             realm4.executeTransaction(new Realm.Transaction() {
                                 @Override
                                 public void execute(Realm realm4) {
@@ -264,6 +260,8 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
                                     realm4.insertOrUpdate(clientes); // using insert API
 
                                     realm4.close();
+                                    activity.setCreditoLimiteClienteSlecc(String.valueOf(ads));
+
                                 }
                             });
 

@@ -290,7 +290,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/clickReportes"
+                    android:id="@+id/clickReimprimirVentas"
                     android:onClick="onClickGo"
                     android:background="@color/divider"
                     android:layout_width="match_parent"
@@ -318,7 +318,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:text="Reportes"
+                            android:text="Reimprimir ventas"
                             android:textColor="@color/icons"
                             android:layout_centerVertical="true"
                             android:layout_toRightOf="@+id/imageView5"

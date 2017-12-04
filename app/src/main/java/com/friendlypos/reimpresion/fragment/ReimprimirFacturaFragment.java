@@ -1,25 +1,32 @@
-package com.friendlypos.distribucion.fragment;
+package com.friendlypos.reimpresion.fragment;
 
 import android.content.Context;
+import android.net.Uri;
+import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.friendlypos.R;
+import com.friendlypos.application.util.Functions;
 import com.friendlypos.distribucion.activity.DistribucionActivity;
 import com.friendlypos.distribucion.adapters.DistrClientesAdapter;
 import com.friendlypos.distribucion.adapters.DistrResumenAdapter;
+import com.friendlypos.distribucion.fragment.BaseFragment;
+import com.friendlypos.distribucion.fragment.DistSelecProductoFragment;
 import com.friendlypos.distribucion.modelo.Facturas;
+import com.friendlypos.distribucion.modelo.Pivot;
 import com.friendlypos.distribucion.modelo.Venta;
-import com.friendlypos.principal.modelo.Clientes;
+import com.friendlypos.principal.modelo.Productos;
+import com.friendlypos.reimpresion.activity.ReimprimirActivity;
+import com.friendlypos.reimpresion.adapters.ReimprimirFacturaAdapter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -28,18 +35,18 @@ import io.realm.Realm;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
 
+public class ReimprimirFacturaFragment extends BaseFragment {
 
-public class DistSelecClienteFragment extends BaseFragment{
-    private Realm realm;
-
-    @Bind(R.id.recyclerViewDistrCliente)
+    @Bind(R.id.recyclerViewReimprimirFactura)
     public RecyclerView recyclerView;
 
-    private DistrClientesAdapter adapter;
+    private ReimprimirFacturaAdapter adapter;
     private DistrResumenAdapter adapter2;
 
-    public static DistSelecProductoFragment getInstance() {
-        return new DistSelecProductoFragment();
+    RealmResults<Venta> result1;
+    Realm realm;
+    public static ReimprimirFacturaFragment getInstance() {
+        return new ReimprimirFacturaFragment();
     }
     @Override
     public void onDestroy() {
@@ -55,7 +62,7 @@ public class DistSelecClienteFragment extends BaseFragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_distribucion_cliente, container,
+        View rootView = inflater.inflate(R.layout.fragment_reimprimir_factura, container,
                 false);
         ButterKnife.bind(this, rootView);
         return rootView;
@@ -65,7 +72,7 @@ public class DistSelecClienteFragment extends BaseFragment{
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        adapter = new DistrClientesAdapter(getContext(), ((DistribucionActivity)getActivity()), getListClientes());
+        adapter = new ReimprimirFacturaAdapter(getContext(), ((ReimprimirActivity)getActivity()), getListClientes());
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);
@@ -81,7 +88,6 @@ public class DistSelecClienteFragment extends BaseFragment{
 
         return result1;
     }
-
 
     @Override
     public void onDestroyView() {

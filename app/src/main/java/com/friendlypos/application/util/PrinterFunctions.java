@@ -15,6 +15,7 @@ import com.friendlypos.distribucion.modelo.Pivot;
 import com.friendlypos.distribucion.modelo.Venta;
 import com.friendlypos.login.util.SessionPrefes;
 import com.friendlypos.principal.modelo.Clientes;
+import com.friendlypos.principal.modelo.Productos;
 import com.friendlypos.principal.modelo.Sysconf;
 
 import java.text.DecimalFormat;
@@ -149,6 +150,8 @@ public class PrinterFunctions {
                     "------------------------------------------------\r\n" +
                     "! U1 SETLP 7 0 10\r\n" +
                     // TODO REVISAR TODOS LOS PRODUCTOS
+
+                    getPrintDistTotal(venta.getInvoice_id()) +
                   // getPrintProducts(Functions.getProducsByBillForPrinting(sale.invoices.id)) +
                     "\r\n" +
 
@@ -546,6 +549,46 @@ public class PrinterFunctions {
 
                 send += String.format("%-5s      %.20s      %-6s", factNum, factFecha, factTotal) + "\r\n";
                 printSalesCashTotal = printSalesCashTotal + factTotal;
+                Log.d("FACTPRODTODFAC", send + "");
+            }
+        }
+        return send;
+    }
+
+    private static String getPrintDistTotal(String idVenta) {
+        String send = "";
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String currentDateandTime = sdf.format(new Date());
+
+        Realm realm = Realm.getDefaultInstance();
+        RealmResults<Pivot> result = realm.where(Pivot.class).equalTo("invoice_id", idVenta).findAll();
+
+        if (result.isEmpty()) {
+            send = "No hay facturas emitidas";
+        } else {
+           // printSalesCashTotal= 0.0;
+            for (int i = 0; i < result.size(); i++) {
+
+                List<Pivot> salesList1 = realm.where(Pivot.class).equalTo("invoice_id", idVenta).findAll();
+                Productos producto = realm.where(Productos.class).equalTo("id", salesList1.get(i).getProduct_id()).findFirst();
+             //   Venta ventas = realm.where(Venta.class).equalTo("invoice_id", salesList1.get(i).getInvoice_id()).findFirst();
+            //    Clientes clientes = realm.where(Clientes.class).equalTo("id", ventas.getCustomer_id()).findFirst();
+                realm.close();
+
+                String description = producto.getDescription();
+                String barcode = producto.getBarcode();
+                String typeId = producto.getProduct_type_id();
+                double cant = Double.parseDouble(salesList1.get(i).getAmount());
+                double precio = Double.parseDouble(salesList1.get(i).getPrice());
+
+
+              /*  String factFecha = salesList1.get(i).getDate();
+                double factTotal = Functions.sGetDecimalStringAnyLocaleAsDouble(salesList1.get(i).getTotal());*/
+
+                send += String.format("%s  %.24s ",description, barcode) + "\r\n" +
+                        String.format("%-5s %-10s %-10s %-15s %.1s", cant /*bill.amount*/, precio, precio,Functions.doubleToString(cant * precio), typeId) + "\r\n";
+                send += "------------------------------------------------\r\n";
                 Log.d("FACTPRODTODFAC", send + "");
             }
         }

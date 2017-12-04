@@ -34,6 +34,8 @@ import com.friendlypos.login.activity.LoginActivity;
 import com.friendlypos.login.util.SessionPrefes;
 import com.friendlypos.principal.fragment.ConfiguracionFragment;
 import com.friendlypos.principal.helpers.DescargasHelper;
+import com.friendlypos.principal.helpers.SubirHelper;
+import com.friendlypos.reimpresion.activity.ReimprimirActivity;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -70,8 +72,8 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
     @Bind(R.id.clickPreventa)
     LinearLayout clickPreventa;
 
-    @Bind(R.id.clickReportes)
-    LinearLayout clickReportes;
+    @Bind(R.id.clickReimprimirVentas)
+    LinearLayout clickReimprimirVentas;
 
     @Bind(R.id.clickConfig)
     LinearLayout clickConfig;
@@ -84,6 +86,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
 
     SessionPrefes session;
     DescargasHelper download1;
+    SubirHelper subir1;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -97,6 +100,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
         session = new SessionPrefes(getApplicationContext());
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         download1 = new DescargasHelper(MenuPrincipal.this);
+        subir1 = new SubirHelper(MenuPrincipal.this);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -247,10 +251,19 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                 break;
 
             case R.id.btn_subir_recibos:
+
+
+
                 Toast.makeText(MenuPrincipal.this, "subir_recibos", Toast.LENGTH_SHORT).show();
                 break;
 
             case R.id.btn_subir_ventas:
+
+                subir1.sendPost("String id1", "String id", "String id", "String id", "String id", "String id","String id",
+                        "String id","String id","String id","String id", "String id","String id", "String id",
+                        "String id","String id","String id", "String id","String id", "String id","String id", "String id","String id",
+                        "String id", "String id", "String id", "String id");
+
                 Toast.makeText(MenuPrincipal.this, "subir_ventas", Toast.LENGTH_SHORT).show();
                 break;
 
@@ -363,8 +376,11 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                 Toast.makeText(this, "Botón no disponible por el momento", Toast.LENGTH_SHORT).show();
                 break;
 
-            case R.id.clickReportes:
-                Toast.makeText(this, "Botón no disponible por el momento", Toast.LENGTH_SHORT).show();
+            case R.id.clickReimprimirVentas:
+                Intent reimprimir;
+                reimprimir = new Intent(MenuPrincipal.this, ReimprimirActivity.class);
+                startActivity(reimprimir);
+                finish();
                 break;
 
         }

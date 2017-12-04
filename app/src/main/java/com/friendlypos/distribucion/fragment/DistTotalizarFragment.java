@@ -45,20 +45,25 @@ public class DistTotalizarFragment extends BaseFragment {
     private static TextView ivaSub;
     private static TextView discount;
     private static TextView Total;
-    private static EditText paid;
     private static TextView change;
+
+
     private static EditText notes;
     private static EditText client_name;
-    private static EditText client_card;
-    private static EditText client_contact;
+    private static EditText paid;
 
-    String totalGrabado;
-    String totalExento;
-    String totalSubtotal;
-    String totalDescuento;
-    String totalImpuesto;
-    String totalTotal;
+    String totalGrabado= "0";
+    String totalExento= "0";
+    String totalSubtotal= "0";
+    String totalDescuento= "0";
+    String totalImpuesto= "0";
+    String totalTotal= "0";
+    String totalVuelvo= "0";
+    String totalPagoCon = "0";
+    static double totalTotalDouble;
+    static double pagoCon = 0.0;
     String facturaId;
+
 
     private static Button applyBill;
     private static Button printBill;
@@ -85,8 +90,6 @@ public class DistTotalizarFragment extends BaseFragment {
 
         View rootView = inflater.inflate(R.layout.fragment_distribucion_totalizar, container, false);
 
-        client_card = (EditText) rootView.findViewById(R.id.client_card);
-        client_contact = (EditText) rootView.findViewById(R.id.client_contact);
         client_name = (EditText) rootView.findViewById(R.id.client_name);
 
         subExe = (TextView) rootView.findViewById(R.id.subExento);
@@ -97,7 +100,28 @@ public class DistTotalizarFragment extends BaseFragment {
         Total = (TextView) rootView.findViewById(R.id.Total);
 
         paid = (EditText) rootView.findViewById(R.id.txtPaid);
+
         change = (TextView) rootView.findViewById(R.id.txtChange);
+
+        String metodoPagoCliente = ((DistribucionActivity)getActivity()).getMetodoPagoCliente();
+
+        if(metodoPagoCliente.equals("1")) {
+            //bill_type = 1;
+            try {
+                paid.setEnabled(true);
+
+            }
+            catch (Exception e) {
+                Log.d("JD", "Error " + e.getMessage());
+            }
+
+        }
+        else if(metodoPagoCliente.equals("2")) {
+          //  bill_type = 2;
+            paid.setEnabled(false);
+        }
+
+
 
         notes = (EditText) rootView.findViewById(R.id.txtNotes);
 
@@ -121,8 +145,23 @@ public class DistTotalizarFragment extends BaseFragment {
                         try {
                             //validateData();
                             // Log.d("total", String.valueOf(Functions.sGetDecimalStringAnyLocaleAsDouble(Total.getText().toString())));
+
+
+                            pagoCon = Double.parseDouble(paid.getText().toString());
+                            totalPagoCon = String.format("%,.2f", pagoCon);
+                            double total = totalTotalDouble;
+
+                            if(pagoCon >= total){
+                            double vuelto = pagoCon - total;
+                            totalVuelvo = String.format("%,.2f", vuelto);
+
+                            change.setText(totalVuelvo);
+
                             aplicarFactura();
-                            //saveDataToSqlite();
+                            }
+                            else {
+                                Toast.makeText(getActivity(), "Digite una cantidad mayor al total", Toast.LENGTH_LONG).show();
+                            }
                         }
                         catch (Exception e) {
                             Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
@@ -130,6 +169,7 @@ public class DistTotalizarFragment extends BaseFragment {
 
                         }
                     }
+
                 } );
 
         printBill.setOnClickListener(
@@ -154,12 +194,15 @@ public class DistTotalizarFragment extends BaseFragment {
 
     @Override
     public void updateData() {
+        paid.getText().clear();
+
         totalGrabado = ((DistribucionActivity) getActivity()).getTotalizarSubGrabado();
         totalExento = ((DistribucionActivity) getActivity()).getTotalizarSubExento();
         totalSubtotal = ((DistribucionActivity) getActivity()).getTotalizarSubTotal();
         totalDescuento = ((DistribucionActivity) getActivity()).getTotalizarDescuento();
         totalImpuesto = ((DistribucionActivity) getActivity()).getTotalizarImpuestoIVA();
         totalTotal = ((DistribucionActivity) getActivity()).getTotalizarTotal();
+        totalTotalDouble = ((DistribucionActivity) getActivity()).getTotalizarTotalDouble();
         facturaId = ((DistribucionActivity) getActivity()).getInvoiceId();
 
         subGra.setText(totalGrabado);
@@ -194,10 +237,11 @@ public class DistTotalizarFragment extends BaseFragment {
                 factura_actualizada.setTax(totalImpuesto);
                 factura_actualizada.setTotal(totalTotal);
 
-                factura_actualizada.setChanging(change.getText().toString());
+                factura_actualizada.setPaid(totalPagoCon);
+                factura_actualizada.setChanging(totalVuelvo);
+
                 factura_actualizada.setNote(notes.getText().toString());
                 factura_actualizada.setCanceled("1");
-                factura_actualizada.setPaid((paid.getText().toString().isEmpty()) ? "0" : paid.getText().toString());
 
 
                 realm2.insertOrUpdate(factura_actualizada);
@@ -227,6 +271,7 @@ public class DistTotalizarFragment extends BaseFragment {
     }
 
     protected void aplicarFactura() {
+        paid.setEnabled(false);
 
         actualizarFactura();
         actualizarVenta();
@@ -237,12 +282,14 @@ public class DistTotalizarFragment extends BaseFragment {
         printBill.setVisibility(View.VISIBLE);
         apply_done = 1;
 
+
     }
 
     public static void clearAll() {
         if (apply_done == 1) {
 
             apply_done = 0;
+            paid.getText().clear();
         }
         try {
             System.gc();
