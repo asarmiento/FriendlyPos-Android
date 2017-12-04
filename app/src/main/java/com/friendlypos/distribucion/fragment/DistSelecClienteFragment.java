@@ -76,7 +76,7 @@ public class DistSelecClienteFragment extends BaseFragment{
 
     private List<Venta> getListClientes(){
         realm = Realm.getDefaultInstance();
-        RealmQuery<Venta> query = realm.where(Venta.class);
+        RealmQuery<Venta> query = realm.where(Venta.class).equalTo("aplicada", 0);
         RealmResults<Venta> result1 = query.findAll();
 
         return result1;

@@ -21,6 +21,7 @@ import com.friendlypos.distribucion.fragment.DistTotalizarFragment;
 import com.friendlypos.distribucion.util.Adapter;
 import com.friendlypos.principal.activity.MenuPrincipal;
 import com.friendlypos.reimpresion.fragment.ReimprimirFacturaFragment;
+import com.friendlypos.reimpresion.fragment.ReimprimirResumenFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +30,17 @@ public class ReimprimirActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
+
+    private String invoiceIdReimprimir;
+
+    public String getInvoiceIdReimprimir() {
+        return invoiceIdReimprimir;
+    }
+
+    public void setInvoiceIdReimprimir(String invoiceIdReimprimir) {
+        this.invoiceIdReimprimir = invoiceIdReimprimir;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +55,7 @@ public class ReimprimirActivity extends AppCompatActivity {
 
         tabLayout = (TabLayout) findViewById(R.id.tabsReimprimir);
         tabLayout.setupWithViewPager(viewPager);
+        tabLayout.setTabMode(TabLayout.MODE_FIXED);
 
        /* tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
 
@@ -78,14 +91,22 @@ public class ReimprimirActivity extends AppCompatActivity {
         });*/
     }
 
-    private void setupViewPager(ViewPager viewPager) {
+  /*  private void setupViewPager(ViewPager viewPager) {
+        Adapter adapter = new Adapter(getSupportFragmentManager());
+        adapter.addFragment(new ReimprimirFacturaFragment(), "SELECCIONE LA FACTURA");
+        adapter.addFragment(new ReimprimirResumenFragment(), "RESUMEN");
+        //adapter.addFragment(new quickSaleTotalFragment(), "TOTALIZAR");
+        viewPager.setAdapter(adapter);
+    }*/
+
+   private void setupViewPager(ViewPager viewPager) {
         Adapter adapter = new Adapter(getSupportFragmentManager());
         final List<BaseFragment> list = new ArrayList<>();
         list.add(new ReimprimirFacturaFragment());
-     //   list.add(new ReimprimirResumenFragment());
+        list.add(new ReimprimirResumenFragment());
 
         adapter.addFragment(list.get(0), "Seleccionar Factura");
-     //   adapter.addFragment(list.get(1), "Resumen");
+        adapter.addFragment(list.get(1), "Resumen");
 
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {

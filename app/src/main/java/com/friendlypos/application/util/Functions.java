@@ -96,6 +96,14 @@ public class Functions {
         return isURL;
     }
 
+    public static String paddigTabs(long tabs) {
+        String format = "";
+        for (int c = 0; c < tabs; c += 2) {
+            format += "\t";
+        }
+        return format;
+    }
+
     public static String getVesionNaveCode(Context context) {
         String send = "";
         try {

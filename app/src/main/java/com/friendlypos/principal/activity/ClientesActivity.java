@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.friendlypos.R;
@@ -42,6 +43,9 @@ public class ClientesActivity extends AppCompatActivity {
 
     @Bind(R.id.recyclerView)
     RecyclerView recyclerView;
+
+    @Bind(R.id.tv_title)
+    TextView tv_title;
 
     private ProgressDialog progress;
     private ArrayList<Clientes> mContentsArray = new ArrayList<>();
@@ -81,8 +85,11 @@ public class ClientesActivity extends AppCompatActivity {
             realm = Realm.getDefaultInstance();
             RealmQuery<Clientes> query = realm.where(Clientes.class);
             RealmResults<Clientes> result1 = query.findAll();
-
-            return result1;
+            if(result1.size() == 0){
+               Toast.makeText(getApplicationContext(),"Favor descargar datos primero",Toast.LENGTH_LONG).show();
+                tv_title.setText("Favor descargar datos primero");
+            }
+                return result1;
         }
 
     @Override

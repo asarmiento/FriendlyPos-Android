@@ -242,6 +242,7 @@ public class DistTotalizarFragment extends BaseFragment {
 
                 factura_actualizada.setNote(notes.getText().toString());
                 factura_actualizada.setCanceled("1");
+                factura_actualizada.setAplicada(1);
 
 
                 realm2.insertOrUpdate(factura_actualizada);
@@ -262,6 +263,7 @@ public class DistTotalizarFragment extends BaseFragment {
                 venta_actualizada.setCustomer_name(client_name.getText().toString());
                 venta_actualizada.setSale_type("1");
                 venta_actualizada.setUpdated_at(Functions.getDate() + " " + Functions.get24Time());
+                venta_actualizada.setAplicada(1);
 
                 realm3.insertOrUpdate(venta_actualizada);
                 realm3.close();

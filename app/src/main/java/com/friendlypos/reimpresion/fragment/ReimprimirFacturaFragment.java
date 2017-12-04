@@ -41,23 +41,24 @@ public class ReimprimirFacturaFragment extends BaseFragment {
     public RecyclerView recyclerView;
 
     private ReimprimirFacturaAdapter adapter;
-    private DistrResumenAdapter adapter2;
 
     RealmResults<Venta> result1;
     Realm realm;
+
     public static ReimprimirFacturaFragment getInstance() {
         return new ReimprimirFacturaFragment();
     }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
-        adapter2.clearAll();
     }
+
     @Override
     public void onResume() {
         super.onResume();
-        adapter2.clearAll();
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -77,13 +78,13 @@ public class ReimprimirFacturaFragment extends BaseFragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);
 
-        adapter2 = new DistrResumenAdapter();
-        adapter2.clearAll();
+
     }
 
     private List<Venta> getListClientes(){
         realm = Realm.getDefaultInstance();
-        RealmQuery<Venta> query = realm.where(Venta.class);
+
+        RealmQuery<Venta> query = realm.where(Venta.class).equalTo("aplicada", 1);
         RealmResults<Venta> result1 = query.findAll();
 
         return result1;
@@ -92,7 +93,6 @@ public class ReimprimirFacturaFragment extends BaseFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        adapter2.clearAll();
         realm.close();
     }
 

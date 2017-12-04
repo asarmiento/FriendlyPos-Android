@@ -40,15 +40,4 @@ public  class Adapter extends FragmentPagerAdapter {
         return mFragmentTitles.get(position);
     }
 
-    @Override
-    public void destroyItem(ViewGroup container, int position, Object object) {
-        super.destroyItem(container, position, object);
-
-        if (position <= getCount()) {
-            FragmentManager manager = ((Fragment) object).getFragmentManager();
-            FragmentTransaction trans = manager.beginTransaction();
-            trans.remove((Fragment) object);
-            trans.commit();
-        }}
-
 }

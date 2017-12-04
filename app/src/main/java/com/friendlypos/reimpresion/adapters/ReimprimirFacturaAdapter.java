@@ -65,36 +65,21 @@ public class ReimprimirFacturaAdapter extends RecyclerView.Adapter<ReimprimirFac
 
     @Override
     public void onBindViewHolder(CharacterViewHolder holder, final int position) {
-        final Venta venta = contentList.get(position);
 
+        final Venta venta = contentList.get(position);
 
         Realm realm = Realm.getDefaultInstance();
 
-        RealmResults<Venta> query = null;
-
-        RealmResults<Facturas> result = realm.where(Facturas.class).equalTo("canceled", "1").findAll();
-
-        String numeracionFactura = null;
-        String fantasyCliente = null;
-        String aNombreDe = null;
-        String totalFactura = null;
         long cantidadPivot = 0;
-        if (result.isEmpty()) {
 
-        } else {
-            for (int i = 0; i < result.size(); i++) {
-                Clientes clientes = realm.where(Clientes.class).equalTo("id", venta.getCustomer_id()).findFirst();
-                Facturas facturas = realm.where(Facturas.class).equalTo("id", venta.getInvoice_id()).findFirst();
-                cantidadPivot = realm.where(Pivot.class).equalTo("invoice_id", venta.getInvoice_id()).count();
+        Clientes clientes = realm.where(Clientes.class).equalTo("id", venta.getCustomer_id()).findFirst();
+        final Facturas facturas = realm.where(Facturas.class).equalTo("id", venta.getInvoice_id()).findFirst();
 
-                aNombreDe = venta.getCustomer_name();
-                fantasyCliente = clientes.getFantasyName();
-                numeracionFactura = facturas.getNumeration();
-                totalFactura = facturas.getTotal();
-
-            }
-        }
-
+        cantidadPivot = realm.where(Pivot.class).equalTo("invoice_id", venta.getInvoice_id()).count();
+        String numeracionFactura = facturas.getNumeration();
+        String fantasyCliente = clientes.getFantasyName();
+        String aNombreDe = venta.getCustomer_name();
+        String totalFactura = facturas.getTotal();
 
         holder.txt_reimprimir_factura_numeracion.setText(numeracionFactura);
         holder.txt_reimprimir_factura_fechahora.setText(Functions.getDate() + " " + Functions.get24Time());
@@ -146,7 +131,7 @@ public class ReimprimirFacturaAdapter extends RecyclerView.Adapter<ReimprimirFac
 
                     Venta clickedDataItem = contentList.get(pos);
                     facturaID = clickedDataItem.getInvoice_id();
-                    clienteID = clickedDataItem.getCustomer_id();
+                    /*clienteID = clickedDataItem.getCustomer_id();
 
                     Realm realm = Realm.getDefaultInstance();
                     Facturas facturas = realm.where(Facturas.class).equalTo("id", facturaID).findFirst();
@@ -156,13 +141,14 @@ public class ReimprimirFacturaAdapter extends RecyclerView.Adapter<ReimprimirFac
                     String metodoPago = facturas.getPayment_method_id();
                     String creditoLimiteCliente = clientes.getCreditLimit();
                     String dueCliente = clientes.getDue();
-                    realm.close();
+                    realm.close();*/
 
 
                     Toast.makeText(view.getContext(), "You clicked " + facturaID, Toast.LENGTH_SHORT).show();
-                    Log.d("PRODUCTOSFACTURATO", facturaid1 + "");
-                    Log.d("metodoPago", metodoPago + "");
-
+                   /* Log.d("PRODUCTOSFACTURATO", facturaid1 + "");
+                    Log.d("metodoPago", metodoPago + "");*/
+                    activity.setInvoiceIdReimprimir(facturaID);
+                    Log.d("metodoPago", facturaID + "");
                  /*   activity.setInvoiceId(facturaID);
                     activity.setMetodoPagoCliente(metodoPago);
                     activity.setCreditoLimiteCliente(creditoLimiteCliente);
@@ -174,109 +160,6 @@ public class ReimprimirFacturaAdapter extends RecyclerView.Adapter<ReimprimirFac
         }
     }
 
-    public void devolverFactura() {
-        AlertDialog dialogReturnSale = new AlertDialog.Builder(QuickContext)
-                .setTitle("Devolución")
-                .setMessage("¿Desea proceder con la devolución de la factura?")
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        Log.d("PRODUCTOSFACTURA1", facturaid1 + "");
-
-                        for (int i = 0; i < facturaid1.size(); i++) {
-                            final Pivot eventRealm = facturaid1.get(i);
-                            final double cantidadDevolver = Double.parseDouble(eventRealm.getAmount());
-
-                            Log.d("PRODUCTOSFACTURASEPA1", eventRealm + "");
-                            Log.d("PRODUCTOSFACTURASEPA", cantidadDevolver + "");
-
-                            // TRANSACCIÓN BD PARA SELECCIONAR LOS DATOS DEL INVENTARIO
-                            Realm realm3 = Realm.getDefaultInstance();
-                            realm3.executeTransaction(new Realm.Transaction() {
-                                @Override
-                                public void execute(Realm realm3) {
-
-                                    Inventario inventario = realm3.where(Inventario.class).equalTo("product_id", eventRealm.getProduct_id()).findFirst();
-
-                                    if (inventario != null) {
-                                        idInvetarioSelec = inventario.getId();
-                                        amount_dist_inventario = Double.valueOf(inventario.getAmount_dist());
-                                        Log.d("idinventario", idInvetarioSelec+"");
-
-                                    } else {
-                                        amount_dist_inventario = 0.0;
-                                        // increment index
-                                        Number currentIdNum = realm3.where(Inventario.class).max("id");
-
-                                        if (currentIdNum == null) {
-                                            nextId = 1;
-                                        } else {
-                                            nextId = currentIdNum.intValue() + 1;
-                                        }
-
-                                        Inventario invnuevo= new Inventario(); // unmanaged
-                                        invnuevo.setId(nextId);
-                                        invnuevo.setProduct_id(eventRealm.getProduct_id());
-                                        invnuevo.setInitial(String.valueOf(cantidadDevolver));
-                                        invnuevo.setAmount(String.valueOf("0"));
-                                        invnuevo.setAmount_dist(String.valueOf(cantidadDevolver));
-                                        invnuevo.setDistributor(String.valueOf("0"));
-
-                                        realm3.insertOrUpdate(invnuevo);
-                                        Log.d("idinvNUEVOCREADO", invnuevo +"");
-                                    }
-
-                                    realm3.close();
-                                }
-                            });
-
-
-                            // OBTENER NUEVO AMOUNT_DIST
-                            final Double nuevoAmountDevuelto =  cantidadDevolver + amount_dist_inventario;
-                            Log.d("nuevoAmount",nuevoAmountDevuelto+"");
-
-                            // TRANSACCIÓN PARA ACTUALIZAR EL CAMPO AMOUNT_DIST EN EL INVENTARIO
-                            final Realm realm2 = Realm.getDefaultInstance();
-                            realm2.executeTransaction(new Realm.Transaction() {
-                                @Override
-                                public void execute(Realm realm2) {
-                                    Inventario inv_actualizado = realm2.where(Inventario.class).equalTo("id", idInvetarioSelec).findFirst();
-                                    inv_actualizado.setAmount_dist(String.valueOf(nuevoAmountDevuelto));
-                                    realm2.insertOrUpdate(inv_actualizado);
-                                    realm2.close();
-                                }
-                            });
-
-
-
-
-                        }
-                        // TRANSACCIÓN BD PARA BORRAR LA FACTURA
-                        final Realm realm4 = Realm.getDefaultInstance();
-                        realm4.executeTransaction(new Realm.Transaction() {
-                            @Override
-                            public void execute(Realm realm4) {
-                                RealmResults<Venta> result = realm4.where(Venta.class).equalTo("invoice_id", facturaID).findAll();
-                                result.deleteAllFromRealm();
-                                // Log.d("RealmResultsVenta", result + "");
-                                realm4.close();
-                            }
-
-                        });
-                        notifyDataSetChanged();
-
-                    }
-                }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                }).create();
-        dialogReturnSale.show();
-    }
 
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {

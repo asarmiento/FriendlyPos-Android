@@ -40,6 +40,8 @@ public class Venta extends RealmObject {
     public Clientes clientes;
     public Facturas facturas;
 
+    private int aplicada = 0;
+
     public String getId() {
         return id;
     }
@@ -128,6 +130,14 @@ public class Venta extends RealmObject {
         this.reserved = reserved;
     }
 
+    public int getAplicada() {
+        return aplicada;
+    }
+
+    public void setAplicada(int aplicada) {
+        this.aplicada = aplicada;
+    }
+
     @Override
     public String toString() {
         return "Venta{" +
@@ -142,6 +152,7 @@ public class Venta extends RealmObject {
                 ", created_at='" + created_at + '\'' +
                 ", updated_at='" + updated_at + '\'' +
                 ", reserved='" + reserved + '\'' +
+                ", aplicada=" + aplicada +
                 '}';
     }
 }
