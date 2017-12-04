@@ -186,6 +186,16 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
                             final double precioSeleccionado = (double) spPrices.getSelectedItem();
                             Log.d("precioSeleccionado", precioSeleccionado + "");
 
+                            //  CREDITO
+                            double totalProducSlecc = precioSeleccionado * producto_amount_dist_add;
+                            final double creditoLimiteCliente = Double.parseDouble(activity.getCreditoLimiteCliente());
+                            final double totalCredito = creditoLimiteCliente - totalProducSlecc;
+                            Log.d("ads", totalCredito +"");
+
+                            // LIMITAR SEGUN EL LIMITE DEL CREDITO
+                            if (totalCredito > 0) {
+
+
                             final Realm realm2 = Realm.getDefaultInstance();
 
                             realm2.executeTransaction(new Realm.Transaction() {
@@ -226,9 +236,6 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
                             Log.d("nuevoAmount", nuevoAmount + "");
 
 
-
-
-
                             final Realm realm3 = Realm.getDefaultInstance();
 
                             realm3.executeTransaction(new Realm.Transaction() {
@@ -242,40 +249,45 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
                                 }
                             });
 
-                           double totalProducSlecc = precioSeleccionado * producto_amount_dist_add;
-                            final double creditoLimiteCliente = Double.parseDouble(activity.getCreditoLimiteCliente());
-                            final double ads = creditoLimiteCliente - totalProducSlecc;
-                            Log.d("ads", ads +"");
 
-                           final Realm realm4 = Realm.getDefaultInstance();
-                            realm4.executeTransaction(new Realm.Transaction() {
-                                @Override
-                                public void execute(Realm realm4) {
 
-                                    final Venta ventas = realm4.where(Venta.class).equalTo("invoice_id", idFacturaSeleccionada).findFirst();
-                                    Clientes clientes = realm4.where(Clientes.class).equalTo("id", ventas.getCustomer_id()).findFirst();
-                                    Log.d("ads", clientes +"");
-                                   clientes.setCreditLimit(String.valueOf(ads));
+                                // TRANSACCION PARA ACTUALIZAR EL CREDIT_LIMIT DEL CLIENTE
+                                final Realm realm4 = Realm.getDefaultInstance();
+                                realm4.executeTransaction(new Realm.Transaction() {
+                                    @Override
+                                    public void execute(Realm realm4) {
 
-                                    realm4.insertOrUpdate(clientes); // using insert API
+                                        final Venta ventas = realm4.where(Venta.class).equalTo("invoice_id", idFacturaSeleccionada).findFirst();
+                                        Clientes clientes = realm4.where(Clientes.class).equalTo("id", ventas.getCustomer_id()).findFirst();
+                                        Log.d("ads", clientes + "");
+                                        clientes.setCreditLimit(String.valueOf(totalCredito));
 
-                                    realm4.close();
-                                    activity.setCreditoLimiteClienteSlecc(String.valueOf(ads));
+                                        realm4.insertOrUpdate(clientes); // using insert API
 
-                                }
-                            });
+                                        realm4.close();
+                                        activity.setCreditoLimiteClienteSlecc(String.valueOf(totalCredito));
+
+                                    }
+                                });
+
+
 
                             Toast.makeText(context, nextId + "agregocanti ", Toast.LENGTH_LONG).show();
 
 
-                        } else {
+                        }
+                            else{
+
+                                Toast.makeText(context, "Has excedido el monto del crédito", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                        else {
                             Toast.makeText(context, "El producto no se agrego, verifique la cantidad que esta ingresando", Toast.LENGTH_LONG).show();
                         }
 
                     } else {
                         Toast.makeText(context, "El producto no se agrego, El descuento debe ser >0 <11", Toast.LENGTH_LONG).show();
                     }
-
                     notifyDataSetChanged();
 
                 } catch (Exception e) {
