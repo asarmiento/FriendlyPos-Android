@@ -14,7 +14,9 @@ import com.friendlypos.distribucion.activity.DistribucionActivity;
 import com.friendlypos.distribucion.adapters.DistrResumenAdapter;
 import com.friendlypos.distribucion.adapters.DistrSeleccionarProductosAdapter;
 import com.friendlypos.distribucion.modelo.Inventario;
+
 import java.util.List;
+
 import io.realm.Realm;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
@@ -32,11 +34,13 @@ public class DistSelecProductoFragment extends BaseFragment {
     public static DistSelecProductoFragment getInstance() {
         return new DistSelecProductoFragment();
     }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
         adapter2.clearAll();
     }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -49,11 +53,11 @@ public class DistSelecProductoFragment extends BaseFragment {
         // Inflate the layout for this fragment
 
         View rootView = inflater.inflate(R.layout.fragment_distribucion_selecproduct, container,
-                false);
+            false);
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerViewDistrSeleccProducto);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setHasFixedSize(true);
-        adapter = new DistrSeleccionarProductosAdapter(((DistribucionActivity)getActivity()),getListProductos());
+        adapter = new DistrSeleccionarProductosAdapter(((DistribucionActivity) getActivity()), this, getListProductos());
         recyclerView.setAdapter(adapter);
         creditoLimite = (TextView) rootView.findViewById(R.id.restCredit);
 
@@ -68,7 +72,7 @@ public class DistSelecProductoFragment extends BaseFragment {
 
     }
 
-    private List<Inventario> getListProductos(){
+    private List<Inventario> getListProductos() {
         realm = Realm.getDefaultInstance();
         RealmQuery<Inventario> query = realm.where(Inventario.class);
         RealmResults<Inventario> result1 = query.findAll();
@@ -76,6 +80,7 @@ public class DistSelecProductoFragment extends BaseFragment {
         return result1;
 
     }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -87,23 +92,23 @@ public class DistSelecProductoFragment extends BaseFragment {
 
         // creditoLimiteCliente = Double.parseDouble(((DistribucionActivity) getActivity()).getCreditoLimiteClienteSlecc());
 
-        String metodoPagoCliente = ((DistribucionActivity)getActivity()).getMetodoPagoCliente();
-        creditoLimiteCliente = Double.parseDouble(((DistribucionActivity)getActivity()).getCreditoLimiteCliente());
-        String dueCliente = ((DistribucionActivity)getActivity()).getDueCliente();
+        String metodoPagoCliente = ((DistribucionActivity) getActivity()).getMetodoPagoCliente();
+        creditoLimiteCliente = Double.parseDouble(((DistribucionActivity) getActivity()).getCreditoLimiteClienteSlecc());
+        String dueCliente = ((DistribucionActivity) getActivity()).getDueCliente();
 
         Log.d("PagoProductoSelec", metodoPagoCliente + "");
         Log.d("PagoProductoSelec", creditoLimiteCliente + "");
         Log.d("PagoProductoSelec", dueCliente + "");
 
-        if(metodoPagoCliente.equals("1")) {
+        if (metodoPagoCliente.equals("1")) {
             bill_type = 1;
             creditoLimite.setVisibility(View.GONE);
         }
-        else if(metodoPagoCliente.equals("2")) {
+        else if (metodoPagoCliente.equals("2")) {
             bill_type = 2;
             try {
                 creditoLimite.setVisibility(View.VISIBLE);
-                creditoLimite.setText("C.Disponible: " +  String.format("%,.2f", creditoLimiteCliente));
+                creditoLimite.setText("C.Disponible: " + String.format("%,.2f", creditoLimiteCliente));
             }
             catch (Exception e) {
                 Log.d("JD", "Error " + e.getMessage());
@@ -111,14 +116,14 @@ public class DistSelecProductoFragment extends BaseFragment {
         }
 
     }
+
     @Override
     public void updateData() {
         adapter.updateData(getListProductos());
-        creditoLimiteCliente = Double.parseDouble(((DistribucionActivity)getActivity()).getCreditoLimiteCliente());
-        creditoLimite.setText("C.Disponible: " +  String.format("%,.2f", creditoLimiteCliente));
+        creditoLimiteCliente = Double.parseDouble(((DistribucionActivity) getActivity()).getCreditoLimiteClienteSlecc());
+        creditoLimite.setText("C.Disponible: " + String.format("%,.2f", creditoLimiteCliente));
 
     }
-
 
 
 }

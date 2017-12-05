@@ -20,7 +20,7 @@ import android.widget.Toast;
 
 import com.friendlypos.R;
 import com.friendlypos.distribucion.activity.DistribucionActivity;
-import com.friendlypos.distribucion.fragment.BaseFragment;
+import com.friendlypos.distribucion.fragment.DistSelecProductoFragment;
 import com.friendlypos.distribucion.modelo.Inventario;
 import com.friendlypos.distribucion.modelo.Marcas;
 import com.friendlypos.distribucion.modelo.Pivot;
@@ -34,8 +34,6 @@ import java.util.List;
 
 import io.realm.Realm;
 
-import static java.lang.String.valueOf;
-
 /**
  * Created by DelvoM on 21/09/2017.
  */
@@ -45,6 +43,7 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
     private Context context;
     public List<Inventario> productosList;
     private DistribucionActivity activity;
+    private DistSelecProductoFragment fragment;
     private static double producto_amount_dist_add = 0;
     private static double producto_descuento_add = 0;
     private int selected_position = -1;
@@ -56,12 +55,13 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
     String idProducto;
     int nextId;
 
-    public DistrSeleccionarProductosAdapter(DistribucionActivity activity, List<Inventario> productosList) {
+    public DistrSeleccionarProductosAdapter(DistribucionActivity activity, DistSelecProductoFragment fragment, List<Inventario> productosList) {
         this.activity = activity;
+        this.fragment = fragment;
         this.productosList = productosList;
     }
 
-    public void updateData(List<Inventario> productosList ) {
+    public void updateData(List<Inventario> productosList) {
         this.productosList = productosList;
         notifyDataSetChanged();
     }
@@ -69,7 +69,7 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
     @Override
     public CharacterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.lista_distribucion_productos, parent, false);
+            .inflate(R.layout.lista_distribucion_productos, parent, false);
         context = parent.getContext();
         //  CharacterViewHolder placeViewHolder = new CharacterViewHolder(view);
         // placeViewHolder.cardView.setOnClickListener(new ProductosAdapter(placeViewHolder, parent));
@@ -110,7 +110,6 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
         holder.txt_producto_factura_seleccionado.setText("Selec: " + "0.0");
         holder.cardView.setBackgroundColor(selected_position == position ? Color.parseColor("#607d8b") : Color.parseColor("#009688"));
     }
-
 
 
     public void addProduct(final int inventario_id, final String producto_id, final Double cantidadDisponible, String Precio1, String Precio2, String Precio3, String Precio4, String Precio5) {
@@ -188,39 +187,41 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
 
                             //  CREDITO
                             double totalProducSlecc = precioSeleccionado * producto_amount_dist_add;
-                            final double creditoLimiteCliente = Double.parseDouble(activity.getCreditoLimiteCliente());
+                            final double creditoLimiteCliente = Double.parseDouble(activity.getCreditoLimiteClienteSlecc());
                             final double totalCredito = creditoLimiteCliente - totalProducSlecc;
-                            Log.d("ads", totalCredito +"");
+                            Log.d("ads", totalCredito + "");
 
                             // LIMITAR SEGUN EL LIMITE DEL CREDITO
                             if (totalCredito > 0) {
 
 
-                            final Realm realm2 = Realm.getDefaultInstance();
+                                final Realm realm2 = Realm.getDefaultInstance();
 
-                            realm2.executeTransaction(new Realm.Transaction() {
-                                @Override
-                                public void execute(Realm realm) {
+                                realm2.executeTransaction(new Realm.Transaction() {
 
-                                    // increment index
-                                    Number currentIdNum = realm.where(Pivot.class).max("id");
+                                    @Override
+                                    public void execute(Realm realm) {
 
-                                    if (currentIdNum == null) {
-                                        nextId = 1;
-                                    } else {
-                                        nextId = currentIdNum.intValue() + 1;
-                                    }
+                                        // increment index
+                                        Number currentIdNum = realm.where(Pivot.class).max("id");
 
-                                    Pivot pivotnuevo = new Pivot(); // unmanaged
-                                    pivotnuevo.setId(nextId);
-                                    pivotnuevo.setInvoice_id(idFacturaSeleccionada);
-                                    pivotnuevo.setProduct_id(producto_id);
-                                    pivotnuevo.setPrice(String.valueOf(precioSeleccionado));
-                                    pivotnuevo.setAmount(String.valueOf(producto_amount_dist_add));
-                                    pivotnuevo.setDiscount(String.valueOf(producto_descuento_add));
-                                    pivotnuevo.setDelivered(String.valueOf(producto_amount_dist_add));
+                                        if (currentIdNum == null) {
+                                            nextId = 1;
+                                        }
+                                        else {
+                                            nextId = currentIdNum.intValue() + 1;
+                                        }
 
-                                    realm2.insertOrUpdate(pivotnuevo); // using insert API
+                                        Pivot pivotnuevo = new Pivot(); // unmanaged
+                                        pivotnuevo.setId(nextId);
+                                        pivotnuevo.setInvoice_id(idFacturaSeleccionada);
+                                        pivotnuevo.setProduct_id(producto_id);
+                                        pivotnuevo.setPrice(String.valueOf(precioSeleccionado));
+                                        pivotnuevo.setAmount(String.valueOf(producto_amount_dist_add));
+                                        pivotnuevo.setDiscount(String.valueOf(producto_descuento_add));
+                                        pivotnuevo.setDelivered(String.valueOf(producto_amount_dist_add));
+
+                                        realm2.insertOrUpdate(pivotnuevo); // using insert API
 
 
 
@@ -229,31 +230,32 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
 
                                     */
 
-                                }
-                            });
+                                    }
+                                });
 
-                            final Double nuevoAmount = cantidadDisponible - producto_amount_dist_add;
-                            Log.d("nuevoAmount", nuevoAmount + "");
+                                final Double nuevoAmount = cantidadDisponible - producto_amount_dist_add;
+                                Log.d("nuevoAmount", nuevoAmount + "");
 
 
-                            final Realm realm3 = Realm.getDefaultInstance();
+                                final Realm realm3 = Realm.getDefaultInstance();
 
-                            realm3.executeTransaction(new Realm.Transaction() {
-                                @Override
-                                public void execute(Realm realm3) {
+                                realm3.executeTransaction(new Realm.Transaction() {
 
-                                    Inventario inv_actualizado = realm3.where(Inventario.class).equalTo("id", inventario_id).findFirst();
-                                    inv_actualizado.setAmount_dist(String.valueOf(nuevoAmount));
+                                    @Override
+                                    public void execute(Realm realm3) {
 
-                                    realm3.insertOrUpdate(inv_actualizado); // using insert API
-                                }
-                            });
+                                        Inventario inv_actualizado = realm3.where(Inventario.class).equalTo("id", inventario_id).findFirst();
+                                        inv_actualizado.setAmount_dist(String.valueOf(nuevoAmount));
 
+                                        realm3.insertOrUpdate(inv_actualizado); // using insert API
+                                    }
+                                });
 
 
                                 // TRANSACCION PARA ACTUALIZAR EL CREDIT_LIMIT DEL CLIENTE
                                 final Realm realm4 = Realm.getDefaultInstance();
                                 realm4.executeTransaction(new Realm.Transaction() {
+
                                     @Override
                                     public void execute(Realm realm4) {
 
@@ -266,17 +268,17 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
 
                                         realm4.close();
                                         activity.setCreditoLimiteClienteSlecc(String.valueOf(totalCredito));
+                                        fragment.updateData();
 
                                     }
                                 });
 
 
+                                Toast.makeText(context, nextId + "agregocanti ", Toast.LENGTH_LONG).show();
 
-                            Toast.makeText(context, nextId + "agregocanti ", Toast.LENGTH_LONG).show();
 
-
-                        }
-                            else{
+                            }
+                            else {
 
                                 Toast.makeText(context, "Has excedido el monto del crédito", Toast.LENGTH_SHORT).show();
                             }
@@ -285,12 +287,14 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
                             Toast.makeText(context, "El producto no se agrego, verifique la cantidad que esta ingresando", Toast.LENGTH_LONG).show();
                         }
 
-                    } else {
+                    }
+                    else {
                         Toast.makeText(context, "El producto no se agrego, El descuento debe ser >0 <11", Toast.LENGTH_LONG).show();
                     }
                     notifyDataSetChanged();
 
-                } catch (Exception e) {
+                }
+                catch (Exception e) {
                     e.printStackTrace();
                        /* Functions.createSnackBar(QuickContext, coordinatorLayout, "Sucedio un error Revise que el producto y sus dependientes tengan existencias", 2, Snackbar.LENGTH_LONG);
                         Functions.CreateMessage(QuickContext, "Error", e.getMessage());*/
@@ -298,12 +302,12 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
             }
         });
         alertDialogBuilder.setNegativeButton("Cancel",
-                new DialogInterface.OnClickListener() {
+            new DialogInterface.OnClickListener() {
 
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
+                public void onClick(DialogInterface dialog, int id) {
+                    dialog.cancel();
+                }
+            });
 
         AlertDialog alertD = alertDialogBuilder.create();
         alertD.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);

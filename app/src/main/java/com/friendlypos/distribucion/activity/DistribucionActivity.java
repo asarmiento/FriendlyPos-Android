@@ -3,15 +3,10 @@ package com.friendlypos.distribucion.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.view.ViewGroup;
 
 import com.friendlypos.R;
 import com.friendlypos.distribucion.fragment.BaseFragment;
@@ -25,6 +20,8 @@ import com.friendlypos.principal.activity.MenuPrincipal;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.ButterKnife;
+
 public class DistribucionActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
@@ -35,18 +32,27 @@ public class DistribucionActivity extends AppCompatActivity {
     private String metodoPagoCliente;
     private String creditoLimiteCliente;
     private String dueCliente;
-    private String creditoLimiteClienteSlecc;
-
+    private String creditoLimiteClienteSlecc = "";
 
 
     private String totalizarSubGrabado;
-    private String totalizarSubExento;
+    private double totalizarSubExento;
     private String totalizarSubTotal;
     private String totalizarDescuento;
     private String totalizarImpuestoIVA;
     private String totalizarTotal;
     private double totalizarTotalDouble;
 
+
+    public void cleanTotalize() {
+        totalizarSubGrabado = "0";
+        totalizarSubExento = 0.0;
+        totalizarSubTotal = "0";
+        totalizarDescuento = "0";
+        totalizarImpuestoIVA = "0";
+        totalizarTotal = "0";
+        totalizarTotalDouble = 0.0;
+    }
 
     public String getInvoiceId() {
         return invoiceId;
@@ -62,14 +68,6 @@ public class DistribucionActivity extends AppCompatActivity {
 
     public void setMetodoPagoCliente(String metodoPagoCliente) {
         this.metodoPagoCliente = metodoPagoCliente;
-    }
-
-    public String getCreditoLimiteCliente() {
-        return creditoLimiteCliente;
-    }
-
-    public void setCreditoLimiteCliente(String creditoLimiteCliente) {
-        this.creditoLimiteCliente = creditoLimiteCliente;
     }
 
     public String getCreditoLimiteClienteSlecc() {
@@ -96,12 +94,12 @@ public class DistribucionActivity extends AppCompatActivity {
         this.totalizarSubGrabado = totalizarSubGrabado;
     }
 
-    public String getTotalizarSubExento() {
+    public double getTotalizarSubExento() {
         return totalizarSubExento;
     }
 
-    public void setTotalizarSubExento(String totalizarSubExento) {
-        this.totalizarSubExento = totalizarSubExento;
+    public void setTotalizarSubExento(double totalizarSubExento) {
+        this.totalizarSubExento = this.totalizarSubExento + totalizarSubExento;
     }
 
     public String getTotalizarSubTotal() {
@@ -148,7 +146,7 @@ public class DistribucionActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_distribucion);
-
+        ButterKnife.bind(this);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -238,7 +236,8 @@ public class DistribucionActivity extends AppCompatActivity {
 
             default:
                 return super.onOptionsItemSelected(item);
-        }}
+        }
+    }
 
 }
 

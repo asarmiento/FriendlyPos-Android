@@ -47,6 +47,8 @@ public class Facturas extends RealmObject {
     @SerializedName("product_invoice")
     private RealmList<Pivot> productofacturas;
 
+
+
     private int aplicada = 0;
 
     public String getId() {
@@ -302,7 +304,6 @@ public class Facturas extends RealmObject {
                 ", payment_method_id='" + payment_method_id + '\'' +
                 ", venta=" + venta +
                 ", productofacturas=" + productofacturas +
-                ", aplicada=" + aplicada +
                 '}';
     }
 }

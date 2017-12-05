@@ -1,12 +1,6 @@
 package com.friendlypos.distribucion.fragment;
 
-import android.content.Context;
 import android.os.Bundle;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,24 +11,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.friendlypos.R;
-import com.friendlypos.application.runModelo.RunSale;
 import com.friendlypos.application.util.Functions;
 import com.friendlypos.application.util.PrinterFunctions;
 import com.friendlypos.distribucion.activity.DistribucionActivity;
 import com.friendlypos.distribucion.modelo.Facturas;
-import com.friendlypos.distribucion.modelo.Inventario;
-import com.friendlypos.distribucion.modelo.Pivot;
-import com.friendlypos.distribucion.modelo.ProductoFactura;
 import com.friendlypos.distribucion.modelo.Venta;
-import com.friendlypos.principal.modelo.Sysconf;
-import com.google.gson.annotations.SerializedName;
-
-import java.io.IOException;
 
 import io.realm.Realm;
-import io.realm.RealmList;
-
-import static java.lang.String.valueOf;
 
 
 public class DistTotalizarFragment extends BaseFragment {
@@ -52,13 +35,13 @@ public class DistTotalizarFragment extends BaseFragment {
     private static EditText client_name;
     private static EditText paid;
 
-    String totalGrabado= "0";
-    String totalExento= "0";
-    String totalSubtotal= "0";
-    String totalDescuento= "0";
-    String totalImpuesto= "0";
-    String totalTotal= "0";
-    String totalVuelvo= "0";
+    String totalGrabado = "0";
+    double totalExento = 0.0;
+    String totalSubtotal = "0";
+    String totalDescuento = "0";
+    String totalImpuesto = "0";
+    String totalTotal = "0";
+    String totalVuelvo = "0";
     String totalPagoCon = "0";
     static double totalTotalDouble;
     static double pagoCon = 0.0;
@@ -76,12 +59,6 @@ public class DistTotalizarFragment extends BaseFragment {
     public void onDestroy() {
         super.onDestroy();
         clearAll();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        updateData();
     }
 
     @Override
@@ -103,9 +80,9 @@ public class DistTotalizarFragment extends BaseFragment {
 
         change = (TextView) rootView.findViewById(R.id.txtChange);
 
-        String metodoPagoCliente = ((DistribucionActivity)getActivity()).getMetodoPagoCliente();
+        String metodoPagoCliente = ((DistribucionActivity) getActivity()).getMetodoPagoCliente();
 
-        if(metodoPagoCliente.equals("1")) {
+        if (metodoPagoCliente.equals("1")) {
             //bill_type = 1;
             try {
                 paid.setEnabled(true);
@@ -116,11 +93,10 @@ public class DistTotalizarFragment extends BaseFragment {
             }
 
         }
-        else if(metodoPagoCliente.equals("2")) {
-          //  bill_type = 2;
+        else if (metodoPagoCliente.equals("2")) {
+            //  bill_type = 2;
             paid.setEnabled(false);
         }
-
 
 
         notes = (EditText) rootView.findViewById(R.id.txtNotes);
@@ -138,53 +114,53 @@ public class DistTotalizarFragment extends BaseFragment {
         }
 
         applyBill.setOnClickListener(
-                new View.OnClickListener() {
+            new View.OnClickListener() {
 
-                    @Override
-                    public void onClick(View v) {
-                        try {
-                            //validateData();
-                            // Log.d("total", String.valueOf(Functions.sGetDecimalStringAnyLocaleAsDouble(Total.getText().toString())));
+                @Override
+                public void onClick(View v) {
+                    try {
+                        //validateData();
+                        // Log.d("total", String.valueOf(Functions.sGetDecimalStringAnyLocaleAsDouble(Total.getText().toString())));
 
 
-                            pagoCon = Double.parseDouble(paid.getText().toString());
-                            totalPagoCon = String.format("%,.2f", pagoCon);
-                            double total = totalTotalDouble;
+                        pagoCon = Double.parseDouble(paid.getText().toString());
+                        totalPagoCon = String.format("%,.2f", pagoCon);
+                        double total = totalTotalDouble;
 
-                            if(pagoCon >= total){
+                        if (pagoCon >= total) {
                             double vuelto = pagoCon - total;
                             totalVuelvo = String.format("%,.2f", vuelto);
 
                             change.setText(totalVuelvo);
 
                             aplicarFactura();
-                            }
-                            else {
-                                Toast.makeText(getActivity(), "Digite una cantidad mayor al total", Toast.LENGTH_LONG).show();
-                            }
                         }
-                        catch (Exception e) {
-                            Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
-                            e.printStackTrace();
-
+                        else {
+                            Toast.makeText(getActivity(), "Digite una cantidad mayor al total", Toast.LENGTH_LONG).show();
                         }
                     }
+                    catch (Exception e) {
+                        Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
+                        e.printStackTrace();
 
-                } );
-
-        printBill.setOnClickListener(
-                new View.OnClickListener() {
-
-                    @Override
-                    public void onClick(View v) {
-                        try {
-                            PrinterFunctions.imprimirFacturaDistrTotal(venta_actualizada, getActivity(), 1);
-                        }
-                        catch (Exception e) {
-                            Functions.CreateMessage(getActivity(), "Error", e.getMessage() + "\n" + e.getStackTrace().toString());
-                        }
                     }
                 }
+
+            });
+
+        printBill.setOnClickListener(
+            new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    try {
+                        PrinterFunctions.imprimirFacturaDistrTotal(venta_actualizada, getActivity(), 1);
+                    }
+                    catch (Exception e) {
+                        Functions.CreateMessage(getActivity(), "Error", e.getMessage() + "\n" + e.getStackTrace().toString());
+                    }
+                }
+            }
 
         );
 
@@ -194,10 +170,12 @@ public class DistTotalizarFragment extends BaseFragment {
 
     @Override
     public void updateData() {
+
         paid.getText().clear();
 
         totalGrabado = ((DistribucionActivity) getActivity()).getTotalizarSubGrabado();
         totalExento = ((DistribucionActivity) getActivity()).getTotalizarSubExento();
+        Log.d("TotalExento", String.valueOf(((DistribucionActivity) getActivity()).getTotalizarSubExento()));
         totalSubtotal = ((DistribucionActivity) getActivity()).getTotalizarSubTotal();
         totalDescuento = ((DistribucionActivity) getActivity()).getTotalizarDescuento();
         totalImpuesto = ((DistribucionActivity) getActivity()).getTotalizarImpuestoIVA();
@@ -206,7 +184,7 @@ public class DistTotalizarFragment extends BaseFragment {
         facturaId = ((DistribucionActivity) getActivity()).getInvoiceId();
 
         subGra.setText(totalGrabado);
-        subExe.setText(totalExento);
+        subExe.setText(String.format("%,.2f", totalExento));
 
         subT.setText(totalSubtotal);
         discount.setText(totalDescuento);
@@ -216,12 +194,19 @@ public class DistTotalizarFragment extends BaseFragment {
 
         Log.d("FACTURAIDTOTALIZAR", facturaId);
 
+
     }
+
+    private void clearUI() {
+
+    }
+
     protected void actualizarFactura() {
 
         // TRANSACCION PARA ACTUALIZAR CAMPOS DE LA TABLA FACTURAS
         final Realm realm2 = Realm.getDefaultInstance();
         realm2.executeTransaction(new Realm.Transaction() {
+
             @Override
             public void execute(Realm realm2) {
                 Facturas factura_actualizada = realm2.where(Facturas.class).equalTo("id", facturaId).findFirst();
@@ -231,7 +216,7 @@ public class DistTotalizarFragment extends BaseFragment {
                 factura_actualizada.setTimes(Functions.get24Time());
 
                 factura_actualizada.setSubtotal_taxed(totalGrabado);
-                factura_actualizada.setSubtotal_exempt(totalExento);
+                factura_actualizada.setSubtotal_exempt(String.valueOf(totalExento));
                 factura_actualizada.setSubtotal(totalSubtotal);
                 factura_actualizada.setDiscount(totalDescuento);
                 factura_actualizada.setTax(totalImpuesto);
@@ -256,6 +241,7 @@ public class DistTotalizarFragment extends BaseFragment {
         // TRANSACCION PARA ACTUALIZAR CAMPOS DE LA TABLA VENTAS
         final Realm realm3 = Realm.getDefaultInstance();
         realm3.executeTransaction(new Realm.Transaction() {
+
             @Override
             public void execute(Realm realm3) {
                 venta_actualizada = realm3.where(Venta.class).equalTo("id", facturaId).findFirst();

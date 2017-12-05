@@ -1,7 +1,6 @@
 package com.friendlypos.reimpresion.fragment;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,8 +9,6 @@ import android.widget.ImageButton;
 
 import com.friendlypos.R;
 import com.friendlypos.application.util.Functions;
-import com.friendlypos.application.util.PrinterFunctions;
-import com.friendlypos.distribucion.activity.DistribucionActivity;
 import com.friendlypos.distribucion.fragment.BaseFragment;
 import com.friendlypos.distribucion.modelo.Facturas;
 import com.friendlypos.distribucion.modelo.Pivot;
@@ -23,8 +20,6 @@ import com.friendlypos.reimpresion.activity.ReimprimirActivity;
 
 import org.sufficientlysecure.htmltextview.HtmlTextView;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import butterknife.Bind;
@@ -40,14 +35,8 @@ public class ReimprimirResumenFragment extends BaseFragment {
     public ImageButton btnReimprimirFactura;
 
 
-    Venta venta_actualizada;
-    String facturaId;
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        updateData();
-    }
+    Venta venta_actualizada = null;
+    String facturaId = "";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -58,12 +47,14 @@ public class ReimprimirResumenFragment extends BaseFragment {
 
 
         btnReimprimirFactura.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
 
                 // TRANSACCION PARA ACTUALIZAR CAMPOS DE LA TABLA VENTAS
                 final Realm realm3 = Realm.getDefaultInstance();
                 realm3.executeTransaction(new Realm.Transaction() {
+
                     @Override
                     public void execute(Realm realm3) {
 
@@ -74,11 +65,11 @@ public class ReimprimirResumenFragment extends BaseFragment {
                 });
 
                 String a = "1";
-                if(venta_actualizada.getSale_type() == "2"){
+                if (venta_actualizada.getSale_type() == "2") {
                     a = "2";
                 }
                 getHtmlPreview();
-               // PrinterFunctions.imprimirFacturaDistrTotal(venta_actualizada, getActivity(), Integer.parseInt(a));
+                // PrinterFunctions.imprimirFacturaDistrTotal(venta_actualizada, getActivity(), Integer.parseInt(a));
             }
         });
 
@@ -86,8 +77,7 @@ public class ReimprimirResumenFragment extends BaseFragment {
     }
 
 
-
-    private void getHtmlPreview(){
+    private void getHtmlPreview() {
         try {
 
             Realm realm = Realm.getDefaultInstance();
@@ -108,18 +98,18 @@ public class ReimprimirResumenFragment extends BaseFragment {
             double descuentoCliente = Double.parseDouble(clientes.getFixedDiscount());
 
             // VARIABLES FACTURA
-            String fechaFactura =facturas.getDue_date();
+            String fechaFactura = facturas.getDue_date();
             String numeracionFactura = facturas.getNumeration();
             String metodoPago = facturas.getPayment_method_id();
-            String totalGrabado= facturas.getSubtotal_taxed();
-            String totalExento= facturas.getSubtotal_exempt();
-            String totalSubtotal= facturas.getSubtotal();
-            String totalDescuento= facturas.getDiscount();
-            String totalImpuesto= facturas.getTax();
-            String totalTotal= facturas.getTotal();
-            String totalCancelado= facturas.getPaid();
-            String totalVuelto= facturas.getChanging();
-            String totalNotas= facturas.getNote();
+            String totalGrabado = facturas.getSubtotal_taxed();
+            String totalExento = facturas.getSubtotal_exempt();
+            String totalSubtotal = facturas.getSubtotal();
+            String totalDescuento = facturas.getDiscount();
+            String totalImpuesto = facturas.getTax();
+            String totalTotal = facturas.getTotal();
+            String totalCancelado = facturas.getPaid();
+            String totalVuelto = facturas.getChanging();
+            String totalNotas = facturas.getNote();
 
             // VARIABLES SYSCONF
             String sysNombre = sysconf.getName();
@@ -132,30 +122,29 @@ public class ReimprimirResumenFragment extends BaseFragment {
 
             String preview = "";
             String condition = "Esta factura constituye titulo ejecutivo al tenor del articulo 460 del codigo de comercio. "
-                    + "El deudor renuncia a los requerimientos de pago, domicilio y tramites del juicio ejecutivo. "
-                    + "El suscrito da fe, bajo la gravedad de juramento que se encuentra facultado y autorizado para firmar esta factura, "
-                    + "por su representada, conforme al articulo supracitado. Si realiza pago mediante transferencia electronica de "
-                    + "fondos o cualquier otro medio que no sea efectivo, la validez del pago queda sujeto a su acreditacion en las cuentas "
-                    + "bancarias de " + sysNombre + ", Por lo cual la factura original le sera entregada una vez confirme dicha acreditacion ";
+                + "El deudor renuncia a los requerimientos de pago, domicilio y tramites del juicio ejecutivo. "
+                + "El suscrito da fe, bajo la gravedad de juramento que se encuentra facultado y autorizado para firmar esta factura, "
+                + "por su representada, conforme al articulo supracitado. Si realiza pago mediante transferencia electronica de "
+                + "fondos o cualquier otro medio que no sea efectivo, la validez del pago queda sujeto a su acreditacion en las cuentas "
+                + "bancarias de " + sysNombre + ", Por lo cual la factura original le sera entregada una vez confirme dicha acreditacion ";
 
-            if ( venta_actualizada != null) {
-
+            if (venta_actualizada != null) {
 
 
                 String billString = "";
-                if (venta_actualizada.getSale_type() == "1"){
-                    billString ="Factura";
-                }else if (venta_actualizada.getSale_type() == "2")
-                {
-                    billString ="Factura";
-                }else if(venta_actualizada.getSale_type() == "3")
-                {
-                    billString ="Proforma";
+                if (venta_actualizada.getSale_type() == "1") {
+                    billString = "Factura";
+                }
+                else if (venta_actualizada.getSale_type() == "2") {
+                    billString = "Factura";
+                }
+                else if (venta_actualizada.getSale_type() == "3") {
+                    billString = "Proforma";
                 }
 
 
-                preview += "<center><h2>"+billString+ " a "+ metodoPago  +"</h2>";
-                preview += "<h5>"+billString+ " #" + numeracionFactura + "</h3>";
+                preview += "<center><h2>" + billString + " a " + metodoPago + "</h2>";
+                preview += "<h5>" + billString + " #" + numeracionFactura + "</h3>";
                 preview += "<center><h2>" + sysNombre + "</h2></center>";
                 preview += "<center><h4>" + sysNombreNegocio + "</h4></center>";
                 preview += "<h6>" + sysDireccion + "</h2></center>";
@@ -165,11 +154,11 @@ public class ReimprimirResumenFragment extends BaseFragment {
                 //preview += "<a><b>Fecha:</b> " + SelectedSale.invoice.date + "</a><br><br>";
 
                 preview += "<a><b>Fecha:</b> " + fechayhora + "</a><br><br>";
-               // preview += "<a><b>Vendedor:</b> " + users.name + "</a><br>";
+                // preview += "<a><b>Vendedor:</b> " + users.name + "</a><br>";
                 preview += "<a><b>ID Cliente:</b> " + cardCliente + "</a><br>";
                 preview += "<a><b>Cliente:</b> " + companyCliente + "</a><br>";
                 preview += "<a><b>A nombre de:</b> " + nombreCliente + "</a><br><br>";
-                preview += "<a><b>" + padRight("Descripcion", 10) + "\t\t" + padRight("Codigo", 10)+ padRight("Desc.", 10) + "</b></a><br>";
+                preview += "<a><b>" + padRight("Descripcion", 10) + "\t\t" + padRight("Codigo", 10) + padRight("Desc.", 10) + "</b></a><br>";
                 preview += "<a><b>I\t" + padRight("Cantidad", 10) + padRight("Precio", 10) + padRight("Total", 10) + "</b></a><br>";
                 preview += "<a>------------------------------------------------<a><br>";
 
@@ -183,13 +172,13 @@ public class ReimprimirResumenFragment extends BaseFragment {
                 preview += "<a> " + String.format("%20s %-20s", "Total", totalTotal) + "</a><br><br></center>";
                 preview += "<a><b>Notas:</b> " + totalNotas + "</a><br>";
                 preview += "<a><b>Firma y Cedula:_______________________________</b></a><br>";
-                if(metodoPago == "2") {
+                if (metodoPago == "2") {
                     preview += "<br><br><font size=\"7\"><p>" + condition + "</p></font>";
                 }
 
                 preview += "<a>" +
-                        " Autorizado mediante oficio <br>" +
-                        "N° : 11-1997 de la D.G.T.D  </a>";
+                    " Autorizado mediante oficio <br>" +
+                    "N° : 11-1997 de la D.G.T.D  </a>";
 
             }
             else {
@@ -197,7 +186,8 @@ public class ReimprimirResumenFragment extends BaseFragment {
             }
             //HtmlTextView.
             text.setHtmlFromString(preview, new HtmlTextView.LocalImageGetter());
-        }catch (Exception e){
+        }
+        catch (Exception e) {
             String preview = "<center><h2>Seleccione la factura a ver cath</h2></center>";
             text.setHtmlFromString(preview, new HtmlTextView.LocalImageGetter());
             Log.d("adsdad", e.getMessage());
@@ -206,17 +196,19 @@ public class ReimprimirResumenFragment extends BaseFragment {
 
     public static String padRight(String s, double n) {
         String centeredString;
-        double pad=(n+4)-s.length();
+        double pad = (n + 4) - s.length();
 
-        if (pad > 0){
-            String pd= Functions.paddigTabs((int)(pad/2.0));
-            centeredString = "\t" +s+"\t" +pd;
+        if (pad > 0) {
+            String pd = Functions.paddigTabs((int) (pad / 2.0));
+            centeredString = "\t" + s + "\t" + pd;
             System.out.println("pad: " + "|" + centeredString + "|");
-        }else{
-            centeredString="\t"+s+"\t";
+        }
+        else {
+            centeredString = "\t" + s + "\t";
         }
         return centeredString;
     }
+
     private static String getPrintDistTotal(String idVenta) {
         String send = "";
 
@@ -225,7 +217,8 @@ public class ReimprimirResumenFragment extends BaseFragment {
 
         if (result.isEmpty()) {
             send = "No hay facturas emitidas";
-        } else {
+        }
+        else {
             // printSalesCashTotal= 0.0;
             for (int i = 0; i < result.size(); i++) {
 
@@ -244,8 +237,8 @@ public class ReimprimirResumenFragment extends BaseFragment {
               /*  String factFecha = salesList1.get(i).getDate();
                 double factTotal = Functions.sGetDecimalStringAnyLocaleAsDouble(salesList1.get(i).getTotal());*/
 
-                send += String.format("%s  %.24s ",description, barcode) + "<br>" +
-                        String.format("%-5s %-10s %-10s %-15s %.1s", cant /*bill.amount*/, precio, precio,Functions.doubleToString(cant * precio), typeId)+ "<br>";
+                send += String.format("%s  %.24s ", description, barcode) + "<br>" +
+                    String.format("%-5s %-10s %-10s %-15s %.1s", cant /*bill.amount*/, precio, precio, Functions.doubleToString(cant * precio), typeId) + "<br>";
                 send += "<a>------------------------------------------------<a><br>";
                 Log.d("FACTPRODTODFAC", send + "");
 
@@ -254,11 +247,33 @@ public class ReimprimirResumenFragment extends BaseFragment {
         }
         return send;
     }
+
     @Override
     public void updateData() {
         facturaId = ((ReimprimirActivity) getActivity()).getInvoiceIdReimprimir();
-       // Log.d("FACTURAIDReim", facturaId);
+        if (facturaId != null) {
+            Log.d("FACTURAIDReim", facturaId);
+        }
 
+        // TRANSACCION PARA ACTUALIZAR CAMPOS DE LA TABLA VENTAS
+        final Realm realm3 = Realm.getDefaultInstance();
+        realm3.executeTransaction(new Realm.Transaction() {
+
+            @Override
+            public void execute(Realm realm3) {
+
+                venta_actualizada = realm3.where(Venta.class).equalTo("id", facturaId).findFirst();
+
+                realm3.close();
+            }
+        });
+
+        String a = "1";
+        if (venta_actualizada.getSale_type() == "2") {
+            a = "2";
+        }
+        getHtmlPreview();
+        // PrinterFunctions.imprimirFacturaDistrTotal(venta_actualizada, getActivity(), Integer.parseInt(a));
     }
 }
 

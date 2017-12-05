@@ -38,20 +38,14 @@ public class SubirHelper {
         mAPIService = BaseManager.getApi();
     }
 
-    public void sendPost(String id, String branch_office_id, String numeration,String date, String times, String date_presale,String time_presale,
-                         String due_date,String subtotal,String subtotal_taxed,String subtotal_exempt,String discount,String percent_discount,String tax,
-                         String total,String changing,String note,String canceled,String paid_up,String paid,String created_at,String user_id,String user_id_applied,String invoice_type_id,
-                         String payment_method_id, String venta, String productofacturas) {
+    public void sendPost(String facturaQuery) {
 
         if (isOnline()) {
 
-        mAPIService.savePost(id, branch_office_id, numeration,date,times,date_presale,time_presale,
-                due_date,subtotal,subtotal_taxed,subtotal_exempt,discount,percent_discount,tax,
-                total,changing,note,canceled,paid_up,paid,created_at,user_id,user_id_applied,invoice_type_id,
-                payment_method_id, venta, productofacturas).enqueue(new Callback<Facturas>() {
+        mAPIService.savePost(facturaQuery).enqueue(new Callback<Facturas>() {
             @Override
             public void onResponse(Call<Facturas> call, Response<Facturas> response) {
-
+                Log.i(TAG, "mamon " + response.body());
                 if(response.isSuccessful()) {
                     showResponse(response.body().toString());
                     Log.i(TAG, "post submitted to API." + response.body().toString());

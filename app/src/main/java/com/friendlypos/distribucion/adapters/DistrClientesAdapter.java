@@ -162,7 +162,7 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
 
                         activity.setInvoiceId(facturaID);
                         activity.setMetodoPagoCliente(metodoPago);
-                        activity.setCreditoLimiteCliente(creditoLimiteCliente);
+                        activity.setCreditoLimiteClienteSlecc(creditoLimiteCliente);
                         activity.setDueCliente(dueCliente);
 
                 }

@@ -14,7 +14,6 @@ import android.widget.Toast;
 
 import com.friendlypos.R;
 import com.friendlypos.distribucion.activity.DistribucionActivity;
-import com.friendlypos.distribucion.modelo.Facturas;
 import com.friendlypos.distribucion.modelo.Inventario;
 import com.friendlypos.distribucion.modelo.Pivot;
 import com.friendlypos.distribucion.modelo.Venta;
@@ -40,9 +39,11 @@ public class DistrResumenAdapter extends RecyclerView.Adapter<DistrResumenAdapte
     private int selected_position1 = -1;
     Double amount_dist_inventario = 0.0;
     int idInvetarioSelec;
+
     public ArrayList<Pivot> getData() {
         return data;
     }
+
     double credi = 0.0;
     private static double iva = 13.0;
     private static int apply_done = 0;
@@ -60,7 +61,7 @@ public class DistrResumenAdapter extends RecyclerView.Adapter<DistrResumenAdapte
     private static String impuestoIVA;
     private static Double cantidad = 0.0;
     private static Double precio = 0.0;
-    private static Double descuento= 0.0;
+    private static Double descuento = 0.0;
     private static Double clienteFixedDescuento = 0.0;
 
 
@@ -74,14 +75,13 @@ public class DistrResumenAdapter extends RecyclerView.Adapter<DistrResumenAdapte
         this.QuickContext = context;
         this.data = aListdata;
     }
+
     public DistrResumenAdapter() {
 
     }
 
 
-
-
-    public void updateData(List<Pivot> productosList){
+    public void updateData(List<Pivot> productosList) {
         this.productosList = productosList;
         notifyDataSetChanged();
     }
@@ -124,6 +124,7 @@ public class DistrResumenAdapter extends RecyclerView.Adapter<DistrResumenAdapte
         holder.txt_resumen_factura_total.setText("T: " + pivotTotal);
         totalize();
     }
+
     @Override
     public long getItemId(int position) {
         return 0;
@@ -140,9 +141,9 @@ public class DistrResumenAdapter extends RecyclerView.Adapter<DistrResumenAdapte
     }
 
 
-    public class CharacterViewHolder extends RecyclerView.ViewHolder{
+    public class CharacterViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView txt_resumen_factura_nombre, txt_resumen_factura_descuento,txt_resumen_factura_precio, txt_resumen_factura_cantidad, txt_resumen_factura_total;
+        private TextView txt_resumen_factura_nombre, txt_resumen_factura_descuento, txt_resumen_factura_precio, txt_resumen_factura_cantidad, txt_resumen_factura_total;
         protected CardView cardView;
         ImageButton btnEliminarResumen;
 
@@ -186,6 +187,7 @@ public class DistrResumenAdapter extends RecyclerView.Adapter<DistrResumenAdapte
                     // TRANSACCIÓN BD PARA SELECCIONAR LOS DATOS DEL INVENTARIO
                     Realm realm3 = Realm.getDefaultInstance();
                     realm3.executeTransaction(new Realm.Transaction() {
+
                         @Override
                         public void execute(Realm realm3) {
 
@@ -193,17 +195,18 @@ public class DistrResumenAdapter extends RecyclerView.Adapter<DistrResumenAdapte
                             idInvetarioSelec = inventario.getId();
                             amount_dist_inventario = Double.valueOf(inventario.getAmount_dist());
                             realm3.close();
-                            Log.d("idinventario", idInvetarioSelec+"");
+                            Log.d("idinventario", idInvetarioSelec + "");
                         }
                     });
 
                     // OBTENER NUEVO AMOUNT_DIST
-                    final Double nuevoAmountDevuelto =  cantidadProducto + amount_dist_inventario;
-                    Log.d("nuevoAmount",nuevoAmountDevuelto+"");
+                    final Double nuevoAmountDevuelto = cantidadProducto + amount_dist_inventario;
+                    Log.d("nuevoAmount", nuevoAmountDevuelto + "");
 
                     // TRANSACCIÓN PARA ACTUALIZAR EL CAMPO AMOUNT_DIST EN EL INVENTARIO
                     final Realm realm2 = Realm.getDefaultInstance();
                     realm2.executeTransaction(new Realm.Transaction() {
+
                         @Override
                         public void execute(Realm realm2) {
                             Inventario inv_actualizado = realm2.where(Inventario.class).equalTo("id", idInvetarioSelec).findFirst();
@@ -226,8 +229,9 @@ public class DistrResumenAdapter extends RecyclerView.Adapter<DistrResumenAdapte
                     });*/
 
                     // TRANSACCIÓN BD PARA BORRAR EL CAMPO
-                      final Realm realm = Realm.getDefaultInstance();
+                    final Realm realm = Realm.getDefaultInstance();
                     realm.executeTransaction(new Realm.Transaction() {
+
                         @Override
                         public void execute(Realm realm) {
                             RealmResults<Pivot> result = realm.where(Pivot.class).equalTo("id", resumenProductoId).findAll();
@@ -244,67 +248,80 @@ public class DistrResumenAdapter extends RecyclerView.Adapter<DistrResumenAdapte
 
     }
 
-   public void totalize() {
+    public void totalize() {
+        cleanVariables();
+        activity.cleanTotalize();
+        if (tipo.equals("1")) {
+            subGrab = subGrab + (precio) * (cantidad);
+            subTotalGrabado = String.format("%,.2f", subGrab);
+            Log.d("subTotalGrabado", subTotalGrabado);
 
-           if (tipo.equals("1")) {
-               subGrab = subGrab + (precio) * (cantidad);
-               subTotalGrabado = String.format("%,.2f", subGrab);
-               Log.d("subTotalGrabado", subTotalGrabado);
+            subGrabm = subGrabm + ((precio) * (cantidad) - ((descuento / 100) * (precio) * (cantidad)));
+            subTotalGrabadoM = String.format("%,.2f", subGrabm);
+            Log.d("subTotalGrabadoM", subTotalGrabadoM);
+        }
+        else {
+            subExen = subExen + ((precio) * (cantidad));
+            subTotalExento = String.format("%,.2f", subExen);
 
-               subGrabm = subGrabm + ((precio) * (cantidad) - ((descuento / 100) * (precio) * (cantidad)));
-               subTotalGrabadoM = String.format("%,.2f", subGrabm);
-               Log.d("subTotalGrabadoM", subTotalGrabadoM);
-           } else {
-               subExen = subExen + ((precio) * (cantidad));
-               subTotalExento = String.format("%,.2f", subExen);
-               Log.d("subTotalExento", subTotalExento);
-           }
-           //  TODO REVISAR ANDROIDPOS EL IF QUE REVISA SI ESTA LLENO O NO
+        }
+        //  TODO REVISAR ANDROIDPOS EL IF QUE REVISA SI ESTA LLENO O NO
 
-           discountBill += ((descuento / 100) * (precio) * (cantidad));
+        discountBill += ((descuento / 100) * (precio) * (cantidad));
 
-           discountBill += ((subExen * (clienteFixedDescuento / 100.00)) + (subGrabm * (clienteFixedDescuento / 100.00)));
-           descuentoCliente = String.format("%,.2f", discountBill);
-           Log.d("descuentoCliente", descuentoCliente);
+        discountBill += ((subExen * (clienteFixedDescuento / 100.00)) + (subGrabm * (clienteFixedDescuento / 100.00)));
+        descuentoCliente = String.format("%,.2f", discountBill);
+        Log.d("descuentoCliente", descuentoCliente);
 
 
-           if (subGrab > 0) {
-               IvaT = (subGrabm - (subGrabm * (clienteFixedDescuento / 100.00))) * (iva / 100);
-               impuestoIVA = String.format("%,.2f", IvaT);
+        if (subGrab > 0) {
+            IvaT = (subGrabm - (subGrabm * (clienteFixedDescuento / 100.00))) * (iva / 100);
+            impuestoIVA = String.format("%,.2f", IvaT);
 
-               Log.d("impuestoIVA", impuestoIVA);
-           } else {
-               IvaT = 0.0;
-               impuestoIVA = String.format("%,.2f", IvaT);
-               Log.d("impuestoIVA", impuestoIVA);
-           }
+            Log.d("impuestoIVA", impuestoIVA);
+        }
+        else {
+            IvaT = 0.0;
+            impuestoIVA = String.format("%,.2f", IvaT);
+            Log.d("impuestoIVA", impuestoIVA);
+        }
 
-           subt = subGrab + subExen;
-           subTotal = String.format("%,.2f", subt);
-           Log.d("subtotal", subt + "");
-           total = (subt + IvaT) - discountBill;
-           Total = String.format("%,.2f", total);
-           Log.d("total", total + "");
+        subt = subGrab + subExen;
+        subTotal = String.format("%,.2f", subt);
+        Log.d("subtotal", subt + "");
+        total = (subt + IvaT) - discountBill;
+        Total = String.format("%,.2f", total);
+        Log.d("total", total + "");
 
-           activity.setTotalizarSubGrabado(subTotalGrabado);
-           activity.setTotalizarSubExento(subTotalExento);
+        activity.setTotalizarSubGrabado(subTotalGrabado);
+        activity.setTotalizarSubExento(subExen);
+        Log.d("subTotalExento", subTotalExento);
+        activity.setTotalizarSubTotal(subTotal);
+        activity.setTotalizarDescuento(descuentoCliente);
 
-           activity.setTotalizarSubTotal(subTotal);
-           activity.setTotalizarDescuento(descuentoCliente);
-
-           activity.setTotalizarImpuestoIVA(impuestoIVA);
-           activity.setTotalizarTotal(Total);
-           activity.setTotalizarTotalDouble(total);
+        activity.setTotalizarImpuestoIVA(impuestoIVA);
+        activity.setTotalizarTotal(Total);
+        activity.setTotalizarTotalDouble(total);
 
     }
 
+    private void cleanVariables() {
+        subTotalGrabado = "0";
+        subTotalExento = "0";
+        subTotal = "0";
+        descuentoCliente = "0";
+        impuestoIVA = "0";
+        Total = "0";
+        total = 0.0;
+    }
+
     public void clearAll() {
-            subGrab = 0.0;
-            subGrabm = 0.0;
-            subExen = 0.0;
-            IvaT = 0.0;
-            subt = subGrab + subExen;
-            total = subt + IvaT;
+        subGrab = 0.0;
+        subGrabm = 0.0;
+        subExen = 0.0;
+        IvaT = 0.0;
+        subt = subGrab + subExen;
+        total = subt + IvaT;
         try {
             System.gc();
         }

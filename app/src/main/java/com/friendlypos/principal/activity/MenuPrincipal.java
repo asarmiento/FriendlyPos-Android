@@ -4,7 +4,6 @@ import android.app.ActivityManager;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -25,11 +24,10 @@ import android.widget.Toast;
 
 import com.friendlypos.R;
 import com.friendlypos.app.broadcastreceiver.NetworkStateChangeReceiver;
-
 import com.friendlypos.application.bluetooth.PrinterService;
 import com.friendlypos.application.util.PrinterFunctions;
 import com.friendlypos.distribucion.activity.DistribucionActivity;
-
+import com.friendlypos.distribucion.modelo.Facturas;
 import com.friendlypos.login.activity.LoginActivity;
 import com.friendlypos.login.util.SessionPrefes;
 import com.friendlypos.principal.fragment.ConfiguracionFragment;
@@ -39,15 +37,12 @@ import com.friendlypos.reimpresion.activity.ReimprimirActivity;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import io.realm.Realm;
 import io.realm.RealmResults;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 import static com.friendlypos.R.id.btn_descargar_datosempresa;
 
@@ -78,7 +73,6 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
     @Bind(R.id.clickConfig)
     LinearLayout clickConfig;
 
-    @Bind(R.id.drawer)
     DrawerLayout drawer;
 
     @Bind(R.id.txtNombreUsuario)
@@ -92,6 +86,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu_principal);
+        ButterKnife.bind(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
        /* Initializing();*/
@@ -103,7 +98,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
         subir1 = new SubirHelper(MenuPrincipal.this);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+            this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         connectToPrinter();
@@ -112,11 +107,13 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
         if (!session.isLoggedIn()) {
             startActivity(new Intent(this, LoginActivity.class));
             finish();
-        } else {
+        }
+        else {
 
 // TODO OBTENER USUARIO
             String usuer = session.getUsuarioPrefs();
             Log.d("usuer", usuer);
+            txtNombreUsuario.setText(usuer);
             //
         }
     }
@@ -129,19 +126,24 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
     }
 
     private void connectToPrinter() {
-        getPreferences();
-        if (printer_enabled) {
-            if (printer == null || printer.equals("")) {
+        if(bluetoothStateChangeReceiver.isBluetoothAvailable()) {
+            getPreferences();
+            if (printer_enabled) {
+                if (printer == null || printer.equals("")) {
 //                AlertDialog d = new AlertDialog.Builder(context)
 //                        .setTitle(getResources().getString(R.string.printer_alert))
 //                        .setMessage(getResources().getString(R.string.message_printer_not_found))
 //                        .setNegativeButton(getString(android.R.string.ok), null)
 //                        .show();
-            } else {
-                if (!isServiceRunning(PrinterService.CLASS_NAME)) {
-                    PrinterService.startRDService(getApplicationContext(), printer);
+                }
+                else {
+                    if (!isServiceRunning(PrinterService.CLASS_NAME)) {
+                        PrinterService.startRDService(getApplicationContext(), printer);
+                    }
                 }
             }
+        }else{
+            //TODO MUESTRA UN DIALOG DE ERROR
         }
     }
 
@@ -151,7 +153,8 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
             txtNombreUsuario.setText("oscar");
-        } else {
+        }
+        else {
             super.onBackPressed();
         }
     }
@@ -176,7 +179,8 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                     break;
                 }
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             e.printStackTrace();
         }
         popup.getMenuInflater().inflate(R.menu.popup_menu, popup.getMenu());
@@ -187,8 +191,9 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
             //bloqueados
             popupMenu.findItem(R.id.btn_descargar_catalogo).setEnabled(false);
             popupMenu.findItem(R.id.btn_descargar_inventario).setEnabled(false);
-            Toast.makeText(MenuPrincipal.this,"Descargar datos de la empresa primero",Toast.LENGTH_LONG).show();
-        } else if (bloquear == 1) {
+            Toast.makeText(MenuPrincipal.this, "Descargar datos de la empresa primero", Toast.LENGTH_LONG).show();
+        }
+        else if (bloquear == 1) {
             //desbloqueados
             popupMenu.findItem(R.id.btn_descargar_catalogo).setEnabled(true);
             popupMenu.findItem(R.id.btn_descargar_inventario).setEnabled(true);
@@ -203,7 +208,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
             case R.id.menu_cerrarsesion:
 
                 AlertDialog alertDialog = new AlertDialog.Builder(
-                        MenuPrincipal.this).setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                    MenuPrincipal.this).setPositiveButton("Si", new DialogInterface.OnClickListener() {
 
                     public void onClick(DialogInterface dialog, int which) {
                         // Write your code here to execute after dialog closed
@@ -212,16 +217,16 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                     }
 
                 }).setNegativeButton(
-                        "No", new DialogInterface.OnClickListener() {
+                    "No", new DialogInterface.OnClickListener() {
 
-                            public void onClick(DialogInterface dialog, int which) {
-                                // Write your code here to execute after dialog closed
-                                //customer = cust;
-                                dialog.cancel();
-                                //new getDataClient().execute();
-                            }
-
+                        public void onClick(DialogInterface dialog, int which) {
+                            // Write your code here to execute after dialog closed
+                            //customer = cust;
+                            dialog.cancel();
+                            //new getDataClient().execute();
                         }
+
+                    }
                 ).create();
 
                 alertDialog.setMessage("Seguro que quiere cerrar Sesion?");
@@ -253,16 +258,19 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
             case R.id.btn_subir_recibos:
 
 
-
                 Toast.makeText(MenuPrincipal.this, "subir_recibos", Toast.LENGTH_SHORT).show();
                 break;
 
             case R.id.btn_subir_ventas:
 
-                subir1.sendPost("String id1", "String id", "String id", "String id", "String id", "String id","String id",
-                        "String id","String id","String id","String id", "String id","String id", "String id",
-                        "String id","String id","String id", "String id","String id", "String id","String id", "String id","String id",
-                        "String id", "String id", "String id", "String id");
+                //TODO SABER COMO TENER QUE SUBIR LOS DATOS, SI UNO X UNO O TODOS DE UN SOLO.
+                Realm realm = Realm.getDefaultInstance();
+
+
+                final RealmResults<Facturas> facturas1 = realm.where(Facturas.class).findAll();
+                for (int i = 0; i < facturas1.size(); i++) {
+                    subir1.sendPost(facturas1.get(i).toString());
+                }
 
                 Toast.makeText(MenuPrincipal.this, "subir_ventas", Toast.LENGTH_SHORT).show();
                 break;
@@ -272,8 +280,12 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                 break;
 
             case R.id.btn_imprimir_liquidacion:
-                PrinterFunctions.imprimirLiquidacionMenu(MenuPrincipal.this);
-                Toast.makeText(MenuPrincipal.this, "imprimir liquidacion", Toast.LENGTH_SHORT).show();
+                if(bluetoothStateChangeReceiver.isBluetoothAvailable()) {
+                    PrinterFunctions.imprimirLiquidacionMenu(MenuPrincipal.this);
+                    Toast.makeText(MenuPrincipal.this, "imprimir liquidacion", Toast.LENGTH_SHORT).show();
+                }else{
+                    //TODO ERROR
+                }
                 break;
 
 
@@ -331,7 +343,8 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
         }
         try {
             fragment = (Fragment) fragmentClass.newInstance();
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             e.printStackTrace();
         }// Insert the fragment by replacing any existing fragment
         FragmentManager fragmentManager = getFragmentManager();
