@@ -27,6 +27,7 @@ import com.friendlypos.application.util.Functions;
 import com.friendlypos.login.modelo.User;
 import com.friendlypos.login.modelo.UserError;
 import com.friendlypos.login.modelo.UserResponse;
+import com.friendlypos.login.util.Properties;
 import com.friendlypos.login.util.SessionPrefes;
 import com.friendlypos.principal.activity.MenuPrincipal;
 import com.friendlypos.principal.fragment.ConfiguracionFragment;
@@ -40,6 +41,8 @@ import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static io.realm.internal.SyncObjectServerFacade.getApplicationContext;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -75,7 +78,7 @@ public class LoginActivity extends AppCompatActivity {
 
     @Bind(R.id.RLLogin)
     RelativeLayout RLLogin;
-
+    Properties properties;
 
     Context context = null;
 
@@ -86,6 +89,17 @@ public class LoginActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         context = this;
         session = new SessionPrefes(getApplicationContext());
+        properties = new Properties(getApplicationContext());
+     //   properties.setUrlWebsrv("http://friendlyaccount.com");
+
+        if (properties.getUrlWebsrv() == null) {
+            System.out.println("Stablishing properties");
+
+            Log.d("adasda1",properties.getUrlWebsrv()+"");
+        } else {
+            Log.d("adasdad",properties.getUrlWebsrv()+"");
+        }
+
 
         if (session.isLoggedIn()){
             startActivity(new Intent(this, LoginActivity.class));
@@ -157,11 +171,13 @@ public class LoginActivity extends AppCompatActivity {
 
         // Check for a valid password, if the user entered one.
         if (TextUtils.isEmpty(password)) {
+            progress.dismiss();
             mFloatLabelPassword.setError(getString(R.string.error_field_required));
             focusView = mFloatLabelPassword;
             cancel = true;
         }
         else if (!isPasswordValid(password)) {
+            progress.dismiss();
             mFloatLabelPassword.setError(getString(R.string.error_invalid_password));
             focusView = mFloatLabelPassword;
             cancel = true;
@@ -169,11 +185,13 @@ public class LoginActivity extends AppCompatActivity {
 
         // Verificar si el ID tiene contenido.
         if (TextUtils.isEmpty(userId)) {
+            progress.dismiss();
             mFloatLabelUserId.setError(getString(R.string.error_field_required));
             focusView = mFloatLabelUserId;
             cancel = true;
         }
         else if (!isUserIdValid(userId)) {
+            progress.dismiss();
             mFloatLabelUserId.setError(getString(R.string.error_invalid_user_id));
             focusView = mFloatLabelUserId;
             cancel = true;

@@ -27,7 +27,7 @@ public class ConfiguracionActivity extends AppCompatActivity {
         properties = new Properties(this);
         coordinatorLayout = (CoordinatorLayout) findViewById(R.id.main_content);
         webServiceUrl = (TextView) findViewById(R.id.txtwebservice);
-        webServiceUrl.setText(properties.getUrlWebsrv());
+        webServiceUrl.setText(webServiceUrl.getText().toString());
         save = (FloatingActionButton) findViewById(R.id.floating);
         save.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -48,6 +48,7 @@ public class ConfiguracionActivity extends AppCompatActivity {
             Functions.createNotification(this, 100, "Cambiando el WebService", "No se modifico el webservice ya que es el mismo");
         } else {
             if (Functions.checkURL(webServiceUrl.getText().toString())) {
+
                 properties.setUrlWebsrv(webServiceUrl.getText().toString());
                 Functions.createNotification(this, 100, "Cambiando el WebService", "WebService Modificado Correctamente");
             } else {

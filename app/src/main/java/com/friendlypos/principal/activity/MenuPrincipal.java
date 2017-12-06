@@ -126,7 +126,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
     }
 
     private void connectToPrinter() {
-        if(bluetoothStateChangeReceiver.isBluetoothAvailable()) {
+      //  if(bluetoothStateChangeReceiver.isBluetoothAvailable()) {
             getPreferences();
             if (printer_enabled) {
                 if (printer == null || printer.equals("")) {
@@ -142,9 +142,16 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                     }
                 }
             }
+        /*    if (bluetoothStateChangeReceiver.isBluetoothAvailable() == false) {
+                Log.i("adsdsda", "Bluetooth not supported");
+                // Show proper message here
+                finish();
+            }
         }else{
+          //  return null;
+            Toast.makeText(getApplicationContext(),"dasda", Toast.LENGTH_LONG).show();
             //TODO MUESTRA UN DIALOG DE ERROR
-        }
+        }*/
     }
 
     @Override

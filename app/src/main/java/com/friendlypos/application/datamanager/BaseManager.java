@@ -7,6 +7,7 @@ import android.util.Log;
 import com.friendlypos.app.broadcastreceiver.NetworkStateChangeReceiver;
 import com.friendlypos.application.interfaces.RequestInterface;
 import com.friendlypos.login.util.Properties;
+import com.friendlypos.login.util.SessionPrefes;
 import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
@@ -22,22 +23,36 @@ import okhttp3.Request;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static io.realm.internal.SyncObjectServerFacade.getApplicationContext;
+
 public class BaseManager {
     private Activity activity;
     private Context mContext;
     private static RequestInterface api;
     static Properties properties;
 
-    public BaseManager(Activity activity) {
+    public BaseManager(Activity activity, Context context) {
         this.activity = activity;
         this.mContext = activity;
-        properties = new Properties(mContext);
+
     }
 
     public static RequestInterface getApi() {
 
+       /* properties = new Properties(getApplicationContext());
+        //   properties.setUrlWebsrv("http://friendlyaccount.com");
+
+        if (properties.getUrlWebsrv() == null) {
+            System.out.println("Stablishing properties");
+
+            Log.d("adasda1",properties.getUrlWebsrv()+"");
+        } else {
+            Log.d("adasdad",properties.getUrlWebsrv()+"");
+        }*/
 
         if(api == null) {
+
+
 
             // create a converter compatible with Realm
             // GSON can parse the data.
@@ -71,16 +86,10 @@ public class BaseManager {
                     })
                     .build();
 
-            // TODO REVISAR LA PROPIEDAD VIENE NULL
-
-        /*    String urlRequest = properties.getUrlWebsrv();
-
-            Log.d("urlRequest", urlRequest);*/
-
             Retrofit retrofit = new Retrofit.Builder()
                     /*.baseUrl(appAPI.ENDPOINT)*/
                     .baseUrl("http://friendlyaccount.com")
-                   // .baseUrl(properties.getUrlWebsrv())
+                    //.baseUrl(properties.getUrlWebsrv())
                     .client(httpClient)
                     .addConverterFactory(GsonConverterFactory.create(gson))
                     .build();

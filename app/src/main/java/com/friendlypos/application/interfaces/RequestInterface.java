@@ -55,7 +55,7 @@ public interface RequestInterface {
     Call<FacturasResponse> getFacturas(@Header("Authorization") String token);
 
     // TODO DEFINIR CUAL ES EL KEY PARA ENVIAR (KEY, VALUE)
-    @POST("/api/donwload-inventory-products")
+    @POST("/api/upload-invoices")
     @FormUrlEncoded
     Call<Facturas> savePost(@Query("id") String id);
 

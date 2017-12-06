@@ -1,6 +1,11 @@
 package com.friendlypos.distribucion.fragment;
 
+import android.Manifest;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.location.LocationListener;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +21,16 @@ import com.friendlypos.application.util.PrinterFunctions;
 import com.friendlypos.distribucion.activity.DistribucionActivity;
 import com.friendlypos.distribucion.modelo.Facturas;
 import com.friendlypos.distribucion.modelo.Venta;
+import com.friendlypos.distribucion.util.Localizacion;
+
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationManager;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
 
 import io.realm.Realm;
 
@@ -47,6 +62,9 @@ public class DistTotalizarFragment extends BaseFragment {
     static double pagoCon = 0.0;
     String facturaId;
 
+    TextView messageTextView;
+    TextView messageTextView2;
+
 
     private static Button applyBill;
     private static Button printBill;
@@ -67,6 +85,8 @@ public class DistTotalizarFragment extends BaseFragment {
 
         View rootView = inflater.inflate(R.layout.fragment_distribucion_totalizar, container, false);
 
+
+
         client_name = (EditText) rootView.findViewById(R.id.client_name);
 
         subExe = (TextView) rootView.findViewById(R.id.subExento);
@@ -75,6 +95,9 @@ public class DistTotalizarFragment extends BaseFragment {
         subT = (TextView) rootView.findViewById(R.id.subTotal);
         discount = (TextView) rootView.findViewById(R.id.Discount);
         Total = (TextView) rootView.findViewById(R.id.Total);
+
+        messageTextView = (TextView) rootView.findViewById(R.id.message_id);
+        messageTextView2 = (TextView) rootView.findViewById(R.id.message_id2);
 
         paid = (EditText) rootView.findViewById(R.id.txtPaid);
 
@@ -87,13 +110,11 @@ public class DistTotalizarFragment extends BaseFragment {
             try {
                 paid.setEnabled(true);
 
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 Log.d("JD", "Error " + e.getMessage());
             }
 
-        }
-        else if (metodoPagoCliente.equals("2")) {
+        } else if (metodoPagoCliente.equals("2")) {
             //  bill_type = 2;
             paid.setEnabled(false);
         }
@@ -107,60 +128,57 @@ public class DistTotalizarFragment extends BaseFragment {
         if (apply_done == 1) {
             applyBill.setVisibility(View.GONE);
             printBill.setVisibility(View.VISIBLE);
-        }
-        else {
+        } else {
             applyBill.setVisibility(View.VISIBLE);
             printBill.setVisibility(View.GONE);
         }
 
         applyBill.setOnClickListener(
-            new View.OnClickListener() {
+                new View.OnClickListener() {
 
-                @Override
-                public void onClick(View v) {
-                    try {
-                        //validateData();
-                        // Log.d("total", String.valueOf(Functions.sGetDecimalStringAnyLocaleAsDouble(Total.getText().toString())));
+                    @Override
+                    public void onClick(View v) {
+                        try {
+                            //validateData();
+                            // Log.d("total", String.valueOf(Functions.sGetDecimalStringAnyLocaleAsDouble(Total.getText().toString())));
 
 
-                        pagoCon = Double.parseDouble(paid.getText().toString());
-                        totalPagoCon = String.format("%,.2f", pagoCon);
-                        double total = totalTotalDouble;
+                            pagoCon = Double.parseDouble(paid.getText().toString());
+                            totalPagoCon = String.format("%,.2f", pagoCon);
+                            double total = totalTotalDouble;
 
-                        if (pagoCon >= total) {
-                            double vuelto = pagoCon - total;
-                            totalVuelvo = String.format("%,.2f", vuelto);
+                            if (pagoCon >= total) {
+                                double vuelto = pagoCon - total;
+                                totalVuelvo = String.format("%,.2f", vuelto);
 
-                            change.setText(totalVuelvo);
+                                change.setText(totalVuelvo);
 
-                            aplicarFactura();
-                        }
-                        else {
-                            Toast.makeText(getActivity(), "Digite una cantidad mayor al total", Toast.LENGTH_LONG).show();
+                               // aplicarFactura();
+                                obtenerLocalización();
+                            } else {
+                                Toast.makeText(getActivity(), "Digite una cantidad mayor al total", Toast.LENGTH_LONG).show();
+                            }
+                        } catch (Exception e) {
+                            Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
+                            e.printStackTrace();
+
                         }
                     }
-                    catch (Exception e) {
-                        Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
-                        e.printStackTrace();
 
-                    }
-                }
-
-            });
+                });
 
         printBill.setOnClickListener(
-            new View.OnClickListener() {
+                new View.OnClickListener() {
 
-                @Override
-                public void onClick(View v) {
-                    try {
-                        PrinterFunctions.imprimirFacturaDistrTotal(venta_actualizada, getActivity(), 1);
-                    }
-                    catch (Exception e) {
-                        Functions.CreateMessage(getActivity(), "Error", e.getMessage() + "\n" + e.getStackTrace().toString());
+                    @Override
+                    public void onClick(View v) {
+                        try {
+                            PrinterFunctions.imprimirFacturaDistrTotal(venta_actualizada, getActivity(), 1);
+                        } catch (Exception e) {
+                            Functions.CreateMessage(getActivity(), "Error", e.getMessage() + "\n" + e.getStackTrace().toString());
+                        }
                     }
                 }
-            }
 
         );
 
@@ -281,12 +299,96 @@ public class DistTotalizarFragment extends BaseFragment {
         }
         try {
             System.gc();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
         }
 
 
     }
+
+    public void obtenerLocalización() {
+
+        /* Use the LocationManager class to obtain GPS locations */
+        LocationManager mlocManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        MyLocationListener mlocListener = new MyLocationListener();
+        mlocListener.setMainActivity(this);
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(getActivity(), "First enable LOCATION ACCESS in settings.", Toast.LENGTH_LONG).show();
+            return;
+        }
+        mlocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0,
+                (LocationListener) mlocListener);
+
+    }
+
+    public void setLocation(Location loc) {
+        //Obtener la direccion de la calle a partir de la latitud y la longitud
+        if (loc.getLatitude() != 0.0 && loc.getLongitude() != 0.0) {
+            try {
+                Geocoder geocoder = new Geocoder(getActivity(), Locale.getDefault());
+                List<Address> list = geocoder.getFromLocation(
+                        loc.getLatitude(), loc.getLongitude(), 1);
+                if (!list.isEmpty()) {
+                    Address address = list.get(0);
+                    messageTextView2.setText("Mi direccion es: \n"
+                            + address.getAddressLine(0));
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /* Class My Location Listener */
+    public class MyLocationListener implements LocationListener {
+        DistTotalizarFragment mainActivity;
+
+        public DistTotalizarFragment getMainActivity() {
+            return mainActivity;
+        }
+
+        public void setMainActivity(DistTotalizarFragment mainActivity) {
+            this.mainActivity = mainActivity;
+        }
+
+        @Override
+        public void onLocationChanged(Location loc) {
+            // Este metodo se ejecuta cada vez que el GPS recibe nuevas coordenadas
+            // debido a la deteccion de un cambio de ubicacion
+            loc.getLatitude();
+            loc.getLongitude();
+            String Text = "Mi ubicacion actual es: " + "\n Lat = "
+                    + loc.getLatitude() + "\n Long = " + loc.getLongitude();
+            messageTextView.setText(Text);
+            this.mainActivity.setLocation(loc);
+        }
+
+        @Override
+        public void onProviderDisabled(String provider) {
+            // Este metodo se ejecuta cuando el GPS es desactivado
+            messageTextView.setText("GPS Desactivado");
+        }
+
+        @Override
+        public void onProviderEnabled(String provider) {
+            // Este metodo se ejecuta cuando el GPS es activado
+            messageTextView.setText("GPS Activado");
+        }
+
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+            // Este metodo se ejecuta cada vez que se detecta un cambio en el
+            // status del proveedor de localizacion (GPS)
+            // Los diferentes Status son:
+            // OUT_OF_SERVICE -> Si el proveedor esta fuera de servicio
+            // TEMPORARILY_UNAVAILABLE -> Temporalmente no disponible pero se
+            // espera que este disponible en breve
+            // AVAILABLE -> Disponible
+        }
+
+    }/* End of Class MyLocationListener */
+
+
 
 
 /*

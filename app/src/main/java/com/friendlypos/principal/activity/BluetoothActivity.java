@@ -6,9 +6,11 @@ import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.friendlypos.app.broadcastreceiver.BluetoothStateChangeReceiver;
 import com.friendlypos.app.broadcastreceiver.NetworkStateChangeReceiver;
+import com.friendlypos.application.util.Functions;
 
 
 public class BluetoothActivity extends AppCompatActivity implements NetworkStateChangeReceiver.InternetStateHasChange, BluetoothStateChangeReceiver.BluetoothStateHasChange {
@@ -59,6 +61,8 @@ public class BluetoothActivity extends AppCompatActivity implements NetworkState
     public void bluetoothChangedState(boolean isBluetoothAvailable) {
         Log.d("SALSANEQUER", "bluetoothChangedState " + String.valueOf(isBluetoothAvailable));
         if(!isBluetoothAvailable){
+
+            Functions.CreateMessage(getApplicationContext(), "Error","dasdasdaadad");
             // TODO MOSTRAR UN DIALOG DE ERROR.
         }
     }

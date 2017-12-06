@@ -67,7 +67,7 @@ public class Properties {
     // Constructor
     public Properties(Context context){
         this._context = context;
-        pref = _context.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
+        pref = _context.getSharedPreferences(context.getPackageName(), PRIVATE_MODE);
         editor = pref.edit();
     }
 
@@ -93,17 +93,6 @@ public class Properties {
     }
 
     /**
-     * set BlockedApp
-     * */
-    public void setBlockedApp(Boolean blocke){
-        // Storing url in pref
-        editor.putBoolean(BlockedApp, blocke);
-        // commit changes
-        editor.commit();
-    }
-
-
-    /**
      * set URL WEBSRV
      * */
     public void setUrlWebsrv(String url){
@@ -114,95 +103,10 @@ public class Properties {
     }
 
 
-
-
-    /**
-     * set URL WEBSRV
-     * */
-    public void setUrlLogin(String url){
-        // Storing url in pref
-        editor.putString(URL_LOGIN, url);
-        // commit changes
-        editor.commit();
-    }
-
-    /**
-     * set URL WEBSRV Catalog
-     * */
-    public void setUrlCatalog(String url){
-        // Storing url in pref
-        editor.putString(URL_CATALOG, url);
-        // commit changes
-        editor.commit();
-    }
-
-    /**
-     * set URL WEBSRV UsrInv
-     * */
-    public void setUrlInvuser(String url){
-        // Storing url in pref
-        editor.putString(URL_INVUSER, url);
-        // commit changes
-        editor.commit();
-    }
-
-    /**
-     * set URL WEBSRV URLupload chekin
-     * */
-    public void setUrlUploadChekin(String url){
-        // Storing url in pref
-        editor.putString(URL_UPLOAD_CHEKIN, url);
-        // commit changes
-        editor.commit();
-    }
-
-
-    /**
-     * set URL WEBSRV url upload sales
-     * */
-    public void setUrlUploadSales(String url){
-        // Storing url in pref
-        editor.putString(URL_UPLOAD_SALES, url);
-        // commit changes
-        editor.commit();
-    }
-
-    /**
-     * set URL WEBSRV url Refound
-     * */
-    public void setUrlRefound(String url){
-        // Storing url in pref
-        editor.putString(URL_REFOUND, url);
-        // commit changes
-        editor.commit();
-    }
-
-    /**
-     * set URL WEBSRV url credits
-     * */
-    public void setUrlCredits(String url){
-        // Storing url in pref
-        editor.putString(URL_CREDITS, url);
-        // commit changes
-        editor.commit();
-    }
-
-    /**
-     * set URL WEBSRV url urluploadreceipts
-     * */
-    public void setUrlReceipts(String url){
-        // Storing url in pref
-        editor.putString(URL_RECEIPTS, url);
-        // commit changes
-        editor.commit();
-    }
-
-    /**
-     * @return String url webservice
-     */
     public String getUrlWebsrv() {
         return pref.getString(URL_WEBSRV,null);
     }
+
 
     /**
      * @return String url webservice
