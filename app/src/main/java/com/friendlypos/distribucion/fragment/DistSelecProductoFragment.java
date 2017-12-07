@@ -93,7 +93,7 @@ public class DistSelecProductoFragment extends BaseFragment {
         // creditoLimiteCliente = Double.parseDouble(((DistribucionActivity) getActivity()).getCreditoLimiteClienteSlecc());
 
         String metodoPagoCliente = ((DistribucionActivity) getActivity()).getMetodoPagoCliente();
-        creditoLimiteCliente = Double.parseDouble(((DistribucionActivity) getActivity()).getCreditoLimiteClienteSlecc());
+        creditoLimiteCliente = Double.parseDouble(((DistribucionActivity)getActivity()).getCreditoLimiteCliente());
         String dueCliente = ((DistribucionActivity) getActivity()).getDueCliente();
 
         Log.d("PagoProductoSelec", metodoPagoCliente + "");
@@ -120,7 +120,7 @@ public class DistSelecProductoFragment extends BaseFragment {
     @Override
     public void updateData() {
         adapter.updateData(getListProductos());
-        creditoLimiteCliente = Double.parseDouble(((DistribucionActivity) getActivity()).getCreditoLimiteClienteSlecc());
+        creditoLimiteCliente = Double.parseDouble(((DistribucionActivity)getActivity()).getCreditoLimiteCliente());
         creditoLimite.setText("C.Disponible: " + String.format("%,.2f", creditoLimiteCliente));
 
     }

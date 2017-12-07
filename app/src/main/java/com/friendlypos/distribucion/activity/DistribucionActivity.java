@@ -1,5 +1,6 @@
 package com.friendlypos.distribucion.activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -30,7 +31,7 @@ public class DistribucionActivity extends AppCompatActivity {
 
     private String invoiceId;
     private String metodoPagoCliente;
-    private String creditoLimiteCliente;
+    private String creditoLimiteCliente= "";
     private String dueCliente;
     private String creditoLimiteClienteSlecc = "";
 
@@ -42,7 +43,7 @@ public class DistribucionActivity extends AppCompatActivity {
     private String totalizarImpuestoIVA;
     private String totalizarTotal;
     private double totalizarTotalDouble;
-
+    ProgressDialog progressDialog;
 
     public void cleanTotalize() {
         totalizarSubGrabado = "0";
@@ -70,13 +71,21 @@ public class DistribucionActivity extends AppCompatActivity {
         this.metodoPagoCliente = metodoPagoCliente;
     }
 
-    public String getCreditoLimiteClienteSlecc() {
+    public String getCreditoLimiteCliente() {
+        return creditoLimiteClienteSlecc;
+    }
+
+    public void setCreditoLimiteCliente(String creditoLimiteCliente) {
+        this.creditoLimiteCliente = creditoLimiteCliente;
+    }
+
+  /*  public String getCreditoLimiteClienteSlecc() {
         return creditoLimiteClienteSlecc;
     }
 
     public void setCreditoLimiteClienteSlecc(String creditoLimiteClienteSlecc) {
         this.creditoLimiteClienteSlecc = creditoLimiteClienteSlecc;
-    }
+    }*/
 
     public String getDueCliente() {
         return dueCliente;
@@ -151,7 +160,8 @@ public class DistribucionActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("Wait...");
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         setupViewPager(viewPager);
 
@@ -213,7 +223,9 @@ public class DistribucionActivity extends AppCompatActivity {
 
             @Override
             public void onPageSelected(int position) {
+
                 list.get(position).updateData();
+                progressDialog.dismiss();
             }
 
             @Override

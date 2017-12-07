@@ -1,7 +1,9 @@
 package com.friendlypos.application.util;
 
+import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.BitmapFactory;
@@ -36,6 +38,16 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Functions {
+
+    public static ProgressDialog showProgressDialog(Activity activity, String message) {
+        ProgressDialog m_Dialog = new ProgressDialog(activity);
+        m_Dialog.setMessage(message);
+        m_Dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        m_Dialog.setCancelable(false);
+        m_Dialog.show();
+        return m_Dialog;
+
+    }
 
 
     public static void CreateMessage(Context context, String Tittle, String Message) {

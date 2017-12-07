@@ -187,7 +187,7 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
 
                             //  CREDITO
                             double totalProducSlecc = precioSeleccionado * producto_amount_dist_add;
-                            final double creditoLimiteCliente = Double.parseDouble(activity.getCreditoLimiteClienteSlecc());
+                            final double creditoLimiteCliente = Double.parseDouble(activity.getCreditoLimiteCliente());
                             final double totalCredito = creditoLimiteCliente - totalProducSlecc;
                             Log.d("ads", totalCredito + "");
 
@@ -267,7 +267,7 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
                                         realm4.insertOrUpdate(clientes); // using insert API
 
                                         realm4.close();
-                                        activity.setCreditoLimiteClienteSlecc(String.valueOf(totalCredito));
+                                        activity.setCreditoLimiteCliente(String.valueOf(totalCredito));
                                         fragment.updateData();
 
                                     }
