@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.LocationListener;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
@@ -50,20 +51,20 @@ public class DistTotalizarFragment extends BaseFragment {
     private static EditText client_name;
     private static EditText paid;
 
-    String totalGrabado = "0";
+    double totalGrabado = 0.0;
     double totalExento = 0.0;
-    String totalSubtotal = "0";
-    String totalDescuento = "0";
-    String totalImpuesto = "0";
-    String totalTotal = "0";
+    double totalSubtotal = 0.0;
+    double totalDescuento = 0.0;
+    double totalImpuesto = 0.0;
+    double totalTotal = 0.0;
     String totalVuelvo = "0";
     String totalPagoCon = "0";
-    static double totalTotalDouble;
     static double pagoCon = 0.0;
     String facturaId;
 
     TextView messageTextView;
     TextView messageTextView2;
+
 
 
     private static Button applyBill;
@@ -84,7 +85,6 @@ public class DistTotalizarFragment extends BaseFragment {
                              Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_distribucion_totalizar, container, false);
-
 
 
         client_name = (EditText) rootView.findViewById(R.id.client_name);
@@ -145,7 +145,7 @@ public class DistTotalizarFragment extends BaseFragment {
 
                             pagoCon = Double.parseDouble(paid.getText().toString());
                             totalPagoCon = String.format("%,.2f", pagoCon);
-                            double total = totalTotalDouble;
+                            double total = totalTotal;
 
                             if (pagoCon >= total) {
                                 double vuelto = pagoCon - total;
@@ -153,7 +153,7 @@ public class DistTotalizarFragment extends BaseFragment {
 
                                 change.setText(totalVuelvo);
 
-                               // aplicarFactura();
+                                // aplicarFactura();
                                 obtenerLocalización();
                             } else {
                                 Toast.makeText(getActivity(), "Digite una cantidad mayor al total", Toast.LENGTH_LONG).show();
@@ -193,29 +193,23 @@ public class DistTotalizarFragment extends BaseFragment {
 
         totalGrabado = ((DistribucionActivity) getActivity()).getTotalizarSubGrabado();
         totalExento = ((DistribucionActivity) getActivity()).getTotalizarSubExento();
-        Log.d("TotalExento", String.valueOf(((DistribucionActivity) getActivity()).getTotalizarSubExento()));
         totalSubtotal = ((DistribucionActivity) getActivity()).getTotalizarSubTotal();
         totalDescuento = ((DistribucionActivity) getActivity()).getTotalizarDescuento();
         totalImpuesto = ((DistribucionActivity) getActivity()).getTotalizarImpuestoIVA();
         totalTotal = ((DistribucionActivity) getActivity()).getTotalizarTotal();
-        totalTotalDouble = ((DistribucionActivity) getActivity()).getTotalizarTotalDouble();
         facturaId = ((DistribucionActivity) getActivity()).getInvoiceId();
 
-        subGra.setText(totalGrabado);
+        subGra.setText(String.format("%,.2f", totalGrabado));
         subExe.setText(String.format("%,.2f", totalExento));
 
-        subT.setText(totalSubtotal);
-        discount.setText(totalDescuento);
+        subT.setText(String.format("%,.2f", totalSubtotal));
+        discount.setText(String.format("%,.2f", totalDescuento));
 
-        ivaSub.setText(totalImpuesto);
-        Total.setText(totalTotal);
+        ivaSub.setText(String.format("%,.2f", totalImpuesto));
+        Total.setText(String.format("%,.2f", totalTotal));
 
         Log.d("FACTURAIDTOTALIZAR", facturaId);
 
-
-    }
-
-    private void clearUI() {
 
     }
 
@@ -233,12 +227,12 @@ public class DistTotalizarFragment extends BaseFragment {
                 factura_actualizada.setDate(Functions.getDate());
                 factura_actualizada.setTimes(Functions.get24Time());
 
-                factura_actualizada.setSubtotal_taxed(totalGrabado);
+                factura_actualizada.setSubtotal_taxed(String.valueOf(totalGrabado));
                 factura_actualizada.setSubtotal_exempt(String.valueOf(totalExento));
-                factura_actualizada.setSubtotal(totalSubtotal);
-                factura_actualizada.setDiscount(totalDescuento);
-                factura_actualizada.setTax(totalImpuesto);
-                factura_actualizada.setTotal(totalTotal);
+                factura_actualizada.setSubtotal(String.valueOf(totalSubtotal));
+                factura_actualizada.setDiscount(String.valueOf(totalDescuento));
+                factura_actualizada.setTax(String.valueOf(totalImpuesto));
+                factura_actualizada.setTotal(String.valueOf(totalTotal));
 
                 factura_actualizada.setPaid(totalPagoCon);
                 factura_actualizada.setChanging(totalVuelvo);
@@ -307,8 +301,13 @@ public class DistTotalizarFragment extends BaseFragment {
 
     public void obtenerLocalización() {
 
+        MyLocationListener mLocationListener = new MyLocationListener();
+        LocationManager mLocationManager = (LocationManager) getActivity().getSystemService(
+                Context.LOCATION_SERVICE);
+        mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10 * 1000L, 0F, mLocationListener);
+
         /* Use the LocationManager class to obtain GPS locations */
-        LocationManager mlocManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+ /*       LocationManager mlocManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
         MyLocationListener mlocListener = new MyLocationListener();
         mlocListener.setMainActivity(this);
         if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -316,7 +315,7 @@ public class DistTotalizarFragment extends BaseFragment {
             return;
         }
         mlocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0,
-                (LocationListener) mlocListener);
+                (LocationListener) mlocListener);*/
 
     }
 

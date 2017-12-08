@@ -44,7 +44,6 @@ public class DistrResumenAdapter extends RecyclerView.Adapter<DistrResumenAdapte
         return data;
     }
 
-    double credi = 0.0;
     private static double iva = 13.0;
     private static int apply_done = 0;
     //IVA
@@ -253,7 +252,7 @@ public class DistrResumenAdapter extends RecyclerView.Adapter<DistrResumenAdapte
         activity.cleanTotalize();
         if (tipo.equals("1")) {
             subGrab = subGrab + (precio) * (cantidad);
-            subTotalGrabado = String.format("%,.2f", subGrab);
+         //   subTotalGrabado = String.format("%,.2f", subGrab);
             Log.d("subTotalGrabado", subTotalGrabado);
 
             subGrabm = subGrabm + ((precio) * (cantidad) - ((descuento / 100) * (precio) * (cantidad)));
@@ -262,7 +261,7 @@ public class DistrResumenAdapter extends RecyclerView.Adapter<DistrResumenAdapte
         }
         else {
             subExen = subExen + ((precio) * (cantidad));
-            subTotalExento = String.format("%,.2f", subExen);
+           // subTotalExento = String.format("%,.2f", subExen);
 
         }
         //  TODO REVISAR ANDROIDPOS EL IF QUE REVISA SI ESTA LLENO O NO
@@ -270,15 +269,15 @@ public class DistrResumenAdapter extends RecyclerView.Adapter<DistrResumenAdapte
         discountBill += ((descuento / 100) * (precio) * (cantidad));
 
         discountBill += ((subExen * (clienteFixedDescuento / 100.00)) + (subGrabm * (clienteFixedDescuento / 100.00)));
-        descuentoCliente = String.format("%,.2f", discountBill);
-        Log.d("descuentoCliente", descuentoCliente);
+        //descuentoCliente = String.format("%,.2f", discountBill);
+      //  Log.d("descuentoCliente", descuentoCliente);
 
 
         if (subGrab > 0) {
             IvaT = (subGrabm - (subGrabm * (clienteFixedDescuento / 100.00))) * (iva / 100);
-            impuestoIVA = String.format("%,.2f", IvaT);
+        //    impuestoIVA = String.format("%,.2f", IvaT);
 
-            Log.d("impuestoIVA", impuestoIVA);
+         //   Log.d("impuestoIVA", impuestoIVA);
         }
         else {
             IvaT = 0.0;
@@ -287,21 +286,20 @@ public class DistrResumenAdapter extends RecyclerView.Adapter<DistrResumenAdapte
         }
 
         subt = subGrab + subExen;
-        subTotal = String.format("%,.2f", subt);
+       // subTotal = String.format("%,.2f", subt);
         Log.d("subtotal", subt + "");
         total = (subt + IvaT) - discountBill;
-        Total = String.format("%,.2f", total);
-        Log.d("total", total + "");
+       // Total = String.format("%,.2f", total);
+       // Log.d("total", total + "");
 
-        activity.setTotalizarSubGrabado(subTotalGrabado);
+        activity.setTotalizarSubGrabado(subGrab);
         activity.setTotalizarSubExento(subExen);
-        Log.d("subTotalExento", subTotalExento);
-        activity.setTotalizarSubTotal(subTotal);
-        activity.setTotalizarDescuento(descuentoCliente);
+        activity.setTotalizarSubTotal(subt);
+        activity.setTotalizarDescuento(discountBill);
 
-        activity.setTotalizarImpuestoIVA(impuestoIVA);
-        activity.setTotalizarTotal(Total);
-        activity.setTotalizarTotalDouble(total);
+        activity.setTotalizarImpuestoIVA(IvaT);
+        activity.setTotalizarTotal(total);
+      //  activity.setTotalizarTotalDouble(total);
 
     }
 

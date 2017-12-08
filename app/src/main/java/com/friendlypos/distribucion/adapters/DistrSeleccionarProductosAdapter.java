@@ -49,7 +49,8 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
     private int selected_position = -1;
     private static int bill_type = 1;
     static TextView creditoLimite;
-    static double creditoLimiteCliente;
+    static double creditoLimiteCliente = 0.0;
+    double totalCredito = 0.0;;
 
     // private static String productoAmountDistAdd, productoDescuentoAdd, subTotalExento, descuentoCliente, subTotal, Total;
     String idProducto;
@@ -130,10 +131,6 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
         final EditText input = (EditText) promptView.findViewById(R.id.promtCtext);
         final EditText desc = (EditText) promptView.findViewById(R.id.promtCDesc);
 
-       /* if (inv.product.salemethod.id == 2) {
-            input.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
-            input.setRawInputType(Configuration.KEYBOARD_QWERTY);
-        }*/
 
         final Spinner spPrices = (Spinner) promptView.findViewById(R.id.spPrices);
         ArrayList<Double> pricesList = new ArrayList<>();
@@ -186,13 +183,22 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
                             Log.d("precioSeleccionado", precioSeleccionado + "");
 
                             //  CREDITO
-                            double totalProducSlecc = precioSeleccionado * producto_amount_dist_add;
-                            final double creditoLimiteCliente = Double.parseDouble(activity.getCreditoLimiteCliente());
-                            final double totalCredito = creditoLimiteCliente - totalProducSlecc;
-                            Log.d("ads", totalCredito + "");
+                            String metodoPagoCliente = activity.getMetodoPagoCliente();
+                            Double cred = Double.parseDouble(activity.getCreditoLimiteCliente());
+                            if (metodoPagoCliente.equals("1")) {
+                                creditoLimiteCliente = cred;
+                                totalCredito = creditoLimiteCliente;
+                                Log.d("ads", creditoLimiteCliente + "");
+                            }
+                            else if (metodoPagoCliente.equals("2")) {
+                                double totalProducSlecc = precioSeleccionado * producto_amount_dist_add;
+                                creditoLimiteCliente = cred;
+                                totalCredito = creditoLimiteCliente - totalProducSlecc;
+                                Log.d("ads", totalCredito + "");
+                            }
 
                             // LIMITAR SEGUN EL LIMITE DEL CREDITO
-                            if (totalCredito > 0) {
+                            if (totalCredito >= 0) {
 
 
                                 final Realm realm2 = Realm.getDefaultInstance();

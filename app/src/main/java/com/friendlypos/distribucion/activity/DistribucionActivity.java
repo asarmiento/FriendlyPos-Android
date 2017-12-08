@@ -36,22 +36,24 @@ public class DistribucionActivity extends AppCompatActivity {
     private String creditoLimiteClienteSlecc = "";
 
 
-    private String totalizarSubGrabado;
+    private double totalizarSubGrabado;
     private double totalizarSubExento;
-    private String totalizarSubTotal;
-    private String totalizarDescuento;
-    private String totalizarImpuestoIVA;
-    private String totalizarTotal;
+    private double totalizarSubTotal;
+    private double totalizarDescuento;
+    private double totalizarImpuestoIVA;
+    private double totalizarTotal;
     private double totalizarTotalDouble;
+
+
     ProgressDialog progressDialog;
 
     public void cleanTotalize() {
-        totalizarSubGrabado = "0";
+        totalizarSubGrabado= 0.0;
         totalizarSubExento = 0.0;
-        totalizarSubTotal = "0";
-        totalizarDescuento = "0";
-        totalizarImpuestoIVA = "0";
-        totalizarTotal = "0";
+        totalizarSubTotal = 0.0;
+        totalizarDescuento= 0.0;
+        totalizarImpuestoIVA = 0.0;
+        totalizarTotal = 0.0;
         totalizarTotalDouble = 0.0;
     }
 
@@ -72,7 +74,7 @@ public class DistribucionActivity extends AppCompatActivity {
     }
 
     public String getCreditoLimiteCliente() {
-        return creditoLimiteClienteSlecc;
+        return creditoLimiteCliente;
     }
 
     public void setCreditoLimiteCliente(String creditoLimiteCliente) {
@@ -95,12 +97,14 @@ public class DistribucionActivity extends AppCompatActivity {
         this.dueCliente = dueCliente;
     }
 
-    public String getTotalizarSubGrabado() {
+
+
+    public double getTotalizarSubGrabado() {
         return totalizarSubGrabado;
     }
 
-    public void setTotalizarSubGrabado(String totalizarSubGrabado) {
-        this.totalizarSubGrabado = totalizarSubGrabado;
+    public void setTotalizarSubGrabado(double totalizarSubGrabado) {
+        this.totalizarSubGrabado = this.totalizarSubGrabado + totalizarSubGrabado;
     }
 
     public double getTotalizarSubExento() {
@@ -111,27 +115,27 @@ public class DistribucionActivity extends AppCompatActivity {
         this.totalizarSubExento = this.totalizarSubExento + totalizarSubExento;
     }
 
-    public String getTotalizarSubTotal() {
+    public double getTotalizarSubTotal() {
         return totalizarSubTotal;
     }
 
-    public void setTotalizarSubTotal(String totalizarSubTotal) {
+    public void setTotalizarSubTotal(double totalizarSubTotal) {
         this.totalizarSubTotal = totalizarSubTotal;
     }
 
-    public String getTotalizarDescuento() {
+    public double getTotalizarDescuento() {
         return totalizarDescuento;
     }
 
-    public void setTotalizarDescuento(String totalizarDescuento) {
+    public void setTotalizarDescuento(double totalizarDescuento) {
         this.totalizarDescuento = totalizarDescuento;
     }
 
-    public String getTotalizarImpuestoIVA() {
+    public double getTotalizarImpuestoIVA() {
         return totalizarImpuestoIVA;
     }
 
-    public void setTotalizarImpuestoIVA(String totalizarImpuestoIVA) {
+    public void setTotalizarImpuestoIVA(double totalizarImpuestoIVA) {
         this.totalizarImpuestoIVA = totalizarImpuestoIVA;
     }
 
@@ -143,11 +147,11 @@ public class DistribucionActivity extends AppCompatActivity {
         this.totalizarTotalDouble = totalizarTotalDouble;
     }
 
-    public String getTotalizarTotal() {
+    public double getTotalizarTotal() {
         return totalizarTotal;
     }
 
-    public void setTotalizarTotal(String totalizarTotal) {
+    public void setTotalizarTotal(double totalizarTotal) {
         this.totalizarTotal = totalizarTotal;
     }
 

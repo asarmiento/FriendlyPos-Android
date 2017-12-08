@@ -93,7 +93,7 @@ public class DistSelecProductoFragment extends BaseFragment {
         // creditoLimiteCliente = Double.parseDouble(((DistribucionActivity) getActivity()).getCreditoLimiteClienteSlecc());
 
         String metodoPagoCliente = ((DistribucionActivity) getActivity()).getMetodoPagoCliente();
-        creditoLimiteCliente = Double.parseDouble(((DistribucionActivity)getActivity()).getCreditoLimiteCliente());
+        creditoLimiteCliente = Double.parseDouble(((DistribucionActivity) getActivity()).getCreditoLimiteCliente());
         String dueCliente = ((DistribucionActivity) getActivity()).getDueCliente();
 
         Log.d("PagoProductoSelec", metodoPagoCliente + "");
