@@ -13,6 +13,7 @@ import com.friendlypos.application.bluetooth.PrinterService;
 import com.friendlypos.distribucion.modelo.Facturas;
 import com.friendlypos.distribucion.modelo.Pivot;
 import com.friendlypos.distribucion.modelo.Venta;
+import com.friendlypos.login.modelo.Usuarios;
 import com.friendlypos.login.util.SessionPrefes;
 import com.friendlypos.principal.modelo.Clientes;
 import com.friendlypos.principal.modelo.Productos;
@@ -71,6 +72,11 @@ public class PrinterFunctions {
         String totalCancelado= facturas.getPaid();
         String totalVuelto= facturas.getChanging();
         String totalNotas= facturas.getNote();
+        String idUsuario = facturas.getUser_id();
+
+        Usuarios usuarios = realm.where(Usuarios.class).equalTo("id", idUsuario).findFirst();
+
+        String nombreUsuario = usuarios.getUsername();
 
         // VARIABLES SYSCONF
         String sysNombre = sysconf.getName();
@@ -131,8 +137,7 @@ public class PrinterFunctions {
                     "E-mail " + sysCorreo + "\r\n" +
                     "! U1 SETLP 7 0 14\r\n" +
                     "Fecha y hora: " + fechayhora + "\r\n" +
-                    // TODO REVISAR LOS USUARIOS
-              //      "Vendedor:  " + sale.users.name + "\r\n" +
+                    "Vendedor:  " + nombreUsuario + "\r\n" +
                     "\r\n" +
                     "! U1 LMARGIN 50\r\n" +
                     "Cedula: " + cardCliente + " \r\n" +
@@ -146,10 +151,8 @@ public class PrinterFunctions {
                     "Cant     Precio       P.Sug        Total      I\r\n" +
                     "------------------------------------------------\r\n" +
                     "! U1 SETLP 7 0 10\r\n" +
-                    // TODO REVISAR TODOS LOS PRODUCTOS
 
                     getPrintDistTotal(venta.getInvoice_id()) +
-                  // getPrintProducts(Functions.getProducsByBillForPrinting(sale.invoices.id)) +
                     "\r\n" +
 
                     String.format("%20s %-20s", "Subtotal Gravado", totalGrabado) + "\r\n" +
@@ -200,7 +203,7 @@ public class PrinterFunctions {
                     preview += Html.fromHtml("<h1>") + "Cedula " + sysIdentificacion + "  Tel. " + sysTelefono + Html.fromHtml("</h1></center><br/><br/>");
                     preview += Html.fromHtml("<h1>") +  "E-mail " + sysCorreo + Html.fromHtml("</h1></center><br/><br/>");
                     preview += Html.fromHtml("<h1>") +  "Fecha y hora: " + fechayhora + Html.fromHtml("</h1></center><br/><br/>");
-                    //preview += Html.fromHtml("<h1>") +  "Vendedor:  " + sale.users.name + Html.fromHtml("</h1></center><br/><br/><br/>");
+                    preview += Html.fromHtml("<h1>") +  "Vendedor:  " + nombreUsuario + Html.fromHtml("</h1></center><br/><br/><br/>");
                     preview += Html.fromHtml("<h1>") +  "Cedula: " + cardCliente + Html.fromHtml("</h1></center><br/><br/>");
                     preview += Html.fromHtml("<h1>") + "Razon Social: " + companyCliente + Html.fromHtml("</h1></center><br/><br/>");
                     preview += Html.fromHtml("<h1>") + "A nombre de: " + nombreCliente + Html.fromHtml("</h1></center><br/><br/>");
@@ -240,7 +243,7 @@ public class PrinterFunctions {
                     preview += Html.fromHtml("<h1>") + "Cedula " + sysIdentificacion + "  Tel. " + sysTelefono + Html.fromHtml("</h1></center><br/><br/>");
                     preview += Html.fromHtml("<h1>") +  "E-mail " + sysCorreo + Html.fromHtml("</h1></center><br/><br/>");
                     preview += Html.fromHtml("<h1>") +  "Fecha y hora: " + fechayhora + Html.fromHtml("</h1></center><br/><br/>");
-                    //preview += Html.fromHtml("<h1>") +  "Vendedor:  " + sale.users.name + Html.fromHtml("</h1></center><br/><br/><br/>");
+                    preview += Html.fromHtml("<h1>") +  "Vendedor:  " + nombreUsuario + Html.fromHtml("</h1></center><br/><br/><br/>");
                     preview += Html.fromHtml("<h1>") +  "Cedula: " + cardCliente + Html.fromHtml("</h1></center><br/><br/>");
                     preview += Html.fromHtml("<h1>") + "Razon Social: " + companyCliente + Html.fromHtml("</h1></center><br/><br/>");
                     preview += Html.fromHtml("<h1>") + "A nombre de: " + nombreCliente + Html.fromHtml("</h1></center><br/><br/>");
@@ -330,6 +333,7 @@ public class PrinterFunctions {
 
         // VARIABLES FACTURA
         String numeracionFactura = facturas.getNumeration();
+
 
         // VARIABLES SYSCONF
         String sysNombre = sysconf.getName();
@@ -445,7 +449,7 @@ public class PrinterFunctions {
                     String.format("%s", billptype) + "\r\n" +
                     "! U1 SETLP 7 0 10\r\n" +
                     "\r\n" +
-                    //"Usuario: " + getUserName(QuickContext) + "\r\n" +
+                    "Usuario: " + getUserName(QuickContext) + "\r\n" +
                     "! U1 LMARGIN 0\r\n" +
                     "! U1 SETSP 0\r\n" +
                     "#     Factura           Fecha         Monto\r\n" +
@@ -590,6 +594,23 @@ public class PrinterFunctions {
             }
         }
         return send;
+    }
+
+
+    private static String getUserName(Context context) {
+        SessionPrefes session = new SessionPrefes(context);
+
+        String usuer = session.getUsuarioPrefs();
+        Log.d("usuer", usuer);
+        Realm realm = Realm.getDefaultInstance();
+        Usuarios usuarios = realm.where(Usuarios.class).equalTo("email", usuer).findFirst();
+        String nombreUsuario = usuarios.getUsername();
+        realm.close();
+
+
+     //   Session session = new Session(context);
+      //  Users users = new Select().all().from(Users.class).where(Condition.column(Users$Table.ID).eq(session.getUserDetails().get(session.KEY_USERINFO).userId)).querySingle();
+        return nombreUsuario;
     }
 
 

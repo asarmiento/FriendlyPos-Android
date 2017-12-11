@@ -25,6 +25,7 @@ import android.widget.Toast;
 import com.friendlypos.R;
 import com.friendlypos.app.broadcastreceiver.NetworkStateChangeReceiver;
 import com.friendlypos.application.bluetooth.PrinterService;
+import com.friendlypos.application.util.Functions;
 import com.friendlypos.application.util.PrinterFunctions;
 import com.friendlypos.distribucion.activity.DistribucionActivity;
 import com.friendlypos.distribucion.modelo.Facturas;
@@ -89,7 +90,6 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
         ButterKnife.bind(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-       /* Initializing();*/
         networkStateChangeReceiver = new NetworkStateChangeReceiver();
 
         session = new SessionPrefes(getApplicationContext());
@@ -110,7 +110,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
         }
         else {
 
-// TODO OBTENER USUARIO
+
             String usuer = session.getUsuarioPrefs();
             Log.d("usuer", usuer);
             txtNombreUsuario.setText(usuer);
@@ -126,7 +126,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
     }
 
     private void connectToPrinter() {
-      //  if(bluetoothStateChangeReceiver.isBluetoothAvailable()) {
+        //if(bluetoothStateChangeReceiver.isBluetoothAvailable()) {
             getPreferences();
             if (printer_enabled) {
                 if (printer == null || printer.equals("")) {
@@ -142,17 +142,16 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                     }
                 }
             }
-        /*    if (bluetoothStateChangeReceiver.isBluetoothAvailable() == false) {
-                Log.i("adsdsda", "Bluetooth not supported");
-                // Show proper message here
-                finish();
-            }
-        }else{
+        }/*else{
           //  return null;
             Toast.makeText(getApplicationContext(),"dasda", Toast.LENGTH_LONG).show();
+            Log.i("adsdsda", "Bluetooth not supported");
+            // Show proper message here
+            //finish();
+
             //TODO MUESTRA UN DIALOG DE ERROR
-        }*/
-    }
+        }
+    }*/
 
     @Override
     public void onBackPressed() {
@@ -291,7 +290,8 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                     PrinterFunctions.imprimirLiquidacionMenu(MenuPrincipal.this);
                     Toast.makeText(MenuPrincipal.this, "imprimir liquidacion", Toast.LENGTH_SHORT).show();
                 }else{
-                    //TODO ERROR
+                    Toast.makeText(getApplicationContext(), "dasdada", Toast.LENGTH_LONG).show();
+                    Functions.CreateMessage(getApplicationContext(), "Error", "La conexión del bluetooth ha fallado");
                 }
                 break;
 
