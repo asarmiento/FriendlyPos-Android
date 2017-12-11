@@ -71,27 +71,6 @@ public class Properties {
         editor = pref.edit();
     }
 
-
-    /**
-     * set URL WEBSRV
-     * */
-    public void setGcmid(String id){
-        // Storing url in pref
-        editor.putString(GCMID, id);
-        // commit changes
-        editor.commit();
-    }
-
-    /**
-     * set FirstTime
-     * */
-    public void setFirstTime(Boolean firstT){
-        // Storing url in pref
-        editor.putBoolean(FirstTime, firstT);
-        // commit changes
-        editor.commit();
-    }
-
     /**
      * set URL WEBSRV
      * */
@@ -101,7 +80,6 @@ public class Properties {
         // commit changes
         editor.commit();
     }
-
 
     public String getUrlWebsrv() {
         return pref.getString(URL_WEBSRV,null);

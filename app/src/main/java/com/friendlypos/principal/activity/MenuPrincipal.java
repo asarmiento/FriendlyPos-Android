@@ -271,11 +271,9 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
 
                 //TODO SABER COMO TENER QUE SUBIR LOS DATOS, SI UNO X UNO O TODOS DE UN SOLO.
                 Realm realm = Realm.getDefaultInstance();
-
-
                 final RealmResults<Facturas> facturas1 = realm.where(Facturas.class).findAll();
                 for (int i = 0; i < facturas1.size(); i++) {
-                    subir1.sendPost(facturas1.get(i).toString());
+                    subir1.sendPost(facturas1.get(i));
                 }
 
                 Toast.makeText(MenuPrincipal.this, "subir_ventas", Toast.LENGTH_SHORT).show();

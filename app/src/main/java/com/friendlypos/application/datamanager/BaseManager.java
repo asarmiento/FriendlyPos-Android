@@ -31,7 +31,7 @@ public class BaseManager {
     private static RequestInterface api;
     static Properties properties;
 
-    public BaseManager(Activity activity, Context context) {
+    public BaseManager(Activity activity) {
         this.activity = activity;
         this.mContext = activity;
 
@@ -39,8 +39,8 @@ public class BaseManager {
 
     public static RequestInterface getApi() {
 
-       /* properties = new Properties(getApplicationContext());
-        //   properties.setUrlWebsrv("http://friendlyaccount.com");
+        properties = new Properties(getApplicationContext());
+       /* //   properties.setUrlWebsrv("http://friendlyaccount.com");
 
         if (properties.getUrlWebsrv() == null) {
             System.out.println("Stablishing properties");
@@ -49,7 +49,7 @@ public class BaseManager {
         } else {
             Log.d("adasdad",properties.getUrlWebsrv()+"");
         }*/
-
+        String nombreURL = properties.getUrlWebsrv();
         if(api == null) {
 
 
@@ -87,8 +87,8 @@ public class BaseManager {
                     .build();
 
             Retrofit retrofit = new Retrofit.Builder()
-                    /*.baseUrl(appAPI.ENDPOINT)*/
-                    .baseUrl("http://friendlyaccount.com")
+                    .baseUrl(nombreURL)
+                   // .baseUrl("http://friendlyaccount.com")
                     //.baseUrl(properties.getUrlWebsrv())
                     .client(httpClient)
                     .addConverterFactory(GsonConverterFactory.create(gson))

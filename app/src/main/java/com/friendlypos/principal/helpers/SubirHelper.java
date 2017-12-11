@@ -10,6 +10,7 @@ import com.friendlypos.app.broadcastreceiver.NetworkStateChangeReceiver;
 import com.friendlypos.application.datamanager.BaseManager;
 import com.friendlypos.application.interfaces.RequestInterface;
 import com.friendlypos.distribucion.modelo.Facturas;
+import com.friendlypos.login.util.SessionPrefes;
 
 import io.realm.Realm;
 import retrofit2.Call;
@@ -38,11 +39,12 @@ public class SubirHelper {
         mAPIService = BaseManager.getApi();
     }
 
-    public void sendPost(String facturaQuery) {
-
+    public void sendPost(Facturas facturaQuery) {
+        String token = "Bearer " + SessionPrefes.get(mContext).getToken();
+        Log.d("tokenCliente", token + " ");
         if (isOnline()) {
 
-        mAPIService.savePost(facturaQuery).enqueue(new Callback<Facturas>() {
+        mAPIService.savePost(facturaQuery, token).enqueue(new Callback<Facturas>() {
             @Override
             public void onResponse(Call<Facturas> call, Response<Facturas> response) {
                 Log.i(TAG, "mamon " + response.body());
@@ -66,7 +68,6 @@ public class SubirHelper {
         }
         mResponseTv.setText(response);
     }
-
 
     private boolean isOnline() {
         return networkStateChangeReceiver.isNetworkAvailable(mContext);

@@ -1,5 +1,6 @@
 package com.friendlypos.login.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -27,7 +28,11 @@ public class ConfiguracionActivity extends AppCompatActivity {
         properties = new Properties(this);
         coordinatorLayout = (CoordinatorLayout) findViewById(R.id.main_content);
         webServiceUrl = (TextView) findViewById(R.id.txtwebservice);
-        webServiceUrl.setText(webServiceUrl.getText().toString());
+
+        String nombreURL = properties.getUrlWebsrv();
+
+        webServiceUrl.setText(nombreURL);
+
         save = (FloatingActionButton) findViewById(R.id.floating);
         save.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,5 +60,7 @@ public class ConfiguracionActivity extends AppCompatActivity {
                 Functions.createNotification(this, 100, "Cambiando el WebService", "No se modifico el webservice ya el Url Es invalido");
             }
         }
+        Intent i = new Intent(getApplicationContext(), LoginActivity.class);
+        startActivity(i);
     }
 }

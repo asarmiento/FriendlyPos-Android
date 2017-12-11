@@ -94,9 +94,12 @@ public class LoginActivity extends AppCompatActivity {
 
         if (properties.getUrlWebsrv() == null) {
             System.out.println("Stablishing properties");
+            Toast.makeText(this, properties.getUrlWebsrv() + "",Toast.LENGTH_SHORT).show();
 
             Log.d("adasda1",properties.getUrlWebsrv()+"");
         } else {
+            Toast.makeText(this, "adasdad" + properties.getUrlWebsrv() + "",Toast.LENGTH_SHORT).show();
+
             Log.d("adasdad",properties.getUrlWebsrv()+"");
         }
 
