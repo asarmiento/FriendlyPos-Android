@@ -1,12 +1,6 @@
 package com.friendlypos.distribucion.fragment;
 
-import android.Manifest;
-import android.content.Context;
-import android.content.pm.PackageManager;
-import android.location.LocationListener;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,16 +16,7 @@ import com.friendlypos.application.util.PrinterFunctions;
 import com.friendlypos.distribucion.activity.DistribucionActivity;
 import com.friendlypos.distribucion.modelo.Facturas;
 import com.friendlypos.distribucion.modelo.Venta;
-import com.friendlypos.distribucion.util.Localizacion;
-
-import android.location.Address;
-import android.location.Geocoder;
-import android.location.Location;
-import android.location.LocationManager;
-
-import java.io.IOException;
-import java.util.List;
-import java.util.Locale;
+import com.friendlypos.distribucion.util.GPSTracker;
 
 import io.realm.Realm;
 
@@ -62,10 +47,9 @@ public class DistTotalizarFragment extends BaseFragment {
     static double pagoCon = 0.0;
     String facturaId;
 
-    TextView messageTextView;
-    TextView messageTextView2;
 
-
+    double latitude;
+    double longitude;
 
     private static Button applyBill;
     private static Button printBill;
@@ -73,6 +57,8 @@ public class DistTotalizarFragment extends BaseFragment {
     private static int apply_done = 0;
 
     Venta venta_actualizada;
+
+    GPSTracker gps;
 
     @Override
     public void onDestroy() {
@@ -95,9 +81,6 @@ public class DistTotalizarFragment extends BaseFragment {
         subT = (TextView) rootView.findViewById(R.id.subTotal);
         discount = (TextView) rootView.findViewById(R.id.Discount);
         Total = (TextView) rootView.findViewById(R.id.Total);
-
-        messageTextView = (TextView) rootView.findViewById(R.id.message_id);
-        messageTextView2 = (TextView) rootView.findViewById(R.id.message_id2);
 
         paid = (EditText) rootView.findViewById(R.id.txtPaid);
 
@@ -152,9 +135,9 @@ public class DistTotalizarFragment extends BaseFragment {
                                 totalVuelvo = String.format("%,.2f", vuelto);
 
                                 change.setText(totalVuelvo);
-
-                                // aplicarFactura();
                                 obtenerLocalización();
+                                aplicarFactura();
+
                             } else {
                                 Toast.makeText(getActivity(), "Digite una cantidad mayor al total", Toast.LENGTH_LONG).show();
                             }
@@ -213,6 +196,31 @@ public class DistTotalizarFragment extends BaseFragment {
 
     }
 
+    public void obtenerLocalización() {
+
+        gps = new GPSTracker(getActivity());
+
+        // check if GPS enabled
+        if(gps.canGetLocation()){
+
+            latitude = gps.getLatitude();
+            longitude = gps.getLongitude();
+
+           /* messageTextView2.setText("Mi direccion es: \n"
+                    + latitude + "log "  + longitude );
+            // \n is for new line
+            Toast.makeText(getActivity(), "Your Location is - \nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();*/
+        }else{
+            // can't get location
+            // GPS or Network is not enabled
+            // Ask user to enable GPS/network in settings
+            gps.showSettingsAlert();
+
+
+        }
+
+    }
+
     protected void actualizarFactura() {
 
         // TRANSACCION PARA ACTUALIZAR CAMPOS DE LA TABLA FACTURAS
@@ -226,6 +234,9 @@ public class DistTotalizarFragment extends BaseFragment {
 
                 factura_actualizada.setDate(Functions.getDate());
                 factura_actualizada.setTimes(Functions.get24Time());
+
+                factura_actualizada.setLatitud(latitude);
+                factura_actualizada.setLongitud(longitude);
 
                 factura_actualizada.setSubtotal_taxed(String.valueOf(totalGrabado));
                 factura_actualizada.setSubtotal_exempt(String.valueOf(totalExento));
@@ -282,7 +293,6 @@ public class DistTotalizarFragment extends BaseFragment {
         printBill.setVisibility(View.VISIBLE);
         apply_done = 1;
 
-
     }
 
     public static void clearAll() {
@@ -298,95 +308,6 @@ public class DistTotalizarFragment extends BaseFragment {
 
 
     }
-
-    public void obtenerLocalización() {
-
-        MyLocationListener mLocationListener = new MyLocationListener();
-        LocationManager mLocationManager = (LocationManager) getActivity().getSystemService(
-                Context.LOCATION_SERVICE);
-        mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10 * 1000L, 0F, mLocationListener);
-
-        /* Use the LocationManager class to obtain GPS locations */
- /*       LocationManager mlocManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-        MyLocationListener mlocListener = new MyLocationListener();
-        mlocListener.setMainActivity(this);
-        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            Toast.makeText(getActivity(), "First enable LOCATION ACCESS in settings.", Toast.LENGTH_LONG).show();
-            return;
-        }
-        mlocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0,
-                (LocationListener) mlocListener);*/
-
-    }
-
-    public void setLocation(Location loc) {
-        //Obtener la direccion de la calle a partir de la latitud y la longitud
-        if (loc.getLatitude() != 0.0 && loc.getLongitude() != 0.0) {
-            try {
-                Geocoder geocoder = new Geocoder(getActivity(), Locale.getDefault());
-                List<Address> list = geocoder.getFromLocation(
-                        loc.getLatitude(), loc.getLongitude(), 1);
-                if (!list.isEmpty()) {
-                    Address address = list.get(0);
-                    messageTextView2.setText("Mi direccion es: \n"
-                            + address.getAddressLine(0));
-                }
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    /* Class My Location Listener */
-    public class MyLocationListener implements LocationListener {
-        DistTotalizarFragment mainActivity;
-
-        public DistTotalizarFragment getMainActivity() {
-            return mainActivity;
-        }
-
-        public void setMainActivity(DistTotalizarFragment mainActivity) {
-            this.mainActivity = mainActivity;
-        }
-
-        @Override
-        public void onLocationChanged(Location loc) {
-            // Este metodo se ejecuta cada vez que el GPS recibe nuevas coordenadas
-            // debido a la deteccion de un cambio de ubicacion
-            loc.getLatitude();
-            loc.getLongitude();
-            String Text = "Mi ubicacion actual es: " + "\n Lat = "
-                    + loc.getLatitude() + "\n Long = " + loc.getLongitude();
-            messageTextView.setText(Text);
-            this.mainActivity.setLocation(loc);
-        }
-
-        @Override
-        public void onProviderDisabled(String provider) {
-            // Este metodo se ejecuta cuando el GPS es desactivado
-            messageTextView.setText("GPS Desactivado");
-        }
-
-        @Override
-        public void onProviderEnabled(String provider) {
-            // Este metodo se ejecuta cuando el GPS es activado
-            messageTextView.setText("GPS Activado");
-        }
-
-        @Override
-        public void onStatusChanged(String provider, int status, Bundle extras) {
-            // Este metodo se ejecuta cada vez que se detecta un cambio en el
-            // status del proveedor de localizacion (GPS)
-            // Los diferentes Status son:
-            // OUT_OF_SERVICE -> Si el proveedor esta fuera de servicio
-            // TEMPORARILY_UNAVAILABLE -> Temporalmente no disponible pero se
-            // espera que este disponible en breve
-            // AVAILABLE -> Disponible
-        }
-
-    }/* End of Class MyLocationListener */
-
 
 
 

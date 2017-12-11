@@ -32,10 +32,7 @@ import io.realm.RealmResults;
 
 public class PrinterFunctions {
 
-    private static double printSalesCashTotal;
-    private static double printSalesCreditTotal;
-    private static double printReceiptsTotal;
-    private static double printSalesCashTotal1;
+    private static double printSalesCashTotal = 0.0;
 
     public static void datosImprimirDistrTotal(int type, Venta venta, Context QuickContext, int ptype) {
         String stype = "";
@@ -212,7 +209,7 @@ public class PrinterFunctions {
                     preview += Html.fromHtml("<h1>") +  "#  Descripcion               Codigo" + Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>") +  "Cant     Precio       P.Sug        Total      I" + Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>") +  "------------------------------------------------" + Html.fromHtml("</h1></center><br/>");
-                //    preview += Html.fromHtml("<h1>") +  getPrintProducts(Functions.getProducsByBillForPrinting(sale.invoices.id)) + Html.fromHtml("</h1></center><br/>");
+                    preview += Html.fromHtml("<h1>") +    getPrintDistTotal(venta.getInvoice_id()) + Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>") +  String.format("%20s %-20s", "Subtotal Gravado", totalGrabado) + Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>") +  String.format("%20s %-20s", "Subtotal Exento", totalExento) + Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>") +  String.format("%20s %-20s", "Subtotal", totalSubtotal) + Html.fromHtml("</h1></center><br/>");
@@ -252,7 +249,7 @@ public class PrinterFunctions {
                     preview += Html.fromHtml("<h1>") +  "#  Descripcion               Codigo" + Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>") +  "Cant     Precio       P.Sug        Total      I" + Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>") +  "------------------------------------------------" + Html.fromHtml("</h1></center><br/>");
-                   // preview += Html.fromHtml("<h1>") +  getPrintProducts(Functions.getProducsByBillForPrinting(sale.invoices.id)) + Html.fromHtml("</h1></center><br/>");
+                    preview += Html.fromHtml("<h1>") +    getPrintDistTotal(venta.getInvoice_id()) + Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>") +  String.format("%20s %-20s", "Subtotal Gravado", totalGrabado) + Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>") +  String.format("%20s %-20s", "Subtotal Exento", totalExento) + Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>") +  String.format("%20s %-20s", "Subtotal", totalSubtotal) + Html.fromHtml("</h1></center><br/>");
@@ -373,7 +370,7 @@ public class PrinterFunctions {
                     "Cant I\r\n" +
                     "------------------------------------------------\r\n" +
                     "! U1 SETLP 7 0 10\r\n" +
-             //       getPrintProducts(Functions.getProducsByBillForPrinting(sale.invoice.id)) +
+                    getPrintDistTotal(venta.getInvoice_id()) +
                     "\r\n" +
                     "! U1 SETLP 5 3 70\r\n" +
                     " \n\n" +
@@ -397,7 +394,7 @@ public class PrinterFunctions {
             preview += Html.fromHtml("<h1>") +  "#  Descripcion               Codigo" + Html.fromHtml("</h1></center><br/>");
             preview += Html.fromHtml("<h1>") +  "Cant     I" + Html.fromHtml("</h1></center><br/>");
             preview += Html.fromHtml("<h1>") +  "------------------------------------------------" + Html.fromHtml("</h1></center><br/>");
-         //   preview += Html.fromHtml("<h1>") +   getPrintProducts(Functions.getProducsByBillForPrinting(sale.invoice.id)) + Html.fromHtml("</h1></center><br/>");
+            preview += Html.fromHtml("<h1>") +    getPrintDistTotal(venta.getInvoice_id()) + Html.fromHtml("</h1></center><br/>");
 
             Intent intent2 = new Intent(PrinterService.BROADCAST_CLASS);
             intent2.putExtra(PrinterService.BROADCAST_CLASS + "TO_PRINT", "true");
@@ -476,7 +473,7 @@ public class PrinterFunctions {
                     "\r\n" +
                     "\r\n" +*/
                     "------------------------------------------------\r\n" +
-                   "#     Total " + Functions.doubleToString(printSalesCashTotal + printSalesCreditTotal + printReceiptsTotal) + "\r\n" +
+                   "#     Total " + Functions.doubleToString(printSalesCashTotal /*+ printSalesCreditTotal + printReceiptsTotal*/) + "\r\n" +
                     " \r\n" +
                     " \r\n" +
                     " \r\n" +
@@ -494,9 +491,9 @@ public class PrinterFunctions {
           //  preview += Html.fromHtml("<h1>") + "Usuario: " + getUserName(QuickContext) + Html.fromHtml("</h1><br/><br/>");
             preview += Html.fromHtml("<h1>") +  "#     Factura           Fecha         Monto" + Html.fromHtml("</h1></center><br/>");
             preview += Html.fromHtml("<h1>") +  "------------------------------------------------" + Html.fromHtml("</h1></center><br/>");
-           // preview += Html.fromHtml("<h1>") +   receipts + Html.fromHtml("</h1></center><br/>");
-            preview += Html.fromHtml("<h1>") +  "#     Total " + Functions.doubleToString(printReceiptsTotal) + Html.fromHtml("</h1><br/><br/><br/>");
-            preview += Html.fromHtml("<h1>") +  "#     Total " + Functions.doubleToString(printSalesCashTotal + printSalesCreditTotal + printReceiptsTotal) + Html.fromHtml("</h1><br/><br/><br/>");
+            preview += Html.fromHtml("<h1>") +   salesCredit + Html.fromHtml("</h1></center><br/>");
+            preview += Html.fromHtml("<h1>") +  "#     Total " + Functions.doubleToString(printSalesCashTotal) + Html.fromHtml("</h1><br/><br/><br/>");
+            preview += Html.fromHtml("<h1>") +  "#     Total " + Functions.doubleToString(printSalesCashTotal /*+ printSalesCreditTotal + printReceiptsTotal*/) + Html.fromHtml("</h1><br/><br/><br/>");
 
             Intent intent2 = new Intent(PrinterService.BROADCAST_CLASS);
             intent2.putExtra(PrinterService.BROADCAST_CLASS + "TO_PRINT", "true");

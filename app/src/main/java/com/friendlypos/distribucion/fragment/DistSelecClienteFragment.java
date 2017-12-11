@@ -92,6 +92,5 @@ public class DistSelecClienteFragment extends BaseFragment{
 
     @Override
     public void updateData() {
-
     }
 }

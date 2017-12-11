@@ -33,8 +33,6 @@ public class DistribucionActivity extends AppCompatActivity {
     private String metodoPagoCliente;
     private String creditoLimiteCliente= "";
     private String dueCliente;
-    private String creditoLimiteClienteSlecc = "";
-
 
     private double totalizarSubGrabado;
     private double totalizarSubExento;
@@ -43,7 +41,6 @@ public class DistribucionActivity extends AppCompatActivity {
     private double totalizarImpuestoIVA;
     private double totalizarTotal;
     private double totalizarTotalDouble;
-
 
     ProgressDialog progressDialog;
 
@@ -80,14 +77,6 @@ public class DistribucionActivity extends AppCompatActivity {
     public void setCreditoLimiteCliente(String creditoLimiteCliente) {
         this.creditoLimiteCliente = creditoLimiteCliente;
     }
-
-  /*  public String getCreditoLimiteClienteSlecc() {
-        return creditoLimiteClienteSlecc;
-    }
-
-    public void setCreditoLimiteClienteSlecc(String creditoLimiteClienteSlecc) {
-        this.creditoLimiteClienteSlecc = creditoLimiteClienteSlecc;
-    }*/
 
     public String getDueCliente() {
         return dueCliente;
@@ -137,14 +126,6 @@ public class DistribucionActivity extends AppCompatActivity {
 
     public void setTotalizarImpuestoIVA(double totalizarImpuestoIVA) {
         this.totalizarImpuestoIVA = totalizarImpuestoIVA;
-    }
-
-    public double getTotalizarTotalDouble() {
-        return totalizarTotalDouble;
-    }
-
-    public void setTotalizarTotalDouble(double totalizarTotalDouble) {
-        this.totalizarTotalDouble = totalizarTotalDouble;
     }
 
     public double getTotalizarTotal() {
@@ -207,6 +188,7 @@ public class DistribucionActivity extends AppCompatActivity {
     }
 
     private void setupViewPager(ViewPager viewPager) {
+
         Adapter adapter = new Adapter(getSupportFragmentManager());
         final List<BaseFragment> list = new ArrayList<>();
         list.add(new DistSelecClienteFragment());
@@ -227,9 +209,7 @@ public class DistribucionActivity extends AppCompatActivity {
 
             @Override
             public void onPageSelected(int position) {
-
                 list.get(position).updateData();
-                progressDialog.dismiss();
             }
 
             @Override

@@ -20,6 +20,8 @@ public class Facturas extends RealmObject {
 
     private String branch_office_id;
     private String numeration;
+    private double longitud;
+    private double latitud;
     private String date;
     private String times;
     private String date_presale;
@@ -73,6 +75,22 @@ public class Facturas extends RealmObject {
 
     public void setNumeration(String numeration) {
         this.numeration = numeration;
+    }
+
+    public double getLongitud() {
+        return longitud;
+    }
+
+    public void setLongitud(double longitud) {
+        this.longitud = longitud;
+    }
+
+    public double getLatitud() {
+        return latitud;
+    }
+
+    public void setLatitud(double latitud) {
+        this.latitud = latitud;
     }
 
     public String getDate() {
@@ -280,6 +298,8 @@ public class Facturas extends RealmObject {
                 "id='" + id + '\'' +
                 ", branch_office_id='" + branch_office_id + '\'' +
                 ", numeration='" + numeration + '\'' +
+                ", longitud='" + longitud + '\'' +
+                ", latitud='" + latitud + '\'' +
                 ", date='" + date + '\'' +
                 ", times='" + times + '\'' +
                 ", date_presale='" + date_presale + '\'' +

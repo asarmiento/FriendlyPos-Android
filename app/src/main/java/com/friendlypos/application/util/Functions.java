@@ -39,17 +39,6 @@ import java.util.regex.Pattern;
 
 public class Functions {
 
-    public static ProgressDialog showProgressDialog(Activity activity, String message) {
-        ProgressDialog m_Dialog = new ProgressDialog(activity);
-        m_Dialog.setMessage(message);
-        m_Dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        m_Dialog.setCancelable(false);
-        m_Dialog.show();
-        return m_Dialog;
-
-    }
-
-
     public static void CreateMessage(Context context, String Tittle, String Message) {
         AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
         builder1.setTitle(Tittle);
@@ -65,7 +54,6 @@ public class Functions {
         AlertDialog alert11 = builder1.create();
         alert11.show();
     }
-
 
     public static void createNotification(Context context, int id, String title, String message) {
         NotificationManager mNotifyManager =

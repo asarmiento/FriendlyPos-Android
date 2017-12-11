@@ -165,6 +165,7 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
                         activity.setCreditoLimiteCliente(creditoLimiteCliente);
                         activity.setDueCliente(dueCliente);
 
+
                 }
             });
 
