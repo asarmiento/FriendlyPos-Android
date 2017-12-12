@@ -59,9 +59,12 @@ public class BluetoothActivity extends AppCompatActivity implements NetworkState
 
     @Override
     public void bluetoothChangedState(boolean isBluetoothAvailable) {
-        Log.d("SALSANEQUER", "bluetoothChangedState " + String.valueOf(isBluetoothAvailable));
-        if(!isBluetoothAvailable){
-            Functions.CreateMessage(getApplicationContext(), "Error","El bluetooth esta desactivado");
+        if (isBluetoothAvailable == true) {
+            Log.d("SALSANEQUER", "bluetoothChangedStateTRUE" + String.valueOf(isBluetoothAvailable));
+    }
+        else{
+            Log.d("SALSANEQUER", "bluetoothChangedStateFALSE " + String.valueOf(isBluetoothAvailable));
+           // Functions.CreateMessage(getApplicationContext(), "Error","El bluetooth esta desactivado");
         }
     }
 }

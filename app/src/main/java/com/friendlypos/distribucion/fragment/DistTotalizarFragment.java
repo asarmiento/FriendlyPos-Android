@@ -1,6 +1,7 @@
 package com.friendlypos.distribucion.fragment;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.friendlypos.R;
+import com.friendlypos.app.broadcastreceiver.BluetoothStateChangeReceiver;
+import com.friendlypos.app.broadcastreceiver.NetworkStateChangeReceiver;
 import com.friendlypos.application.util.Functions;
 import com.friendlypos.application.util.PrinterFunctions;
 import com.friendlypos.distribucion.activity.DistribucionActivity;
@@ -21,7 +24,7 @@ import com.friendlypos.distribucion.util.GPSTracker;
 import io.realm.Realm;
 
 
-public class DistTotalizarFragment extends BaseFragment {
+public class DistTotalizarFragment extends BaseFragment  {
 
     private static TextView subGra;
     private static TextView subExe;
@@ -59,11 +62,18 @@ public class DistTotalizarFragment extends BaseFragment {
     Venta venta_actualizada;
 
     GPSTracker gps;
-
+    BluetoothStateChangeReceiver bluetoothStateChangeReceiver;
     @Override
     public void onDestroy() {
         super.onDestroy();
         clearAll();
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        bluetoothStateChangeReceiver = new BluetoothStateChangeReceiver();
+        bluetoothStateChangeReceiver.setBluetoothStateChangeReceiver(getContext());
     }
 
     @Override
@@ -155,8 +165,19 @@ public class DistTotalizarFragment extends BaseFragment {
 
                     @Override
                     public void onClick(View v) {
+
                         try {
-                            PrinterFunctions.imprimirFacturaDistrTotal(venta_actualizada, getActivity(), 1);
+
+                            if(bluetoothStateChangeReceiver.isBluetoothAvailable()== true) {
+                                PrinterFunctions.imprimirFacturaDistrTotal(venta_actualizada, getActivity(), 1);
+                                Toast.makeText(getActivity(), "imprimir liquidacion", Toast.LENGTH_SHORT).show();
+                            }
+                            else if(bluetoothStateChangeReceiver.isBluetoothAvailable() == false){
+                                Functions.CreateMessage(getActivity(), "Error", "La conexión del bluetooth ha fallado, favor revisar o conectar el dispositivo");
+                            }
+
+
+
                         } catch (Exception e) {
                             Functions.CreateMessage(getActivity(), "Error", e.getMessage() + "\n" + e.getStackTrace().toString());
                         }

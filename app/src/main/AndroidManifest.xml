@@ -22,18 +22,21 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <receiver android:name="app.broadcastreceiver.NetworkStateChangeReceiver">
+
+        <receiver android:name="com.friendlypos.app.broadcastreceiver.NetworkStateChangeReceiver" android:enabled="true">
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
                 <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
             </intent-filter>
         </receiver>
-        <receiver android:name="app.broadcastreceiver.BluetoothStateChangeReceiver">
+
+        <receiver android:name="com.friendlypos.app.broadcastreceiver.BluetoothStateChangeReceiver" android:enabled="true">
             <intent-filter>
                 <action android:name="android.bluetooth.adapter.action.STATE_CHANGED" />
                 <action android:name="android.bluetooth.adapter.action.CONNECTION_STATE_CHANGED" />
             </intent-filter>
         </receiver>
+
         <activity
             android:name=".login.activity.LoginActivity"
             android:launchMode="singleTop"

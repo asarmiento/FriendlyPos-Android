@@ -1,18 +1,23 @@
 package com.friendlypos.reimpresion.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.friendlypos.R;
+import com.friendlypos.app.broadcastreceiver.BluetoothStateChangeReceiver;
 import com.friendlypos.application.util.Functions;
+import com.friendlypos.application.util.PrinterFunctions;
 import com.friendlypos.distribucion.fragment.BaseFragment;
 import com.friendlypos.distribucion.modelo.Facturas;
 import com.friendlypos.distribucion.modelo.Pivot;
 import com.friendlypos.distribucion.modelo.Venta;
+import com.friendlypos.principal.activity.MenuPrincipal;
 import com.friendlypos.principal.modelo.Clientes;
 import com.friendlypos.principal.modelo.Productos;
 import com.friendlypos.principal.modelo.Sysconf;
@@ -33,10 +38,21 @@ public class ReimprimirResumenFragment extends BaseFragment {
 
     @Bind(R.id.btnReimprimirFactura)
     public ImageButton btnReimprimirFactura;
-
+    BluetoothStateChangeReceiver bluetoothStateChangeReceiver;
+    Context mContext;
 
     Venta venta_actualizada = null;
     String facturaId = "";
+
+    public ReimprimirResumenFragment(){
+    }
+
+    public ReimprimirResumenFragment(Context context){
+        this.mContext = context;
+        bluetoothStateChangeReceiver = new BluetoothStateChangeReceiver();
+        bluetoothStateChangeReceiver.setBluetoothStateChangeReceiver(mContext);
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -51,25 +67,19 @@ public class ReimprimirResumenFragment extends BaseFragment {
             @Override
             public void onClick(View v) {
 
-                // TRANSACCION PARA ACTUALIZAR CAMPOS DE LA TABLA VENTAS
-                final Realm realm3 = Realm.getDefaultInstance();
-                realm3.executeTransaction(new Realm.Transaction() {
-
-                    @Override
-                    public void execute(Realm realm3) {
-
-                        venta_actualizada = realm3.where(Venta.class).equalTo("id", facturaId).findFirst();
-
-                        realm3.close();
-                    }
-                });
-
                 String a = "1";
                 if (venta_actualizada.getSale_type() == "2") {
                     a = "2";
                 }
-                getHtmlPreview();
-                // PrinterFunctions.imprimirFacturaDistrTotal(venta_actualizada, getActivity(), Integer.parseInt(a));
+
+
+                if(bluetoothStateChangeReceiver.isBluetoothAvailable()== true) {
+                    PrinterFunctions.imprimirFacturaDistrTotal(venta_actualizada, getActivity(), Integer.parseInt(a));
+                    Toast.makeText(getActivity(), "imprimir liquidacion", Toast.LENGTH_SHORT).show();
+                }
+                else if(bluetoothStateChangeReceiver.isBluetoothAvailable() == false){
+                    Functions.CreateMessage(getActivity(), "Error", "La conexión del bluetooth ha fallado, favor revisar o conectar el dispositivo");
+                }
             }
         });
 

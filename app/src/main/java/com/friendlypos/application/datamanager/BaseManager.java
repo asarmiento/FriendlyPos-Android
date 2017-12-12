@@ -87,8 +87,8 @@ public class BaseManager {
                     .build();
 
             Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(nombreURL)
-                   // .baseUrl("http://friendlyaccount.com")
+                    //.baseUrl(nombreURL)
+                    .baseUrl("http://friendlyaccount.com")
                     //.baseUrl(properties.getUrlWebsrv())
                     .client(httpClient)
                     .addConverterFactory(GsonConverterFactory.create(gson))

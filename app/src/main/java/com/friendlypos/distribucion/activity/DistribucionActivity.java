@@ -10,6 +10,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.friendlypos.R;
+import com.friendlypos.app.broadcastreceiver.BluetoothStateChangeReceiver;
+import com.friendlypos.app.broadcastreceiver.NetworkStateChangeReceiver;
 import com.friendlypos.distribucion.fragment.BaseFragment;
 import com.friendlypos.distribucion.fragment.DistResumenFragment;
 import com.friendlypos.distribucion.fragment.DistSelecClienteFragment;
@@ -23,7 +25,7 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 
-public class DistribucionActivity extends AppCompatActivity {
+public abstract class DistribucionActivity extends AppCompatActivity implements NetworkStateChangeReceiver.InternetStateHasChange, BluetoothStateChangeReceiver.BluetoothStateHasChange {
 
     private Toolbar toolbar;
     private TabLayout tabLayout;
@@ -149,6 +151,8 @@ public class DistribucionActivity extends AppCompatActivity {
         progressDialog.setTitle("Wait...");
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         setupViewPager(viewPager);
+
+
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
