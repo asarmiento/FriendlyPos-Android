@@ -58,7 +58,7 @@ public class DistTotalizarFragment extends BaseFragment  {
     private static Button printBill;
 
     private static int apply_done = 0;
-
+    int slecTAB;
     Venta venta_actualizada;
 
     GPSTracker gps;
@@ -95,23 +95,30 @@ public class DistTotalizarFragment extends BaseFragment  {
         paid = (EditText) rootView.findViewById(R.id.txtPaid);
 
         change = (TextView) rootView.findViewById(R.id.txtChange);
+        slecTAB = ((DistribucionActivity) getActivity()).getSelecClienteTab();
 
-        String metodoPagoCliente = ((DistribucionActivity) getActivity()).getMetodoPagoCliente();
+        if (slecTAB == 1) {
 
-        if (metodoPagoCliente.equals("1")) {
-            //bill_type = 1;
-            try {
-                paid.setEnabled(true);
+            String metodoPagoCliente = ((DistribucionActivity) getActivity()).getMetodoPagoCliente();
 
-            } catch (Exception e) {
-                Log.d("JD", "Error " + e.getMessage());
+
+            if (metodoPagoCliente.equals("1")) {
+                //bill_type = 1;
+                try {
+                    paid.setEnabled(true);
+
+                } catch (Exception e) {
+                    Log.d("JD", "Error " + e.getMessage());
+                }
+
+            } else if (metodoPagoCliente.equals("2")) {
+                //  bill_type = 2;
+                paid.setEnabled(false);
             }
-
-        } else if (metodoPagoCliente.equals("2")) {
-            //  bill_type = 2;
-            paid.setEnabled(false);
         }
-
+        else{
+            Toast.makeText(getActivity(),"nada",Toast.LENGTH_LONG).show();
+        }
 
         notes = (EditText) rootView.findViewById(R.id.txtNotes);
 
@@ -192,28 +199,31 @@ public class DistTotalizarFragment extends BaseFragment  {
 
     @Override
     public void updateData() {
+        if (slecTAB == 1) {
+            paid.getText().clear();
 
-        paid.getText().clear();
+            totalGrabado = ((DistribucionActivity) getActivity()).getTotalizarSubGrabado();
+            totalExento = ((DistribucionActivity) getActivity()).getTotalizarSubExento();
+            totalSubtotal = ((DistribucionActivity) getActivity()).getTotalizarSubTotal();
+            totalDescuento = ((DistribucionActivity) getActivity()).getTotalizarDescuento();
+            totalImpuesto = ((DistribucionActivity) getActivity()).getTotalizarImpuestoIVA();
+            totalTotal = ((DistribucionActivity) getActivity()).getTotalizarTotal();
+            facturaId = ((DistribucionActivity) getActivity()).getInvoiceId();
 
-        totalGrabado = ((DistribucionActivity) getActivity()).getTotalizarSubGrabado();
-        totalExento = ((DistribucionActivity) getActivity()).getTotalizarSubExento();
-        totalSubtotal = ((DistribucionActivity) getActivity()).getTotalizarSubTotal();
-        totalDescuento = ((DistribucionActivity) getActivity()).getTotalizarDescuento();
-        totalImpuesto = ((DistribucionActivity) getActivity()).getTotalizarImpuestoIVA();
-        totalTotal = ((DistribucionActivity) getActivity()).getTotalizarTotal();
-        facturaId = ((DistribucionActivity) getActivity()).getInvoiceId();
+            subGra.setText(String.format("%,.2f", totalGrabado));
+            subExe.setText(String.format("%,.2f", totalExento));
 
-        subGra.setText(String.format("%,.2f", totalGrabado));
-        subExe.setText(String.format("%,.2f", totalExento));
+            subT.setText(String.format("%,.2f", totalSubtotal));
+            discount.setText(String.format("%,.2f", totalDescuento));
 
-        subT.setText(String.format("%,.2f", totalSubtotal));
-        discount.setText(String.format("%,.2f", totalDescuento));
+            ivaSub.setText(String.format("%,.2f", totalImpuesto));
+            Total.setText(String.format("%,.2f", totalTotal));
 
-        ivaSub.setText(String.format("%,.2f", totalImpuesto));
-        Total.setText(String.format("%,.2f", totalTotal));
-
-        Log.d("FACTURAIDTOTALIZAR", facturaId);
-
+            Log.d("FACTURAIDTOTALIZAR", facturaId);
+        }
+        else{
+            Toast.makeText(getActivity(),"nada",Toast.LENGTH_LONG).show();
+        }
 
     }
 
