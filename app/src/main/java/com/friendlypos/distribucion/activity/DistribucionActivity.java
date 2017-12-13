@@ -3,6 +3,7 @@ package com.friendlypos.distribucion.activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -12,12 +13,14 @@ import android.view.MenuItem;
 import com.friendlypos.R;
 import com.friendlypos.app.broadcastreceiver.BluetoothStateChangeReceiver;
 import com.friendlypos.app.broadcastreceiver.NetworkStateChangeReceiver;
+import com.friendlypos.application.util.Functions;
 import com.friendlypos.distribucion.fragment.BaseFragment;
 import com.friendlypos.distribucion.fragment.DistResumenFragment;
 import com.friendlypos.distribucion.fragment.DistSelecClienteFragment;
 import com.friendlypos.distribucion.fragment.DistSelecProductoFragment;
 import com.friendlypos.distribucion.fragment.DistTotalizarFragment;
 import com.friendlypos.distribucion.util.Adapter;
+import com.friendlypos.principal.activity.BluetoothActivity;
 import com.friendlypos.principal.activity.MenuPrincipal;
 
 import java.util.ArrayList;
@@ -25,7 +28,7 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 
-public abstract class DistribucionActivity extends AppCompatActivity implements NetworkStateChangeReceiver.InternetStateHasChange, BluetoothStateChangeReceiver.BluetoothStateHasChange {
+public class DistribucionActivity extends BluetoothActivity{
 
     private Toolbar toolbar;
     private TabLayout tabLayout;
@@ -33,7 +36,7 @@ public abstract class DistribucionActivity extends AppCompatActivity implements 
 
     private String invoiceId;
     private String metodoPagoCliente;
-    private String creditoLimiteCliente= "";
+    private String creditoLimiteCliente = null;
     private String dueCliente;
 
     private double totalizarSubGrabado;
@@ -43,6 +46,8 @@ public abstract class DistribucionActivity extends AppCompatActivity implements 
     private double totalizarImpuestoIVA;
     private double totalizarTotal;
     private double totalizarTotalDouble;
+
+    private int selecClienteTab;
 
     ProgressDialog progressDialog;
 
@@ -138,30 +143,40 @@ public abstract class DistribucionActivity extends AppCompatActivity implements 
         this.totalizarTotal = totalizarTotal;
     }
 
+    public int getSelecClienteTab() {
+        return selecClienteTab;
+    }
+
+    public void setSelecClienteTab(int selecClienteTab) {
+        this.selecClienteTab = selecClienteTab;
+    }
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_distribucion);
         ButterKnife.bind(this);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setTitle("Wait...");
-        viewPager = (ViewPager) findViewById(R.id.viewpager);
-        setupViewPager(viewPager);
 
-
+        final ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
+        if (viewPager != null) {
+            setupViewPager(viewPager);
+        }
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
 
-       /* tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+       tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
 
-            @Override
+           @Override
            public void onTabSelected(TabLayout.Tab tab) {
-                if (tab.getPosition() != 0) {
+                int tabCliente = getSelecClienteTab();
+                if (tabCliente == 0 && tab.getPosition() != 0) {
 
                     Functions.CreateMessage(DistribucionActivity.this, "Distribución", "Seleccione una factura.");
 
@@ -188,7 +203,8 @@ public abstract class DistribucionActivity extends AppCompatActivity implements 
             public void onTabReselected(TabLayout.Tab tab) {
 
             }
-        });*/
+        });
+
     }
 
     private void setupViewPager(ViewPager viewPager) {

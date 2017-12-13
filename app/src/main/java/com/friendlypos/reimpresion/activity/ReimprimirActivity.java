@@ -19,6 +19,7 @@ import com.friendlypos.distribucion.fragment.DistSelecClienteFragment;
 import com.friendlypos.distribucion.fragment.DistSelecProductoFragment;
 import com.friendlypos.distribucion.fragment.DistTotalizarFragment;
 import com.friendlypos.distribucion.util.Adapter;
+import com.friendlypos.principal.activity.BluetoothActivity;
 import com.friendlypos.principal.activity.MenuPrincipal;
 import com.friendlypos.reimpresion.fragment.ReimprimirFacturaFragment;
 import com.friendlypos.reimpresion.fragment.ReimprimirResumenFragment;
@@ -26,7 +27,7 @@ import com.friendlypos.reimpresion.fragment.ReimprimirResumenFragment;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ReimprimirActivity extends AppCompatActivity {
+public class ReimprimirActivity extends BluetoothActivity {
     private Toolbar toolbar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
@@ -42,7 +43,7 @@ public class ReimprimirActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reimprimir);
         toolbar = (Toolbar) findViewById(R.id.toolbarReimprimir);

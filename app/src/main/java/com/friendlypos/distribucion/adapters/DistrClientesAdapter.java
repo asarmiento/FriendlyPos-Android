@@ -49,11 +49,13 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
     Double amount_dist_inventario = 0.0;
     String facturaID, clienteID;
     int nextId;
+    int tabCliente = 0;
 
     public DistrClientesAdapter(Context context, DistribucionActivity activity, List<Venta> contentList) {
         this.contentList = contentList;
         this.activity = activity;
         this.QuickContext = context;
+        activity.setSelecClienteTab(tabCliente);
     }
 
     @Override
@@ -159,7 +161,8 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
                         Toast.makeText(view.getContext(), "You clicked " + facturaID, Toast.LENGTH_SHORT).show();
                         Log.d("PRODUCTOSFACTURATO", facturaid1 + "");
                          Log.d("metodoPago", metodoPago + "");
-
+                        tabCliente = 1;
+                        activity.setSelecClienteTab(tabCliente);
                         activity.setInvoiceId(facturaID);
                         activity.setMetodoPagoCliente(metodoPago);
                         activity.setCreditoLimiteCliente(creditoLimiteCliente);

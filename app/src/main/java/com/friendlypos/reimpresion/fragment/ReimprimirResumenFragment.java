@@ -2,6 +2,7 @@ package com.friendlypos.reimpresion.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,20 +40,17 @@ public class ReimprimirResumenFragment extends BaseFragment {
     @Bind(R.id.btnReimprimirFactura)
     public ImageButton btnReimprimirFactura;
     BluetoothStateChangeReceiver bluetoothStateChangeReceiver;
-    Context mContext;
 
     Venta venta_actualizada = null;
     String facturaId = "";
 
-    public ReimprimirResumenFragment(){
-    }
 
-    public ReimprimirResumenFragment(Context context){
-        this.mContext = context;
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         bluetoothStateChangeReceiver = new BluetoothStateChangeReceiver();
-        bluetoothStateChangeReceiver.setBluetoothStateChangeReceiver(mContext);
+        bluetoothStateChangeReceiver.setBluetoothStateChangeReceiver(getContext());
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

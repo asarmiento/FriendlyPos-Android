@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.friendlypos.R;
 import com.friendlypos.distribucion.activity.DistribucionActivity;
@@ -30,7 +31,7 @@ public class DistSelecProductoFragment extends BaseFragment {
     private static int bill_type = 1;
     static TextView creditoLimite;
     static double creditoLimiteCliente = 0.0;
-
+    int slecTAB;
     public static DistSelecProductoFragment getInstance() {
         return new DistSelecProductoFragment();
     }
@@ -89,11 +90,14 @@ public class DistSelecProductoFragment extends BaseFragment {
     }
 
     public void creditoDisponible() {
+        slecTAB = ((DistribucionActivity) getActivity()).getSelecClienteTab();
 
+        if (slecTAB == 1){
         // creditoLimiteCliente = Double.parseDouble(((DistribucionActivity) getActivity()).getCreditoLimiteClienteSlecc());
-
+    //    creditoLimiteCliente = 0.0;
         String metodoPagoCliente = ((DistribucionActivity) getActivity()).getMetodoPagoCliente();
-        creditoLimiteCliente = Double.parseDouble(((DistribucionActivity) getActivity()).getCreditoLimiteCliente());
+        String limite = ((DistribucionActivity) getActivity()).getCreditoLimiteCliente();
+       // creditoLimiteCliente = Double.parseDouble(limite);
         String dueCliente = ((DistribucionActivity) getActivity()).getDueCliente();
 
         Log.d("PagoProductoSelec", metodoPagoCliente + "");
@@ -113,6 +117,9 @@ public class DistSelecProductoFragment extends BaseFragment {
             catch (Exception e) {
                 Log.d("JD", "Error " + e.getMessage());
             }
+        }}
+        else{
+            Toast.makeText(getActivity(),"nada",Toast.LENGTH_LONG).show();
         }
 
     }
@@ -120,9 +127,13 @@ public class DistSelecProductoFragment extends BaseFragment {
     @Override
     public void updateData() {
         adapter.updateData(getListProductos());
-        creditoLimiteCliente = Double.parseDouble(((DistribucionActivity)getActivity()).getCreditoLimiteCliente());
-        creditoLimite.setText("C.Disponible: " + String.format("%,.2f", creditoLimiteCliente));
-
+        if (slecTAB == 1) {
+            creditoLimiteCliente = Double.parseDouble(((DistribucionActivity) getActivity()).getCreditoLimiteCliente());
+            creditoLimite.setText("C.Disponible: " + String.format("%,.2f", creditoLimiteCliente));
+        }
+        else{
+            Toast.makeText(getActivity(),"nada",Toast.LENGTH_LONG).show();
+        }
     }
 
 
