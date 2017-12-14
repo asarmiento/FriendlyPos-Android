@@ -52,7 +52,7 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
     Double amount_dist_inventario = 0.0;
     String facturaID, clienteID;
     int nextId;
-    int tabCliente = 0;
+    int tabCliente;
     ProgressDialog progressDoalog;
 
     public DistrClientesAdapter(Context context, DistribucionActivity activity, List<Venta> contentList) {
@@ -155,7 +155,7 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
                     }).start();
 
                                 int pos = getAdapterPosition();
-                                if (pos == RecyclerView.NO_POSITION) return;
+                                //if (pos == RecyclerView.NO_POSITION) return;
 
                                 // Updating old as well as new positions
                                 notifyItemChanged(selected_position);

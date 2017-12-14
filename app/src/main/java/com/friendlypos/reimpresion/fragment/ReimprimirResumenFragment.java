@@ -18,6 +18,7 @@ import com.friendlypos.distribucion.fragment.BaseFragment;
 import com.friendlypos.distribucion.modelo.Facturas;
 import com.friendlypos.distribucion.modelo.Pivot;
 import com.friendlypos.distribucion.modelo.Venta;
+import com.friendlypos.login.modelo.Usuarios;
 import com.friendlypos.principal.activity.MenuPrincipal;
 import com.friendlypos.principal.modelo.Clientes;
 import com.friendlypos.principal.modelo.Productos;
@@ -94,6 +95,12 @@ public class ReimprimirResumenFragment extends BaseFragment {
             Facturas facturas = realm.where(Facturas.class).equalTo("id", venta_actualizada.getInvoice_id()).findFirst();
             RealmResults<Pivot> result = realm.where(Pivot.class).equalTo("invoice_id", venta_actualizada.getInvoice_id()).findAll();
 
+            String idUsuario = facturas.getUser_id();
+
+            Usuarios usuarios = realm.where(Usuarios.class).equalTo("id", idUsuario).findFirst();
+
+            String nombreUsuario = usuarios.getUsername();
+
             // VARIABLES VENTA
             String fechayhora = venta_actualizada.getUpdated_at();
             String nombreCliente = venta_actualizada.getCustomer_name();
@@ -159,10 +166,8 @@ public class ReimprimirResumenFragment extends BaseFragment {
                 preview += "<a><b>Tel:</b> " + sysTelefono + "</a><br>";
                 preview += "<a><b>E-mail:</b> " + sysCorreo + "</a><br>";
                 preview += "<a><b>Cedula Juridica:</b> " + sysIdentificacion + "</a><br>";
-                //preview += "<a><b>Fecha:</b> " + SelectedSale.invoice.date + "</a><br><br>";
-
                 preview += "<a><b>Fecha:</b> " + fechayhora + "</a><br><br>";
-                // preview += "<a><b>Vendedor:</b> " + users.name + "</a><br>";
+                preview += "<a><b>Vendedor:</b> " + nombreUsuario + "</a><br>";
                 preview += "<a><b>ID Cliente:</b> " + cardCliente + "</a><br>";
                 preview += "<a><b>Cliente:</b> " + companyCliente + "</a><br>";
                 preview += "<a><b>A nombre de:</b> " + nombreCliente + "</a><br><br>";
@@ -232,9 +237,6 @@ public class ReimprimirResumenFragment extends BaseFragment {
 
                 List<Pivot> salesList1 = realm1.where(Pivot.class).equalTo("invoice_id", idVenta).findAll();
                 Productos producto = realm1.where(Productos.class).equalTo("id", salesList1.get(i).getProduct_id()).findFirst();
-                //   Venta ventas = realm.where(Venta.class).equalTo("invoice_id", salesList1.get(i).getInvoice_id()).findFirst();
-                //    Clientes clientes = realm.where(Clientes.class).equalTo("id", ventas.getCustomer_id()).findFirst();
-
 
                 String description = producto.getDescription();
                 String barcode = producto.getBarcode();

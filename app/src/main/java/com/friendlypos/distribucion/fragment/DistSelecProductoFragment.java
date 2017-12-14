@@ -119,7 +119,7 @@ public class DistSelecProductoFragment extends BaseFragment {
             }
         }}
         else{
-            Toast.makeText(getActivity(),"nada",Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(),"nadaSelecProducto",Toast.LENGTH_LONG).show();
         }
 
     }
@@ -132,7 +132,7 @@ public class DistSelecProductoFragment extends BaseFragment {
             creditoLimite.setText("C.Disponible: " + String.format("%,.2f", creditoLimiteCliente));
         }
         else{
-            Toast.makeText(getActivity(),"nada",Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(),"nadaSelecProducto",Toast.LENGTH_LONG).show();
         }
     }
 

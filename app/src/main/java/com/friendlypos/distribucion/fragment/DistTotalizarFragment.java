@@ -117,7 +117,7 @@ public class DistTotalizarFragment extends BaseFragment  {
             }
         }
         else{
-            Toast.makeText(getActivity(),"nada",Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(),"nadaTotalizar",Toast.LENGTH_LONG).show();
         }
 
         notes = (EditText) rootView.findViewById(R.id.txtNotes);
@@ -222,7 +222,7 @@ public class DistTotalizarFragment extends BaseFragment  {
             Log.d("FACTURAIDTOTALIZAR", facturaId);
         }
         else{
-            Toast.makeText(getActivity(),"nada",Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(),"nadaTotalizarupdate",Toast.LENGTH_LONG).show();
         }
 
     }

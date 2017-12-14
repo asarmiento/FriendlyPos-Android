@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.friendlypos.R;
 import com.friendlypos.distribucion.activity.DistribucionActivity;
@@ -24,7 +25,7 @@ public class DistResumenFragment extends BaseFragment {
 
     RecyclerView recyclerView;
     private DistrResumenAdapter adapter;
-
+    int slecTAB;
     @Override
     public void onResume() {
         super.onResume();
@@ -44,10 +45,11 @@ public class DistResumenFragment extends BaseFragment {
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerViewDistrResumen);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setHasFixedSize(true);
-        adapter = new DistrResumenAdapter(getContext(), ((DistribucionActivity)getActivity()), getListResumen());
-        recyclerView.setAdapter(adapter);
 
-        Log.d("listaResumen", getListResumen() + "");
+            adapter = new DistrResumenAdapter(getContext(), ((DistribucionActivity) getActivity()), getListResumen());
+            recyclerView.setAdapter(adapter);
+
+            Log.d("listaResumen", getListResumen() + "");
 
         return rootView;
     }
@@ -71,7 +73,11 @@ public class DistResumenFragment extends BaseFragment {
 
     @Override
     public void updateData() {
+        slecTAB = ((DistribucionActivity) getActivity()).getSelecClienteTab();
+        if (slecTAB == 1) {
         adapter.updateData(getListResumen());
     }
-
-}
+        else{
+            Toast.makeText(getActivity(),"nadaTotalizarresume",Toast.LENGTH_LONG).show();
+        }
+}}
