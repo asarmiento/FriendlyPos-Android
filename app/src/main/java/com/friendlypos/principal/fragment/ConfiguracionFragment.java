@@ -27,6 +27,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.friendlypos.R;
+import com.friendlypos.application.util.Functions;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -46,7 +47,7 @@ public class ConfiguracionFragment extends PreferenceFragment implements OnShare
     private String otraImp = "Otra Impresora";
     private ListPreference listPref;
     private BluetoothDevice currentDevice;
-    private Preference prefDesvincularImpresora, prefConectarBluetooth, prefConectarRed, prefSelecImpresora;
+    private Preference prefDesvincularImpresora, prefConectarBluetooth, /*prefConectarRed, */prefSelecImpresora;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -81,8 +82,8 @@ public class ConfiguracionFragment extends PreferenceFragment implements OnShare
         // Set values
         setBTDeviceSummary("pref_conectar_bluetooth");
 
-        prefConectarRed = findPreference("pref_conectar_red");
-        prefConectarRed.setOnPreferenceClickListener(this);
+       /* prefConectarRed = findPreference("pref_conectar_red");
+        prefConectarRed.setOnPreferenceClickListener(this);*/
         return view;
 
     }
@@ -231,9 +232,10 @@ public class ConfiguracionFragment extends PreferenceFragment implements OnShare
         }else if (preference == prefConectarBluetooth){
             populateExternalDisplayDevices();
         }
-        else if (preference == prefConectarRed){
+       /* else if (preference == prefConectarRed){
+
             ImprimirRedImpresora();
-        }
+        }*/
 
         return true;
     }
@@ -244,26 +246,39 @@ public class ConfiguracionFragment extends PreferenceFragment implements OnShare
         preference.setSummary(getNameDevice(value));
         listPref.setValue(value);
 
-        if(operation.equals("U")) {
-            try {
-                Method m = currentDevice.getClass().getMethod("removeBond", (Class[]) null);
-                m.invoke(currentDevice, (Object[]) null);
-                preference.getEditor().remove("pref_conectar_bluetooth").commit();
-                populateExternalDisplayDevices();
-            } catch (NoSuchMethodException e) {
-                e.printStackTrace();
-            } catch (InvocationTargetException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
+        if(value == "No hay dispositivos"){
+            Functions.CreateMessage(getActivity(), "Error", "No hay ninguna conexión activa");
+
         }
+        else{
+            if(operation.equals("U")) {
+                try {
+                    Method m = currentDevice.getClass().getMethod("removeBond", (Class[]) null);
+                    m.invoke(currentDevice, (Object[]) null);
+                    preference.getEditor().remove("pref_conectar_bluetooth").commit();
+                    populateExternalDisplayDevices();
+                } catch (NoSuchMethodException e) {
+                    e.printStackTrace();
+                } catch (InvocationTargetException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+            }}
+
         populateExternalDisplayDevices();
     }
 
     private void ImprimirRedImpresora(){
+        CharSequence[] labels = {noDevicesPaired};
+        CharSequence[] values = {noDevicesPaired};
 
+        listPref = (ListPreference) findPreference("pref_conectar_red");
+        listPref.setEntries(null);
+        listPref.setEntryValues(null);
+        listPref.setOnPreferenceChangeListener(this);
 
+        Toast.makeText(getActivity(), "Botón no disponible por el momento", Toast.LENGTH_SHORT).show();
     }
 
 }

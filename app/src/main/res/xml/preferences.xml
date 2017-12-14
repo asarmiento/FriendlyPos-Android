@@ -23,11 +23,6 @@
             android:title="Conecte la impresora por bluetooth"
             android:dependency="pref_usar_impresora" />
 
-        <ListPreference
-            android:key="pref_conectar_red"
-            android:title="Conecte la impresora por red"
-            android:dependency="pref_usar_impresora" />
-
 
         <PreferenceScreen
         android:title="Desvincular Impresora"

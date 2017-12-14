@@ -28,7 +28,7 @@ import io.realm.Realm;
 public class ProductosAdapter extends RecyclerView.Adapter<ProductosAdapter.CharacterViewHolder> {
 
     private List<Productos> productosList;
-
+    private static Double precio = 0.0;
     public ProductosAdapter(List<Productos> productosList) {
 
         this.productosList = productosList;
@@ -46,26 +46,12 @@ public class ProductosAdapter extends RecyclerView.Adapter<ProductosAdapter.Char
     @Override
     public void onBindViewHolder(ProductosAdapter.CharacterViewHolder holder, final  int position) {
         Productos producto = productosList.get(position);
-        //todo repasar esto
         Realm realm = Realm.getDefaultInstance();
         String marca = realm.where(Marcas.class).equalTo("id", producto.getBrand_id()).findFirst().getName();
         String tipoProducto = realm.where(TipoProducto.class).equalTo("id", producto.getProduct_type_id()).findFirst().getName();
 
-        // TODO Revisar como poner el inventario,ya que el campo 1 es null y se cae la app
-        //String inventario = realm.where(Inventario.class).equalTo("product_id", "5").findFirst().getInitial();
+        precio = Double.parseDouble(producto.getSale_price());
 
-
-        //String inventario2 = realm.where(Inventario.class).equalTo(producto.getId(), "product_id").findFirst().getInitial();
-
-/*
-        {
-            "id": 359,
-                "product_id": "5",
-                "initial": "30",
-                "amount": "0",
-                "amount_dist": "30",
-                "distributor": "0"
-        },*/
         realm.close();
 
         holder.txt_producto_nombre.setText(producto.getDescription());
@@ -74,7 +60,7 @@ public class ProductosAdapter extends RecyclerView.Adapter<ProductosAdapter.Char
         holder.txt_producto_tipo.setText(tipoProducto);
         holder.txt_producto_stock.setText(producto.getStock_max());
         holder.txt_producto_inventario.setText(tipoProducto);
-        holder.txt_producto_precio.setText(producto.getSale_price());
+        holder.txt_producto_precio.setText(String.format("%,.2f", precio));
 
     }
 

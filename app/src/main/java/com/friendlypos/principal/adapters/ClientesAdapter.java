@@ -19,6 +19,11 @@ public class ClientesAdapter extends RecyclerView.Adapter<ClientesAdapter.Charac
 
     private List<Clientes> contentList;
 
+    private static Double creditolimite = 0.0;
+    private static Double descuentoFixed = 0.0;
+    private static Double cleintedue = 0.0;
+    private static Double credittime = 0.0;
+
     public ClientesAdapter(List<Clientes> contentList) {
         this.contentList = contentList;
     }
@@ -35,14 +40,19 @@ public class ClientesAdapter extends RecyclerView.Adapter<ClientesAdapter.Charac
     public void onBindViewHolder(CharacterViewHolder holder, int position) {
         Clientes content = contentList.get(position);
 
+        creditolimite = Double.parseDouble(content.getCreditLimit());
+        descuentoFixed =   Double.parseDouble(content.getFixedDiscount());
+        cleintedue = Double.parseDouble(content.getDue());
+        credittime =   Double.parseDouble(content.getCreditTime());
+
         holder.txt_cliente_card.setText(content.getCard());
         holder.txt_cliente_fantasyname.setText(content.getFantasyName());
         holder.txt_cliente_companyname.setText(content.getCompanyName());
         holder.txt_cliente_address.setText(content.getAddress());
-        holder.txt_cliente_creditlimit.setText(content.getCreditLimit());
-        holder.txt_cliente_fixeddescount.setText(content.getFixedDiscount());
-        holder.txt_cliente_due.setText(content.getDue());
-        holder.txt_cliente_credittime.setText(content.getCreditTime());
+        holder.txt_cliente_creditlimit.setText(String.format("%,.2f", (creditolimite)));
+        holder.txt_cliente_fixeddescount.setText(String.format("%,.2f", (descuentoFixed)));
+        holder.txt_cliente_due.setText(String.format("%,.2f", (cleintedue)));
+        holder.txt_cliente_credittime.setText(String.format("%,.2f", (credittime)));
 
     }
 

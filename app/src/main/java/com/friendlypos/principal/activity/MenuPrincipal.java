@@ -30,6 +30,7 @@ import com.friendlypos.application.util.PrinterFunctions;
 import com.friendlypos.distribucion.activity.DistribucionActivity;
 import com.friendlypos.distribucion.modelo.Facturas;
 import com.friendlypos.login.activity.LoginActivity;
+import com.friendlypos.login.modelo.Usuarios;
 import com.friendlypos.login.util.SessionPrefes;
 import com.friendlypos.principal.fragment.ConfiguracionFragment;
 import com.friendlypos.principal.helpers.DescargasHelper;
@@ -109,12 +110,19 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
             finish();
         }
         else {
-
-
+            Realm realm = Realm.getDefaultInstance();
             String usuer = session.getUsuarioPrefs();
-            Log.d("usuer", usuer);
-            txtNombreUsuario.setText(usuer);
+            Log.d("user", usuer);
+
+            Usuarios usuarios = realm.where(Usuarios.class).equalTo("email", usuer).findFirst();
+
+            String nombreUsuario = usuarios.getUsername();
+
+            Log.d("user", nombreUsuario);
+
+            txtNombreUsuario.setText(nombreUsuario);
             //
+            realm.close();
         }
     }
 
@@ -158,7 +166,6 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
 
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-            txtNombreUsuario.setText("oscar");
         }
         else {
             super.onBackPressed();
@@ -299,42 +306,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
     }
 
 
-    /* @SuppressWarnings("StatementWithEmptyBody")
-     @Override
-     public boolean onNavigationItemSelected(MenuItem item) {
-         // Handle navigation view item clicks here.
-         int id = item.getItemId();
 
-         if (id == R.id.nav_camera) {
-             // Handle the camera action
-         } else if (id == R.id.nav_gallery) {
-
-         } else if (id == R.id.nav_slideshow) {
-
-         } else if (id == R.id.nav_manage) {
-
-         } else if (id == R.id.nav_share) {
-
-         } else if (id == R.id.nav_send) {
-
-         }
-
-         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-         drawer.closeDrawer(GravityCompat.START);
-         return true;
-     }*/
-/*
-    public void Initializing(){
-        Fragment fragment = null;
-        Class fragmentClass =  ProductosFragment.class;
-        try {
-            fragment = (Fragment) fragmentClass.newInstance();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }// Insert the fragment by replacing any existing fragment
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.frame, fragment).commit();
-    }*/
     public void ClickNavigation(View view) {
         Fragment fragment = null;
         Class fragmentClass = ConfiguracionFragment.class;
