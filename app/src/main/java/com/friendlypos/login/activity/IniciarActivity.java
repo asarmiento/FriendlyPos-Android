@@ -27,14 +27,23 @@ public class IniciarActivity extends AppCompatActivity {
         //String adsadas = session.getTiempo();
        // Log.d("#fsfsdf", adsadas);
 
-        if (session.isLoggedIn()){
+        if (session.isLoggedIn() == false){
+            Toast.makeText(this, "false" + "",Toast.LENGTH_SHORT).show();
+
             startActivity(new Intent(this, LoginActivity.class));
             finish();
         }
-        else if (session.getTiempo().equals("31536000")){
+        else if (session.isLoggedIn()== true){
+            Toast.makeText(this, "true" + "",Toast.LENGTH_SHORT).show();
+
             startActivity(new Intent(this, MenuPrincipal.class));
             finish();
         }
+/*
+        else if (session.getTiempo().equals("31536000")){
+            startActivity(new Intent(this, MenuPrincipal.class));
+            finish();
+        }*/
     }
 
 }

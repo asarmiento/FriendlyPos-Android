@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
 
+import com.friendlypos.login.activity.IniciarActivity;
 import com.friendlypos.login.activity.LoginActivity;
 import com.friendlypos.login.modelo.User;
 import com.friendlypos.login.modelo.UserResponse;
@@ -99,7 +100,7 @@ public class SessionPrefes {
         editor.clear();
         editor.commit();
 
-        Intent i = new Intent(_context, LoginActivity.class);
+        Intent i = new Intent(_context, IniciarActivity.class);
         // Cerrar todas las actividades
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
