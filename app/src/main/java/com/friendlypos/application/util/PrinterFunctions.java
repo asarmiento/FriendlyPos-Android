@@ -546,10 +546,14 @@ public class PrinterFunctions {
 
                 String factNum = salesList1.get(i).getNumeration();
                 String factFecha = salesList1.get(i).getDate();
-                double factTotal = Functions.sGetDecimalStringAnyLocaleAsDouble(salesList1.get(i).getTotal());
 
-                send += String.format("%-5s      %.20s      %-6s", factNum, factFecha, factTotal) + "\r\n";
+                double factTotal = Double.parseDouble(salesList1.get(i).getTotal());
+
+                String total = String.format("%,.2f",factTotal);
+
+                send += String.format("%-5s      %.20s      %-6s", factNum, factFecha, total) + "\r\n";
                 printSalesCashTotal = printSalesCashTotal + factTotal;
+
                 Log.d("FACTPRODTODFAC", send + "");
             }
         }

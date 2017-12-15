@@ -79,14 +79,14 @@ public class ReimprimirFacturaAdapter extends RecyclerView.Adapter<ReimprimirFac
         String numeracionFactura = facturas.getNumeration();
         String fantasyCliente = clientes.getFantasyName();
         String aNombreDe = venta.getCustomer_name();
-        String totalFactura = facturas.getTotal();
+        double totalFactura = Double.parseDouble(facturas.getTotal());
 
         holder.txt_reimprimir_factura_numeracion.setText(numeracionFactura);
         holder.txt_reimprimir_factura_fechahora.setText(Functions.getDate() + " " + Functions.get24Time());
         holder.txt_reimprimir_factura_fantasyname.setText(fantasyCliente);
         holder.txt_reimprimir_factura_anombrede.setText(aNombreDe);
 
-        holder.txt_reimprimir_factura_total.setText(totalFactura);
+        holder.txt_reimprimir_factura_total.setText(String.format("%,.2f",totalFactura));
         holder.txt_reimprimir_factura_cantidad.setText((int) cantidadPivot + "");
 
         holder.cardView.setBackgroundColor(selected_position == position ? Color.parseColor("#607d8b") : Color.parseColor("#009688"));

@@ -90,11 +90,14 @@ public class LoginActivity extends AppCompatActivity {
         context = this;
         session = new SessionPrefes(getApplicationContext());
         properties = new Properties(getApplicationContext());
-     //   properties.setUrlWebsrv("http://friendlyaccount.com");
 
-        if (properties.getUrlWebsrv() == null) {
+
+        Toast.makeText(this, "sdfsdf",Toast.LENGTH_SHORT).show();
+
+        //   properties.setUrlWebsrv("http://friendlyaccount.com");
+
+      /*  if (properties.getUrlWebsrv() == null) {
             System.out.println("Stablishing properties");
-            Toast.makeText(this, properties.getUrlWebsrv() + "",Toast.LENGTH_SHORT).show();
 
             Log.d("adasda1",properties.getUrlWebsrv()+"");
         } else {
@@ -102,7 +105,7 @@ public class LoginActivity extends AppCompatActivity {
 
             Log.d("adasdad",properties.getUrlWebsrv()+"");
         }
-
+*/
 
         if (session.isLoggedIn()){
             startActivity(new Intent(this, LoginActivity.class));
