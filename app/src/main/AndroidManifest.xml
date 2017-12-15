@@ -26,16 +26,22 @@
         </receiver>
 
         <activity
-            android:name=".login.activity.LoginActivity"
-            android:launchMode="singleTop"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustPan|adjustResize">
+            android:name=".login.activity.IniciarActivity"
+            android:label="@string/title_activity_iniciar"
+            android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".login.activity.LoginActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustPan|adjustResize">
+
         </activity>
         <activity
             android:name=".principal.activity.MenuPrincipal"
@@ -87,7 +93,8 @@
         <activity
             android:name=".reimpresion.activity.ReimprimirActivity"
             android:label="@string/title_activity_reimprimir"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
+
     </application>
 
 </manifest>

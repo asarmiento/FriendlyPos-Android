@@ -87,6 +87,11 @@ public class SessionPrefes {
         return usuario;
     }
 
+    public String getTiempo(){
+        String tiempo = mPrefs.getString(PREF_USER_EXPIRES_IN, null);
+        return tiempo;
+    }
+
 
     public void cerrarSesion(){
         // Limpiar todos los datos guardados del Usuario

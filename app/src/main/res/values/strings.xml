@@ -159,6 +159,7 @@
     <string name="total">Total</string>
     <string name="title_activity_configuracion">ConfiguracionActivity</string>
     <string name="title_activity_reimprimir">ReimprimirActivity</string>
+    <string name="title_activity_iniciar">IniciarActivity</string>
 
 
 </resources>
