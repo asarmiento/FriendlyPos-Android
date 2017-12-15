@@ -197,17 +197,17 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
         popup.setOnMenuItemClickListener(this);
         Menu popupMenu = popup.getMenu();
 
-        if (bloquear == 0) {
+       /* if (bloquear == 0) {
             //bloqueados
             popupMenu.findItem(R.id.btn_descargar_catalogo).setEnabled(false);
             popupMenu.findItem(R.id.btn_descargar_inventario).setEnabled(false);
-            Toast.makeText(MenuPrincipal.this, "Descargar datos de la empresa primero", Toast.LENGTH_LONG).show();
+
         }
         else if (bloquear == 1) {
             //desbloqueados
             popupMenu.findItem(R.id.btn_descargar_catalogo).setEnabled(true);
             popupMenu.findItem(R.id.btn_descargar_inventario).setEnabled(true);
-        }
+        }*/
         popup.show();
     }
 
@@ -252,13 +252,19 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                 break;
 
             case R.id.btn_descargar_catalogo:
+                if (bloquear == 0){
+                    Toast.makeText(MenuPrincipal.this, "Descargar datos de la empresa primero", Toast.LENGTH_LONG).show();
+                }else{
                 Toast.makeText(MenuPrincipal.this, "descargar_catalogo", Toast.LENGTH_SHORT).show();
-                download1.descargarCatalogo(MenuPrincipal.this);
+                download1.descargarCatalogo(MenuPrincipal.this);}
                 break;
 
             case R.id.btn_descargar_inventario:
+                if (bloquear == 0){
+                    Toast.makeText(MenuPrincipal.this, "Descargar datos de la empresa primero", Toast.LENGTH_LONG).show();
+                }else{
                 Toast.makeText(MenuPrincipal.this, "descargar_inventario", Toast.LENGTH_SHORT).show();
-                download1.descargarInventario(MenuPrincipal.this);
+                download1.descargarInventario(MenuPrincipal.this);}
                 break;
 
             case R.id.btn_subir_ventas:
