@@ -44,12 +44,8 @@ public class ProductosActivity extends AppCompatActivity {
     @Bind(R.id.recyclerView)
     RecyclerView recyclerView;
 
-    private ProgressDialog progress;
-    private ArrayList<Productos> mContentsArray = new ArrayList<>();
     private ProductosAdapter adapter;
-
     private Realm realm;
-    private RequestInterface api;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,74 +70,15 @@ public class ProductosActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
 
         Log.d("lista", getList() + "");
-
-
-
-       /* progress = new ProgressDialog(this);
-        progress.setMessage("Cargando lista de productos");
-        progress.setCanceledOnTouchOutside(false);
-        progress.show();
-
-        // Obtener token de usuario
-        String token = "Bearer " + SessionPrefes.get(this).getToken();
-        Log.d("tokenProdu", token);
-        // Init Realm
-        realm = Realm.getDefaultInstance();
-
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setHasFixedSize(true);
-        adapter = new ProductosAdapter(mContentsArray);
-        recyclerView.setAdapter(adapter);
-
-        api = BaseManager.getApi();
-        Call<ProductosResponse> call = api.getProducts(token);
-
-        call.enqueue(new Callback<ProductosResponse>() {
-            @Override
-            public void onResponse(Call<ProductosResponse> call, Response<ProductosResponse> response) {
-                mContentsArray.clear();
-
-                if(response.isSuccessful()) {
-                    progress.dismiss();
-
-                    mContentsArray.addAll(response.body().getProductos());
-
-                    // Add content to the realm DB
-                    // Open a transaction to store items into the realm
-                    // Use copyToRealm() to convert the objects into proper RealmObjects managed by Realm.
-                    realm.beginTransaction();
-                    realm.copyToRealm(mContentsArray);
-                    realm.commitTransaction();
-                    realm.close();
-
-                    Toast.makeText(ProductosActivity.this, getString(R.string.success), Toast.LENGTH_SHORT).show();
-                } else {
-                    progress.dismiss();
-                    Toast.makeText(ProductosActivity.this, getString(R.string.error) + " CODE: " +response.code(), Toast.LENGTH_LONG).show();
-                    RealmResults<Productos> results = realm.where(Productos.class).findAll();
-                    mContentsArray.addAll(results);
-                }
-
-                adapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onFailure(Call<ProductosResponse> call, Throwable t) {
-                progress.dismiss();
-                Toast.makeText(ProductosActivity.this, getString(R.string.failed), Toast.LENGTH_LONG).show();
-                RealmResults<Productos> results = realm.where(Productos.class).findAll();
-                mContentsArray.addAll(results);
-                adapter.notifyDataSetChanged();
-            }
-        });
-*/
     }
 
     private List<Productos> getList(){
         realm = Realm.getDefaultInstance();
         RealmQuery<Productos> query = realm.where(Productos.class);
         RealmResults<Productos> result1 = query.findAll();
-
+        if(result1.size() == 0){
+            Toast.makeText(getApplicationContext(),"Favor descargar datos primero",Toast.LENGTH_LONG).show();
+        }
         return result1;
     }
 

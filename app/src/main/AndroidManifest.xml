@@ -46,14 +46,16 @@
         <activity
             android:name=".principal.activity.MenuPrincipal"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar">
-
+            android:theme="@style/AppTheme.NoActionBar"
+            android:label="@string/app_name">
         </activity>
+
         <activity
             android:name=".principal.activity.ClientesActivity"
             android:parentActivityName=".principal.activity.MenuPrincipal"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:label="@string/title_activity_clientes">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".principal.activity.MenuPrincipal" />
@@ -62,7 +64,8 @@
             android:name=".principal.activity.ProductosActivity"
             android:parentActivityName=".principal.activity.MenuPrincipal"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:label="@string/title_activity_productos">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".principal.activity.MenuPrincipal" />

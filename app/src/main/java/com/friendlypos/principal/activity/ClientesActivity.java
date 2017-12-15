@@ -44,15 +44,11 @@ public class ClientesActivity extends AppCompatActivity {
     @Bind(R.id.recyclerView)
     RecyclerView recyclerView;
 
-    @Bind(R.id.tv_title)
+    @Bind(R.id.tv_titleClientes)
     TextView tv_title;
 
-    private ProgressDialog progress;
-    private ArrayList<Clientes> mContentsArray = new ArrayList<>();
     private ClientesAdapter adapter;
-
     private Realm realm;
-    private RequestInterface api;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,8 +74,6 @@ public class ClientesActivity extends AppCompatActivity {
 
         Log.d("lista", getList() + "");
     }
-
-
 
         private List<Clientes> getList(){
             realm = Realm.getDefaultInstance();
@@ -107,64 +101,5 @@ public class ClientesActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
-     /*   progress = new ProgressDialog(this);
-        progress.setMessage("Cargando lista de clientes");
-        progress.setCanceledOnTouchOutside(false);
-        progress.show();
-
-        // Obtener token de usuario
-        String token = "Bearer " + SessionPrefes.get(this).getToken();
-        Log.d("tokenCliente", token +" ");
-
-        realm = Realm.getDefaultInstance();
-
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setHasFixedSize(true);
-        adapter = new ClientesAdapter(mContentsArray);
-        recyclerView.setAdapter(adapter);
-
-        api = BaseManager.getApi();
-        Call<ClientesResponse> call = api.getJSON(token);
-
-        call.enqueue(new Callback<ClientesResponse>() {
-            @Override
-            public void onResponse(Call<ClientesResponse> call, Response<ClientesResponse> response) {
-                mContentsArray.clear();
-
-                if(response.isSuccessful()) {
-                    progress.dismiss();
-
-                    mContentsArray.addAll(response.body().getContents());
-
-                    // Add content to the realm DB
-                    // Open a transaction to store items into the realm
-                    // Use copyToRealm() to convert the objects into proper RealmObjects managed by Realm.
-
-                    realm.beginTransaction();
-                    realm.copyToRealm(mContentsArray);
-                    realm.commitTransaction();
-                    realm.close();
-
-                    Toast.makeText(ClientesActivity.this, getString(R.string.success), Toast.LENGTH_SHORT).show();
-                } else {
-                    progress.dismiss();
-                    Toast.makeText(ClientesActivity.this, getString(R.string.error) + " CODE: " +response.code(), Toast.LENGTH_LONG).show();
-                    RealmResults<Clientes> results = realm.where(Clientes.class).findAll();
-                    mContentsArray.addAll(results);
-                }
-
-                adapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onFailure(Call<ClientesResponse> call, Throwable t) {
-                progress.dismiss();
-                Toast.makeText(ClientesActivity.this, getString(R.string.failed), Toast.LENGTH_LONG).show();
-                RealmResults<Clientes> results = realm.where(Clientes.class).findAll();
-                mContentsArray.addAll(results);
-                adapter.notifyDataSetChanged();
-            }
-        });*/
-
 
 }

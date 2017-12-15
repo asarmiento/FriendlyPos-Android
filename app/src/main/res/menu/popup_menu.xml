@@ -12,19 +12,12 @@
         android:id="@+id/btn_descargar_inventario"
         android:icon="@mipmap/ic_config"
         android:title="Descargar Inventario" />
-    <item
-        android:id="@+id/btn_descargar_deudas"
-        android:icon="@mipmap/ic_config"
-        android:title="Descargar Deudas" />
 
     <item
         android:id="@+id/btn_subir_ventas"
         android:icon="@mipmap/ic_config"
         android:title="Subir Ventas"/>
-    <item
-        android:id="@+id/btn_subir_recibos"
-        android:icon="@mipmap/ic_config"
-        android:title="Subir Recibos" />
+
     <item
         android:id="@+id/btn_devolver_inventario"
         android:icon="@mipmap/ic_config"

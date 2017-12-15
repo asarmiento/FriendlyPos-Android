@@ -114,7 +114,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
         else {
             usuer = session.getUsuarioPrefs();
             Log.d("userasd", usuer);
-            Realm realm = Realm.getDefaultInstance();
+           Realm realm = Realm.getDefaultInstance();
             Usuarios usuarios = realm.where(Usuarios.class).equalTo("email", usuer).findFirst();
             String nombreUsuario = usuarios.getUsername();
             Log.d("userasd", nombreUsuario);
@@ -259,16 +259,6 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
             case R.id.btn_descargar_inventario:
                 Toast.makeText(MenuPrincipal.this, "descargar_inventario", Toast.LENGTH_SHORT).show();
                 download1.descargarInventario(MenuPrincipal.this);
-                break;
-
-            case R.id.btn_descargar_deudas:
-                Toast.makeText(this, "Botón no disponible por el momento", Toast.LENGTH_SHORT).show();
-                break;
-
-            case R.id.btn_subir_recibos:
-
-
-                Toast.makeText(MenuPrincipal.this, "subir_recibos", Toast.LENGTH_SHORT).show();
                 break;
 
             case R.id.btn_subir_ventas:

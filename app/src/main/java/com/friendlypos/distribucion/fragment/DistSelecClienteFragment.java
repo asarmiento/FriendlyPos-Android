@@ -10,6 +10,7 @@ import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.friendlypos.R;
 import com.friendlypos.distribucion.activity.DistribucionActivity;
@@ -27,6 +28,8 @@ import butterknife.ButterKnife;
 import io.realm.Realm;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
+
+import static io.realm.internal.SyncObjectServerFacade.getApplicationContext;
 
 
 public class DistSelecClienteFragment extends BaseFragment{
@@ -78,7 +81,9 @@ public class DistSelecClienteFragment extends BaseFragment{
         realm = Realm.getDefaultInstance();
         RealmQuery<Venta> query = realm.where(Venta.class).equalTo("aplicada", 0);
         RealmResults<Venta> result1 = query.findAll();
-
+        if(result1.size() == 0){
+            Toast.makeText(getApplicationContext(),"Favor descargar datos primero",Toast.LENGTH_LONG).show();
+        }
         return result1;
     }
 

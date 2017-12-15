@@ -112,46 +112,6 @@ public class DescargasHelper {
                 }
             });
 
-            // TODO descarga Usuarios
-            Call<UsuariosResponse> callusuarios = api.getUsuariosRetrofit(token);
-            callusuarios.enqueue(new Callback<UsuariosResponse>() {
-
-                @Override
-                public void onResponse(Call<UsuariosResponse> callusuarios, Response<UsuariosResponse> response) {
-                    mContentsArrayUsuarios.clear();
-
-
-                    if (response.isSuccessful()) {
-                        mContentsArrayUsuarios.addAll(response.body().getUsuarios());
-
-                        try {
-                            realmUsuarios = Realm.getDefaultInstance();
-
-                            // Work with Realm
-                            realmUsuarios.beginTransaction();
-                            realmUsuarios.copyToRealmOrUpdate(mContentsArrayUsuarios);
-                            realmUsuarios.commitTransaction();
-                            //realm.close();
-                        }
-                        finally {
-                            realmUsuarios.close();
-                        }
-                        Log.d(DescargasHelper.class.getName()+"USUARIOSRE", mContentsArrayUsuarios.toString());
-                        //  Toast.makeText(DescargarInventario.this, getString(R.string.success), Toast.LENGTH_SHORT).show();
-                    }
-                    else {
-                        //  Toast.makeText(DescargarInventario.this, getString(R.string.error) + " CODE: " +response.code(), Toast.LENGTH_LONG).show();
-                        RealmResults<Usuarios> results = realmUsuarios.where(Usuarios.class).findAll();
-                        mContentsArrayUsuarios.addAll(results);
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<UsuariosResponse> callMarcas, Throwable t) {
-                    // Toast.makeText(context, getString(R.string.error), Toast.LENGTH_LONG).show();
-                }
-            });
-
             // TODO descarga Marcas
             Call<MarcasResponse> callMarcas = api.getMarcas(token);
             callMarcas.enqueue(new Callback<MarcasResponse>() {
@@ -507,6 +467,54 @@ public class DescargasHelper {
         }
 
     }
+
+    public void descargarUsuarios(Context context) {
+        String token = "Bearer " + SessionPrefes.get(context).getToken();
+        Log.d("tokenCliente", token + " ");
+
+        final RequestInterface api = BaseManager.getApi();
+        final ArrayList<Usuarios> mContentsArrayUsuarios = new ArrayList<>();
+
+            // TODO descarga Usuarios
+            Call<UsuariosResponse> callusuarios = api.getUsuariosRetrofit(token);
+            callusuarios.enqueue(new Callback<UsuariosResponse>() {
+
+                @Override
+                public void onResponse(Call<UsuariosResponse> callusuarios, Response<UsuariosResponse> response) {
+                    mContentsArrayUsuarios.clear();
+
+
+                    if (response.isSuccessful()) {
+                        mContentsArrayUsuarios.addAll(response.body().getUsuarios());
+
+                        try {
+                            realmUsuarios = Realm.getDefaultInstance();
+
+                            // Work with Realm
+                            realmUsuarios.beginTransaction();
+                            realmUsuarios.copyToRealmOrUpdate(mContentsArrayUsuarios);
+                            realmUsuarios.commitTransaction();
+                            //realm.close();
+                        }
+                        finally {
+                            realmUsuarios.close();
+                        }
+                        Log.d(DescargasHelper.class.getName()+"USUARIOSRE", mContentsArrayUsuarios.toString());
+                        //  Toast.makeText(DescargarInventario.this, getString(R.string.success), Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        //  Toast.makeText(DescargarInventario.this, getString(R.string.error) + " CODE: " +response.code(), Toast.LENGTH_LONG).show();
+                        RealmResults<Usuarios> results = realmUsuarios.where(Usuarios.class).findAll();
+                        mContentsArrayUsuarios.addAll(results);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<UsuariosResponse> callMarcas, Throwable t) {
+                    // Toast.makeText(context, getString(R.string.error), Toast.LENGTH_LONG).show();
+                }
+            });
+        }
 
     private boolean isOnline() {
         return networkStateChangeReceiver.isNetworkAvailable(mContext);

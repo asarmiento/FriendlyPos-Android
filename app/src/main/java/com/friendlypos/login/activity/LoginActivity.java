@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -31,6 +32,7 @@ import com.friendlypos.login.util.Properties;
 import com.friendlypos.login.util.SessionPrefes;
 import com.friendlypos.principal.activity.MenuPrincipal;
 import com.friendlypos.principal.fragment.ConfiguracionFragment;
+import com.friendlypos.principal.helpers.DescargasHelper;
 
 import org.sufficientlysecure.htmltextview.HtmlTextView;
 
@@ -49,7 +51,7 @@ public class LoginActivity extends AppCompatActivity {
     private RequestInterface api;
     private NetworkStateChangeReceiver networkStateChangeReceiver;
     private ProgressDialog progress;
-
+    DescargasHelper download1;
     SessionPrefes session;
 
     @Bind(R.id.usuario)
@@ -90,7 +92,7 @@ public class LoginActivity extends AppCompatActivity {
         context = this;
         session = new SessionPrefes(getApplicationContext());
         properties = new Properties(getApplicationContext());
-
+        download1 = new DescargasHelper(LoginActivity.this);
         //
         if (properties.getUrlWebsrv() == null) {
             properties.setUrlWebsrv("http://friendlyaccount.com");
@@ -143,6 +145,7 @@ public class LoginActivity extends AppCompatActivity {
                     showLoginError(getString(R.string.error_network));
                     return;
                 }
+
                 attemptLogin();
 
             }
@@ -239,10 +242,14 @@ public class LoginActivity extends AppCompatActivity {
                         return;
                     }
                     Log.d("fsdfsdfs", response.body().getToken_type() + " " + response.body().getAccess_token() + "");
+
                     // Guardar afiliado en preferencias
                     session.guardarDatosUsuario(response.body());
                     session.guardarDatosUsuarioas(userId, password);
-                    showAppointmentsScreen();
+                    download1.descargarUsuarios(context);
+                    entrarMenuPrincipal();
+
+                    //showAppointmentsScreen();
                 }
 
                 @Override
@@ -252,7 +259,28 @@ public class LoginActivity extends AppCompatActivity {
                 }
             });
         }
+    }final Handler handler = new Handler();
+    protected void entrarMenuPrincipal(){
+        Thread t = new Thread(){
+            public void run(){
+                try{
+                    Thread.sleep(3000);
+                }
+                catch (InterruptedException e){
+                    e.printStackTrace();
+                }
+                handler.post(irMenuPrincipal);
+            }
+        };
+        t.start();
     }
+    final Runnable irMenuPrincipal = new Runnable() {
+        @Override
+        public void run() {
+            showAppointmentsScreen();
+            Toast.makeText(context, "menu", Toast.LENGTH_LONG).show();
+        }
+    };
 
     private boolean isUserIdValid(String userId) {
         return userId.length() > 10;
@@ -271,6 +299,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void showAppointmentsScreen() {
+
         startActivity(new Intent(this, MenuPrincipal.class));
         finish();
     }

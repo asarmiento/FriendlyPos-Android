@@ -1,9 +1,9 @@
 <resources>
-    <string name="app_name">FriendlyPos</string>
+    <string name="app_name">Friendly Pos</string>
     <string name="title_activity_login">Login</string>
     <string name="back_button_label">Back</string>
-    <string name="title_activity_productos">ProductosActivity</string>
-    <string name="title_activity_clientes">ClientesActivity</string>
+    <string name="title_activity_productos">Productos</string>
+    <string name="title_activity_clientes">Clientes</string>
 
     <string name="base_url">http://friendlyaccount.com</string>
 
@@ -145,7 +145,7 @@
 
     <!-- DISTRIBUCION -->
 
-    <string name="title_activity_distribucion">DistribucionActivity</string>
+    <string name="title_activity_distribucion">Distribución</string>
     <string name="seleccionecliente">Seleccionar cliente</string>
     <string name="resumen">Resumen</string>
     <string name="seleccioneproductos">Seleccionar productos</string>
@@ -157,9 +157,10 @@
     <string name="notes">Notas?</string>
     <string name="paywith">Cancela con</string>
     <string name="total">Total</string>
-    <string name="title_activity_configuracion">ConfiguracionActivity</string>
-    <string name="title_activity_reimprimir">ReimprimirActivity</string>
-    <string name="title_activity_iniciar">IniciarActivity</string>
+
+    <string name="title_activity_configuracion">Configuración</string>
+    <string name="title_activity_reimprimir">Reimprimir Ventas</string>
+    <string name="title_activity_iniciar">Iniciar</string>
 
 
 </resources>
