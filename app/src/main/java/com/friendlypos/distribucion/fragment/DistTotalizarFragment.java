@@ -151,6 +151,9 @@ public class DistTotalizarFragment extends BaseFragment  {
                                 double vuelto = pagoCon - total;
                                 totalVuelvo = String.format("%,.2f", vuelto);
 
+                                int tabCliente = 0;
+                                ((DistribucionActivity) getActivity()).setSelecClienteTab(tabCliente);
+
                                 change.setText(totalVuelvo);
                                 obtenerLocalización();
                                 aplicarFactura();
@@ -299,8 +302,8 @@ public class DistTotalizarFragment extends BaseFragment  {
             @Override
             public void execute(Realm realm3) {
                 venta_actualizada = realm3.where(Venta.class).equalTo("id", facturaId).findFirst();
-
-                venta_actualizada.setCustomer_name(client_name.getText().toString());
+                String nombre = client_name.getText().toString();
+                venta_actualizada.setCustomer_name(nombre);
                 venta_actualizada.setSale_type("1");
                 venta_actualizada.setUpdated_at(Functions.getDate() + " " + Functions.get24Time());
                 venta_actualizada.setAplicada(1);
@@ -314,6 +317,8 @@ public class DistTotalizarFragment extends BaseFragment  {
 
     protected void aplicarFactura() {
         paid.setEnabled(false);
+
+
 
         actualizarFactura();
         actualizarVenta();

@@ -14,6 +14,8 @@ import android.widget.Toast;
 
 import com.friendlypos.R;
 import com.friendlypos.distribucion.activity.DistribucionActivity;
+import com.friendlypos.distribucion.fragment.DistResumenFragment;
+import com.friendlypos.distribucion.fragment.DistSelecProductoFragment;
 import com.friendlypos.distribucion.modelo.Inventario;
 import com.friendlypos.distribucion.modelo.Pivot;
 import com.friendlypos.distribucion.modelo.Venta;
@@ -62,15 +64,16 @@ public class DistrResumenAdapter extends RecyclerView.Adapter<DistrResumenAdapte
     private static Double precio = 0.0;
     private static Double descuento = 0.0;
     private static Double clienteFixedDescuento = 0.0;
-    int slecTAB;
+    private DistResumenFragment fragment;
 
     private static String subTotalGrabado, subTotalGrabadoM, subTotalExento, descuentoCliente, subTotal, Total;
 
     private static Context QuickContext = null;
 
-    public DistrResumenAdapter(Context context, DistribucionActivity activity, List<Pivot> productosList) {
+    public DistrResumenAdapter(Context context, DistribucionActivity activity, DistResumenFragment fragment, List<Pivot> productosList) {
         this.productosList = productosList;
         this.activity = activity;
+        this.fragment = fragment;
         this.QuickContext = context;
         this.data = aListdata;
     }
@@ -83,6 +86,9 @@ public class DistrResumenAdapter extends RecyclerView.Adapter<DistrResumenAdapte
     public void updateData(List<Pivot> productosList) {
         this.productosList = productosList;
         notifyDataSetChanged();
+        cleanVariables();
+        activity.cleanTotalize();
+
     }
 
     @Override
@@ -90,14 +96,14 @@ public class DistrResumenAdapter extends RecyclerView.Adapter<DistrResumenAdapte
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.lista_distribucion_resumen, parent, false);
 
         context = parent.getContext();
-        slecTAB = activity.getSelecClienteTab();
+      /*  slecTAB = activity.getSelecClienteTab();
         if (slecTAB == 1){
             Toast.makeText(QuickContext,"nadaResumen1",Toast.LENGTH_LONG).show();
         }
         else{
             Toast.makeText(QuickContext,"nadaResumen0",Toast.LENGTH_LONG).show();
 
-        }
+        }*/
 
         return new DistrResumenAdapter.CharacterViewHolder(view);
     }
@@ -128,6 +134,8 @@ public class DistrResumenAdapter extends RecyclerView.Adapter<DistrResumenAdapte
 
         String pivotTotal = String.format("%,.2f", (precio * cantidad));
         holder.txt_resumen_factura_total.setText("T: " + pivotTotal);
+        cleanVariables();
+        activity.cleanTotalize();
         totalize();
 
     }
@@ -168,6 +176,8 @@ public class DistrResumenAdapter extends RecyclerView.Adapter<DistrResumenAdapte
 
                 @Override
                 public void onClick(View view) {
+                    cleanVariables();
+                    activity.cleanTotalize();
                     int pos = getAdapterPosition();
 
                     // Updating old as well as new positions
@@ -176,15 +186,6 @@ public class DistrResumenAdapter extends RecyclerView.Adapter<DistrResumenAdapte
                     notifyItemChanged(selected_position1);
 
                     final Pivot clickedDataItem = productosList.get(pos);
-
-                    //todo repasar esto
-              /*      Realm realm6 = Realm.getDefaultInstance();
-                    final Venta ventas = realm6.where(Venta.class).equalTo("invoice_id", clickedDataItem.getInvoice_id()).findFirst();
-                    Clientes clientes = realm6.where(Clientes.class).equalTo("id", ventas.getCustomer_id()).findFirst();
-                    double cantidadCreditoLimite = Double.valueOf(clientes.getCreditLimit());
-                    double cantidadDue = Double.valueOf(clientes.getDue());
-                    credi = (cantidadCreditoLimite - cantidadDue) + total;
-                    realm6.close();*/
 
                     final int resumenProductoId = clickedDataItem.getId();
                     final double cantidadProducto = Double.parseDouble(clickedDataItem.getAmount());
@@ -248,6 +249,7 @@ public class DistrResumenAdapter extends RecyclerView.Adapter<DistrResumenAdapte
 
                     });
                     notifyDataSetChanged();
+                    fragment.updateData();
 
                 }
             });

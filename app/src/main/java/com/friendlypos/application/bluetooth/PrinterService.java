@@ -61,7 +61,6 @@ public class PrinterService extends Service {
     public static Handler mHandler2 = null;
     public static int mState = STATE_NONE;
     public static String deviceName;
-    public Vector<Byte> packdata = new Vector<>(2048);
     public static BluetoothDevice device = null;
 
     private String mMacAddress;

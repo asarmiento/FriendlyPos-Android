@@ -46,7 +46,7 @@ public class DistResumenFragment extends BaseFragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setHasFixedSize(true);
 
-            adapter = new DistrResumenAdapter(getContext(), ((DistribucionActivity) getActivity()), getListResumen());
+            adapter = new DistrResumenAdapter(getContext(), ((DistribucionActivity) getActivity()), this, getListResumen());
             recyclerView.setAdapter(adapter);
 
             Log.d("listaResumen", getListResumen() + "");
@@ -75,9 +75,12 @@ public class DistResumenFragment extends BaseFragment {
     public void updateData() {
         slecTAB = ((DistribucionActivity) getActivity()).getSelecClienteTab();
         if (slecTAB == 1) {
-        adapter.updateData(getListResumen());
-    }
+            adapter.clearAll();
+            ((DistribucionActivity) getActivity()).cleanTotalize();
+            adapter.updateData(getListResumen());
+
+        }
         else{
-            Toast.makeText(getActivity(),"nadaTotalizarresume",Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(),"nadaresumenUpdate",Toast.LENGTH_LONG).show();
         }
 }}

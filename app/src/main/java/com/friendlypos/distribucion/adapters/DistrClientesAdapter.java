@@ -53,13 +53,12 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
     String facturaID, clienteID;
     int nextId;
     int tabCliente;
-    ProgressDialog progressDoalog;
 
     public DistrClientesAdapter(Context context, DistribucionActivity activity, List<Venta> contentList) {
         this.contentList = contentList;
         this.activity = activity;
         this.QuickContext = context;
-        activity.setSelecClienteTab(tabCliente);
+       // activity.setSelecClienteTab(tabCliente);
     }
 
     @Override
@@ -155,7 +154,7 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
                     }).start();
 
                                 int pos = getAdapterPosition();
-                                //if (pos == RecyclerView.NO_POSITION) return;
+                                if (pos == RecyclerView.NO_POSITION) return;
 
                                 // Updating old as well as new positions
                                 notifyItemChanged(selected_position);
@@ -165,6 +164,7 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
                                 Venta clickedDataItem = contentList.get(pos);
                                 facturaID = clickedDataItem.getInvoice_id();
                                 clienteID = clickedDataItem.getCustomer_id();
+                                cardView.setBackgroundColor(selected_position == pos ? Color.parseColor("#607d8b") : Color.parseColor("#009688"));
 
                                 Realm realm = Realm.getDefaultInstance();
                                 Facturas facturas = realm.where(Facturas.class).equalTo("id", facturaID).findFirst();
@@ -201,6 +201,9 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+
+                        tabCliente = 0;
+                        activity.setSelecClienteTab(tabCliente);
 
                         Log.d("PRODUCTOSFACTURA1", facturaid1 + "");
 
