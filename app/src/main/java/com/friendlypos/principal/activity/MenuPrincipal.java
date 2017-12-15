@@ -83,7 +83,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
     SessionPrefes session;
     DescargasHelper download1;
     SubirHelper subir1;
-
+    String usuer;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,6 +92,8 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         networkStateChangeReceiver = new NetworkStateChangeReceiver();
+
+
 
         session = new SessionPrefes(getApplicationContext());
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -110,18 +112,13 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
             finish();
         }
         else {
+            usuer = session.getUsuarioPrefs();
+            Log.d("userasd", usuer);
             Realm realm = Realm.getDefaultInstance();
-            String usuer = session.getUsuarioPrefs();
-            Log.d("user", usuer);
-
             Usuarios usuarios = realm.where(Usuarios.class).equalTo("email", usuer).findFirst();
-
             String nombreUsuario = usuarios.getUsername();
-
-            Log.d("user", nombreUsuario);
-
+            Log.d("userasd", nombreUsuario);
             txtNombreUsuario.setText(nombreUsuario);
-            //
             realm.close();
         }
     }

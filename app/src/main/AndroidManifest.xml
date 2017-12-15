@@ -9,10 +9,6 @@
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS"/>
-    <uses-permission android:name="android.permission.READ_LOGS"/>
-    <uses-permission android:name = "android.permission.ACCESS_FINE_LOCATION" />
-
 
     <application
         android:name=".application.FriendlyApp"
@@ -22,18 +18,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-        <receiver android:name="com.friendlypos.app.broadcastreceiver.NetworkStateChangeReceiver" android:enabled="true">
+        <receiver android:name="app.broadcastreceiver.NetworkStateChangeReceiver">
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
                 <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
-            </intent-filter>
-        </receiver>
-
-        <receiver android:name="com.friendlypos.app.broadcastreceiver.BluetoothStateChangeReceiver" android:enabled="true">
-            <intent-filter>
-                <action android:name="android.bluetooth.adapter.action.STATE_CHANGED" />
-                <action android:name="android.bluetooth.adapter.action.CONNECTION_STATE_CHANGED" />
             </intent-filter>
         </receiver>
 
@@ -48,7 +36,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
         <activity
             android:name=".principal.activity.MenuPrincipal"

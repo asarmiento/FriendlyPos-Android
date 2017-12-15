@@ -71,14 +71,10 @@ public class Properties {
         editor = pref.edit();
     }
 
-    /**
-     * set URL WEBSRV
-     * */
     public void setUrlWebsrv(String url){
-        // Storing url in pref
         editor.putString(URL_WEBSRV, url);
-        // commit changes
         editor.commit();
+        editor.apply();
     }
 
     public String getUrlWebsrv() {
@@ -86,92 +82,6 @@ public class Properties {
     }
 
 
-    /**
-     * @return String url webservice
-     */
-    public Boolean getFirstTime() {
-        return pref.getBoolean(FirstTime, true);
-    }
-
-    /**
-     * @return Boolean FirstTime
-     */
-    public Boolean getBlockedApp() {
-        Log.d("Blockeado", String.valueOf(pref.getBoolean(BlockedApp, false)));
-        return pref.getBoolean(BlockedApp, false);
-    }
 
 
-    /**
-     * @return String url webservice
-     */
-    public String getUrlLogin() {
-        return pref.getString(URL_LOGIN, null);
-    }
-
-    /**
-     * @return String url webservice
-     */
-    public String getUrlCatalog() {
-        return pref.getString(URL_CATALOG,null);
-    }
-
-    /**
-     * @return String url webservice
-     */
-    public String getUrlInvuser() {
-        return pref.getString(URL_INVUSER,null);
-    }
-
-    /**
-     * @return String url webservice
-     */
-    public String getUrlUploadChekin() {
-        return pref.getString(URL_UPLOAD_CHEKIN,null);
-    }
-
-    /**
-     * @return String url webservice
-     */
-    public String getUrlUploadSales (){
-        return pref.getString(URL_UPLOAD_SALES,null);
-    }
-
-    /**
-     * @return String url refound
-     */
-    public String getUrlRefound (){
-        return pref.getString(URL_REFOUND,null);
-    }
-
-    /**
-     * @return String url refound
-     */
-    public String getUrlCredits(){
-        return pref.getString(URL_CREDITS,null);
-    }
-
-    /**
-     * @return String url receipts
-     */
-    public String getUrlReceipts(){
-        return pref.getString(URL_RECEIPTS,null);
-    }
-
-
-    /**
-     * @return String url webservice
-     */
-    public String getGcmid() {
-        return pref.getString(GCMID,null);
-    }
-
-
-    public String getUrlUploadToken() {
-        return pref.getString(URL_UPLOAD_TOKEN,null);
-    }
-
-    public void setUrlToken(String urlToken) {
-        editor.putString(URL_UPLOAD_TOKEN, urlToken).commit();
-    }
 }

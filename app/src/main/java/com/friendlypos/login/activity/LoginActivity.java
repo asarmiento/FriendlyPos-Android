@@ -91,21 +91,14 @@ public class LoginActivity extends AppCompatActivity {
         session = new SessionPrefes(getApplicationContext());
         properties = new Properties(getApplicationContext());
 
-
-        Toast.makeText(this, "sdfsdf",Toast.LENGTH_SHORT).show();
-
-        //   properties.setUrlWebsrv("http://friendlyaccount.com");
-
-      /*  if (properties.getUrlWebsrv() == null) {
-            System.out.println("Stablishing properties");
-
-            Log.d("adasda1",properties.getUrlWebsrv()+"");
+        //
+        if (properties.getUrlWebsrv() == null) {
+            properties.setUrlWebsrv("http://friendlyaccount.com");
+            Toast.makeText(this, "nullASDAS" + properties.getUrlWebsrv() + "",Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(this, "adasdad" + properties.getUrlWebsrv() + "",Toast.LENGTH_SHORT).show();
-
-            Log.d("adasdad",properties.getUrlWebsrv()+"");
         }
-*/
+
 
         if (session.isLoggedIn()){
             startActivity(new Intent(this, LoginActivity.class));
