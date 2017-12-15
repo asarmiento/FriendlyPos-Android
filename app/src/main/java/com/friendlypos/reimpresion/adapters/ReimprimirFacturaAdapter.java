@@ -48,6 +48,7 @@ public class ReimprimirFacturaAdapter extends RecyclerView.Adapter<ReimprimirFac
     Double amount_dist_inventario = 0.0;
     String facturaID, clienteID;
     int nextId;
+    int tabCliente;
 
     public ReimprimirFacturaAdapter(Context context, ReimprimirActivity activity, List<Venta> contentList) {
         this.contentList = contentList;
@@ -123,36 +124,20 @@ public class ReimprimirFacturaAdapter extends RecyclerView.Adapter<ReimprimirFac
                 public void onClick(View view) {
                     int pos = getAdapterPosition();
                     if (pos == RecyclerView.NO_POSITION) return;
-
-                    // Updating old as well as new positions
                     notifyItemChanged(selected_position);
                     selected_position = getAdapterPosition();
                     notifyItemChanged(selected_position);
 
                     Venta clickedDataItem = contentList.get(pos);
                     facturaID = clickedDataItem.getInvoice_id();
-                    /*clienteID = clickedDataItem.getCustomer_id();
-
-                    Realm realm = Realm.getDefaultInstance();
-                    Facturas facturas = realm.where(Facturas.class).equalTo("id", facturaID).findFirst();
-                    Clientes clientes = realm.where(Clientes.class).equalTo("id", clienteID).findFirst();
-                    //String facturaid = String.valueOf(realm.where(ProductoFactura.class).equalTo("id", facturaID).findFirst().getId());
-                    facturaid1 = realm.where(Pivot.class).equalTo("invoice_id", facturaID).findAll();
-                    String metodoPago = facturas.getPayment_method_id();
-                    String creditoLimiteCliente = clientes.getCreditLimit();
-                    String dueCliente = clientes.getDue();
-                    realm.close();*/
-
 
                     Toast.makeText(view.getContext(), "You clicked " + facturaID, Toast.LENGTH_SHORT).show();
-                   /* Log.d("PRODUCTOSFACTURATO", facturaid1 + "");
-                    Log.d("metodoPago", metodoPago + "");*/
+
+                    tabCliente = 1;
+                    activity.setSelecFacturaTab(tabCliente);
                     activity.setInvoiceIdReimprimir(facturaID);
                     Log.d("metodoPago", facturaID + "");
-                 /*   activity.setInvoiceId(facturaID);
-                    activity.setMetodoPagoCliente(metodoPago);
-                    activity.setCreditoLimiteCliente(creditoLimiteCliente);
-                    activity.setDueCliente(dueCliente);*/
+
 
                 }
             });

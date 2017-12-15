@@ -58,7 +58,6 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
         this.contentList = contentList;
         this.activity = activity;
         this.QuickContext = context;
-       // activity.setSelecClienteTab(tabCliente);
     }
 
     @Override

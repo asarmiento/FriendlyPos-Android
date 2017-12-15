@@ -2,6 +2,7 @@ package com.friendlypos.reimpresion.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
@@ -12,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.friendlypos.R;
+import com.friendlypos.application.util.Functions;
 import com.friendlypos.distribucion.activity.DistribucionActivity;
 import com.friendlypos.distribucion.fragment.BaseFragment;
 import com.friendlypos.distribucion.fragment.DistResumenFragment;
@@ -33,6 +35,7 @@ public class ReimprimirActivity extends BluetoothActivity {
     private ViewPager viewPager;
 
     private String invoiceIdReimprimir;
+    private int selecFacturaTab;
 
     public String getInvoiceIdReimprimir() {
         return invoiceIdReimprimir;
@@ -40,6 +43,14 @@ public class ReimprimirActivity extends BluetoothActivity {
 
     public void setInvoiceIdReimprimir(String invoiceIdReimprimir) {
         this.invoiceIdReimprimir = invoiceIdReimprimir;
+    }
+
+    public int getSelecFacturaTab() {
+        return selecFacturaTab;
+    }
+
+    public void setSelecFacturaTab(int selecFacturaTab) {
+        this.selecFacturaTab = selecFacturaTab;
     }
 
     @Override
@@ -57,6 +68,41 @@ public class ReimprimirActivity extends BluetoothActivity {
         tabLayout = (TabLayout) findViewById(R.id.tabsReimprimir);
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.setTabMode(TabLayout.MODE_FIXED);
+
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                int tabCliente = getSelecFacturaTab();
+                if (tabCliente == 0 && tab.getPosition() != 0) {
+
+                    Functions.CreateMessage(ReimprimirActivity.this, "Distribución", "Seleccione una factura.");
+
+                    new Handler().postDelayed(
+                            new Runnable() {
+
+                                @Override
+                                public void run() {
+                                    tabLayout.getTabAt(0).select();
+                                }
+                            }, 100);
+                }
+                else {
+
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
 
        /* tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
 
