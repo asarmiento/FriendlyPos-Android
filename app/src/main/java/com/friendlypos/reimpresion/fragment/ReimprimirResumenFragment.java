@@ -45,7 +45,7 @@ public class ReimprimirResumenFragment extends BaseFragment {
     Venta venta_actualizada = null;
     String facturaId = "";
 
-
+    int slecTAB;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -260,6 +260,10 @@ public class ReimprimirResumenFragment extends BaseFragment {
 
     @Override
     public void updateData() {
+        slecTAB = ((ReimprimirActivity) getActivity()).getSelecFacturaTab();
+
+        if (slecTAB == 1){
+
         facturaId = ((ReimprimirActivity) getActivity()).getInvoiceIdReimprimir();
         if (facturaId != null) {
             Log.d("FACTURAIDReim", facturaId);
@@ -285,6 +289,9 @@ public class ReimprimirResumenFragment extends BaseFragment {
         getHtmlPreview();
         // PrinterFunctions.imprimirFacturaDistrTotal(venta_actualizada, getActivity(), Integer.parseInt(a));
     }
+        else{
+        Toast.makeText(getActivity(),"nadaSelecProducto",Toast.LENGTH_LONG).show();
+    }}
 }
 
 

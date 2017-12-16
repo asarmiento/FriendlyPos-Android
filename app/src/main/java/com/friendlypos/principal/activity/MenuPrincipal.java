@@ -112,12 +112,12 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
         else {
             usuer = session.getUsuarioPrefs();
             Log.d("userasd", usuer);
-           Realm realm = Realm.getDefaultInstance();
+         /*  Realm realm = Realm.getDefaultInstance();
             Usuarios usuarios = realm.where(Usuarios.class).equalTo("email", usuer).findFirst();
             String nombreUsuario = usuarios.getUsername();
             Log.d("userasd", nombreUsuario);
             txtNombreUsuario.setText(nombreUsuario);
-            realm.close();
+            realm.close();*/
         }
     }
 
