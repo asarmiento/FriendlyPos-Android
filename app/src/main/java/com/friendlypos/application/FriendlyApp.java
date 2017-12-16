@@ -11,8 +11,6 @@ public class FriendlyApp extends Application {
     public void onCreate() {
         super.onCreate();
 
-        // Configure Realm for the application
-
         Realm.init(this);
 
         RealmConfiguration config = new RealmConfiguration.Builder()

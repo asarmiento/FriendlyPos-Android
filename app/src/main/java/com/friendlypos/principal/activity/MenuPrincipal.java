@@ -92,9 +92,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         networkStateChangeReceiver = new NetworkStateChangeReceiver();
-
-
-
+        
         session = new SessionPrefes(getApplicationContext());
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         download1 = new DescargasHelper(MenuPrincipal.this);
