@@ -96,7 +96,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
         session = new SessionPrefes(getApplicationContext());
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         download1 = new DescargasHelper(MenuPrincipal.this);
-        subir1 = new SubirHelper(MenuPrincipal.this);
+//        subir1 = new SubirHelper(MenuPrincipal.this);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
             this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -112,12 +112,12 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
         else {
             usuer = session.getUsuarioPrefs();
             Log.d("userasd", usuer);
-         /*  Realm realm = Realm.getDefaultInstance();
+           Realm realm = Realm.getDefaultInstance();
             Usuarios usuarios = realm.where(Usuarios.class).equalTo("email", usuer).findFirst();
             String nombreUsuario = usuarios.getUsername();
             Log.d("userasd", nombreUsuario);
             txtNombreUsuario.setText(nombreUsuario);
-            realm.close();*/
+            realm.close();
         }
     }
 
@@ -267,13 +267,14 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
 
             case R.id.btn_subir_ventas:
 
+/*
                 //TODO SABER COMO TENER QUE SUBIR LOS DATOS, SI UNO X UNO O TODOS DE UN SOLO.
                 Realm realm = Realm.getDefaultInstance();
                 final RealmResults<Facturas> facturas1 = realm.where(Facturas.class).findAll();
                 for (int i = 0; i < facturas1.size(); i++) {
                     subir1.sendPost(facturas1.get(i));
                 }
-
+*/
                 Toast.makeText(MenuPrincipal.this, "subir_ventas", Toast.LENGTH_SHORT).show();
                 break;
 

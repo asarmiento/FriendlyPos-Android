@@ -27,6 +27,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.friendlypos.R;
+import com.friendlypos.application.bluetooth.PrinterService;
 import com.friendlypos.application.util.Functions;
 
 import java.io.IOException;
@@ -38,6 +39,8 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+
+import static io.realm.internal.SyncObjectServerFacade.getApplicationContext;
 
 public class ConfiguracionFragment extends PreferenceFragment implements OnSharedPreferenceChangeListener, /*OnInitListener, */Preference.OnPreferenceChangeListener, Preference.OnPreferenceClickListener {
 
@@ -280,5 +283,6 @@ public class ConfiguracionFragment extends PreferenceFragment implements OnShare
 
         Toast.makeText(getActivity(), "Botón no disponible por el momento", Toast.LENGTH_SHORT).show();
     }
+
 
 }

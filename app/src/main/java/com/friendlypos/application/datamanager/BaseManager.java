@@ -30,7 +30,7 @@ public class BaseManager {
     private Context mContext;
     private static RequestInterface api;
     static Properties properties;
-    static String nombreURL;
+    static String nombreURL = "http://friendlyaccount.com";
 
     public BaseManager(Activity activity) {
         this.activity = activity;
@@ -72,8 +72,8 @@ public class BaseManager {
                     .build();
 
             Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(nombreURL)
-                   // .baseUrl("http://friendlyaccount.com")
+                     .baseUrl(nombreURL)
+                    // .baseUrl("http://friendlyaccount.com")
                     //.baseUrl(properties.getUrlWebsrv())
                     .client(httpClient)
                     .addConverterFactory(GsonConverterFactory.create(gson))

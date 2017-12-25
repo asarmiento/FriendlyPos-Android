@@ -96,9 +96,9 @@ public class LoginActivity extends AppCompatActivity {
         //
         if (properties.getUrlWebsrv() == null) {
             properties.setUrlWebsrv("http://friendlyaccount.com");
-            Toast.makeText(this, "nullASDAS" + properties.getUrlWebsrv() + "",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "URL: " + properties.getUrlWebsrv() + "",Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(this, "adasdad" + properties.getUrlWebsrv() + "",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "URL: " + properties.getUrlWebsrv() + "",Toast.LENGTH_SHORT).show();
         }
 
 
@@ -165,7 +165,9 @@ public class LoginActivity extends AppCompatActivity {
         mFloatLabelPassword.setError(null);
 
         // Store values at the time of the login attempt.
-        final String userId = mUserIdView.getText().toString();
+        final String userdatos = mUserIdView.getText().toString();
+        final String userId = userdatos.trim();
+
         final String password = mPasswordView.getText().toString();
 
         boolean cancel = false;
