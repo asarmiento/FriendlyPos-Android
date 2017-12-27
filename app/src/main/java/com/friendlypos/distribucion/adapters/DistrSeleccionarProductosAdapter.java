@@ -330,6 +330,12 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
         return productosList.size();
     }
 
+    public void setFilter(List<Inventario> countryModels){
+        productosList = new ArrayList<>();
+        productosList.addAll(countryModels);
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getItemViewType(int position) {
         return 0;

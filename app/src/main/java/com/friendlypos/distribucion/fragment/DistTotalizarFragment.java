@@ -1,5 +1,6 @@
 package com.friendlypos.distribucion.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -20,8 +21,12 @@ import com.friendlypos.distribucion.activity.DistribucionActivity;
 import com.friendlypos.distribucion.modelo.Facturas;
 import com.friendlypos.distribucion.modelo.Venta;
 import com.friendlypos.distribucion.util.GPSTracker;
+import com.friendlypos.login.modelo.Usuarios;
+import com.friendlypos.login.util.SessionPrefes;
 
 import io.realm.Realm;
+
+import static io.realm.internal.SyncObjectServerFacade.getApplicationContext;
 
 
 public class DistTotalizarFragment extends BaseFragment  {
@@ -49,8 +54,8 @@ public class DistTotalizarFragment extends BaseFragment  {
     String totalPagoCon = "0";
     static double pagoCon = 0.0;
     String facturaId;
-
-
+    String usuer;
+    SessionPrefes session;
     double latitude;
     double longitude;
 
@@ -74,6 +79,7 @@ public class DistTotalizarFragment extends BaseFragment  {
         super.onCreate(savedInstanceState);
         bluetoothStateChangeReceiver = new BluetoothStateChangeReceiver();
         bluetoothStateChangeReceiver.setBluetoothStateChangeReceiver(getContext());
+        session = new SessionPrefes(getApplicationContext());
     }
 
     @Override
@@ -232,6 +238,8 @@ public class DistTotalizarFragment extends BaseFragment  {
 
     public void obtenerLocalización() {
 
+
+
         gps = new GPSTracker(getActivity());
 
         // check if GPS enabled
@@ -264,7 +272,11 @@ public class DistTotalizarFragment extends BaseFragment  {
             @Override
             public void execute(Realm realm2) {
                 Facturas factura_actualizada = realm2.where(Facturas.class).equalTo("id", facturaId).findFirst();
-
+                Realm realm = Realm.getDefaultInstance();
+                usuer = session.getUsuarioPrefs();
+                Usuarios usuarios = realm.where(Usuarios.class).equalTo("email", usuer).findFirst();
+                String idUsuario = usuarios.getId();
+                realm.close();
 
                 factura_actualizada.setDate(Functions.getDate());
                 factura_actualizada.setTimes(Functions.get24Time());
@@ -281,7 +293,7 @@ public class DistTotalizarFragment extends BaseFragment  {
 
                 factura_actualizada.setPaid(totalPagoCon);
                 factura_actualizada.setChanging(totalVuelvo);
-
+                factura_actualizada.setUser_id_applied(idUsuario);
                 factura_actualizada.setNote(notes.getText().toString());
                 factura_actualizada.setCanceled("1");
                 factura_actualizada.setAplicada(1);

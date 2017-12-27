@@ -15,8 +15,10 @@ import com.friendlypos.R;
 import com.friendlypos.distribucion.modelo.Inventario;
 import com.friendlypos.distribucion.modelo.Marcas;
 import com.friendlypos.distribucion.modelo.TipoProducto;
+import com.friendlypos.principal.modelo.Clientes;
 import com.friendlypos.principal.modelo.Productos;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
@@ -64,6 +66,7 @@ public class ProductosAdapter extends RecyclerView.Adapter<ProductosAdapter.Char
 
     }
 
+
     @Override
     public long getItemId(int position) {
         return 0;
@@ -72,6 +75,12 @@ public class ProductosAdapter extends RecyclerView.Adapter<ProductosAdapter.Char
     @Override
     public int getItemCount() {
         return productosList.size();
+    }
+
+    public void setFilter(List<Productos> countryModels){
+        productosList = new ArrayList<>();
+        productosList.addAll(countryModels);
+        notifyDataSetChanged();
     }
 
     @Override

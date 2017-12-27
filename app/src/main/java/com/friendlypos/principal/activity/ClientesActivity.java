@@ -3,12 +3,19 @@ package com.friendlypos.principal.activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,16 +43,15 @@ import retrofit2.Response;
 import com.friendlypos.principal.modelo.ClientesResponse;
 import com.friendlypos.principal.modelo.Productos;
 
-public class ClientesActivity extends AppCompatActivity {
+public class ClientesActivity extends AppCompatActivity implements SearchView.OnQueryTextListener{
 
     @Bind(R.id.toolbar)
     Toolbar toolbar;
 
+
+
     @Bind(R.id.recyclerView)
     RecyclerView recyclerView;
-
-    @Bind(R.id.tv_titleClientes)
-    TextView tv_title;
 
     private ClientesAdapter adapter;
     private Realm realm;
@@ -73,7 +79,9 @@ public class ClientesActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
 
         Log.d("lista", getList() + "");
+
     }
+
 
         private List<Clientes> getList(){
             realm = Realm.getDefaultInstance();
@@ -81,7 +89,6 @@ public class ClientesActivity extends AppCompatActivity {
             RealmResults<Clientes> result1 = query.findAll();
             if(result1.size() == 0){
                Toast.makeText(getApplicationContext(),"Favor descargar datos primero",Toast.LENGTH_LONG).show();
-                tv_title.setText("Favor descargar datos primero");
             }
                 return result1;
         }
@@ -100,6 +107,59 @@ public class ClientesActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
+
+        final MenuItem item = menu.findItem(R.id.action_search);
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
+        searchView.setOnQueryTextListener(this);
+
+        MenuItemCompat.setOnActionExpandListener(item,
+                new MenuItemCompat.OnActionExpandListener() {
+                    @Override
+                    public boolean onMenuItemActionCollapse(MenuItem item) {
+                        // Do something when collapsed
+                        adapter.setFilter(getList());
+                        return true; // Return true to collapse action view
+                    }
+
+                    @Override
+                    public boolean onMenuItemActionExpand(MenuItem item) {
+                        // Do something when expanded
+                        return true; // Return true to expand action view
+                    }
+                });
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        final List<Clientes> filteredModelList = filter(getList(), newText);
+        adapter.setFilter(filteredModelList);
+        return true;
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+
+    private List<Clientes> filter(List<Clientes> models, String query) {
+        query = query.toLowerCase();
+
+        final List<Clientes> filteredModelList = new ArrayList<>();
+        for (Clientes model : models) {
+            final String text = model.getFantasyName().toLowerCase();
+            if (text.contains(query)) {
+                filteredModelList.add(model);
+            }
+        }
+        return filteredModelList;
     }
 
 }

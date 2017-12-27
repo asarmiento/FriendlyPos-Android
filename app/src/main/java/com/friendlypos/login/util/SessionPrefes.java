@@ -21,6 +21,8 @@ public class SessionPrefes {
     public static final String PREF_USER_NAME = "PREF_USER_NAME";
     public static final String PREF_USER_PASS = "PREF_USER_PASS";
 
+    public static final String PREF_DESCARGA_DATOS = "PREF_DESCARGA_DATOS";
+
     private final SharedPreferences mPrefs;
 
     private boolean mIsLoggedIn = false;
@@ -86,6 +88,18 @@ public class SessionPrefes {
     public String getUsuarioPrefs(){
         String usuario = mPrefs.getString(PREF_USER_NAME, null);
         return usuario;
+    }
+
+    public int getPrefDescargaDatos(){
+        int descargarDatos = mPrefs.getInt(PREF_DESCARGA_DATOS, 0);
+        return descargarDatos;
+    }
+
+    public void setPrefDescargaDatos(int tipoDescarga){
+        SharedPreferences.Editor editor = mPrefs.edit();
+        editor.putInt(PREF_DESCARGA_DATOS, tipoDescarga);
+        editor.commit();
+        editor.apply();
     }
 
     public String getTiempo(){

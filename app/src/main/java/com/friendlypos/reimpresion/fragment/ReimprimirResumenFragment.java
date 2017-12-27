@@ -166,7 +166,8 @@ public class ReimprimirResumenFragment extends BaseFragment {
                 preview += "<a><b>Tel:</b> " + sysTelefono + "</a><br>";
                 preview += "<a><b>E-mail:</b> " + sysCorreo + "</a><br>";
                 preview += "<a><b>Cedula Juridica:</b> " + sysIdentificacion + "</a><br>";
-                preview += "<a><b>Fecha:</b> " + fechayhora + "</a><br><br>";
+                preview += "<a><b>Fecha:</b> " + fechayhora + "</a><br>";
+                preview += "<a><b>Fecha de impresión:</b> " + Functions.getDate() + " " + Functions.get24Time() + "</a><br><br>";
                 preview += "<a><b>Vendedor:</b> " + nombreUsuario + "</a><br>";
                 preview += "<a><b>ID Cliente:</b> " + cardCliente + "</a><br>";
                 preview += "<a><b>Cliente:</b> " + companyCliente + "</a><br>";

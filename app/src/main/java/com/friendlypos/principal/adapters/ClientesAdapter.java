@@ -1,7 +1,6 @@
 package com.friendlypos.principal.adapters;
 
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,14 +9,14 @@ import android.widget.TextView;
 import com.friendlypos.R;
 import com.friendlypos.principal.modelo.Clientes;
 
+import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Podisto on 15/05/2016.
- */
-public class ClientesAdapter extends RecyclerView.Adapter<ClientesAdapter.CharacterViewHolder> {
 
-    private List<Clientes> contentList;
+public class ClientesAdapter extends RecyclerView.Adapter<ClientesAdapter.CharacterViewHolder>{
+
+    public List<Clientes> contentList;
+
 
     private static Double creditolimite = 0.0;
     private static Double descuentoFixed = 0.0;
@@ -53,13 +52,19 @@ public class ClientesAdapter extends RecyclerView.Adapter<ClientesAdapter.Charac
         holder.txt_cliente_fixeddescount.setText(String.format("%,.2f", (descuentoFixed)));
         holder.txt_cliente_due.setText(String.format("%,.2f", (cleintedue)));
         holder.txt_cliente_credittime.setText(String.format("%,.2f", (credittime)));
-
     }
 
     @Override
     public int getItemCount() {
         return contentList.size();
     }
+
+    public void setFilter(List<Clientes> countryModels){
+        contentList = new ArrayList<>();
+        contentList.addAll(countryModels);
+        notifyDataSetChanged();
+    }
+
 
     public static class CharacterViewHolder extends RecyclerView.ViewHolder {
 
@@ -84,4 +89,5 @@ public class ClientesAdapter extends RecyclerView.Adapter<ClientesAdapter.Charac
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
     }
+
 }

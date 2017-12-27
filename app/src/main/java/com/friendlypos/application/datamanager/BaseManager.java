@@ -30,7 +30,7 @@ public class BaseManager {
     private Context mContext;
     private static RequestInterface api;
     static Properties properties;
-    static String nombreURL = "http://friendlyaccount.com";
+    static String nombreURL = "friendlyaccount.com";
 
     public BaseManager(Activity activity) {
         this.activity = activity;

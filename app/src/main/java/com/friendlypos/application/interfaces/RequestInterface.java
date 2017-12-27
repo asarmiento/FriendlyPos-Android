@@ -56,8 +56,6 @@ public interface RequestInterface {
 
     // TODO DEFINIR CUAL ES EL KEY PARA ENVIAR (KEY, VALUE)
     @POST("/api/upload-invoices")
-    @FormUrlEncoded
-   // Call<Facturas> savePost(@Query("id") String id);
     Call<Facturas> savePost(@Body Facturas facturas, @Header("Authorization") String token);
 
 }

@@ -5,9 +5,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.TabLayout;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.friendlypos.R;
@@ -22,6 +27,7 @@ import com.friendlypos.distribucion.fragment.DistTotalizarFragment;
 import com.friendlypos.distribucion.util.Adapter;
 import com.friendlypos.principal.activity.BluetoothActivity;
 import com.friendlypos.principal.activity.MenuPrincipal;
+import com.friendlypos.principal.modelo.Clientes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -156,11 +162,18 @@ public class DistribucionActivity extends BluetoothActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_distribucion);
         ButterKnife.bind(this);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        toolbar = (Toolbar) findViewById(R.id.toolbarDistribucion);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
+        /*toolbar = (Toolbar) findViewById(R.id.toolbarDistribucion);
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);*/
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
         if (viewPager != null) {
@@ -254,6 +267,5 @@ public class DistribucionActivity extends BluetoothActivity{
                 return super.onOptionsItemSelected(item);
         }
     }
-
 }
 

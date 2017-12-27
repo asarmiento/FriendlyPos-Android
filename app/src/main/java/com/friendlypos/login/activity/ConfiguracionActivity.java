@@ -16,20 +16,18 @@ import com.friendlypos.application.util.Functions;
 import com.friendlypos.login.util.Properties;
 
 public class ConfiguracionActivity extends AppCompatActivity {
-    CoordinatorLayout coordinatorLayout;
     TextView webServiceUrl;
     FloatingActionButton save;
     Properties properties;
-
+    String nombreURL;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_configuracion);
         properties = new Properties(this);
-        coordinatorLayout = (CoordinatorLayout) findViewById(R.id.main_content);
         webServiceUrl = (TextView) findViewById(R.id.txtwebservice);
 
-        String nombreURL = properties.getUrlWebsrv();
+        nombreURL =  properties.getUrlWebsrv();
 
         webServiceUrl.setText(nombreURL);
 
@@ -48,13 +46,13 @@ public class ConfiguracionActivity extends AppCompatActivity {
     }
 
     private void save() {
-        if (webServiceUrl.getText().toString().equals(properties.getUrlWebsrv())) {
-            Toast.makeText(this, properties.getUrlWebsrv() + "",Toast.LENGTH_SHORT).show();
+        if (webServiceUrl.getText().toString().equals(nombreURL)) {
+            Toast.makeText(this, nombreURL + "",Toast.LENGTH_SHORT).show();
             Functions.createNotification(this, 100, "Cambiando el WebService", "No se modifico el webservice ya que es el mismo");
         } else {
             if (Functions.checkURL(webServiceUrl.getText().toString())) {
 
-                properties.setUrlWebsrv(webServiceUrl.getText().toString());
+                properties.setUrlWebsrv(("http://" +webServiceUrl.getText().toString()));
                 Functions.createNotification(this, 100, "Cambiando el WebService", "WebService Modificado Correctamente");
             } else {
                 Functions.createNotification(this, 100, "Cambiando el WebService", "No se modifico el webservice ya el Url Es invalido");

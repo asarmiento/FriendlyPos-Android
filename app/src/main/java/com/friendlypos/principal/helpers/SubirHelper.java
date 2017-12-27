@@ -49,8 +49,7 @@ public class SubirHelper {
             public void onResponse(Call<Facturas> call, Response<Facturas> response) {
                 Log.i(TAG, "mamon " + response.body());
                 if(response.isSuccessful()) {
-                    showResponse(response.body().toString());
-                    Log.i(TAG, "post submitted to API." + response.body().toString());
+                   // showResponse(response.body().toString());
                     Log.d("adasdasdasdasd",response.body().toString());
                 }
             }
@@ -60,13 +59,6 @@ public class SubirHelper {
                 Log.e(TAG, "Unable to submit post to API.");
             }
         });}
-    }
-
-    public void showResponse(String response) {
-        if(mResponseTv.getVisibility() == View.GONE) {
-            mResponseTv.setVisibility(View.VISIBLE);
-        }
-        mResponseTv.setText(response);
     }
 
     private boolean isOnline() {

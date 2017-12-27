@@ -1,5 +1,6 @@
 package com.friendlypos.principal.activity;
 
+import android.Manifest;
 import android.app.ActivityManager;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -8,6 +9,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -29,6 +31,7 @@ import com.friendlypos.application.util.Functions;
 import com.friendlypos.application.util.PrinterFunctions;
 import com.friendlypos.distribucion.activity.DistribucionActivity;
 import com.friendlypos.distribucion.modelo.Facturas;
+import com.friendlypos.distribucion.modelo.Venta;
 import com.friendlypos.login.activity.LoginActivity;
 import com.friendlypos.login.modelo.Usuarios;
 import com.friendlypos.login.util.SessionPrefes;
@@ -44,6 +47,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import io.realm.Realm;
+import io.realm.RealmQuery;
 import io.realm.RealmResults;
 
 import static com.friendlypos.R.id.btn_descargar_datosempresa;
@@ -84,6 +88,19 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
     DescargasHelper download1;
     SubirHelper subir1;
     String usuer;
+    String idUsuario;
+
+    private int descargaDatosEmpresa;
+    private int cambioDatosEmpresa = 0;
+
+    public int getDescargaDatosEmpresa() {
+        return descargaDatosEmpresa;
+    }
+
+    public void setDescargaDatosEmpresa(int descargaDatosEmpresa) {
+        this.descargaDatosEmpresa = descargaDatosEmpresa;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,11 +109,11 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         networkStateChangeReceiver = new NetworkStateChangeReceiver();
-        
+        ActivityCompat.requestPermissions(MenuPrincipal.this, new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, 123);
         session = new SessionPrefes(getApplicationContext());
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         download1 = new DescargasHelper(MenuPrincipal.this);
-//        subir1 = new SubirHelper(MenuPrincipal.this);
+        subir1 = new SubirHelper(MenuPrincipal.this);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
             this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -115,6 +132,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
            Realm realm = Realm.getDefaultInstance();
             Usuarios usuarios = realm.where(Usuarios.class).equalTo("email", usuer).findFirst();
             String nombreUsuario = usuarios.getUsername();
+            idUsuario = usuarios.getId();
             Log.d("userasd", nombreUsuario);
             txtNombreUsuario.setText(nombreUsuario);
             realm.close();
@@ -145,16 +163,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                     }
                 }
             }
-        }/*else{
-          //  return null;
-            Toast.makeText(getApplicationContext(),"dasda", Toast.LENGTH_LONG).show();
-            Log.i("adsdsda", "Bluetooth not supported");
-            // Show proper message here
-            //finish();
-
-            //TODO MUESTRA UN DIALOG DE ERROR
         }
-    }*/
 
     @Override
     public void onBackPressed() {
@@ -175,7 +184,6 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
     public void showPopup(View view) {
         PopupMenu popup = new PopupMenu(MenuPrincipal.this, view);
         try {
-            // Reflection apis to enforce show icon
             Field[] fields = popup.getClass().getDeclaredFields();
             for (Field field : fields) {
                 if (field.getName().equals(POPUP_CONSTANT)) {
@@ -193,19 +201,6 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
         }
         popup.getMenuInflater().inflate(R.menu.popup_menu, popup.getMenu());
         popup.setOnMenuItemClickListener(this);
-        Menu popupMenu = popup.getMenu();
-
-       /* if (bloquear == 0) {
-            //bloqueados
-            popupMenu.findItem(R.id.btn_descargar_catalogo).setEnabled(false);
-            popupMenu.findItem(R.id.btn_descargar_inventario).setEnabled(false);
-
-        }
-        else if (bloquear == 1) {
-            //desbloqueados
-            popupMenu.findItem(R.id.btn_descargar_catalogo).setEnabled(true);
-            popupMenu.findItem(R.id.btn_descargar_inventario).setEnabled(true);
-        }*/
         popup.show();
     }
 
@@ -219,7 +214,8 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                     MenuPrincipal.this).setPositiveButton("Si", new DialogInterface.OnClickListener() {
 
                     public void onClick(DialogInterface dialog, int which) {
-                        // Write your code here to execute after dialog closed
+                        cambioDatosEmpresa = 0;
+                        session.setPrefDescargaDatos(cambioDatosEmpresa);
                         session.cerrarSesion();
                         finish();
                     }
@@ -228,21 +224,17 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                     "No", new DialogInterface.OnClickListener() {
 
                         public void onClick(DialogInterface dialog, int which) {
-                            // Write your code here to execute after dialog closed
-                            //customer = cust;
                             dialog.cancel();
-                            //new getDataClient().execute();
+
                         }
 
                     }
                 ).create();
 
                 alertDialog.setMessage("Seguro que quiere cerrar Sesion?");
-
-                // Showing Alert Message
                 alertDialog.show();
                 break;
-
+/*
             case btn_descargar_datosempresa:
                 bloquear = 1;
                 Toast.makeText(MenuPrincipal.this, "descargar_datosEmpresa", Toast.LENGTH_SHORT).show();
@@ -253,29 +245,83 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                 if (bloquear == 0){
                     Toast.makeText(MenuPrincipal.this, "Descargar datos de la empresa primero", Toast.LENGTH_LONG).show();
                 }else{
-                Toast.makeText(MenuPrincipal.this, "descargar_catalogo", Toast.LENGTH_SHORT).show();
-                download1.descargarCatalogo(MenuPrincipal.this);}
+                    Toast.makeText(MenuPrincipal.this, "descargar_catalogo", Toast.LENGTH_SHORT).show();
+                    download1.descargarCatalogo(MenuPrincipal.this);}
                 break;
 
             case R.id.btn_descargar_inventario:
                 if (bloquear == 0){
                     Toast.makeText(MenuPrincipal.this, "Descargar datos de la empresa primero", Toast.LENGTH_LONG).show();
                 }else{
-                Toast.makeText(MenuPrincipal.this, "descargar_inventario", Toast.LENGTH_SHORT).show();
-                download1.descargarInventario(MenuPrincipal.this);}
+                    Toast.makeText(MenuPrincipal.this, "descargar_inventario", Toast.LENGTH_SHORT).show();
+                    download1.descargarInventario(MenuPrincipal.this);}
+                break;
+*/
+            case btn_descargar_datosempresa:
+                cambioDatosEmpresa = session.getPrefDescargaDatos();
+                //cambioDatosEmpresa = getDescargaDatosEmpresa();
+
+                if (cambioDatosEmpresa == 0) {
+                Toast.makeText(MenuPrincipal.this, "descargar_datosEmpresa", Toast.LENGTH_SHORT).show();
+                download1.descargarDatosEmpresa(MenuPrincipal.this);
+                    cambioDatosEmpresa = 1;
+                    session.setPrefDescargaDatos(cambioDatosEmpresa);
+                }else{
+                    Toast.makeText(MenuPrincipal.this, "Ya los datos están descargados", Toast.LENGTH_LONG).show();
+                }
+
+
+
+              //  setDescargaDatosEmpresa(cambioDatosEmpresa);
+                break;
+
+            case R.id.btn_descargar_catalogo:
+              //  cambioDatosEmpresa = getDescargaDatosEmpresa();
+                cambioDatosEmpresa = session.getPrefDescargaDatos();
+
+                    if (cambioDatosEmpresa == 1) {
+                        Toast.makeText(MenuPrincipal.this, "descargar_catalogo", Toast.LENGTH_SHORT).show();
+                        download1.descargarCatalogo(MenuPrincipal.this);
+
+                    } else {
+                        Toast.makeText(MenuPrincipal.this, "Descargar datos de la empresa primero", Toast.LENGTH_LONG).show();
+                    }
+                break;
+
+            case R.id.btn_descargar_inventario:
+                cambioDatosEmpresa = session.getPrefDescargaDatos();
+               // cambioDatosEmpresa = getDescargaDatosEmpresa();
+
+                    if (cambioDatosEmpresa == 1) {
+                        Toast.makeText(MenuPrincipal.this, "descargar_inventario", Toast.LENGTH_SHORT).show();
+                        download1.descargarInventario(MenuPrincipal.this);
+
+                    } else {
+                        Toast.makeText(MenuPrincipal.this, "Descargar datos de la empresa primero", Toast.LENGTH_LONG).show();
+                    }
+
                 break;
 
             case R.id.btn_subir_ventas:
-
-/*
                 //TODO SABER COMO TENER QUE SUBIR LOS DATOS, SI UNO X UNO O TODOS DE UN SOLO.
+
                 Realm realm = Realm.getDefaultInstance();
-                final RealmResults<Facturas> facturas1 = realm.where(Facturas.class).findAll();
-                for (int i = 0; i < facturas1.size(); i++) {
+
+                RealmQuery<Facturas> query = realm.where(Facturas.class).equalTo("aplicada", 1);
+                final RealmResults<Facturas> facturas1 = query.findAll();
+
+                Log.d("qweqweq", facturas1.toString());
+                Log.d("qweqweq2", facturas1.get(0)+ "");
+
+                subir1.sendPost(facturas1.get(0));
+
+
+             /*   for (int i = 0; i < facturas1.size(); i++) {
                     subir1.sendPost(facturas1.get(i));
-                }
-*/
+                }*/
+
                 Toast.makeText(MenuPrincipal.this, "subir_ventas", Toast.LENGTH_SHORT).show();
+                realm.close();
                 break;
 
             case R.id.btn_devolver_inventario:

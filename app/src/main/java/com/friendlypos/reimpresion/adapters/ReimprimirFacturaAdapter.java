@@ -79,11 +79,13 @@ public class ReimprimirFacturaAdapter extends RecyclerView.Adapter<ReimprimirFac
         cantidadPivot = realm.where(Pivot.class).equalTo("invoice_id", venta.getInvoice_id()).count();
         String numeracionFactura = facturas.getNumeration();
         String fantasyCliente = clientes.getFantasyName();
+        String fecha1 = facturas.getDate();
+        String hora1 = facturas.getTimes();
         String aNombreDe = venta.getCustomer_name();
         double totalFactura = Double.parseDouble(facturas.getTotal());
 
         holder.txt_reimprimir_factura_numeracion.setText(numeracionFactura);
-        holder.txt_reimprimir_factura_fechahora.setText(Functions.getDate() + " " + Functions.get24Time());
+        holder.txt_reimprimir_factura_fechahora.setText(fecha1 + " " + hora1);
         holder.txt_reimprimir_factura_fantasyname.setText(fantasyCliente);
         holder.txt_reimprimir_factura_anombrede.setText(aNombreDe);
 

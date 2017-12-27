@@ -3,11 +3,15 @@ import android.app.ProgressDialog;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,6 +23,7 @@ import com.friendlypos.login.util.SessionPrefes;
 import com.friendlypos.principal.adapters.ClientesAdapter;
 import com.friendlypos.principal.adapters.ProductosAdapter;
 import com.friendlypos.application.interfaces.RequestInterface;
+import com.friendlypos.principal.modelo.Clientes;
 import com.friendlypos.principal.modelo.Productos;
 import com.friendlypos.principal.modelo.ProductosResponse;
 
@@ -35,7 +40,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ProductosActivity extends AppCompatActivity {
+public class ProductosActivity extends AppCompatActivity implements SearchView.OnQueryTextListener{
 
 
     @Bind(R.id.toolbar)
@@ -96,5 +101,58 @@ public class ProductosActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
+
+        final MenuItem item = menu.findItem(R.id.action_search);
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
+        searchView.setOnQueryTextListener(this);
+
+        MenuItemCompat.setOnActionExpandListener(item,
+                new MenuItemCompat.OnActionExpandListener() {
+                    @Override
+                    public boolean onMenuItemActionCollapse(MenuItem item) {
+                        // Do something when collapsed
+                        adapter.setFilter(getList());
+                        return true; // Return true to collapse action view
+                    }
+
+                    @Override
+                    public boolean onMenuItemActionExpand(MenuItem item) {
+                        // Do something when expanded
+                        return true; // Return true to expand action view
+                    }
+                });
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        final List<Productos> filteredModelList = filter(getList(), newText);
+        adapter.setFilter(filteredModelList);
+        return true;
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+
+    private List<Productos> filter(List<Productos> models, String query) {
+        query = query.toLowerCase();
+
+        final List<Productos> filteredModelList = new ArrayList<>();
+        for (Productos model : models) {
+            final String text = model.getDescription().toLowerCase();
+            if (text.contains(query)) {
+                filteredModelList.add(model);
+            }
+        }
+        return filteredModelList;
     }
 }
