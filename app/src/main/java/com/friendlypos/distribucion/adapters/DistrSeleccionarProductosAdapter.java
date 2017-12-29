@@ -113,7 +113,7 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
     }
 
 
-    public void addProduct(final int inventario_id, final String producto_id, final Double cantidadDisponible, String Precio1, String Precio2, String Precio3, String Precio4, String Precio5) {
+    public void addProduct(final int inventario_id, final String producto_id, final Double cantidadDisponible, final String description, String Precio1, String Precio2, String Precio3, String Precio4, String Precio5) {
 
         final String idFacturaSeleccionada = (activity).getInvoiceId();
         Log.d("idFacturaSeleccionada", idFacturaSeleccionada + "");
@@ -125,6 +125,9 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
         alertDialogBuilder.setView(promptView);
+
+        final TextView txtNombreProducto = (TextView) promptView.findViewById(R.id.txtNombreProducto);
+        txtNombreProducto.setText(description);
 
         final TextView label = (TextView) promptView.findViewById(R.id.promtClabel);
         label.setText("Escriba una cantidad maxima de " + cantidadDisponible + " minima de 1");
@@ -383,8 +386,16 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
 
                     Double ProductoAmount = Double.valueOf(clickedDataItem.getAmount_dist());
 
+                    Realm realm1 = Realm.getDefaultInstance();
+                    Productos producto = realm1.where(Productos.class).equalTo("id", ProductoID).findFirst();
+
+
+                    String description = producto.getDescription();
+
+                    realm1.close();
+
                     Toast.makeText(view.getContext(), "You clicked " + ProductoID, Toast.LENGTH_SHORT).show();
-                    addProduct(InventarioID, ProductoID, ProductoAmount, precio, precio2, precio3, precio4, precio5);
+                    addProduct(InventarioID, ProductoID, ProductoAmount, description, precio, precio2, precio3, precio4, precio5);
 
                 }
             });
