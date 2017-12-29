@@ -122,20 +122,23 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
 
         }
         realm3.close();
+/*
+        if(inventario.getAmount().equals("0")){
 
-
+            holder.cardView.setVisibility(View.GONE);
+        }else{
+*/
         holder.fillData(producto);
-
         holder.txt_producto_factura_nombre.setText(description);
 
         holder.txt_producto_factura_nombre.setText(description);
         holder.txt_producto_factura_marca.setText("Marca: " + marca2);
         holder.txt_producto_factura_tipo.setText("Tipo: " + tipoProducto);
         holder.txt_producto_factura_precio.setText(precio);
-        holder.txt_producto_factura_disponible.setText("Disp: " + inventario.getAmount_dist());
-        holder.txt_producto_factura_seleccionado.setText("Selec: " + "0.0");
+        holder.txt_producto_factura_disponible.setText("Disp: " + inventario.getAmount());
         holder.cardView.setBackgroundColor(selected_position == position ? Color.parseColor("#607d8b") : Color.parseColor("#009688"));
     }
+    //}
 
 
     public void addProduct(final int inventario_id, final String producto_id, final Double cantidadDisponible, final String description, String Precio1, String Precio2, String Precio3, String Precio4, String Precio5) {
@@ -279,7 +282,7 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
                                     public void execute(Realm realm3) {
 
                                         Inventario inv_actualizado = realm3.where(Inventario.class).equalTo("id", inventario_id).findFirst();
-                                        inv_actualizado.setAmount_dist(String.valueOf(nuevoAmount));
+                                        inv_actualizado.setAmount(String.valueOf(nuevoAmount));
 
                                         realm3.insertOrUpdate(inv_actualizado); // using insert API
                                     }
@@ -384,7 +387,6 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
             txt_producto_factura_precio = (TextView) view.findViewById(R.id.txt_producto_factura_precio);
             txt_producto_factura_disponible = (TextView) view.findViewById(R.id.txt_producto_factura_disponible);
             txt_producto_factura_seleccionado = (TextView) view.findViewById(R.id.txt_producto_factura_seleccionado);
-
         }
 
         void fillData(final Productos producto) {
@@ -410,7 +412,7 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
                     String precio4 = producto.getSale_price4();
                     String precio5 = producto.getSale_price5();
 
-                    Double ProductoAmount = Double.valueOf(clickedDataItem.getAmount_dist());
+                    Double ProductoAmount = Double.valueOf(clickedDataItem.getAmount());
 
                     Realm realm1 = Realm.getDefaultInstance();
                     Productos producto = realm1.where(Productos.class).equalTo("id", ProductoID).findFirst();

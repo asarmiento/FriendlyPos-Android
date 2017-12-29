@@ -87,7 +87,7 @@ public class DistSelecProductoFragment extends BaseFragment implements SearchVie
 
     private List<Inventario> getListProductos() {
         realm = Realm.getDefaultInstance();
-        RealmQuery<Inventario> query = realm.where(Inventario.class);
+        RealmQuery<Inventario> query = realm.where(Inventario.class).notEqualTo("amount", "0");
         RealmResults<Inventario> result1 = query.findAll();
 
         return result1;
