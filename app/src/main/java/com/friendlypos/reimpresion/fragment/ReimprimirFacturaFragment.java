@@ -1,29 +1,16 @@
 package com.friendlypos.reimpresion.fragment;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.friendlypos.R;
-import com.friendlypos.application.util.Functions;
-import com.friendlypos.distribucion.activity.DistribucionActivity;
-import com.friendlypos.distribucion.adapters.DistrClientesAdapter;
-import com.friendlypos.distribucion.adapters.DistrResumenAdapter;
 import com.friendlypos.distribucion.fragment.BaseFragment;
-import com.friendlypos.distribucion.fragment.DistSelecProductoFragment;
-import com.friendlypos.distribucion.modelo.Facturas;
-import com.friendlypos.distribucion.modelo.Pivot;
-import com.friendlypos.distribucion.modelo.Venta;
-import com.friendlypos.principal.modelo.Productos;
+import com.friendlypos.distribucion.modelo.sale;
 import com.friendlypos.reimpresion.activity.ReimprimirActivity;
 import com.friendlypos.reimpresion.adapters.ReimprimirFacturaAdapter;
 
@@ -42,7 +29,7 @@ public class ReimprimirFacturaFragment extends BaseFragment {
 
     private ReimprimirFacturaAdapter adapter;
 
-    RealmResults<Venta> result1;
+    RealmResults<sale> result1;
     Realm realm;
 
     public static ReimprimirFacturaFragment getInstance() {
@@ -81,11 +68,11 @@ public class ReimprimirFacturaFragment extends BaseFragment {
 
     }
 
-    private List<Venta> getListClientes(){
+    private List<sale> getListClientes(){
         realm = Realm.getDefaultInstance();
 
-        RealmQuery<Venta> query = realm.where(Venta.class).equalTo("aplicada", 1);
-        RealmResults<Venta> result1 = query.findAll();
+        RealmQuery<sale> query = realm.where(sale.class).equalTo("aplicada", 1);
+        RealmResults<sale> result1 = query.findAll();
 
         return result1;
     }

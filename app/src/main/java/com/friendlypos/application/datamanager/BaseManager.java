@@ -42,7 +42,7 @@ public class BaseManager {
     public static RequestInterface getApi() {
 
             properties = new Properties(getApplicationContext());
-            nombreURL = properties.getUrlWebsrv();
+            nombreURL = "http://"+properties.getUrlWebsrv();
 
             Gson gson = new GsonBuilder()
                     .setExclusionStrategies(new ExclusionStrategy() {

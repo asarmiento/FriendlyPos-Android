@@ -2,9 +2,6 @@ package com.friendlypos.distribucion.modelo;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
@@ -13,45 +10,99 @@ import io.realm.annotations.PrimaryKey;
  * Created by DelvoM on 02/11/2017.
  */
 
-public class Facturas extends RealmObject {
+public class invoice extends RealmObject {
 //TODO REVISAR ESTAS KEYS
     @PrimaryKey
     private String id;
 
+    private boolean result;
+    private String code;
+    private String messages;
+
+    @SerializedName("branch_office_id")
     private String branch_office_id;
+    @SerializedName("numeration")
     private String numeration;
+    @SerializedName("longitud")
     private double longitud;
+    @SerializedName("latitud")
     private double latitud;
+    @SerializedName("date")
     private String date;
+    @SerializedName("times")
     private String times;
+    @SerializedName("date_presale")
     private String date_presale;
+    @SerializedName("time_presale")
     private String time_presale;
+    @SerializedName("due_date")
     private String due_date;
+    @SerializedName("subtotal")
     private String subtotal;
+    @SerializedName("subtotal_taxed")
     private String subtotal_taxed;
+    @SerializedName("subtotal_exempt")
     private String subtotal_exempt;
+    @SerializedName("discount")
     private String discount;
+    @SerializedName("percent_discount")
     private String percent_discount;
+    @SerializedName("tax")
     private String tax;
+    @SerializedName("total")
     private String total;
+    @SerializedName("changing")
     private String changing;
+    @SerializedName("note")
     private String note;
+    @SerializedName("canceled")
     private String canceled;
+    @SerializedName("paid_up")
     private String paid_up;
+    @SerializedName("paid")
     private String paid;
+    @SerializedName("created_at")
     private String created_at;
+    @SerializedName("user_id")
     private String user_id;
+    @SerializedName("user_id_applied")
     private String user_id_applied;
+    @SerializedName("invoice_type_id")
     private String invoice_type_id;
+    @SerializedName("payment_method_id")
     private String payment_method_id;
     @SerializedName("sale")
-    private Venta venta;
+    private sale sale;
     @SerializedName("product_invoice")
     private RealmList<Pivot> productofacturas;
 
 
-
     private int aplicada = 0;
+    private int subida = 0;
+
+    public boolean isResult() {
+        return result;
+    }
+
+    public void setResult(boolean result) {
+        this.result = result;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getMessage() {
+        return messages;
+    }
+
+    public void setMessage(String message) {
+        this.messages = message;
+    }
 
     public String getId() {
         return id;
@@ -269,12 +320,12 @@ public class Facturas extends RealmObject {
         this.payment_method_id = payment_method_id;
     }
 
-   public Venta getVenta() {
-        return venta;
+   public sale getSale() {
+        return sale;
     }
 
-    public void setVenta(Venta venta) {
-        this.venta = venta;
+    public void setSale(sale sale) {
+        this.sale = sale;
     }
 
     public RealmList<Pivot> getProductofactura() {
@@ -293,8 +344,16 @@ public class Facturas extends RealmObject {
         this.aplicada = aplicada;
     }
 
+    public int getSubida() {
+        return subida;
+    }
+
+    public void setSubida(int subida) {
+        this.subida = subida;
+    }
+
     public String toString() {
-        return "Facturas{" +
+        return "invoice{" +
                 "id='" + id + '\'' +
                 ", branch_office_id='" + branch_office_id + '\'' +
                 ", numeration='" + numeration + '\'' +
@@ -322,8 +381,13 @@ public class Facturas extends RealmObject {
                 ", user_id_applied='" + user_id_applied + '\'' +
                 ", invoice_type_id='" + invoice_type_id + '\'' +
                 ", payment_method_id='" + payment_method_id + '\'' +
-                ", venta=" + venta +
+                ", sale=" + sale +
                 ", productofacturas=" + productofacturas +
+                ", result='" + result + '\'' +
+                ", code='" + code + '\'' +
+                ", message='" + messages + '\'' +
+                ", aplicada='" + aplicada + '\'' +
+                ", subida='" + subida + '\'' +
                 '}';
     }
 }

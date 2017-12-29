@@ -1,7 +1,8 @@
 package com.friendlypos.application.interfaces;
 
 
-import com.friendlypos.distribucion.modelo.Facturas;
+import com.friendlypos.distribucion.modelo.EnviarFactura;
+import com.friendlypos.distribucion.modelo.invoice;
 import com.friendlypos.distribucion.modelo.FacturasResponse;
 import com.friendlypos.distribucion.modelo.InventarioResponse;
 import com.friendlypos.distribucion.modelo.MarcasResponse;
@@ -16,11 +17,9 @@ import com.friendlypos.principal.modelo.SysconfResponse;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
-import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
-import retrofit2.http.Query;
 
 public interface RequestInterface {
 
@@ -56,6 +55,6 @@ public interface RequestInterface {
 
     // TODO DEFINIR CUAL ES EL KEY PARA ENVIAR (KEY, VALUE)
     @POST("/api/upload-invoices")
-    Call<Facturas> savePost(@Body Facturas facturas, @Header("Authorization") String token);
+    Call<invoice> savePost(@Body EnviarFactura invoice, @Header("Authorization") String token);
 
 }

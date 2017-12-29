@@ -4,9 +4,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
-import android.os.AsyncTask;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -23,26 +20,22 @@ import com.friendlypos.R;
 import com.friendlypos.application.util.Functions;
 import com.friendlypos.application.util.PrinterFunctions;
 import com.friendlypos.distribucion.activity.DistribucionActivity;
-import com.friendlypos.distribucion.fragment.DistSelecProductoFragment;
-import com.friendlypos.distribucion.modelo.Facturas;
+import com.friendlypos.distribucion.modelo.invoice;
 import com.friendlypos.distribucion.modelo.Inventario;
 import com.friendlypos.distribucion.modelo.Pivot;
-import com.friendlypos.distribucion.modelo.Venta;
+import com.friendlypos.distribucion.modelo.sale;
 import com.friendlypos.principal.modelo.Clientes;
-import com.friendlypos.principal.modelo.Productos;
 
 import java.util.List;
 
 import io.realm.Realm;
-import io.realm.RealmList;
 import io.realm.RealmResults;
 
-import static android.R.attr.handle;
 import static java.lang.String.valueOf;
 
 public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdapter.CharacterViewHolder> {
 
-    public List<Venta> contentList;
+    public List<sale> contentList;
     private DistribucionActivity activity;
     //private boolean isSelected = false;
     private int selected_position = -1;
@@ -54,7 +47,7 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
     int nextId;
     int tabCliente;
 
-    public DistrClientesAdapter(Context context, DistribucionActivity activity, List<Venta> contentList) {
+    public DistrClientesAdapter(Context context, DistribucionActivity activity, List<sale> contentList) {
         this.contentList = contentList;
         this.activity = activity;
         this.QuickContext = context;
@@ -70,18 +63,18 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
 
     @Override
     public void onBindViewHolder(CharacterViewHolder holder, final int position) {
-        final Venta venta = contentList.get(position);
+        final sale sale = contentList.get(position);
 
         Realm realm = Realm.getDefaultInstance();
 
 
-        Clientes clientes = realm.where(Clientes.class).equalTo("id", venta.getCustomer_id()).findFirst();
-        final Facturas facturas = realm.where(Facturas.class).equalTo("id", venta.getInvoice_id()).findFirst();
+        Clientes clientes = realm.where(Clientes.class).equalTo("id", sale.getCustomer_id()).findFirst();
+        final invoice invoice = realm.where(com.friendlypos.distribucion.modelo.invoice.class).equalTo("id", sale.getInvoice_id()).findFirst();
 
         final String cardCliente = clientes.getCard();
         String companyCliente = clientes.getCompanyName();
         String fantasyCliente = clientes.getFantasyName();
-        String numeracionFactura = facturas.getNumeration();
+        String numeracionFactura = invoice.getNumeration();
 
         holder.txt_cliente_factura_card.setText(cardCliente);
         holder.txt_cliente_factura_fantasyname.setText(fantasyCliente);
@@ -102,7 +95,7 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
             @Override
             public void onClick(View v) {
                 try {
-                    PrinterFunctions.imprimirProductosDistrSelecCliente(venta, QuickContext);
+                    PrinterFunctions.imprimirProductosDistrSelecCliente(sale, QuickContext);
                 }
                 catch (Exception e) {
                     Functions.CreateMessage(QuickContext, "Error", e.getMessage() + "\n" + e.getStackTrace().toString());
@@ -160,17 +153,17 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
                                 selected_position = getAdapterPosition();
                                 notifyItemChanged(selected_position);
 
-                                Venta clickedDataItem = contentList.get(pos);
+                                sale clickedDataItem = contentList.get(pos);
                                 facturaID = clickedDataItem.getInvoice_id();
                                 clienteID = clickedDataItem.getCustomer_id();
                                 cardView.setBackgroundColor(selected_position == pos ? Color.parseColor("#607d8b") : Color.parseColor("#009688"));
 
                                 Realm realm = Realm.getDefaultInstance();
-                                Facturas facturas = realm.where(Facturas.class).equalTo("id", facturaID).findFirst();
+                                invoice invoice = realm.where(com.friendlypos.distribucion.modelo.invoice.class).equalTo("id", facturaID).findFirst();
                                 Clientes clientes = realm.where(Clientes.class).equalTo("id", clienteID).findFirst();
                                 //String facturaid = String.valueOf(realm.where(ProductoFactura.class).equalTo("id", facturaID).findFirst().getId());
                                 facturaid1 = realm.where(Pivot.class).equalTo("invoice_id", facturaID).findAll();
-                                String metodoPago = facturas.getPayment_method_id();
+                                String metodoPago = invoice.getPayment_method_id();
                                 String creditoLimiteCliente = clientes.getCreditLimit();
                                 String dueCliente = clientes.getDue();
                                 realm.close();
@@ -279,7 +272,7 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
                         realm4.executeTransaction(new Realm.Transaction() {
                             @Override
                             public void execute(Realm realm4) {
-                                RealmResults<Venta> result = realm4.where(Venta.class).equalTo("invoice_id", facturaID).findAll();
+                                RealmResults<sale> result = realm4.where(sale.class).equalTo("invoice_id", facturaID).findAll();
                                 result.deleteAllFromRealm();
                                // Log.d("RealmResultsVenta", result + "");
                                 realm4.close();

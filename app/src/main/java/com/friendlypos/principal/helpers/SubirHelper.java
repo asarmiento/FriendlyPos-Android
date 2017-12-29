@@ -3,13 +3,13 @@ package com.friendlypos.principal.helpers;
 import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
-import android.view.View;
 import android.widget.TextView;
 
 import com.friendlypos.app.broadcastreceiver.NetworkStateChangeReceiver;
 import com.friendlypos.application.datamanager.BaseManager;
 import com.friendlypos.application.interfaces.RequestInterface;
-import com.friendlypos.distribucion.modelo.Facturas;
+import com.friendlypos.distribucion.modelo.EnviarFactura;
+import com.friendlypos.distribucion.modelo.invoice;
 import com.friendlypos.login.util.SessionPrefes;
 
 import io.realm.Realm;
@@ -28,8 +28,6 @@ public class SubirHelper {
     private NetworkStateChangeReceiver networkStateChangeReceiver;
     private Activity activity;
     private Context mContext;
-    private Realm realm, realm2, realmSysconfig, realmMarcas, realmTipoProducto,realmUsuarios, realmMetodoPago;
-    private TextView mResponseTv;
     private RequestInterface mAPIService;
 
     public SubirHelper(Activity activity) {
@@ -39,23 +37,23 @@ public class SubirHelper {
         mAPIService = BaseManager.getApi();
     }
 
-    public void sendPost(Facturas facturaQuery) {
+    public void sendPost(EnviarFactura facturaQuery) {
         String token = "Bearer " + SessionPrefes.get(mContext).getToken();
         Log.d("tokenCliente", token + " ");
         if (isOnline()) {
+            Log.d("factura1", facturaQuery + " ");
+        mAPIService.savePost(facturaQuery, token).enqueue(new Callback<invoice>() {
 
-        mAPIService.savePost(facturaQuery, token).enqueue(new Callback<Facturas>() {
             @Override
-            public void onResponse(Call<Facturas> call, Response<Facturas> response) {
-                Log.i(TAG, "mamon " + response.body());
+            public void onResponse(Call<invoice> call, Response<invoice> response) {
                 if(response.isSuccessful()) {
                    // showResponse(response.body().toString());
-                    Log.d("adasdasdasdasd",response.body().toString());
+                    Log.d("respuestaFactura",response.body().toString());
                 }
             }
 
             @Override
-            public void onFailure(Call<Facturas> call, Throwable t) {
+            public void onFailure(Call<invoice> call, Throwable t) {
                 Log.e(TAG, "Unable to submit post to API.");
             }
         });}

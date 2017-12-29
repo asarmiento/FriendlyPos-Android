@@ -27,7 +27,7 @@ public class ConfiguracionActivity extends AppCompatActivity {
         properties = new Properties(this);
         webServiceUrl = (TextView) findViewById(R.id.txtwebservice);
 
-        nombreURL =  properties.getUrlWebsrv();
+        nombreURL = properties.getUrlWebsrv();
 
         webServiceUrl.setText(nombreURL);
 
@@ -47,14 +47,16 @@ public class ConfiguracionActivity extends AppCompatActivity {
 
     private void save() {
         if (webServiceUrl.getText().toString().equals(nombreURL)) {
-            Toast.makeText(this, nombreURL + "",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,"No se mismo " + nombreURL + "",Toast.LENGTH_SHORT).show();
             Functions.createNotification(this, 100, "Cambiando el WebService", "No se modifico el webservice ya que es el mismo");
         } else {
             if (Functions.checkURL(webServiceUrl.getText().toString())) {
 
-                properties.setUrlWebsrv(("http://" +webServiceUrl.getText().toString()));
+                properties.setUrlWebsrv((webServiceUrl.getText().toString()));
+                Toast.makeText(this,"WebService Mod " + nombreURL + "",Toast.LENGTH_SHORT).show();
                 Functions.createNotification(this, 100, "Cambiando el WebService", "WebService Modificado Correctamente");
             } else {
+                Toast.makeText(this,"No se mod url " + nombreURL + "",Toast.LENGTH_SHORT).show();
                 Functions.createNotification(this, 100, "Cambiando el WebService", "No se modifico el webservice ya el Url Es invalido");
             }
         }

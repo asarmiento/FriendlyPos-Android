@@ -1,6 +1,5 @@
 package com.friendlypos.distribucion.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -14,12 +13,11 @@ import android.widget.Toast;
 
 import com.friendlypos.R;
 import com.friendlypos.app.broadcastreceiver.BluetoothStateChangeReceiver;
-import com.friendlypos.app.broadcastreceiver.NetworkStateChangeReceiver;
 import com.friendlypos.application.util.Functions;
 import com.friendlypos.application.util.PrinterFunctions;
 import com.friendlypos.distribucion.activity.DistribucionActivity;
-import com.friendlypos.distribucion.modelo.Facturas;
-import com.friendlypos.distribucion.modelo.Venta;
+import com.friendlypos.distribucion.modelo.invoice;
+import com.friendlypos.distribucion.modelo.sale;
 import com.friendlypos.distribucion.util.GPSTracker;
 import com.friendlypos.login.modelo.Usuarios;
 import com.friendlypos.login.util.SessionPrefes;
@@ -64,7 +62,7 @@ public class DistTotalizarFragment extends BaseFragment  {
 
     private static int apply_done = 0;
     int slecTAB;
-    Venta venta_actualizada;
+    sale sale_actualizada;
 
     GPSTracker gps;
     BluetoothStateChangeReceiver bluetoothStateChangeReceiver;
@@ -185,7 +183,7 @@ public class DistTotalizarFragment extends BaseFragment  {
                         try {
 
                             if(bluetoothStateChangeReceiver.isBluetoothAvailable()== true) {
-                                PrinterFunctions.imprimirFacturaDistrTotal(venta_actualizada, getActivity(), 1);
+                                PrinterFunctions.imprimirFacturaDistrTotal(sale_actualizada, getActivity(), 1);
                                 Toast.makeText(getActivity(), "imprimir liquidacion", Toast.LENGTH_SHORT).show();
                             }
                             else if(bluetoothStateChangeReceiver.isBluetoothAvailable() == false){
@@ -271,7 +269,7 @@ public class DistTotalizarFragment extends BaseFragment  {
 
             @Override
             public void execute(Realm realm2) {
-                Facturas factura_actualizada = realm2.where(Facturas.class).equalTo("id", facturaId).findFirst();
+                invoice factura_actualizada = realm2.where(invoice.class).equalTo("id", facturaId).findFirst();
                 Realm realm = Realm.getDefaultInstance();
                 usuer = session.getUsuarioPrefs();
                 Usuarios usuarios = realm.where(Usuarios.class).equalTo("email", usuer).findFirst();
@@ -297,7 +295,7 @@ public class DistTotalizarFragment extends BaseFragment  {
                 factura_actualizada.setNote(notes.getText().toString());
                 factura_actualizada.setCanceled("1");
                 factura_actualizada.setAplicada(1);
-
+                factura_actualizada.setSubida(1);
 
                 realm2.insertOrUpdate(factura_actualizada);
                 realm2.close();
@@ -313,14 +311,15 @@ public class DistTotalizarFragment extends BaseFragment  {
 
             @Override
             public void execute(Realm realm3) {
-                venta_actualizada = realm3.where(Venta.class).equalTo("id", facturaId).findFirst();
+                sale_actualizada = realm3.where(sale.class).equalTo("id", facturaId).findFirst();
                 String nombre = client_name.getText().toString();
-                venta_actualizada.setCustomer_name(nombre);
-                venta_actualizada.setSale_type("1");
-                venta_actualizada.setUpdated_at(Functions.getDate() + " " + Functions.get24Time());
-                venta_actualizada.setAplicada(1);
+                sale_actualizada.setCustomer_name(nombre);
+                sale_actualizada.setSale_type("1");
+                sale_actualizada.setUpdated_at(Functions.getDate() + " " + Functions.get24Time());
+                sale_actualizada.setAplicada(1);
+                sale_actualizada.setSubida(1);
 
-                realm3.insertOrUpdate(venta_actualizada);
+                realm3.insertOrUpdate(sale_actualizada);
                 realm3.close();
             }
         });

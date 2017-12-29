@@ -10,32 +10,27 @@ import android.text.Html;
 import android.util.Log;
 import android.widget.Toast;
 import com.friendlypos.application.bluetooth.PrinterService;
-import com.friendlypos.distribucion.modelo.Facturas;
+import com.friendlypos.distribucion.modelo.invoice;
 import com.friendlypos.distribucion.modelo.Pivot;
-import com.friendlypos.distribucion.modelo.Venta;
+import com.friendlypos.distribucion.modelo.sale;
 import com.friendlypos.login.modelo.Usuarios;
 import com.friendlypos.login.util.SessionPrefes;
 import com.friendlypos.principal.modelo.Clientes;
 import com.friendlypos.principal.modelo.Productos;
 import com.friendlypos.principal.modelo.Sysconf;
 
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
+
 import io.realm.Realm;
-import io.realm.RealmList;
 import io.realm.RealmResults;
 
 public class PrinterFunctions {
 
     private static double printSalesCashTotal = 0.0;
 
-    public static void datosImprimirDistrTotal(int type, Venta venta, Context QuickContext, int ptype) {
+    public static void datosImprimirDistrTotal(int type, sale sale, Context QuickContext, int ptype) {
         String stype = "";
         String payment = "";
         String messageC = "";
@@ -44,13 +39,13 @@ public class PrinterFunctions {
 
         Realm realm = Realm.getDefaultInstance();
         Sysconf sysconf = realm.where(Sysconf.class).findFirst();
-        Clientes clientes = realm.where(Clientes.class).equalTo("id", venta.getCustomer_id()).findFirst();
-        Facturas facturas = realm.where(Facturas.class).equalTo("id", venta.getInvoice_id()).findFirst();
-        RealmResults<Pivot> result = realm.where(Pivot.class).equalTo("invoice_id", venta.getInvoice_id()).findAll();
+        Clientes clientes = realm.where(Clientes.class).equalTo("id", sale.getCustomer_id()).findFirst();
+        invoice invoice = realm.where(com.friendlypos.distribucion.modelo.invoice.class).equalTo("id", sale.getInvoice_id()).findFirst();
+        RealmResults<Pivot> result = realm.where(Pivot.class).equalTo("invoice_id", sale.getInvoice_id()).findAll();
         Log.d("FACTPRODTOD", result + "");
         // VARIABLES VENTA
-        String fechayhora = venta.getUpdated_at();
-        String nombreCliente = venta.getCustomer_name();
+        String fechayhora = sale.getUpdated_at();
+        String nombreCliente = sale.getCustomer_name();
 
         // VARIABLES CLIENTES
         final String cardCliente = clientes.getCard();
@@ -60,19 +55,19 @@ public class PrinterFunctions {
         double descuentoCliente = Double.parseDouble(clientes.getFixedDiscount());
 
         // VARIABLES FACTURA
-        String fechaFactura =facturas.getDue_date();
-        String numeracionFactura = facturas.getNumeration();
-        String metodoPago = facturas.getPayment_method_id();
-        String totalGrabado= facturas.getSubtotal_taxed();
-        String totalExento= facturas.getSubtotal_exempt();
-        String totalSubtotal= facturas.getSubtotal();
-        String totalDescuento= facturas.getDiscount();
-        String totalImpuesto= facturas.getTax();
-        String totalTotal= facturas.getTotal();
-        String totalCancelado= facturas.getPaid();
-        String totalVuelto= facturas.getChanging();
-        String totalNotas= facturas.getNote();
-        String idUsuario = facturas.getUser_id();
+        String fechaFactura = invoice.getDue_date();
+        String numeracionFactura = invoice.getNumeration();
+        String metodoPago = invoice.getPayment_method_id();
+        String totalGrabado= invoice.getSubtotal_taxed();
+        String totalExento= invoice.getSubtotal_exempt();
+        String totalSubtotal= invoice.getSubtotal();
+        String totalDescuento= invoice.getDiscount();
+        String totalImpuesto= invoice.getTax();
+        String totalTotal= invoice.getTotal();
+        String totalCancelado= invoice.getPaid();
+        String totalVuelto= invoice.getChanging();
+        String totalNotas= invoice.getNote();
+        String idUsuario = invoice.getUser_id();
 
         Usuarios usuarios = realm.where(Usuarios.class).equalTo("id", idUsuario).findFirst();
 
@@ -152,7 +147,7 @@ public class PrinterFunctions {
                     "------------------------------------------------\r\n" +
                     "! U1 SETLP 7 0 10\r\n" +
 
-                    getPrintDistTotal(venta.getInvoice_id()) +
+                    getPrintDistTotal(sale.getInvoice_id()) +
                     "\r\n" +
 
                     String.format("%20s %-20s", "Subtotal Gravado", totalGrabado) + "\r\n" +
@@ -212,7 +207,7 @@ public class PrinterFunctions {
                     preview += Html.fromHtml("<h1>") +  "#  Descripcion               Codigo" + Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>") +  "Cant     Precio       P.Sug        Total      I" + Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>") +  "------------------------------------------------" + Html.fromHtml("</h1></center><br/>");
-                    preview += Html.fromHtml("<h1>") +    getPrintDistTotal(venta.getInvoice_id()) + Html.fromHtml("</h1></center><br/>");
+                    preview += Html.fromHtml("<h1>") +    getPrintDistTotal(sale.getInvoice_id()) + Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>") +  String.format("%20s %-20s", "Subtotal Gravado", totalGrabado) + Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>") +  String.format("%20s %-20s", "Subtotal Exento", totalExento) + Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>") +  String.format("%20s %-20s", "Subtotal", totalSubtotal) + Html.fromHtml("</h1></center><br/>");
@@ -252,7 +247,7 @@ public class PrinterFunctions {
                     preview += Html.fromHtml("<h1>") +  "#  Descripcion               Codigo" + Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>") +  "Cant     Precio       P.Sug        Total      I" + Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>") +  "------------------------------------------------" + Html.fromHtml("</h1></center><br/>");
-                    preview += Html.fromHtml("<h1>") +    getPrintDistTotal(venta.getInvoice_id()) + Html.fromHtml("</h1></center><br/>");
+                    preview += Html.fromHtml("<h1>") +    getPrintDistTotal(sale.getInvoice_id()) + Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>") +  String.format("%20s %-20s", "Subtotal Gravado", totalGrabado) + Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>") +  String.format("%20s %-20s", "Subtotal Exento", totalExento) + Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>") +  String.format("%20s %-20s", "Subtotal", totalSubtotal) + Html.fromHtml("</h1></center><br/>");
@@ -280,7 +275,7 @@ public class PrinterFunctions {
         }
     }
 
-    public static void imprimirFacturaDistrTotal (final Venta saleB, final Context QuickContext, final int ptype){
+    public static void imprimirFacturaDistrTotal (final sale saleB, final Context QuickContext, final int ptype){
 
         CharSequence colors[] = new CharSequence[]{"Copia Cliente", "Copia Contabilidad", "Copia Archivo"};
         AlertDialog.Builder builder = new AlertDialog.Builder(QuickContext);
@@ -306,7 +301,7 @@ public class PrinterFunctions {
         //}
         }
 
-    private static void imprimirTotalizar(int type, Venta invoices, Context QuickContext, int ptype) {
+    private static void imprimirTotalizar(int type, sale invoices, Context QuickContext, int ptype) {
         try {
             if (invoices != null) {
                 PrinterFunctions.datosImprimirDistrTotal(type, invoices, QuickContext, ptype);
@@ -319,20 +314,20 @@ public class PrinterFunctions {
         }
     }
 
-    public static void datosImprimirProductosSelecClientes(Venta venta, Context QuickContext) {
+    public static void datosImprimirProductosSelecClientes(sale sale, Context QuickContext) {
 
         Realm realm = Realm.getDefaultInstance();
         Sysconf sysconf = realm.where(Sysconf.class).findFirst();
-        Clientes clientes = realm.where(Clientes.class).equalTo("id", venta.getCustomer_id()).findFirst();
-        Facturas facturas = realm.where(Facturas.class).equalTo("id", venta.getInvoice_id()).findFirst();
-        RealmResults<Pivot> result = realm.where(Pivot.class).equalTo("invoice_id", venta.getInvoice_id()).findAll();
+        Clientes clientes = realm.where(Clientes.class).equalTo("id", sale.getCustomer_id()).findFirst();
+        invoice invoice = realm.where(com.friendlypos.distribucion.modelo.invoice.class).equalTo("id", sale.getInvoice_id()).findFirst();
+        RealmResults<Pivot> result = realm.where(Pivot.class).equalTo("invoice_id", sale.getInvoice_id()).findAll();
         Log.d("FACTPRODTOD", result + "");
 
         // VARIABLES CLIENTES
         String companyCliente = clientes.getCompanyName();
 
         // VARIABLES FACTURA
-        String numeracionFactura = facturas.getNumeration();
+        String numeracionFactura = invoice.getNumeration();
 
 
         // VARIABLES SYSCONF
@@ -374,7 +369,7 @@ public class PrinterFunctions {
                     "Cant I\r\n" +
                     "------------------------------------------------\r\n" +
                     "! U1 SETLP 7 0 10\r\n" +
-                    getPrintDistTotal(venta.getInvoice_id()) +
+                    getPrintDistTotal(sale.getInvoice_id()) +
                     "\r\n" +
                     "! U1 SETLP 5 3 70\r\n" +
                     " \n\n" +
@@ -398,7 +393,7 @@ public class PrinterFunctions {
             preview += Html.fromHtml("<h1>") +  "#  Descripcion               Codigo" + Html.fromHtml("</h1></center><br/>");
             preview += Html.fromHtml("<h1>") +  "Cant     I" + Html.fromHtml("</h1></center><br/>");
             preview += Html.fromHtml("<h1>") +  "------------------------------------------------" + Html.fromHtml("</h1></center><br/>");
-            preview += Html.fromHtml("<h1>") +    getPrintDistTotal(venta.getInvoice_id()) + Html.fromHtml("</h1></center><br/>");
+            preview += Html.fromHtml("<h1>") +    getPrintDistTotal(sale.getInvoice_id()) + Html.fromHtml("</h1></center><br/>");
 
             Intent intent2 = new Intent(PrinterService.BROADCAST_CLASS);
             intent2.putExtra(PrinterService.BROADCAST_CLASS + "TO_PRINT", "true");
@@ -407,7 +402,7 @@ public class PrinterFunctions {
         }
     }
 
-    public static void imprimirProductosDistrSelecCliente(final Venta sale, final Context QuickContext) {
+    public static void imprimirProductosDistrSelecCliente(final sale sale, final Context QuickContext) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(QuickContext);
         builder.setTitle("Impresión de Productos?");
@@ -534,15 +529,15 @@ public class PrinterFunctions {
         String currentDateandTime = sdf.format(new Date());
 
         Realm realm = Realm.getDefaultInstance();
-        RealmResults<Facturas> result = realm.where(Facturas.class).equalTo("date", currentDateandTime).findAll();
+        RealmResults<invoice> result = realm.where(invoice.class).equalTo("date", currentDateandTime).findAll();
 
         if (result.isEmpty()) {
-            send = "No hay facturas emitidas";
+            send = "No hay invoice emitidas";
         } else {
             printSalesCashTotal= 0.0;
             for (int i = 0; i < result.size(); i++) {
 
-                List<Facturas> salesList1 = realm.where(Facturas.class).equalTo("date", currentDateandTime).findAll();
+                List<invoice> salesList1 = realm.where(invoice.class).equalTo("date", currentDateandTime).findAll();
 
                 String factNum = salesList1.get(i).getNumeration();
                 String factFecha = salesList1.get(i).getDate();
@@ -570,14 +565,14 @@ public class PrinterFunctions {
         RealmResults<Pivot> result = realm.where(Pivot.class).equalTo("invoice_id", idVenta).findAll();
 
         if (result.isEmpty()) {
-            send = "No hay facturas emitidas";
+            send = "No hay invoice emitidas";
         } else {
            // printSalesCashTotal= 0.0;
             for (int i = 0; i < result.size(); i++) {
 
                 List<Pivot> salesList1 = realm.where(Pivot.class).equalTo("invoice_id", idVenta).findAll();
                 Productos producto = realm.where(Productos.class).equalTo("id", salesList1.get(i).getProduct_id()).findFirst();
-             //   Venta ventas = realm.where(Venta.class).equalTo("invoice_id", salesList1.get(i).getInvoice_id()).findFirst();
+             //   sale ventas = realm.where(sale.class).equalTo("invoice_id", salesList1.get(i).getInvoice_id()).findFirst();
             //    Clientes clientes = realm.where(Clientes.class).equalTo("id", ventas.getCustomer_id()).findFirst();
                 realm.close();
 

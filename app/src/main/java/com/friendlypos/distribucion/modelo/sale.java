@@ -9,7 +9,7 @@ import io.realm.annotations.PrimaryKey;
  * Created by DelvoM on 06/11/2017.
  */
 
-public class Venta extends RealmObject {
+public class sale extends RealmObject {
 
   /*  "sale": {
         "id": 43,
@@ -38,9 +38,10 @@ public class Venta extends RealmObject {
     String updated_at;
     String reserved;
     public Clientes clientes;
-    public Facturas facturas;
+    public com.friendlypos.distribucion.modelo.invoice invoice;
 
     private int aplicada = 0;
+    private int subida = 0;
 
     public String getId() {
         return id;
@@ -138,9 +139,17 @@ public class Venta extends RealmObject {
         this.aplicada = aplicada;
     }
 
+    public int getSubida() {
+        return subida;
+    }
+
+    public void setSubida(int subida) {
+        this.subida = subida;
+    }
+
     @Override
     public String toString() {
-        return "Venta{" +
+        return "sale{" +
                 "id='" + id + '\'' +
                 ", invoice_id='" + invoice_id + '\'' +
                 ", customer_id='" + customer_id + '\'' +

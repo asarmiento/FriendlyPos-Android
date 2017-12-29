@@ -14,7 +14,7 @@ public class VentaResponse {
     private String code;
     private String message;
     @SerializedName("sale")
-    private List<Venta> venta;
+    private List<sale> sale;
 
     public boolean isResult() {
         return result;
@@ -40,11 +40,11 @@ public class VentaResponse {
         this.message = message;
     }
 
-  public List<Venta> getVenta() {
-        return venta;
+  public List<sale> getSale() {
+        return sale;
     }
 
-    public void setVenta(List<Venta> venta) {
-        this.venta = venta;
+    public void setSale(List<sale> sale) {
+        this.sale = sale;
     }
 }

@@ -95,10 +95,11 @@ public class LoginActivity extends AppCompatActivity {
         download1 = new DescargasHelper(LoginActivity.this);
         //
         if (properties.getUrlWebsrv() == null) {
+            //if ("http://"+properties.getUrlWebsrv() == null) {
             properties.setUrlWebsrv("friendlyaccount.com");
-            Toast.makeText(this, "URL: " + properties.getUrlWebsrv() + "",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "URL: " + "http://"+properties.getUrlWebsrv() + "",Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(this, "URL: " + properties.getUrlWebsrv() + "",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "URL1: " + "http://"+properties.getUrlWebsrv() + "",Toast.LENGTH_SHORT).show();
         }
 
 

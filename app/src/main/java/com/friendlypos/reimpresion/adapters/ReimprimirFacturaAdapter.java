@@ -1,29 +1,20 @@
 package com.friendlypos.reimpresion.adapters;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.Color;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.friendlypos.R;
-import com.friendlypos.application.util.Functions;
-import com.friendlypos.application.util.PrinterFunctions;
-import com.friendlypos.distribucion.activity.DistribucionActivity;
-import com.friendlypos.distribucion.adapters.DistrClientesAdapter;
-import com.friendlypos.distribucion.modelo.Facturas;
-import com.friendlypos.distribucion.modelo.Inventario;
+import com.friendlypos.distribucion.modelo.invoice;
 import com.friendlypos.distribucion.modelo.Pivot;
-import com.friendlypos.distribucion.modelo.Venta;
+import com.friendlypos.distribucion.modelo.sale;
 import com.friendlypos.principal.modelo.Clientes;
 import com.friendlypos.reimpresion.activity.ReimprimirActivity;
 
@@ -38,7 +29,7 @@ import io.realm.RealmResults;
 
 public class ReimprimirFacturaAdapter extends RecyclerView.Adapter<ReimprimirFacturaAdapter.CharacterViewHolder> {
 
-    public List<Venta> contentList;
+    public List<sale> contentList;
     private ReimprimirActivity activity;
     //private boolean isSelected = false;
     private int selected_position = -1;
@@ -50,7 +41,7 @@ public class ReimprimirFacturaAdapter extends RecyclerView.Adapter<ReimprimirFac
     int nextId;
     int tabCliente;
 
-    public ReimprimirFacturaAdapter(Context context, ReimprimirActivity activity, List<Venta> contentList) {
+    public ReimprimirFacturaAdapter(Context context, ReimprimirActivity activity, List<sale> contentList) {
         this.contentList = contentList;
         this.activity = activity;
         this.QuickContext = context;
@@ -67,27 +58,35 @@ public class ReimprimirFacturaAdapter extends RecyclerView.Adapter<ReimprimirFac
     @Override
     public void onBindViewHolder(CharacterViewHolder holder, final int position) {
 
-        final Venta venta = contentList.get(position);
+        final sale sale = contentList.get(position);
 
         Realm realm = Realm.getDefaultInstance();
 
         long cantidadPivot = 0;
 
-        Clientes clientes = realm.where(Clientes.class).equalTo("id", venta.getCustomer_id()).findFirst();
-        final Facturas facturas = realm.where(Facturas.class).equalTo("id", venta.getInvoice_id()).findFirst();
+        Clientes clientes = realm.where(Clientes.class).equalTo("id", sale.getCustomer_id()).findFirst();
+        final invoice invoice = realm.where(com.friendlypos.distribucion.modelo.invoice.class).equalTo("id", sale.getInvoice_id()).findFirst();
 
-        cantidadPivot = realm.where(Pivot.class).equalTo("invoice_id", venta.getInvoice_id()).count();
-        String numeracionFactura = facturas.getNumeration();
+        cantidadPivot = realm.where(Pivot.class).equalTo("invoice_id", sale.getInvoice_id()).count();
+        String numeracionFactura = invoice.getNumeration();
         String fantasyCliente = clientes.getFantasyName();
-        String fecha1 = facturas.getDate();
-        String hora1 = facturas.getTimes();
-        String aNombreDe = venta.getCustomer_name();
-        double totalFactura = Double.parseDouble(facturas.getTotal());
+        String fecha1 = invoice.getDate();
+        String hora1 = invoice.getTimes();
+        int subida = invoice.getSubida();
+        String aNombreDe = sale.getCustomer_name();
+        double totalFactura = Double.parseDouble(invoice.getTotal());
 
         holder.txt_reimprimir_factura_numeracion.setText(numeracionFactura);
         holder.txt_reimprimir_factura_fechahora.setText(fecha1 + " " + hora1);
         holder.txt_reimprimir_factura_fantasyname.setText(fantasyCliente);
         holder.txt_reimprimir_factura_anombrede.setText(aNombreDe);
+
+        if(subida == 1){
+            holder.txtSubida.setBackgroundColor(Color.parseColor("#FF0000"));
+        }
+        else{
+            holder.txtSubida.setBackgroundColor(Color.parseColor("#607d8b"));
+        }
 
         holder.txt_reimprimir_factura_total.setText(String.format("%,.2f",totalFactura));
         holder.txt_reimprimir_factura_cantidad.setText((int) cantidadPivot + "");
@@ -104,7 +103,7 @@ public class ReimprimirFacturaAdapter extends RecyclerView.Adapter<ReimprimirFac
     public class CharacterViewHolder extends RecyclerView.ViewHolder {
 
         private TextView txt_reimprimir_factura_numeracion, txt_reimprimir_factura_fechahora, txt_reimprimir_factura_fantasyname, txt_reimprimir_factura_anombrede,
-                txt_reimprimir_factura_total, txt_reimprimir_factura_cantidad;
+                txt_reimprimir_factura_total, txt_reimprimir_factura_cantidad, txtSubida;
         protected CardView cardView;
 
 
@@ -115,7 +114,7 @@ public class ReimprimirFacturaAdapter extends RecyclerView.Adapter<ReimprimirFac
             txt_reimprimir_factura_fechahora = (TextView) view.findViewById(R.id.txt_reimprimir_factura_fechahora);
             txt_reimprimir_factura_fantasyname = (TextView) view.findViewById(R.id.txt_reimprimir_factura_fantasyname);
             txt_reimprimir_factura_anombrede = (TextView) view.findViewById(R.id.txt_reimprimir_factura_anombrede);
-
+            txtSubida = (TextView) view.findViewById(R.id.txtSubida);
             txt_reimprimir_factura_total = (TextView) view.findViewById(R.id.txt_reimprimir_factura_total);
             txt_reimprimir_factura_cantidad = (TextView) view.findViewById(R.id.txt_reimprimir_factura_cantidad);
 
@@ -130,7 +129,7 @@ public class ReimprimirFacturaAdapter extends RecyclerView.Adapter<ReimprimirFac
                     selected_position = getAdapterPosition();
                     notifyItemChanged(selected_position);
 
-                    Venta clickedDataItem = contentList.get(pos);
+                    sale clickedDataItem = contentList.get(pos);
                     facturaID = clickedDataItem.getInvoice_id();
 
                     Toast.makeText(view.getContext(), "You clicked " + facturaID, Toast.LENGTH_SHORT).show();

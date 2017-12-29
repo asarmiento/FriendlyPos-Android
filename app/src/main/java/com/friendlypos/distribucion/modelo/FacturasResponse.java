@@ -14,7 +14,7 @@ public class FacturasResponse {
     private String code;
     private String message;
     @SerializedName("invoices")
-    private List<Facturas> facturas;
+    private List<invoice> facturas;
 
     public boolean isResult() {
         return result;
@@ -40,11 +40,11 @@ public class FacturasResponse {
         this.message = message;
     }
 
-    public List<Facturas> getFacturas() {
+    public List<invoice> getFacturas() {
         return facturas;
     }
 
-    public void setFacturas(List<Facturas> facturas) {
+    public void setFacturas(List<invoice> facturas) {
         this.facturas = facturas;
     }
 }

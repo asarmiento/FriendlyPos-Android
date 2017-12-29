@@ -1,6 +1,5 @@
 package com.friendlypos.reimpresion.fragment;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -15,11 +14,10 @@ import com.friendlypos.app.broadcastreceiver.BluetoothStateChangeReceiver;
 import com.friendlypos.application.util.Functions;
 import com.friendlypos.application.util.PrinterFunctions;
 import com.friendlypos.distribucion.fragment.BaseFragment;
-import com.friendlypos.distribucion.modelo.Facturas;
+import com.friendlypos.distribucion.modelo.invoice;
 import com.friendlypos.distribucion.modelo.Pivot;
-import com.friendlypos.distribucion.modelo.Venta;
+import com.friendlypos.distribucion.modelo.sale;
 import com.friendlypos.login.modelo.Usuarios;
-import com.friendlypos.principal.activity.MenuPrincipal;
 import com.friendlypos.principal.modelo.Clientes;
 import com.friendlypos.principal.modelo.Productos;
 import com.friendlypos.principal.modelo.Sysconf;
@@ -42,7 +40,7 @@ public class ReimprimirResumenFragment extends BaseFragment {
     public ImageButton btnReimprimirFactura;
     BluetoothStateChangeReceiver bluetoothStateChangeReceiver;
 
-    Venta venta_actualizada = null;
+    sale sale_actualizada = null;
     String facturaId = "";
 
     int slecTAB;
@@ -67,13 +65,13 @@ public class ReimprimirResumenFragment extends BaseFragment {
             public void onClick(View v) {
 
                 String a = "1";
-                if (venta_actualizada.getSale_type() == "2") {
+                if (sale_actualizada.getSale_type() == "2") {
                     a = "2";
                 }
 
 
                 if(bluetoothStateChangeReceiver.isBluetoothAvailable()== true) {
-                    PrinterFunctions.imprimirFacturaDistrTotal(venta_actualizada, getActivity(), Integer.parseInt(a));
+                    PrinterFunctions.imprimirFacturaDistrTotal(sale_actualizada, getActivity(), Integer.parseInt(a));
                     Toast.makeText(getActivity(), "imprimir liquidacion", Toast.LENGTH_SHORT).show();
                 }
                 else if(bluetoothStateChangeReceiver.isBluetoothAvailable() == false){
@@ -91,19 +89,19 @@ public class ReimprimirResumenFragment extends BaseFragment {
 
             Realm realm = Realm.getDefaultInstance();
             Sysconf sysconf = realm.where(Sysconf.class).findFirst();
-            Clientes clientes = realm.where(Clientes.class).equalTo("id", venta_actualizada.getCustomer_id()).findFirst();
-            Facturas facturas = realm.where(Facturas.class).equalTo("id", venta_actualizada.getInvoice_id()).findFirst();
-            RealmResults<Pivot> result = realm.where(Pivot.class).equalTo("invoice_id", venta_actualizada.getInvoice_id()).findAll();
+            Clientes clientes = realm.where(Clientes.class).equalTo("id", sale_actualizada.getCustomer_id()).findFirst();
+            invoice invoice = realm.where(com.friendlypos.distribucion.modelo.invoice.class).equalTo("id", sale_actualizada.getInvoice_id()).findFirst();
+            RealmResults<Pivot> result = realm.where(Pivot.class).equalTo("invoice_id", sale_actualizada.getInvoice_id()).findAll();
 
-            String idUsuario = facturas.getUser_id();
+            String idUsuario = invoice.getUser_id();
 
             Usuarios usuarios = realm.where(Usuarios.class).equalTo("id", idUsuario).findFirst();
 
             String nombreUsuario = usuarios.getUsername();
 
             // VARIABLES VENTA
-            String fechayhora = venta_actualizada.getUpdated_at();
-            String nombreCliente = venta_actualizada.getCustomer_name();
+            String fechayhora = sale_actualizada.getUpdated_at();
+            String nombreCliente = sale_actualizada.getCustomer_name();
 
             // VARIABLES CLIENTES
             final String cardCliente = clientes.getCard();
@@ -113,18 +111,18 @@ public class ReimprimirResumenFragment extends BaseFragment {
             double descuentoCliente = Double.parseDouble(clientes.getFixedDiscount());
 
             // VARIABLES FACTURA
-            String fechaFactura = facturas.getDue_date();
-            String numeracionFactura = facturas.getNumeration();
-            String metodoPago = facturas.getPayment_method_id();
-            String totalGrabado = facturas.getSubtotal_taxed();
-            String totalExento = facturas.getSubtotal_exempt();
-            String totalSubtotal = facturas.getSubtotal();
-            String totalDescuento = facturas.getDiscount();
-            String totalImpuesto = facturas.getTax();
-            String totalTotal = facturas.getTotal();
-            String totalCancelado = facturas.getPaid();
-            String totalVuelto = facturas.getChanging();
-            String totalNotas = facturas.getNote();
+            String fechaFactura = invoice.getDue_date();
+            String numeracionFactura = invoice.getNumeration();
+            String metodoPago = invoice.getPayment_method_id();
+            String totalGrabado = invoice.getSubtotal_taxed();
+            String totalExento = invoice.getSubtotal_exempt();
+            String totalSubtotal = invoice.getSubtotal();
+            String totalDescuento = invoice.getDiscount();
+            String totalImpuesto = invoice.getTax();
+            String totalTotal = invoice.getTotal();
+            String totalCancelado = invoice.getPaid();
+            String totalVuelto = invoice.getChanging();
+            String totalNotas = invoice.getNote();
 
             // VARIABLES SYSCONF
             String sysNombre = sysconf.getName();
@@ -143,17 +141,17 @@ public class ReimprimirResumenFragment extends BaseFragment {
                 + "fondos o cualquier otro medio que no sea efectivo, la validez del pago queda sujeto a su acreditacion en las cuentas "
                 + "bancarias de " + sysNombre + ", Por lo cual la factura original le sera entregada una vez confirme dicha acreditacion ";
 
-            if (venta_actualizada != null) {
+            if (sale_actualizada != null) {
 
 
                 String billString = "";
-                if (venta_actualizada.getSale_type() == "1") {
+                if (sale_actualizada.getSale_type() == "1") {
                     billString = "Factura";
                 }
-                else if (venta_actualizada.getSale_type() == "2") {
+                else if (sale_actualizada.getSale_type() == "2") {
                     billString = "Factura";
                 }
-                else if (venta_actualizada.getSale_type() == "3") {
+                else if (sale_actualizada.getSale_type() == "3") {
                     billString = "Proforma";
                 }
 
@@ -176,7 +174,7 @@ public class ReimprimirResumenFragment extends BaseFragment {
                 preview += "<a><b>I\t" + padRight("Cantidad", 10) + padRight("Precio", 10) + padRight("Total", 10) + "</b></a><br>";
                 preview += "<a>------------------------------------------------<a><br>";
 
-                preview += getPrintDistTotal(venta_actualizada.getInvoice_id());
+                preview += getPrintDistTotal(sale_actualizada.getInvoice_id());
 
                 preview += "<center><a>" + String.format("%20s %-20s", "Subtotal Gravado", totalGrabado) + "</a><br>";
                 preview += "<a> " + String.format("%20s %-20s", "Subtotal Exento", totalExento) + "</a><br>";
@@ -230,7 +228,7 @@ public class ReimprimirResumenFragment extends BaseFragment {
         RealmResults<Pivot> result = realm1.where(Pivot.class).equalTo("invoice_id", idVenta).findAll();
 
         if (result.isEmpty()) {
-            send = "No hay facturas emitidas";
+            send = "No hay invoice emitidas";
         }
         else {
             // printSalesCashTotal= 0.0;
@@ -277,18 +275,18 @@ public class ReimprimirResumenFragment extends BaseFragment {
             @Override
             public void execute(Realm realm3) {
 
-                venta_actualizada = realm3.where(Venta.class).equalTo("id", facturaId).findFirst();
+                sale_actualizada = realm3.where(sale.class).equalTo("id", facturaId).findFirst();
 
                 realm3.close();
             }
         });
 
         String a = "1";
-        if (venta_actualizada.getSale_type() == "2") {
+        if (sale_actualizada.getSale_type() == "2") {
             a = "2";
         }
         getHtmlPreview();
-        // PrinterFunctions.imprimirFacturaDistrTotal(venta_actualizada, getActivity(), Integer.parseInt(a));
+        // PrinterFunctions.imprimirFacturaDistrTotal(sale_actualizada, getActivity(), Integer.parseInt(a));
     }
         else{
         Toast.makeText(getActivity(),"nadaSelecProducto",Toast.LENGTH_LONG).show();

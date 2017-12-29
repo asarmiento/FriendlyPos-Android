@@ -1,12 +1,9 @@
 package com.friendlypos.distribucion.fragment;
 
-import android.content.Context;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,11 +13,8 @@ import com.friendlypos.R;
 import com.friendlypos.distribucion.activity.DistribucionActivity;
 import com.friendlypos.distribucion.adapters.DistrClientesAdapter;
 import com.friendlypos.distribucion.adapters.DistrResumenAdapter;
-import com.friendlypos.distribucion.modelo.Facturas;
-import com.friendlypos.distribucion.modelo.Venta;
-import com.friendlypos.principal.modelo.Clientes;
+import com.friendlypos.distribucion.modelo.sale;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -77,10 +71,10 @@ public class DistSelecClienteFragment extends BaseFragment{
         adapter2.clearAll();
     }
 
-    private List<Venta> getListClientes(){
+    private List<sale> getListClientes(){
         realm = Realm.getDefaultInstance();
-        RealmQuery<Venta> query = realm.where(Venta.class).equalTo("aplicada", 0);
-        RealmResults<Venta> result1 = query.findAll();
+        RealmQuery<sale> query = realm.where(sale.class).equalTo("aplicada", 0);
+        RealmResults<sale> result1 = query.findAll();
         if(result1.size() == 0){
             Toast.makeText(getApplicationContext(),"Favor descargar datos primero",Toast.LENGTH_LONG).show();
         }

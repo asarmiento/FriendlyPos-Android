@@ -25,7 +25,7 @@ import com.friendlypos.distribucion.modelo.Inventario;
 import com.friendlypos.distribucion.modelo.Marcas;
 import com.friendlypos.distribucion.modelo.Pivot;
 import com.friendlypos.distribucion.modelo.TipoProducto;
-import com.friendlypos.distribucion.modelo.Venta;
+import com.friendlypos.distribucion.modelo.sale;
 import com.friendlypos.principal.modelo.Clientes;
 import com.friendlypos.principal.modelo.Productos;
 
@@ -265,7 +265,7 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
                                     @Override
                                     public void execute(Realm realm4) {
 
-                                        final Venta ventas = realm4.where(Venta.class).equalTo("invoice_id", idFacturaSeleccionada).findFirst();
+                                        final sale ventas = realm4.where(sale.class).equalTo("invoice_id", idFacturaSeleccionada).findFirst();
                                         Clientes clientes = realm4.where(Clientes.class).equalTo("id", ventas.getCustomer_id()).findFirst();
                                         Log.d("ads", clientes + "");
                                         clientes.setCreditLimit(String.valueOf(totalCredito));

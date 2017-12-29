@@ -8,7 +8,7 @@ import android.util.Log;
 import com.friendlypos.app.broadcastreceiver.NetworkStateChangeReceiver;
 import com.friendlypos.application.datamanager.BaseManager;
 import com.friendlypos.application.interfaces.RequestInterface;
-import com.friendlypos.distribucion.modelo.Facturas;
+import com.friendlypos.distribucion.modelo.invoice;
 import com.friendlypos.distribucion.modelo.FacturasResponse;
 import com.friendlypos.distribucion.modelo.Inventario;
 import com.friendlypos.distribucion.modelo.InventarioResponse;
@@ -19,7 +19,7 @@ import com.friendlypos.distribucion.modelo.MetodoPagoResponse;
 import com.friendlypos.distribucion.modelo.ProductoFactura;
 import com.friendlypos.distribucion.modelo.TipoProducto;
 import com.friendlypos.distribucion.modelo.TipoProductoResponse;
-import com.friendlypos.distribucion.modelo.Venta;
+import com.friendlypos.distribucion.modelo.sale;
 import com.friendlypos.login.modelo.Usuarios;
 import com.friendlypos.login.modelo.UsuariosResponse;
 import com.friendlypos.login.util.SessionPrefes;
@@ -291,8 +291,8 @@ public class DescargasHelper {
 
         final RequestInterface api = BaseManager.getApi();
         final ArrayList<Inventario> mContentsArray = new ArrayList<>();
-        final ArrayList<Facturas> mContentsArray2 = new ArrayList<>();
-        final ArrayList<Venta> mContentsArrayVenta = new ArrayList<>();
+        final ArrayList<invoice> mContentsArray2 = new ArrayList<>();
+        final ArrayList<sale> mContentsArraySale = new ArrayList<>();
         final ArrayList<ProductoFactura> mContentsArrayPivot = new ArrayList<>();
         final ProgressDialog dialog = new ProgressDialog(context);
         dialog.setMessage("Cargando lista de inventarios");
@@ -341,7 +341,7 @@ public class DescargasHelper {
                 }
             });
 
-            // TODO descarga Facturas
+            // TODO descarga invoice
             Call<FacturasResponse> call2 = api.getFacturas(token);
 
             call2.enqueue(new Callback<FacturasResponse>() {
@@ -377,7 +377,7 @@ public class DescargasHelper {
                     }
                     else {
                         // Toast.makeText(ProductosActivity.this, getString(R.string.error) + " CODE: " +response.code(), Toast.LENGTH_LONG).show();
-                        RealmResults<Facturas> results2 = realm2.where(Facturas.class).findAll();
+                        RealmResults<invoice> results2 = realm2.where(invoice.class).findAll();
                         mContentsArray2.addAll(results2);
                     }
                     dialog.dismiss();
@@ -389,7 +389,7 @@ public class DescargasHelper {
                     dialog.dismiss();
 
                     //  Toast.makeText(ProductosActivity.this, getString(R.string.failed), Toast.LENGTH_LONG).show();
-                    RealmResults<Facturas> results2 = realm2.where(Facturas.class).findAll();
+                    RealmResults<invoice> results2 = realm2.where(invoice.class).findAll();
                     mContentsArray2.addAll(results2);
                 }
             });
