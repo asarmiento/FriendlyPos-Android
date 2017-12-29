@@ -18,6 +18,7 @@ public class Inventario extends RealmObject {
     String amount;
     String amount_dist;
     String distributor;
+    String nombre_producto;
 
     public int getId() {
         return id;
@@ -67,6 +68,13 @@ public class Inventario extends RealmObject {
         this.distributor = distributor;
     }
 
+    public String getNombre_producto() {
+        return nombre_producto;
+    }
+
+    public void setNombre_producto(String nombre_producto) {
+        this.nombre_producto = nombre_producto;
+    }
 
     @Override
     public String toString() {
@@ -77,6 +85,7 @@ public class Inventario extends RealmObject {
             ", amount='" + amount + '\'' +
             ", amount_dist='" + amount_dist + '\'' +
             ", distributor='" + distributor + '\'' +
+            ", nombre_producto='" + nombre_producto + '\'' +
             '}';
     }
 }

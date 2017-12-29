@@ -191,7 +191,8 @@ public class DistSelecProductoFragment extends BaseFragment implements SearchVie
 
         final List<Inventario> filteredModelList = new ArrayList<>();
         for (Inventario model : models) {
-            final String text = model.getProduct_id().toLowerCase();
+            final String text = model.getNombre_producto().toLowerCase();
+            Log.d("dasdad", text);
             if (text.contains(query)) {
                 filteredModelList.add(model);
             }

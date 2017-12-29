@@ -26,6 +26,7 @@ import com.friendlypos.distribucion.modelo.Marcas;
 import com.friendlypos.distribucion.modelo.Pivot;
 import com.friendlypos.distribucion.modelo.TipoProducto;
 import com.friendlypos.distribucion.modelo.sale;
+import com.friendlypos.principal.activity.MenuPrincipal;
 import com.friendlypos.principal.modelo.Clientes;
 import com.friendlypos.principal.modelo.Productos;
 
@@ -83,13 +84,11 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
 
         final Inventario inventario = productosList.get(position);
 
-        //todo repasar esto
-
         Realm realm = Realm.getDefaultInstance();
         Productos producto = realm.where(Productos.class).equalTo("id", inventario.getProduct_id()).findFirst();
 
 
-        String description = producto.getDescription();
+        final String description = producto.getDescription();
         String marca = producto.getBrand_id();
         String tipo = producto.getProduct_type_id();
         String precio = producto.getSale_price();
@@ -98,6 +97,32 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
         String tipoProducto = realm.where(TipoProducto.class).equalTo("id", tipo).findFirst().getName();
 
         realm.close();
+
+        // TRANSACCION PARA ACTUALIZAR CAMPOS DE LA TABLA VENTAS
+        final Realm realm3 = Realm.getDefaultInstance();
+
+        try {
+            realm3.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm3) {
+
+                  //  Inventario inv_actualizado = realm3.where(Inventario.class).equalTo("id", inventario_id).findFirst();
+                  //  inv_actualizado.setAmount_dist(String.valueOf(nuevoAmount));
+                    inventario.setNombre_producto(description);
+                    realm3.insertOrUpdate(inventario); // using insert API
+
+                    Log.d("asda", inventario.getNombre_producto());
+                }
+
+            });
+
+        } catch (Exception e) {
+            Log.e("error", "error", e);
+            Toast.makeText(context,"error", Toast.LENGTH_SHORT).show();
+
+        }
+        realm3.close();
+
 
         holder.fillData(producto);
 
@@ -334,6 +359,7 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
     }
 
     public void setFilter(List<Inventario> countryModels){
+
         productosList = new ArrayList<>();
         productosList.addAll(countryModels);
         notifyDataSetChanged();
