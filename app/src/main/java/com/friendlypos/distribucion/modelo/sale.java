@@ -38,7 +38,7 @@ public class sale extends RealmObject {
     String updated_at;
     String reserved;
     public Clientes clientes;
-    public com.friendlypos.distribucion.modelo.invoice invoice;
+    public invoice invoice;
 
     private int aplicada = 0;
     private int subida = 0;

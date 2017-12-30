@@ -56,7 +56,7 @@ public class DistTotalizarFragment extends BaseFragment  {
     SessionPrefes session;
     double latitude;
     double longitude;
-
+    String metodoPagoCliente;
     private static Button applyBill;
     private static Button printBill;
 
@@ -103,7 +103,7 @@ public class DistTotalizarFragment extends BaseFragment  {
 
         if (slecTAB == 1) {
 
-            String metodoPagoCliente = ((DistribucionActivity) getActivity()).getMetodoPagoCliente();
+            metodoPagoCliente = ((DistribucionActivity) getActivity()).getMetodoPagoCliente();
 
 
             if (metodoPagoCliente.equals("1")) {
@@ -123,7 +123,6 @@ public class DistTotalizarFragment extends BaseFragment  {
         else{
             Toast.makeText(getActivity(),"nadaTotalizar",Toast.LENGTH_LONG).show();
         }
-
         notes = (EditText) rootView.findViewById(R.id.txtNotes);
 
         applyBill = (Button) rootView.findViewById(R.id.applyInvoice);
@@ -146,26 +145,35 @@ public class DistTotalizarFragment extends BaseFragment  {
                             //validateData();
                             // Log.d("total", String.valueOf(Functions.sGetDecimalStringAnyLocaleAsDouble(Total.getText().toString())));
 
+                            if (metodoPagoCliente.equals("1")) {
+                                pagoCon = Double.parseDouble(paid.getText().toString());
+                                totalPagoCon = String.format("%,.2f", pagoCon);
+                                double total = totalTotal;
 
-                            pagoCon = Double.parseDouble(paid.getText().toString());
-                            totalPagoCon = String.format("%,.2f", pagoCon);
-                            double total = totalTotal;
+                                if (pagoCon >= total) {
+                                    double vuelto = pagoCon - total;
+                                    totalVuelvo = String.format("%,.2f", vuelto);
 
-                            if (pagoCon >= total) {
-                                double vuelto = pagoCon - total;
-                                totalVuelvo = String.format("%,.2f", vuelto);
+                                    int tabCliente = 0;
+                                    ((DistribucionActivity) getActivity()).setSelecClienteTab(tabCliente);
 
-                                int tabCliente = 0;
-                                ((DistribucionActivity) getActivity()).setSelecClienteTab(tabCliente);
-
-                                change.setText(totalVuelvo);
+                                    change.setText(totalVuelvo);
+                                    obtenerLocalización();
+                                    aplicarFactura();
+                            }
+                                else {
+                                    Toast.makeText(getActivity(), "Digite una cantidad mayor al total", Toast.LENGTH_LONG).show();
+                                }
+                            }
+                           else if (metodoPagoCliente.equals("2")) {
+                                    Toast.makeText(getActivity(), "Crédito", Toast.LENGTH_LONG).show();
                                 obtenerLocalización();
                                 aplicarFactura();
-
-                            } else {
-                                Toast.makeText(getActivity(), "Digite una cantidad mayor al total", Toast.LENGTH_LONG).show();
                             }
-                        } catch (Exception e) {
+
+
+                            }
+                         catch (Exception e) {
                             Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
                             e.printStackTrace();
 
@@ -311,10 +319,13 @@ public class DistTotalizarFragment extends BaseFragment  {
 
             @Override
             public void execute(Realm realm3) {
-                sale_actualizada = realm3.where(sale.class).equalTo("id", facturaId).findFirst();
-                String nombre = client_name.getText().toString();
-                sale_actualizada.setCustomer_name(nombre);
+                sale_actualizada = realm3.where(sale.class).equalTo("invoice_id", facturaId).findFirst();
+                Log.d("dadasdad", client_name.getText().toString());
+                sale_actualizada.setCustomer_name(client_name.getText().toString());
+
+
                 sale_actualizada.setSale_type("1");
+                sale_actualizada.setApplied("1");
                 sale_actualizada.setUpdated_at(Functions.getDate() + " " + Functions.get24Time());
                 sale_actualizada.setAplicada(1);
                 sale_actualizada.setSubida(1);
@@ -328,8 +339,6 @@ public class DistTotalizarFragment extends BaseFragment  {
 
     protected void aplicarFactura() {
         paid.setEnabled(false);
-
-
 
         actualizarFactura();
         actualizarVenta();

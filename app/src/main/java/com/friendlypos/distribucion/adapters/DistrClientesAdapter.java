@@ -46,6 +46,7 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
     String facturaID, clienteID;
     int nextId;
     int tabCliente;
+    int activa = 0;
 
     public DistrClientesAdapter(Context context, DistribucionActivity activity, List<sale> contentList) {
         this.contentList = contentList;
@@ -67,7 +68,6 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
 
         Realm realm = Realm.getDefaultInstance();
 
-
         Clientes clientes = realm.where(Clientes.class).equalTo("id", sale.getCustomer_id()).findFirst();
         final invoice invoice = realm.where(com.friendlypos.distribucion.modelo.invoice.class).equalTo("id", sale.getInvoice_id()).findFirst();
 
@@ -81,12 +81,16 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
         holder.txt_cliente_factura_companyname.setText(companyCliente);
         holder.txt_cliente_factura_numeracion.setText("Factura: " + numeracionFactura);
         holder.cardView.setBackgroundColor(selected_position == position ? Color.parseColor("#607d8b") : Color.parseColor("#009688"));
-
         holder.btnDevolverFacturaCliente.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                devolverFactura();
+                if(activa == 1){
+                devolverFactura();}
+                else{
+                    Toast.makeText(QuickContext, "Selecciona una factura primero", Toast.LENGTH_SHORT).show();
+
+                }
             }
         });
 
@@ -94,11 +98,15 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
 
             @Override
             public void onClick(View v) {
+                if(activa == 1){
                 try {
                     PrinterFunctions.imprimirProductosDistrSelecCliente(sale, QuickContext);
                 }
                 catch (Exception e) {
                     Functions.CreateMessage(QuickContext, "Error", e.getMessage() + "\n" + e.getStackTrace().toString());
+                }}
+                else{
+                    Toast.makeText(QuickContext, "Selecciona una factura primero", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -130,6 +138,8 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
 
                 @Override
                 public void onClick(View view) {
+
+                    activa = 1;
 
                     final ProgressDialog progresRing = ProgressDialog.show(QuickContext, "Cargando", "Seleccionando Cliente", true);
                     progresRing.setCancelable(true);
@@ -167,7 +177,6 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
                                 String creditoLimiteCliente = clientes.getCreditLimit();
                                 String dueCliente = clientes.getDue();
                                 realm.close();
-
 
                                 Toast.makeText(QuickContext, "You clicked " + facturaID, Toast.LENGTH_SHORT).show();
                                 Log.d("PRODUCTOSFACTURATO", facturaid1 + "");
