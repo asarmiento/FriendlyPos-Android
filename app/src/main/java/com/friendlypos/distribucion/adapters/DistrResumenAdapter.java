@@ -1,8 +1,6 @@
 package com.friendlypos.distribucion.adapters;
 
 
-import android.app.ProgressDialog;
-import android.content.Context;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -18,8 +16,6 @@ import com.friendlypos.distribucion.activity.DistribucionActivity;
 import com.friendlypos.distribucion.fragment.DistResumenFragment;
 import com.friendlypos.distribucion.modelo.Inventario;
 import com.friendlypos.distribucion.modelo.Pivot;
-import com.friendlypos.distribucion.modelo.sale;
-import com.friendlypos.principal.modelo.Clientes;
 import com.friendlypos.principal.modelo.Productos;
 
 import java.util.ArrayList;
@@ -33,7 +29,6 @@ import io.realm.RealmResults;
  */
 
 public class DistrResumenAdapter extends RecyclerView.Adapter<DistrResumenAdapter.CharacterViewHolder> {
-    private Context context;
     private List<Pivot> productosList;
     private DistribucionActivity activity;
     private ArrayList<Pivot> data;
@@ -42,36 +37,17 @@ public class DistrResumenAdapter extends RecyclerView.Adapter<DistrResumenAdapte
     Double amount_inventario = 0.0;
     int idInvetarioSelec;
 
+    private DistResumenFragment fragment;
+
+
     public ArrayList<Pivot> getData() {
         return data;
     }
 
-    private static double iva = 13.0;
-    private static int apply_done = 0;
-    //IVA
-    private static Double subExen = 0.0;
-    private static Double subGrab = 0.0;
-    private static Double subGrabm = 0.0;
-    private static Double IvaT = 0.0;
-    private static Double subt = 0.0;
-    private static Double discountBill = 0.0;
-    private static Double total = 0.0;
-
-    private static String description;
-    private static String tipo;
-    private static Double cantidad = 0.0;
-    private static Double precio = 0.0;
-    private static Double descuento = 0.0;
-    private static Double clienteFixedDescuento = 0.0;
-    private DistResumenFragment fragment;
-
-    private static Context QuickContext = null;
-
-    public DistrResumenAdapter(Context context, DistribucionActivity activity, DistResumenFragment fragment, List<Pivot> productosList) {
+    public DistrResumenAdapter(DistribucionActivity activity, DistResumenFragment fragment, List<Pivot> productosList) {
         this.productosList = productosList;
         this.activity = activity;
         this.fragment = fragment;
-        this.QuickContext = context;
         this.data = aListdata;
     }
 
@@ -79,22 +55,25 @@ public class DistrResumenAdapter extends RecyclerView.Adapter<DistrResumenAdapte
 
     }
 
-
     public void updateData(List<Pivot> productosList) {
         activity.cleanTotalize();
         this.productosList = productosList;
         notifyDataSetChanged();
-
 
     }
 
     @Override
     public CharacterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.lista_distribucion_resumen, parent, false);
-
-        context = parent.getContext();
         return new DistrResumenAdapter.CharacterViewHolder(view);
 
+    }
+
+    private String getProductDescriptionByPivotId(String id) {
+        Realm realm = Realm.getDefaultInstance();
+        String description = realm.where(Productos.class).equalTo("id", id).findFirst().getDescription();
+        realm.close();
+        return description;
     }
 
     @Override
@@ -102,28 +81,14 @@ public class DistrResumenAdapter extends RecyclerView.Adapter<DistrResumenAdapte
 
         final Pivot pivot = productosList.get(position);
 
-        Realm realm = Realm.getDefaultInstance();
-        Productos producto = realm.where(Productos.class).equalTo("id", pivot.getProduct_id()).findFirst();
-        sale ventas = realm.where(sale.class).equalTo("invoice_id", pivot.getInvoice_id()).findFirst();
-        Clientes clientes = realm.where(Clientes.class).equalTo("id", ventas.getCustomer_id()).findFirst();
-        realm.close();
+        holder.txt_resumen_factura_nombre.setText(getProductDescriptionByPivotId(pivot.getProduct_id()));
+        holder.txt_resumen_factura_precio.setText("P: " + Double.valueOf(pivot.getPrice()));
+        holder.txt_resumen_factura_descuento.setText("Descuento de: " + Double.valueOf(pivot.getDiscount()));
+        holder.txt_resumen_factura_cantidad.setText("C: " + Double.parseDouble(pivot.getAmount()));
 
-        description = producto.getDescription();
-        tipo = producto.getProduct_type_id();
+        String pivotTotal = String.format("%,.2f", (Double.valueOf(pivot.getPrice()) * Double.parseDouble(pivot.getAmount())));
 
-        cantidad = Double.parseDouble(pivot.getAmount());
-        precio = Double.valueOf(pivot.getPrice());
-        descuento = Double.valueOf(pivot.getDiscount());
-        clienteFixedDescuento = Double.valueOf(clientes.getFixedDiscount());
-
-        holder.txt_resumen_factura_nombre.setText(description);
-        holder.txt_resumen_factura_precio.setText("P: " + precio);
-        holder.txt_resumen_factura_descuento.setText("Descuento de: " + descuento);
-        holder.txt_resumen_factura_cantidad.setText("C: " + cantidad);
-
-        String pivotTotal = String.format("%,.2f", (precio * cantidad));
         holder.txt_resumen_factura_total.setText("T: " + pivotTotal);
-        totalize();
     }
 
     @Override
@@ -242,51 +207,10 @@ public class DistrResumenAdapter extends RecyclerView.Adapter<DistrResumenAdapte
 
     }
 
-    public void totalize() {
-
-        activity.cleanTotalize();
-        if (tipo.equals("1")) {
-            subGrab = subGrab + (precio) * (cantidad);
-
-            subGrabm = subGrabm + ((precio) * (cantidad) - ((descuento / 100) * (precio) * (cantidad)));
-        }
-        else {
-            subExen = subExen + ((precio) * (cantidad));
-
-        }
-        discountBill += ((descuento / 100) * (precio) * (cantidad));
-
-        discountBill += ((subExen * (clienteFixedDescuento / 100.00)) + (subGrabm * (clienteFixedDescuento / 100.00)));
-
-
-        if (subGrab > 0) {
-            IvaT = (subGrabm - (subGrabm * (clienteFixedDescuento / 100.00))) * (iva / 100);
-        }
-        else {
-            IvaT = 0.0;
-        }
-
-        subt = subGrab + subExen;
-       // subTotal = String.format("%,.2f", subt);
-        Log.d("subtotal", subt + "");
-        total = (subt + IvaT) - discountBill;
-       // Total = String.format("%,.2f", total);
-       // Log.d("total", total + "");
-
-        activity.setTotalizarSubGrabado(subGrab);
-        activity.setTotalizarSubExento(subExen);
-        activity.setTotalizarSubTotal(subt);
-        activity.setTotalizarDescuento(discountBill);
-
-        activity.setTotalizarImpuestoIVA(IvaT);
-        activity.setTotalizarTotal(total);
-      //  activity.setTotalizarTotalDouble(total);
-
-    }
-
-
+    @Deprecated
     public void clearAll() {
-        subGrab = 0.0;
+        Log.d("ClearAll", "RECIENTEMENTE REMOVIDO");
+      /*  subGrab = 0.0;
         subGrabm = 0.0;
         subExen = 0.0;
         discountBill = 0.0;
@@ -298,7 +222,7 @@ public class DistrResumenAdapter extends RecyclerView.Adapter<DistrResumenAdapte
         }
         catch (Exception e) {
         }
-
+*/
 
     }
 

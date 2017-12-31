@@ -5,19 +5,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.TabLayout;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.friendlypos.R;
-import com.friendlypos.app.broadcastreceiver.BluetoothStateChangeReceiver;
-import com.friendlypos.app.broadcastreceiver.NetworkStateChangeReceiver;
 import com.friendlypos.application.util.Functions;
 import com.friendlypos.distribucion.fragment.BaseFragment;
 import com.friendlypos.distribucion.fragment.DistResumenFragment;
@@ -27,14 +20,13 @@ import com.friendlypos.distribucion.fragment.DistTotalizarFragment;
 import com.friendlypos.distribucion.util.Adapter;
 import com.friendlypos.principal.activity.BluetoothActivity;
 import com.friendlypos.principal.activity.MenuPrincipal;
-import com.friendlypos.principal.modelo.Clientes;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
 
-public class DistribucionActivity extends BluetoothActivity{
+public class DistribucionActivity extends BluetoothActivity {
 
     private Toolbar toolbar;
     private TabLayout tabLayout;
@@ -58,10 +50,10 @@ public class DistribucionActivity extends BluetoothActivity{
     ProgressDialog progressDialog;
 
     public void cleanTotalize() {
-        totalizarSubGrabado= 0.0;
+        totalizarSubGrabado = 0.0;
         totalizarSubExento = 0.0;
         totalizarSubTotal = 0.0;
-        totalizarDescuento= 0.0;
+        totalizarDescuento = 0.0;
         totalizarImpuestoIVA = 0.0;
         totalizarTotal = 0.0;
         totalizarTotalDouble = 0.0;
@@ -99,8 +91,6 @@ public class DistribucionActivity extends BluetoothActivity{
         this.dueCliente = dueCliente;
     }
 
-
-
     public double getTotalizarSubGrabado() {
         return totalizarSubGrabado;
     }
@@ -122,7 +112,7 @@ public class DistribucionActivity extends BluetoothActivity{
     }
 
     public void setTotalizarSubTotal(double totalizarSubTotal) {
-        this.totalizarSubTotal = totalizarSubTotal;
+        this.totalizarSubTotal = this.totalizarSubTotal + totalizarSubTotal;
     }
 
     public double getTotalizarDescuento() {
@@ -130,7 +120,7 @@ public class DistribucionActivity extends BluetoothActivity{
     }
 
     public void setTotalizarDescuento(double totalizarDescuento) {
-        this.totalizarDescuento = totalizarDescuento;
+        this.totalizarDescuento = this.totalizarDescuento + totalizarDescuento;
     }
 
     public double getTotalizarImpuestoIVA() {
@@ -138,7 +128,7 @@ public class DistribucionActivity extends BluetoothActivity{
     }
 
     public void setTotalizarImpuestoIVA(double totalizarImpuestoIVA) {
-        this.totalizarImpuestoIVA = totalizarImpuestoIVA;
+        this.totalizarImpuestoIVA = this.totalizarImpuestoIVA + totalizarImpuestoIVA;
     }
 
     public double getTotalizarTotal() {
@@ -146,7 +136,7 @@ public class DistribucionActivity extends BluetoothActivity{
     }
 
     public void setTotalizarTotal(double totalizarTotal) {
-        this.totalizarTotal = totalizarTotal;
+        this.totalizarTotal = this.totalizarTotal + totalizarTotal;
     }
 
     public int getSelecClienteTab() {
@@ -184,23 +174,23 @@ public class DistribucionActivity extends BluetoothActivity{
         tabLayout.setupWithViewPager(viewPager);
 
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-       tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
 
-           @Override
-           public void onTabSelected(TabLayout.Tab tab) {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
                 int tabCliente = getSelecClienteTab();
                 if (tabCliente == 0 && tab.getPosition() != 0) {
 
                     Functions.CreateMessage(DistribucionActivity.this, "Distribución", "Seleccione una factura.");
 
                     new Handler().postDelayed(
-                            new Runnable() {
+                        new Runnable() {
 
-                                @Override
-                                public void run() {
-                                    tabLayout.getTabAt(0).select();
-                                }
-                            }, 100);
+                            @Override
+                            public void run() {
+                                tabLayout.getTabAt(0).select();
+                            }
+                        }, 100);
                 }
                 else {
 

@@ -1,7 +1,7 @@
 package com.friendlypos.distribucion.fragment;
 
+import android.app.Activity;
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -14,6 +14,7 @@ import com.friendlypos.R;
 import com.friendlypos.distribucion.activity.DistribucionActivity;
 import com.friendlypos.distribucion.adapters.DistrResumenAdapter;
 import com.friendlypos.distribucion.modelo.Pivot;
+import com.friendlypos.distribucion.util.TotalizeHelper;
 
 import java.util.List;
 
@@ -26,6 +27,12 @@ public class DistResumenFragment extends BaseFragment {
     RecyclerView recyclerView;
     private DistrResumenAdapter adapter;
     int slecTAB;
+
+    TotalizeHelper totalizeHelper;
+
+
+    DistribucionActivity activity;
+
     @Override
     public void onResume() {
         super.onResume();
@@ -45,16 +52,39 @@ public class DistResumenFragment extends BaseFragment {
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerViewDistrResumen);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-            adapter = new DistrResumenAdapter(getContext(), ((DistribucionActivity) getActivity()), this, getListResumen());
-            recyclerView.setAdapter(adapter);
+        List<Pivot> list = getListResumen();
 
-            Log.d("listaResumen", getListResumen() + "");
+        adapter = new DistrResumenAdapter(activity, this, list);
+        recyclerView.setAdapter(adapter);
+
+        ((DistribucionActivity) getActivity()).cleanTotalize();
+        totalizeHelper = new TotalizeHelper(activity);
+        totalizeHelper.totalize(list);
+        Log.d("listaResumen", list + "");
 
         return rootView;
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        totalizeHelper.destroy();
+    }
+
+    @Override
+    public void onAttach(Activity activity){
+        super.onAttach(activity);
+        this.activity = (DistribucionActivity) activity;
+    }
+
+    @Override
+    public void onDetach(){
+        super.onDetach();
+        activity = null;
+
+    }
     private List<Pivot> getListResumen() {
-        String facturaId = ((DistribucionActivity) getActivity()).getInvoiceId();
+        String facturaId = activity.getInvoiceId();
         Realm realm = Realm.getDefaultInstance();
         RealmResults<Pivot> facturaid1 = realm.where(Pivot.class).equalTo("invoice_id", facturaId).findAll();
         realm.close();
@@ -63,13 +93,17 @@ public class DistResumenFragment extends BaseFragment {
 
     @Override
     public void updateData() {
-        slecTAB = ((DistribucionActivity) getActivity()).getSelecClienteTab();
+        slecTAB = activity.getSelecClienteTab();
         if (slecTAB == 1) {
             adapter.clearAll();
-            ((DistribucionActivity) getActivity()).cleanTotalize();
-            adapter.updateData(getListResumen());
+            activity.cleanTotalize();
+            List<Pivot> list = getListResumen();
+
+            adapter.updateData(list);
+            totalizeHelper.totalize(list);
         }
-        else{
-            Toast.makeText(getActivity(),"nadaresumenUpdate",Toast.LENGTH_LONG).show();
+        else {
+            Toast.makeText(getActivity(), "nadaresumenUpdate", Toast.LENGTH_LONG).show();
         }
-}}
+    }
+}
