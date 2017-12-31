@@ -44,7 +44,6 @@ public class DistResumenFragment extends BaseFragment {
 
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerViewDistrResumen);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setHasFixedSize(true);
 
             adapter = new DistrResumenAdapter(getContext(), ((DistribucionActivity) getActivity()), this, getListResumen());
             recyclerView.setAdapter(adapter);
@@ -57,17 +56,8 @@ public class DistResumenFragment extends BaseFragment {
     private List<Pivot> getListResumen() {
         String facturaId = ((DistribucionActivity) getActivity()).getInvoiceId();
         Realm realm = Realm.getDefaultInstance();
-        //String facturaid = String.valueOf(realm.where(ProductoFactura.class).equalTo("id", facturaID).findFirst().getId());
-
         RealmResults<Pivot> facturaid1 = realm.where(Pivot.class).equalTo("invoice_id", facturaId).findAll();
-
         realm.close();
-
-        // RealmQuery<ProductoFactura> query = realm.where(ProductoFactura.class);
-        // RealmResults<ProductoFactura> result1 = query.findAll();
-
-        //SECUNDARIO
-        //((DistribucionActivity) getActivity()).setInvoiceId(null);
         return facturaid1;
     }
 
@@ -78,7 +68,6 @@ public class DistResumenFragment extends BaseFragment {
             adapter.clearAll();
             ((DistribucionActivity) getActivity()).cleanTotalize();
             adapter.updateData(getListResumen());
-
         }
         else{
             Toast.makeText(getActivity(),"nadaresumenUpdate",Toast.LENGTH_LONG).show();

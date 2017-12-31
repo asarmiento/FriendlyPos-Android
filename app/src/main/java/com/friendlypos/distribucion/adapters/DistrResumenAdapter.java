@@ -1,6 +1,7 @@
 package com.friendlypos.distribucion.adapters;
 
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -80,9 +81,10 @@ public class DistrResumenAdapter extends RecyclerView.Adapter<DistrResumenAdapte
 
 
     public void updateData(List<Pivot> productosList) {
+        activity.cleanTotalize();
         this.productosList = productosList;
         notifyDataSetChanged();
-        activity.cleanTotalize();
+
 
     }
 
@@ -91,16 +93,8 @@ public class DistrResumenAdapter extends RecyclerView.Adapter<DistrResumenAdapte
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.lista_distribucion_resumen, parent, false);
 
         context = parent.getContext();
-      /*  slecTAB = activity.getSelecClienteTab();
-        if (slecTAB == 1){
-            Toast.makeText(QuickContext,"nadaResumen1",Toast.LENGTH_LONG).show();
-        }
-        else{
-            Toast.makeText(QuickContext,"nadaResumen0",Toast.LENGTH_LONG).show();
-
-        }*/
-
         return new DistrResumenAdapter.CharacterViewHolder(view);
+
     }
 
     @Override
@@ -129,9 +123,7 @@ public class DistrResumenAdapter extends RecyclerView.Adapter<DistrResumenAdapte
 
         String pivotTotal = String.format("%,.2f", (precio * cantidad));
         holder.txt_resumen_factura_total.setText("T: " + pivotTotal);
-        activity.cleanTotalize();
         totalize();
-
     }
 
     @Override
@@ -251,6 +243,7 @@ public class DistrResumenAdapter extends RecyclerView.Adapter<DistrResumenAdapte
     }
 
     public void totalize() {
+
         activity.cleanTotalize();
         if (tipo.equals("1")) {
             subGrab = subGrab + (precio) * (cantidad);
@@ -261,8 +254,6 @@ public class DistrResumenAdapter extends RecyclerView.Adapter<DistrResumenAdapte
             subExen = subExen + ((precio) * (cantidad));
 
         }
-        //  TODO REVISAR ANDROIDPOS EL IF QUE REVISA SI ESTA LLENO O NO
-
         discountBill += ((descuento / 100) * (precio) * (cantidad));
 
         discountBill += ((subExen * (clienteFixedDescuento / 100.00)) + (subGrabm * (clienteFixedDescuento / 100.00)));
