@@ -267,7 +267,7 @@ public class LoginActivity extends AppCompatActivity {
         Thread t = new Thread(){
             public void run(){
                 try{
-                    Thread.sleep(3000);
+                    Thread.sleep(9000);
                 }
                 catch (InterruptedException e){
                     e.printStackTrace();
