@@ -244,7 +244,6 @@ public class LoginActivity extends AppCompatActivity {
 
                         return;
                     }
-                    Log.d("fsdfsdfs", response.body().getToken_type() + " " + response.body().getAccess_token() + "");
 
                     // Guardar afiliado en preferencias
                     session.guardarDatosUsuario(response.body());
@@ -267,7 +266,7 @@ public class LoginActivity extends AppCompatActivity {
         Thread t = new Thread(){
             public void run(){
                 try{
-                    Thread.sleep(9000);
+                    Thread.sleep(10000);
                 }
                 catch (InterruptedException e){
                     e.printStackTrace();
@@ -280,9 +279,7 @@ public class LoginActivity extends AppCompatActivity {
     final Runnable irMenuPrincipal = new Runnable() {
         @Override
         public void run() {
-            showAppointmentsScreen();
-            Toast.makeText(context, "menu", Toast.LENGTH_LONG).show();
-        }
+            showAppointmentsScreen();}
     };
 
     private boolean isUserIdValid(String userId) {
@@ -291,14 +288,6 @@ public class LoginActivity extends AppCompatActivity {
 
     private boolean isPasswordValid(String password) {
         return password.length() > 4;
-    }
-
-    private void showProgress(boolean show) {
-        mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-
-        int visibility = show ? View.GONE : View.VISIBLE;
-        mLogoView.setVisibility(visibility);
-        mLoginFormView.setVisibility(visibility);
     }
 
     private void showAppointmentsScreen() {

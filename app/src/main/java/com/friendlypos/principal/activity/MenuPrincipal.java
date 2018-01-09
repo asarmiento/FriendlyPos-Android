@@ -136,12 +136,18 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
         else {
             usuer = session.getUsuarioPrefs();
             Log.d("userasd", usuer);
-          Realm realm = Realm.getDefaultInstance();
+
+
+           Realm realm = Realm.getDefaultInstance();
             Usuarios usuarios = realm.where(Usuarios.class).equalTo("email", usuer).findFirst();
+            if(usuarios == null){
+                txtNombreUsuario.setText(usuer);
+            }else{
             String nombreUsuario = usuarios.getUsername();
             idUsuario = usuarios.getId();
             Log.d("userasd", nombreUsuario);
             txtNombreUsuario.setText(nombreUsuario);
+            }
             realm.close();
         }
     }
@@ -271,6 +277,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                 if (cambioDatosEmpresa == 0) {
                 Toast.makeText(MenuPrincipal.this, "descargar_datosEmpresa", Toast.LENGTH_SHORT).show();
                 download1.descargarDatosEmpresa(MenuPrincipal.this);
+                    download1.descargarUsuarios(MenuPrincipal.this);
                     cambioDatosEmpresa = 1;
                     session.setPrefDescargaDatos(cambioDatosEmpresa);
                 }else{

@@ -3,7 +3,9 @@ package com.friendlypos.principal.helpers;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.os.Handler;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.friendlypos.app.broadcastreceiver.NetworkStateChangeReceiver;
 import com.friendlypos.application.datamanager.BaseManager;
@@ -468,6 +470,7 @@ public class DescargasHelper {
 
     }
 
+
     public void descargarUsuarios(Context context) {
         String token = "Bearer " + SessionPrefes.get(context).getToken();
         Log.d("tokenCliente", token + " ");
@@ -499,7 +502,7 @@ public class DescargasHelper {
                         finally {
                             realmUsuarios.close();
                         }
-                        Log.d(DescargasHelper.class.getName()+"USUARIOSRE", mContentsArrayUsuarios.toString());
+                        Log.d("USUARIOSRE", mContentsArrayUsuarios.toString());
                         //  Toast.makeText(DescargarInventario.this, getString(R.string.success), Toast.LENGTH_SHORT).show();
                     }
                     else {
