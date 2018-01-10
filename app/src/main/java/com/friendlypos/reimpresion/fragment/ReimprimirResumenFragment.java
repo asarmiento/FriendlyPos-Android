@@ -275,7 +275,7 @@ public class ReimprimirResumenFragment extends BaseFragment {
             @Override
             public void execute(Realm realm3) {
 
-                sale_actualizada = realm3.where(sale.class).equalTo("id", facturaId).findFirst();
+                sale_actualizada = realm3.where(sale.class).equalTo("invoice_id", facturaId).findFirst();
 
                 realm3.close();
             }
