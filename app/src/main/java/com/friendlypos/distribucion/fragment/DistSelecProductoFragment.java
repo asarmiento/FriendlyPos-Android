@@ -1,5 +1,6 @@
 package com.friendlypos.distribucion.fragment;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.LinearLayoutManager;
@@ -20,6 +21,7 @@ import com.friendlypos.distribucion.activity.DistribucionActivity;
 import com.friendlypos.distribucion.adapters.DistrResumenAdapter;
 import com.friendlypos.distribucion.adapters.DistrSeleccionarProductosAdapter;
 import com.friendlypos.distribucion.modelo.Inventario;
+import com.friendlypos.distribucion.util.TotalizeHelper;
 import com.friendlypos.principal.modelo.Clientes;
 import com.friendlypos.principal.modelo.Productos;
 
@@ -41,6 +43,9 @@ public class DistSelecProductoFragment extends BaseFragment implements SearchVie
     static TextView creditoLimite;
     static double creditoLimiteCliente = 0.0;
     int slecTAB;
+
+    DistribucionActivity activity;
+
     public static DistSelecProductoFragment getInstance() {
         return new DistSelecProductoFragment();
     }
@@ -51,6 +56,18 @@ public class DistSelecProductoFragment extends BaseFragment implements SearchVie
         adapter2.clearAll();
     }
 
+    @Override
+    public void onAttach(Activity activity){
+        super.onAttach(activity);
+        this.activity = (DistribucionActivity) activity;
+    }
+
+    @Override
+    public void onDetach(){
+        super.onDetach();
+        activity = null;
+
+    }
     @Override
     public void onResume() {
         super.onResume();
@@ -68,7 +85,7 @@ public class DistSelecProductoFragment extends BaseFragment implements SearchVie
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerViewDistrSeleccProducto);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setHasFixedSize(true);
-        adapter = new DistrSeleccionarProductosAdapter(((DistribucionActivity) getActivity()), this, getListProductos());
+        adapter = new DistrSeleccionarProductosAdapter(activity, this, getListProductos());
         recyclerView.setAdapter(adapter);
         creditoLimite = (TextView) rootView.findViewById(R.id.restCredit);
 
@@ -76,7 +93,6 @@ public class DistSelecProductoFragment extends BaseFragment implements SearchVie
 
         adapter2 = new DistrResumenAdapter();
         adapter2.clearAll();
-
         creditoDisponible();
 
         return rootView;
@@ -87,7 +103,7 @@ public class DistSelecProductoFragment extends BaseFragment implements SearchVie
 
     private List<Inventario> getListProductos() {
         realm = Realm.getDefaultInstance();
-        RealmQuery<Inventario> query = realm.where(Inventario.class).notEqualTo("amount", "0");
+        RealmQuery<Inventario> query = realm.where(Inventario.class).notEqualTo("amount", "0").notEqualTo("amount", "0.0");
         RealmResults<Inventario> result1 = query.findAll();
 
         return result1;
@@ -102,15 +118,15 @@ public class DistSelecProductoFragment extends BaseFragment implements SearchVie
     }
 
     public void creditoDisponible() {
-        slecTAB = ((DistribucionActivity) getActivity()).getSelecClienteTab();
+        slecTAB = activity.getSelecClienteTab();
 
         if (slecTAB == 1){
         // creditoLimiteCliente = Double.parseDouble(((DistribucionActivity) getActivity()).getCreditoLimiteClienteSlecc());
     //    creditoLimiteCliente = 0.0;
-        String metodoPagoCliente = ((DistribucionActivity) getActivity()).getMetodoPagoCliente();
-        String limite = ((DistribucionActivity) getActivity()).getCreditoLimiteCliente();
+        String metodoPagoCliente = activity.getMetodoPagoCliente();
+        String limite = activity.getCreditoLimiteCliente();
        // creditoLimiteCliente = Double.parseDouble(limite);
-        String dueCliente = ((DistribucionActivity) getActivity()).getDueCliente();
+        String dueCliente = activity.getDueCliente();
 
         Log.d("PagoProductoSelec", metodoPagoCliente + "");
         Log.d("PagoProductoSelec", creditoLimiteCliente + "");
@@ -139,6 +155,7 @@ public class DistSelecProductoFragment extends BaseFragment implements SearchVie
     @Override
     public void updateData() {
         adapter.updateData(getListProductos());
+
         if (slecTAB == 1) {
             creditoLimiteCliente = Double.parseDouble(((DistribucionActivity) getActivity()).getCreditoLimiteCliente());
             creditoLimite.setText("C.Disponible: " + String.format("%,.2f", creditoLimiteCliente));

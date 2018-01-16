@@ -64,6 +64,7 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
     }
 
     public void updateData(List<Inventario> productosList) {
+
         this.productosList = productosList;
         notifyDataSetChanged();
     }
