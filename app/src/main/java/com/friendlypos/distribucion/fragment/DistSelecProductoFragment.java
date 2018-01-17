@@ -39,12 +39,13 @@ public class DistSelecProductoFragment extends BaseFragment implements SearchVie
     RecyclerView recyclerView;
     private DistrSeleccionarProductosAdapter adapter;
     private DistrResumenAdapter adapter2;
+    private DistResumenFragment resumenFrag1;
     private static int bill_type = 1;
     static TextView creditoLimite;
     static double creditoLimiteCliente = 0.0;
     int slecTAB;
-
     DistribucionActivity activity;
+
 
     public static DistSelecProductoFragment getInstance() {
         return new DistSelecProductoFragment();
@@ -90,7 +91,6 @@ public class DistSelecProductoFragment extends BaseFragment implements SearchVie
         creditoLimite = (TextView) rootView.findViewById(R.id.restCredit);
 
         Log.d("listaProducto", getListProductos() + "");
-
         adapter2 = new DistrResumenAdapter();
         adapter2.clearAll();
         creditoDisponible();

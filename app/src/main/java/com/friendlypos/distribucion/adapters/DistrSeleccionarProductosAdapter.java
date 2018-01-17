@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.friendlypos.R;
 import com.friendlypos.distribucion.activity.DistribucionActivity;
+import com.friendlypos.distribucion.fragment.DistResumenFragment;
 import com.friendlypos.distribucion.fragment.DistSelecProductoFragment;
 import com.friendlypos.distribucion.modelo.Inventario;
 import com.friendlypos.distribucion.modelo.Marcas;
@@ -45,16 +46,13 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
     public List<Inventario> productosList;
     private DistribucionActivity activity;
     private DistSelecProductoFragment fragment;
+    private DistResumenFragment fragment1;
     private static double producto_amount_dist_add = 0;
     private static double producto_descuento_add = 0;
     private int selected_position = -1;
-    private static int bill_type = 1;
-    static TextView creditoLimite;
     static double creditoLimiteCliente = 0.0;
     double totalCredito = 0.0;;
 
-    // private static String productoAmountDistAdd, productoDescuentoAdd, subTotalExento, descuentoCliente, subTotal, Total;
-    String idProducto;
     int nextId;
 
     public DistrSeleccionarProductosAdapter(DistribucionActivity activity, DistSelecProductoFragment fragment, List<Inventario> productosList) {
@@ -74,14 +72,11 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
         View view = LayoutInflater.from(parent.getContext())
             .inflate(R.layout.lista_distribucion_productos, parent, false);
         context = parent.getContext();
-        //  CharacterViewHolder placeViewHolder = new CharacterViewHolder(view);
-        // placeViewHolder.cardView.setOnClickListener(new ProductosAdapter(placeViewHolder, parent));
         return new CharacterViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(final DistrSeleccionarProductosAdapter.CharacterViewHolder holder, final int position) {
-
 
         final Inventario inventario = productosList.get(position);
 
@@ -306,7 +301,9 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
 
                                         realm4.close();
                                         activity.setCreditoLimiteCliente(String.valueOf(totalCredito));
+
                                         fragment.updateData();
+                                        fragment1.updateData();
 
                                     }
                                 });
