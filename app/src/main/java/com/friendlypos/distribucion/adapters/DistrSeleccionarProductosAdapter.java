@@ -59,6 +59,7 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
         this.activity = activity;
         this.fragment = fragment;
         this.productosList = productosList;
+        fragment1 = new DistResumenFragment();
     }
 
     public void updateData(List<Inventario> productosList) {
@@ -137,7 +138,9 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
     //}
 
 
-    public void addProduct(final int inventario_id, final String producto_id, final Double cantidadDisponible, final String description, String Precio1, String Precio2, String Precio3, String Precio4, String Precio5) {
+    public void addProduct(final int inventario_id, final String producto_id, final
+    Double cantidadDisponible, final String description, String Precio1, String Precio2,
+                           String Precio3, String Precio4, String Precio5) {
 
         final String idFacturaSeleccionada = (activity).getInvoiceId();
         Log.d("idFacturaSeleccionada", idFacturaSeleccionada + "");

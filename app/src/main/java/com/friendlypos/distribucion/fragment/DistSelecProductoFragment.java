@@ -45,7 +45,7 @@ public class DistSelecProductoFragment extends BaseFragment implements SearchVie
     static double creditoLimiteCliente = 0.0;
     int slecTAB;
     DistribucionActivity activity;
-
+    TotalizeHelper totalizeHelper;
 
     public static DistSelecProductoFragment getInstance() {
         return new DistSelecProductoFragment();
@@ -155,6 +155,9 @@ public class DistSelecProductoFragment extends BaseFragment implements SearchVie
     @Override
     public void updateData() {
         adapter.updateData(getListProductos());
+        adapter2.notifyDataSetChanged();
+        totalizeHelper = new TotalizeHelper(activity);
+        totalizeHelper.totalize(resumenFrag1.getListResumen());
 
         if (slecTAB == 1) {
             creditoLimiteCliente = Double.parseDouble(((DistribucionActivity) getActivity()).getCreditoLimiteCliente());
