@@ -28,8 +28,8 @@ public class DistResumenFragment extends BaseFragment {
     private DistrResumenAdapter adapter;
     int slecTAB;
 
-    TotalizeHelper totalizeHelper;
 
+    TotalizeHelper totalizeHelper;
 
     DistribucionActivity activity;
 
@@ -57,7 +57,7 @@ public class DistResumenFragment extends BaseFragment {
         adapter = new DistrResumenAdapter(activity, this, list);
         recyclerView.setAdapter(adapter);
 
-        ((DistribucionActivity) getActivity()).cleanTotalize();
+        activity.cleanTotalize();
         totalizeHelper = new TotalizeHelper(activity);
         totalizeHelper.totalize(list);
         Log.d("listaResumen", list + "");

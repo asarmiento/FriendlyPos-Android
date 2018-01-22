@@ -27,6 +27,7 @@ import com.friendlypos.distribucion.modelo.Marcas;
 import com.friendlypos.distribucion.modelo.Pivot;
 import com.friendlypos.distribucion.modelo.TipoProducto;
 import com.friendlypos.distribucion.modelo.sale;
+import com.friendlypos.distribucion.util.TotalizeHelper;
 import com.friendlypos.principal.activity.MenuPrincipal;
 import com.friendlypos.principal.modelo.Clientes;
 import com.friendlypos.principal.modelo.Productos;
@@ -35,6 +36,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
+import io.realm.RealmResults;
 
 /**
  * Created by DelvoM on 21/09/2017.
@@ -52,6 +54,7 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
     private int selected_position = -1;
     static double creditoLimiteCliente = 0.0;
     double totalCredito = 0.0;;
+    TotalizeHelper totalizeHelper;
 
     int nextId;
 
@@ -59,7 +62,7 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
         this.activity = activity;
         this.fragment = fragment;
         this.productosList = productosList;
-        fragment1 = new DistResumenFragment();
+        totalizeHelper = new TotalizeHelper(activity);
     }
 
     public void updateData(List<Inventario> productosList) {
@@ -306,7 +309,11 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
                                         activity.setCreditoLimiteCliente(String.valueOf(totalCredito));
 
                                         fragment.updateData();
-                                        fragment1.updateData();
+                                        List<Pivot> list = getListResumen();
+                                        activity.cleanTotalize();
+                                        totalizeHelper = new TotalizeHelper(activity);
+                                        totalizeHelper.totalize(list);
+                                        Log.d("listaResumenADD", list + "");
 
                                     }
                                 });
@@ -352,6 +359,13 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
         alertD.show();
     }
 
+    public List<Pivot> getListResumen() {
+        String facturaId = activity.getInvoiceId();
+        Realm realm = Realm.getDefaultInstance();
+        RealmResults<Pivot> facturaid1 = realm.where(Pivot.class).equalTo("invoice_id", facturaId).findAll();
+        realm.close();
+        return facturaid1;
+    }
     @Override
     public long getItemId(int position) {
         return 0;

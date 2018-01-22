@@ -156,8 +156,8 @@ public class DistSelecProductoFragment extends BaseFragment implements SearchVie
     public void updateData() {
         adapter.updateData(getListProductos());
         adapter2.notifyDataSetChanged();
-        totalizeHelper = new TotalizeHelper(activity);
-        totalizeHelper.totalize(resumenFrag1.getListResumen());
+       /* totalizeHelper = new TotalizeHelper(activity);
+        totalizeHelper.totalize(resumenFrag1.getListResumen());*/
 
         if (slecTAB == 1) {
             creditoLimiteCliente = Double.parseDouble(((DistribucionActivity) getActivity()).getCreditoLimiteCliente());
