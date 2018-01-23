@@ -41,12 +41,10 @@ public class DistSelecClienteFragment extends BaseFragment{
     @Override
     public void onDestroy() {
         super.onDestroy();
-        adapter2.clearAll();
     }
     @Override
     public void onResume() {
         super.onResume();
-        adapter2.clearAll();
     }
 
     @Override
@@ -68,7 +66,6 @@ public class DistSelecClienteFragment extends BaseFragment{
         recyclerView.setAdapter(adapter);
 
         adapter2 = new DistrResumenAdapter();
-        adapter2.clearAll();
     }
 
     private List<sale> getListClientes(){
@@ -85,7 +82,6 @@ public class DistSelecClienteFragment extends BaseFragment{
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        adapter2.clearAll();
         realm.close();
     }
 

@@ -31,7 +31,6 @@ import io.realm.RealmResults;
 public class DistrResumenAdapter extends RecyclerView.Adapter<DistrResumenAdapter.CharacterViewHolder> {
     private List<Pivot> productosList;
     private DistribucionActivity activity;
-    private ArrayList<Pivot> data;
     private static ArrayList<Pivot> aListdata = new ArrayList<Pivot>();
     private int selected_position1 = -1;
     Double amount_inventario = 0.0;
@@ -39,16 +38,10 @@ public class DistrResumenAdapter extends RecyclerView.Adapter<DistrResumenAdapte
 
     private DistResumenFragment fragment;
 
-
-    public ArrayList<Pivot> getData() {
-        return data;
-    }
-
     public DistrResumenAdapter(DistribucionActivity activity, DistResumenFragment fragment, List<Pivot> productosList) {
         this.productosList = productosList;
         this.activity = activity;
         this.fragment = fragment;
-        this.data = aListdata;
     }
 
     public DistrResumenAdapter() {
@@ -206,26 +199,6 @@ public class DistrResumenAdapter extends RecyclerView.Adapter<DistrResumenAdapte
         }
 
     }
-
-    @Deprecated
-    public void clearAll() {
-        Log.d("ClearAll", "RECIENTEMENTE REMOVIDO");
-      /*  subGrab = 0.0;
-        subGrabm = 0.0;
-        subExen = 0.0;
-        discountBill = 0.0;
-        IvaT = 0.0;
-        subt = subGrab + subExen;
-        total = subt + IvaT;
-        try {
-            System.gc();
-        }
-        catch (Exception e) {
-        }
-*/
-
-    }
-
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);

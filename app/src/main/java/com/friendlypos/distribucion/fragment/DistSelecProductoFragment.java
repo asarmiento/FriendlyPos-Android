@@ -54,7 +54,6 @@ public class DistSelecProductoFragment extends BaseFragment implements SearchVie
     @Override
     public void onDestroy() {
         super.onDestroy();
-        adapter2.clearAll();
     }
 
     @Override
@@ -72,7 +71,6 @@ public class DistSelecProductoFragment extends BaseFragment implements SearchVie
     @Override
     public void onResume() {
         super.onResume();
-        adapter2.clearAll();
     }
 
     @Override
@@ -92,7 +90,6 @@ public class DistSelecProductoFragment extends BaseFragment implements SearchVie
 
         Log.d("listaProducto", getListProductos() + "");
         adapter2 = new DistrResumenAdapter();
-        adapter2.clearAll();
         creditoDisponible();
 
         return rootView;
@@ -113,7 +110,6 @@ public class DistSelecProductoFragment extends BaseFragment implements SearchVie
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        adapter2.clearAll();
         realm.close();
     }
 

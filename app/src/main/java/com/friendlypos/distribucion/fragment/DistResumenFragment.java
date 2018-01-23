@@ -36,7 +36,6 @@ public class DistResumenFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        adapter.clearAll();
     }
 
     @Override
@@ -95,7 +94,6 @@ public class DistResumenFragment extends BaseFragment {
     public void updateData() {
         slecTAB = activity.getSelecClienteTab();
         if (slecTAB == 1) {
-            adapter.clearAll();
             activity.cleanTotalize();
             List<Pivot> list = getListResumen();
 
