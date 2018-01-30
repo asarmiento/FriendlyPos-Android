@@ -19,6 +19,8 @@ import com.friendlypos.principal.modelo.Clientes;
 import com.friendlypos.principal.modelo.Productos;
 import com.friendlypos.principal.modelo.Sysconf;
 
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -455,7 +457,7 @@ public class PrinterFunctions {
                     "\r\n" +
                     "\r\n" +
                     "------------------------------------------------\r\n" +
-                    "#     Total " + Functions.doubleToString(printSalesCashTotal) + "\r\n" +
+                    "#     Total " + Functions.doubleToString1(printSalesCashTotal) + "\r\n" +
                     "\r\n" +
                     "\r\n" +
                    /* "Recibos \r\n" +
@@ -469,11 +471,11 @@ public class PrinterFunctions {
                     " \r\n" +
                     " \r\n" +
                     "------------------------------------------------\r\n" +
-               //     "#     Total " + Functions.doubleToString(printReceiptsTotal) + "\r\n" +
+
                     "\r\n" +
                     "\r\n" +*/
                     "------------------------------------------------\r\n" +
-                   "#     Total " + Functions.doubleToString(printSalesCashTotal /*+ printSalesCreditTotal + printReceiptsTotal*/) + "\r\n" +
+                   "#     Total " + Functions.doubleToString1(printSalesCashTotal /*+ printSalesCreditTotal + printReceiptsTotal*/) + "\r\n" +
                     " \r\n" +
                     " \r\n" +
                     " \r\n" +
@@ -492,8 +494,8 @@ public class PrinterFunctions {
             preview += Html.fromHtml("<h1>") +  "#     Factura           Fecha         Monto" + Html.fromHtml("</h1></center><br/>");
             preview += Html.fromHtml("<h1>") +  "------------------------------------------------" + Html.fromHtml("</h1></center><br/>");
             preview += Html.fromHtml("<h1>") +   salesCredit + Html.fromHtml("</h1></center><br/>");
-            preview += Html.fromHtml("<h1>") +  "#     Total " + Functions.doubleToString(printSalesCashTotal) + Html.fromHtml("</h1><br/><br/><br/>");
-            preview += Html.fromHtml("<h1>") +  "#     Total " + Functions.doubleToString(printSalesCashTotal /*+ printSalesCreditTotal + printReceiptsTotal*/) + Html.fromHtml("</h1><br/><br/><br/>");
+            preview += Html.fromHtml("<h1>") +  "#     Total " + Functions.doubleToString1(printSalesCashTotal) + Html.fromHtml("</h1><br/><br/><br/>");
+            preview += Html.fromHtml("<h1>") +  "#     Total " + Functions.doubleToString1(printSalesCashTotal /*+ printSalesCreditTotal + printReceiptsTotal*/) + Html.fromHtml("</h1><br/><br/><br/>");
 
             Intent intent2 = new Intent(PrinterService.BROADCAST_CLASS);
             intent2.putExtra(PrinterService.BROADCAST_CLASS + "TO_PRINT", "true");
@@ -573,11 +575,20 @@ public class PrinterFunctions {
 
                 List<Pivot> salesList1 = realm.where(Pivot.class).equalTo("invoice_id", idVenta).findAll();
                 Productos producto = realm.where(Productos.class).equalTo("id", salesList1.get(i).getProduct_id()).findFirst();
-             //   sale ventas = realm.where(sale.class).equalTo("invoice_id", salesList1.get(i).getInvoice_id()).findFirst();
-            //    Clientes clientes = realm.where(Clientes.class).equalTo("id", ventas.getCustomer_id()).findFirst();
+                //   sale ventas = realm.where(sale.class).equalTo("invoice_id", salesList1.get(i).getInvoice_id()).findFirst();
+                //    Clientes clientes = realm.where(Clientes.class).equalTo("id", ventas.getCustomer_id()).findFirst();
                 realm.close();
 
+
                 String description = producto.getDescription();
+                byte[] byteText = description.getBytes(Charset.forName("UTF-8"));
+//To get original string from byte.
+                String description1 = null;
+                try {
+                    description1 = new String(byteText, "UTF-8");
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
                 String barcode = producto.getBarcode();
                 String typeId = producto.getProduct_type_id();
                 double cant = Double.parseDouble(salesList1.get(i).getAmount());
@@ -589,14 +600,14 @@ public class PrinterFunctions {
                 String total2 = String.format("%,.2f", cant * precio);
                 Log.d("r", total2 + "");
                 //String total3 = String.format("%.,2f", cant * precio);
-              //  Log.d("r", total3 + "");
+                //  Log.d("r", total3 + "");
                 String total4 = String.format(Locale.FRANCE, "%1$,.2f", cant * precio);
                 Log.d("r", total4 + "");
               /*  String factFecha = salesList1.get(i).getDate();
                 double factTotal = Functions.sGetDecimalStringAnyLocaleAsDouble(salesList1.get(i).getTotal());*/
 
-                send += String.format("%s  %.24s ",description, barcode) + "\r\n" +
-                        String.format("%-5s %-10s %-10s %-15s %.1s", cant /*bill.amount*/, precio, precio,Functions.doubleToString1(cant * precio), typeId) + "\r\n";
+                send += String.format("%s  %.24s ", description1, barcode) + "\r\n" +
+                        String.format("%-5s %-10s %-10s %-15s %.1s", cant /*bill.amount*/, precio, precio, Functions.doubleToString1(cant * precio), typeId) + "\r\n";
                 send += "------------------------------------------------\r\n";
                 Log.d("FACTPRODTODFAC", send + "");
             }
