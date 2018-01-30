@@ -22,6 +22,7 @@ import com.friendlypos.principal.modelo.Sysconf;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -583,11 +584,19 @@ public class PrinterFunctions {
                 double precio = Double.parseDouble(salesList1.get(i).getPrice());
 
 
+                String total = String.valueOf(cant * precio);
+                Log.d("r", total + "");
+                String total2 = String.format("%,.2f", cant * precio);
+                Log.d("r", total2 + "");
+                //String total3 = String.format("%.,2f", cant * precio);
+              //  Log.d("r", total3 + "");
+                String total4 = String.format(Locale.FRANCE, "%1$,.2f", cant * precio);
+                Log.d("r", total4 + "");
               /*  String factFecha = salesList1.get(i).getDate();
                 double factTotal = Functions.sGetDecimalStringAnyLocaleAsDouble(salesList1.get(i).getTotal());*/
 
                 send += String.format("%s  %.24s ",description, barcode) + "\r\n" +
-                        String.format("%-5s %-10s %-10s %-15s %.1s", cant /*bill.amount*/, precio, precio,Functions.doubleToString(cant * precio), typeId) + "\r\n";
+                        String.format("%-5s %-10s %-10s %-15s %.1s", cant /*bill.amount*/, precio, precio,Functions.doubleToString1(cant * precio), typeId) + "\r\n";
                 send += "------------------------------------------------\r\n";
                 Log.d("FACTPRODTODFAC", send + "");
             }

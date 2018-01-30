@@ -131,6 +131,10 @@ public class Functions {
         return String.format(Locale.getDefault(), "%,.2f", number);
     }
 
+    public static String doubleToString1(double number) {
+        return String.format(Locale.FRANCE, "%1$,.2f", number);
+    }
+
     public static double sGetDecimalStringAnyLocaleAsDouble(String value) {
 
         Locale theLocale = Locale.getDefault();
