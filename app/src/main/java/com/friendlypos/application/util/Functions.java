@@ -132,7 +132,7 @@ public class Functions {
     }
 
     public static String doubleToString1(double number) {
-        return String.format(Locale.FRANCE, "%1$,.2f", number);
+        return String.format(Locale.US, "%1$,.2f", number);
     }
 
     public static double sGetDecimalStringAnyLocaleAsDouble(String value) {
