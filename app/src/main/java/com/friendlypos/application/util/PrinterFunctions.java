@@ -61,7 +61,7 @@ public class PrinterFunctions {
         String fechaFactura = invoice.getDue_date();
         String numeracionFactura = invoice.getNumeration();
         String metodoPago = invoice.getPayment_method_id();
-        String totalGrabado= invoice.getSubtotal_taxed();
+        String totalGrabado= Functions.doubleToString1(Double.parseDouble(invoice.getSubtotal_taxed()));
         String totalExento= invoice.getSubtotal_exempt();
         String totalSubtotal= invoice.getSubtotal();
         String totalDescuento= invoice.getDiscount();
@@ -591,6 +591,14 @@ public class PrinterFunctions {
                 }
                 String barcode = producto.getBarcode();
                 String typeId = producto.getProduct_type_id();
+                String nombreTipo = null;
+                if (typeId.equals("1")){
+                    nombreTipo = "Gravado";
+                }
+                else if (typeId.equals("2")){
+                    nombreTipo = "Exento";
+
+                }
                 double cant = Double.parseDouble(salesList1.get(i).getAmount());
                 double precio = Double.parseDouble(salesList1.get(i).getPrice());
 
@@ -607,7 +615,7 @@ public class PrinterFunctions {
                 double factTotal = Functions.sGetDecimalStringAnyLocaleAsDouble(salesList1.get(i).getTotal());*/
 
                 send += String.format("%s  %.24s ", description1, barcode) + "\r\n" +
-                        String.format("%-5s %-10s %-10s %-15s %.1s", cant /*bill.amount*/, precio, precio, Functions.doubleToString1(cant * precio), typeId) + "\r\n";
+                        String.format("%-5s %-10s %-10s %-15s %.1s", cant /*bill.amount*/, precio, precio, Functions.doubleToString1(cant * precio), nombreTipo) + "\r\n";
                 send += "------------------------------------------------\r\n";
                 Log.d("FACTPRODTODFAC", send + "");
             }
