@@ -100,14 +100,6 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
     private int descargaDatosEmpresa;
     private int cambioDatosEmpresa = 0;
 
-    public int getDescargaDatosEmpresa() {
-        return descargaDatosEmpresa;
-    }
-
-    public void setDescargaDatosEmpresa(int descargaDatosEmpresa) {
-        this.descargaDatosEmpresa = descargaDatosEmpresa;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -216,7 +208,6 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
         popup.setOnMenuItemClickListener(this);
         popup.show();
     }
-
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
@@ -435,8 +426,6 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
         realm3.close();
     }
 
-
-
     public void ClickNavigation(View view) {
         Fragment fragment = null;
         Class fragmentClass = ConfiguracionFragment.class;
@@ -505,6 +494,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
 
         }
     }
+
 
     //Check if the printing service is running
     public boolean isServiceRunning(String serviceClassName) {

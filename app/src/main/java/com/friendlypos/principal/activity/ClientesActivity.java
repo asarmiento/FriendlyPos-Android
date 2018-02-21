@@ -1,6 +1,8 @@
 package com.friendlypos.principal.activity;
 
+import android.app.ActivityManager;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
@@ -20,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.friendlypos.R;
+import com.friendlypos.application.bluetooth.PrinterService;
 import com.friendlypos.application.datamanager.BaseManager;
 import com.friendlypos.login.activity.LoginActivity;
 import com.friendlypos.login.util.SessionPrefes;
@@ -43,7 +46,7 @@ import retrofit2.Response;
 import com.friendlypos.principal.modelo.ClientesResponse;
 import com.friendlypos.principal.modelo.Productos;
 
-public class ClientesActivity extends AppCompatActivity implements SearchView.OnQueryTextListener{
+public class ClientesActivity extends BluetoothActivity implements SearchView.OnQueryTextListener{
 
     @Bind(R.id.toolbar)
     Toolbar toolbar;
@@ -57,7 +60,7 @@ public class ClientesActivity extends AppCompatActivity implements SearchView.On
     private Realm realm;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_clientes);
         ButterKnife.bind(this);
@@ -72,7 +75,7 @@ public class ClientesActivity extends AppCompatActivity implements SearchView.On
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+        connectToPrinter();
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
         adapter = new ClientesAdapter(getList());
@@ -162,4 +165,35 @@ public class ClientesActivity extends AppCompatActivity implements SearchView.On
         return filteredModelList;
     }
 
+
+    private void connectToPrinter() {
+        //if(bluetoothStateChangeReceiver.isBluetoothAvailable()) {
+        getPreferences();
+        if (printer_enabled) {
+            if (printer == null || printer.equals("")) {
+//                AlertDialog d = new AlertDialog.Builder(context)
+//                        .setTitle(getResources().getString(R.string.printer_alert))
+//                        .setMessage(getResources().getString(R.string.message_printer_not_found))
+//                        .setNegativeButton(getString(android.R.string.ok), null)
+//                        .show();
+            }
+            else {
+                if (!isServiceRunning(PrinterService.CLASS_NAME)) {
+                    PrinterService.startRDService(getApplicationContext(), printer);
+                }
+            }
+        }
+    }
+    //Check if the printing service is running
+    public boolean isServiceRunning(String serviceClassName) {
+        final ActivityManager activityManager = (ActivityManager) getApplicationContext().getSystemService(Context.ACTIVITY_SERVICE);
+        final List<ActivityManager.RunningServiceInfo> services = activityManager.getRunningServices(Integer.MAX_VALUE);
+
+        for (ActivityManager.RunningServiceInfo runningServiceInfo : services) {
+            if (runningServiceInfo.service.getClassName().equals(serviceClassName)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

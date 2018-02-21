@@ -1,6 +1,8 @@
 package com.friendlypos.distribucion.activity;
 
+import android.app.ActivityManager;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -11,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.friendlypos.R;
+import com.friendlypos.application.bluetooth.PrinterService;
 import com.friendlypos.application.util.Functions;
 import com.friendlypos.distribucion.fragment.BaseFragment;
 import com.friendlypos.distribucion.fragment.DistResumenFragment;
@@ -158,7 +161,7 @@ public class DistribucionActivity extends BluetoothActivity {
         ActionBar actionBar = getSupportActionBar();
 
         actionBar.setDisplayHomeAsUpEnabled(true);
-
+        connectToPrinter();
         /*toolbar = (Toolbar) findViewById(R.id.toolbarDistribucion);
 
         setSupportActionBar(toolbar);
@@ -210,6 +213,26 @@ public class DistribucionActivity extends BluetoothActivity {
 
     }
 
+
+    private void connectToPrinter() {
+        //if(bluetoothStateChangeReceiver.isBluetoothAvailable()) {
+        getPreferences();
+        if (printer_enabled) {
+            if (printer == null || printer.equals("")) {
+//                AlertDialog d = new AlertDialog.Builder(context)
+//                        .setTitle(getResources().getString(R.string.printer_alert))
+//                        .setMessage(getResources().getString(R.string.message_printer_not_found))
+//                        .setNegativeButton(getString(android.R.string.ok), null)
+//                        .show();
+            }
+            else {
+                if (!isServiceRunning(PrinterService.CLASS_NAME)) {
+                    PrinterService.startRDService(getApplicationContext(), printer);
+                }
+            }
+        }
+    }
+
     private void setupViewPager(ViewPager viewPager) {
 
         Adapter adapter = new Adapter(getSupportFragmentManager());
@@ -257,5 +280,19 @@ public class DistribucionActivity extends BluetoothActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    //Check if the printing service is running
+    public boolean isServiceRunning(String serviceClassName) {
+        final ActivityManager activityManager = (ActivityManager) getApplicationContext().getSystemService(Context.ACTIVITY_SERVICE);
+        final List<ActivityManager.RunningServiceInfo> services = activityManager.getRunningServices(Integer.MAX_VALUE);
+
+        for (ActivityManager.RunningServiceInfo runningServiceInfo : services) {
+            if (runningServiceInfo.service.getClassName().equals(serviceClassName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }
 

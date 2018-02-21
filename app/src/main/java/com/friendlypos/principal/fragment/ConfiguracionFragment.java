@@ -72,8 +72,6 @@ public class ConfiguracionFragment extends PreferenceFragment implements OnShare
 
         populateExternalDisplayDevices();
         populateExternalSeleccImpresora();
-        prefDesvincularImpresora = findPreference("pref_desvincular_impresora");
-        prefDesvincularImpresora.setOnPreferenceClickListener(this);
 
         prefSelecImpresora = findPreference("pref_selec_impresora");
         prefSelecImpresora.setOnPreferenceClickListener(this);
@@ -81,6 +79,8 @@ public class ConfiguracionFragment extends PreferenceFragment implements OnShare
         prefConectarBluetooth = findPreference("pref_conectar_bluetooth");
         prefConectarBluetooth.setOnPreferenceClickListener(this);
 
+        prefDesvincularImpresora = findPreference("pref_desvincular_impresora");
+        prefDesvincularImpresora.setOnPreferenceClickListener(this);
 
         // Set values
         setBTDeviceSummary("pref_conectar_bluetooth");
@@ -101,7 +101,7 @@ public class ConfiguracionFragment extends PreferenceFragment implements OnShare
 
     }
 
-    private void showUnlinkDialog(){
+    private void desvincularImpresora(){
         AlertDialog.Builder build = new AlertDialog.Builder(getActivity());
         build.setTitle("Desvincular Impresora");
         build.setMessage("¿Desea desvincular la impresora?");
@@ -231,7 +231,7 @@ public class ConfiguracionFragment extends PreferenceFragment implements OnShare
     @Override
     public boolean onPreferenceClick(Preference preference) {
         if( preference == prefDesvincularImpresora) {
-            showUnlinkDialog();
+            desvincularImpresora();
         }else if (preference == prefConectarBluetooth){
             populateExternalDisplayDevices();
         }
