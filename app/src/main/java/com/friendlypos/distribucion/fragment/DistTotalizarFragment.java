@@ -51,6 +51,7 @@ public class DistTotalizarFragment extends BaseFragment  {
     String totalVuelvo = "0";
     String totalPagoCon = "0";
     static double pagoCon = 0.0;
+    static double vuelto = 0.0;
     String facturaId;
     String usuer;
     SessionPrefes session;
@@ -151,7 +152,7 @@ public class DistTotalizarFragment extends BaseFragment  {
                                 double total = totalTotal;
 
                                 if (pagoCon >= total) {
-                                    double vuelto = pagoCon - total;
+                                    vuelto = pagoCon - total;
                                     totalVuelvo = String.format("%,.2f", vuelto);
 
                                     int tabCliente = 0;
@@ -297,8 +298,8 @@ public class DistTotalizarFragment extends BaseFragment  {
                 factura_actualizada.setTax(String.valueOf(totalImpuesto));
                 factura_actualizada.setTotal(String.valueOf(totalTotal));
 
-                factura_actualizada.setPaid(totalPagoCon);
-                factura_actualizada.setChanging(totalVuelvo);
+                factura_actualizada.setPaid(String.valueOf(pagoCon));
+                factura_actualizada.setChanging(String.valueOf(vuelto));
                 factura_actualizada.setUser_id_applied(idUsuario);
                 factura_actualizada.setNote(notes.getText().toString());
                 factura_actualizada.setCanceled("1");

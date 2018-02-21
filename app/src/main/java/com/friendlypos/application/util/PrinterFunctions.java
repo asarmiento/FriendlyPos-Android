@@ -62,13 +62,13 @@ public class PrinterFunctions {
         String numeracionFactura = invoice.getNumeration();
         String metodoPago = invoice.getPayment_method_id();
         String totalGrabado= Functions.doubleToString1(Double.parseDouble(invoice.getSubtotal_taxed()));
-        String totalExento= invoice.getSubtotal_exempt();
-        String totalSubtotal= invoice.getSubtotal();
-        String totalDescuento= invoice.getDiscount();
-        String totalImpuesto= invoice.getTax();
-        String totalTotal= invoice.getTotal();
-        String totalCancelado= invoice.getPaid();
-        String totalVuelto= invoice.getChanging();
+        String totalExento= Functions.doubleToString1(Double.parseDouble(invoice.getSubtotal_exempt()));
+        String totalSubtotal= Functions.doubleToString1(Double.parseDouble(invoice.getSubtotal()));
+        String totalDescuento= Functions.doubleToString1(Double.parseDouble(invoice.getDiscount()));
+        String totalImpuesto= Functions.doubleToString1(Double.parseDouble(invoice.getTax()));
+        String totalTotal= Functions.doubleToString1(Double.parseDouble(invoice.getTotal()));
+        String totalCancelado= Functions.doubleToString1(Double.parseDouble(invoice.getPaid()));
+        String totalVuelto= Functions.doubleToString1(Double.parseDouble(invoice.getChanging()));
         String totalNotas= invoice.getNote();
         String idUsuario = invoice.getUser_id();
 
@@ -247,7 +247,7 @@ public class PrinterFunctions {
                     preview += Html.fromHtml("<h1>") + "A nombre de: " + nombreCliente + Html.fromHtml("</h1></center><br/><br/>");
                     preview += Html.fromHtml("<h1>") +  "Nombre fantasia: " + fantasyCliente + Html.fromHtml("</h1></center><br/><br/>");
                     preview += Html.fromHtml("<h1>") +  "# Telefono: " + telefonoCliente + Html.fromHtml("</h1></center><br/><br/><br/>");
-                    preview += Html.fromHtml("<h1>") +  "#  Descripcion               Codigo" + Html.fromHtml("</h1></center><br/>");
+                    preview += Html.fromHtml("<h1>") +  "#  Descripcion      Codigo" + Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>") +  "Cant     Precio       P.Sug        Total      I" + Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>") +  "------------------------------------------------" + Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>") +    getPrintDistTotal(sale.getInvoice_id()) + Html.fromHtml("</h1></center><br/>");
@@ -615,7 +615,7 @@ public class PrinterFunctions {
                 double factTotal = Functions.sGetDecimalStringAnyLocaleAsDouble(salesList1.get(i).getTotal());*/
 
                 send += String.format("%s  %.24s ", description1, barcode) + "\r\n" +
-                        String.format("%-5s %-10s %-10s %-15s %.1s", cant /*bill.amount*/, precio, precio, Functions.doubleToString1(cant * precio), nombreTipo) + "\r\n";
+                        String.format("%-5s %-10s %-15s %-12s %.1s", cant /*bill.amount*/, precio, precio, Functions.doubleToString1(cant * precio), nombreTipo) + "\r\n";
                 send += "------------------------------------------------\r\n";
                 Log.d("FACTPRODTODFAC", send + "");
             }
