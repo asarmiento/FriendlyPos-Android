@@ -28,7 +28,6 @@ public class DistResumenFragment extends BaseFragment {
     private DistrResumenAdapter adapter;
     int slecTAB;
 
-
     TotalizeHelper totalizeHelper;
 
     DistribucionActivity activity;

@@ -45,7 +45,6 @@ import retrofit2.Response;
 
 public class ProductosActivity extends BluetoothActivity implements SearchView.OnQueryTextListener{
 
-
     @Bind(R.id.toolbar)
     Toolbar toolbar;
 

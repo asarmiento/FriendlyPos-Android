@@ -322,8 +322,16 @@ public class DistTotalizarFragment extends BaseFragment  {
             public void execute(Realm realm3) {
                 sale_actualizada = realm3.where(sale.class).equalTo("invoice_id", facturaId).findFirst();
                 Log.d("dadasdad", client_name.getText().toString());
-                sale_actualizada.setCustomer_name(client_name.getText().toString());
 
+                String nombreEscrito = client_name.getText().toString();
+
+                if (nombreEscrito.matches("")) {
+                    Toast.makeText(getActivity(), "Nombre no cambio", Toast.LENGTH_SHORT).show();
+
+                }else{
+                    Toast.makeText(getActivity(), "Nombre cambio", Toast.LENGTH_SHORT).show();
+                    sale_actualizada.setCustomer_name(client_name.getText().toString());
+                }
 
                 sale_actualizada.setSale_type("1");
                 sale_actualizada.setApplied("1");

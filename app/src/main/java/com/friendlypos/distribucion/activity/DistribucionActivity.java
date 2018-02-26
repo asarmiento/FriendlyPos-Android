@@ -4,6 +4,7 @@ import android.app.ActivityManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.TabLayout;
@@ -11,10 +12,12 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.friendlypos.R;
 import com.friendlypos.application.bluetooth.PrinterService;
 import com.friendlypos.application.util.Functions;
+import com.friendlypos.distribucion.adapters.DistrClientesAdapter;
 import com.friendlypos.distribucion.fragment.BaseFragment;
 import com.friendlypos.distribucion.fragment.DistResumenFragment;
 import com.friendlypos.distribucion.fragment.DistSelecClienteFragment;
@@ -49,6 +52,8 @@ public class DistribucionActivity extends BluetoothActivity {
     private double totalizarTotalDouble;
 
     private int selecClienteTab;
+
+    private int selecColorCliente;
 
     ProgressDialog progressDialog;
 
@@ -196,7 +201,6 @@ public class DistribucionActivity extends BluetoothActivity {
                         }, 100);
                 }
                 else {
-
                 }
             }
 

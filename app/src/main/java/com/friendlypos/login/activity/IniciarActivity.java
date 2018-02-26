@@ -28,13 +28,13 @@ public class IniciarActivity extends AppCompatActivity {
        // Log.d("#fsfsdf", adsadas);
 
         if (session.isLoggedIn() == false){
-            Toast.makeText(this, "false" + "",Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "false" + "",Toast.LENGTH_SHORT).show();
 
             startActivity(new Intent(this, LoginActivity.class));
             finish();
         }
         else if (session.isLoggedIn()== true){
-            Toast.makeText(this, "true" + "",Toast.LENGTH_SHORT).show();
+          //  Toast.makeText(this, "true" + "",Toast.LENGTH_SHORT).show();
 
             startActivity(new Intent(this, MenuPrincipal.class));
             finish();

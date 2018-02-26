@@ -97,9 +97,9 @@ public class LoginActivity extends AppCompatActivity {
         if (properties.getUrlWebsrv() == null) {
             //if ("http://"+properties.getUrlWebsrv() == null) {
             properties.setUrlWebsrv("friendlyaccount.com");
-            Toast.makeText(this, "URL: " + "http://"+properties.getUrlWebsrv() + "",Toast.LENGTH_SHORT).show();
+          //  Toast.makeText(this, "URL: " + "http://"+properties.getUrlWebsrv() + "",Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(this, "URL1: " + "http://"+properties.getUrlWebsrv() + "",Toast.LENGTH_SHORT).show();
+          //  Toast.makeText(this, "URL1: " + "http://"+properties.getUrlWebsrv() + "",Toast.LENGTH_SHORT).show();
         }
 
 
@@ -266,7 +266,8 @@ public class LoginActivity extends AppCompatActivity {
         Thread t = new Thread(){
             public void run(){
                 try{
-                    Thread.sleep(10000);
+                   // Thread.sleep(10000);
+                    Thread.sleep(1000);
                 }
                 catch (InterruptedException e){
                     e.printStackTrace();
