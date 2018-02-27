@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,6 +50,7 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
     int nextId;
     int tabCliente;
     int activa = 0;
+    String nombreMetodoPago;
 
     public DistrClientesAdapter(Context context, DistribucionActivity activity, List<sale> contentList) {
         this.contentList = contentList;
@@ -69,11 +73,14 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
         Realm realm = Realm.getDefaultInstance();
 
         Clientes clientes = realm.where(Clientes.class).equalTo("id", sale.getCustomer_id()).findFirst();
-        final invoice invoice = realm.where(com.friendlypos.distribucion.modelo.invoice.class).equalTo("id", sale.getInvoice_id()).findFirst();
+        final invoice invoice = realm.where(invoice.class).equalTo("id", sale.getInvoice_id()).findFirst();
 
         final String cardCliente = clientes.getCard();
         String companyCliente = clientes.getCompanyName();
         String fantasyCliente = clientes.getFantasyName();
+
+
+
         String numeracionFactura = invoice.getNumeration();
 
 
@@ -82,6 +89,93 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
         holder.txt_cliente_factura_fantasyname.setText(fantasyCliente);
         holder.txt_cliente_factura_companyname.setText(companyCliente);
         holder.txt_cliente_factura_numeracion.setText("Factura: " + numeracionFactura);
+
+        holder.cardView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+
+                int pos = position;
+                sale clickedDataItem = contentList.get(pos);
+
+
+                Realm realm6 = Realm.getDefaultInstance();
+                invoice invoice1 = realm6.where(invoice.class).equalTo("id", clickedDataItem.getInvoice_id()).findFirst();
+                Clientes clientes = realm6.where(Clientes.class).equalTo("id", clickedDataItem.getCustomer_id()).findFirst();
+                realm6.close();
+
+                String metodoPago = invoice1.getPayment_method_id();
+                final double creditoLimite = Double.parseDouble(clientes.getCreditLimit());
+                final int creditoTime = Integer.parseInt(clientes.getCreditTime());
+                if (metodoPago.equals("1")){
+                    nombreMetodoPago = "Contado";
+                }
+                else if(metodoPago.equals("2")){
+                    nombreMetodoPago = "Crédito";
+                }
+
+
+                LayoutInflater layoutInflater = LayoutInflater.from(QuickContext);
+
+                View promptView = layoutInflater.inflate(R.layout.promptclient, null);
+
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(QuickContext);
+                alertDialogBuilder.setView(promptView);
+                final TextView txtTipoFacturaEs = (TextView) promptView.findViewById(R.id.txtTipoFacturaEs);
+                final RadioButton rbcontado = (RadioButton) promptView.findViewById(R.id.contadoBill);
+                final RadioButton rbcredito = (RadioButton) promptView.findViewById(R.id.creditBill);
+                final RadioGroup rgTipo = (RadioGroup) promptView.findViewById(R.id.rgTipo);
+
+                txtTipoFacturaEs.setText("Esta factura es de: " + nombreMetodoPago);
+
+                if (nombreMetodoPago.equals("Contado")){
+                    rgTipo.check(R.id.contadoBill);
+                }else if (nombreMetodoPago.equals("Credito")){
+                    rgTipo.check(R.id.creditBill);
+                }
+
+
+                alertDialogBuilder
+                        .setCancelable(false)
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+
+                             Toast.makeText(QuickContext,"CREDITO_CONTADO", Toast.LENGTH_LONG).show();
+
+                                if (creditoTime == 0 && rbcredito.isChecked()) {
+                                    Toast.makeText(QuickContext,"Este Cliente no puede tener credito" + creditoTime, Toast.LENGTH_LONG).show();
+                                }
+                                else{
+
+
+                                   // TRANSACCIÓN PARA ACTUALIZAR EL CAMPO METODO DE PAGO DE LA FACTURA
+                                    final Realm realm2 = Realm.getDefaultInstance();
+                                    realm2.executeTransaction(new Realm.Transaction() {
+
+                                        @Override
+                                        public void execute(Realm realm2) {
+                                            invoice factura_actualizado = realm2.where(invoice.class).equalTo("id", sale.getInvoice_id()).findFirst();
+                                            factura_actualizado.setPayment_method_id(String.valueOf("2"));
+                                            realm2.insertOrUpdate(factura_actualizado);
+                                            realm2.close();
+                                        }
+                                    });
+                                    Toast.makeText(QuickContext,"Este Cliente si puede tener credito" + creditoTime, Toast.LENGTH_LONG).show();
+                                    notifyDataSetChanged();
+                                }
+                            }
+                        })
+                        .setNegativeButton("Cancel",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        dialog.cancel();
+                                    }
+                                });
+
+                AlertDialog alertD = alertDialogBuilder.create();
+                alertD.show();
+                return true;
+            }
+        });
 
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
