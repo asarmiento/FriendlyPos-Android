@@ -42,6 +42,7 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
     private DistribucionActivity activity;
     //private boolean isSelected = false;
     private int selected_position = -1;
+    private int selected_position1 = -1;
     private static Context QuickContext = null;
     RealmResults<Pivot> facturaid1;
     int idInvetarioSelec;
@@ -78,15 +79,17 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
         final String cardCliente = clientes.getCard();
         String companyCliente = clientes.getCompanyName();
         String fantasyCliente = clientes.getFantasyName();
-
-
-
         String numeracionFactura = invoice.getNumeration();
+        String nombreVenta = sale.getCustomer_name();
 
 
 
         holder.txt_cliente_factura_card.setText(cardCliente);
-        holder.txt_cliente_factura_fantasyname.setText(fantasyCliente);
+        if (fantasyCliente.equals("Cliente Generico")){
+            holder.txt_cliente_factura_fantasyname.setText(nombreVenta);
+        }else{
+            holder.txt_cliente_factura_fantasyname.setText(fantasyCliente);
+        }
         holder.txt_cliente_factura_companyname.setText(companyCliente);
         holder.txt_cliente_factura_numeracion.setText("Factura: " + numeracionFactura);
 
@@ -95,6 +98,12 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
             public boolean onLongClick(View v) {
 
                 int pos = position;
+
+                // Updating old as well as new positions
+                notifyItemChanged(selected_position1);
+                selected_position1 = position;
+                notifyItemChanged(selected_position1);
+
                 sale clickedDataItem = contentList.get(pos);
 
 
@@ -104,7 +113,7 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
                 realm6.close();
 
                 String metodoPago = invoice1.getPayment_method_id();
-                final double creditoLimite = Double.parseDouble(clientes.getCreditLimit());
+                String numeracionFactura1 = invoice1.getNumeration();
                 final int creditoTime = Integer.parseInt(clientes.getCreditTime());
                 if (metodoPago.equals("1")){
                     nombreMetodoPago = "Contado";
@@ -125,11 +134,11 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
                 final RadioButton rbcredito = (RadioButton) promptView.findViewById(R.id.creditBill);
                 final RadioGroup rgTipo = (RadioGroup) promptView.findViewById(R.id.rgTipo);
 
-                txtTipoFacturaEs.setText("Esta factura es de: " + nombreMetodoPago);
+                txtTipoFacturaEs.setText("La factura #" + numeracionFactura1 + " es de: " + nombreMetodoPago);
 
                 if (nombreMetodoPago.equals("Contado")){
                     rgTipo.check(R.id.contadoBill);
-                }else if (nombreMetodoPago.equals("Credito")){
+                }else if (nombreMetodoPago.equals("Crédito")){
                     rgTipo.check(R.id.creditBill);
                 }
 
@@ -139,29 +148,51 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
 
-                             Toast.makeText(QuickContext,"CREDITO_CONTADO", Toast.LENGTH_LONG).show();
+                                if(rbcredito.isChecked()) {
+                                    if (creditoTime == 0) {
+                                        Toast.makeText(QuickContext, "Este cliente no cuenta con crédito", Toast.LENGTH_LONG).show();
+                                    }
+                                    else if (nombreMetodoPago.equals("Crédito")) {
+                                        Toast.makeText(QuickContext, "Esta factura ya es de crédito", Toast.LENGTH_LONG).show();
+                                    }
+                                    else {
+                                        // TRANSACCIÓN PARA ACTUALIZAR EL CAMPO METODO DE PAGO CREDITO DE LA FACTURA
+                                        final Realm realm2 = Realm.getDefaultInstance();
+                                        realm2.executeTransaction(new Realm.Transaction() {
 
-                                if (creditoTime == 0 && rbcredito.isChecked()) {
-                                    Toast.makeText(QuickContext,"Este Cliente no puede tener credito" + creditoTime, Toast.LENGTH_LONG).show();
+                                            @Override
+                                            public void execute(Realm realm2) {
+                                                invoice factura_actualizado = realm2.where(invoice.class).equalTo("id", sale.getInvoice_id()).findFirst();
+                                                factura_actualizado.setPayment_method_id(String.valueOf("2"));
+                                                realm2.insertOrUpdate(factura_actualizado);
+                                                realm2.close();
+                                            }
+                                        });
+                                        Toast.makeText(QuickContext, "Se cambio la factura a crédito", Toast.LENGTH_LONG).show();
+                                        notifyDataSetChanged();
+                                    }
                                 }
-                                else{
 
-
-                                   // TRANSACCIÓN PARA ACTUALIZAR EL CAMPO METODO DE PAGO DE LA FACTURA
+                                 if(nombreMetodoPago.equals("Contado") && rbcontado.isChecked() ){
+                                    Toast.makeText(QuickContext, "Esta factura ya es de contado", Toast.LENGTH_LONG).show();
+                                }
+                                 else if(rbcontado.isChecked()){
+                                    // TRANSACCIÓN PARA ACTUALIZAR EL CAMPO METODO DE PAGO CONTADO DE LA FACTURA
                                     final Realm realm2 = Realm.getDefaultInstance();
                                     realm2.executeTransaction(new Realm.Transaction() {
 
                                         @Override
                                         public void execute(Realm realm2) {
                                             invoice factura_actualizado = realm2.where(invoice.class).equalTo("id", sale.getInvoice_id()).findFirst();
-                                            factura_actualizado.setPayment_method_id(String.valueOf("2"));
+                                            factura_actualizado.setPayment_method_id(String.valueOf("1"));
                                             realm2.insertOrUpdate(factura_actualizado);
                                             realm2.close();
                                         }
                                     });
-                                    Toast.makeText(QuickContext,"Este Cliente si puede tener credito" + creditoTime, Toast.LENGTH_LONG).show();
+                                    Toast.makeText(QuickContext,"Se cambio la factura a contado", Toast.LENGTH_LONG).show();
                                     notifyDataSetChanged();
                                 }
+
                             }
                         })
                         .setNegativeButton("Cancel",
@@ -176,7 +207,6 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
                 return true;
             }
         });
-
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

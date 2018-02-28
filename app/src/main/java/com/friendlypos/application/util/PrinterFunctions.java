@@ -623,7 +623,6 @@ public class PrinterFunctions {
         return send;
     }
 
-
     private static String getUserName(Context context) {
         SessionPrefes session = new SessionPrefes(context);
 

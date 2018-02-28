@@ -12,9 +12,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.friendlypos.R;
+import com.friendlypos.application.util.Functions;
 import com.friendlypos.distribucion.activity.DistribucionActivity;
 import com.friendlypos.distribucion.fragment.DistResumenFragment;
 import com.friendlypos.distribucion.modelo.Inventario;
+import com.friendlypos.distribucion.modelo.InventarioDevuelto;
 import com.friendlypos.distribucion.modelo.Pivot;
 import com.friendlypos.principal.modelo.Productos;
 
@@ -35,7 +37,7 @@ public class DistrResumenAdapter extends RecyclerView.Adapter<DistrResumenAdapte
     private int selected_position1 = -1;
     Double amount_inventario = 0.0;
     int idInvetarioSelec;
-
+    int nextId;
     private DistResumenFragment fragment;
 
     public DistrResumenAdapter(DistribucionActivity activity, DistResumenFragment fragment, List<Pivot> productosList) {
