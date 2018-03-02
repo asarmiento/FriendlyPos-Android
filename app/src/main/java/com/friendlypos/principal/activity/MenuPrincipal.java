@@ -368,6 +368,16 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                 }
                 break;
 
+            case R.id.btn_imprimir_devolucion:
+                if(bluetoothStateChangeReceiver.isBluetoothAvailable()== true) {
+                    PrinterFunctions.imprimirDevoluciónMenu(MenuPrincipal.this);
+                    Toast.makeText(MenuPrincipal.this, "imprimir devolucion", Toast.LENGTH_SHORT).show();
+                }
+                else if(bluetoothStateChangeReceiver.isBluetoothAvailable() == false){
+                    Functions.CreateMessage(MenuPrincipal.this, "Error", "La conexión del bluetooth ha fallado, favor revisar o conectar el dispositivo");
+                }
+                break;
+
 
         }
         return false;

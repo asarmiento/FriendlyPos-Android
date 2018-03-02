@@ -42,7 +42,7 @@ public class ReimprimirResumenFragment extends BaseFragment {
 
     sale sale_actualizada = null;
     String facturaId = "";
-
+    String nombreMetodoPago;
     int slecTAB;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -68,7 +68,6 @@ public class ReimprimirResumenFragment extends BaseFragment {
                 if (sale_actualizada.getSale_type() == "2") {
                     a = "2";
                 }
-
 
                 if(bluetoothStateChangeReceiver.isBluetoothAvailable()== true) {
                     PrinterFunctions.imprimirFacturaDistrTotal(sale_actualizada, getActivity(), Integer.parseInt(a));
@@ -114,15 +113,24 @@ public class ReimprimirResumenFragment extends BaseFragment {
             String fechaFactura = invoice.getDue_date();
             String numeracionFactura = invoice.getNumeration();
             String metodoPago = invoice.getPayment_method_id();
-            String totalGrabado = invoice.getSubtotal_taxed();
-            String totalExento = invoice.getSubtotal_exempt();
-            String totalSubtotal = invoice.getSubtotal();
-            String totalDescuento = invoice.getDiscount();
-            String totalImpuesto = invoice.getTax();
-            String totalTotal = invoice.getTotal();
-            String totalCancelado = invoice.getPaid();
-            String totalVuelto = invoice.getChanging();
-            String totalNotas = invoice.getNote();
+
+            if (metodoPago.equals("1")){
+                nombreMetodoPago = "Contado";
+            }
+            else if(metodoPago.equals("2")){
+                nombreMetodoPago = "Crédito";
+            }
+
+            String totalGrabado= Functions.doubleToString1(Double.parseDouble(invoice.getSubtotal_taxed()));
+            String totalExento= Functions.doubleToString1(Double.parseDouble(invoice.getSubtotal_exempt()));
+            String totalSubtotal= Functions.doubleToString1(Double.parseDouble(invoice.getSubtotal()));
+            String totalDescuento= Functions.doubleToString1(Double.parseDouble(invoice.getDiscount()));
+            String totalImpuesto= Functions.doubleToString1(Double.parseDouble(invoice.getTax()));
+            String totalTotal= Functions.doubleToString1(Double.parseDouble(invoice.getTotal()));
+            String totalCancelado= Functions.doubleToString1(Double.parseDouble(invoice.getPaid()));
+            String totalVuelto= Functions.doubleToString1(Double.parseDouble(invoice.getChanging()));
+            String totalNotas= invoice.getNote();
+
 
             // VARIABLES SYSCONF
             String sysNombre = sysconf.getName();
@@ -145,18 +153,18 @@ public class ReimprimirResumenFragment extends BaseFragment {
 
 
                 String billString = "";
-                if (sale_actualizada.getSale_type() == "1") {
+                if (sale_actualizada.getSale_type().equals("1")) {
                     billString = "Factura";
                 }
-                else if (sale_actualizada.getSale_type() == "2") {
+                else if (sale_actualizada.getSale_type().equals("2")) {
                     billString = "Factura";
                 }
-                else if (sale_actualizada.getSale_type() == "3") {
+                else if (sale_actualizada.getSale_type().equals("3")) {
                     billString = "Proforma";
                 }
 
 
-                preview += "<center><h2>" + billString + " a " + metodoPago + "</h2>";
+                preview += "<center><h2>" + billString + " a " + nombreMetodoPago + "</h2>";
                 preview += "<h5>" + billString + " #" + numeracionFactura + "</h3>";
                 preview += "<center><h2>" + sysNombre + "</h2></center>";
                 preview += "<center><h4>" + sysNombreNegocio + "</h4></center>";
@@ -175,7 +183,6 @@ public class ReimprimirResumenFragment extends BaseFragment {
                 preview += "<a>------------------------------------------------<a><br>";
 
                 preview += getPrintDistTotal(sale_actualizada.getInvoice_id());
-
                 preview += "<center><a>" + String.format("%20s %-20s", "Subtotal Gravado", totalGrabado) + "</a><br>";
                 preview += "<a> " + String.format("%20s %-20s", "Subtotal Exento", totalExento) + "</a><br>";
                 preview += "<a> " + String.format("%20s %-20s", "Subtotal", totalSubtotal) + "</a><br>";

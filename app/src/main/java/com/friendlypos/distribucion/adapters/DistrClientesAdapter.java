@@ -403,7 +403,6 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
                                 }
                             });
 
-
                             // OBTENER NUEVO AMOUNT_DIST
                             final Double nuevoAmountDevuelto =  cantidadDevolver + amount_inventario;
                             Log.d("nuevoAmount",nuevoAmountDevuelto+"");

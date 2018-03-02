@@ -10,6 +10,7 @@ import android.text.Html;
 import android.util.Log;
 import android.widget.Toast;
 import com.friendlypos.application.bluetooth.PrinterService;
+import com.friendlypos.distribucion.modelo.Inventario;
 import com.friendlypos.distribucion.modelo.invoice;
 import com.friendlypos.distribucion.modelo.Pivot;
 import com.friendlypos.distribucion.modelo.sale;
@@ -27,6 +28,7 @@ import java.util.List;
 import java.util.Locale;
 
 import io.realm.Realm;
+import io.realm.RealmQuery;
 import io.realm.RealmResults;
 
 public class PrinterFunctions {
@@ -525,6 +527,141 @@ public class PrinterFunctions {
         //}
     }
 
+    public static void datosImprimirDevolucion(Context QuickContext) {
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(QuickContext);
+        String prefList = sharedPreferences.getString("pref_selec_impresora","Impresora Zebra");
+        String preview = "";
+
+        //String salesCash = getPrintSalesCash();
+        String salesCredit = getPrintDevolcionProductInvoices();
+        // String receipts = getPrintReceipts();
+        String billptype = "D e v o l u c i o n";
+
+        if (prefList.equals("1")){
+
+            String bill = "! U1 JOURNAl\r\n" +
+                    "! U1 SETLP 0 0 0\r\n" +
+                    "\r\n" +
+                    "! U1 SETLP 5 3 70\r\n" +
+                    //"! U1 LMARGIN 185\r\n" +
+                    String.format("%s", billptype) + "\r\n" +
+                    "! U1 SETLP 7 0 10\r\n" +
+                    "\r\n" +
+                    "Usuario: " + getUserName(QuickContext) + "\r\n" +
+                    "! U1 LMARGIN 0\r\n" +
+                    "! U1 SETSP 0\r\n" +
+                    "#     Factura           Fecha         Monto\r\n" +
+                    "------------------------------------------------\r\n" +
+                    "! U1 SETLP 7 0 10\r\n" +
+                    salesCredit +
+                    "\r\n" +
+                    "\r\n" +
+                    "------------------------------------------------\r\n" +
+                  //  "#     Total " + Functions.doubleToString1(printSalesCashTotal) + "\r\n" +
+                    "\r\n" +
+                    "\r\n" +
+                   /* "Recibos \r\n" +
+                    "! U1 LMARGIN 0\r\n" +
+                    "! U1 SETSP 0\r\n" +
+                    " \n\n" +
+                    "#     Recibo           Fecha         Monto\r\n" +
+                    "------------------------------------------------\r\n" +
+                    "! U1 SETLP 7 0 10\r\n" +
+                 //   receipts +
+                    " \r\n" +
+                    " \r\n" +
+                    "------------------------------------------------\r\n" +
+
+                    "\r\n" +
+                    "\r\n" +*/
+                    "------------------------------------------------\r\n" +
+                  //  "#     Total " + Functions.doubleToString1(printSalesCashTotal /*+ printSalesCreditTotal + printReceiptsTotal*/) + "\r\n" +
+                    " \r\n" +
+                    " \r\n" +
+                    " \r\n" +
+                    " \n ";
+
+            Intent intent2 = new Intent(PrinterService.BROADCAST_CLASS);
+            intent2.putExtra(PrinterService.BROADCAST_CLASS + "TO_PRINT", "true");
+            intent2.putExtra("bill_to_print", bill);
+            QuickContext.sendBroadcast(intent2);
+        }
+
+        else if(prefList.equals("2")){
+
+            preview += Html.fromHtml("<h1>") + String.format("%s", billptype) + Html.fromHtml("</h1><br/><br/><br/>");
+            //  preview += Html.fromHtml("<h1>") + "Usuario: " + getUserName(QuickContext) + Html.fromHtml("</h1><br/><br/>");
+            preview += Html.fromHtml("<h1>") +  "#     Factura           Fecha         Monto" + Html.fromHtml("</h1></center><br/>");
+            preview += Html.fromHtml("<h1>") +  "------------------------------------------------" + Html.fromHtml("</h1></center><br/>");
+            preview += Html.fromHtml("<h1>") +   salesCredit + Html.fromHtml("</h1></center><br/>");
+        //    preview += Html.fromHtml("<h1>") +  "#     Total " + Functions.doubleToString1(printSalesCashTotal) + Html.fromHtml("</h1><br/><br/><br/>");
+        //    preview += Html.fromHtml("<h1>") +  "#     Total " + Functions.doubleToString1(printSalesCashTotal /*+ printSalesCreditTotal + printReceiptsTotal*/) + Html.fromHtml("</h1><br/><br/><br/>");
+
+            Intent intent2 = new Intent(PrinterService.BROADCAST_CLASS);
+            intent2.putExtra(PrinterService.BROADCAST_CLASS + "TO_PRINT", "true");
+            intent2.putExtra("bill_to_print", preview);
+            QuickContext.sendBroadcast(intent2);
+        }
+    }
+
+    public static void imprimirDevoluciónMenu(final Context QuickContext) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(QuickContext);
+        builder.setTitle("¿Desea imprimir la lista de devolución?");
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                datosImprimirDevolucion(QuickContext);
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        builder.show();
+        //}
+    }
+
+    private static String getPrintDevolcionProductInvoices() {
+        String send = "";
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String currentDateandTime = sdf.format(new Date());
+
+        Realm realm = Realm.getDefaultInstance();
+
+        RealmResults<Inventario> result = realm.where(Inventario.class).notEqualTo("amount", "0").notEqualTo("amount", "0.0").findAll();
+
+       // RealmResults<invoice> result = realm.where(invoice.class).equalTo("date", currentDateandTime).findAll();
+
+        if (result.isEmpty()) {
+            send = "No hay devoluciones emitidas";
+        } else {
+            printSalesCashTotal= 0.0;
+            for (int i = 0; i < result.size(); i++) {
+
+                List<Inventario> salesList1 = realm.where(Inventario.class).notEqualTo("amount", "0").notEqualTo("amount", "0.0").findAll();
+
+                String factProductoId = salesList1.get(i).getProduct_id();
+                String factAmount = salesList1.get(i).getAmount();
+
+             //   double factTotal = Double.parseDouble(salesList1.get(i).getTotal());
+
+              //  String total = String.format("%,.2f",factTotal);
+
+                send += String.format("%-5s      %.20s", factProductoId, factAmount) + "\r\n";
+             //   printSalesCashTotal = printSalesCashTotal + factTotal;
+
+                Log.d("FACTPRODTODFAC", send + "");
+            }
+        }
+        return send;
+    }
+
     private static String getPrintProductInvoices() {
         String send = "";
 
@@ -535,7 +672,7 @@ public class PrinterFunctions {
         RealmResults<invoice> result = realm.where(invoice.class).equalTo("date", currentDateandTime).findAll();
 
         if (result.isEmpty()) {
-            send = "No hay invoice emitidas";
+            send = "No hay facturas emitidas";
         } else {
             printSalesCashTotal= 0.0;
             for (int i = 0; i < result.size(); i++) {

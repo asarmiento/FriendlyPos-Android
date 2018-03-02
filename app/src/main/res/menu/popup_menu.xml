@@ -27,4 +27,9 @@
         android:icon="@mipmap/ic_config"
         android:title="Imprimir Liquidación" />
 
+    <item
+        android:id="@+id/btn_imprimir_devolucion"
+        android:icon="@mipmap/ic_config"
+        android:title="Imprimir Devolución" />
+
 </menu>
