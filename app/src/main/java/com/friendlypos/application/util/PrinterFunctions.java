@@ -551,7 +551,7 @@ public class PrinterFunctions {
                     "Usuario: " + getUserName(QuickContext) + "\r\n" +
                     "! U1 LMARGIN 0\r\n" +
                     "! U1 SETSP 0\r\n" +
-                    "#           Producto                  \r\n" +
+                    "#        Producto                  \r\n" +
                     "Cantidad         Precio           Total\r\n" +
                     "------------------------------------------------\r\n" +
                     "! U1 SETLP 7 0 10\r\n" +
@@ -593,7 +593,7 @@ public class PrinterFunctions {
 
             preview += Html.fromHtml("<h1>") + String.format("%s", billptype) + Html.fromHtml("</h1><br/><br/><br/>");
             //  preview += Html.fromHtml("<h1>") + "Usuario: " + getUserName(QuickContext) + Html.fromHtml("</h1><br/><br/>");
-            preview += Html.fromHtml("<h1>") +   "#           Producto" + Html.fromHtml("</h1></center><br/>");
+            preview += Html.fromHtml("<h1>") +   "#        Producto" + Html.fromHtml("</h1></center><br/>");
             preview += Html.fromHtml("<h1>") +   "Cantidad         Precio           Total" + Html.fromHtml("</h1></center><br/>");
             preview += Html.fromHtml("<h1>") +  "------------------------------------------------" + Html.fromHtml("</h1></center><br/>");
             preview += Html.fromHtml("<h1>") +   salesCredit + Html.fromHtml("</h1></center><br/>");
@@ -663,8 +663,8 @@ public class PrinterFunctions {
 
               //  String total = String.format("%,.2f",factTotal);
 
-                send += String.format("%-5s      %.20s", factProductoId, description) + "\r\n" +
-                        String.format("%-5s   %-10s    %.1s", factAmount, precio, Functions.doubleToString1(factAmount * precio)) + "\r\n";
+                send += String.format("%-1s      %.60s", factProductoId, description) + "\r\n" +
+                        String.format("%-14s   %-12s    %.10s", factAmount, precio, Functions.doubleToString1(factAmount * precio)) + "\r\n";
                 send += "------------------------------------------------\r\n";
                 //   printSalesCashTotal = printSalesCashTotal + factTotal;
 
