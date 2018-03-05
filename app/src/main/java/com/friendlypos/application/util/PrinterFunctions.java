@@ -551,7 +551,8 @@ public class PrinterFunctions {
                     "Usuario: " + getUserName(QuickContext) + "\r\n" +
                     "! U1 LMARGIN 0\r\n" +
                     "! U1 SETSP 0\r\n" +
-                    "#     Factura           Fecha         Monto\r\n" +
+                    "#           Producto                  \r\n" +
+                    "Cantidad         Precio           Total\r\n" +
                     "------------------------------------------------\r\n" +
                     "! U1 SETLP 7 0 10\r\n" +
                     salesCredit +
@@ -592,7 +593,8 @@ public class PrinterFunctions {
 
             preview += Html.fromHtml("<h1>") + String.format("%s", billptype) + Html.fromHtml("</h1><br/><br/><br/>");
             //  preview += Html.fromHtml("<h1>") + "Usuario: " + getUserName(QuickContext) + Html.fromHtml("</h1><br/><br/>");
-            preview += Html.fromHtml("<h1>") +  "#     Factura           Fecha         Monto" + Html.fromHtml("</h1></center><br/>");
+            preview += Html.fromHtml("<h1>") +   "#           Producto" + Html.fromHtml("</h1></center><br/>");
+            preview += Html.fromHtml("<h1>") +   "Cantidad         Precio           Total" + Html.fromHtml("</h1></center><br/>");
             preview += Html.fromHtml("<h1>") +  "------------------------------------------------" + Html.fromHtml("</h1></center><br/>");
             preview += Html.fromHtml("<h1>") +   salesCredit + Html.fromHtml("</h1></center><br/>");
         //    preview += Html.fromHtml("<h1>") +  "#     Total " + Functions.doubleToString1(printSalesCashTotal) + Html.fromHtml("</h1><br/><br/><br/>");
@@ -646,15 +648,25 @@ public class PrinterFunctions {
 
                 List<Inventario> salesList1 = realm.where(Inventario.class).notEqualTo("amount", "0").notEqualTo("amount", "0.0").findAll();
 
-                String factProductoId = salesList1.get(i).getProduct_id();
-                String factAmount = salesList1.get(i).getAmount();
 
+
+                String factProductoId = salesList1.get(i).getProduct_id();
+                double factAmount = Double.parseDouble(salesList1.get(i).getAmount());
+
+                Realm realm1 = Realm.getDefaultInstance();
+                Productos producto = realm1.where(Productos.class).equalTo("id", factProductoId).findFirst();
+                String description = producto.getDescription();
+                double precio = Double.parseDouble(producto.getSale_price());
+
+                realm1.close();
              //   double factTotal = Double.parseDouble(salesList1.get(i).getTotal());
 
               //  String total = String.format("%,.2f",factTotal);
 
-                send += String.format("%-5s      %.20s", factProductoId, factAmount) + "\r\n";
-             //   printSalesCashTotal = printSalesCashTotal + factTotal;
+                send += String.format("%-5s      %.20s", factProductoId, description) + "\r\n" +
+                        String.format("%-5s   %-10s    %.1s", factAmount, precio, Functions.doubleToString1(factAmount * precio)) + "\r\n";
+                send += "------------------------------------------------\r\n";
+                //   printSalesCashTotal = printSalesCashTotal + factTotal;
 
                 Log.d("FACTPRODTODFAC", send + "");
             }
