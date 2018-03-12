@@ -341,6 +341,8 @@ public class DistTotalizarFragment extends BaseFragment  {
 
                 realm3.insertOrUpdate(sale_actualizada);
                 realm3.close();
+
+                Log.d("ENVIADOSALE", sale_actualizada + "" );
             }
         });
 
