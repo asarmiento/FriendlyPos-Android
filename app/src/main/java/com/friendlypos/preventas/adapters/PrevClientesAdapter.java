@@ -94,44 +94,41 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
                 selected_position1 = position;
                 notifyItemChanged(selected_position1);
 
-                sale clickedDataItem = contentList.get(pos);
+                Clientes clickedDataItem = contentList.get(pos);
 
 
                 Realm realm6 = Realm.getDefaultInstance();
-                invoice invoice1 = realm6.where(invoice.class).equalTo("id", clickedDataItem.getInvoice_id()).findFirst();
-                Clientes clientes = realm6.where(Clientes.class).equalTo("id", clickedDataItem.getCustomer_id()).findFirst();
+                //invoice invoice1 = realm6.where(invoice.class).equalTo("id", clickedDataItem.getInvoice_id()).findFirst();
+               // Clientes clientes = realm6.where(Clientes.class).equalTo("id", clickedDataItem.getCustomer_id()).findFirst();
                 realm6.close();
 
-                String metodoPago = invoice1.getPayment_method_id();
-                String numeracionFactura1 = invoice1.getNumeration();
-                final int creditoTime = Integer.parseInt(clientes.getCreditTime());
-                if (metodoPago.equals("1")){
+              //  String metodoPago = invoice1.getPayment_method_id();
+              //  String numeracionFactura1 = invoice1.getNumeration();
+                final int creditoTime = Integer.parseInt(clickedDataItem.getCreditTime());
+
+             /*   if (metodoPago.equals("1")){
                     nombreMetodoPago = "Contado";
                 }
                 else if(metodoPago.equals("2")){
                     nombreMetodoPago = "Crédito";
                 }
-
+*/
 
                 LayoutInflater layoutInflater = LayoutInflater.from(QuickContext);
 
-                View promptView = layoutInflater.inflate(R.layout.promptclient, null);
+                View promptView = layoutInflater.inflate(R.layout.promptclient_preventa, null);
 
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(QuickContext);
                 alertDialogBuilder.setView(promptView);
-                final TextView txtTipoFacturaEs = (TextView) promptView.findViewById(R.id.txtTipoFacturaEs);
                 final RadioButton rbcontado = (RadioButton) promptView.findViewById(R.id.contadoBill);
                 final RadioButton rbcredito = (RadioButton) promptView.findViewById(R.id.creditBill);
                 final RadioGroup rgTipo = (RadioGroup) promptView.findViewById(R.id.rgTipo);
-
-                txtTipoFacturaEs.setText("La factura #" + numeracionFactura1 + " es de: " + nombreMetodoPago);
 
                 if (nombreMetodoPago.equals("Contado")){
                     rgTipo.check(R.id.contadoBill);
                 }else if (nombreMetodoPago.equals("Crédito")){
                     rgTipo.check(R.id.creditBill);
                 }
-
 
                 alertDialogBuilder
                         .setCancelable(false)
