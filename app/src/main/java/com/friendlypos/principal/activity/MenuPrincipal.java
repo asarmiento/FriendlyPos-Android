@@ -36,19 +36,15 @@ import com.friendlypos.distribucion.modelo.sale;
 import com.friendlypos.login.activity.LoginActivity;
 import com.friendlypos.login.modelo.Usuarios;
 import com.friendlypos.login.util.SessionPrefes;
+import com.friendlypos.preventas.activity.PreventaActivity;
 import com.friendlypos.principal.fragment.ConfiguracionFragment;
 import com.friendlypos.principal.helpers.DescargasHelper;
 import com.friendlypos.principal.helpers.SubirHelper;
 import com.friendlypos.reimpresion.activity.ReimprimirActivity;
-import com.google.gson.Gson;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.List;
-import java.util.logging.Logger;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -492,7 +488,10 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                 break;
 
             case R.id.clickPreventa:
-                Toast.makeText(this, "Botón no disponible por el momento", Toast.LENGTH_SHORT).show();
+                Intent preventa;
+                preventa = new Intent(MenuPrincipal.this, PreventaActivity.class);
+                startActivity(preventa);
+                finish();
                 break;
 
             case R.id.clickReimprimirVentas:

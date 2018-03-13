@@ -162,5 +162,13 @@
     <string name="title_activity_reimprimir">Reimprimir Ventas</string>
     <string name="title_activity_iniciar">Iniciar</string>
 
+    <!-- PREVENTA -->
+
+    <string name="title_activity_preventa">Preventa</string>
+    <string name="seleccionecliente_preventa">Seleccionar cliente</string>
+    <string name="resumen_preventa">Resumen</string>
+    <string name="seleccioneproductos_preventa">Seleccionar productos</string>
+    <string name="totalizar_preventa">Totalizar</string>
+
 
 </resources>

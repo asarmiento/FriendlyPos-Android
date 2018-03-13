@@ -1,0 +1,77 @@
+<android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/cardViewSeleccionarProductos"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="3dp"
+    card_view:cardBackgroundColor="@color/background">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"
+        android:orientation="vertical"
+        >
+        <TextView
+            android:id="@+id/txt_prev_producto_factura_nombre"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:text="Nombre"
+            android:textColor="@color/icons"/>
+
+
+        <TextView
+            android:id="@+id/txt_prev_producto_factura_marca"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Marca"
+            android:layout_marginTop="5dp"
+            android:textColor="@color/icons"
+            android:layout_below="@+id/txt_prev_producto_factura_nombre"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:id="@+id/txt_prev_producto_factura_tipo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tipo"
+            android:textColor="@color/icons"
+            android:layout_below="@+id/txt_prev_producto_factura_marca"
+            android:layout_alignStart="@+id/txt_prev_producto_factura_marca" />
+
+        <TextView
+            android:id="@+id/txt_prev_producto_factura_precio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:text="Precio"
+            android:gravity="right"
+            android:textColor="@color/icons"
+            android:layout_below="@+id/txt_prev_producto_factura_tipo"
+            android:layout_alignParentEnd="true" />
+
+
+        <TextView
+            android:id="@+id/txt_prev_producto_factura_disponible"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Disponible"
+            android:layout_marginTop="8dp"
+            android:textColor="@color/icons"
+            android:layout_below="@+id/txt_prev_producto_factura_precio"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:id="@+id/txt_prev_producto_factura_seleccionado"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Seleccionado"
+            android:textColor="@color/icons"
+            android:layout_alignBaseline="@+id/txt_prev_producto_factura_disponible"
+            android:layout_alignBottom="@+id/txt_prev_producto_factura_disponible"
+            android:layout_alignParentEnd="true" />
+
+
+    </RelativeLayout>
+</android.support.v7.widget.CardView>
