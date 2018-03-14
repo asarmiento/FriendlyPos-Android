@@ -165,10 +165,10 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
                                     }
                                 }
 
-                                if(nombreMetodoPago.equals("Contado") && rbcontado.isChecked() ){
-                                    Functions.CreateMessage(QuickContext, " ", "Esta factura ya es de contado");
+                                 if(nombreMetodoPago.equals("Contado") && rbcontado.isChecked() ){
+                                     Functions.CreateMessage(QuickContext, " ", "Esta factura ya es de contado");
                                 }
-                                else if(rbcontado.isChecked()){
+                                 else if(rbcontado.isChecked()){
                                     // TRANSACCIÓN PARA ACTUALIZAR EL CAMPO METODO DE PAGO CONTADO DE LA FACTURA
                                     final Realm realm2 = Realm.getDefaultInstance();
                                     realm2.executeTransaction(new Realm.Transaction() {
@@ -182,8 +182,8 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
                                         }
                                     });
 
-                                    Functions.CreateMessage(QuickContext, " ", "Se cambio la factura a contado");
-                                    notifyDataSetChanged();
+                                     Functions.CreateMessage(QuickContext, " ", "Se cambio la factura a contado");
+                                     notifyDataSetChanged();
                                 }
 
                             }
@@ -356,6 +356,8 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
                             Log.d("PRODUCTOSFACTURASEPA1", eventRealm + "");
                             Log.d("PRODUCTOSFACTURASEPA", cantidadDevolver + "");
 
+                            final int resumenProductoId = eventRealm.getId();
+
                             // TRANSACCIÓN BD PARA SELECCIONAR LOS DATOS DEL INVENTARIO
                             Realm realm3 = Realm.getDefaultInstance();
                             realm3.executeTransaction(new Realm.Transaction() {
@@ -395,6 +397,26 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
                                     realm3.close();
                                 }
                             });
+
+                            final Realm realm5 = Realm.getDefaultInstance();
+                            realm5.executeTransaction(new Realm.Transaction() {
+                                @Override
+                                public void execute(Realm realm5) {
+                                    Pivot inv_actualizado = realm5.where(Pivot.class).equalTo("id", resumenProductoId).findFirst();
+                                    int dev = inv_actualizado.getDevuelvo();
+                                    if(dev == 0){
+                                        inv_actualizado.setDevuelvo(1);
+                                        realm5.insertOrUpdate(inv_actualizado);
+                                    }
+                                    else{
+                                        Toast.makeText(QuickContext, "ya sta 1", Toast.LENGTH_LONG).show();
+                                    }
+
+
+                                    realm5.close();
+                                }
+                            });
+
 
                             // OBTENER NUEVO AMOUNT_DIST
                             final Double nuevoAmountDevuelto =  cantidadDevolver + amount_inventario;
