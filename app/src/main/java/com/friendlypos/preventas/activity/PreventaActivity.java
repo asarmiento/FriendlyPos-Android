@@ -114,12 +114,12 @@ public class PreventaActivity extends BluetoothActivity {
         Adapter adapter = new Adapter(getSupportFragmentManager());
         final List<BaseFragment> list = new ArrayList<>();
         list.add(new PrevSelecClienteFragment());
-        list.add(new PrevSelecProductoFragment());
-       /*   list.add(new DistSelecProductoFragment());
+      /*   list.add(new PrevSelecProductoFragment());
+         list.add(new DistSelecProductoFragment());
         list.add(new DistTotalizarFragment());*/
         adapter.addFragment(list.get(0), "Seleccionar Cliente");
-        adapter.addFragment(list.get(1), "Seleccionar Productos");
-       /* adapter.addFragment(list.get(2), "Resumen");
+        /*  adapter.addFragment(list.get(1), "Seleccionar Productos");
+      adapter.addFragment(list.get(2), "Resumen");
         adapter.addFragment(list.get(3), "Totalizar");*/
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
