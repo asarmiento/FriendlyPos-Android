@@ -48,13 +48,35 @@
             android:layout_alignParentStart="true" />
 
         <TextView
+            android:id="@+id/txt_texto_cliente_telefono"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Teléfono:"
+            android:textStyle="bold"
+            android:textColor="@color/icons"
+            android:layout_below="@+id/txt_cliente_address"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:id="@+id/txt_cliente_telefono"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Telefono"
+            android:textColor="@color/icons"
+            android:layout_alignBaseline="@+id/txt_texto_cliente_telefono"
+            android:layout_alignBottom="@+id/txt_texto_cliente_telefono"
+            android:layout_toEndOf="@+id/txt_texto_cliente_telefono"
+            android:layout_marginLeft="5dp"/>
+
+        <TextView
             android:id="@+id/txt_texto_cliente_creditlimit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Crédito:"
             android:textStyle="bold"
+            android:layout_marginTop="5dp"
             android:textColor="@color/icons"
-            android:layout_below="@+id/txt_cliente_address"
+            android:layout_below="@+id/txt_texto_cliente_telefono"
             android:layout_alignParentStart="true" />
 
         <TextView
@@ -96,7 +118,7 @@
             android:text="Saldo:"
             android:textStyle="bold"
             android:textColor="@color/icons"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="3dp"
             android:layout_below="@+id/txt_texto_cliente_creditlimit"
             android:layout_alignParentStart="true" />
 
@@ -105,7 +127,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Due"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="3dp"
             android:textColor="@color/icons"
             android:layout_below="@+id/txt_cliente_creditlimit"
             android:layout_alignStart="@+id/txt_cliente_creditlimit" />
@@ -116,7 +138,7 @@
             android:layout_height="wrap_content"
             android:text="T. Limite:"
             android:textStyle="bold"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="3dp"
             android:textColor="@color/icons"
             android:layout_below="@+id/txt_texto_cliente_fixeddescount"
             android:layout_alignStart="@+id/txt_texto_cliente_fixeddescount" />
@@ -126,8 +148,7 @@
             android:layout_height="wrap_content"
             android:text="Credit time"
             android:textColor="@color/icons"
-            android:layout_marginTop="8dp"
-
+            android:layout_marginTop="3dp"
             android:layout_below="@+id/txt_cliente_fixeddescount"
             android:layout_alignStart="@+id/txt_cliente_fixeddescount" />
     </RelativeLayout>

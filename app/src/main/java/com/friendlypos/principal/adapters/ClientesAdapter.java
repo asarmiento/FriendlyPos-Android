@@ -16,8 +16,6 @@ import java.util.List;
 public class ClientesAdapter extends RecyclerView.Adapter<ClientesAdapter.CharacterViewHolder>{
 
     public List<Clientes> contentList;
-
-
     private static Double creditolimite = 0.0;
     private static Double descuentoFixed = 0.0;
     private static Double cleintedue = 0.0;
@@ -48,6 +46,7 @@ public class ClientesAdapter extends RecyclerView.Adapter<ClientesAdapter.Charac
         holder.txt_cliente_fantasyname.setText(content.getFantasyName());
         holder.txt_cliente_companyname.setText(content.getCompanyName());
         holder.txt_cliente_address.setText(content.getAddress());
+        holder.txt_cliente_telefono.setText(content.getPhone());
         holder.txt_cliente_creditlimit.setText(String.format("%,.2f", (creditolimite)));
         holder.txt_cliente_fixeddescount.setText(String.format("%,.2f", (descuentoFixed)));
         holder.txt_cliente_due.setText(String.format("%,.2f", (cleintedue)));
@@ -69,7 +68,7 @@ public class ClientesAdapter extends RecyclerView.Adapter<ClientesAdapter.Charac
     public static class CharacterViewHolder extends RecyclerView.ViewHolder {
 
         private TextView txt_cliente_card,txt_cliente_fantasyname,txt_cliente_companyname, txt_cliente_address,txt_cliente_creditlimit,
-                txt_cliente_fixeddescount, txt_cliente_due,txt_cliente_credittime;
+                txt_cliente_fixeddescount, txt_cliente_due,txt_cliente_credittime, txt_cliente_telefono;
 
         public CharacterViewHolder(View view) {
             super(view);
@@ -77,7 +76,7 @@ public class ClientesAdapter extends RecyclerView.Adapter<ClientesAdapter.Charac
             txt_cliente_fantasyname = (TextView)view.findViewById(R.id.txt_cliente_fantasyname);
             txt_cliente_companyname = (TextView)view.findViewById(R.id.txt_cliente_companyname);
             txt_cliente_address = (TextView)view.findViewById(R.id.txt_cliente_address);
-
+            txt_cliente_telefono = (TextView)view.findViewById(R.id.txt_cliente_telefono);
             txt_cliente_creditlimit = (TextView)view.findViewById(R.id.txt_cliente_creditlimit);
             txt_cliente_fixeddescount = (TextView)view.findViewById(R.id.txt_cliente_fixeddescount);
             txt_cliente_due = (TextView)view.findViewById(R.id.txt_cliente_due);
