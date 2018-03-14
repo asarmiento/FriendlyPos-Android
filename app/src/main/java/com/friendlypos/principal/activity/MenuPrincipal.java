@@ -35,12 +35,14 @@ import com.friendlypos.distribucion.modelo.invoice;
 import com.friendlypos.distribucion.modelo.sale;
 import com.friendlypos.login.activity.LoginActivity;
 import com.friendlypos.login.modelo.Usuarios;
+import com.friendlypos.login.util.Properties;
 import com.friendlypos.login.util.SessionPrefes;
 import com.friendlypos.preventas.activity.PreventaActivity;
 import com.friendlypos.principal.fragment.ConfiguracionFragment;
 import com.friendlypos.principal.helpers.DescargasHelper;
 import com.friendlypos.principal.helpers.SubirHelper;
 import com.friendlypos.reimpresion.activity.ReimprimirActivity;
+import com.github.clans.fab.FloatingActionButton;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -60,6 +62,9 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
     private static String POPUP_FORCE_SHOW_ICON = "setForceShowIcon";
     private NetworkStateChangeReceiver networkStateChangeReceiver;
     int bloquear = 0;
+    private FloatingActionButton but1 = null;
+    private FloatingActionButton but2 = null;
+    private FloatingActionButton but3 = null;
     @Bind(R.id.clickClientes)
     LinearLayout clickClientes;
 
@@ -92,7 +97,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
     String usuer;
     String idUsuario;
     String facturaId;
-
+    private Properties properties;
     private int descargaDatosEmpresa;
     private int cambioDatosEmpresa = 0;
 
@@ -106,6 +111,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
         networkStateChangeReceiver = new NetworkStateChangeReceiver();
         ActivityCompat.requestPermissions(MenuPrincipal.this, new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, 123);
         session = new SessionPrefes(getApplicationContext());
+        properties = new Properties(getApplicationContext());
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         download1 = new DescargasHelper(MenuPrincipal.this);
         subir1 = new SubirHelper(MenuPrincipal.this);
@@ -138,6 +144,43 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
             }
             realm.close();
         }
+
+        but1 = (FloatingActionButton) findViewById(R.id.nav_distribucion);
+
+        but1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!properties.getBlockedApp()) {
+                    Intent intent = new Intent(getApplication(), DistribucionActivity.class);
+                    startActivity(intent);
+                }
+            }
+        });
+
+        but2 = (FloatingActionButton) findViewById(R.id.nav_ventadirecta);
+
+        but2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               /* if (!properties.getBlockedApp()) {
+                    Intent intent = new Intent(getApplication(), PresaleActivity.class);
+                    startActivity(intent);
+                }*/
+            }
+        });
+
+        but3 = (FloatingActionButton) findViewById(R.id.nav_preventa);
+
+        but3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!properties.getBlockedApp()) {
+                    Intent intent = new Intent(getApplication(), PreventaActivity.class);
+                    startActivity(intent);
+                }
+            }
+        });
+
     }
 
     @Override

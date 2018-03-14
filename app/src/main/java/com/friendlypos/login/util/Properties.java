@@ -81,7 +81,10 @@ public class Properties {
         return pref.getString(URL_WEBSRV,null);
     }
 
-
+    public Boolean getBlockedApp() {
+        Log.d("Blockeado", String.valueOf(pref.getBoolean(BlockedApp, false)));
+        return pref.getBoolean(BlockedApp, false);
+    }
 
 
 }
