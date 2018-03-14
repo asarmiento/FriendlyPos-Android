@@ -98,14 +98,7 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
             public boolean onLongClick(View v) {
 
                 int pos = position;
-
-                // Updating old as well as new positions
-                notifyItemChanged(selected_position1);
-                selected_position1 = position;
-                notifyItemChanged(selected_position1);
-
                 sale clickedDataItem = contentList.get(pos);
-
 
                 Realm realm6 = Realm.getDefaultInstance();
                 invoice invoice1 = realm6.where(invoice.class).equalTo("id", clickedDataItem.getInvoice_id()).findFirst();
@@ -142,7 +135,6 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
                     rgTipo.check(R.id.creditBill);
                 }
 
-
                 alertDialogBuilder
                         .setCancelable(false)
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -150,10 +142,10 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
 
                                 if(rbcredito.isChecked()) {
                                     if (creditoTime == 0) {
-                                        Toast.makeText(QuickContext, "Este cliente no cuenta con crédito", Toast.LENGTH_LONG).show();
+                                        Functions.CreateMessage(QuickContext, " ", "Este cliente no cuenta con crédito");
                                     }
                                     else if (nombreMetodoPago.equals("Crédito")) {
-                                        Toast.makeText(QuickContext, "Esta factura ya es de crédito", Toast.LENGTH_LONG).show();
+                                        Functions.CreateMessage(QuickContext, " ", "Esta factura ya es de crédito");
                                     }
                                     else {
                                         // TRANSACCIÓN PARA ACTUALIZAR EL CAMPO METODO DE PAGO CREDITO DE LA FACTURA
@@ -168,15 +160,15 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
                                                 realm2.close();
                                             }
                                         });
-                                        Toast.makeText(QuickContext, "Se cambio la factura a crédito", Toast.LENGTH_LONG).show();
+                                        Functions.CreateMessage(QuickContext, " ", "Se cambio la factura a crédito");
                                         notifyDataSetChanged();
                                     }
                                 }
 
-                                 if(nombreMetodoPago.equals("Contado") && rbcontado.isChecked() ){
-                                    Toast.makeText(QuickContext, "Esta factura ya es de contado", Toast.LENGTH_LONG).show();
+                                if(nombreMetodoPago.equals("Contado") && rbcontado.isChecked() ){
+                                    Functions.CreateMessage(QuickContext, " ", "Esta factura ya es de contado");
                                 }
-                                 else if(rbcontado.isChecked()){
+                                else if(rbcontado.isChecked()){
                                     // TRANSACCIÓN PARA ACTUALIZAR EL CAMPO METODO DE PAGO CONTADO DE LA FACTURA
                                     final Realm realm2 = Realm.getDefaultInstance();
                                     realm2.executeTransaction(new Realm.Transaction() {
@@ -189,7 +181,8 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
                                             realm2.close();
                                         }
                                     });
-                                    Toast.makeText(QuickContext,"Se cambio la factura a contado", Toast.LENGTH_LONG).show();
+
+                                    Functions.CreateMessage(QuickContext, " ", "Se cambio la factura a contado");
                                     notifyDataSetChanged();
                                 }
 

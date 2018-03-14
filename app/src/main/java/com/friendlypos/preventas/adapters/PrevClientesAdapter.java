@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.friendlypos.R;
+import com.friendlypos.application.util.Functions;
 import com.friendlypos.distribucion.modelo.Pivot;
 import com.friendlypos.distribucion.modelo.invoice;
 import com.friendlypos.preventas.activity.PreventaActivity;
@@ -88,41 +89,36 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
             public boolean onLongClick(View v) {
 
                 int pos = position;
-
-                // Updating old as well as new positions
-                notifyItemChanged(selected_position1);
-                selected_position1 = position;
-                notifyItemChanged(selected_position1);
-
                 Clientes clickedDataItem = contentList.get(pos);
 
-
                 Realm realm6 = Realm.getDefaultInstance();
-                //invoice invoice1 = realm6.where(invoice.class).equalTo("id", clickedDataItem.getInvoice_id()).findFirst();
-               // Clientes clientes = realm6.where(Clientes.class).equalTo("id", clickedDataItem.getCustomer_id()).findFirst();
+                invoice invoice1 = realm6.where(invoice.class).equalTo("id", clickedDataItem.getInvoice_id()).findFirst();
+                Clientes clientes = realm6.where(Clientes.class).equalTo("id", clickedDataItem.getCustomer_id()).findFirst();
                 realm6.close();
 
-              //  String metodoPago = invoice1.getPayment_method_id();
-              //  String numeracionFactura1 = invoice1.getNumeration();
-                final int creditoTime = Integer.parseInt(clickedDataItem.getCreditTime());
-
-             /*   if (metodoPago.equals("1")){
+                String metodoPago = invoice1.getPayment_method_id();
+                String numeracionFactura1 = invoice1.getNumeration();
+                final int creditoTime = Integer.parseInt(clientes.getCreditTime());
+                if (metodoPago.equals("1")){
                     nombreMetodoPago = "Contado";
                 }
                 else if(metodoPago.equals("2")){
                     nombreMetodoPago = "Crédito";
                 }
-*/
+
 
                 LayoutInflater layoutInflater = LayoutInflater.from(QuickContext);
 
-                View promptView = layoutInflater.inflate(R.layout.promptclient_preventa, null);
+                View promptView = layoutInflater.inflate(R.layout.promptclient, null);
 
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(QuickContext);
                 alertDialogBuilder.setView(promptView);
+                final TextView txtTipoFacturaEs = (TextView) promptView.findViewById(R.id.txtTipoFacturaEs);
                 final RadioButton rbcontado = (RadioButton) promptView.findViewById(R.id.contadoBill);
                 final RadioButton rbcredito = (RadioButton) promptView.findViewById(R.id.creditBill);
                 final RadioGroup rgTipo = (RadioGroup) promptView.findViewById(R.id.rgTipo);
+
+                txtTipoFacturaEs.setText("La factura #" + numeracionFactura1 + " es de: " + nombreMetodoPago);
 
                 if (nombreMetodoPago.equals("Contado")){
                     rgTipo.check(R.id.contadoBill);
@@ -137,10 +133,10 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
 
                                 if(rbcredito.isChecked()) {
                                     if (creditoTime == 0) {
-                                        Toast.makeText(QuickContext, "Este cliente no cuenta con crédito", Toast.LENGTH_LONG).show();
+                                        Functions.CreateMessage(QuickContext, " ", "Este cliente no cuenta con crédito");
                                     }
                                     else if (nombreMetodoPago.equals("Crédito")) {
-                                        Toast.makeText(QuickContext, "Esta factura ya es de crédito", Toast.LENGTH_LONG).show();
+                                        Functions.CreateMessage(QuickContext, " ", "Esta factura ya es de crédito");
                                     }
                                     else {
                                         // TRANSACCIÓN PARA ACTUALIZAR EL CAMPO METODO DE PAGO CREDITO DE LA FACTURA
@@ -155,13 +151,13 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
                                                 realm2.close();
                                             }
                                         });
-                                        Toast.makeText(QuickContext, "Se cambio la factura a crédito", Toast.LENGTH_LONG).show();
+                                        Functions.CreateMessage(QuickContext, " ", "Se cambio la factura a crédito");
                                         notifyDataSetChanged();
                                     }
                                 }
 
                                 if(nombreMetodoPago.equals("Contado") && rbcontado.isChecked() ){
-                                    Toast.makeText(QuickContext, "Esta factura ya es de contado", Toast.LENGTH_LONG).show();
+                                    Functions.CreateMessage(QuickContext, " ", "Esta factura ya es de contado");
                                 }
                                 else if(rbcontado.isChecked()){
                                     // TRANSACCIÓN PARA ACTUALIZAR EL CAMPO METODO DE PAGO CONTADO DE LA FACTURA
@@ -176,10 +172,10 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
                                             realm2.close();
                                         }
                                     });
-                                    Toast.makeText(QuickContext,"Se cambio la factura a contado", Toast.LENGTH_LONG).show();
+
+                                    Functions.CreateMessage(QuickContext, " ", "Se cambio la factura a contado");
                                     notifyDataSetChanged();
                                 }
-
                             }
                         })
                         .setNegativeButton("Cancel",

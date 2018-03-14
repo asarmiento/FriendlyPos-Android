@@ -14,12 +14,16 @@ import com.friendlypos.R;
 import com.friendlypos.distribucion.activity.DistribucionActivity;
 import com.friendlypos.distribucion.adapters.DistrResumenAdapter;
 import com.friendlypos.distribucion.modelo.Pivot;
+import com.friendlypos.distribucion.modelo.sale;
 import com.friendlypos.distribucion.util.TotalizeHelper;
 
 import java.util.List;
 
 import io.realm.Realm;
+import io.realm.RealmQuery;
 import io.realm.RealmResults;
+
+import static io.realm.internal.SyncObjectServerFacade.getApplicationContext;
 
 
 public class DistResumenFragment extends BaseFragment {
@@ -79,12 +83,13 @@ public class DistResumenFragment extends BaseFragment {
     public void onDetach(){
         super.onDetach();
         activity = null;
-
     }
+
+
     public List<Pivot> getListResumen() {
         String facturaId = activity.getInvoiceId();
         Realm realm = Realm.getDefaultInstance();
-        RealmResults<Pivot> facturaid1 = realm.where(Pivot.class).equalTo("invoice_id", facturaId).findAll();
+        RealmResults<Pivot> facturaid1 = realm.where(Pivot.class).equalTo("invoice_id", facturaId).equalTo("devuelvo", 0).findAll();
         realm.close();
         return facturaid1;
     }
