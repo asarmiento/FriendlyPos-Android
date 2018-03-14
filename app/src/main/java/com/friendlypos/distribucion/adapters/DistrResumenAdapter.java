@@ -165,9 +165,38 @@ public class DistrResumenAdapter extends RecyclerView.Adapter<DistrResumenAdapte
                             Inventario inv_actualizado = realm2.where(Inventario.class).equalTo("id", idInvetarioSelec).findFirst();
                             inv_actualizado.setAmount(String.valueOf(nuevoAmountDevuelto));
                             realm2.insertOrUpdate(inv_actualizado);
+
                             realm2.close();
                         }
                     });
+
+
+/*
+                    // TRANSACCIÓN PARA COPIAR DATOS EN LA BASE DEVUELTA
+                    final Realm realmInvDevolver = Realm.getDefaultInstance();
+                    realmInvDevolver.executeTransaction(new Realm.Transaction() {
+
+                        @Override
+                        public void execute(Realm realmInvDevolver) {
+
+                            // increment index
+                            Number currentIdNum = realmInvDevolver.where(InventarioDevuelto.class).max("id_devuelto");
+
+                            if (currentIdNum == null) {
+                                nextId = 1;
+                            }
+                            else {
+                                nextId = currentIdNum.intValue() + 1;
+                            }
+
+                            InventarioDevuelto inv_actualizado = realmInvDevolver.where(InventarioDevuelto.class).findFirst();
+                            inv_actualizado.setId_devuelto(nextId);
+                            inv_actualizado.setDate_devuelto(Functions.getDate());
+                            inv_actualizado.setTimes_devuelto(Functions.get24Time());
+                            realmInvDevolver.insertOrUpdate(inv_actualizado);
+                            realmInvDevolver.close();
+                        }
+                    });*/
 
                     // TRANSACCIÓN PARA ACTUALIZAR EL CAMPO CREDIT_LIMIT EN LA FACTURA
                 /*    final Realm realm5 = Realm.getDefaultInstance();
@@ -182,7 +211,20 @@ public class DistrResumenAdapter extends RecyclerView.Adapter<DistrResumenAdapte
                     });*/
 
                     // TRANSACCIÓN BD PARA BORRAR EL CAMPO
-                    final Realm realm = Realm.getDefaultInstance();
+
+                    final Realm realm5 = Realm.getDefaultInstance();
+                    realm5.executeTransaction(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm5) {
+                            Pivot inv_actualizado = realm5.where(Pivot.class).equalTo("id", resumenProductoId).findFirst();
+                            inv_actualizado.setDevuelvo(1);
+                            realm5.insertOrUpdate(inv_actualizado);
+                            realm5.close();
+                        }
+                    });
+
+
+             /*     final Realm realm = Realm.getDefaultInstance();
                     realm.executeTransaction(new Realm.Transaction() {
 
                         @Override
@@ -192,7 +234,7 @@ public class DistrResumenAdapter extends RecyclerView.Adapter<DistrResumenAdapte
                             realm.close();
                         }
 
-                    });
+                    });*/
                     notifyDataSetChanged();
                     fragment.updateData();
 

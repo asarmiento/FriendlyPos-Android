@@ -24,6 +24,7 @@ public class Pivot extends RealmObject {
     String amount;
     String discount;
     String delivered;
+    int devuelvo= 0;
 
     public int getId() {
         return id;
@@ -81,6 +82,14 @@ public class Pivot extends RealmObject {
         this.delivered = delivered;
     }
 
+    public int getDevuelvo() {
+        return devuelvo;
+    }
+
+    public void setDevuelvo(int devuelvo) {
+        this.devuelvo = devuelvo;
+    }
+
     @Override
     public String toString() {
         return "Pivot{" +
@@ -91,6 +100,7 @@ public class Pivot extends RealmObject {
                 ", amount='" + amount + '\'' +
                 ", discount='" + discount + '\'' +
                 ", delivered='" + delivered + '\'' +
+                ", devuelvo='" + devuelvo + '\'' +
                 '}';
     }
 }
