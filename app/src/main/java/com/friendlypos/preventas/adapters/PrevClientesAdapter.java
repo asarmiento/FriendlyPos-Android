@@ -43,6 +43,7 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
     int activa = 0;
     String nombreMetodoPago;
     String metodoPagoId;
+    int contador = 0;
 
     private static Double creditolimite = 0.0;
     private static Double descuentoFixed = 0.0;
@@ -113,8 +114,11 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
 
                 Clientes clickedDataItem = contentList.get(pos);
 
-
+                // increment index
+                contador ++;
+                facturaID = String.valueOf(contador);
                 // facturaID = clickedDataItem.getInvoice_id();
+
 
 
                 //   Realm realm6 = Realm.getDefaultInstance();
@@ -217,6 +221,8 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
                 AlertDialog alertD = alertDialogBuilder.create();
                 alertD.show();
 
+                Toast.makeText(QuickContext, "You clicked " + facturaID, Toast.LENGTH_SHORT).show();
+                activity.setInvoiceIdPreventa(facturaID);
         /*        Realm realm = Realm.getDefaultInstance();
                 invoice invoice = realm.where(com.friendlypos.distribucion.modelo.invoice.class).equalTo("id", facturaID).findFirst();
                 Clientes clientes = realm.where(Clientes.class).equalTo("id", clienteID).findFirst();

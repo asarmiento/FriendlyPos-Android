@@ -28,6 +28,16 @@ public class PreventaActivity extends BluetoothActivity {
 
     private Toolbar toolbar;
     private TabLayout tabLayout;
+    private String invoiceIdPreventa;
+
+    public String getInvoiceIdPreventa() {
+        return invoiceIdPreventa;
+    }
+
+    public void setInvoiceIdPreventa(String invoiceIdPreventa) {
+        this.invoiceIdPreventa = invoiceIdPreventa;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

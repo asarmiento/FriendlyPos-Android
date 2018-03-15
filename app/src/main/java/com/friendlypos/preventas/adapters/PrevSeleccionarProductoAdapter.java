@@ -31,6 +31,7 @@ import com.friendlypos.distribucion.modelo.TipoProducto;
 import com.friendlypos.distribucion.modelo.sale;
 import com.friendlypos.distribucion.util.TotalizeHelper;
 import com.friendlypos.preventas.activity.PreventaActivity;
+import com.friendlypos.preventas.fragment.PrevSelecProductoFragment;
 import com.friendlypos.principal.modelo.Clientes;
 import com.friendlypos.principal.modelo.Productos;
 
@@ -40,8 +41,264 @@ import java.util.List;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
-public class PrevSeleccionarProductoAdapter  {
+public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSeleccionarProductoAdapter.CharacterViewHolder> {
+
+    private Context context;
+    public List<Inventario> productosList;
+    private PreventaActivity activity;
+    private PrevSelecProductoFragment fragment;
+    private static double producto_amount_dist_add = 0;
+    private static double producto_descuento_add = 0;
+    private int selected_position = -1;
+    static double creditoLimiteCliente = 0.0;
+    double totalCredito = 0.0;;
+//    TotalizeHelper totalizeHelper;
+
+    int nextId;
+
+    public PrevSeleccionarProductoAdapter(PreventaActivity activity, PrevSelecProductoFragment fragment, List<Inventario> productosList) {
+        this.activity = activity;
+        this.fragment = fragment;
+        this.productosList = productosList;
+     //   totalizeHelper = new TotalizeHelper(activity);
+    }
+
+    public void updateData(List<Inventario> productosList) {
+
+        this.productosList = productosList;
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public PrevSeleccionarProductoAdapter.CharacterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.lista_preventa_productos, parent, false);
+        context = parent.getContext();
+        return new PrevSeleccionarProductoAdapter.CharacterViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(final PrevSeleccionarProductoAdapter.CharacterViewHolder holder, final int position) {
+
+        final Inventario inventario = productosList.get(position);
+
+        Realm realm = Realm.getDefaultInstance();
+        Productos producto = realm.where(Productos.class).equalTo("id", inventario.getProduct_id()).findFirst();
 
 
+        final String description = producto.getDescription();
+        String marca = producto.getBrand_id();
+        String tipo = producto.getProduct_type_id();
+        String precio = producto.getSale_price();
+
+        String marca2 = realm.where(Marcas.class).equalTo("id", marca).findFirst().getName();
+        String tipoProducto = realm.where(TipoProducto.class).equalTo("id", tipo).findFirst().getName();
+
+        realm.close();
+
+        // TRANSACCION PARA ACTUALIZAR CAMPOS DE LA TABLA VENTAS
+        final Realm realm3 = Realm.getDefaultInstance();
+
+        try {
+            realm3.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm3) {
+
+                    //  Inventario inv_actualizado = realm3.where(Inventario.class).equalTo("id", inventario_id).findFirst();
+                    //  inv_actualizado.setAmount_dist(String.valueOf(nuevoAmount));
+                    inventario.setNombre_producto(description);
+                    realm3.insertOrUpdate(inventario); // using insert API
+
+                    Log.d("asda", inventario.getNombre_producto());
+                }
+
+            });
+
+        } catch (Exception e) {
+            Log.e("error", "error", e);
+            Toast.makeText(context,"error", Toast.LENGTH_SHORT).show();
+
+        }
+        realm3.close();
+/*
+        if(inventario.getAmount().equals("0")){
+
+            holder.cardView.setVisibility(View.GONE);
+        }else{
+*/
+        holder.fillData(producto);
+        holder.txt_producto_factura_nombre.setText(description);
+
+        holder.txt_producto_factura_nombre.setText(description);
+        holder.txt_producto_factura_marca.setText("Marca: " + marca2);
+        holder.txt_producto_factura_tipo.setText("Tipo: " + tipoProducto);
+        holder.txt_producto_factura_precio.setText(precio);
+        holder.txt_producto_factura_disponible.setText("Disp: " + inventario.getAmount());
+        holder.cardView.setBackgroundColor(selected_position == position ? Color.parseColor("#607d8b") : Color.parseColor("#009688"));
+    }
+    //}
+
+
+    public void addProduct(final int inventario_id, final String producto_id, final
+    Double cantidadDisponible, final String description, String Precio1, String Precio2,
+                           String Precio3, String Precio4, String Precio5) {
+
+        final String idFacturaSeleccionada = (activity).getInvoiceIdPreventa();
+        Log.d("idFacturaSeleccionada", idFacturaSeleccionada + "");
+        Log.d("idProductoSeleccionado", producto_id + "");
+
+
+        LayoutInflater layoutInflater = LayoutInflater.from(context);
+        View promptView = layoutInflater.inflate(R.layout.promptamount, null);
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+        alertDialogBuilder.setView(promptView);
+
+        final TextView txtNombreProducto = (TextView) promptView.findViewById(R.id.txtNombreProducto);
+        txtNombreProducto.setText(description);
+
+        final TextView label = (TextView) promptView.findViewById(R.id.promtClabel);
+        label.setText("Escriba una cantidad maxima de " + cantidadDisponible + " minima de 1");
+        final EditText input = (EditText) promptView.findViewById(R.id.promtCtext);
+        final EditText desc = (EditText) promptView.findViewById(R.id.promtCDesc);
+
+
+        final Spinner spPrices = (Spinner) promptView.findViewById(R.id.spPrices);
+        ArrayList<Double> pricesList = new ArrayList<>();
+        Double precio1 = Double.valueOf(Precio1);
+        Double precio2 = Double.valueOf(Precio2);
+        Double precio3 = Double.valueOf(Precio3);
+        Double precio4 = Double.valueOf(Precio4);
+        Double precio5 = Double.valueOf(Precio5);
+
+        pricesList.add(precio1);
+
+        if (precio2 != 0)
+            pricesList.add(precio2);
+
+        if (precio3 != 0)
+            pricesList.add(precio3);
+
+        if (precio4 != 0)
+            pricesList.add(precio4);
+
+        if (precio5 != 0)
+            pricesList.add(precio5);
+
+        ArrayAdapter<Double> pricesAdapter = new ArrayAdapter<Double>(label.getContext(), android.R.layout.simple_spinner_item, pricesList);
+        spPrices.setAdapter(pricesAdapter);
+        spPrices.setSelection(0);
+
+        // setup a dialog window
+        alertDialogBuilder.setCancelable(false);
+        alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface dialog, int id) {
+
+                }
+        });
+        alertDialogBuilder.setNegativeButton("Cancel",
+                new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        AlertDialog alertD = alertDialogBuilder.create();
+        alertD.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        alertD.show();
+    }
+
+    public List<Pivot> getListResumen() {
+        String facturaId = activity.getInvoiceIdPreventa();
+        Realm realm = Realm.getDefaultInstance();
+        RealmResults<Pivot> facturaid1 = realm.where(Pivot.class).equalTo("invoice_id", facturaId).findAll();
+        realm.close();
+        return facturaid1;
+    }
+    @Override
+    public long getItemId(int position) {
+        return 0;
+    }
+
+    @Override
+    public int getItemCount() {
+        return productosList.size();
+    }
+
+    public void setFilter(List<Inventario> countryModels){
+
+        productosList = new ArrayList<>();
+        productosList.addAll(countryModels);
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return 0;
+    }
+
+    public class CharacterViewHolder extends RecyclerView.ViewHolder {
+
+        private TextView txt_producto_factura_nombre, txt_producto_factura_marca, txt_producto_factura_tipo, txt_producto_factura_precio, txt_producto_factura_disponible, txt_producto_factura_seleccionado;
+        protected CardView cardView;
+
+        public CharacterViewHolder(View view) {
+            super(view);
+            cardView = (CardView) view.findViewById(R.id.cardViewSeleccionarProductos);
+            txt_producto_factura_nombre = (TextView) view.findViewById(R.id.txt_producto_factura_nombre);
+            txt_producto_factura_marca = (TextView) view.findViewById(R.id.txt_producto_factura_marca);
+            txt_producto_factura_tipo = (TextView) view.findViewById(R.id.txt_producto_factura_tipo);
+            txt_producto_factura_precio = (TextView) view.findViewById(R.id.txt_producto_factura_precio);
+            txt_producto_factura_disponible = (TextView) view.findViewById(R.id.txt_producto_factura_disponible);
+            txt_producto_factura_seleccionado = (TextView) view.findViewById(R.id.txt_producto_factura_seleccionado);
+        }
+
+        void fillData(final Productos producto) {
+            cardView.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View view) {
+
+                    int pos = getAdapterPosition();
+                    if (pos == RecyclerView.NO_POSITION) return;
+
+                    notifyItemChanged(selected_position);
+                    selected_position = getAdapterPosition();
+                    notifyItemChanged(selected_position);
+
+                    Inventario clickedDataItem = productosList.get(pos);
+                    String ProductoID = clickedDataItem.getProduct_id();
+                    int InventarioID = clickedDataItem.getId();
+
+                    String precio = producto.getSale_price();
+                    String precio2 = producto.getSale_price2();
+                    String precio3 = producto.getSale_price3();
+                    String precio4 = producto.getSale_price4();
+                    String precio5 = producto.getSale_price5();
+
+                    Double ProductoAmount = Double.valueOf(clickedDataItem.getAmount());
+
+                    Realm realm1 = Realm.getDefaultInstance();
+                    Productos producto = realm1.where(Productos.class).equalTo("id", ProductoID).findFirst();
+
+
+                    String description = producto.getDescription();
+
+                    realm1.close();
+
+                    Toast.makeText(view.getContext(), "You clicked " + ProductoID, Toast.LENGTH_SHORT).show();
+                    addProduct(InventarioID, ProductoID, ProductoAmount, description, precio, precio2, precio3, precio4, precio5);
+
+                }
+            });
+        }
+    }
+
+    @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+    }
 }
 
