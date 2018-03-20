@@ -28,14 +28,49 @@ public class PreventaActivity extends BluetoothActivity {
 
     private Toolbar toolbar;
     private TabLayout tabLayout;
-    private String invoiceIdPreventa;
-
-    public String getInvoiceIdPreventa() {
+    private int invoiceIdPreventa;
+    private String metodoPagoClientePreventa;
+    private String creditoLimiteClientePreventa = null;
+    private int selecClienteTabPreventa;
+    private String dueClientePreventa;
+    public int getInvoiceIdPreventa() {
         return invoiceIdPreventa;
     }
 
-    public void setInvoiceIdPreventa(String invoiceIdPreventa) {
+    public void setInvoiceIdPreventa(int invoiceIdPreventa) {
         this.invoiceIdPreventa = invoiceIdPreventa;
+    }
+
+    public String getMetodoPagoClientePreventa() {
+        return metodoPagoClientePreventa;
+    }
+
+    public void setMetodoPagoClientePreventa(String metodoPagoClientePreventa) {
+        this.metodoPagoClientePreventa = metodoPagoClientePreventa;
+    }
+
+    public String getCreditoLimiteClientePreventa() {
+        return creditoLimiteClientePreventa;
+    }
+
+    public void setCreditoLimiteClientePreventa(String creditoLimiteClientePreventa) {
+        this.creditoLimiteClientePreventa = creditoLimiteClientePreventa;
+    }
+
+    public int getSelecClienteTabPreventa() {
+        return selecClienteTabPreventa;
+    }
+
+    public void setSelecClienteTabPreventa(int selecClienteTabPreventa) {
+        this.selecClienteTabPreventa = selecClienteTabPreventa;
+    }
+
+    public String getDueClientePreventa() {
+        return dueClientePreventa;
+    }
+
+    public void setDueClientePreventa(String dueClientePreventa) {
+        this.dueClientePreventa = dueClientePreventa;
     }
 
     @Override
@@ -124,12 +159,12 @@ public class PreventaActivity extends BluetoothActivity {
         Adapter adapter = new Adapter(getSupportFragmentManager());
         final List<BaseFragment> list = new ArrayList<>();
         list.add(new PrevSelecClienteFragment());
-      /*   list.add(new PrevSelecProductoFragment());
-         list.add(new DistSelecProductoFragment());
+        list.add(new PrevSelecProductoFragment());
+      /*    list.add(new DistSelecProductoFragment());
         list.add(new DistTotalizarFragment());*/
         adapter.addFragment(list.get(0), "Seleccionar Cliente");
-        /*  adapter.addFragment(list.get(1), "Seleccionar Productos");
-      adapter.addFragment(list.get(2), "Resumen");
+          adapter.addFragment(list.get(1), "Seleccionar Productos");
+    /*  adapter.addFragment(list.get(2), "Resumen");
         adapter.addFragment(list.get(3), "Totalizar");*/
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {

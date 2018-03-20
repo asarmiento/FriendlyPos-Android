@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,9 +18,11 @@ import android.widget.Toast;
 
 import com.friendlypos.R;
 import com.friendlypos.application.util.Functions;
+import com.friendlypos.distribucion.modelo.Inventario;
 import com.friendlypos.distribucion.modelo.Pivot;
 import com.friendlypos.distribucion.modelo.invoice;
 import com.friendlypos.preventas.activity.PreventaActivity;
+import com.friendlypos.preventas.modelo.invoiceDetallePreventa;
 import com.friendlypos.principal.modelo.Clientes;
 
 import java.util.List;
@@ -44,6 +47,8 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
     String nombreMetodoPago;
     String metodoPagoId;
     int contador = 0;
+    private RealmResults<invoiceDetallePreventa> realmResultado;
+    invoiceDetallePreventa factura_nueva= new invoiceDetallePreventa();
 
     private static Double creditolimite = 0.0;
     private static Double descuentoFixed = 0.0;
@@ -113,46 +118,17 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
                 notifyItemChanged(selected_position);
 
                 Clientes clickedDataItem = contentList.get(pos);
-
-                // increment index
-                contador ++;
-                facturaID = String.valueOf(contador);
-                // facturaID = clickedDataItem.getInvoice_id();
-
-
-
-                //   Realm realm6 = Realm.getDefaultInstance();
-                //invoice invoice1 = realm6.where(invoice.class).equalTo("id", clickedDataItem.getInvoice_id()).findFirst();
-                // Clientes clientes = realm6.where(Clientes.class).equalTo("id", clickedDataItem.getCustomer_id()).findFirst();
-                //  realm6.close();
-
-                //  String metodoPago = invoice1.getPayment_method_id();
-                //  String numeracionFactura1 = invoice1.getNumeration();
                 final int creditoTime = Integer.parseInt(clickedDataItem.getCreditTime());
-
-             /*   if (metodoPago.equals("1")){
-                    nombreMetodoPago = "Contado";
-                }
-                else if(metodoPago.equals("2")){
-                    nombreMetodoPago = "Crédito";
-                }
-*/
+                final String creditoLimiteClienteP = clickedDataItem.getCreditLimit();
+                final String dueClienteP = clickedDataItem.getDue();
 
                 LayoutInflater layoutInflater = LayoutInflater.from(QuickContext);
-
                 View promptView = layoutInflater.inflate(R.layout.promptclient_preventa, null);
 
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(QuickContext);
                 alertDialogBuilder.setView(promptView);
                 final RadioButton rbcontado = (RadioButton) promptView.findViewById(R.id.contadoBill);
                 final RadioButton rbcredito = (RadioButton) promptView.findViewById(R.id.creditBill);
-                final RadioGroup rgTipo = (RadioGroup) promptView.findViewById(R.id.rgTipo);
-
-             /*   if (nombreMetodoPago.equals("Contado")){
-                    rgTipo.check(R.id.contadoBill);
-                }else if (nombreMetodoPago.equals("Crédito")){
-                    rgTipo.check(R.id.creditBill);
-                }*/
 
                 alertDialogBuilder
                         .setCancelable(false)
@@ -163,52 +139,35 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
                                     if (creditoTime == 0) {
                                         Functions.CreateMessage(QuickContext, " ", "Este cliente no cuenta con crédito");
                                     }
-                                  /*  else if (nombreMetodoPago.equals("Crédito")) {
-                                        Toast.makeText(QuickContext, "Esta factura ya es de crédito", Toast.LENGTH_LONG).show();
-                                    }*/
                                     else {
                                         // TRANSACCIÓN PARA ACTUALIZAR EL CAMPO METODO DE PAGO CREDITO DE LA FACTURA
-
                                         metodoPagoId = "2";
-
-                                    /*    final Realm realm2 = Realm.getDefaultInstance();
-                                        realm2.executeTransaction(new Realm.Transaction() {
-
-                                            @Override
-                                            public void execute(Realm realm2) {
-                                                invoice factura_actualizado = realm2.where(invoice.class).equalTo("id", sale.getInvoice_id()).findFirst();
-                                                factura_actualizado.setPayment_method_id(String.valueOf("2"));
-                                                realm2.insertOrUpdate(factura_actualizado);
-                                                realm2.close();
-                                            }
-                                        });*/
                                         Functions.CreateMessage(QuickContext, " ", "Se cambio la factura a crédito" + metodoPagoId);
                                         notifyDataSetChanged();
                                     }
                                 }
-
-                           /*     if(nombreMetodoPago.equals("Contado") && rbcontado.isChecked() ){
-                                    Toast.makeText(QuickContext, "Esta factura ya es de contado", Toast.LENGTH_LONG).show();
-                                }*/
                                 else if(rbcontado.isChecked()){
                                     // TRANSACCIÓN PARA ACTUALIZAR EL CAMPO METODO DE PAGO CONTADO DE LA FACTURA
-
                                     metodoPagoId = "1";
-                                   /* final Realm realm2 = Realm.getDefaultInstance();
-                                    realm2.executeTransaction(new Realm.Transaction() {
-
-                                        @Override
-                                        public void execute(Realm realm2) {
-                                            invoice factura_actualizado = realm2.where(invoice.class).equalTo("id", sale.getInvoice_id()).findFirst();
-                                            factura_actualizado.setPayment_method_id(String.valueOf("1"));
-                                            realm2.insertOrUpdate(factura_actualizado);
-                                            realm2.close();
-                                        }
-                                    });*/
                                     Functions.CreateMessage(QuickContext, " ", "Se cambio la factura a contado"+ metodoPagoId);
                                     notifyDataSetChanged();
                                 }
 
+                                // TRANSACCIÓN BD PARA SELECCIONAR LOS DATOS DEL INVENTARIO
+                                Realm realm3 = Realm.getDefaultInstance();
+                                realm3.executeTransaction(new Realm.Transaction() {
+                                    @Override
+                                    public void execute(Realm realm3) {
+
+                                        invoiceDetallePreventa factura_nueva= new invoiceDetallePreventa(); // unmanaged
+                                        factura_nueva.setP_id(getContador() + 1);
+                                        factura_nueva.setP_payment_method_id(String.valueOf(metodoPagoId));
+                                        realm3.insertOrUpdate(factura_nueva);
+                                        Log.d("FACTURANUEVACREADA", factura_nueva +"");
+                                        Log.d("IDFACTURANUEVACREADA", factura_nueva.getP_id() +"");
+                                        realm3.close();
+                                    }
+                                });
                             }
                         })
                         .setNegativeButton("Cancel",
@@ -221,27 +180,16 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
                 AlertDialog alertD = alertDialogBuilder.create();
                 alertD.show();
 
-                Toast.makeText(QuickContext, "You clicked " + facturaID, Toast.LENGTH_SHORT).show();
-                activity.setInvoiceIdPreventa(facturaID);
-        /*        Realm realm = Realm.getDefaultInstance();
-                invoice invoice = realm.where(com.friendlypos.distribucion.modelo.invoice.class).equalTo("id", facturaID).findFirst();
-                Clientes clientes = realm.where(Clientes.class).equalTo("id", clienteID).findFirst();
-                //String facturaid = String.valueOf(realm.where(ProductoFactura.class).equalTo("id", facturaID).findFirst().getId());
-                facturaid1 = realm.where(Pivot.class).equalTo("invoice_id", facturaID).findAll();
-                String metodoPago = invoice.getPayment_method_id();
-                String creditoLimiteCliente = clientes.getCreditLimit();
-                String dueCliente = clientes.getDue();
-                realm.close();
 
-                Toast.makeText(QuickContext, "You clicked " + facturaID, Toast.LENGTH_SHORT).show();
-                Log.d("PRODUCTOSFACTURATO", facturaid1 + "");
-                Log.d("metodoPago", metodoPago + "");
+
+                Toast.makeText(QuickContext, "You clicked FACTURA NUEVA " +factura_nueva.getP_id(), Toast.LENGTH_SHORT).show();
+
                 tabCliente = 1;
-                activity.setSelecClienteTab(tabCliente);
-                activity.setInvoiceId(facturaID);
-                activity.setMetodoPagoCliente(metodoPago);
-                activity.setCreditoLimiteCliente(creditoLimiteCliente);
-                activity.setDueCliente(dueCliente);*/
+                activity.setSelecClienteTabPreventa(tabCliente);
+                activity.setCreditoLimiteClientePreventa(creditoLimiteClienteP);
+                activity.setDueClientePreventa(dueClienteP);
+                activity.setInvoiceIdPreventa(factura_nueva.getP_id());
+                activity.setMetodoPagoClientePreventa(metodoPagoId);
             }
         });
         if(selected_position==position){
@@ -279,8 +227,14 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
             txt_prev_fixeddescount = (TextView)view.findViewById(R.id.txt_prev_fixeddescount);
             txt_prev_due = (TextView)view.findViewById(R.id.txt_prev_due);
             txt_prev_credittime = (TextView)view.findViewById(R.id.txt_prev_credittime);
-
         }
+    }
+
+    private int getContador() {
+        Realm realm = Realm.getDefaultInstance();
+        realmResultado = realm.where(invoiceDetallePreventa.class).findAll();
+        realmResultado.sort("p_id");
+        return realmResultado.size();
     }
 
     @Override

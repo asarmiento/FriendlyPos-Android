@@ -14,7 +14,7 @@ import io.realm.annotations.PrimaryKey;
 
 public class invoiceDetallePreventa extends RealmObject {
     @PrimaryKey
-    private String p_id;
+    private int p_id;
 
     private boolean p_result;
     private String p_code;
@@ -77,11 +77,11 @@ public class invoiceDetallePreventa extends RealmObject {
     @SerializedName("product_invoice")
     private RealmList<Pivot> p_productofacturas;
 
-    public String getP_id() {
+    public int getP_id() {
         return p_id;
     }
 
-    public void setP_id(String p_id) {
+    public void setP_id(int p_id) {
         this.p_id = p_id;
     }
 
@@ -331,5 +331,43 @@ public class invoiceDetallePreventa extends RealmObject {
 
     public void setP_productofacturas(RealmList<Pivot> p_productofacturas) {
         this.p_productofacturas = p_productofacturas;
+    }
+
+    @Override
+    public String toString() {
+        return "invoiceDetallePreventa{" +
+                "p_id=" + p_id +
+                ", p_result=" + p_result +
+                ", p_code='" + p_code + '\'' +
+                ", p_messages='" + p_messages + '\'' +
+                ", p_branch_office_id='" + p_branch_office_id + '\'' +
+                ", p_numeration='" + p_numeration + '\'' +
+                ", p_longitud=" + p_longitud +
+                ", p_latitud=" + p_latitud +
+                ", p_date='" + p_date + '\'' +
+                ", p_times='" + p_times + '\'' +
+                ", p_date_presale='" + p_date_presale + '\'' +
+                ", p_time_presale='" + p_time_presale + '\'' +
+                ", p_due_date='" + p_due_date + '\'' +
+                ", p_subtotal='" + p_subtotal + '\'' +
+                ", p_subtotal_taxed='" + p_subtotal_taxed + '\'' +
+                ", p_subtotal_exempt='" + p_subtotal_exempt + '\'' +
+                ", p_discount='" + p_discount + '\'' +
+                ", p_percent_discount='" + p_percent_discount + '\'' +
+                ", p_tax='" + p_tax + '\'' +
+                ", p_total='" + p_total + '\'' +
+                ", p_changing='" + p_changing + '\'' +
+                ", p_note='" + p_note + '\'' +
+                ", p_canceled='" + p_canceled + '\'' +
+                ", p_paid_up='" + p_paid_up + '\'' +
+                ", p_paid='" + p_paid + '\'' +
+                ", p_created_at='" + p_created_at + '\'' +
+                ", p_user_id='" + p_user_id + '\'' +
+                ", p_user_id_applied='" + p_user_id_applied + '\'' +
+                ", p_invoice_type_id='" + p_invoice_type_id + '\'' +
+                ", p_payment_method_id='" + p_payment_method_id + '\'' +
+                ", p_sale=" + p_sale +
+                ", p_productofacturas=" + p_productofacturas +
+                '}';
     }
 }

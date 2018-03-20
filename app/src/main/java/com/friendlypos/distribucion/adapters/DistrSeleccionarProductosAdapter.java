@@ -129,7 +129,6 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
         }else{
 */
         holder.fillData(producto);
-        holder.txt_producto_factura_nombre.setText(description);
 
         holder.txt_producto_factura_nombre.setText(description);
         holder.txt_producto_factura_marca.setText("Marca: " + marca2);

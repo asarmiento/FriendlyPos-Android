@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -18,21 +16,13 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.friendlypos.R;
-import com.friendlypos.distribucion.activity.DistribucionActivity;
-import com.friendlypos.distribucion.adapters.DistrSeleccionarProductosAdapter;
-import com.friendlypos.distribucion.fragment.DistResumenFragment;
-import com.friendlypos.distribucion.fragment.DistSelecProductoFragment;
 import com.friendlypos.distribucion.modelo.Inventario;
 import com.friendlypos.distribucion.modelo.Marcas;
 import com.friendlypos.distribucion.modelo.Pivot;
 import com.friendlypos.distribucion.modelo.TipoProducto;
-import com.friendlypos.distribucion.modelo.sale;
-import com.friendlypos.distribucion.util.TotalizeHelper;
 import com.friendlypos.preventas.activity.PreventaActivity;
 import com.friendlypos.preventas.fragment.PrevSelecProductoFragment;
-import com.friendlypos.principal.modelo.Clientes;
 import com.friendlypos.principal.modelo.Productos;
 
 import java.util.ArrayList;
@@ -64,7 +54,6 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
     }
 
     public void updateData(List<Inventario> productosList) {
-
         this.productosList = productosList;
         notifyDataSetChanged();
     }
@@ -85,7 +74,6 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
         Realm realm = Realm.getDefaultInstance();
         Productos producto = realm.where(Productos.class).equalTo("id", inventario.getProduct_id()).findFirst();
 
-
         final String description = producto.getDescription();
         String marca = producto.getBrand_id();
         String tipo = producto.getProduct_type_id();
@@ -103,7 +91,6 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
             realm3.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm3) {
-
                     //  Inventario inv_actualizado = realm3.where(Inventario.class).equalTo("id", inventario_id).findFirst();
                     //  inv_actualizado.setAmount_dist(String.valueOf(nuevoAmount));
                     inventario.setNombre_producto(description);
@@ -128,8 +115,6 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
 */
         holder.fillData(producto);
         holder.txt_producto_factura_nombre.setText(description);
-
-        holder.txt_producto_factura_nombre.setText(description);
         holder.txt_producto_factura_marca.setText("Marca: " + marca2);
         holder.txt_producto_factura_tipo.setText("Tipo: " + tipoProducto);
         holder.txt_producto_factura_precio.setText(precio);
@@ -143,7 +128,7 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
     Double cantidadDisponible, final String description, String Precio1, String Precio2,
                            String Precio3, String Precio4, String Precio5) {
 
-        final String idFacturaSeleccionada = (activity).getInvoiceIdPreventa();
+        final int idFacturaSeleccionada = (activity).getInvoiceIdPreventa();
         Log.d("idFacturaSeleccionada", idFacturaSeleccionada + "");
         Log.d("idProductoSeleccionado", producto_id + "");
 
@@ -161,7 +146,6 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
         label.setText("Escriba una cantidad maxima de " + cantidadDisponible + " minima de 1");
         final EditText input = (EditText) promptView.findViewById(R.id.promtCtext);
         final EditText desc = (EditText) promptView.findViewById(R.id.promtCDesc);
-
 
         final Spinner spPrices = (Spinner) promptView.findViewById(R.id.spPrices);
         ArrayList<Double> pricesList = new ArrayList<>();
@@ -211,12 +195,13 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
     }
 
     public List<Pivot> getListResumen() {
-        String facturaId = activity.getInvoiceIdPreventa();
+        int facturaId = activity.getInvoiceIdPreventa();
         Realm realm = Realm.getDefaultInstance();
         RealmResults<Pivot> facturaid1 = realm.where(Pivot.class).equalTo("invoice_id", facturaId).findAll();
         realm.close();
         return facturaid1;
     }
+
     @Override
     public long getItemId(int position) {
         return 0;
@@ -246,13 +231,13 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
 
         public CharacterViewHolder(View view) {
             super(view);
-            cardView = (CardView) view.findViewById(R.id.cardViewSeleccionarProductos);
-            txt_producto_factura_nombre = (TextView) view.findViewById(R.id.txt_producto_factura_nombre);
-            txt_producto_factura_marca = (TextView) view.findViewById(R.id.txt_producto_factura_marca);
-            txt_producto_factura_tipo = (TextView) view.findViewById(R.id.txt_producto_factura_tipo);
-            txt_producto_factura_precio = (TextView) view.findViewById(R.id.txt_producto_factura_precio);
-            txt_producto_factura_disponible = (TextView) view.findViewById(R.id.txt_producto_factura_disponible);
-            txt_producto_factura_seleccionado = (TextView) view.findViewById(R.id.txt_producto_factura_seleccionado);
+            cardView = (CardView) view.findViewById(R.id.cardViewSeleccionarProductosPreventa);
+            txt_producto_factura_nombre = (TextView) view.findViewById(R.id.txt_prev_producto_factura_nombre);
+            txt_producto_factura_marca = (TextView) view.findViewById(R.id.txt_prev_producto_factura_marca);
+            txt_producto_factura_tipo = (TextView) view.findViewById(R.id.txt_prev_producto_factura_tipo);
+            txt_producto_factura_precio = (TextView) view.findViewById(R.id.txt_prev_producto_factura_precio);
+            txt_producto_factura_disponible = (TextView) view.findViewById(R.id.txt_prev_producto_factura_disponible);
+            txt_producto_factura_seleccionado = (TextView) view.findViewById(R.id.txt_prev_producto_factura_seleccionado);
         }
 
         void fillData(final Productos producto) {
@@ -282,7 +267,6 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
 
                     Realm realm1 = Realm.getDefaultInstance();
                     Productos producto = realm1.where(Productos.class).equalTo("id", ProductoID).findFirst();
-
 
                     String description = producto.getDescription();
 
