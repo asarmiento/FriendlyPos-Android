@@ -7,27 +7,21 @@ import android.graphics.Color;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.friendlypos.R;
 import com.friendlypos.application.util.Functions;
-import com.friendlypos.distribucion.modelo.Inventario;
 import com.friendlypos.distribucion.modelo.Pivot;
-import com.friendlypos.distribucion.modelo.invoice;
 import com.friendlypos.preventas.activity.PreventaActivity;
 import com.friendlypos.preventas.modelo.invoiceDetallePreventa;
 import com.friendlypos.principal.modelo.Clientes;
 
 import java.util.List;
 
-import io.realm.Realm;
 import io.realm.RealmResults;
 
 public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapter.CharacterViewHolder> {
@@ -47,8 +41,8 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
     String nombreMetodoPago;
     String metodoPagoId;
     int contador = 0;
-    private RealmResults<invoiceDetallePreventa> realmResultado;
-    invoiceDetallePreventa factura_nueva= new invoiceDetallePreventa();
+  //  private RealmResults<InvoiceDetallePreventa> realmResultado;
+    invoiceDetallePreventa factura_nueva = new invoiceDetallePreventa();
 
     private static Double creditolimite = 0.0;
     private static Double descuentoFixed = 0.0;
@@ -65,7 +59,7 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
     @Override
     public PrevClientesAdapter.CharacterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.lista_preventa_clientes, parent, false);
+            .inflate(R.layout.lista_preventa_clientes, parent, false);
 
         return new PrevClientesAdapter.CharacterViewHolder(view);
     }
@@ -75,9 +69,9 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
         Clientes content = contentList.get(position);
 
         creditolimite = Double.parseDouble(content.getCreditLimit());
-        descuentoFixed =   Double.parseDouble(content.getFixedDiscount());
+        descuentoFixed = Double.parseDouble(content.getFixedDiscount());
         cleintedue = Double.parseDouble(content.getDue());
-        credittime =   Double.parseDouble(content.getCreditTime());
+        credittime = Double.parseDouble(content.getCreditTime());
         final String cardCliente = content.getCard();
         String companyCliente = content.getCompanyName();
         String fantasyCliente = content.getFantasyName();
@@ -91,6 +85,7 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
         holder.txt_prev_credittime.setText(String.format("%,.2f", (credittime)));
 
         holder.cardView.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View view) {
                 activa = 1;
@@ -98,11 +93,13 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
                 final ProgressDialog progresRing = ProgressDialog.show(QuickContext, "Cargando", "Seleccionando Cliente", true);
                 progresRing.setCancelable(true);
                 new Thread(new Runnable() {
+
                     @Override
                     public void run() {
                         try {
                             Thread.sleep(5000);
-                        } catch (Exception e) {
+                        }
+                        catch (Exception e) {
 
                         }
                         progresRing.dismiss();
@@ -131,72 +128,58 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
                 final RadioButton rbcredito = (RadioButton) promptView.findViewById(R.id.creditBill);
 
                 alertDialogBuilder
-                        .setCancelable(false)
-                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
+                    .setCancelable(false)
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
 
-                                if(rbcredito.isChecked()) {
-                                    if (creditoTime == 0) {
-                                        Functions.CreateMessage(QuickContext, " ", "Este cliente no cuenta con crédito");
-                                    }
-                                    else {
-                                        // TRANSACCIÓN PARA ACTUALIZAR EL CAMPO METODO DE PAGO CREDITO DE LA FACTURA
-                                        metodoPagoId = "2";
-                                        Functions.CreateMessage(QuickContext, " ", "Se cambio la factura a crédito" + metodoPagoId);
-                                        notifyDataSetChanged();
-                                    }
+                        public void onClick(DialogInterface dialog, int id) {
+
+                            if (rbcredito.isChecked()) {
+                                if (creditoTime == 0) {
+                                    Functions.CreateMessage(QuickContext, " ", "Este cliente no cuenta con crédito");
                                 }
-                                else if(rbcontado.isChecked()){
-                                    // TRANSACCIÓN PARA ACTUALIZAR EL CAMPO METODO DE PAGO CONTADO DE LA FACTURA
-                                    metodoPagoId = "1";
-                                    Functions.CreateMessage(QuickContext, " ", "Se cambio la factura a contado"+ metodoPagoId);
+                                else {
+                                    // TRANSACCIÓN PARA ACTUALIZAR EL CAMPO METODO DE PAGO CREDITO DE LA FACTURA
+                                    metodoPagoId = "2";
+                                    Functions.CreateMessage(QuickContext, " ", "Se cambio la factura a crédito" + metodoPagoId);
                                     notifyDataSetChanged();
                                 }
-
-                                // TRANSACCIÓN BD PARA SELECCIONAR LOS DATOS DEL INVENTARIO
-                                Realm realm3 = Realm.getDefaultInstance();
-                                realm3.executeTransaction(new Realm.Transaction() {
-                                    @Override
-                                    public void execute(Realm realm3) {
-
-                                        invoiceDetallePreventa factura_nueva= new invoiceDetallePreventa(); // unmanaged
-                                        factura_nueva.setP_id(getContador() + 1);
-                                        factura_nueva.setP_payment_method_id(String.valueOf(metodoPagoId));
-                                        realm3.insertOrUpdate(factura_nueva);
-                                        Log.d("FACTURANUEVACREADA", factura_nueva +"");
-                                        Log.d("IDFACTURANUEVACREADA", factura_nueva.getP_id() +"");
-                                        realm3.close();
-                                    }
-                                });
                             }
-                        })
-                        .setNegativeButton("Cancel",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        dialog.cancel();
-                                    }
-                                });
+                            else if (rbcontado.isChecked()) {
+                                // TRANSACCIÓN PARA ACTUALIZAR EL CAMPO METODO DE PAGO CONTADO DE LA FACTURA
+                                metodoPagoId = "1";
+                                Functions.CreateMessage(QuickContext, " ", "Se cambio la factura a contado" + metodoPagoId);
+                                notifyDataSetChanged();
+                            }
+
+                            activity.initCurrentInvoice(1, String.valueOf(metodoPagoId));
+                        }
+                    })
+                    .setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
 
                 AlertDialog alertD = alertDialogBuilder.create();
                 alertD.show();
 
 
-
-                Toast.makeText(QuickContext, "You clicked FACTURA NUEVA " +factura_nueva.getP_id(), Toast.LENGTH_SHORT).show();
+              //  Toast.makeText(QuickContext, "You clicked FACTURA NUEVA " + factura_nueva.getP_id(), Toast.LENGTH_SHORT).show();
 
                 tabCliente = 1;
                 activity.setSelecClienteTabPreventa(tabCliente);
                 activity.setCreditoLimiteClientePreventa(creditoLimiteClienteP);
                 activity.setDueClientePreventa(dueClienteP);
-                activity.setInvoiceIdPreventa(factura_nueva.getP_id());
+             //   activity.setInvoiceIdPreventa(factura_nueva.getP_id());
                 activity.setMetodoPagoClientePreventa(metodoPagoId);
             }
         });
-        if(selected_position==position){
+        if (selected_position == position) {
             holder.cardView.setBackgroundColor(Color.parseColor("#607d8b"));
         }
-        else
-        {
+        else {
             holder.cardView.setBackgroundColor(Color.parseColor("#009688"));
         }
 
@@ -210,8 +193,8 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
     public class CharacterViewHolder extends RecyclerView.ViewHolder {
 
 
-        private TextView txt_prev_card,txt_prev_fantasyname,txt_prev_companyname,txt_prev_creditlimit,
-                txt_prev_fixeddescount, txt_prev_due,txt_prev_credittime;
+        private TextView txt_prev_card, txt_prev_fantasyname, txt_prev_companyname, txt_prev_creditlimit,
+            txt_prev_fixeddescount, txt_prev_due, txt_prev_credittime;
         public CardView cardView;
 
 
@@ -219,24 +202,28 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
             super(view);
             cardView = (CardView) view.findViewById(R.id.cardViewPreventaClientes);
 
-            txt_prev_card = (TextView)view.findViewById(R.id.txt_prev_card);
-            txt_prev_fantasyname = (TextView)view.findViewById(R.id.txt_prev_fantasyname);
-            txt_prev_companyname = (TextView)view.findViewById(R.id.txt_prev_companyname);
+            txt_prev_card = (TextView) view.findViewById(R.id.txt_prev_card);
+            txt_prev_fantasyname = (TextView) view.findViewById(R.id.txt_prev_fantasyname);
+            txt_prev_companyname = (TextView) view.findViewById(R.id.txt_prev_companyname);
 
-            txt_prev_creditlimit = (TextView)view.findViewById(R.id.txt_prev_creditlimit);
-            txt_prev_fixeddescount = (TextView)view.findViewById(R.id.txt_prev_fixeddescount);
-            txt_prev_due = (TextView)view.findViewById(R.id.txt_prev_due);
-            txt_prev_credittime = (TextView)view.findViewById(R.id.txt_prev_credittime);
+            txt_prev_creditlimit = (TextView) view.findViewById(R.id.txt_prev_creditlimit);
+            txt_prev_fixeddescount = (TextView) view.findViewById(R.id.txt_prev_fixeddescount);
+            txt_prev_due = (TextView) view.findViewById(R.id.txt_prev_due);
+            txt_prev_credittime = (TextView) view.findViewById(R.id.txt_prev_credittime);
         }
     }
 
-    private int getContador() {
+   /* private int getContador() {
         Realm realm = Realm.getDefaultInstance();
-        realmResultado = realm.where(invoiceDetallePreventa.class).findAll();
+        realmResultado = realm.where(InvoiceDetallePreventa.class).findAll();
         realmResultado.sort("p_id");
+
+//        InvoiceDetallePreventa invoiceDetallePreventa = activity.getCurrentInvoice();
+//        invoiceDetallePreventa.setP_code(weqweq);
+//
         return realmResultado.size();
     }
-
+*/
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);

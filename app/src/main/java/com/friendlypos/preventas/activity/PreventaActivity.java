@@ -3,19 +3,23 @@ package com.friendlypos.preventas.activity;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-
+import android.os.Handler;
 import com.friendlypos.R;
 import com.friendlypos.application.bluetooth.PrinterService;
+import com.friendlypos.application.util.Functions;
 import com.friendlypos.distribucion.fragment.BaseFragment;
+import com.friendlypos.distribucion.modelo.Pivot;
 import com.friendlypos.distribucion.util.Adapter;
+import com.friendlypos.preventas.delegate.PreSellInvoiceDelegate;
 import com.friendlypos.preventas.fragment.PrevSelecClienteFragment;
 import com.friendlypos.preventas.fragment.PrevSelecProductoFragment;
+import com.friendlypos.preventas.modelo.invoiceDetallePreventa;
 import com.friendlypos.principal.activity.BluetoothActivity;
 import com.friendlypos.principal.activity.MenuPrincipal;
 
@@ -33,6 +37,9 @@ public class PreventaActivity extends BluetoothActivity {
     private String creditoLimiteClientePreventa = null;
     private int selecClienteTabPreventa;
     private String dueClientePreventa;
+
+    private PreSellInvoiceDelegate preSellInvoiceDelegate;
+
     public int getInvoiceIdPreventa() {
         return invoiceIdPreventa;
     }
@@ -73,6 +80,7 @@ public class PreventaActivity extends BluetoothActivity {
         this.dueClientePreventa = dueClientePreventa;
     }
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,6 +91,7 @@ public class PreventaActivity extends BluetoothActivity {
         ActionBar actionBar = getSupportActionBar();
 
         actionBar.setDisplayHomeAsUpEnabled(true);
+        preSellInvoiceDelegate = new PreSellInvoiceDelegate(this);
         connectToPrinter();
         /*toolbar = (Toolbar) findViewById(R.id.toolbarDistribucion);
 
@@ -99,14 +108,14 @@ public class PreventaActivity extends BluetoothActivity {
         tabLayout.setupWithViewPager(viewPager);
 
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-       /* tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
 
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                int tabCliente = getSelecClienteTab();
+                int tabCliente = getSelecClienteTabPreventa();
                 if (tabCliente == 0 && tab.getPosition() != 0) {
 
-                    Functions.CreateMessage(DistribucionActivity.this, "Distribución", "Seleccione una factura.");
+                    Functions.CreateMessage(PreventaActivity.this, "Preventa", "Seleccione una factura.");
 
                     new Handler().postDelayed(
                             new Runnable() {
@@ -130,7 +139,7 @@ public class PreventaActivity extends BluetoothActivity {
             public void onTabReselected(TabLayout.Tab tab) {
 
             }
-        });*/
+        });
 
     }
 
@@ -163,7 +172,7 @@ public class PreventaActivity extends BluetoothActivity {
       /*    list.add(new DistSelecProductoFragment());
         list.add(new DistTotalizarFragment());*/
         adapter.addFragment(list.get(0), "Seleccionar Cliente");
-          adapter.addFragment(list.get(1), "Seleccionar Productos");
+        adapter.addFragment(list.get(1), "Seleccionar Productos");
     /*  adapter.addFragment(list.get(2), "Resumen");
         adapter.addFragment(list.get(3), "Totalizar");*/
         viewPager.setAdapter(adapter);
@@ -215,5 +224,23 @@ public class PreventaActivity extends BluetoothActivity {
         return false;
     }
 
+    public invoiceDetallePreventa getCurrentInvoice() {
+        return preSellInvoiceDelegate.getCurrentInvoice();
+    }
+
+    public void insertProduct(Pivot pivot) {
+        preSellInvoiceDelegate.insertProduct(pivot);
+    }
+
+    public void initCurrentInvoice(int counter, String payMethodId) {
+        preSellInvoiceDelegate.initInvoiceDetallePreventa(counter, payMethodId);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        preSellInvoiceDelegate.destroy();
+        preSellInvoiceDelegate = null;
+    }
 }
 

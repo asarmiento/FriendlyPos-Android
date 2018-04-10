@@ -28,6 +28,7 @@ import com.friendlypos.distribucion.modelo.Inventario;
 import com.friendlypos.distribucion.util.TotalizeHelper;
 import com.friendlypos.preventas.activity.PreventaActivity;
 import com.friendlypos.preventas.adapters.PrevSeleccionarProductoAdapter;
+import com.friendlypos.preventas.modelo.invoiceDetallePreventa;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -88,7 +89,7 @@ public class PrevSelecProductoFragment extends BaseFragment implements SearchVie
         recyclerView.setHasFixedSize(true);
         adapter = new PrevSeleccionarProductoAdapter(activity, this, getListProductos());
         recyclerView.setAdapter(adapter);
-        creditoLimite = (TextView) rootView.findViewById(R.id.restCredit);
+        creditoLimite = (TextView) rootView.findViewById(R.id.restCreditPreventa);
 
         Log.d("listaProducto", getListProductos() + "");
        // adapter2 = new DistrResumenAdapter();
@@ -121,7 +122,13 @@ public class PrevSelecProductoFragment extends BaseFragment implements SearchVie
         if (slecTAB == 1){
             // creditoLimiteCliente = Double.parseDouble(((DistribucionActivity) getActivity()).getCreditoLimiteClienteSlecc());
             //    creditoLimiteCliente = 0.0;
-            String metodoPagoCliente = activity.getMetodoPagoClientePreventa();
+            final invoiceDetallePreventa invoiceDetallePreventa = activity.getCurrentInvoice();
+
+            //String metodoPagoCliente = invoiceDetallePreventa.getP_payment_method_id();
+
+
+            String metodoPagoCliente  = activity.getMetodoPagoClientePreventa();
+
             String limite = activity.getCreditoLimiteClientePreventa();
             // creditoLimiteCliente = Double.parseDouble(limite);
             String dueCliente = activity.getDueClientePreventa();

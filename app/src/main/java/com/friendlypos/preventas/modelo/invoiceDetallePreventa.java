@@ -5,76 +5,68 @@ import com.friendlypos.distribucion.modelo.sale;
 import com.google.gson.annotations.SerializedName;
 
 import io.realm.RealmList;
-import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by DelvoM on 19/03/2018.
  */
 
-public class invoiceDetallePreventa extends RealmObject {
-    @PrimaryKey
+public class invoiceDetallePreventa {
     private int p_id;
 
     private boolean p_result;
     private String p_code;
     private String p_messages;
 
-    @SerializedName("branch_office_id")
     private String p_branch_office_id;
-    @SerializedName("numeration")
     private String p_numeration;
-    @SerializedName("longitud")
+
     private double p_longitud;
-    @SerializedName("latitud")
+
     private double p_latitud;
-    @SerializedName("date")
+
     private String p_date;
-    @SerializedName("times")
+
     private String p_times;
-    @SerializedName("date_presale")
+
     private String p_date_presale;
-    @SerializedName("time_presale")
+
     private String p_time_presale;
-    @SerializedName("due_date")
+
     private String p_due_date;
-    @SerializedName("subtotal")
+
     private String p_subtotal;
-    @SerializedName("subtotal_taxed")
+
     private String p_subtotal_taxed;
-    @SerializedName("subtotal_exempt")
     private String p_subtotal_exempt;
-    @SerializedName("discount")
     private String p_discount;
-    @SerializedName("percent_discount")
+
     private String p_percent_discount;
-    @SerializedName("tax")
+
     private String p_tax;
-    @SerializedName("total")
+
     private String p_total;
-    @SerializedName("changing")
+
     private String p_changing;
-    @SerializedName("note")
     private String p_note;
-    @SerializedName("canceled")
+
     private String p_canceled;
-    @SerializedName("paid_up")
     private String p_paid_up;
-    @SerializedName("paid")
+
     private String p_paid;
-    @SerializedName("created_at")
+
     private String p_created_at;
-    @SerializedName("user_id")
+
     private String p_user_id;
-    @SerializedName("user_id_applied")
+
     private String p_user_id_applied;
-    @SerializedName("invoice_type_id")
+
     private String p_invoice_type_id;
-    @SerializedName("payment_method_id")
+
     private String p_payment_method_id;
-    @SerializedName("sale")
+
     private com.friendlypos.distribucion.modelo.sale p_sale;
-    @SerializedName("product_invoice")
+
     private RealmList<Pivot> p_productofacturas;
 
     public int getP_id() {
@@ -335,39 +327,39 @@ public class invoiceDetallePreventa extends RealmObject {
 
     @Override
     public String toString() {
-        return "invoiceDetallePreventa{" +
-                "p_id=" + p_id +
-                ", p_result=" + p_result +
-                ", p_code='" + p_code + '\'' +
-                ", p_messages='" + p_messages + '\'' +
-                ", p_branch_office_id='" + p_branch_office_id + '\'' +
-                ", p_numeration='" + p_numeration + '\'' +
-                ", p_longitud=" + p_longitud +
-                ", p_latitud=" + p_latitud +
-                ", p_date='" + p_date + '\'' +
-                ", p_times='" + p_times + '\'' +
-                ", p_date_presale='" + p_date_presale + '\'' +
-                ", p_time_presale='" + p_time_presale + '\'' +
-                ", p_due_date='" + p_due_date + '\'' +
-                ", p_subtotal='" + p_subtotal + '\'' +
-                ", p_subtotal_taxed='" + p_subtotal_taxed + '\'' +
-                ", p_subtotal_exempt='" + p_subtotal_exempt + '\'' +
-                ", p_discount='" + p_discount + '\'' +
-                ", p_percent_discount='" + p_percent_discount + '\'' +
-                ", p_tax='" + p_tax + '\'' +
-                ", p_total='" + p_total + '\'' +
-                ", p_changing='" + p_changing + '\'' +
-                ", p_note='" + p_note + '\'' +
-                ", p_canceled='" + p_canceled + '\'' +
-                ", p_paid_up='" + p_paid_up + '\'' +
-                ", p_paid='" + p_paid + '\'' +
-                ", p_created_at='" + p_created_at + '\'' +
-                ", p_user_id='" + p_user_id + '\'' +
-                ", p_user_id_applied='" + p_user_id_applied + '\'' +
-                ", p_invoice_type_id='" + p_invoice_type_id + '\'' +
-                ", p_payment_method_id='" + p_payment_method_id + '\'' +
-                ", p_sale=" + p_sale +
-                ", p_productofacturas=" + p_productofacturas +
-                '}';
+        return "InvoiceDetallePreventa{" +
+            "p_id=" + p_id +
+            ", p_result=" + p_result +
+            ", p_code='" + p_code + '\'' +
+            ", p_messages='" + p_messages + '\'' +
+            ", p_branch_office_id='" + p_branch_office_id + '\'' +
+            ", p_numeration='" + p_numeration + '\'' +
+            ", p_longitud=" + p_longitud +
+            ", p_latitud=" + p_latitud +
+            ", p_date='" + p_date + '\'' +
+            ", p_times='" + p_times + '\'' +
+            ", p_date_presale='" + p_date_presale + '\'' +
+            ", p_time_presale='" + p_time_presale + '\'' +
+            ", p_due_date='" + p_due_date + '\'' +
+            ", p_subtotal='" + p_subtotal + '\'' +
+            ", p_subtotal_taxed='" + p_subtotal_taxed + '\'' +
+            ", p_subtotal_exempt='" + p_subtotal_exempt + '\'' +
+            ", p_discount='" + p_discount + '\'' +
+            ", p_percent_discount='" + p_percent_discount + '\'' +
+            ", p_tax='" + p_tax + '\'' +
+            ", p_total='" + p_total + '\'' +
+            ", p_changing='" + p_changing + '\'' +
+            ", p_note='" + p_note + '\'' +
+            ", p_canceled='" + p_canceled + '\'' +
+            ", p_paid_up='" + p_paid_up + '\'' +
+            ", p_paid='" + p_paid + '\'' +
+            ", p_created_at='" + p_created_at + '\'' +
+            ", p_user_id='" + p_user_id + '\'' +
+            ", p_user_id_applied='" + p_user_id_applied + '\'' +
+            ", p_invoice_type_id='" + p_invoice_type_id + '\'' +
+            ", p_payment_method_id='" + p_payment_method_id + '\'' +
+            ", p_sale=" + p_sale +
+            ", p_productofacturas=" + p_productofacturas +
+            '}';
     }
 }

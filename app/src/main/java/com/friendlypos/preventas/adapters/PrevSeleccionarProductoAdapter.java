@@ -23,6 +23,7 @@ import com.friendlypos.distribucion.modelo.Pivot;
 import com.friendlypos.distribucion.modelo.TipoProducto;
 import com.friendlypos.preventas.activity.PreventaActivity;
 import com.friendlypos.preventas.fragment.PrevSelecProductoFragment;
+import com.friendlypos.preventas.modelo.invoiceDetallePreventa;
 import com.friendlypos.principal.modelo.Productos;
 
 import java.util.ArrayList;
@@ -43,7 +44,7 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
     static double creditoLimiteCliente = 0.0;
     double totalCredito = 0.0;;
 //    TotalizeHelper totalizeHelper;
-
+    int idDetallesFactura = 0;
     int nextId;
 
     public PrevSeleccionarProductoAdapter(PreventaActivity activity, PrevSelecProductoFragment fragment, List<Inventario> productosList) {
@@ -128,6 +129,13 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
     Double cantidadDisponible, final String description, String Precio1, String Precio2,
                            String Precio3, String Precio4, String Precio5) {
 
+        final invoiceDetallePreventa invoiceDetallePreventa = activity.getCurrentInvoice();
+
+
+        idDetallesFactura =  invoiceDetallePreventa.getP_id();
+        Log.d("FACTURAIDDELEG", idDetallesFactura + "");
+        // invoiceDetallePreventa.setP_code(weqweq);
+
         final int idFacturaSeleccionada = (activity).getInvoiceIdPreventa();
         Log.d("idFacturaSeleccionada", idFacturaSeleccionada + "");
         Log.d("idProductoSeleccionado", producto_id + "");
@@ -136,7 +144,7 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         View promptView = layoutInflater.inflate(R.layout.promptamount, null);
 
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+        final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
         alertDialogBuilder.setView(promptView);
 
         final TextView txtNombreProducto = (TextView) promptView.findViewById(R.id.txtNombreProducto);
@@ -178,6 +186,81 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
         alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 
             public void onClick(DialogInterface dialog, int id) {
+                try {
+                producto_amount_dist_add = Double.parseDouble(((input.getText().toString().isEmpty()) ? "0" : input.getText().toString()));
+                Log.d("productoAmountDistAdd", producto_amount_dist_add + "");
+                //  productoAmountDistAdd = String.format("%,.2f", producto_amount_dist_add);
+
+                producto_descuento_add = Double.parseDouble(((desc.getText().toString().isEmpty()) ? "0" : desc.getText().toString()));
+                // productoDescuentoAdd = String.format("%,.2f", producto_descuento_add);
+                Log.d("productoDescuentoAdd", producto_descuento_add + "");
+
+                if (producto_descuento_add >= 0 && producto_descuento_add <= 10) {
+                    Toast.makeText(context, "agregodesc", Toast.LENGTH_LONG).show();
+                    if (producto_amount_dist_add > 0 && producto_amount_dist_add <= cantidadDisponible) {
+
+
+                        final double precioSeleccionado = (double) spPrices.getSelectedItem();
+                        Log.d("precioSeleccionado", precioSeleccionado + "");
+
+                        //  CREDITO
+                        String metodoPagoCliente = invoiceDetallePreventa.getP_payment_method_id();
+                        Double cred = Double.parseDouble(activity.getCreditoLimiteClientePreventa());
+                        if (metodoPagoCliente.equals("1")) {
+                            creditoLimiteCliente = cred;
+                            totalCredito = creditoLimiteCliente;
+                            Log.d("ads", creditoLimiteCliente + "");
+                        }
+                        else if (metodoPagoCliente.equals("2")) {
+                            double totalProducSlecc = precioSeleccionado * producto_amount_dist_add;
+                            creditoLimiteCliente = cred;
+                            totalCredito = creditoLimiteCliente - totalProducSlecc;
+                            Log.d("ads", totalCredito + "");
+                        }
+
+                        // LIMITAR SEGUN EL LIMITE DEL CREDITO
+                        if (totalCredito >= 0) {
+                            Toast.makeText(context, "ENTROOOO", Toast.LENGTH_LONG).show();
+
+                            // increment index
+                            Number currentIdNum = id + 1;
+
+                            if (currentIdNum == null) {
+                                nextId = 1;
+                            }
+                            else {
+                                nextId = currentIdNum.intValue() + 1;
+                            }
+
+                            Pivot pivotnuevo = new Pivot(); // unmanaged
+                            pivotnuevo.setId(nextId);
+                            pivotnuevo.setInvoice_id(String.valueOf(idDetallesFactura));
+                            pivotnuevo.setProduct_id(producto_id);
+                            pivotnuevo.setPrice(String.valueOf(precioSeleccionado));
+                            pivotnuevo.setAmount(String.valueOf(producto_amount_dist_add));
+                            pivotnuevo.setDiscount(String.valueOf(producto_descuento_add));
+                            pivotnuevo.setDelivered(String.valueOf(producto_amount_dist_add));
+
+                            activity.insertProduct(pivotnuevo);
+                        }
+                    else {
+                            Toast.makeText(context, "Has excedido el monto del crédito", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                    else {
+                           Toast.makeText(context, "El producto no se agrego, verifique la cantidad que esta ingresando", Toast.LENGTH_LONG).show();
+                    }
+                }
+                    else {
+                    Toast.makeText(context, "El producto no se agrego, El descuento debe ser >0 <11", Toast.LENGTH_LONG).show();
+                }
+                notifyDataSetChanged();
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                       /* Functions.createSnackBar(QuickContext, coordinatorLayout, "Sucedio un error Revise que el producto y sus dependientes tengan existencias", 2, Snackbar.LENGTH_LONG);
+                        Functions.CreateMessage(QuickContext, "Error", e.getMessage());*/
+                }
 
                 }
         });
@@ -273,7 +356,7 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
                     realm1.close();
 
                     Toast.makeText(view.getContext(), "You clicked " + ProductoID, Toast.LENGTH_SHORT).show();
-                    addProduct(InventarioID, ProductoID, ProductoAmount, description, precio, precio2, precio3, precio4, precio5);
+                   addProduct(InventarioID, ProductoID, ProductoAmount, description, precio, precio2, precio3, precio4, precio5);
 
                 }
             });
