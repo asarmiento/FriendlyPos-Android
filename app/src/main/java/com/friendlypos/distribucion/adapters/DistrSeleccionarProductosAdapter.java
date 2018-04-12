@@ -261,9 +261,6 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
 
                                         realm2.insertOrUpdate(pivotnuevo); // using insert API
 
-
-
-
                                     /*Pivot pivotnuevo = realm2.createObject(Pivot.class, nextId);
 
                                     */

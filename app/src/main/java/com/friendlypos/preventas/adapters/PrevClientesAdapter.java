@@ -115,6 +115,9 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
                 notifyItemChanged(selected_position);
 
                 Clientes clickedDataItem = contentList.get(pos);
+
+                final String idCliente = clickedDataItem.getId();
+                final String nombreCliente = clickedDataItem.getName();
                 final int creditoTime = Integer.parseInt(clickedDataItem.getCreditTime());
                 final String creditoLimiteClienteP = clickedDataItem.getCreditLimit();
                 final String dueClienteP = clickedDataItem.getDue();
@@ -132,7 +135,7 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
                     .setPositiveButton("OK", new DialogInterface.OnClickListener() {
 
                         public void onClick(DialogInterface dialog, int id) {
-
+                            String fecha = Functions.getDate() + " " + Functions.get24Time();
                             if (rbcredito.isChecked()) {
                                 if (creditoTime == 0) {
                                     Functions.CreateMessage(QuickContext, " ", "Este cliente no cuenta con crédito");
@@ -152,6 +155,7 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
                             }
 
                             activity.initCurrentInvoice(1, String.valueOf(metodoPagoId));
+                            activity.initCurrentVenta("1", "1", idCliente, nombreCliente, "6", "2", "0", "0", fecha, fecha, "0", 0 , 0);
                         }
                     })
                     .setNegativeButton("Cancel",

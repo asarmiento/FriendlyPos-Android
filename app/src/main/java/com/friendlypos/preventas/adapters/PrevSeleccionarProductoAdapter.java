@@ -21,9 +21,12 @@ import com.friendlypos.distribucion.modelo.Inventario;
 import com.friendlypos.distribucion.modelo.Marcas;
 import com.friendlypos.distribucion.modelo.Pivot;
 import com.friendlypos.distribucion.modelo.TipoProducto;
+import com.friendlypos.distribucion.modelo.sale;
+import com.friendlypos.distribucion.util.TotalizeHelper;
 import com.friendlypos.preventas.activity.PreventaActivity;
 import com.friendlypos.preventas.fragment.PrevSelecProductoFragment;
 import com.friendlypos.preventas.modelo.invoiceDetallePreventa;
+import com.friendlypos.principal.modelo.Clientes;
 import com.friendlypos.principal.modelo.Productos;
 
 import java.util.ArrayList;
@@ -242,6 +245,54 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
                             pivotnuevo.setDelivered(String.valueOf(producto_amount_dist_add));
 
                             activity.insertProduct(pivotnuevo);
+
+
+                            final Double nuevoAmount = cantidadDisponible - producto_amount_dist_add;
+                            Log.d("nuevoAmount", nuevoAmount + "");
+
+
+                            final Realm realm3 = Realm.getDefaultInstance();
+
+                            realm3.executeTransaction(new Realm.Transaction() {
+
+                                @Override
+                                public void execute(Realm realm3) {
+
+                                    Inventario inv_actualizado = realm3.where(Inventario.class).equalTo("id", inventario_id).findFirst();
+                                    inv_actualizado.setAmount(String.valueOf(nuevoAmount));
+
+                                    realm3.insertOrUpdate(inv_actualizado); // using insert API
+                                }
+                            });
+
+                            // TRANSACCION PARA ACTUALIZAR EL CREDIT_LIMIT DEL CLIENTE
+                          /*  final Realm realm4 = Realm.getDefaultInstance();
+                            realm4.executeTransaction(new Realm.Transaction() {
+
+                                @Override
+                                public void execute(Realm realm4) {
+
+                                    final sale ventas = realm4.where(sale.class).equalTo("invoice_id", idFacturaSeleccionada).findFirst();
+                                    Clientes clientes = realm4.where(Clientes.class).equalTo("id", ventas.getCustomer_id()).findFirst();
+                                    Log.d("ads", clientes + "");
+                                    clientes.setCreditLimit(String.valueOf(totalCredito));
+
+                                    realm4.insertOrUpdate(clientes); // using insert API
+
+                                    realm4.close();
+                                    activity.setCreditoLimiteClientePreventa(String.valueOf(totalCredito));
+
+                                    fragment.updateData();
+                                    List<Pivot> list = getListResumen();
+                                  //  activity.cleanTotalize();
+                                 //   totalizeHelper = new TotalizeHelper(activity);
+                                //    totalizeHelper.totalize(list);
+                                    Log.d("listaResumenADD", list + "");
+
+                                }
+                            });*/
+
+
                         }
                     else {
                             Toast.makeText(context, "Has excedido el monto del crédito", Toast.LENGTH_SHORT).show();

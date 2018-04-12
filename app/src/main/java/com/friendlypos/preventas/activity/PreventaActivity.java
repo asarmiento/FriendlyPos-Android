@@ -236,6 +236,16 @@ public class PreventaActivity extends BluetoothActivity {
         preSellInvoiceDelegate.initInvoiceDetallePreventa(counter, payMethodId);
     }
 
+    public void initCurrentVenta(String p_id, String p_invoice_id, String p_customer_id, String p_customer_name,
+                                 String p_cash_desk_id, String p_sale_type, String p_viewed, String p_applied,
+                                 String p_created_at, String p_updated_at, String p_reserved, int aplicada, int subida) {
+        preSellInvoiceDelegate.initVentaDetallePreventa(p_id, p_invoice_id, p_customer_id, p_customer_name,
+                p_cash_desk_id, p_sale_type, p_viewed, p_applied,
+                p_created_at, p_updated_at, p_reserved, aplicada, subida);
+    }
+
+
+
     @Override
     public void onDestroy() {
         super.onDestroy();
