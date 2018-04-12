@@ -247,8 +247,6 @@ public class PrevTotalizarFragment extends BaseFragment  {
 
     public void obtenerLocalización() {
 
-
-
         gps = new GPSTracker(getActivity());
 
         // check if GPS enabled
