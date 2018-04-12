@@ -22,10 +22,11 @@ import com.friendlypos.distribucion.modelo.Marcas;
 import com.friendlypos.distribucion.modelo.Pivot;
 import com.friendlypos.distribucion.modelo.TipoProducto;
 import com.friendlypos.distribucion.modelo.sale;
-import com.friendlypos.distribucion.util.TotalizeHelper;
+import com.friendlypos.login.util.SessionPrefes;
 import com.friendlypos.preventas.activity.PreventaActivity;
 import com.friendlypos.preventas.fragment.PrevSelecProductoFragment;
 import com.friendlypos.preventas.modelo.invoiceDetallePreventa;
+import com.friendlypos.preventas.util.TotalizeHelperPreventa;
 import com.friendlypos.principal.modelo.Clientes;
 import com.friendlypos.principal.modelo.Productos;
 
@@ -34,6 +35,8 @@ import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
+
+import static io.realm.internal.SyncObjectServerFacade.getApplicationContext;
 
 public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSeleccionarProductoAdapter.CharacterViewHolder> {
 
@@ -46,15 +49,17 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
     private int selected_position = -1;
     static double creditoLimiteCliente = 0.0;
     double totalCredito = 0.0;;
-//    TotalizeHelper totalizeHelper;
+    TotalizeHelperPreventa totalizeHelper;
     int idDetallesFactura = 0;
     int nextId;
+    SessionPrefes session;
 
     public PrevSeleccionarProductoAdapter(PreventaActivity activity, PrevSelecProductoFragment fragment, List<Inventario> productosList) {
         this.activity = activity;
         this.fragment = fragment;
         this.productosList = productosList;
-     //   totalizeHelper = new TotalizeHelper(activity);
+        session = new SessionPrefes(getApplicationContext());
+        totalizeHelper = new TotalizeHelperPreventa(activity);
     }
 
     public void updateData(List<Inventario> productosList) {
@@ -224,9 +229,9 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
                         // LIMITAR SEGUN EL LIMITE DEL CREDITO
                         if (totalCredito >= 0) {
                             Toast.makeText(context, "ENTROOOO", Toast.LENGTH_LONG).show();
-
+                            int numero = session.getDatosPivotPreventa();
                             // increment index
-                            Number currentIdNum = id + 1;
+                            Number currentIdNum = numero;
 
                             if (currentIdNum == null) {
                                 nextId = 1;
@@ -243,9 +248,11 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
                             pivotnuevo.setAmount(String.valueOf(producto_amount_dist_add));
                             pivotnuevo.setDiscount(String.valueOf(producto_descuento_add));
                             pivotnuevo.setDelivered(String.valueOf(producto_amount_dist_add));
+                            pivotnuevo.setDevuelvo(0);
 
                             activity.insertProduct(pivotnuevo);
-
+                            numero++;
+                            session.guardarDatosPivotPreventa(numero);
 
                             final Double nuevoAmount = cantidadDisponible - producto_amount_dist_add;
                             Log.d("nuevoAmount", nuevoAmount + "");
@@ -266,7 +273,7 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
                             });
 
                             // TRANSACCION PARA ACTUALIZAR EL CREDIT_LIMIT DEL CLIENTE
-                          /*  final Realm realm4 = Realm.getDefaultInstance();
+                            final Realm realm4 = Realm.getDefaultInstance();
                             realm4.executeTransaction(new Realm.Transaction() {
 
                                 @Override
@@ -284,14 +291,14 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
 
                                     fragment.updateData();
                                     List<Pivot> list = getListResumen();
-                                  //  activity.cleanTotalize();
-                                 //   totalizeHelper = new TotalizeHelper(activity);
-                                //    totalizeHelper.totalize(list);
+                                    activity.cleanTotalize();
+                                    totalizeHelper = new TotalizeHelperPreventa(activity);
+                                   totalizeHelper.totalize(list);
                                     Log.d("listaResumenADD", list + "");
 
                                 }
-                            });*/
-
+                            });
+                             //   activity.getAllPivotDelegate();
 
                         }
                     else {

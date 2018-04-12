@@ -156,6 +156,12 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
 
                             activity.initCurrentInvoice(1, String.valueOf(metodoPagoId));
                             activity.initCurrentVenta("1", "1", idCliente, nombreCliente, "6", "2", "0", "0", fecha, fecha, "0", 0 , 0);
+                            tabCliente = 1;
+                            activity.setSelecClienteTabPreventa(tabCliente);
+                            activity.setCreditoLimiteClientePreventa(creditoLimiteClienteP);
+                            activity.setDueClientePreventa(dueClienteP);
+                            activity.setInvoiceIdPreventa(1);
+                            activity.setMetodoPagoClientePreventa(metodoPagoId);
                         }
                     })
                     .setNegativeButton("Cancel",
@@ -166,18 +172,15 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
                             }
                         });
 
+
+
                 AlertDialog alertD = alertDialogBuilder.create();
                 alertD.show();
 
 
               //  Toast.makeText(QuickContext, "You clicked FACTURA NUEVA " + factura_nueva.getP_id(), Toast.LENGTH_SHORT).show();
 
-                tabCliente = 1;
-                activity.setSelecClienteTabPreventa(tabCliente);
-                activity.setCreditoLimiteClientePreventa(creditoLimiteClienteP);
-                activity.setDueClientePreventa(dueClienteP);
-             //   activity.setInvoiceIdPreventa(factura_nueva.getP_id());
-                activity.setMetodoPagoClientePreventa(metodoPagoId);
+
             }
         });
         if (selected_position == position) {

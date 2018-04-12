@@ -25,10 +25,10 @@ import com.friendlypos.distribucion.fragment.BaseFragment;
 import com.friendlypos.distribucion.fragment.DistResumenFragment;
 import com.friendlypos.distribucion.fragment.DistSelecProductoFragment;
 import com.friendlypos.distribucion.modelo.Inventario;
-import com.friendlypos.distribucion.util.TotalizeHelper;
 import com.friendlypos.preventas.activity.PreventaActivity;
 import com.friendlypos.preventas.adapters.PrevSeleccionarProductoAdapter;
 import com.friendlypos.preventas.modelo.invoiceDetallePreventa;
+import com.friendlypos.preventas.util.TotalizeHelperPreventa;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +48,7 @@ public class PrevSelecProductoFragment extends BaseFragment implements SearchVie
     static double creditoLimiteCliente = 0.0;
     int slecTAB;
     PreventaActivity activity;
-    TotalizeHelper totalizeHelper;
+    TotalizeHelperPreventa totalizeHelper;
 
     public static PrevSelecProductoFragment getInstance() {
         return new PrevSelecProductoFragment();
@@ -161,7 +161,7 @@ public class PrevSelecProductoFragment extends BaseFragment implements SearchVie
     public void updateData() {
         adapter.updateData(getListProductos());
       //  adapter2.notifyDataSetChanged();
-       /* totalizeHelper = new TotalizeHelper(activity);
+       /* totalizeHelper = new TotalizeHelperPreventa(activity);
         totalizeHelper.totalize(resumenFrag1.getListResumen());*/
 
         if (slecTAB == 1) {

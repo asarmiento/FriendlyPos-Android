@@ -17,9 +17,12 @@ import com.friendlypos.distribucion.fragment.BaseFragment;
 import com.friendlypos.distribucion.modelo.Pivot;
 import com.friendlypos.distribucion.util.Adapter;
 import com.friendlypos.preventas.delegate.PreSellInvoiceDelegate;
+import com.friendlypos.preventas.fragment.PrevResumenFragment;
 import com.friendlypos.preventas.fragment.PrevSelecClienteFragment;
 import com.friendlypos.preventas.fragment.PrevSelecProductoFragment;
+import com.friendlypos.preventas.fragment.PrevTotalizarFragment;
 import com.friendlypos.preventas.modelo.invoiceDetallePreventa;
+import com.friendlypos.preventas.modelo.saleDetallePreventa;
 import com.friendlypos.principal.activity.BluetoothActivity;
 import com.friendlypos.principal.activity.MenuPrincipal;
 
@@ -38,6 +41,14 @@ public class PreventaActivity extends BluetoothActivity {
     private int selecClienteTabPreventa;
     private String dueClientePreventa;
 
+    private double totalizarSubGrabado;
+    private double totalizarSubExento;
+    private double totalizarSubTotal;
+    private double totalizarDescuento;
+    private double totalizarImpuestoIVA;
+    private double totalizarTotal;
+    private double totalizarTotalDouble;
+
     private PreSellInvoiceDelegate preSellInvoiceDelegate;
 
     public int getInvoiceIdPreventa() {
@@ -47,6 +58,56 @@ public class PreventaActivity extends BluetoothActivity {
     public void setInvoiceIdPreventa(int invoiceIdPreventa) {
         this.invoiceIdPreventa = invoiceIdPreventa;
     }
+
+
+    public double getTotalizarSubGrabado() {
+        return totalizarSubGrabado;
+    }
+
+    public void setTotalizarSubGrabado(double totalizarSubGrabado) {
+        this.totalizarSubGrabado = this.totalizarSubGrabado + totalizarSubGrabado;
+    }
+
+    public double getTotalizarSubExento() {
+        return totalizarSubExento;
+    }
+
+    public void setTotalizarSubExento(double totalizarSubExento) {
+        this.totalizarSubExento = this.totalizarSubExento + totalizarSubExento;
+    }
+
+    public double getTotalizarSubTotal() {
+        return totalizarSubTotal;
+    }
+
+    public void setTotalizarSubTotal(double totalizarSubTotal) {
+        this.totalizarSubTotal = this.totalizarSubTotal + totalizarSubTotal;
+    }
+
+    public double getTotalizarDescuento() {
+        return totalizarDescuento;
+    }
+
+    public void setTotalizarDescuento(double totalizarDescuento) {
+        this.totalizarDescuento = this.totalizarDescuento + totalizarDescuento;
+    }
+
+    public double getTotalizarImpuestoIVA() {
+        return totalizarImpuestoIVA;
+    }
+
+    public void setTotalizarImpuestoIVA(double totalizarImpuestoIVA) {
+        this.totalizarImpuestoIVA = this.totalizarImpuestoIVA + totalizarImpuestoIVA;
+    }
+
+    public double getTotalizarTotal() {
+        return totalizarTotal;
+    }
+
+    public void setTotalizarTotal(double totalizarTotal) {
+        this.totalizarTotal = this.totalizarTotal + totalizarTotal;
+    }
+
 
     public String getMetodoPagoClientePreventa() {
         return metodoPagoClientePreventa;
@@ -169,12 +230,12 @@ public class PreventaActivity extends BluetoothActivity {
         final List<BaseFragment> list = new ArrayList<>();
         list.add(new PrevSelecClienteFragment());
         list.add(new PrevSelecProductoFragment());
-      /*    list.add(new DistSelecProductoFragment());
-        list.add(new DistTotalizarFragment());*/
+          list.add(new PrevResumenFragment());
+       list.add(new PrevTotalizarFragment());
         adapter.addFragment(list.get(0), "Seleccionar Cliente");
         adapter.addFragment(list.get(1), "Seleccionar Productos");
-    /*  adapter.addFragment(list.get(2), "Resumen");
-        adapter.addFragment(list.get(3), "Totalizar");*/
+        adapter.addFragment(list.get(2), "Resumen");
+          adapter.addFragment(list.get(3), "Totalizar");
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
@@ -228,8 +289,20 @@ public class PreventaActivity extends BluetoothActivity {
         return preSellInvoiceDelegate.getCurrentInvoice();
     }
 
+    public saleDetallePreventa getCurrentVenta() {
+        return preSellInvoiceDelegate.getCurrentVenta();
+    }
+
+    public List<Pivot> getAllPivotDelegate() {
+        return preSellInvoiceDelegate.getAllPivot();
+    }
+
     public void insertProduct(Pivot pivot) {
         preSellInvoiceDelegate.insertProduct(pivot);
+    }
+
+    public void borrarProduct(Pivot pivot) {
+        preSellInvoiceDelegate.borrarProducto(pivot);
     }
 
     public void initCurrentInvoice(int counter, String payMethodId) {
@@ -242,6 +315,21 @@ public class PreventaActivity extends BluetoothActivity {
         preSellInvoiceDelegate.initVentaDetallePreventa(p_id, p_invoice_id, p_customer_id, p_customer_name,
                 p_cash_desk_id, p_sale_type, p_viewed, p_applied,
                 p_created_at, p_updated_at, p_reserved, aplicada, subida);
+    }
+
+    public void initProducto(int pos) {
+        preSellInvoiceDelegate.initProduct(pos);
+    }
+
+
+    public void cleanTotalize() {
+        totalizarSubGrabado = 0.0;
+        totalizarSubExento = 0.0;
+        totalizarSubTotal = 0.0;
+        totalizarDescuento = 0.0;
+        totalizarImpuestoIVA = 0.0;
+        totalizarTotal = 0.0;
+        totalizarTotalDouble = 0.0;
     }
 
 

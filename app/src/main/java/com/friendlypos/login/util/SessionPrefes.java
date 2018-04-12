@@ -21,6 +21,8 @@ public class SessionPrefes {
     public static final String PREF_USER_NAME = "PREF_USER_NAME";
     public static final String PREF_USER_PASS = "PREF_USER_PASS";
 
+    public static final String PREF_PREV_NUMERO = "PREF_PREV_NUMERO";
+
     public static final String PREF_DESCARGA_DATOS = "PREF_DESCARGA_DATOS";
 
     private final SharedPreferences mPrefs;
@@ -67,6 +69,23 @@ public class SessionPrefes {
         }
     }
 
+    public void guardarDatosPivotPreventa(int numero) {
+        if (numero != 0) {
+            //todo revisar que es PREF_USER_EXPIRES_IN
+            // referencia https://www.timecalculator.net/milliseconds-to-date
+            SharedPreferences.Editor editor = mPrefs.edit();
+            editor.putInt(PREF_PREV_NUMERO, numero);
+           /* editor.putString(PREF_USER_ACCESS_TOKEN, userresp.getAccess_token());
+            editor.putString(PREF_USER_REFRESH_TOKEN, userresp.getRefresh_token());*/
+            editor.apply();
+        }
+    }
+
+    public int getDatosPivotPreventa(){
+        int numero = mPrefs.getInt(PREF_PREV_NUMERO, 0);
+        return numero;
+    }
+
     public void guardarDatosUsuarioas(String userName, String passWord) {
         if (userName != null && passWord != null ) {
             //todo revisar que es PREF_USER_EXPIRES_IN
@@ -81,6 +100,7 @@ public class SessionPrefes {
             mIsLoggedIn = true;
         }
     }
+
     public String getToken(){
         return mPrefs.getString(PREF_USER_ACCESS_TOKEN, null);
     }
