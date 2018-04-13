@@ -194,8 +194,8 @@ public class PrevTotalizarFragment extends BaseFragment  {
                         try {
 
                             if(bluetoothStateChangeReceiver.isBluetoothAvailable()== true) {
-                                PrinterFunctions.imprimirFacturaDistrTotal(sale_actualizada, getActivity(), 1);
-                                Toast.makeText(getActivity(), "imprimir liquidacion", Toast.LENGTH_SHORT).show();
+                                PrinterFunctions.imprimirFacturaPrevTotal(sale_actualizada, getActivity(), 1);
+                                Toast.makeText(getActivity(), "imprimir Totalizar Preventa", Toast.LENGTH_SHORT).show();
                             }
                             else if(bluetoothStateChangeReceiver.isBluetoothAvailable() == false){
                                 Functions.CreateMessage(getActivity(), "Error", "La conexión del bluetooth ha fallado, favor revisar o conectar el dispositivo");
