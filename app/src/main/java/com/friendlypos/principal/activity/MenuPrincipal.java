@@ -378,7 +378,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
 
                     for (int i = 0; i < listaFacturas.size(); i++) {
 
-                        facturaId = listaFacturas.get(i).getId();
+                        facturaId = String.valueOf(listaFacturas.get(i).getId());
                         Log.d("facturaId", facturaId + "");
                         EnviarFactura obj = new EnviarFactura(listaFacturas.get(i));
                         Log.d("My App", obj + "");

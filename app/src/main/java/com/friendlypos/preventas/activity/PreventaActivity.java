@@ -305,8 +305,20 @@ public class PreventaActivity extends BluetoothActivity {
         preSellInvoiceDelegate.borrarProducto(pivot);
     }
 
-    public void initCurrentInvoice(int counter, String payMethodId) {
-        preSellInvoiceDelegate.initInvoiceDetallePreventa(counter, payMethodId);
+    public void initCurrentInvoice(String id, String branch_office_id, String numeration, double latitude, double longitude,
+                                   String date, String times, String date_presale, String times_presale, String due_data,
+                                   String invoice_type_id, String payment_method_id, String totalSubtotal, String totalGrabado,
+                                   String totalExento, String totalDescuento, String percent_discount, String totalImpuesto,
+                                   String totalTotal, String changing, String notes, String canceled,
+                                   String paid_up, String paid, String created_at, String idUsuario,
+                                   String idUsuarioAplicado) {
+        preSellInvoiceDelegate.initInvoiceDetallePreventa(id, branch_office_id, numeration, latitude, longitude,
+                date, times, date_presale, times_presale, due_data,
+                invoice_type_id, payment_method_id, totalSubtotal, totalGrabado,
+                totalExento, totalDescuento, percent_discount, totalImpuesto,
+                totalTotal, changing, notes, canceled,
+                paid_up, paid, created_at, idUsuario,
+                idUsuarioAplicado);
     }
 
     public void initCurrentVenta(String p_id, String p_invoice_id, String p_customer_id, String p_customer_name,

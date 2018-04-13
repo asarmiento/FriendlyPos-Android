@@ -16,12 +16,14 @@ import android.widget.TextView;
 import com.friendlypos.R;
 import com.friendlypos.application.util.Functions;
 import com.friendlypos.distribucion.modelo.Pivot;
+import com.friendlypos.distribucion.modelo.invoice;
 import com.friendlypos.preventas.activity.PreventaActivity;
 import com.friendlypos.preventas.modelo.invoiceDetallePreventa;
 import com.friendlypos.principal.modelo.Clientes;
 
 import java.util.List;
 
+import io.realm.Realm;
 import io.realm.RealmResults;
 
 public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapter.CharacterViewHolder> {
@@ -35,7 +37,7 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
     int idInvetarioSelec;
     Double amount_inventario = 0.0;
     String facturaID, clienteID;
-    int nextId;
+    int nextId, numeration;
     int tabCliente;
     int activa = 0;
     String nombreMetodoPago;
@@ -154,7 +156,40 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
                                 notifyDataSetChanged();
                             }
 
-                            activity.initCurrentInvoice(1, String.valueOf(metodoPagoId));
+                            /*final Realm realm2 = Realm.getDefaultInstance();
+
+                            realm2.executeTransaction(new Realm.Transaction() {
+
+                                @Override
+                                public void execute(Realm realm) {
+
+                                    // increment index
+                                    Number currentIdNum = realm.where(invoice.class).max("id");
+
+                                    if (currentIdNum == null) {
+                                        nextId = 1;
+                                    }
+                                    else {
+                                        nextId = currentIdNum.intValue() + 1;
+                                    }
+
+                                    // increment index
+                                    Number NumFactura = realm.where(invoice.class).max("numeration");
+
+                                    if (NumFactura == null) {
+                                        numeration = 1;
+                                    }
+                                    else {
+                                        numeration = NumFactura.intValue() + 1;
+                                    }
+
+                                }
+                            });*/
+
+                            activity.initCurrentInvoice("1", "3", "00001", 0.0, 0.0, Functions.getDate(), Functions.get24Time(),
+                                    Functions.getDate(), Functions.get24Time(), Functions.getDate(), "2", metodoPagoId, "", "", "", "", "", "","","","","","","",fecha,
+                                    "","");
+
                             activity.initCurrentVenta("1", "1", idCliente, nombreCliente, "6", "2", "0", "0", fecha, fecha, "0", 0 , 0);
                             tabCliente = 1;
                             activity.setSelecClienteTabPreventa(tabCliente);

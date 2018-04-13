@@ -12,12 +12,8 @@ import io.realm.annotations.PrimaryKey;
  */
 
 public class invoiceDetallePreventa {
+
     private int p_id;
-
-    private boolean p_result;
-    private String p_code;
-    private String p_messages;
-
     private String p_branch_office_id;
     private String p_numeration;
 
@@ -68,6 +64,11 @@ public class invoiceDetallePreventa {
     private com.friendlypos.distribucion.modelo.sale p_sale;
 
     private RealmList<Pivot> p_productofacturas;
+
+
+    private boolean p_result;
+    private String p_code;
+    private String p_messages;
 
     public int getP_id() {
         return p_id;
