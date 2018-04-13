@@ -66,40 +66,12 @@ public class invoiceDetallePreventa {
     private RealmList<Pivot> p_productofacturas;
 
 
-    private boolean p_result;
-    private String p_code;
-    private String p_messages;
-
     public int getP_id() {
         return p_id;
     }
 
     public void setP_id(int p_id) {
         this.p_id = p_id;
-    }
-
-    public boolean isP_result() {
-        return p_result;
-    }
-
-    public void setP_result(boolean p_result) {
-        this.p_result = p_result;
-    }
-
-    public String getP_code() {
-        return p_code;
-    }
-
-    public void setP_code(String p_code) {
-        this.p_code = p_code;
-    }
-
-    public String getP_messages() {
-        return p_messages;
-    }
-
-    public void setP_messages(String p_messages) {
-        this.p_messages = p_messages;
     }
 
     public String getP_branch_office_id() {
@@ -330,9 +302,6 @@ public class invoiceDetallePreventa {
     public String toString() {
         return "InvoiceDetallePreventa{" +
             "p_id=" + p_id +
-            ", p_result=" + p_result +
-            ", p_code='" + p_code + '\'' +
-            ", p_messages='" + p_messages + '\'' +
             ", p_branch_office_id='" + p_branch_office_id + '\'' +
             ", p_numeration='" + p_numeration + '\'' +
             ", p_longitud=" + p_longitud +

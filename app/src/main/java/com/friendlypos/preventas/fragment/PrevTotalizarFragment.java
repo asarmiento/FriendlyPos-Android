@@ -1,5 +1,6 @@
 package com.friendlypos.preventas.fragment;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -23,6 +24,7 @@ import com.friendlypos.distribucion.util.GPSTracker;
 import com.friendlypos.login.modelo.Usuarios;
 import com.friendlypos.login.util.SessionPrefes;
 import com.friendlypos.preventas.activity.PreventaActivity;
+import com.friendlypos.preventas.modelo.invoiceDetallePreventa;
 
 import io.realm.Realm;
 
@@ -66,9 +68,23 @@ public class PrevTotalizarFragment extends BaseFragment  {
     private static int apply_done = 0;
     int slecTAB;
     sale sale_actualizada;
+    PreventaActivity activity;
 
     GPSTracker gps;
     BluetoothStateChangeReceiver bluetoothStateChangeReceiver;
+
+    @Override
+    public void onAttach(Activity activity){
+        super.onAttach(activity);
+        this.activity = (PreventaActivity) activity;
+    }
+
+    @Override
+    public void onDetach(){
+        super.onDetach();
+        activity = null;
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -158,7 +174,7 @@ public class PrevTotalizarFragment extends BaseFragment  {
                                     totalVuelvo = String.format("%,.2f", vuelto);
 
                                     int tabCliente = 0;
-                                    ((DistribucionActivity) getActivity()).setSelecClienteTab(tabCliente);
+                                    ((PreventaActivity) getActivity()).setSelecClienteTabPreventa(tabCliente);
 
                                     change.setText(totalVuelvo);
                                     obtenerLocalización();
@@ -270,6 +286,41 @@ public class PrevTotalizarFragment extends BaseFragment  {
 
     }
 
+    public void actualizarFacturaDetalles() {
+
+        Realm realm = Realm.getDefaultInstance();
+        usuer = session.getUsuarioPrefs();
+        Usuarios usuarios = realm.where(Usuarios.class).equalTo("email", usuer).findFirst();
+        String idUsuario = usuarios.getId();
+        realm.close();
+
+        final invoiceDetallePreventa invoiceDetallePreventa1 = activity.getCurrentInvoice();
+        invoiceDetallePreventa1.setP_longitud(longitude);
+        invoiceDetallePreventa1.setP_latitud(latitude);
+
+        invoiceDetallePreventa1.setP_subtotal(String.valueOf(totalSubtotal));
+        invoiceDetallePreventa1.setP_subtotal_taxed(String.valueOf(totalGrabado));
+        invoiceDetallePreventa1.setP_subtotal_exempt(String.valueOf(totalExento));
+        invoiceDetallePreventa1.setP_discount(String.valueOf(totalDescuento));
+        invoiceDetallePreventa1.setP_tax(String.valueOf(totalImpuesto));
+        invoiceDetallePreventa1.setP_total(String.valueOf(totalTotal));
+
+        invoiceDetallePreventa1.setP_changing(String.valueOf(vuelto));
+        invoiceDetallePreventa1.setP_note(notes.getText().toString());
+        invoiceDetallePreventa1.setP_canceled("1");
+        invoiceDetallePreventa1.setP_paid(String.valueOf(pagoCon));
+        invoiceDetallePreventa1.setP_user_id(idUsuario);
+        invoiceDetallePreventa1.setP_user_id_applied(idUsuario);
+
+/*
+        invoiceDetallePreventa1.setAplicada(1);
+        invoiceDetallePreventa1.setSubida(1);*/
+
+
+        Log.d("codigoooo", invoiceDetallePreventa1 + "");
+
+    }
+
     protected void actualizarFactura() {
 
         // TRANSACCION PARA ACTUALIZAR CAMPOS DE LA TABLA FACTURAS
@@ -350,6 +401,8 @@ public class PrevTotalizarFragment extends BaseFragment  {
 
     protected void aplicarFactura() {
         paid.setEnabled(false);
+
+        actualizarFacturaDetalles();
 
     /*    actualizarFactura();
         actualizarVenta();*/

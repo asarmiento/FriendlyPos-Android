@@ -26,6 +26,7 @@ import com.friendlypos.login.util.SessionPrefes;
 import com.friendlypos.preventas.activity.PreventaActivity;
 import com.friendlypos.preventas.fragment.PrevSelecProductoFragment;
 import com.friendlypos.preventas.modelo.invoiceDetallePreventa;
+import com.friendlypos.preventas.modelo.saleDetallePreventa;
 import com.friendlypos.preventas.util.TotalizeHelperPreventa;
 import com.friendlypos.principal.modelo.Clientes;
 import com.friendlypos.principal.modelo.Productos;
@@ -52,6 +53,7 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
     TotalizeHelperPreventa totalizeHelper;
     int idDetallesFactura = 0;
     int nextId;
+    String customer;
     SessionPrefes session;
 
     public PrevSeleccionarProductoAdapter(PreventaActivity activity, PrevSelecProductoFragment fragment, List<Inventario> productosList) {
@@ -272,6 +274,16 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
                                 }
                             });
 
+
+                            saleDetallePreventa ventaDetallePreventa = activity.getCurrentVenta();
+                            ventaDetallePreventa.getP_invoice_id();
+
+                            if(ventaDetallePreventa.getP_invoice_id().equals(String.valueOf(idFacturaSeleccionada))){
+
+                                customer = ventaDetallePreventa.getP_customer_id();
+
+                            }
+
                             // TRANSACCION PARA ACTUALIZAR EL CREDIT_LIMIT DEL CLIENTE
                             final Realm realm4 = Realm.getDefaultInstance();
                             realm4.executeTransaction(new Realm.Transaction() {
@@ -279,8 +291,8 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
                                 @Override
                                 public void execute(Realm realm4) {
 
-                                    final sale ventas = realm4.where(sale.class).equalTo("invoice_id", idFacturaSeleccionada).findFirst();
-                                    Clientes clientes = realm4.where(Clientes.class).equalTo("id", ventas.getCustomer_id()).findFirst();
+                                    //final sale ventas = realm4.where(sale.class).equalTo("invoice_id", idFacturaSeleccionada).findFirst();
+                                    Clientes clientes = realm4.where(Clientes.class).equalTo("id", customer).findFirst();
                                     Log.d("ads", clientes + "");
                                     clientes.setCreditLimit(String.valueOf(totalCredito));
 
@@ -290,7 +302,7 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
                                     activity.setCreditoLimiteClientePreventa(String.valueOf(totalCredito));
 
                                     fragment.updateData();
-                                    List<Pivot> list = getListResumen();
+                                    List<Pivot> list = activity.getAllPivotDelegate();
                                     activity.cleanTotalize();
                                     totalizeHelper = new TotalizeHelperPreventa(activity);
                                    totalizeHelper.totalize(list);

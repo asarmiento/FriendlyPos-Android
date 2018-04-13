@@ -156,7 +156,7 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
                                 notifyDataSetChanged();
                             }
 
-                            /*final Realm realm2 = Realm.getDefaultInstance();
+                       /*    final Realm realm2 = Realm.getDefaultInstance();
 
                             realm2.executeTransaction(new Realm.Transaction() {
 
@@ -164,7 +164,11 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
                                 public void execute(Realm realm) {
 
                                     // increment index
-                                    Number currentIdNum = realm.where(invoice.class).max("id");
+
+                                    int numero = (int) realm.where(invoice.class).max("id");
+
+                                    Number currentIdNum = numero;
+
 
                                     if (currentIdNum == null) {
                                         nextId = 1;
@@ -184,8 +188,8 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
                                     }
 
                                 }
-                            });*/
-
+                           });
+*/
                             activity.initCurrentInvoice("1", "3", "00001", 0.0, 0.0, Functions.getDate(), Functions.get24Time(),
                                     Functions.getDate(), Functions.get24Time(), Functions.getDate(), "2", metodoPagoId, "", "", "", "", "", "","","","","","","",fecha,
                                     "","");
