@@ -360,7 +360,9 @@ public class PrevTotalizarFragment extends BaseFragment  {
         printBill.setVisibility(View.VISIBLE);
         apply_done = 1;
 
+
     }
+
 
     public static void clearAll() {
         if (apply_done == 1) {
