@@ -15,6 +15,8 @@ import com.friendlypos.application.bluetooth.PrinterService;
 import com.friendlypos.application.util.Functions;
 import com.friendlypos.distribucion.fragment.BaseFragment;
 import com.friendlypos.distribucion.modelo.Pivot;
+import com.friendlypos.distribucion.modelo.invoice;
+import com.friendlypos.distribucion.modelo.sale;
 import com.friendlypos.distribucion.util.Adapter;
 import com.friendlypos.preventas.delegate.PreSellInvoiceDelegate;
 import com.friendlypos.preventas.fragment.PrevResumenFragment;
@@ -289,9 +291,16 @@ public class PreventaActivity extends BluetoothActivity {
         return preSellInvoiceDelegate.getCurrentInvoice();
     }
 
-    public saleDetallePreventa getCurrentVenta() {
+    public sale getCurrentVenta() {
         return preSellInvoiceDelegate.getCurrentVenta();
     }
+
+    public invoice getInvoiceByInvoiceDetalles() {
+        return preSellInvoiceDelegate.getInvoiceByInvoiceDetalle();
+    }
+
+
+
 
     public List<Pivot> getAllPivotDelegate() {
         return preSellInvoiceDelegate.getAllPivot();
@@ -332,7 +341,6 @@ public class PreventaActivity extends BluetoothActivity {
     public void initProducto(int pos) {
         preSellInvoiceDelegate.initProduct(pos);
     }
-
 
     public void cleanTotalize() {
         totalizarSubGrabado = 0.0;

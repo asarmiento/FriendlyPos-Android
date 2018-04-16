@@ -275,12 +275,12 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
                             });
 
 
-                            saleDetallePreventa ventaDetallePreventa = activity.getCurrentVenta();
-                            ventaDetallePreventa.getP_invoice_id();
+                            sale ventaDetallePreventa = activity.getCurrentVenta();
+                            ventaDetallePreventa.getInvoice_id();
 
-                            if(ventaDetallePreventa.getP_invoice_id().equals(String.valueOf(idFacturaSeleccionada))){
+                            if(ventaDetallePreventa.getInvoice_id().equals(String.valueOf(idFacturaSeleccionada))){
 
-                                customer = ventaDetallePreventa.getP_customer_id();
+                                customer = ventaDetallePreventa.getCustomer_id();
 
                             }
 

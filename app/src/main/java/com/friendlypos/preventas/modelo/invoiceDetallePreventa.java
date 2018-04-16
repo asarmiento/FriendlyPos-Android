@@ -61,7 +61,7 @@ public class invoiceDetallePreventa {
 
     private String p_payment_method_id;
 
-    private com.friendlypos.distribucion.modelo.sale p_sale;
+    private sale p_sale;
 
     private RealmList<Pivot> p_productofacturas;
 

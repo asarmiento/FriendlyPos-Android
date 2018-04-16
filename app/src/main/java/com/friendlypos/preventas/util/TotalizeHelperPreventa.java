@@ -37,18 +37,18 @@ public class TotalizeHelperPreventa {
 
     private Double getClienteFixedDescuentoByPivotId(String id) {
 
-        saleDetallePreventa ventaDetallePreventa = activity.getCurrentVenta();
-        ventaDetallePreventa.getP_invoice_id();
+        sale ventaDetallePreventa = activity.getCurrentVenta();
+        ventaDetallePreventa.getInvoice_id();
+        customer = ventaDetallePreventa.getCustomer_id();
+       /* if(ventaDetallePreventa.getP_invoice_id() == id){
 
-        if(ventaDetallePreventa.getP_invoice_id() == id){
 
-            customer = ventaDetallePreventa.getP_customer_id();
 
-        }
+        }*/
 
         Realm realm = Realm.getDefaultInstance();
 
-        sale venta = realm.where(sale.class).equalTo("invoice_id", id).findFirst();
+        //sale venta = realm.where(sale.class).equalTo("invoice_id", id).findFirst();
         Double clienteFixedDescuento = Double.valueOf(realm.where(Clientes.class).equalTo("id", customer).findFirst().getFixedDiscount());
 
         realm.close();

@@ -194,7 +194,7 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
                                     Functions.getDate(), Functions.get24Time(), Functions.getDate(), "2", metodoPagoId, "", "", "", "", "", "","","","","","","",fecha,
                                     "","");
 
-                            activity.initCurrentVenta("1", "1", idCliente, nombreCliente, "6", "2", "0", "0", fecha, fecha, "0", 0 , 0);
+                            activity.initCurrentVenta("1", "1", idCliente, nombreCliente, "6", "2", "0", "0", fecha, fecha, "0", 1 , 0);
                             tabCliente = 1;
                             activity.setSelecClienteTabPreventa(tabCliente);
                             activity.setCreditoLimiteClientePreventa(creditoLimiteClienteP);

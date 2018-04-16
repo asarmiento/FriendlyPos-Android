@@ -189,7 +189,7 @@ public class PrevTotalizarFragment extends BaseFragment  {
                                 obtenerLocalización();
                                 aplicarFactura();
                             }
-
+                            actualizarFactura();
 
                             }
                          catch (Exception e) {
@@ -311,7 +311,7 @@ public class PrevTotalizarFragment extends BaseFragment  {
         invoiceDetallePreventa1.setP_paid(String.valueOf(pagoCon));
         invoiceDetallePreventa1.setP_user_id(idUsuario);
         invoiceDetallePreventa1.setP_user_id_applied(idUsuario);
-
+        invoiceDetallePreventa1.setP_sale(activity.getCurrentVenta());
 /*
         invoiceDetallePreventa1.setAplicada(1);
         invoiceDetallePreventa1.setSubida(1);*/
@@ -323,7 +323,9 @@ public class PrevTotalizarFragment extends BaseFragment  {
 
     protected void actualizarFactura() {
 
-        // TRANSACCION PARA ACTUALIZAR CAMPOS DE LA TABLA FACTURAS
+        activity.getInvoiceByInvoiceDetalles();
+
+     /*   // TRANSACCION PARA ACTUALIZAR CAMPOS DE LA TABLA FACTURAS
         final Realm realm2 = Realm.getDefaultInstance();
         realm2.executeTransaction(new Realm.Transaction() {
 
@@ -360,7 +362,7 @@ public class PrevTotalizarFragment extends BaseFragment  {
                 realm2.insertOrUpdate(factura_actualizada);
                 realm2.close();
             }
-        });
+        });*/
     }
 
     protected void actualizarVenta() {

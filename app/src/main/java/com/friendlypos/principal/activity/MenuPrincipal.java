@@ -5,9 +5,11 @@ import android.app.ActivityManager;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.GravityCompat;
@@ -527,6 +529,27 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                 break;
 
             case R.id.clickVentaDirecta:
+
+                try
+                {
+                    // Launch Waze to look for Hawaii:
+                    String url = "https://waze.com/ul?ll=9.9261253,-84.0889091&navigate=yes";
+                    Intent intent = new Intent( Intent.ACTION_VIEW, Uri.parse( url ) );
+                    startActivity( intent );
+                }
+                catch ( ActivityNotFoundException ex  )
+                {
+
+                    Uri gmmIntentUri = Uri.parse("geo:9.9261253,-84.0889091");
+                    Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                    mapIntent.setPackage("com.google.android.apps.maps");
+                    startActivity(mapIntent);
+
+                /*    // If Waze is not installed, open it in Google Play:
+                    Intent intent = new Intent( Intent.ACTION_VIEW, Uri.parse( "market://details?id=com.waze" ) );
+                    startActivity(intent);*/
+                }
+
                 Toast.makeText(this, "Botón no disponible por el momento", Toast.LENGTH_SHORT).show();
                 break;
 

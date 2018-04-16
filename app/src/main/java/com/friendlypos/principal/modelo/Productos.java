@@ -24,6 +24,8 @@ public class Productos extends RealmObject {
     String product_category_id;
     String product_type_id;
     String cost;
+    String suggested;
+    String bonus;
     String utility;
     String percentage_of_utility;
     String sale_price;
@@ -119,6 +121,22 @@ public class Productos extends RealmObject {
 
     public void setCost(String cost) {
         this.cost = cost;
+    }
+
+    public String getSuggested() {
+        return suggested;
+    }
+
+    public void setSuggested(String suggested) {
+        this.suggested = suggested;
+    }
+
+    public String getBonus() {
+        return bonus;
+    }
+
+    public void setBonus(String bonus) {
+        this.bonus = bonus;
     }
 
     public String getUtility() {
@@ -254,6 +272,8 @@ public class Productos extends RealmObject {
                 ", product_category_id='" + product_category_id + '\'' +
                 ", product_type_id='" + product_type_id + '\'' +
                 ", cost='" + cost + '\'' +
+                ", suggested='" + suggested + '\'' +
+                ", bonus='" + bonus + '\'' +
                 ", utility='" + utility + '\'' +
                 ", percentage_of_utility='" + percentage_of_utility + '\'' +
                 ", sale_price='" + sale_price + '\'' +

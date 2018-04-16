@@ -23,7 +23,7 @@ public class PreSellInvoiceDelegate {
     PreventaActivity preventaActivity;
 
     invoiceDetallePreventa newInvoice;
-    saleDetallePreventa newSale;
+    sale newSale;
     List<Pivot> productofacturas;
 
     public PreSellInvoiceDelegate(PreventaActivity preventaActivity) {
@@ -79,8 +79,9 @@ public class PreSellInvoiceDelegate {
     public void initVentaDetallePreventa(String p_id, String p_invoice_id, String p_customer_id, String p_customer_name,
                                          String p_cash_desk_id, String p_sale_type, String p_viewed, String p_applied,
                                          String p_created_at, String p_updated_at, String p_reserved, int aplicada, int subida) {
-        newSale = new saleDetallePreventa();
-        newSale.setP_id(p_id);
+        newSale = new sale();
+
+      /*  newSale.setP_id(p_id);
         newSale.setP_invoice_id(p_invoice_id);
         newSale.setP_customer_id(p_customer_id);
         newSale.setP_customer_name(p_customer_name);
@@ -90,7 +91,20 @@ public class PreSellInvoiceDelegate {
         newSale.setP_applied(p_applied);
         newSale.setP_created_at(p_created_at);
         newSale.setP_updated_at(p_updated_at);
-        newSale.setP_reserved(p_reserved);
+        newSale.setP_reserved(p_reserved);*/
+
+
+        newSale.setId(p_id);
+        newSale.setInvoice_id(p_invoice_id);
+        newSale.setCustomer_id(p_customer_id);
+        newSale.setCustomer_name(p_customer_name);
+        newSale.setCash_desk_id(p_cash_desk_id);
+        newSale.setSale_type(p_sale_type);
+        newSale.setViewed(p_viewed);
+        newSale.setApplied(p_applied);
+        newSale.setCreated_at(p_created_at);
+        newSale.setUpdated_at(p_updated_at);
+        newSale.setReserved(p_reserved);
         newSale.setAplicada(aplicada);
         newSale.setSubida(subida);
 
@@ -103,7 +117,7 @@ public class PreSellInvoiceDelegate {
         return newInvoice;
     }
 
-    public saleDetallePreventa getCurrentVenta() {
+    public sale getCurrentVenta() {
         return newSale;
     }
 
@@ -210,11 +224,14 @@ public class PreSellInvoiceDelegate {
         invoice.setCreated_at(newInvoice.getP_created_at());
         invoice.setUser_id(newInvoice.getP_user_id());
         invoice.setUser_id_applied(newInvoice.getP_user_id_applied());
-      //  invoice.setSale(newSale);
-       // invoice.setProductofactura(new RealmList<Pivot>((Pivot) productofacturas));
+        invoice.setSale(newSale);
+     //   invoice.setProductofactura(new RealmList<Pivot>((Pivot) productofacturas));
 
         invoice.setAplicada(1);
         invoice.setSubida(1);
+        Log.d("invoicetotal", invoice + "");
         return invoice;
+
+
     }
 }
