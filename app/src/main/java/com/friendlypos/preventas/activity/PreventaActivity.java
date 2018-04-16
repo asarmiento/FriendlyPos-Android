@@ -24,7 +24,6 @@ import com.friendlypos.preventas.fragment.PrevSelecClienteFragment;
 import com.friendlypos.preventas.fragment.PrevSelecProductoFragment;
 import com.friendlypos.preventas.fragment.PrevTotalizarFragment;
 import com.friendlypos.preventas.modelo.invoiceDetallePreventa;
-import com.friendlypos.preventas.modelo.saleDetallePreventa;
 import com.friendlypos.principal.activity.BluetoothActivity;
 import com.friendlypos.principal.activity.MenuPrincipal;
 
@@ -332,10 +331,10 @@ public class PreventaActivity extends BluetoothActivity {
 
     public void initCurrentVenta(String p_id, String p_invoice_id, String p_customer_id, String p_customer_name,
                                  String p_cash_desk_id, String p_sale_type, String p_viewed, String p_applied,
-                                 String p_created_at, String p_updated_at, String p_reserved, int aplicada, int subida) {
-        preSellInvoiceDelegate.initVentaDetallePreventa(p_id, p_invoice_id, p_customer_id, p_customer_name,
+                                 String p_created_at, String p_updated_at, String p_reserved, int aplicada, int subida, int facturaDePreventa) {
+        preSellInvoiceDelegate.initVentaDetallesPreventa(p_id, p_invoice_id, p_customer_id, p_customer_name,
                 p_cash_desk_id, p_sale_type, p_viewed, p_applied,
-                p_created_at, p_updated_at, p_reserved, aplicada, subida);
+                p_created_at, p_updated_at, p_reserved, aplicada, subida, facturaDePreventa);
     }
 
     public void initProducto(int pos) {

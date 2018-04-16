@@ -1,14 +1,17 @@
 package com.friendlypos.preventas.fragment;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,12 +21,14 @@ import com.friendlypos.application.util.Functions;
 import com.friendlypos.application.util.PrinterFunctions;
 import com.friendlypos.distribucion.activity.DistribucionActivity;
 import com.friendlypos.distribucion.fragment.BaseFragment;
+import com.friendlypos.distribucion.modelo.Pivot;
 import com.friendlypos.distribucion.modelo.invoice;
 import com.friendlypos.distribucion.modelo.sale;
 import com.friendlypos.distribucion.util.GPSTracker;
 import com.friendlypos.login.modelo.Usuarios;
 import com.friendlypos.login.util.SessionPrefes;
 import com.friendlypos.preventas.activity.PreventaActivity;
+import com.friendlypos.preventas.modelo.ClienteVisitado;
 import com.friendlypos.preventas.modelo.invoiceDetallePreventa;
 
 import io.realm.Realm;
@@ -69,9 +74,11 @@ public class PrevTotalizarFragment extends BaseFragment  {
     int slecTAB;
     sale sale_actualizada;
     PreventaActivity activity;
-
+    int nextId;
     GPSTracker gps;
     BluetoothStateChangeReceiver bluetoothStateChangeReceiver;
+
+    String seleccion;
 
     @Override
     public void onAttach(Activity activity){
@@ -190,6 +197,7 @@ public class PrevTotalizarFragment extends BaseFragment  {
                                 aplicarFactura();
                             }
                             actualizarFactura();
+                            alertVisitado();
 
                             }
                          catch (Exception e) {
@@ -285,6 +293,49 @@ public class PrevTotalizarFragment extends BaseFragment  {
         }
 
     }
+
+    public void alertVisitado(){
+
+    LayoutInflater layoutInflater = LayoutInflater.from(activity);
+    View promptView = layoutInflater.inflate(R.layout.promptvisitado_preventa, null);
+
+    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(activity);
+                alertDialogBuilder.setView(promptView);
+    final RadioButton rbcomprado = (RadioButton) promptView.findViewById(R.id.compradoBillVisitado);
+    final RadioButton rbvisitado = (RadioButton) promptView.findViewById(R.id.visitadoBillVisitado);
+
+
+                alertDialogBuilder
+                        .setCancelable(false)
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+        public void onClick(DialogInterface dialog, int id) {
+
+            if(rbcomprado.isChecked()) {seleccion = "1";}
+
+            else if(rbvisitado.isChecked()){seleccion = "2";}
+
+            actualizarClienteVisitado();
+
+        }
+
+
+                        })
+            .setNegativeButton("Cancel",
+                                       new DialogInterface.OnClickListener() {
+
+        public void onClick(DialogInterface dialog, int id) {
+            dialog.cancel();
+        }
+    });
+
+
+
+    AlertDialog alertD = alertDialogBuilder.create();
+                alertD.show();
+
+    }
+
 
     public void actualizarFacturaDetalles() {
 
@@ -400,6 +451,38 @@ public class PrevTotalizarFragment extends BaseFragment  {
         });
 
     }
+
+    protected void actualizarClienteVisitado() {
+        final Realm realm5 = Realm.getDefaultInstance();
+
+        realm5.executeTransaction(new Realm.Transaction() {
+
+            @Override
+            public void execute(Realm realm5) {
+
+                Number currentIdNum = realm5.where(ClienteVisitado.class).max("id");
+
+                if (currentIdNum == null) {
+                    nextId = 1;
+                }
+                else {
+                    nextId = currentIdNum.intValue() + 1;
+                }
+
+                ClienteVisitado visitadonuevo = new ClienteVisitado();
+                visitadonuevo.setId(nextId);
+                visitadonuevo.setId_invoice(facturaId);
+                visitadonuevo.setPedido(seleccion);
+                visitadonuevo.setLongitud(longitude);
+                visitadonuevo.setLatitud(latitude);
+
+                realm5.insertOrUpdate(visitadonuevo);
+                Log.d("ClienteVisitado", visitadonuevo + "" );
+            }
+        });
+
+    }
+
 
     protected void aplicarFactura() {
         paid.setEnabled(false);

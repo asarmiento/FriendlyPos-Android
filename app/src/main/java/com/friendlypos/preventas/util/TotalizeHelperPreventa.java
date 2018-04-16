@@ -2,11 +2,9 @@ package com.friendlypos.preventas.util;
 
 import android.util.Log;
 
-import com.friendlypos.distribucion.activity.DistribucionActivity;
 import com.friendlypos.distribucion.modelo.Pivot;
 import com.friendlypos.distribucion.modelo.sale;
 import com.friendlypos.preventas.activity.PreventaActivity;
-import com.friendlypos.preventas.modelo.saleDetallePreventa;
 import com.friendlypos.principal.modelo.Clientes;
 import com.friendlypos.principal.modelo.Productos;
 

@@ -1,9 +1,12 @@
 package com.friendlypos.distribucion.adapters;
 
 import android.app.ProgressDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
@@ -81,6 +84,9 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
         String fantasyCliente = clientes.getFantasyName();
         String numeracionFactura = invoice.getNumeration();
         String nombreVenta = sale.getCustomer_name();
+
+        final double longitud = invoice.getLongitud();
+        final double latitud = invoice.getLatitud();
 
 
 
@@ -262,6 +268,44 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
             holder.cardView.setBackgroundColor(Color.parseColor("#009688"));
         }
 
+        holder.btnUbicacionFacturaCliente.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                if(activa == 1) {
+
+                    if (longitud != 0.0 && latitud != 0.0) {
+
+                        try {
+                            // Launch Waze to look for Hawaii:
+                         //   String url = "https://waze.com/ul?ll=9.9261253,-84.0889091&navigate=yes";
+
+                            String url = "https://waze.com/ul?ll="+ latitud + "," + longitud + "&navigate=yes";
+                            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                            QuickContext.startActivity(intent);
+                        } catch (ActivityNotFoundException ex) {
+
+                            Uri gmmIntentUri = Uri.parse("geo:"+latitud + "," + longitud);
+                           // Uri gmmIntentUri = Uri.parse("geo:9.9261253,-84.0889091");
+                            Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                            mapIntent.setPackage("com.google.android.apps.maps");
+                            QuickContext.startActivity(mapIntent);
+
+                /*    // If Waze is not installed, open it in Google Play:
+                    Intent intent = new Intent( Intent.ACTION_VIEW, Uri.parse( "market://details?id=com.waze" ) );
+                    startActivity(intent);*/
+                        }
+                    } else {
+                        Toast.makeText(QuickContext, "El cliente no cuenta con dirección GPS", Toast.LENGTH_SHORT).show();
+
+                    }
+                }
+                else{
+                    Toast.makeText(QuickContext, "Selecciona una factura primero", Toast.LENGTH_SHORT).show();
+
+                }
+            }
+        });
 
         holder.btnDevolverFacturaCliente.setOnClickListener(new View.OnClickListener() {
 
@@ -304,7 +348,7 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
         private TextView txt_cliente_factura_card, txt_cliente_factura_fantasyname, txt_cliente_factura_companyname, txt_cliente_factura_numeracion;
         public CardView cardView;
         Button btnDevolverFacturaCliente;
-        ImageButton btnImprimirFacturaCliente;
+        ImageButton btnImprimirFacturaCliente, btnUbicacionFacturaCliente;
 
         public CharacterViewHolder(View view) {
             super(view);
@@ -315,23 +359,8 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
             txt_cliente_factura_numeracion = (TextView) view.findViewById(R.id.txt_cliente_factura_numeracion);
             btnDevolverFacturaCliente = (Button) view.findViewById(R.id.btnDevolverFacturaCliente);
             btnImprimirFacturaCliente = (ImageButton) view.findViewById(R.id.btnImprimirFacturaCliente);
+            btnUbicacionFacturaCliente = (ImageButton) view.findViewById(R.id.btnUbicacionFacturaCliente);
 
-            cardView.setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View view) {
-
-
-
-                }
-            });
-          /*  if(selected_position==pos){
-                cardView.setBackgroundColor(Color.parseColor("#607d8b"));
-            }
-            else
-            {
-                cardView.setBackgroundColor(Color.parseColor("#009688"));
-            }*/
         }
     }
 

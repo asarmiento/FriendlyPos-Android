@@ -42,6 +42,7 @@ public class sale extends RealmObject {
 
     private int aplicada = 0;
     private int subida = 0;
+    private int facturaDePreventa = 0;
 
     public String getId() {
         return id;
@@ -147,6 +148,14 @@ public class sale extends RealmObject {
         this.subida = subida;
     }
 
+    public int getFacturaDePreventa() {
+        return facturaDePreventa;
+    }
+
+    public void setFacturaDePreventa(int facturaDePreventa) {
+        this.facturaDePreventa = facturaDePreventa;
+    }
+
     @Override
     public String toString() {
         return "sale{" +
@@ -162,6 +171,8 @@ public class sale extends RealmObject {
                 ", updated_at='" + updated_at + '\'' +
                 ", reserved='" + reserved + '\'' +
                 ", aplicada=" + aplicada +
+                ", subida=" + subida +
+                ", facturaDePreventa=" + facturaDePreventa +
                 '}';
     }
 }

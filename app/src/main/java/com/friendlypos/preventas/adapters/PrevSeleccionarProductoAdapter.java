@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.friendlypos.R;
 import com.friendlypos.distribucion.modelo.Inventario;
 import com.friendlypos.distribucion.modelo.Marcas;
@@ -26,7 +27,6 @@ import com.friendlypos.login.util.SessionPrefes;
 import com.friendlypos.preventas.activity.PreventaActivity;
 import com.friendlypos.preventas.fragment.PrevSelecProductoFragment;
 import com.friendlypos.preventas.modelo.invoiceDetallePreventa;
-import com.friendlypos.preventas.modelo.saleDetallePreventa;
 import com.friendlypos.preventas.util.TotalizeHelperPreventa;
 import com.friendlypos.principal.modelo.Clientes;
 import com.friendlypos.principal.modelo.Productos;

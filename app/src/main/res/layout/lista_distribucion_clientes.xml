@@ -69,9 +69,17 @@
             android:src="@mipmap/ic_print"
             android:id="@+id/btnImprimirFacturaCliente"
             android:background="@null"
-            android:layout_marginEnd="19dp"
             android:layout_alignParentTop="true"
-            android:layout_alignEnd="@+id/btnDevolverFacturaCliente" />
+            android:layout_toStartOf="@+id/btnUbicacionFacturaCliente" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/ic_ubicacion"
+            android:id="@+id/btnUbicacionFacturaCliente"
+            android:background="@null"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true" />
 
     </RelativeLayout>
 </android.support.v7.widget.CardView>

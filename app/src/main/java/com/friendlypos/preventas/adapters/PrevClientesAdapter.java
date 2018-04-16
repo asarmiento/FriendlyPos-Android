@@ -190,15 +190,18 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
                                 }
                            });
 */
+                            //TODO MODIFICAR CON EL IDS CONSECUTIVOS (FACTURA Y NUMERACION)
                             activity.initCurrentInvoice("1", "3", "00001", 0.0, 0.0, Functions.getDate(), Functions.get24Time(),
                                     Functions.getDate(), Functions.get24Time(), Functions.getDate(), "2", metodoPagoId, "", "", "", "", "", "","","","","","","",fecha,
                                     "","");
 
-                            activity.initCurrentVenta("1", "1", idCliente, nombreCliente, "6", "2", "0", "0", fecha, fecha, "0", 1 , 0);
+                            activity.initCurrentVenta("1", "1", idCliente, nombreCliente, "6", "2", "0", "0", fecha, fecha, "0", 1 , 0, 1);
                             tabCliente = 1;
                             activity.setSelecClienteTabPreventa(tabCliente);
                             activity.setCreditoLimiteClientePreventa(creditoLimiteClienteP);
                             activity.setDueClientePreventa(dueClienteP);
+
+                            //TODO MODIFICAR CON EL ID CONSECUTIVOS
                             activity.setInvoiceIdPreventa(1);
                             activity.setMetodoPagoClientePreventa(metodoPagoId);
                         }

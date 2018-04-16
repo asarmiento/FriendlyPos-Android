@@ -1,22 +1,16 @@
 package com.friendlypos.preventas.delegate;
 
-import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.friendlypos.application.util.Functions;
 import com.friendlypos.distribucion.modelo.Pivot;
 import com.friendlypos.distribucion.modelo.invoice;
 import com.friendlypos.distribucion.modelo.sale;
 import com.friendlypos.preventas.activity.PreventaActivity;
 import com.friendlypos.preventas.modelo.invoiceDetallePreventa;
-import com.friendlypos.preventas.modelo.saleDetallePreventa;
 
-import java.net.ConnectException;
 import java.util.ArrayList;
 import java.util.List;
-
-import io.realm.RealmList;
 
 public class PreSellInvoiceDelegate {
 
@@ -68,6 +62,9 @@ public class PreSellInvoiceDelegate {
         newInvoice.setP_user_id(idUsuario);
         newInvoice.setP_user_id_applied(idUsuarioAplicado);
        // newInvoice.setP_sale(newSale);
+
+
+        //TODO agregar productos a la factura
       //  newInvoice.setP_productofacturas(new RealmList<Pivot>((Pivot) productofacturas));
 
      //   newInvoice.setP_productofacturas(new RealmList<Pivot>((Pivot) productofacturas));
@@ -76,9 +73,9 @@ public class PreSellInvoiceDelegate {
 
     }
 
-    public void initVentaDetallePreventa(String p_id, String p_invoice_id, String p_customer_id, String p_customer_name,
+    public void initVentaDetallesPreventa(String p_id, String p_invoice_id, String p_customer_id, String p_customer_name,
                                          String p_cash_desk_id, String p_sale_type, String p_viewed, String p_applied,
-                                         String p_created_at, String p_updated_at, String p_reserved, int aplicada, int subida) {
+                                         String p_created_at, String p_updated_at, String p_reserved, int aplicada, int subida, int facturaDePreventa) {
         newSale = new sale();
 
       /*  newSale.setP_id(p_id);
@@ -107,6 +104,7 @@ public class PreSellInvoiceDelegate {
         newSale.setReserved(p_reserved);
         newSale.setAplicada(aplicada);
         newSale.setSubida(subida);
+        newSale.setFacturaDePreventa(facturaDePreventa);
 
 
         Log.d("invoiceSale", newSale + "");

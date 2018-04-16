@@ -65,6 +65,8 @@ public class invoiceDetallePreventa {
 
     private RealmList<Pivot> p_productofacturas;
 
+    private int facturaDePreventa = 0;
+
 
     public int getP_id() {
         return p_id;
@@ -298,6 +300,14 @@ public class invoiceDetallePreventa {
         this.p_productofacturas = p_productofacturas;
     }
 
+    public int getFacturaDePreventa() {
+        return facturaDePreventa;
+    }
+
+    public void setFacturaDePreventa(int facturaDePreventa) {
+        this.facturaDePreventa = facturaDePreventa;
+    }
+
     @Override
     public String toString() {
         return "InvoiceDetallePreventa{" +
@@ -330,6 +340,7 @@ public class invoiceDetallePreventa {
             ", p_payment_method_id='" + p_payment_method_id + '\'' +
             ", p_sale=" + p_sale +
             ", p_productofacturas=" + p_productofacturas +
+                ",facturaDePreventa=" + facturaDePreventa +
             '}';
     }
 }
