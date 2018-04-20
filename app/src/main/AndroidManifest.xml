@@ -113,8 +113,17 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".principal.activity.MenuPrincipal" />
         </activity>
-        <activity android:name=".preventas.fragment.PrevSelecProductoFragment" />
-        <activity android:name=".preventas.adapters.PrevSeleccionarProductoAdapter"></activity>
+
+        <activity
+            android:name=".reimpresion_pedidos.activity.ReimprimirPedidosActivity"
+            android:label="@string/title_activity_reimprimirpedido"
+            android:parentActivityName=".principal.activity.MenuPrincipal"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".principal.activity.MenuPrincipal" />
+        </activity>
+
     </application>
 
 </manifest>

@@ -12,6 +12,9 @@ import com.friendlypos.preventas.modelo.invoiceDetallePreventa;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.realm.Realm;
+import io.realm.RealmList;
+
 public class PreSellInvoiceDelegate {
 
     PreventaActivity preventaActivity;
@@ -61,21 +64,18 @@ public class PreSellInvoiceDelegate {
         newInvoice.setP_created_at(created_at);
         newInvoice.setP_user_id(idUsuario);
         newInvoice.setP_user_id_applied(idUsuarioAplicado);
-       // newInvoice.setP_sale(newSale);
+        // newInvoice.setP_sale(newSale);
 
+        newInvoice.setP_productofacturas(productofacturas);
 
-        //TODO agregar productos a la factura
-      //  newInvoice.setP_productofacturas(new RealmList<Pivot>((Pivot) productofacturas));
-
-     //   newInvoice.setP_productofacturas(new RealmList<Pivot>((Pivot) productofacturas));
 
         Log.d("invoice1", newInvoice + "");
 
     }
 
     public void initVentaDetallesPreventa(String p_id, String p_invoice_id, String p_customer_id, String p_customer_name,
-                                         String p_cash_desk_id, String p_sale_type, String p_viewed, String p_applied,
-                                         String p_created_at, String p_updated_at, String p_reserved, int aplicada, int subida, int facturaDePreventa) {
+                                          String p_cash_desk_id, String p_sale_type, String p_viewed, String p_applied,
+                                          String p_created_at, String p_updated_at, String p_reserved, int aplicada, int subida, int facturaDePreventa) {
         newSale = new sale();
 
       /*  newSale.setP_id(p_id);
@@ -119,7 +119,7 @@ public class PreSellInvoiceDelegate {
         return newSale;
     }
 
-   public void insertProduct(Pivot pivot) {
+    public void insertProduct(Pivot pivot) {
         productofacturas.add(pivot);
 
         Log.d("invoice2", productofacturas + "");
@@ -129,21 +129,22 @@ public class PreSellInvoiceDelegate {
     public List<Pivot> initProduct(int pos) {
 
         if (productofacturas.isEmpty()) {
-            Toast.makeText(preventaActivity,"vacio",Toast.LENGTH_LONG).show();
+            Toast.makeText(preventaActivity, "vacio", Toast.LENGTH_LONG).show();
             // send = "No hay invoice emitidas";
         }
         else {
-                int devolver = productofacturas.get(pos).getDevuelvo();
+            int devolver = productofacturas.get(pos).getDevuelvo();
 
-                Log.d("invoiceDev", devolver + "");
-                if( devolver == 0) {
+            Log.d("invoiceDev", devolver + "");
+            if (devolver == 0) {
 
-                    productofacturas.get(pos).setDevuelvo(1);
+                productofacturas.get(pos).setDevuelvo(1);
 
-                }else{
-                  //  productofacturas.get(pos).removeAllChangeListeners();
-                    Toast.makeText(preventaActivity,"no hay",Toast.LENGTH_LONG).show();
-                }
+            }
+            else {
+                //  productofacturas.get(pos).removeAllChangeListeners();
+                Toast.makeText(preventaActivity, "no hay", Toast.LENGTH_LONG).show();
+            }
         }
         Log.d("invoiceremover", productofacturas + "");
         return productofacturas;
@@ -161,22 +162,23 @@ public class PreSellInvoiceDelegate {
     public List<Pivot> getAllPivot() {
 
         if (productofacturas.isEmpty()) {
-            Toast.makeText(preventaActivity,"vacio",Toast.LENGTH_LONG).show();
-           // send = "No hay invoice emitidas";
-            }
-         else {
+            Toast.makeText(preventaActivity, "vacio", Toast.LENGTH_LONG).show();
+            // send = "No hay invoice emitidas";
+        }
+        else {
 
             for (int i = 0; i < productofacturas.size(); i++) {
 
                 int devolver = productofacturas.get(i).getDevuelvo();
                 Log.d("invoiceDev", devolver + "");
-                if( devolver == 0) {
+                if (devolver == 0) {
 
                     productofacturas.get(i);
 
-                }else{
+                }
+                else {
                     productofacturas.remove(i);
-                    Toast.makeText(preventaActivity,"no hay",Toast.LENGTH_LONG).show();
+                    Toast.makeText(preventaActivity, "no hay", Toast.LENGTH_LONG).show();
                 }
 
             }
@@ -223,13 +225,15 @@ public class PreSellInvoiceDelegate {
         invoice.setUser_id(newInvoice.getP_user_id());
         invoice.setUser_id_applied(newInvoice.getP_user_id_applied());
         invoice.setSale(newSale);
-     //   invoice.setProductofactura(new RealmList<Pivot>((Pivot) productofacturas));
+
+        RealmList<Pivot> results = new RealmList<>();
+
+        results.addAll(productofacturas);
+        invoice.setProductofactura(results);
 
         invoice.setAplicada(1);
         invoice.setSubida(1);
-        Log.d("invoicetotal", invoice + "");
+
         return invoice;
-
-
     }
 }

@@ -171,4 +171,7 @@
     <string name="totalizar_preventa">Totalizar</string>
 
 
+    <string name="title_activity_reimprimirpedido">Reimprimir Pedido</string>
+
+
 </resources>

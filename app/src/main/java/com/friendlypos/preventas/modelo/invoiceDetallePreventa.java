@@ -4,6 +4,8 @@ import com.friendlypos.distribucion.modelo.Pivot;
 import com.friendlypos.distribucion.modelo.sale;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 import io.realm.RealmList;
 import io.realm.annotations.PrimaryKey;
 
@@ -63,7 +65,7 @@ public class invoiceDetallePreventa {
 
     private sale p_sale;
 
-    private RealmList<Pivot> p_productofacturas;
+    private List<Pivot> p_productofacturas;
 
     private int facturaDePreventa = 0;
 
@@ -292,11 +294,11 @@ public class invoiceDetallePreventa {
         this.p_sale = p_sale;
     }
 
-    public RealmList<Pivot> getP_productofacturas() {
+    public List<Pivot> getP_productofacturas() {
         return p_productofacturas;
     }
 
-    public void setP_productofacturas(RealmList<Pivot> p_productofacturas) {
+    public void setP_productofacturas(List<Pivot> p_productofacturas) {
         this.p_productofacturas = p_productofacturas;
     }
 

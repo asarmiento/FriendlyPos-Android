@@ -44,6 +44,7 @@ import com.friendlypos.principal.fragment.ConfiguracionFragment;
 import com.friendlypos.principal.helpers.DescargasHelper;
 import com.friendlypos.principal.helpers.SubirHelper;
 import com.friendlypos.reimpresion.activity.ReimprimirActivity;
+import com.friendlypos.reimpresion_pedidos.activity.ReimprimirPedidosActivity;
 import com.github.clans.fab.FloatingActionButton;
 
 import java.lang.reflect.Field;
@@ -84,6 +85,9 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
 
     @Bind(R.id.clickReimprimirVentas)
     LinearLayout clickReimprimirVentas;
+
+    @Bind(R.id.clickReimprimirPedidos)
+    LinearLayout clickReimprimirPedidos;
 
     @Bind(R.id.clickConfig)
     LinearLayout clickConfig;
@@ -564,6 +568,13 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                 Intent reimprimir;
                 reimprimir = new Intent(MenuPrincipal.this, ReimprimirActivity.class);
                 startActivity(reimprimir);
+                finish();
+                break;
+
+            case R.id.clickReimprimirPedidos:
+                Intent reimprimirpedidos;
+                reimprimirpedidos = new Intent(MenuPrincipal.this, ReimprimirPedidosActivity.class);
+                startActivity(reimprimirpedidos);
                 finish();
                 break;
 

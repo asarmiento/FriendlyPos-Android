@@ -1,46 +1,47 @@
-package com.friendlypos.preventas.activity;
+package com.friendlypos.reimpresion_pedidos.activity;
 
 import android.app.ActivityManager;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.os.Handler;
+
 import com.friendlypos.R;
 import com.friendlypos.application.bluetooth.PrinterService;
 import com.friendlypos.application.util.Functions;
 import com.friendlypos.distribucion.fragment.BaseFragment;
-import com.friendlypos.distribucion.modelo.Pivot;
-import com.friendlypos.distribucion.modelo.invoice;
-import com.friendlypos.distribucion.modelo.sale;
+import com.friendlypos.distribucion.fragment.DistResumenFragment;
+import com.friendlypos.distribucion.fragment.DistSelecClienteFragment;
+import com.friendlypos.distribucion.fragment.DistSelecProductoFragment;
+import com.friendlypos.distribucion.fragment.DistTotalizarFragment;
 import com.friendlypos.distribucion.util.Adapter;
-import com.friendlypos.preventas.delegate.PreSellInvoiceDelegate;
-import com.friendlypos.preventas.fragment.PrevResumenFragment;
-import com.friendlypos.preventas.fragment.PrevSelecClienteFragment;
-import com.friendlypos.preventas.fragment.PrevSelecProductoFragment;
-import com.friendlypos.preventas.fragment.PrevTotalizarFragment;
-import com.friendlypos.preventas.modelo.invoiceDetallePreventa;
 import com.friendlypos.principal.activity.BluetoothActivity;
 import com.friendlypos.principal.activity.MenuPrincipal;
+import com.friendlypos.reimpresion_pedidos.fragment.ReimPedidoResumenFragment;
+import com.friendlypos.reimpresion_pedidos.fragment.ReimPedidoSelecClienteFragment;
+import com.friendlypos.reimpresion_pedidos.fragment.ReimPedidoSelecProductoFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
 
-public class PreventaActivity extends BluetoothActivity {
+public class ReimprimirPedidosActivity extends BluetoothActivity {
 
     private Toolbar toolbar;
     private TabLayout tabLayout;
-    private int invoiceIdPreventa;
-    private String metodoPagoClientePreventa;
-    private String creditoLimiteClientePreventa = null;
-    private int selecClienteTabPreventa;
-    private String dueClientePreventa;
+    private ViewPager viewPager;
+
+    private String invoiceId;
+    private String metodoPagoCliente;
+    private String creditoLimiteCliente = null;
+    private String dueCliente;
 
     private double totalizarSubGrabado;
     private double totalizarSubExento;
@@ -50,16 +51,53 @@ public class PreventaActivity extends BluetoothActivity {
     private double totalizarTotal;
     private double totalizarTotalDouble;
 
-    private PreSellInvoiceDelegate preSellInvoiceDelegate;
+    private int selecClienteTab;
 
-    public int getInvoiceIdPreventa() {
-        return invoiceIdPreventa;
+    private int selecColorCliente;
+
+    ProgressDialog progressDialog;
+
+    public void cleanTotalize() {
+        totalizarSubGrabado = 0.0;
+        totalizarSubExento = 0.0;
+        totalizarSubTotal = 0.0;
+        totalizarDescuento = 0.0;
+        totalizarImpuestoIVA = 0.0;
+        totalizarTotal = 0.0;
+        totalizarTotalDouble = 0.0;
     }
 
-    public void setInvoiceIdPreventa(int invoiceIdPreventa) {
-        this.invoiceIdPreventa = invoiceIdPreventa;
+    public String getInvoiceId() {
+        return invoiceId;
     }
 
+    public void setInvoiceId(String invoiceId) {
+        this.invoiceId = invoiceId;
+    }
+
+    public String getMetodoPagoCliente() {
+        return metodoPagoCliente;
+    }
+
+    public void setMetodoPagoCliente(String metodoPagoCliente) {
+        this.metodoPagoCliente = metodoPagoCliente;
+    }
+
+    public String getCreditoLimiteCliente() {
+        return creditoLimiteCliente;
+    }
+
+    public void setCreditoLimiteCliente(String creditoLimiteCliente) {
+        this.creditoLimiteCliente = creditoLimiteCliente;
+    }
+
+    public String getDueCliente() {
+        return dueCliente;
+    }
+
+    public void setDueCliente(String dueCliente) {
+        this.dueCliente = dueCliente;
+    }
 
     public double getTotalizarSubGrabado() {
         return totalizarSubGrabado;
@@ -109,51 +147,25 @@ public class PreventaActivity extends BluetoothActivity {
         this.totalizarTotal = this.totalizarTotal + totalizarTotal;
     }
 
-
-    public String getMetodoPagoClientePreventa() {
-        return metodoPagoClientePreventa;
+    public int getSelecClienteTab() {
+        return selecClienteTab;
     }
 
-    public void setMetodoPagoClientePreventa(String metodoPagoClientePreventa) {
-        this.metodoPagoClientePreventa = metodoPagoClientePreventa;
+    public void setSelecClienteTab(int selecClienteTab) {
+        this.selecClienteTab = selecClienteTab;
     }
-
-    public String getCreditoLimiteClientePreventa() {
-        return creditoLimiteClientePreventa;
-    }
-
-    public void setCreditoLimiteClientePreventa(String creditoLimiteClientePreventa) {
-        this.creditoLimiteClientePreventa = creditoLimiteClientePreventa;
-    }
-
-    public int getSelecClienteTabPreventa() {
-        return selecClienteTabPreventa;
-    }
-
-    public void setSelecClienteTabPreventa(int selecClienteTabPreventa) {
-        this.selecClienteTabPreventa = selecClienteTabPreventa;
-    }
-
-    public String getDueClientePreventa() {
-        return dueClientePreventa;
-    }
-
-    public void setDueClientePreventa(String dueClientePreventa) {
-        this.dueClientePreventa = dueClientePreventa;
-    }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_preventa);
+        setContentView(R.layout.activity_reimprimir_pedido);
         ButterKnife.bind(this);
-        toolbar = (Toolbar) findViewById(R.id.toolbarPreventa);
+
+        toolbar = (Toolbar) findViewById(R.id.toolbarReimprimirPedido);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
 
         actionBar.setDisplayHomeAsUpEnabled(true);
-        preSellInvoiceDelegate = new PreSellInvoiceDelegate(this);
         connectToPrinter();
         /*toolbar = (Toolbar) findViewById(R.id.toolbarDistribucion);
 
@@ -161,12 +173,12 @@ public class PreventaActivity extends BluetoothActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);*/
 
-        final ViewPager viewPager = (ViewPager) findViewById(R.id.viewpagerPreventa);
+        final ViewPager viewPager = (ViewPager) findViewById(R.id.viewpagerReimprimirPedido);
         if (viewPager != null) {
             setupViewPager(viewPager);
         }
 
-        tabLayout = (TabLayout) findViewById(R.id.tabsPreventa);
+        tabLayout = (TabLayout) findViewById(R.id.tabsReimprimirPedido);
         tabLayout.setupWithViewPager(viewPager);
 
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
@@ -174,19 +186,19 @@ public class PreventaActivity extends BluetoothActivity {
 
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                int tabCliente = getSelecClienteTabPreventa();
+                int tabCliente = getSelecClienteTab();
                 if (tabCliente == 0 && tab.getPosition() != 0) {
 
-                    Functions.CreateMessage(PreventaActivity.this, "Preventa", "Seleccione una factura.");
+                    Functions.CreateMessage(ReimprimirPedidosActivity.this, "Reimprimir Pedido", "Seleccione una factura.");
 
                     new Handler().postDelayed(
-                            new Runnable() {
+                        new Runnable() {
 
-                                @Override
-                                public void run() {
-                                    tabLayout.getTabAt(0).select();
-                                }
-                            }, 100);
+                            @Override
+                            public void run() {
+                                tabLayout.getTabAt(0).select();
+                            }
+                        }, 100);
                 }
                 else {
                 }
@@ -229,14 +241,14 @@ public class PreventaActivity extends BluetoothActivity {
 
         Adapter adapter = new Adapter(getSupportFragmentManager());
         final List<BaseFragment> list = new ArrayList<>();
-        list.add(new PrevSelecClienteFragment());
-        list.add(new PrevSelecProductoFragment());
-          list.add(new PrevResumenFragment());
-       list.add(new PrevTotalizarFragment());
+        list.add(new ReimPedidoSelecClienteFragment());
+        list.add(new ReimPedidoResumenFragment());
+        list.add(new ReimPedidoSelecProductoFragment());
+      /*  list.add(new ReimPedidoTotalizarFragment());*/
         adapter.addFragment(list.get(0), "Seleccionar Cliente");
-        adapter.addFragment(list.get(1), "Seleccionar Productos");
-        adapter.addFragment(list.get(2), "Resumen");
-          adapter.addFragment(list.get(3), "Totalizar");
+       adapter.addFragment(list.get(1), "Resumen");
+        adapter.addFragment(list.get(2), "Seleccionar productos");
+      /*  adapter.addFragment(list.get(3), "Totalizar");*/
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
@@ -262,7 +274,7 @@ public class PreventaActivity extends BluetoothActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
 
-                Intent intent = new Intent(PreventaActivity.this, MenuPrincipal.class);
+                Intent intent = new Intent(ReimprimirPedidosActivity.this, MenuPrincipal.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 finish();
@@ -286,75 +298,5 @@ public class PreventaActivity extends BluetoothActivity {
         return false;
     }
 
-    public invoiceDetallePreventa getCurrentInvoice() {
-        return preSellInvoiceDelegate.getCurrentInvoice();
-    }
-
-    public sale getCurrentVenta() {
-        return preSellInvoiceDelegate.getCurrentVenta();
-    }
-
-    public invoice getInvoiceByInvoiceDetalles() {
-        return preSellInvoiceDelegate.getInvoiceByInvoiceDetalle();
-    }
-
-    public List<Pivot> getAllPivotDelegate() {
-        return preSellInvoiceDelegate.getAllPivot();
-    }
-
-    public void insertProduct(Pivot pivot) {
-        preSellInvoiceDelegate.insertProduct(pivot);
-    }
-
-    public void borrarProduct(Pivot pivot) {
-        preSellInvoiceDelegate.borrarProducto(pivot);
-    }
-
-    public void initCurrentInvoice(String id, String branch_office_id, String numeration, double latitude, double longitude,
-                                   String date, String times, String date_presale, String times_presale, String due_data,
-                                   String invoice_type_id, String payment_method_id, String totalSubtotal, String totalGrabado,
-                                   String totalExento, String totalDescuento, String percent_discount, String totalImpuesto,
-                                   String totalTotal, String changing, String notes, String canceled,
-                                   String paid_up, String paid, String created_at, String idUsuario,
-                                   String idUsuarioAplicado) {
-        preSellInvoiceDelegate.initInvoiceDetallePreventa(id, branch_office_id, numeration, latitude, longitude,
-                date, times, date_presale, times_presale, due_data,
-                invoice_type_id, payment_method_id, totalSubtotal, totalGrabado,
-                totalExento, totalDescuento, percent_discount, totalImpuesto,
-                totalTotal, changing, notes, canceled,
-                paid_up, paid, created_at, idUsuario,
-                idUsuarioAplicado);
-    }
-
-    public void initCurrentVenta(String p_id, String p_invoice_id, String p_customer_id, String p_customer_name,
-                                 String p_cash_desk_id, String p_sale_type, String p_viewed, String p_applied,
-                                 String p_created_at, String p_updated_at, String p_reserved, int aplicada, int subida, int facturaDePreventa) {
-        preSellInvoiceDelegate.initVentaDetallesPreventa(p_id, p_invoice_id, p_customer_id, p_customer_name,
-                p_cash_desk_id, p_sale_type, p_viewed, p_applied,
-                p_created_at, p_updated_at, p_reserved, aplicada, subida, facturaDePreventa);
-    }
-
-    public void initProducto(int pos) {
-        preSellInvoiceDelegate.initProduct(pos);
-    }
-
-    public void cleanTotalize() {
-        totalizarSubGrabado = 0.0;
-        totalizarSubExento = 0.0;
-        totalizarSubTotal = 0.0;
-        totalizarDescuento = 0.0;
-        totalizarImpuestoIVA = 0.0;
-        totalizarTotal = 0.0;
-        totalizarTotalDouble = 0.0;
-    }
-
-
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        preSellInvoiceDelegate.destroy();
-        preSellInvoiceDelegate = null;
-    }
 }
 
