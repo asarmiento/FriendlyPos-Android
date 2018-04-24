@@ -240,7 +240,7 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
                 clienteID = clickedDataItem.getCustomer_id();
 
                 Realm realm = Realm.getDefaultInstance();
-                invoice invoice = realm.where(com.friendlypos.distribucion.modelo.invoice.class).equalTo("id", facturaID).findFirst();
+                invoice invoice = realm.where(invoice.class).equalTo("id", facturaID).findFirst();
                 Clientes clientes = realm.where(Clientes.class).equalTo("id", clienteID).findFirst();
                 //String facturaid = String.valueOf(realm.where(ProductoFactura.class).equalTo("id", facturaID).findFirst().getId());
                 facturaid1 = realm.where(Pivot.class).equalTo("invoice_id", facturaID).findAll();

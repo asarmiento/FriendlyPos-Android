@@ -3,14 +3,11 @@ package com.friendlypos.principal.helpers;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.os.Handler;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.friendlypos.app.broadcastreceiver.NetworkStateChangeReceiver;
 import com.friendlypos.application.datamanager.BaseManager;
 import com.friendlypos.application.interfaces.RequestInterface;
-import com.friendlypos.distribucion.modelo.invoice;
 import com.friendlypos.distribucion.modelo.FacturasResponse;
 import com.friendlypos.distribucion.modelo.Inventario;
 import com.friendlypos.distribucion.modelo.InventarioResponse;
@@ -21,10 +18,13 @@ import com.friendlypos.distribucion.modelo.MetodoPagoResponse;
 import com.friendlypos.distribucion.modelo.ProductoFactura;
 import com.friendlypos.distribucion.modelo.TipoProducto;
 import com.friendlypos.distribucion.modelo.TipoProductoResponse;
+import com.friendlypos.distribucion.modelo.invoice;
 import com.friendlypos.distribucion.modelo.sale;
 import com.friendlypos.login.modelo.Usuarios;
 import com.friendlypos.login.modelo.UsuariosResponse;
 import com.friendlypos.login.util.SessionPrefes;
+import com.friendlypos.preventas.modelo.Numeracion;
+import com.friendlypos.preventas.modelo.NumeracionResponse;
 import com.friendlypos.principal.modelo.Clientes;
 import com.friendlypos.principal.modelo.ClientesResponse;
 import com.friendlypos.principal.modelo.Productos;
@@ -48,7 +48,7 @@ public class DescargasHelper {
     private NetworkStateChangeReceiver networkStateChangeReceiver;
     private Activity activity;
     private Context mContext;
-    private Realm realm, realm2, realmSysconfig, realmMarcas, realmTipoProducto,realmUsuarios, realmMetodoPago;
+    private Realm realm, realm2, realmSysconfig, realmMarcas, realmNumeracion, realmTipoProducto,realmUsuarios, realmMetodoPago;
 
     public DescargasHelper(Activity activity) {
         this.activity = activity;
@@ -64,6 +64,7 @@ public class DescargasHelper {
         final ArrayList<Clientes> mContentsArray = new ArrayList<>();
         final ArrayList<Productos> mContentsArray2 = new ArrayList<>();
         final ArrayList<Marcas> mContentsArrayMarcas = new ArrayList<>();
+        final ArrayList<Numeracion> mContentsArrayNumeracion = new ArrayList<>();
         final ArrayList<TipoProducto> mContentsArrayTipoProducto = new ArrayList<>();
         final ArrayList<MetodoPago> mContentsArrayMetodoPago = new ArrayList<>();
         final ArrayList<Usuarios> mContentsArrayUsuarios = new ArrayList<>();
@@ -150,6 +151,46 @@ public class DescargasHelper {
 
                 @Override
                 public void onFailure(Call<MarcasResponse> callMarcas, Throwable t) {
+                    // Toast.makeText(context, getString(R.string.error), Toast.LENGTH_LONG).show();
+                }
+            });
+
+            // TODO descarga Numeracion
+            Call<NumeracionResponse> callNumeracion = api.getNumeracionDesc(token);
+            callNumeracion.enqueue(new Callback<NumeracionResponse>() {
+
+                @Override
+                public void onResponse(Call<NumeracionResponse> callNumeracion, Response<NumeracionResponse> response) {
+                    mContentsArrayNumeracion.clear();
+
+
+                    if (response.isSuccessful()) {
+                        mContentsArrayNumeracion.addAll(response.body().getNumeracion());
+
+                        try {
+                            realmNumeracion = Realm.getDefaultInstance();
+
+                            // Work with Realm
+                            realmNumeracion.beginTransaction();
+                            realmNumeracion.copyToRealmOrUpdate(mContentsArrayNumeracion);
+                            realmNumeracion.commitTransaction();
+                            //realm.close();
+                        }
+                        finally {
+                            realmNumeracion.close();
+                        }
+                        Log.d(DescargasHelper.class.getName()+"Numeracion", mContentsArrayNumeracion.toString());
+                        //  Toast.makeText(DescargarInventario.this, getString(R.string.success), Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        //  Toast.makeText(DescargarInventario.this, getString(R.string.error) + " CODE: " +response.code(), Toast.LENGTH_LONG).show();
+                        RealmResults<Numeracion> results = realmNumeracion.where(Numeracion.class).findAll();
+                        mContentsArrayNumeracion.addAll(results);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<NumeracionResponse> callMarcas, Throwable t) {
                     // Toast.makeText(context, getString(R.string.error), Toast.LENGTH_LONG).show();
                 }
             });
