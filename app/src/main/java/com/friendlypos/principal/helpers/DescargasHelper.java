@@ -23,6 +23,8 @@ import com.friendlypos.distribucion.modelo.sale;
 import com.friendlypos.login.modelo.Usuarios;
 import com.friendlypos.login.modelo.UsuariosResponse;
 import com.friendlypos.login.util.SessionPrefes;
+import com.friendlypos.preventas.modelo.Bonuses;
+import com.friendlypos.preventas.modelo.BonusesResponse;
 import com.friendlypos.preventas.modelo.Numeracion;
 import com.friendlypos.preventas.modelo.NumeracionResponse;
 import com.friendlypos.principal.modelo.Clientes;
@@ -48,7 +50,7 @@ public class DescargasHelper {
     private NetworkStateChangeReceiver networkStateChangeReceiver;
     private Activity activity;
     private Context mContext;
-    private Realm realm, realm2, realmSysconfig, realmMarcas, realmNumeracion, realmTipoProducto,realmUsuarios, realmMetodoPago;
+    private Realm realm, realm2, realmSysconfig, realmMarcas, realmNumeracion, realmBonuses,  realmTipoProducto,realmUsuarios, realmMetodoPago;
 
     public DescargasHelper(Activity activity) {
         this.activity = activity;
@@ -65,6 +67,7 @@ public class DescargasHelper {
         final ArrayList<Productos> mContentsArray2 = new ArrayList<>();
         final ArrayList<Marcas> mContentsArrayMarcas = new ArrayList<>();
         final ArrayList<Numeracion> mContentsArrayNumeracion = new ArrayList<>();
+        final ArrayList<Bonuses> mContentsArrayBonuses = new ArrayList<>();
         final ArrayList<TipoProducto> mContentsArrayTipoProducto = new ArrayList<>();
         final ArrayList<MetodoPago> mContentsArrayMetodoPago = new ArrayList<>();
         final ArrayList<Usuarios> mContentsArrayUsuarios = new ArrayList<>();
@@ -195,6 +198,8 @@ public class DescargasHelper {
                 }
             });
 
+
+
 // TODO descarga Usuarios
             Call<MetodoPagoResponse> callMetodoPago = api.getMetodoPago(token);
             callMetodoPago.enqueue(new Callback<MetodoPagoResponse>() {
@@ -231,6 +236,46 @@ public class DescargasHelper {
 
                 @Override
                 public void onFailure(Call<MetodoPagoResponse> callMarcas, Throwable t) {
+                    // Toast.makeText(context, getString(R.string.error), Toast.LENGTH_LONG).show();
+                }
+            });
+
+            // TODO descarga Bonuses
+            Call<BonusesResponse> callBonuses = api.getBonusesTable(token);
+            callBonuses.enqueue(new Callback<BonusesResponse>() {
+
+                @Override
+                public void onResponse(Call<BonusesResponse> callBonuses, Response<BonusesResponse> response) {
+                    mContentsArrayBonuses.clear();
+
+
+                    if (response.isSuccessful()) {
+                        mContentsArrayBonuses.addAll(response.body().getBonuses());
+
+                        try {
+                            realmBonuses = Realm.getDefaultInstance();
+
+                            // Work with Realm
+                            realmBonuses.beginTransaction();
+                            realmBonuses.copyToRealmOrUpdate(mContentsArrayBonuses);
+                            realmBonuses.commitTransaction();
+                            //realm.close();
+                        }
+                        finally {
+                            realmBonuses.close();
+                        }
+                        Log.d(DescargasHelper.class.getName()+"Bonuses", mContentsArrayBonuses.toString());
+                        //  Toast.makeText(DescargarInventario.this, getString(R.string.success), Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        //  Toast.makeText(DescargarInventario.this, getString(R.string.error) + " CODE: " +response.code(), Toast.LENGTH_LONG).show();
+                        RealmResults<Bonuses> results = realmBonuses.where(Bonuses.class).findAll();
+                        mContentsArrayBonuses.addAll(results);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<BonusesResponse> callBonuses, Throwable t) {
                     // Toast.makeText(context, getString(R.string.error), Toast.LENGTH_LONG).show();
                 }
             });

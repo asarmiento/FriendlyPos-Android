@@ -26,6 +26,7 @@ import com.friendlypos.principal.activity.MenuPrincipal;
 import com.friendlypos.reimpresion_pedidos.fragment.ReimPedidoResumenFragment;
 import com.friendlypos.reimpresion_pedidos.fragment.ReimPedidoSelecClienteFragment;
 import com.friendlypos.reimpresion_pedidos.fragment.ReimPedidoSelecProductoFragment;
+import com.friendlypos.reimpresion_pedidos.fragment.ReimPedidoTotalizarFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +37,6 @@ public class ReimprimirPedidosActivity extends BluetoothActivity {
 
     private Toolbar toolbar;
     private TabLayout tabLayout;
-    private ViewPager viewPager;
 
     private String invoiceId;
     private String metodoPagoCliente;
@@ -244,11 +244,11 @@ public class ReimprimirPedidosActivity extends BluetoothActivity {
         list.add(new ReimPedidoSelecClienteFragment());
         list.add(new ReimPedidoResumenFragment());
         list.add(new ReimPedidoSelecProductoFragment());
-      /*  list.add(new ReimPedidoTotalizarFragment());*/
+        list.add(new ReimPedidoTotalizarFragment());
         adapter.addFragment(list.get(0), "Seleccionar Cliente");
        adapter.addFragment(list.get(1), "Resumen");
         adapter.addFragment(list.get(2), "Seleccionar productos");
-      /*  adapter.addFragment(list.get(3), "Totalizar");*/
+        adapter.addFragment(list.get(3), "Totalizar");
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 

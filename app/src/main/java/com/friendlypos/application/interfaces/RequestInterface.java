@@ -11,6 +11,7 @@ import com.friendlypos.distribucion.modelo.TipoProductoResponse;
 import com.friendlypos.login.modelo.User;
 import com.friendlypos.login.modelo.UserResponse;
 import com.friendlypos.login.modelo.UsuariosResponse;
+import com.friendlypos.preventas.modelo.BonusesResponse;
 import com.friendlypos.preventas.modelo.NumeracionResponse;
 import com.friendlypos.principal.modelo.ClientesResponse;
 import com.friendlypos.principal.modelo.ProductosResponse;
@@ -41,6 +42,9 @@ public interface RequestInterface {
 
     @GET("api/donwload-info-business")
     Call<NumeracionResponse> getNumeracionDesc(@Header("Authorization") String token);
+
+    @GET("api/donwload-info-business")
+    Call<BonusesResponse> getBonusesTable(@Header("Authorization") String token);
 
     @GET("api/donwload-info-business")
     Call<TipoProductoResponse> getTipoProducto(@Header("Authorization") String token);

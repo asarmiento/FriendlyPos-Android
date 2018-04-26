@@ -1,13 +1,14 @@
 package com.friendlypos.preventas.modelo;
 
 import io.realm.RealmModel;
+import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by DelvoM on 24/04/2018.
  */
 
-public class Numeracion implements RealmModel {
+public class Numeracion extends RealmObject {
 /*
     {
         "sale_type": 1,
