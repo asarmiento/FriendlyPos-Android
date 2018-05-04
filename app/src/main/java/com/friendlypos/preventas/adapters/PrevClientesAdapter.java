@@ -47,6 +47,9 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
     String nombreMetodoPago;
     String metodoPagoId;
     int contador = 0;
+    String fecha;
+    String idCliente;
+    String nombreCliente;
     //  private RealmResults<InvoiceDetallePreventa> realmResultado;
     invoiceDetallePreventa factura_nueva = new invoiceDetallePreventa();
 
@@ -122,8 +125,8 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
 
                 Clientes clickedDataItem = contentList.get(pos);
 
-                final String idCliente = clickedDataItem.getId();
-                final String nombreCliente = clickedDataItem.getName();
+                idCliente = clickedDataItem.getId();
+                nombreCliente = clickedDataItem.getName();
                 final int creditoTime = Integer.parseInt(clickedDataItem.getCreditTime());
                 final String creditoLimiteClienteP = clickedDataItem.getCreditLimit();
                 final String dueClienteP = clickedDataItem.getDue();
@@ -141,7 +144,7 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
                     .setPositiveButton("OK", new DialogInterface.OnClickListener() {
 
                         public void onClick(DialogInterface dialog, int id) {
-                            String fecha = Functions.getDate() + " " + Functions.get24Time();
+                            fecha = Functions.getDate() + " " + Functions.get24Time();
                             if (rbcredito.isChecked()) {
                                 if (creditoTime == 0) {
                                     Functions.CreateMessage(QuickContext, " ", "Este cliente no cuenta con crédito");
@@ -151,6 +154,7 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
                                     metodoPagoId = "2";
                                     Functions.CreateMessage(QuickContext, " ", "Se cambio la factura a crédito" + metodoPagoId);
                                     notifyDataSetChanged();
+                                    agregar();
                                 }
                             }
                             else if (rbcontado.isChecked()) {
@@ -158,66 +162,8 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
                                 metodoPagoId = "1";
                                 Functions.CreateMessage(QuickContext, " ", "Se cambio la factura a contado" + metodoPagoId);
                                 notifyDataSetChanged();
+                                agregar();
                             }
-
-                            final Realm realm2 = Realm.getDefaultInstance();
-
-                            realm2.executeTransaction(new Realm.Transaction() {
-
-                                @Override
-                                public void execute(Realm realm) {
-
-                                    // increment index
-                                  /*  Numeracion numeracion = realm.where(Numeracion.class).equalTo("id", "3").findFirst();
-
-                                    if(numeracion.getId()){}
-*/
-                                    Number numero = realm.where(invoice.class).equalTo("sale_type", "3").max("numeracion_numero");
-
-                                    if (numero == null) {
-                                        nextId = 1;
-                                    }
-                                    else {
-                                        nextId = numero.intValue() + 1;
-                                    }
-
-                                  /*  // increment index
-                                    Number NumFactura = realm.where(invoice.class).max("numeration");
-
-                                    if (NumFactura == null) {
-                                        numeration = 1;
-                                    }
-                                    else {
-                                        numeration = NumFactura.intValue() + 1;
-                                    }*/
-
-                                }
-                            });
-
-                            //TODO MODIFICAR CON EL IDS CONSECUTIVOS (FACTURA Y NUMERACION)
-                            activity.initCurrentInvoice(String.valueOf(nextId), "3", "0000-"+nextId, 0.0, 0.0, Functions.getDate(), Functions.get24Time(),
-                                Functions.getDate(), Functions.get24Time(), Functions.getDate(), "3", metodoPagoId, "", "", "", "", "", "", "", "", "", "", "", "", fecha,
-                                "", "");
-
-                            activity.initCurrentVenta(String.valueOf(nextId), String.valueOf(nextId), idCliente, nombreCliente, "6", "2", "0", "0", fecha, fecha, "0", 1, 0, 1);
-
-                            final Realm realm5 = Realm.getDefaultInstance();
-                            realm5.executeTransaction(new Realm.Transaction() {
-                                @Override
-                                public void execute(Realm realm5) {
-                                    Numeracion numNuevo= new Numeracion(); // unmanaged
-                                    numNuevo.setSale_type("3");
-                                    numNuevo.setNumeracion_numero(nextId);
-
-                                    realm5.insertOrUpdate(numNuevo);
-                                    Log.d("idinvNUEVOCREADO", numNuevo +"");
-
-
-                                }
-
-                            });
-                            realm5.close();
-
 
                             tabCliente = 1;
                             activity.setSelecClienteTabPreventa(tabCliente);
@@ -253,6 +199,68 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
         else {
             holder.cardView.setBackgroundColor(Color.parseColor("#009688"));
         }
+
+    }
+
+    public void agregar(){
+
+        final Realm realm2 = Realm.getDefaultInstance();
+
+        realm2.executeTransaction(new Realm.Transaction() {
+
+            @Override
+            public void execute(Realm realm) {
+
+                // increment index
+                                  /*  Numeracion numeracion = realm.where(Numeracion.class).equalTo("id", "3").findFirst();
+
+                                    if(numeracion.getId()){}
+*/
+                Number numero = realm.where(Numeracion.class).equalTo("sale_type", "3").max("numeracion_numero");
+
+                if (numero == null) {
+                    nextId = 1;
+                }
+                else {
+                    nextId = numero.intValue() + 1;
+                }
+
+                                  /*  // increment index
+                                    Number NumFactura = realm.where(invoice.class).max("numeration");
+
+                                    if (NumFactura == null) {
+                                        numeration = 1;
+                                    }
+                                    else {
+                                        numeration = NumFactura.intValue() + 1;
+                                    }*/
+
+            }
+        });
+
+        //TODO MODIFICAR CON EL IDS CONSECUTIVOS (FACTURA Y NUMERACION)
+        activity.initCurrentInvoice(String.valueOf(nextId), "3", "0000-"+nextId, 0.0, 0.0, Functions.getDate(), Functions.get24Time(),
+                Functions.getDate(), Functions.get24Time(), Functions.getDate(), "3", metodoPagoId, "", "", "", "", "", "", "", "", "", "", "", "", fecha,
+                "", "");
+
+        activity.initCurrentVenta(String.valueOf(nextId), String.valueOf(nextId), idCliente, nombreCliente, "6", "3", "0", "0", fecha, fecha, "0", 1, 0, 1);
+
+        final Realm realm5 = Realm.getDefaultInstance();
+        realm5.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm5) {
+                Numeracion numNuevo= new Numeracion(); // unmanaged
+                numNuevo.setSale_type("3");
+                numNuevo.setNumeracion_numero(nextId);
+
+                realm5.insertOrUpdate(numNuevo);
+                Log.d("idinvNUEVOCREADO", numNuevo +"");
+
+
+            }
+
+        });
+        realm5.close();
 
     }
 

@@ -81,7 +81,7 @@ public class ReimPedidoClientesAdapter extends RecyclerView.Adapter<ReimPedidoCl
         String fantasyCliente = clientes.getFantasyName();
         String numeracionFactura = invoice.getNumeration();
         String nombreVenta = sale.getCustomer_name();
-
+        int subida = invoice.getSubida();
         final double longitud = invoice.getLongitud();
         final double latitud = invoice.getLatitud();
 
@@ -95,6 +95,13 @@ public class ReimPedidoClientesAdapter extends RecyclerView.Adapter<ReimPedidoCl
         }
         holder.txt_cliente_factura_companyname.setText(companyCliente);
         holder.txt_cliente_factura_numeracion.setText("Factura: " + numeracionFactura);
+
+        if(subida == 1){
+            holder.txtSubida.setBackgroundColor(Color.parseColor("#FF0000"));
+        }
+        else{
+            holder.txtSubida.setBackgroundColor(Color.parseColor("#607d8b"));
+        }
 
         holder.cardView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
@@ -117,6 +124,7 @@ public class ReimPedidoClientesAdapter extends RecyclerView.Adapter<ReimPedidoCl
                 else if(metodoPago.equals("2")){
                     nombreMetodoPago = "Crédito";
                 }
+
 
 
                 LayoutInflater layoutInflater = LayoutInflater.from(QuickContext);
@@ -342,7 +350,7 @@ public class ReimPedidoClientesAdapter extends RecyclerView.Adapter<ReimPedidoCl
 
     public class CharacterViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView txt_cliente_factura_card, txt_cliente_factura_fantasyname, txt_cliente_factura_companyname, txt_cliente_factura_numeracion;
+        private TextView txt_cliente_factura_card, txt_cliente_factura_fantasyname, txt_cliente_factura_companyname, txt_cliente_factura_numeracion, txtSubida;
         public CardView cardView;
         Button btnDevolverFacturaCliente;
         ImageButton btnImprimirFacturaCliente, btnUbicacionFacturaCliente;
@@ -354,6 +362,7 @@ public class ReimPedidoClientesAdapter extends RecyclerView.Adapter<ReimPedidoCl
             txt_cliente_factura_fantasyname = (TextView) view.findViewById(R.id.txt_cliente_factura_fantasyname);
             txt_cliente_factura_companyname = (TextView) view.findViewById(R.id.txt_cliente_factura_companyname);
             txt_cliente_factura_numeracion = (TextView) view.findViewById(R.id.txt_cliente_factura_numeracion);
+            txtSubida = (TextView) view.findViewById(R.id.txtSubidaReimpPedidos);
             btnDevolverFacturaCliente = (Button) view.findViewById(R.id.btnDevolverFacturaCliente);
             btnImprimirFacturaCliente = (ImageButton) view.findViewById(R.id.btnImprimirFacturaCliente);
             btnUbicacionFacturaCliente = (ImageButton) view.findViewById(R.id.btnUbicacionFacturaCliente);
