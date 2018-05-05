@@ -243,7 +243,7 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
                 Functions.getDate(), Functions.get24Time(), Functions.getDate(), "3", metodoPagoId, "", "", "", "", "", "", "", "", "", "", "", "", fecha,
                 "", "");
 
-        activity.initCurrentVenta(String.valueOf(nextId), String.valueOf(nextId), idCliente, nombreCliente, "6", "3", "0", "0", fecha, fecha, "0", 1, 0, 1);
+        activity.initCurrentVenta(String.valueOf(nextId), String.valueOf(nextId), idCliente, nombreCliente, "6", "3", "0", "0", fecha, fecha, "0", 1, 1, 1);
 
         final Realm realm5 = Realm.getDefaultInstance();
         realm5.executeTransaction(new Realm.Transaction() {

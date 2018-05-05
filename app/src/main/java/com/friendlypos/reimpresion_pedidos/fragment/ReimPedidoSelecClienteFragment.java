@@ -72,7 +72,7 @@ public class ReimPedidoSelecClienteFragment extends BaseFragment {
         RealmQuery<sale> query = realm.where(sale.class).equalTo("aplicada", 1).equalTo("facturaDePreventa", 1).equalTo("subida", 1);
         RealmResults<sale> result1 = query.findAll();
         if(result1.size() == 0){
-            Toast.makeText(getApplicationContext(),"Favor descargar datos primero",Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(),"No hay facturas para editar",Toast.LENGTH_LONG).show();
         }
         return result1;
     }

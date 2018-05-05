@@ -95,7 +95,7 @@ public class ReimPedidoSeleccionarProductosAdapter extends RecyclerView.Adapter<
 
         realm.close();
 
-        // TRANSACCION PARA ACTUALIZAR CAMPOS DE LA TABLA VENTAS
+  /*      // TRANSACCION PARA ACTUALIZAR CAMPOS DE LA TABLA VENTAS
         final Realm realm3 = Realm.getDefaultInstance();
 
         try {
@@ -118,7 +118,7 @@ public class ReimPedidoSeleccionarProductosAdapter extends RecyclerView.Adapter<
             Toast.makeText(context,"error", Toast.LENGTH_SHORT).show();
 
         }
-        realm3.close();
+        realm3.close();*/
 /*
         if(inventario.getAmount().equals("0")){
 

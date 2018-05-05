@@ -98,7 +98,7 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
 
         realm.close();
 
-        // TRANSACCION PARA ACTUALIZAR CAMPOS DE LA TABLA VENTAS
+   /*     // TRANSACCION PARA ACTUALIZAR CAMPOS DE LA TABLA VENTAS
         final Realm realm3 = Realm.getDefaultInstance();
 
         try {
@@ -121,7 +121,7 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
             Toast.makeText(context,"error", Toast.LENGTH_SHORT).show();
 
         }
-        realm3.close();
+        */
 /*
         if(inventario.getAmount().equals("0")){
 
