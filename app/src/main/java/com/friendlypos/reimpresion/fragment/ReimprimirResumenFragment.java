@@ -232,7 +232,7 @@ public class ReimprimirResumenFragment extends BaseFragment {
         String send = "";
 
         Realm realm1 = Realm.getDefaultInstance();
-        RealmResults<Pivot> result = realm1.where(Pivot.class).equalTo("invoice_id", idVenta).findAll();
+        RealmResults<Pivot> result = realm1.where(Pivot.class).equalTo("invoice_id", idVenta).equalTo("devuelvo", 0).findAll();
 
         if (result.isEmpty()) {
             send = "No hay invoice emitidas";
@@ -241,7 +241,7 @@ public class ReimprimirResumenFragment extends BaseFragment {
             // printSalesCashTotal= 0.0;
             for (int i = 0; i < result.size(); i++) {
 
-                List<Pivot> salesList1 = realm1.where(Pivot.class).equalTo("invoice_id", idVenta).findAll();
+                List<Pivot> salesList1 = realm1.where(Pivot.class).equalTo("invoice_id", idVenta).equalTo("devuelvo", 0).findAll();
                 Productos producto = realm1.where(Productos.class).equalTo("id", salesList1.get(i).getProduct_id()).findFirst();
 
                 String description = producto.getDescription();

@@ -79,6 +79,7 @@ public class invoice extends RealmObject {
 
     private int aplicada = 0;
     private int subida = 0;
+    private int facturaDePreventa = 0;
 
     public boolean isResult() {
         return result;
@@ -352,6 +353,14 @@ public class invoice extends RealmObject {
         this.subida = subida;
     }
 
+    public int getFacturaDePreventa() {
+        return facturaDePreventa;
+    }
+
+    public void setFacturaDePreventa(int facturaDePreventa) {
+        this.facturaDePreventa = facturaDePreventa;
+    }
+
     public String toString() {
         return "invoice{" +
                 "id='" + id + '\'' +
@@ -388,6 +397,7 @@ public class invoice extends RealmObject {
                 ", message='" + messages + '\'' +
                 ", aplicada='" + aplicada + '\'' +
                 ", subida='" + subida + '\'' +
+                ", facturaDePreventa='" + facturaDePreventa + '\'' +
                 '}';
     }
 }

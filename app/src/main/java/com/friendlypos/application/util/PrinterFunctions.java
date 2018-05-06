@@ -49,7 +49,8 @@ public class PrinterFunctions {
         Sysconf sysconf = realm.where(Sysconf.class).findFirst();
         Clientes clientes = realm.where(Clientes.class).equalTo("id", sale.getCustomer_id()).findFirst();
         invoice invoice = realm.where(com.friendlypos.distribucion.modelo.invoice.class).equalTo("id", sale.getInvoice_id()).findFirst();
-        RealmResults<Pivot> result = realm.where(Pivot.class).equalTo("invoice_id", sale.getInvoice_id()).findAll();
+
+        RealmResults<Pivot> result = realm.where(Pivot.class).equalTo("invoice_id", sale.getInvoice_id()).equalTo("devuelvo", 0).findAll();
         Log.d("FACTPRODTOD", result + "");
         // VARIABLES VENTA
         String fechayhora = sale.getUpdated_at();
@@ -329,7 +330,7 @@ public class PrinterFunctions {
         String currentDateandTime = sdf.format(new Date());
 
         Realm realm = Realm.getDefaultInstance();
-        RealmResults<Pivot> result = realm.where(Pivot.class).equalTo("invoice_id", idVenta).findAll();
+        RealmResults<Pivot> result = realm.where(Pivot.class).equalTo("invoice_id", idVenta).equalTo("devuelvo", 0).findAll();
 
         if (result.isEmpty()) {
             send = "No hay invoice emitidas";
@@ -337,7 +338,7 @@ public class PrinterFunctions {
             // printSalesCashTotal= 0.0;
             for (int i = 0; i < result.size(); i++) {
 
-                List<Pivot> salesList1 = realm.where(Pivot.class).equalTo("invoice_id", idVenta).findAll();
+                List<Pivot> salesList1 = realm.where(Pivot.class).equalTo("invoice_id", idVenta).equalTo("devuelvo", 0).findAll();
                 Productos producto = realm.where(Productos.class).equalTo("id", salesList1.get(i).getProduct_id()).findFirst();
                 //   sale ventas = realm.where(sale.class).equalTo("invoice_id", salesList1.get(i).getInvoice_id()).findFirst();
                 //    Clientes clientes = realm.where(Clientes.class).equalTo("id", ventas.getCustomer_id()).findFirst();
@@ -477,7 +478,7 @@ public class PrinterFunctions {
                     "! U1 SETLP 7 0 14\r\n" + "\r\n" +
                     "N# Factura: " + numeracionFactura + "\r\n" +
                     "! U1 LMARGIN 120\r\n" +
-                    "Factura de: ! U1 LMARGIN 350 " + payment + "\r\n" +
+                    "Factura de: ! U1 LMARGIN 350 " + metodoPago + "\r\n" +
                     ((metodoPago == "2") ? "! U1 LMARGIN 120\r\n" +
                             "Fecha Limite: ! U1 LMARGIN 350 " + messageC + "\r\n" : "\r\n") +
                     "! U1 LMARGIN 0\r\n" +

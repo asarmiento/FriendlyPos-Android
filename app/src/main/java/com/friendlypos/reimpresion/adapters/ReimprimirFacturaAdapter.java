@@ -67,7 +67,7 @@ public class ReimprimirFacturaAdapter extends RecyclerView.Adapter<ReimprimirFac
         Clientes clientes = realm.where(Clientes.class).equalTo("id", sale.getCustomer_id()).findFirst();
         final invoice invoice = realm.where(com.friendlypos.distribucion.modelo.invoice.class).equalTo("id", sale.getInvoice_id()).findFirst();
 
-        cantidadPivot = realm.where(Pivot.class).equalTo("invoice_id", sale.getInvoice_id()).count();
+        cantidadPivot = realm.where(Pivot.class).equalTo("invoice_id", sale.getInvoice_id()).equalTo("devuelvo", 0).count();
         String numeracionFactura = invoice.getNumeration();
         String fantasyCliente = clientes.getFantasyName();
         String fecha1 = invoice.getDate();

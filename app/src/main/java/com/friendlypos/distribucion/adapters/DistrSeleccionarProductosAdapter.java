@@ -98,7 +98,7 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
 
         realm.close();
 
-   /*     // TRANSACCION PARA ACTUALIZAR CAMPOS DE LA TABLA VENTAS
+        // TRANSACCION PARA ACTUALIZAR CAMPOS DE LA TABLA VENTAS
         final Realm realm3 = Realm.getDefaultInstance();
 
         try {
@@ -121,7 +121,7 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
             Toast.makeText(context,"error", Toast.LENGTH_SHORT).show();
 
         }
-        */
+
 /*
         if(inventario.getAmount().equals("0")){
 
@@ -358,7 +358,7 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
     public List<Pivot> getListResumen() {
         String facturaId = activity.getInvoiceId();
         Realm realm = Realm.getDefaultInstance();
-        RealmResults<Pivot> facturaid1 = realm.where(Pivot.class).equalTo("invoice_id", facturaId).findAll();
+        RealmResults<Pivot> facturaid1 = realm.where(Pivot.class).equalTo("invoice_id", facturaId).equalTo("devuelvo", 0).findAll();
         realm.close();
         return facturaid1;
     }

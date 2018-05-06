@@ -71,7 +71,7 @@ public class ReimprimirFacturaFragment extends BaseFragment {
 
     private List<sale> getListClientes(){
         realm = Realm.getDefaultInstance();
-        RealmQuery<sale> query = realm.where(sale.class).equalTo("aplicada", 1);
+        RealmQuery<sale> query = realm.where(sale.class).equalTo("aplicada", 1).equalTo("facturaDePreventa", 0);
         RealmResults<sale> result1 = query.findAll();
 
         return result1;

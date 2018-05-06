@@ -371,7 +371,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
 
                 Realm realm = Realm.getDefaultInstance();
 
-                RealmQuery<invoice> query = realm.where(invoice.class).equalTo("subida", 1);
+                RealmQuery<invoice> query = realm.where(invoice.class).equalTo("subida", 1).equalTo("facturaDePreventa", 0);
                 final RealmResults<invoice> invoice1 = query.findAll();
                 Log.d("qweqweq", invoice1.toString());
                 List<invoice> listaFacturas = realm.copyFromRealm(invoice1);
@@ -398,6 +398,41 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                 Toast.makeText(MenuPrincipal.this, "subir_ventas", Toast.LENGTH_SHORT).show();
 
                 break;
+
+            case R.id.btn_subir_pedidos:
+                //TODO SABER COMO TENER QUE SUBIR LOS DATOS, SI UNO X UNO O TODOS DE UN SOLO.
+
+                Realm realmPedidos = Realm.getDefaultInstance();
+
+                RealmQuery<invoice> queryPedidos = realmPedidos.where(invoice.class).equalTo("subida", 1).equalTo("facturaDePreventa", 1);
+                final RealmResults<invoice> invoicePedidos = queryPedidos.findAll();
+                Log.d("qweqweq", invoicePedidos.toString());
+                List<invoice> listaFacturasPedidos = realmPedidos.copyFromRealm(invoicePedidos);
+                Log.d("qweqweq1", listaFacturasPedidos + "");
+                realmPedidos.close();
+
+                if(listaFacturasPedidos.size()== 0){
+                    Toast.makeText(MenuPrincipal.this,"No hay facturas para subir", Toast.LENGTH_LONG).show();
+                }else {
+
+                    for (int i = 0; i < listaFacturasPedidos.size(); i++) {
+                        Toast.makeText(MenuPrincipal.this, "hay", Toast.LENGTH_SHORT).show();
+
+                    /*    facturaId = String.valueOf(listaFacturasPedidos.get(i).getId());
+                        Log.d("facturaId", facturaId + "");
+                        EnviarFactura obj = new EnviarFactura(listaFacturasPedidos.get(i));
+                        Log.d("My App", obj + "");
+                        subir1.sendPost(obj);
+
+                        actualizarVenta();
+                        actualizarFactura();*/
+                    }
+                }
+
+                Toast.makeText(MenuPrincipal.this, "subir_Pedidos", Toast.LENGTH_SHORT).show();
+
+                break;
+
 
             case R.id.btn_devolver_inventario:
                 Toast.makeText(MenuPrincipal.this, "devolver_inventario", Toast.LENGTH_SHORT).show();

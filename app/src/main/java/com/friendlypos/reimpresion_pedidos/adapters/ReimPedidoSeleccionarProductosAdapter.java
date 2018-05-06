@@ -355,7 +355,7 @@ public class ReimPedidoSeleccionarProductosAdapter extends RecyclerView.Adapter<
     public List<Pivot> getListResumen() {
         String facturaId = activity.getInvoiceId();
         Realm realm = Realm.getDefaultInstance();
-        RealmResults<Pivot> facturaid1 = realm.where(Pivot.class).equalTo("invoice_id", facturaId).findAll();
+        RealmResults<Pivot> facturaid1 = realm.where(Pivot.class).equalTo("invoice_id", facturaId).equalTo("devuelvo", 0).findAll();
         realm.close();
         return facturaid1;
     }

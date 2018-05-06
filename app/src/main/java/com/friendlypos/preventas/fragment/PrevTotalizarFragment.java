@@ -209,6 +209,7 @@ public class PrevTotalizarFragment extends BaseFragment {
 
             });
 
+
         printBill.setOnClickListener(
             new View.OnClickListener() {
 
@@ -402,7 +403,7 @@ public class PrevTotalizarFragment extends BaseFragment {
         });
 
         Log.d("invoicetotal", invoice + "");
-
+        actualizarVenta();
     }
 
     protected void actualizarVenta() {
@@ -413,9 +414,10 @@ public class PrevTotalizarFragment extends BaseFragment {
 
             @Override
             public void execute(Realm realm3) {
+                Log.d("ENVIADOSALE", facturaId);
                 sale_actualizada = realm3.where(sale.class).equalTo("invoice_id", facturaId).findFirst();
                 Log.d("dadasdad", client_name.getText().toString());
-
+                Log.d("ENVIADOSALE", sale_actualizada + "");
                 String nombreEscrito = client_name.getText().toString();
 
                 if (nombreEscrito.matches("")) {
@@ -427,11 +429,9 @@ public class PrevTotalizarFragment extends BaseFragment {
                     sale_actualizada.setCustomer_name(client_name.getText().toString());
                 }
 
-                sale_actualizada.setSale_type("1");
                 sale_actualizada.setApplied("1");
                 sale_actualizada.setUpdated_at(Functions.getDate() + " " + Functions.get24Time());
-                sale_actualizada.setAplicada(1);
-                sale_actualizada.setSubida(1);
+
 
                 realm3.insertOrUpdate(sale_actualizada);
                 realm3.close();
@@ -473,7 +473,7 @@ public class PrevTotalizarFragment extends BaseFragment {
         paid.setEnabled(false);
 
         actualizarFacturaDetalles();
-
+       // actualizarVenta();
     /*    actualizarFactura();
         actualizarVenta();*/
 

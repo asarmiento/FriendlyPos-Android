@@ -171,7 +171,7 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
                             activity.setDueClientePreventa(dueClienteP);
 
                             //TODO MODIFICAR CON EL ID CONSECUTIVOS
-                            activity.setInvoiceIdPreventa(1);
+                            activity.setInvoiceIdPreventa(nextId);
                             activity.setMetodoPagoClientePreventa(metodoPagoId);
                         }
                     })
