@@ -29,7 +29,7 @@ public class Bonuses extends RealmObject {
     String product_sale;
     int bonus_product_id;
     String product_bonus;
-    String expiration;
+    int expiration;
     String created_at;
     String updated_at;
 
@@ -81,11 +81,11 @@ public class Bonuses extends RealmObject {
         this.product_bonus = product_bonus;
     }
 
-    public String getExpiration() {
+    public int getExpiration() {
         return expiration;
     }
 
-    public void setExpiration(String expiration) {
+    public void setExpiration(int expiration) {
         this.expiration = expiration;
     }
 

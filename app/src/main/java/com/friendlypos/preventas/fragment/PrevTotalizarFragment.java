@@ -97,6 +97,13 @@ public class PrevTotalizarFragment extends BaseFragment {
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+
+        getActivity().unregisterReceiver(bluetoothStateChangeReceiver);
+    }
+
+    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         bluetoothStateChangeReceiver = new BluetoothStateChangeReceiver();
@@ -196,6 +203,7 @@ public class PrevTotalizarFragment extends BaseFragment {
                             Toast.makeText(getActivity(), "Crédito", Toast.LENGTH_LONG).show();
                             obtenerLocalización();
                             aplicarFactura();
+
                         }
                         actualizarFactura();
 
@@ -392,7 +400,9 @@ public class PrevTotalizarFragment extends BaseFragment {
 
             @Override
             public void onSuccess() {
+                actualizarVenta();
                 alertVisitado();
+
             }
         }, new Realm.Transaction.OnError() {
 
@@ -403,7 +413,7 @@ public class PrevTotalizarFragment extends BaseFragment {
         });
 
         Log.d("invoicetotal", invoice + "");
-        actualizarVenta();
+
     }
 
     protected void actualizarVenta() {
@@ -463,7 +473,7 @@ public class PrevTotalizarFragment extends BaseFragment {
         visitadonuevo.setLatitud(latitude);
 
         realm5.copyToRealmOrUpdate(visitadonuevo);
-
+        realm5.commitTransaction();
         Log.d("ClienteVisitado", visitadonuevo + "");
         realm5.close();
     }

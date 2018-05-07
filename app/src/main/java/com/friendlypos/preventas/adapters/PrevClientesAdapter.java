@@ -42,7 +42,7 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
     Double amount_inventario = 0.0;
     String facturaID, clienteID;
     int nextId, numeration;
-    int tabCliente;
+    int tabCliente = 0;
     int activa = 0;
     String nombreMetodoPago;
     String metodoPagoId;
@@ -99,21 +99,7 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
             public void onClick(View view) {
                 activa = 1;
 
-                final ProgressDialog progresRing = ProgressDialog.show(QuickContext, "Cargando", "Seleccionando Cliente", true);
-                progresRing.setCancelable(true);
-                new Thread(new Runnable() {
 
-                    @Override
-                    public void run() {
-                        try {
-                            Thread.sleep(5000);
-                        }
-                        catch (Exception e) {
-
-                        }
-                        progresRing.dismiss();
-                    }
-                }).start();
 
                 int pos = position;
                 if (pos == RecyclerView.NO_POSITION) return;
@@ -152,7 +138,7 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
                                 else {
                                     // TRANSACCIÓN PARA ACTUALIZAR EL CAMPO METODO DE PAGO CREDITO DE LA FACTURA
                                     metodoPagoId = "2";
-                                    Functions.CreateMessage(QuickContext, " ", "Se cambio la factura a crédito" + metodoPagoId);
+                                 //   Functions.CreateMessage(QuickContext, " ", "Se cambio la factura a crédito" + metodoPagoId);
                                     notifyDataSetChanged();
                                     agregar();
                                 }
@@ -160,7 +146,7 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
                             else if (rbcontado.isChecked()) {
                                 // TRANSACCIÓN PARA ACTUALIZAR EL CAMPO METODO DE PAGO CONTADO DE LA FACTURA
                                 metodoPagoId = "1";
-                                Functions.CreateMessage(QuickContext, " ", "Se cambio la factura a contado" + metodoPagoId);
+                                //Functions.CreateMessage(QuickContext, " ", "Se cambio la factura a contado" + metodoPagoId);
                                 notifyDataSetChanged();
                                 agregar();
                             }
@@ -173,6 +159,22 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
                             //TODO MODIFICAR CON EL ID CONSECUTIVOS
                             activity.setInvoiceIdPreventa(nextId);
                             activity.setMetodoPagoClientePreventa(metodoPagoId);
+
+                            final ProgressDialog progresRing = ProgressDialog.show(QuickContext, "Cargando", "Seleccionando Cliente", true);
+                            progresRing.setCancelable(true);
+                            new Thread(new Runnable() {
+
+                                @Override
+                                public void run() {
+                                    try {
+                                        Thread.sleep(5000);
+                                    }
+                                    catch (Exception e) {
+
+                                    }
+                                    progresRing.dismiss();
+                                }
+                            }).start();
                         }
                     })
                     .setNegativeButton("Cancel",
@@ -261,7 +263,7 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
 
         });
         realm5.close();
-
+       // realm2.close();
     }
 
     @Override

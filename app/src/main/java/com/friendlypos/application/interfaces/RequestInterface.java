@@ -65,4 +65,8 @@ public interface RequestInterface {
     @POST("/api/upload-invoices")
     Call<invoice> savePost(@Body EnviarFactura invoice, @Header("Authorization") String token);
 
+    // TODO DEFINIR CUAL ES EL KEY PARA ENVIAR (KEY, VALUE)
+    @POST("/api/upload-orders-presale")
+    Call<invoice> savePostPreventa(@Body EnviarFactura invoice, @Header("Authorization") String token);
+
 }

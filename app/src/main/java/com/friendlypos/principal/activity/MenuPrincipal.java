@@ -43,6 +43,7 @@ import com.friendlypos.preventas.activity.PreventaActivity;
 import com.friendlypos.principal.fragment.ConfiguracionFragment;
 import com.friendlypos.principal.helpers.DescargasHelper;
 import com.friendlypos.principal.helpers.SubirHelper;
+import com.friendlypos.principal.helpers.SubirHelperPreventa;
 import com.friendlypos.reimpresion.activity.ReimprimirActivity;
 import com.friendlypos.reimpresion_pedidos.activity.ReimprimirPedidosActivity;
 import com.github.clans.fab.FloatingActionButton;
@@ -100,6 +101,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
     SessionPrefes session;
     DescargasHelper download1;
     SubirHelper subir1;
+    SubirHelperPreventa subirPreventa;
     String usuer;
     String idUsuario;
     String facturaId;
@@ -121,7 +123,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         download1 = new DescargasHelper(MenuPrincipal.this);
         subir1 = new SubirHelper(MenuPrincipal.this);
-
+        subirPreventa = new SubirHelperPreventa(MenuPrincipal.this);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
             this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -400,7 +402,6 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                 break;
 
             case R.id.btn_subir_pedidos:
-                //TODO SABER COMO TENER QUE SUBIR LOS DATOS, SI UNO X UNO O TODOS DE UN SOLO.
 
                 Realm realmPedidos = Realm.getDefaultInstance();
 
@@ -418,14 +419,14 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                     for (int i = 0; i < listaFacturasPedidos.size(); i++) {
                         Toast.makeText(MenuPrincipal.this, "hay", Toast.LENGTH_SHORT).show();
 
-                    /*    facturaId = String.valueOf(listaFacturasPedidos.get(i).getId());
+                       facturaId = String.valueOf(listaFacturasPedidos.get(i).getId());
                         Log.d("facturaId", facturaId + "");
                         EnviarFactura obj = new EnviarFactura(listaFacturasPedidos.get(i));
                         Log.d("My App", obj + "");
-                        subir1.sendPost(obj);
+                        subirPreventa.sendPostPreventa(obj);
 
                         actualizarVenta();
-                        actualizarFactura();*/
+                        actualizarFactura();
                     }
                 }
 
@@ -433,19 +434,28 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
 
                 break;
 
-
             case R.id.btn_devolver_inventario:
                 Toast.makeText(MenuPrincipal.this, "devolver_inventario", Toast.LENGTH_SHORT).show();
                 break;
 
             case R.id.btn_imprimir_liquidacion:
-                if(bluetoothStateChangeReceiver.isBluetoothAvailable()== true) {
+               /* if(bluetoothStateChangeReceiver.isBluetoothAvailable()== true) {*/
                     PrinterFunctions.imprimirLiquidacionMenu(MenuPrincipal.this);
                     Toast.makeText(MenuPrincipal.this, "imprimir liquidacion", Toast.LENGTH_SHORT).show();
-                }
+            /*    }
                 else if(bluetoothStateChangeReceiver.isBluetoothAvailable() == false){
                     Functions.CreateMessage(MenuPrincipal.this, "Error", "La conexión del bluetooth ha fallado, favor revisar o conectar el dispositivo");
-                }
+                }*/
+                break;
+
+            case R.id.btn_imprimir_orden_carga:
+               /* if(bluetoothStateChangeReceiver.isBluetoothAvailable()== true) {*/
+                PrinterFunctions.imprimirOrdenCarga(MenuPrincipal.this);
+                Toast.makeText(MenuPrincipal.this, "imprimir liquidacion", Toast.LENGTH_SHORT).show();
+            /*    }
+                else if(bluetoothStateChangeReceiver.isBluetoothAvailable() == false){
+                    Functions.CreateMessage(MenuPrincipal.this, "Error", "La conexión del bluetooth ha fallado, favor revisar o conectar el dispositivo");
+                }*/
                 break;
 
             case R.id.btn_imprimir_devolucion:

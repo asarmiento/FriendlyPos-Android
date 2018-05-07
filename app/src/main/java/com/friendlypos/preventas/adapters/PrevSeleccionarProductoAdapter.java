@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.friendlypos.R;
+import com.friendlypos.application.util.Functions;
 import com.friendlypos.distribucion.modelo.Inventario;
 import com.friendlypos.distribucion.modelo.Marcas;
 import com.friendlypos.distribucion.modelo.Pivot;
@@ -26,6 +27,7 @@ import com.friendlypos.distribucion.modelo.sale;
 import com.friendlypos.login.util.SessionPrefes;
 import com.friendlypos.preventas.activity.PreventaActivity;
 import com.friendlypos.preventas.fragment.PrevSelecProductoFragment;
+import com.friendlypos.preventas.modelo.Bonuses;
 import com.friendlypos.preventas.modelo.invoiceDetallePreventa;
 import com.friendlypos.preventas.util.TotalizeHelperPreventa;
 import com.friendlypos.principal.modelo.Clientes;
@@ -46,7 +48,12 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
     private PreventaActivity activity;
     private PrevSelecProductoFragment fragment;
     private static double producto_amount_dist_add = 0;
+    private static double producto_bonus_add = 0;
+
     private static double producto_descuento_add = 0;
+    private static double productosParaObtenerBonus = 0;
+    private static double productosDelBonus = 0;
+    int fechaExpiracionBonus;
     private int selected_position = -1;
     static double creditoLimiteCliente = 0.0;
     double totalCredito = 0.0;;
@@ -79,7 +86,7 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
 
     @Override
     public void onBindViewHolder(final PrevSeleccionarProductoAdapter.CharacterViewHolder holder, final int position) {
-
+        //final Realm realm3 = Realm.getDefaultInstance();
         final Inventario inventario = productosList.get(position);
 
         Realm realm = Realm.getDefaultInstance();
@@ -93,19 +100,19 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
         String marca2 = realm.where(Marcas.class).equalTo("id", marca).findFirst().getName();
         String tipoProducto = realm.where(TipoProducto.class).equalTo("id", tipo).findFirst().getName();
 
-        realm.close();
+
 
         // TRANSACCION PARA ACTUALIZAR CAMPOS DE LA TABLA VENTAS
-        final Realm realm3 = Realm.getDefaultInstance();
+
 
         try {
-            realm3.executeTransaction(new Realm.Transaction() {
+            realm.executeTransaction(new Realm.Transaction() {
                 @Override
-                public void execute(Realm realm3) {
+                public void execute(Realm realm) {
                     //  Inventario inv_actualizado = realm3.where(Inventario.class).equalTo("id", inventario_id).findFirst();
                     //  inv_actualizado.setAmount_dist(String.valueOf(nuevoAmount));
                     inventario.setNombre_producto(description);
-                    realm3.insertOrUpdate(inventario); // using insert API
+                    realm.copyToRealmOrUpdate(inventario); // using insert API
 
                     Log.d("asda", inventario.getNombre_producto());
                 }
@@ -117,7 +124,7 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
             Toast.makeText(context,"error", Toast.LENGTH_SHORT).show();
 
         }
-        realm3.close();
+       // realm3.close();
 /*
         if(inventario.getAmount().equals("0")){
 
@@ -131,13 +138,14 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
         holder.txt_producto_factura_precio.setText(precio);
         holder.txt_producto_factura_disponible.setText("Disp: " + inventario.getAmount());
         holder.cardView.setBackgroundColor(selected_position == position ? Color.parseColor("#607d8b") : Color.parseColor("#009688"));
+        realm.close();
     }
     //}
 
 
     public void addProduct(final int inventario_id, final String producto_id, final
     Double cantidadDisponible, final String description, String Precio1, String Precio2,
-                           String Precio3, String Precio4, String Precio5) {
+                           String Precio3, String Precio4, String Precio5, final String bonusProducto) {
 
         final invoiceDetallePreventa invoiceDetallePreventa = activity.getCurrentInvoice();
 
@@ -164,6 +172,13 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
         label.setText("Escriba una cantidad maxima de " + cantidadDisponible + " minima de 1");
         final EditText input = (EditText) promptView.findViewById(R.id.promtCtext);
         final EditText desc = (EditText) promptView.findViewById(R.id.promtCDesc);
+
+        final TextView txtBonificacion = (TextView) promptView.findViewById(R.id.txtBonificacion);
+
+
+        final TextView textView2 = (TextView) promptView.findViewById(R.id.textView2);
+        textView2.setText(bonusProducto);
+
 
         final Spinner spPrices = (Spinner) promptView.findViewById(R.id.spPrices);
         ArrayList<Double> pricesList = new ArrayList<>();
@@ -197,17 +212,57 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
 
             public void onClick(DialogInterface dialog, int id) {
                 try {
+
+
                 producto_amount_dist_add = Double.parseDouble(((input.getText().toString().isEmpty()) ? "0" : input.getText().toString()));
-                Log.d("productoAmountDistAdd", producto_amount_dist_add + "");
+               // Log.d("productoAmountDistAdd", producto_amount_dist_add + "");
                 //  productoAmountDistAdd = String.format("%,.2f", producto_amount_dist_add);
 
                 producto_descuento_add = Double.parseDouble(((desc.getText().toString().isEmpty()) ? "0" : desc.getText().toString()));
                 // productoDescuentoAdd = String.format("%,.2f", producto_descuento_add);
-                Log.d("productoDescuentoAdd", producto_descuento_add + "");
+              //  Log.d("productoDescuentoAdd", producto_descuento_add + "");
+
+
+
 
                 if (producto_descuento_add >= 0 && producto_descuento_add <= 10) {
                     Toast.makeText(context, "agregodesc", Toast.LENGTH_LONG).show();
                     if (producto_amount_dist_add > 0 && producto_amount_dist_add <= cantidadDisponible) {
+
+                        if (bonusProducto.equals("1")){
+
+                            final Realm realmBonus = Realm.getDefaultInstance();
+
+                            realmBonus.executeTransaction(new Realm.Transaction() {
+
+                                @Override
+                                public void execute(Realm realmBonus) {
+
+                                    Bonuses productoConBonus = realmBonus.where(Bonuses.class).equalTo("product_id", producto_id).findFirst();
+                                    productosParaObtenerBonus = Double.parseDouble(productoConBonus.getProduct_sale());
+                                    productosDelBonus = Double.parseDouble(productoConBonus.getProduct_sale());
+                                    fechaExpiracionBonus = productoConBonus.getExpiration();
+
+                                }
+                            });
+                            txtBonificacion.setVisibility(View.VISIBLE);
+                            txtBonificacion.setText(" La cantidad para bonificarle es de: " + productosParaObtenerBonus);
+                            int fechaDia = Integer.parseInt(Functions.getDate());
+
+                            if(producto_amount_dist_add >= productosParaObtenerBonus ){
+                                if(fechaExpiracionBonus >= fechaDia){
+                                producto_bonus_add =  producto_amount_dist_add + productosDelBonus;
+                                Log.d("PRODUCTO DEL BONUS", producto_bonus_add + "");
+                            }
+                                else{
+                                    Toast.makeText(context, "Fecha expirada", Toast.LENGTH_LONG).show();
+                                }
+                            }
+                            else{
+                                Toast.makeText(context, "No alcanza la cantidad deseada para el bonus", Toast.LENGTH_LONG).show();
+                            }
+
+                        }
 
 
                         final double precioSeleccionado = (double) spPrices.getSelectedItem();
@@ -260,17 +315,17 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
                             Log.d("nuevoAmount", nuevoAmount + "");
 
 
-                            final Realm realm3 = Realm.getDefaultInstance();
+                            final Realm realm6 = Realm.getDefaultInstance();
 
-                            realm3.executeTransaction(new Realm.Transaction() {
+                            realm6.executeTransaction(new Realm.Transaction() {
 
                                 @Override
-                                public void execute(Realm realm3) {
+                                public void execute(Realm realm6) {
 
-                                    Inventario inv_actualizado = realm3.where(Inventario.class).equalTo("id", inventario_id).findFirst();
+                                    Inventario inv_actualizado = realm6.where(Inventario.class).equalTo("id", inventario_id).findFirst();
                                     inv_actualizado.setAmount(String.valueOf(nuevoAmount));
 
-                                    realm3.insertOrUpdate(inv_actualizado); // using insert API
+                                    realm6.insertOrUpdate(inv_actualizado); // using insert API
                                 }
                             });
 
@@ -347,13 +402,13 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
         alertD.show();
     }
 
-    public List<Pivot> getListResumen() {
+   /* public List<Pivot> getListResumen() {
         int facturaId = activity.getInvoiceIdPreventa();
         Realm realm = Realm.getDefaultInstance();
         RealmResults<Pivot> facturaid1 = realm.where(Pivot.class).equalTo("invoice_id", facturaId).findAll();
         realm.close();
         return facturaid1;
-    }
+    }*/
 
     @Override
     public long getItemId(int position) {
@@ -415,6 +470,7 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
                     String precio3 = producto.getSale_price3();
                     String precio4 = producto.getSale_price4();
                     String precio5 = producto.getSale_price5();
+                    String bonusProducto = producto.getBonus();
 
                     Double ProductoAmount = Double.valueOf(clickedDataItem.getAmount());
 
@@ -426,7 +482,7 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
                     realm1.close();
 
                     Toast.makeText(view.getContext(), "You clicked " + ProductoID, Toast.LENGTH_SHORT).show();
-                   addProduct(InventarioID, ProductoID, ProductoAmount, description, precio, precio2, precio3, precio4, precio5);
+                   addProduct(InventarioID, ProductoID, ProductoAmount, description, precio, precio2, precio3, precio4, precio5, bonusProducto);
 
                 }
             });

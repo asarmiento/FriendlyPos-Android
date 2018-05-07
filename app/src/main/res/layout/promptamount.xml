@@ -25,8 +25,21 @@
         android:textSize="15sp"
         android:textStyle="bold"
         android:layout_marginTop="5dp"
-        android:id="@+id/txtNombreProducto"
+        android:id="@+id/txtBonificacion"
         android:layout_below="@+id/promtClabel"
+        android:layout_alignParentStart="true"
+        android:visibility="invisible"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:gravity="center"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:layout_marginTop="5dp"
+        android:id="@+id/txtNombreProducto"
+        android:layout_below="@+id/txtBonificacion"
         android:layout_alignParentStart="true" />
 
     <TextView
@@ -69,5 +82,13 @@
         android:layout_marginRight="10dp"
         android:layout_below="@+id/promtCtext"
         android:layout_alignStart="@+id/promtCtext" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/txtNombreProducto"
+        android:layout_alignParentStart="true"
+        android:text="TextView" />
 
 </RelativeLayout>

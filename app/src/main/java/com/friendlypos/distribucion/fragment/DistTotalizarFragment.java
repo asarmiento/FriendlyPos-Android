@@ -72,7 +72,12 @@ public class DistTotalizarFragment extends BaseFragment  {
         super.onDestroy();
         clearAll();
     }
+    @Override
+    public void onPause() {
+        super.onPause();
 
+        getActivity().unregisterReceiver(bluetoothStateChangeReceiver);
+    }
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
