@@ -52,17 +52,19 @@ public class PrevResumenFragment extends BaseFragment {
 
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerViewPreventaResumen);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
-        List<Pivot> list = activity.getAllPivotDelegate();
-
+        slecTAB = activity.getSelecClienteTabPreventa();
+        totalizeHelper = new TotalizeHelperPreventa(activity);
+        if (slecTAB == 1) {
+            List<Pivot> list = activity.getAllPivotDelegate();
         adapter = new PrevResumenAdapter(activity, this,  list);
         recyclerView.setAdapter(adapter);
 
+
         activity.cleanTotalize();
-        totalizeHelper = new TotalizeHelperPreventa(activity);
+
         totalizeHelper.totalize(list);
         Log.d("listaResumen",  list + "");
-
+        }
         return rootView;
     }
 
