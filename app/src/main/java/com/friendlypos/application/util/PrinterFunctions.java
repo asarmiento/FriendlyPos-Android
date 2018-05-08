@@ -151,8 +151,9 @@ public class PrinterFunctions {
                     "# Telefono: " + telefonoCliente + "\r\n" +
                     "! U1 LMARGIN 0\r\n" +
                     "! U1 SETSP 0\r\n" +
-                    "#  Descripcion               Codigo\r\n" +
-                    "Cant     Precio       P.Sug        Total      I\r\n" +
+                    "Descripcion           Codigo\r\n" +
+                    "Cantidad      Precio       P.Sug       Total\r\n" +
+                    "Tipo     \r\n" +
                     "------------------------------------------------\r\n" +
                     "! U1 SETLP 7 0 10\r\n" +
 
@@ -213,8 +214,9 @@ public class PrinterFunctions {
                     preview += Html.fromHtml("<h1>") + "A nombre de: " + nombreCliente + Html.fromHtml("</h1></center><br/><br/>");
                     preview += Html.fromHtml("<h1>") +  "Nombre fantasia: " + fantasyCliente + Html.fromHtml("</h1></center><br/><br/>");
                     preview += Html.fromHtml("<h1>") +  "# Telefono: " + telefonoCliente + Html.fromHtml("</h1></center><br/><br/><br/>");
-                    preview += Html.fromHtml("<h1>") +  "#  Descripcion               Codigo" + Html.fromHtml("</h1></center><br/>");
-                    preview += Html.fromHtml("<h1>") +  "Cant     Precio       P.Sug        Total      I" + Html.fromHtml("</h1></center><br/>");
+                    preview += Html.fromHtml("<h1>") +  "Descripcion           Codigo" + Html.fromHtml("</h1></center><br/>");
+                    preview += Html.fromHtml("<h1>") +   "Cantidad      Precio       P.Sug       Total" + Html.fromHtml("</h1></center><br/>");
+                    preview += Html.fromHtml("<h1>") +   "Tipo " + Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>") +  "------------------------------------------------" + Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>") +    getPrintDistTotal(sale.getInvoice_id()) + Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>") +  String.format("%20s %-20s", "Subtotal Gravado", totalGrabado) + Html.fromHtml("</h1></center><br/>");
@@ -344,7 +346,7 @@ public class PrinterFunctions {
                 //    Clientes clientes = realm.where(Clientes.class).equalTo("id", ventas.getCustomer_id()).findFirst();
 
 
-
+                double precioSugerido = Double.parseDouble(producto.getSuggested());
                 String description = producto.getDescription();
                 byte[] byteText = description.getBytes(Charset.forName("UTF-8"));
 //To get original string from byte.
@@ -357,30 +359,32 @@ public class PrinterFunctions {
                 String barcode = producto.getBarcode();
                 String typeId = producto.getProduct_type_id();
                 String nombreTipo = null;
-                if (typeId.equals("1")){
-                    nombreTipo = "Gravado";
-                }
-                else if (typeId.equals("2")){
-                    nombreTipo = "Exento";
 
-                }
+
                 double cant = Double.parseDouble(salesList1.get(i).getAmount());
                 double precio = Double.parseDouble(salesList1.get(i).getPrice());
 
+             //   String total = Functions.doubleToString1(cant * precio);
+           //     double totalD = Double.parseDouble(total);
 
-                String total = String.valueOf(cant * precio);
-                Log.d("r", total + "");
-                String total2 = String.format("%,.2f", cant * precio);
-                Log.d("r", total2 + "");
-                //String total3 = String.format("%.,2f", cant * precio);
-                //  Log.d("r", total3 + "");
-                String total4 = String.format(Locale.FRANCE, "%1$,.2f", cant * precio);
-                Log.d("r", total4 + "");
-              /*  String factFecha = salesList1.get(i).getDate();
-                double factTotal = Functions.sGetDecimalStringAnyLocaleAsDouble(salesList1.get(i).getTotal());*/
+                double sugerido=0.0;
+
+                // gravado Sugerido =( (preciode venta/1.13)*(suggested /100) )+ (preciode venta* 0.13)+(preciode venta/1.13);
+                // en caso de exento Sugerido =( (preciode venta)*(suggested /100)) + (preciode venta);
+
+                if (typeId.equals("1")){
+                    nombreTipo = "Gravado";
+                    sugerido = (precio/1.13)*(precioSugerido /100) + (precio * 0.13)+(precio/1.13);
+                }
+                else if (typeId.equals("2")){
+                    nombreTipo = "Exento";
+                    sugerido = (precio)*(precioSugerido /100) + (precio);
+                }
+
 
                 send += String.format("%s  %.24s ", description1, barcode) + "\r\n" +
-                        String.format("%-5s %-10s %-15s %-12s %.1s", cant /*bill.amount*/, precio, precio, Functions.doubleToString1(cant * precio), nombreTipo) + "\r\n";
+                        String.format("%-12s %-10s %-12s %.10s", cant, Functions.doubleToString1(precio), Functions.doubleToString1(sugerido),Functions.doubleToString1(cant * precio)) + "\r\n" +
+                        String.format("%.10s", nombreTipo) + "\r\n";
                 send += "------------------------------------------------\r\n";
                 Log.d("FACTPRODTODFAC", send + "");
             }
@@ -741,7 +745,9 @@ public class PrinterFunctions {
         Sysconf sysconf = realm.where(Sysconf.class).findFirst();
         Clientes clientes = realm.where(Clientes.class).equalTo("id", sale.getCustomer_id()).findFirst();
         invoice invoice = realm.where(com.friendlypos.distribucion.modelo.invoice.class).equalTo("id", sale.getInvoice_id()).findFirst();
-        RealmResults<Pivot> result = realm.where(Pivot.class).equalTo("invoice_id", sale.getInvoice_id()).findAll();
+        //RealmResults<Pivot> result = realm.where(Pivot.class).equalTo("invoice_id", sale.getInvoice_id()).findAll();
+        RealmResults<Pivot> result = realm.where(Pivot.class).equalTo("invoice_id", sale.getInvoice_id()).equalTo("devuelvo", 0).findAll();
+
         Log.d("FACTPRODTOD", result + "");
 
         // VARIABLES CLIENTES
@@ -786,8 +792,11 @@ public class PrinterFunctions {
                     "Razon Social: " + companyCliente + "\r\n" +
                     "! U1 LMARGIN 0\r\n" +
                     "! U1 SETSP 0\r\n" +
-                    "#     Descripcion           Codigo\r\n" +
-                    "Cant I\r\n" +
+                    "\r\n" +
+                    "\r\n" +
+                    "Descripcion           Codigo\r\n" +
+                    "Cantidad      Precio       P.Sug       Total\r\n" +
+                    "Tipo     \r\n" +
                     "------------------------------------------------\r\n" +
                     "! U1 SETLP 7 0 10\r\n" +
                     getPrintDistTotal(sale.getInvoice_id()) +
@@ -811,8 +820,9 @@ public class PrinterFunctions {
             preview += Html.fromHtml("<h1>") + sysNombreNegocio + Html.fromHtml("</h1><br/><br/>");
             preview += Html.fromHtml("<h1>") + sysDireccion + Html.fromHtml("</h1><br/><br/>");
             preview += Html.fromHtml("<h1>") + "Razon Social: " + companyCliente + Html.fromHtml("</h1></center><br/><br/>");
-            preview += Html.fromHtml("<h1>") +  "#  Descripcion               Codigo" + Html.fromHtml("</h1></center><br/>");
-            preview += Html.fromHtml("<h1>") +  "Cant     I" + Html.fromHtml("</h1></center><br/>");
+            preview += Html.fromHtml("<h1>") +  "Descripcion           Codigo" + Html.fromHtml("</h1></center><br/>");
+            preview += Html.fromHtml("<h1>") +  "Cantidad      Precio       P.Sug       Total" + Html.fromHtml("</h1></center><br/>");
+            preview += Html.fromHtml("<h1>") +  "Tipo" + Html.fromHtml("</h1></center><br/>");
             preview += Html.fromHtml("<h1>") +  "------------------------------------------------" + Html.fromHtml("</h1></center><br/>");
             preview += Html.fromHtml("<h1>") +    getPrintDistTotal(sale.getInvoice_id()) + Html.fromHtml("</h1></center><br/>");
 
@@ -870,9 +880,14 @@ public class PrinterFunctions {
                     "Usuario: " + getUserName(QuickContext) + "\r\n" +
                     "! U1 LMARGIN 0\r\n" +
                     "! U1 SETSP 0\r\n" +
-                    "Descripción      Precio      Cantidad     Total\r\n" +
+                    "\r\n" +
+                    "\r\n" +
+                    "Descripcion     \r\n" +
+                    "Precio         Cantidad          Total\r\n" +
                     "------------------------------------------------\r\n" +
                     "! U1 SETLP 7 0 10\r\n" +
+                    "\r\n" +
+                    "\r\n" +
                     salesCredit +
                     "\r\n" +
                     "\r\n" +
@@ -894,7 +909,7 @@ public class PrinterFunctions {
 
                     "\r\n" +
                     "\r\n" +*/
-                    "------------------------------------------------\r\n" +
+
                 //   "#     Total " + Functions.doubleToString1(printSalesCashTotal /*+ printSalesCreditTotal + printReceiptsTotal*/) + "\r\n" +
                     " \r\n" +
                     " \r\n" +
@@ -911,7 +926,8 @@ public class PrinterFunctions {
 
             preview += Html.fromHtml("<h1>") + String.format("%s", billptype) + Html.fromHtml("</h1><br/><br/><br/>");
           //  preview += Html.fromHtml("<h1>") + "Usuario: " + getUserName(QuickContext) + Html.fromHtml("</h1><br/><br/>");
-            preview += Html.fromHtml("<h1>") +  "Descripción      Precio      Cantidad     Total" + Html.fromHtml("</h1></center><br/>");
+            preview += Html.fromHtml("<h1>") +  "Descripcion " + Html.fromHtml("</h1></center><br/>");
+            preview += Html.fromHtml("<h1>") +  "Precio         Cantidad          Total" + Html.fromHtml("</h1></center><br/>");
             preview += Html.fromHtml("<h1>") +  "------------------------------------------------" + Html.fromHtml("</h1></center><br/>");
             preview += Html.fromHtml("<h1>") +   salesCredit + Html.fromHtml("</h1></center><br/>");
    //         preview += Html.fromHtml("<h1>") +  "#     Total " + Functions.doubleToString1(printSalesCashTotal) + Html.fromHtml("</h1><br/><br/><br/>");
@@ -974,6 +990,8 @@ public class PrinterFunctions {
                     "#     Factura           Fecha         Monto\r\n" +
                     "------------------------------------------------\r\n" +
                     "! U1 SETLP 7 0 10\r\n" +
+                    "\r\n" +
+                    "\r\n" +
                     salesCredit +
                     "\r\n" +
                     "\r\n" +
@@ -1216,9 +1234,8 @@ public class PrinterFunctions {
 
                 double factTotal = Double.parseDouble(salesList1.get(i).getTotal());
 
-                String total = String.format("%,.2f",factTotal);
 
-                send += String.format("%-5s      %.20s      %-6s", factNum, factFecha, total) + "\r\n";
+                send += String.format("%-5s      %.20s      %-6s", factNum, factFecha, Functions.doubleToString1(factTotal)) + "\r\n";
                 printSalesCashTotal = printSalesCashTotal + factTotal;
 
                 Log.d("FACTPRODTODFACSI", send + "");
@@ -1260,7 +1277,9 @@ public class PrinterFunctions {
                         Productos productoList1 = realm.where(Productos.class).equalTo("id", idPivot).findFirst();
                         String descripcion = productoList1.getDescription();
 
-                        send += String.format("%-5s  %.20s  %.20s  %-6s", descripcion, precioPivot, cantidadPivot, Functions.doubleToString1(cantidadPivot * precioPivot)) + "\r\n";
+                    send += String.format("%.60s", descripcion) + "\r\n" +
+                            String.format("%-14s   %-12s    %.10s", precioPivot, cantidadPivot, Functions.doubleToString1(cantidadPivot * precioPivot)) + "\r\n";
+                    send += "------------------------------------------------\r\n";
 
                   /*  }*/
                 }
