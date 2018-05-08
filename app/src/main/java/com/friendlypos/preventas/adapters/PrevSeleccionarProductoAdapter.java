@@ -175,11 +175,6 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
 
         final TextView txtBonificacion = (TextView) promptView.findViewById(R.id.txtBonificacion);
 
-
-        final TextView textView2 = (TextView) promptView.findViewById(R.id.textView2);
-        textView2.setText(bonusProducto);
-
-
         final Spinner spPrices = (Spinner) promptView.findViewById(R.id.spPrices);
         ArrayList<Double> pricesList = new ArrayList<>();
         Double precio1 = Double.valueOf(Precio1);

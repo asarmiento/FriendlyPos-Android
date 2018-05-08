@@ -360,7 +360,6 @@ public class PrinterFunctions {
                 String typeId = producto.getProduct_type_id();
                 String nombreTipo = null;
 
-
                 double cant = Double.parseDouble(salesList1.get(i).getAmount());
                 double precio = Double.parseDouble(salesList1.get(i).getPrice());
 
@@ -500,8 +499,9 @@ public class PrinterFunctions {
                     "# Telefono: " + telefonoCliente + "\r\n" +*/
                     "! U1 LMARGIN 0\r\n" +
                     "! U1 SETSP 0\r\n" +
-                    "#  Descripcion               Codigo\r\n" +
-                    "Cant     Precio       P.Sug        Total      I\r\n" +
+                    "Descripcion           Codigo\r\n" +
+                    "Cantidad      Precio       P.Sug       Total\r\n" +
+                    "Tipo     \r\n" +
                     "------------------------------------------------\r\n" +
                     "! U1 SETLP 7 0 10\r\n" +
 
@@ -562,8 +562,9 @@ public class PrinterFunctions {
                     preview += Html.fromHtml("<h1>") + "A nombre de: " + nombreCliente + Html.fromHtml("</h1></center><br/><br/>");
                     preview += Html.fromHtml("<h1>") +  "Nombre fantasia: " + fantasyCliente + Html.fromHtml("</h1></center><br/><br/>");
                     preview += Html.fromHtml("<h1>") +  "# Telefono: " + telefonoCliente + Html.fromHtml("</h1></center><br/><br/><br/>");*/
-                    preview += Html.fromHtml("<h1>") +  "#  Descripcion               Codigo" + Html.fromHtml("</h1></center><br/>");
-                    preview += Html.fromHtml("<h1>") +  "Cant     Precio       P.Sug        Total      I" + Html.fromHtml("</h1></center><br/>");
+                    preview += Html.fromHtml("<h1>") +  "Descripcion           Codigo" + Html.fromHtml("</h1></center><br/>");
+                    preview += Html.fromHtml("<h1>") +   "Cantidad      Precio       P.Sug       Total" + Html.fromHtml("</h1></center><br/>");
+                    preview += Html.fromHtml("<h1>") +   "Tipo " + Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>") +  "------------------------------------------------" + Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>") +    getPrintPrevTotal(sale.getInvoice_id()) + Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>") +  String.format("%20s %-20s", "Subtotal Gravado", totalGrabado) + Html.fromHtml("</h1></center><br/>");
@@ -679,7 +680,7 @@ public class PrinterFunctions {
         String currentDateandTime = sdf.format(new Date());
 
         Realm realm = Realm.getDefaultInstance();
-        RealmResults<Pivot> result = realm.where(Pivot.class).equalTo("invoice_id", idVenta).findAll();
+        RealmResults<Pivot> result = realm.where(Pivot.class).equalTo("invoice_id", idVenta).equalTo("devuelvo", 0).findAll();
 
         if (result.isEmpty()) {
             send = "No hay invoice emitidas";
@@ -693,7 +694,7 @@ public class PrinterFunctions {
                 //    Clientes clientes = realm.where(Clientes.class).equalTo("id", ventas.getCustomer_id()).findFirst();
 
 
-
+                double precioSugerido = Double.parseDouble(producto.getSuggested());
                 String description = producto.getDescription();
                 byte[] byteText = description.getBytes(Charset.forName("UTF-8"));
 //To get original string from byte.
@@ -706,31 +707,32 @@ public class PrinterFunctions {
                 String barcode = producto.getBarcode();
                 String typeId = producto.getProduct_type_id();
                 String nombreTipo = null;
-                if (typeId.equals("1")){
-                    nombreTipo = "Gravado";
-                }
-                else if (typeId.equals("2")){
-                    nombreTipo = "Exento";
 
-                }
                 double cant = Double.parseDouble(salesList1.get(i).getAmount());
                 double precio = Double.parseDouble(salesList1.get(i).getPrice());
 
+                double sugerido=0.0;
 
-                String total = String.valueOf(cant * precio);
-                Log.d("r", total + "");
-                String total2 = String.format("%,.2f", cant * precio);
-                Log.d("r", total2 + "");
-                //String total3 = String.format("%.,2f", cant * precio);
-                //  Log.d("r", total3 + "");
-                String total4 = String.format(Locale.FRANCE, "%1$,.2f", cant * precio);
-                Log.d("r", total4 + "");
-              /*  String factFecha = salesList1.get(i).getDate();
-                double factTotal = Functions.sGetDecimalStringAnyLocaleAsDouble(salesList1.get(i).getTotal());*/
+                // gravado Sugerido =( (preciode venta/1.13)*(suggested /100) )+ (preciode venta* 0.13)+(preciode venta/1.13);
+                // en caso de exento Sugerido =( (preciode venta)*(suggested /100)) + (preciode venta);
+
+                if (typeId.equals("1")){
+                    nombreTipo = "Gravado";
+                    sugerido = (precio/1.13)*(precioSugerido /100) + (precio * 0.13)+(precio/1.13);
+                }
+                else if (typeId.equals("2")){
+                    nombreTipo = "Exento";
+                    sugerido = (precio)*(precioSugerido /100) + (precio);
+                }
 
                 send += String.format("%s  %.24s ", description1, barcode) + "\r\n" +
-                        String.format("%-5s %-10s %-15s %-12s %.1s", cant /*bill.amount*/, precio, precio, Functions.doubleToString1(cant * precio), nombreTipo) + "\r\n";
+                        String.format("%-12s %-10s %-12s %.10s", cant, Functions.doubleToString1(precio), Functions.doubleToString1(sugerido),Functions.doubleToString1(cant * precio)) + "\r\n" +
+                        String.format("%.10s", nombreTipo) + "\r\n";
                 send += "------------------------------------------------\r\n";
+
+             /*   send += String.format("%s  %.24s ", description1, barcode) + "\r\n" +
+                        String.format("%-5s %-10s %-15s %-12s %.1s", cant /*bill.amount, precio, precio, Functions.doubleToString1(cant * precio), nombreTipo) + "\r\n";
+                send += "------------------------------------------------\r\n";*/
                 Log.d("FACTPRODTODFAC", send + "");
             }
         }

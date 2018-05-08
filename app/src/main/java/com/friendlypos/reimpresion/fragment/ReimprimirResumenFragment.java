@@ -2,6 +2,7 @@ package com.friendlypos.reimpresion.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +26,8 @@ import com.friendlypos.reimpresion.activity.ReimprimirActivity;
 
 import org.sufficientlysecure.htmltextview.HtmlTextView;
 
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 import java.util.List;
 
 import butterknife.Bind;
@@ -178,8 +181,13 @@ public class ReimprimirResumenFragment extends BaseFragment {
                 preview += "<a><b>ID Cliente:</b> " + cardCliente + "</a><br>";
                 preview += "<a><b>Cliente:</b> " + companyCliente + "</a><br>";
                 preview += "<a><b>A nombre de:</b> " + nombreCliente + "</a><br><br>";
-                preview += "<a><b>" + padRight("Descripcion", 10) + "\t\t" + padRight("Codigo", 10) + padRight("Desc.", 10) + "</b></a><br>";
-                preview += "<a><b>I\t" + padRight("Cantidad", 10) + padRight("Precio", 10) + padRight("Total", 10) + "</b></a><br>";
+             /*   preview += Html.fromHtml("<h1>") +  "Descripcion           Codigo" + Html.fromHtml("</h1></center><br/>");
+                preview += Html.fromHtml("<h1>") +   "Cantidad      Precio       P.Sug       Total" + Html.fromHtml("</h1></center><br/>");
+                preview += Html.fromHtml("<h1>") +   "Tipo " + Html.fromHtml("</h1></center><br/>");
+*/
+                preview += "<a><b>" + padRight("Descripcion", 10) + "\t\t" + padRight("Codigo", 10) + "</b></a><br>";
+                preview += "<a><b>" + padRight("Cantidad", 10) + padRight("Precio", 10) + padRight("P.Sug", 10) + padRight("Total", 10)+ "</b></a><br>";
+                preview += "<a><b>" + padRight("Tipo", 10)+"</b></a><br>";
                 preview += "<a>------------------------------------------------<a><br>";
 
                 preview += getPrintDistTotal(sale_actualizada.getInvoice_id());
@@ -244,18 +252,47 @@ public class ReimprimirResumenFragment extends BaseFragment {
                 List<Pivot> salesList1 = realm1.where(Pivot.class).equalTo("invoice_id", idVenta).equalTo("devuelvo", 0).findAll();
                 Productos producto = realm1.where(Productos.class).equalTo("id", salesList1.get(i).getProduct_id()).findFirst();
 
+                double precioSugerido = Double.parseDouble(producto.getSuggested());
                 String description = producto.getDescription();
+                byte[] byteText = description.getBytes(Charset.forName("UTF-8"));
+                String description1 = null;
+                try {
+                    description1 = new String(byteText, "UTF-8");
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
                 String barcode = producto.getBarcode();
                 String typeId = producto.getProduct_type_id();
+                String nombreTipo = null;
+
                 double cant = Double.parseDouble(salesList1.get(i).getAmount());
                 double precio = Double.parseDouble(salesList1.get(i).getPrice());
 
+                double sugerido=0.0;
+
+                // gravado Sugerido =( (preciode venta/1.13)*(suggested /100) )+ (preciode venta* 0.13)+(preciode venta/1.13);
+                // en caso de exento Sugerido =( (preciode venta)*(suggested /100)) + (preciode venta);
+
+                if (typeId.equals("1")){
+                    nombreTipo = "Gravado";
+                    sugerido = (precio/1.13)*(precioSugerido /100) + (precio * 0.13)+(precio/1.13);
+                }
+                else if (typeId.equals("2")){
+                    nombreTipo = "Exento";
+                    sugerido = (precio)*(precioSugerido /100) + (precio);
+                }
+
               /*  String factFecha = salesList1.get(i).getDate();
                 double factTotal = Functions.sGetDecimalStringAnyLocaleAsDouble(salesList1.get(i).getTotal());*/
-
-                send += String.format("%s  %.24s ", description, barcode) + "<br>" +
-                    String.format("%-5s %-10s %-10s %-15s %.1s", cant /*bill.amount*/, precio, precio, Functions.doubleToString(cant * precio), typeId) + "<br>";
+                send += String.format("%s  %.24s ", description1, barcode) + "<br>" +
+                        String.format("%-12s %-10s %-12s %.10s", cant, Functions.doubleToString1(precio), Functions.doubleToString1(sugerido),Functions.doubleToString1(cant * precio)) + "<br>" +
+                        String.format("%.10s", nombreTipo) + "<br>";
                 send += "<a>------------------------------------------------<a><br>";
+
+
+              /*  send += String.format("%s  %.24s ", description, barcode) + "<br>" +
+                    String.format("%-5s %-10s %-10s %-15s %.1s", cant /*bill.amount, precio, precio, Functions.doubleToString(cant * precio), typeId) + "<br>";
+                send += "<a>------------------------------------------------<a><br>";*/
                 Log.d("FACTPRODTODFAC", send + "");
 
             }

@@ -83,12 +83,5 @@
         android:layout_below="@+id/promtCtext"
         android:layout_alignStart="@+id/promtCtext" />
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/txtNombreProducto"
-        android:layout_alignParentStart="true"
-        android:text="TextView" />
 
 </RelativeLayout>
