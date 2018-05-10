@@ -373,7 +373,9 @@ public class PrinterFunctions {
 
                 if (typeId.equals("1")){
                     nombreTipo = "Gravado";
-                    sugerido = (precio/1.13)*(precioSugerido /100) + (precio * 0.13)+(precio/1.13);
+                    sugerido = (precio/1.13)
+
+                            *(precioSugerido /100) + (precio * 0.13)+(precio/1.13);
                 }
                 else if (typeId.equals("2")){
                     nombreTipo = "Exento";
