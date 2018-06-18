@@ -16,6 +16,7 @@ import com.friendlypos.app.broadcastreceiver.BluetoothStateChangeReceiver;
 import com.friendlypos.application.util.Functions;
 import com.friendlypos.application.util.PrinterFunctions;
 import com.friendlypos.distribucion.activity.DistribucionActivity;
+import com.friendlypos.distribucion.modelo.Pivot;
 import com.friendlypos.distribucion.modelo.invoice;
 import com.friendlypos.distribucion.modelo.sale;
 import com.friendlypos.distribucion.util.GPSTracker;
@@ -23,6 +24,7 @@ import com.friendlypos.login.modelo.Usuarios;
 import com.friendlypos.login.util.SessionPrefes;
 
 import io.realm.Realm;
+import io.realm.RealmResults;
 
 import static io.realm.internal.SyncObjectServerFacade.getApplicationContext;
 
@@ -313,6 +315,13 @@ public class DistTotalizarFragment extends BaseFragment  {
 
                 realm2.insertOrUpdate(factura_actualizada);
                 realm2.close();
+
+
+                Log.d("FACTURANUEVA", factura_actualizada + "");
+                Realm realm5 = Realm.getDefaultInstance();
+                RealmResults<Pivot> result = realm.where(Pivot.class).equalTo("invoice_id", facturaId)/*.equalTo("devuelvo", 0)*/.findAll();
+                Log.d("FACTURANUEVA", result + "");
+              //  Pivot pivot  = realm5.where(Pivot.class).equalTo("invoice_id", facturaId).findAll();
             }
         });
     }
