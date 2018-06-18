@@ -13,8 +13,8 @@
         android:textSize="16sp"
         android:textColor="#000000"
         android:text="Seleccione"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/promtCtext"/>
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
 
 
     <RadioGroup
@@ -37,4 +37,28 @@
             android:text="Solo visitado"
             android:id="@+id/visitadoBillVisitado"/>
     </RadioGroup>
+
+    <TextView
+        android:id="@+id/textoObservaciones"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Observaciones:"
+        android:textSize="16sp"
+        android:textColor="#000000"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/rgTipoVisitado"
+        android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:id="@+id/txtObservaciones"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:textSize="14sp"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/textoObservaciones"
+        android:layout_centerHorizontal="true" />
+
+
 </RelativeLayout>

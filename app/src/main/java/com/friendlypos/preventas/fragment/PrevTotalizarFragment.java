@@ -26,7 +26,7 @@ import com.friendlypos.distribucion.util.GPSTracker;
 import com.friendlypos.login.modelo.Usuarios;
 import com.friendlypos.login.util.SessionPrefes;
 import com.friendlypos.preventas.activity.PreventaActivity;
-import com.friendlypos.preventas.modelo.ClienteVisitado;
+import com.friendlypos.preventas.modelo.visit;
 import com.friendlypos.preventas.modelo.invoiceDetallePreventa;
 
 import io.realm.Realm;
@@ -46,7 +46,7 @@ public class PrevTotalizarFragment extends BaseFragment {
 
 
     private static EditText notes;
-    private static EditText client_name;
+    private static EditText client_name, txtObservaciones;
     private static EditText paid;
 
     double totalGrabado = 0.0;
@@ -119,6 +119,7 @@ public class PrevTotalizarFragment extends BaseFragment {
 
 
         client_name = (EditText) rootView.findViewById(R.id.client_name);
+        txtObservaciones = (EditText) rootView.findViewById(R.id.txtObservaciones);
 
         subExe = (TextView) rootView.findViewById(R.id.subExento);
         subGra = (TextView) rootView.findViewById(R.id.subGrabado);
@@ -453,10 +454,17 @@ public class PrevTotalizarFragment extends BaseFragment {
     }
 
     protected void actualizarClienteVisitado() {
+
+        Realm realm = Realm.getDefaultInstance();
+        usuer = session.getUsuarioPrefs();
+        Usuarios usuarios = realm.where(Usuarios.class).equalTo("email", usuer).findFirst();
+        String idUsuario = usuarios.getId();
+        realm.close();
+
         final Realm realm5 = Realm.getDefaultInstance();
 
         realm5.beginTransaction();
-        Number currentIdNum = realm5.where(ClienteVisitado.class).max("id");
+        Number currentIdNum = realm5.where(visit.class).max("id");
 
         if (currentIdNum == null) {
             nextId = 1;
@@ -465,12 +473,17 @@ public class PrevTotalizarFragment extends BaseFragment {
             nextId = currentIdNum.intValue() + 1;
         }
 
-        ClienteVisitado visitadonuevo = new ClienteVisitado();
+
+        visit visitadonuevo = new visit();
+
         visitadonuevo.setId(nextId);
-        visitadonuevo.setId_invoice(facturaId);
-        visitadonuevo.setPedido(seleccion);
+        visitadonuevo.setCustomer_id(facturaId);
+        visitadonuevo.setVisit(seleccion);
+        visitadonuevo.setDate(Functions.getDate() + " " + Functions.get24Time());
+        visitadonuevo.setObservation(txtObservaciones.getText().toString());
         visitadonuevo.setLongitud(longitude);
         visitadonuevo.setLatitud(latitude);
+        visitadonuevo.setUser_id(idUsuario);
 
         realm5.copyToRealmOrUpdate(visitadonuevo);
         realm5.commitTransaction();

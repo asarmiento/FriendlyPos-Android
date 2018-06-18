@@ -40,6 +40,7 @@ import com.friendlypos.login.modelo.Usuarios;
 import com.friendlypos.login.util.Properties;
 import com.friendlypos.login.util.SessionPrefes;
 import com.friendlypos.preventas.activity.PreventaActivity;
+import com.friendlypos.preventas.modelo.visit;
 import com.friendlypos.principal.fragment.ConfiguracionFragment;
 import com.friendlypos.principal.helpers.DescargasHelper;
 import com.friendlypos.principal.helpers.SubirHelper;
@@ -433,6 +434,40 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                 Toast.makeText(MenuPrincipal.this, "subir_Pedidos", Toast.LENGTH_SHORT).show();
 
                 break;
+
+            case R.id.btn_subir_clienteVisitados:
+
+                Realm realmClienteVisitados = Realm.getDefaultInstance();
+
+                RealmQuery<visit> queryClienteVisitados = realmClienteVisitados.where(visit.class);
+                final RealmResults<visit> invoiceVisits = queryClienteVisitados.findAll();
+                Log.d("qweqweq", invoiceVisits.toString());
+                List<visit> listaVisits = realmClienteVisitados.copyFromRealm(invoiceVisits);
+                Log.d("qweqweq1", listaVisits + "");
+                realmClienteVisitados.close();
+
+                if(listaVisits.size()== 0){
+                    Toast.makeText(MenuPrincipal.this,"No hay facturas para subir", Toast.LENGTH_LONG).show();
+                }else {
+
+                    for (int i = 0; i < listaVisits.size(); i++) {
+                        Toast.makeText(MenuPrincipal.this, "hay", Toast.LENGTH_SHORT).show();
+
+                     /*   facturaId = String.valueOf(listaClienteVisitados.get(i).getId());
+                        Log.d("facturaId", facturaId + "");
+                        EnviarFactura obj = new EnviarFactura(listaFacturasPedidos.get(i));
+                        Log.d("My App", obj + "");
+                        subirPreventa.sendPostPreventa(obj);
+
+                        actualizarVenta();
+                        actualizarFactura();*/
+                    }
+                }
+
+                Toast.makeText(MenuPrincipal.this, "subir_clienteVisitados", Toast.LENGTH_SHORT).show();
+
+                break;
+
 
             case R.id.btn_devolver_inventario:
                 Toast.makeText(MenuPrincipal.this, "devolver_inventario", Toast.LENGTH_SHORT).show();

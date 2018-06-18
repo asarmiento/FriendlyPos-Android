@@ -12,6 +12,8 @@ import com.friendlypos.login.modelo.User;
 import com.friendlypos.login.modelo.UserResponse;
 import com.friendlypos.login.modelo.UsuariosResponse;
 import com.friendlypos.preventas.modelo.BonusesResponse;
+import com.friendlypos.preventas.modelo.visit;
+import com.friendlypos.preventas.modelo.EnviarClienteVisitado;
 import com.friendlypos.preventas.modelo.NumeracionResponse;
 import com.friendlypos.principal.modelo.ClientesResponse;
 import com.friendlypos.principal.modelo.ProductosResponse;
@@ -68,5 +70,9 @@ public interface RequestInterface {
     // TODO DEFINIR CUAL ES EL KEY PARA ENVIAR (KEY, VALUE)
     @POST("/api/upload-orders-presale")
     Call<invoice> savePostPreventa(@Body EnviarFactura invoice, @Header("Authorization") String token);
+
+    // TODO DEFINIR CUAL ES EL KEY PARA ENVIAR (KEY, VALUE)
+    @POST("/api/upload-visit")
+    Call<visit> savePostClienteVisitado(@Body EnviarClienteVisitado clienteVisitado, @Header("Authorization") String token);
 
 }

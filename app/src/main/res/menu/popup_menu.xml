@@ -24,6 +24,11 @@
         android:title="Subir Pedidos"/>
 
     <item
+        android:id="@+id/btn_subir_clienteVisitados"
+        android:icon="@mipmap/ic_config"
+        android:title="Subir Clientes Visitados"/>
+
+    <item
         android:id="@+id/btn_devolver_inventario"
         android:icon="@mipmap/ic_config"
         android:title="Devolver Inventario" />
