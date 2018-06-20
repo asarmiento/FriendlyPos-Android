@@ -119,7 +119,7 @@ public class PrevTotalizarFragment extends BaseFragment {
 
 
         client_name = (EditText) rootView.findViewById(R.id.client_name);
-        txtObservaciones = (EditText) rootView.findViewById(R.id.txtObservaciones);
+
 
         subExe = (TextView) rootView.findViewById(R.id.subExento);
         subGra = (TextView) rootView.findViewById(R.id.subGrabado);
@@ -314,7 +314,7 @@ public class PrevTotalizarFragment extends BaseFragment {
         alertDialogBuilder.setView(promptView);
         final RadioButton rbcomprado = (RadioButton) promptView.findViewById(R.id.compradoBillVisitado);
         final RadioButton rbvisitado = (RadioButton) promptView.findViewById(R.id.visitadoBillVisitado);
-
+        txtObservaciones = (EditText) promptView.findViewById(R.id.txtObservaciones);
 
         alertDialogBuilder
             .setCancelable(false)
@@ -459,6 +459,11 @@ public class PrevTotalizarFragment extends BaseFragment {
         usuer = session.getUsuarioPrefs();
         Usuarios usuarios = realm.where(Usuarios.class).equalTo("email", usuer).findFirst();
         String idUsuario = usuarios.getId();
+
+        sale sale = realm.where(sale.class).equalTo("invoice_id", facturaId).findFirst();
+        String clienteid = sale.getCustomer_id();
+        Log.d("ClienteVisitadoFact", facturaId + "");
+        Log.d("ClienteVisitadoClient", clienteid + "");
         realm.close();
 
         final Realm realm5 = Realm.getDefaultInstance();
@@ -477,13 +482,15 @@ public class PrevTotalizarFragment extends BaseFragment {
         visit visitadonuevo = new visit();
 
         visitadonuevo.setId(nextId);
-        visitadonuevo.setCustomer_id(facturaId);
+        visitadonuevo.setCustomer_id(clienteid);
         visitadonuevo.setVisit(seleccion);
-        visitadonuevo.setDate(Functions.getDate() + " " + Functions.get24Time());
         visitadonuevo.setObservation(txtObservaciones.getText().toString());
+        visitadonuevo.setDate(Functions.getDate());
         visitadonuevo.setLongitud(longitude);
         visitadonuevo.setLatitud(latitude);
         visitadonuevo.setUser_id(idUsuario);
+        visitadonuevo.setSubida(1);
+
 
         realm5.copyToRealmOrUpdate(visitadonuevo);
         realm5.commitTransaction();

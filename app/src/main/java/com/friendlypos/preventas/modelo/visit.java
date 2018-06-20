@@ -22,12 +22,13 @@ public class visit extends RealmObject {
     int id;
     String customer_id;
     String visit;
-    String date;
     String observation;
+    String date;
     double longitud;
     double latitud;
     String user_id;
 
+    private int subida = 0;
 
     public int getId() {
         return id;
@@ -53,20 +54,20 @@ public class visit extends RealmObject {
         this.visit = visit;
     }
 
-    public String getDate() {
-        return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
-    }
-
     public String getObservation() {
         return observation;
     }
 
     public void setObservation(String observation) {
         this.observation = observation;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public double getLongitud() {
@@ -93,17 +94,26 @@ public class visit extends RealmObject {
         this.user_id = user_id;
     }
 
+    public int getSubida() {
+        return subida;
+    }
+
+    public void setSubida(int subida) {
+        this.subida = subida;
+    }
+
     @Override
     public String toString() {
         return "visit{" +
                 "id=" + id +
                 ", customer_id='" + customer_id + '\'' +
                 ", visit='" + visit + '\'' +
-                ", date='" + date + '\'' +
                 ", observation='" + observation + '\'' +
+                ", date='" + date + '\'' +
                 ", longitud=" + longitud +
                 ", latitud=" + latitud +
                 ", user_id='" + user_id + '\'' +
+                ", subida='" + subida + '\'' +
                 '}';
     }
 }

@@ -3,13 +3,16 @@ package com.friendlypos.principal.helpers;
 import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.friendlypos.app.broadcastreceiver.NetworkStateChangeReceiver;
 import com.friendlypos.application.datamanager.BaseManager;
 import com.friendlypos.application.interfaces.RequestInterface;
+import com.friendlypos.login.modelo.UserError;
 import com.friendlypos.login.util.SessionPrefes;
 import com.friendlypos.preventas.modelo.visit;
 import com.friendlypos.preventas.modelo.EnviarClienteVisitado;
+import com.friendlypos.principal.activity.MenuPrincipal;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -47,6 +50,13 @@ public class SubirHelperClienteVisitado {
                 if(response.isSuccessful()) {
                    // showResponse(response.body().toString());
                     Log.d("respClienteVisitado",response.body().toString());
+
+                    if (response.code() == 200) {
+                        Log.d("respClViMens",  "OK");
+                        Toast.makeText(mContext, "Se subio con exito", Toast.LENGTH_SHORT).show();
+                    }else{
+                        Log.d("respClViMens",  "ERROR");
+                    }
                 }
             }
 

@@ -40,10 +40,12 @@ import com.friendlypos.login.modelo.Usuarios;
 import com.friendlypos.login.util.Properties;
 import com.friendlypos.login.util.SessionPrefes;
 import com.friendlypos.preventas.activity.PreventaActivity;
+import com.friendlypos.preventas.modelo.EnviarClienteVisitado;
 import com.friendlypos.preventas.modelo.visit;
 import com.friendlypos.principal.fragment.ConfiguracionFragment;
 import com.friendlypos.principal.helpers.DescargasHelper;
 import com.friendlypos.principal.helpers.SubirHelper;
+import com.friendlypos.principal.helpers.SubirHelperClienteVisitado;
 import com.friendlypos.principal.helpers.SubirHelperPreventa;
 import com.friendlypos.reimpresion.activity.ReimprimirActivity;
 import com.friendlypos.reimpresion_pedidos.activity.ReimprimirPedidosActivity;
@@ -103,9 +105,11 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
     DescargasHelper download1;
     SubirHelper subir1;
     SubirHelperPreventa subirPreventa;
+    SubirHelperClienteVisitado subirClienteVisitado;
     String usuer;
     String idUsuario;
     String facturaId;
+    int facturaIdCV;
     private Properties properties;
     private int descargaDatosEmpresa;
     private int cambioDatosEmpresa = 0;
@@ -125,6 +129,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
         download1 = new DescargasHelper(MenuPrincipal.this);
         subir1 = new SubirHelper(MenuPrincipal.this);
         subirPreventa = new SubirHelperPreventa(MenuPrincipal.this);
+        subirClienteVisitado = new SubirHelperClienteVisitado(MenuPrincipal.this);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
             this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -439,7 +444,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
 
                 Realm realmClienteVisitados = Realm.getDefaultInstance();
 
-                RealmQuery<visit> queryClienteVisitados = realmClienteVisitados.where(visit.class);
+                RealmQuery<visit> queryClienteVisitados = realmClienteVisitados.where(visit.class).equalTo("subida", 1);
                 final RealmResults<visit> invoiceVisits = queryClienteVisitados.findAll();
                 Log.d("qweqweq", invoiceVisits.toString());
                 List<visit> listaVisits = realmClienteVisitados.copyFromRealm(invoiceVisits);
@@ -453,14 +458,13 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                     for (int i = 0; i < listaVisits.size(); i++) {
                         Toast.makeText(MenuPrincipal.this, "hay", Toast.LENGTH_SHORT).show();
 
-                     /*   facturaId = String.valueOf(listaClienteVisitados.get(i).getId());
-                        Log.d("facturaId", facturaId + "");
-                        EnviarFactura obj = new EnviarFactura(listaFacturasPedidos.get(i));
+                        facturaIdCV = listaVisits.get(i).getId();
+                        Log.d("facturaIdCV", facturaIdCV + "");
+                        EnviarClienteVisitado obj = new EnviarClienteVisitado(listaVisits.get(i));
                         Log.d("My App", obj + "");
-                        subirPreventa.sendPostPreventa(obj);
+                        subirClienteVisitado.sendPostClienteVisitado(obj);
 
-                        actualizarVenta();
-                        actualizarFactura();*/
+                        actualizarClienteVisitado();
                     }
                 }
 
@@ -546,6 +550,32 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                 public void execute(Realm realm) {
 
                     sale sale_actualizada = realm3.where(sale.class).equalTo("id", facturaId).findFirst();
+                    sale_actualizada.setSubida(0);
+                    realm3.insertOrUpdate(sale_actualizada);
+
+                }
+
+            });
+
+        } catch (Exception e) {
+            Log.e("error", "error", e);
+            Toast.makeText(MenuPrincipal.this,"error", Toast.LENGTH_SHORT).show();
+
+        }
+        realm3.close();
+    }
+
+    protected void actualizarClienteVisitado() {
+
+        // TRANSACCION PARA ACTUALIZAR CAMPOS DE LA TABLA VENTAS
+        final Realm realm3 = Realm.getDefaultInstance();
+
+        try {
+            realm3.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+
+                    visit sale_actualizada = realm3.where(visit.class).equalTo("id", facturaIdCV).findFirst();
                     sale_actualizada.setSubida(0);
                     realm3.insertOrUpdate(sale_actualizada);
 
