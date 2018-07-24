@@ -42,12 +42,12 @@ public class PrevTotalizarFragment extends BaseFragment {
     private static TextView ivaSub;
     private static TextView discount;
     private static TextView Total;
-    private static TextView change;
+   // private static TextView change;
 
 
     private static EditText notes;
-    private static EditText client_name, txtObservaciones;
-    private static EditText paid;
+    private static EditText client_name;
+   // private static EditText paid;
 
     double totalGrabado = 0.0;
     double totalExento = 0.0;
@@ -55,10 +55,6 @@ public class PrevTotalizarFragment extends BaseFragment {
     double totalDescuento = 0.0;
     double totalImpuesto = 0.0;
     double totalTotal = 0.0;
-    String totalVuelvo = "0";
-    String totalPagoCon = "0";
-    static double pagoCon = 0.0;
-    static double vuelto = 0.0;
     String facturaId;
     String usuer;
     SessionPrefes session;
@@ -76,7 +72,6 @@ public class PrevTotalizarFragment extends BaseFragment {
     GPSTracker gps;
     BluetoothStateChangeReceiver bluetoothStateChangeReceiver;
 
-    String seleccion;
 
     @Override
     public void onAttach(Activity activity) {
@@ -128,12 +123,12 @@ public class PrevTotalizarFragment extends BaseFragment {
         discount = (TextView) rootView.findViewById(R.id.Discount);
         Total = (TextView) rootView.findViewById(R.id.Total);
 
-        paid = (EditText) rootView.findViewById(R.id.txtPaid);
+      //  paid = (EditText) rootView.findViewById(R.id.txtPaid);
 
-        change = (TextView) rootView.findViewById(R.id.txtChange);
-        slecTAB = ((PreventaActivity) getActivity()).getSelecClienteTabPreventa();
+     //   change = (TextView) rootView.findViewById(R.id.txtChange);
 
-        if (slecTAB == 1) {
+            slecTAB = ((PreventaActivity) getActivity()).getSelecClienteTabPreventa();
+ if (slecTAB == 1) {
 
             metodoPagoCliente = ((PreventaActivity) getActivity()).getMetodoPagoClientePreventa();
 
@@ -141,7 +136,7 @@ public class PrevTotalizarFragment extends BaseFragment {
             if (metodoPagoCliente.equals("1")) {
                 //bill_type = 1;
                 try {
-                    paid.setEnabled(true);
+                    Toast.makeText(getActivity(), "1", Toast.LENGTH_LONG).show();
 
                 }
                 catch (Exception e) {
@@ -150,8 +145,9 @@ public class PrevTotalizarFragment extends BaseFragment {
 
             }
             else if (metodoPagoCliente.equals("2")) {
+                Toast.makeText(getActivity(), "2", Toast.LENGTH_LONG).show();
                 //  bill_type = 2;
-                paid.setEnabled(false);
+            //    paid.setEnabled(false);
             }
         }
         else {
@@ -181,25 +177,26 @@ public class PrevTotalizarFragment extends BaseFragment {
                         // Log.d("total", String.valueOf(Functions.sGetDecimalStringAnyLocaleAsDouble(Total.getText().toString())));
 
                         if (metodoPagoCliente.equals("1")) {
-                            pagoCon = Double.parseDouble(paid.getText().toString());
+                          /*  pagoCon = Double.parseDouble(paid.getText().toString());
                             totalPagoCon = String.format("%,.2f", pagoCon);
                             double total = totalTotal;
 
                             if (pagoCon >= total) {
                                 vuelto = pagoCon - total;
-                                totalVuelvo = String.format("%,.2f", vuelto);
+                                totalVuelvo = String.format("%,.2f", vuelto);*/
 
                                 int tabCliente = 0;
                                 ((PreventaActivity) getActivity()).setSelecClienteTabPreventa(tabCliente);
 
-                                change.setText(totalVuelvo);
+                            /*    change.setText(totalVuelvo);*/
+                            Toast.makeText(getActivity(), "Contado", Toast.LENGTH_LONG).show();
                                 obtenerLocalización();
                                 aplicarFactura();
                             }
-                            else {
+                            /*else {
                                 Toast.makeText(getActivity(), "Digite una cantidad mayor al total", Toast.LENGTH_LONG).show();
-                            }
-                        }
+                            }*/
+
                         else if (metodoPagoCliente.equals("2")) {
                             Toast.makeText(getActivity(), "Crédito", Toast.LENGTH_LONG).show();
                             obtenerLocalización();
@@ -252,7 +249,7 @@ public class PrevTotalizarFragment extends BaseFragment {
     @Override
     public void updateData() {
         if (slecTAB == 1) {
-            paid.getText().clear();
+          //  paid.getText().clear();
 
             totalGrabado = ((PreventaActivity) getActivity()).getTotalizarSubGrabado();
             totalExento = ((PreventaActivity) getActivity()).getTotalizarSubExento();
@@ -305,52 +302,6 @@ public class PrevTotalizarFragment extends BaseFragment {
 
     }
 
-    public void alertVisitado() {
-
-        LayoutInflater layoutInflater = LayoutInflater.from(activity);
-        View promptView = layoutInflater.inflate(R.layout.promptvisitado_preventa, null);
-
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(activity);
-        alertDialogBuilder.setView(promptView);
-        final RadioButton rbcomprado = (RadioButton) promptView.findViewById(R.id.compradoBillVisitado);
-        final RadioButton rbvisitado = (RadioButton) promptView.findViewById(R.id.visitadoBillVisitado);
-        txtObservaciones = (EditText) promptView.findViewById(R.id.txtObservaciones);
-
-        alertDialogBuilder
-            .setCancelable(false)
-            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-
-                public void onClick(DialogInterface dialog, int id) {
-
-                    if (rbcomprado.isChecked()) {
-                        seleccion = "1";
-                    }
-
-                    else if (rbvisitado.isChecked()) {
-                        seleccion = "2";
-                    }
-
-                    actualizarClienteVisitado();
-
-                }
-
-
-            })
-            .setNegativeButton("Cancel",
-                new DialogInterface.OnClickListener() {
-
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
-
-
-        AlertDialog alertD = alertDialogBuilder.create();
-        alertD.show();
-
-    }
-
-
     public void actualizarFacturaDetalles() {
 
         Realm realm = Realm.getDefaultInstance();
@@ -370,10 +321,10 @@ public class PrevTotalizarFragment extends BaseFragment {
         invoiceDetallePreventa1.setP_tax(String.valueOf(totalImpuesto));
         invoiceDetallePreventa1.setP_total(String.valueOf(totalTotal));
 
-        invoiceDetallePreventa1.setP_changing(String.valueOf(vuelto));
+        invoiceDetallePreventa1.setP_changing("0");
         invoiceDetallePreventa1.setP_note(notes.getText().toString());
         invoiceDetallePreventa1.setP_canceled("1");
-        invoiceDetallePreventa1.setP_paid(String.valueOf(pagoCon));
+        invoiceDetallePreventa1.setP_paid("0");
         invoiceDetallePreventa1.setP_user_id(idUsuario);
         invoiceDetallePreventa1.setP_user_id_applied(idUsuario);
         invoiceDetallePreventa1.setP_sale(activity.getCurrentVenta());
@@ -402,7 +353,6 @@ public class PrevTotalizarFragment extends BaseFragment {
             @Override
             public void onSuccess() {
                 actualizarVenta();
-                alertVisitado();
 
             }
         }, new Realm.Transaction.OnError() {
@@ -453,54 +403,11 @@ public class PrevTotalizarFragment extends BaseFragment {
 
     }
 
-    protected void actualizarClienteVisitado() {
 
-        Realm realm = Realm.getDefaultInstance();
-        usuer = session.getUsuarioPrefs();
-        Usuarios usuarios = realm.where(Usuarios.class).equalTo("email", usuer).findFirst();
-        String idUsuario = usuarios.getId();
-
-        sale sale = realm.where(sale.class).equalTo("invoice_id", facturaId).findFirst();
-        String clienteid = sale.getCustomer_id();
-        Log.d("ClienteVisitadoFact", facturaId + "");
-        Log.d("ClienteVisitadoClient", clienteid + "");
-        realm.close();
-
-        final Realm realm5 = Realm.getDefaultInstance();
-
-        realm5.beginTransaction();
-        Number currentIdNum = realm5.where(visit.class).max("id");
-
-        if (currentIdNum == null) {
-            nextId = 1;
-        }
-        else {
-            nextId = currentIdNum.intValue() + 1;
-        }
-
-
-        visit visitadonuevo = new visit();
-
-        visitadonuevo.setId(nextId);
-        visitadonuevo.setCustomer_id(clienteid);
-        visitadonuevo.setVisit(seleccion);
-        visitadonuevo.setObservation(txtObservaciones.getText().toString());
-        visitadonuevo.setDate(Functions.getDate());
-        visitadonuevo.setLongitud(longitude);
-        visitadonuevo.setLatitud(latitude);
-        visitadonuevo.setUser_id(idUsuario);
-        visitadonuevo.setSubida(1);
-
-
-        realm5.copyToRealmOrUpdate(visitadonuevo);
-        realm5.commitTransaction();
-        Log.d("ClienteVisitado", visitadonuevo + "");
-        realm5.close();
-    }
 
 
     protected void aplicarFactura() {
-        paid.setEnabled(false);
+       // paid.setEnabled(false);
 
         actualizarFacturaDetalles();
        // actualizarVenta();
@@ -521,7 +428,7 @@ public class PrevTotalizarFragment extends BaseFragment {
         if (apply_done == 1) {
 
             apply_done = 0;
-            paid.getText().clear();
+           // paid.getText().clear();
         }
         try {
             System.gc();

@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,15 +21,21 @@ import com.friendlypos.application.util.Functions;
 import com.friendlypos.distribucion.modelo.Inventario;
 import com.friendlypos.distribucion.modelo.Pivot;
 import com.friendlypos.distribucion.modelo.invoice;
+import com.friendlypos.distribucion.modelo.sale;
+import com.friendlypos.login.modelo.Usuarios;
+import com.friendlypos.login.util.SessionPrefes;
 import com.friendlypos.preventas.activity.PreventaActivity;
 import com.friendlypos.preventas.modelo.Numeracion;
 import com.friendlypos.preventas.modelo.invoiceDetallePreventa;
+import com.friendlypos.preventas.modelo.visit;
 import com.friendlypos.principal.modelo.Clientes;
 
 import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
+
+import static io.realm.internal.SyncObjectServerFacade.getApplicationContext;
 
 public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapter.CharacterViewHolder> {
 
@@ -50,7 +57,10 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
     String fecha;
     String idCliente;
     String nombreCliente;
-    //  private RealmResults<InvoiceDetallePreventa> realmResultado;
+    String usuer;
+    SessionPrefes session;
+    private static EditText txtObservaciones;
+    String seleccion;
     invoiceDetallePreventa factura_nueva = new invoiceDetallePreventa();
 
     private static Double creditolimite = 0.0;
@@ -63,6 +73,7 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
         this.contentList = contentList;
         this.activity = activity;
         this.QuickContext = context;
+        session = new SessionPrefes(context);
     }
 
     @Override
@@ -74,7 +85,7 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
     }
 
     @Override
-    public void onBindViewHolder(PrevClientesAdapter.CharacterViewHolder holder, final int position) {
+    public void onBindViewHolder(final PrevClientesAdapter.CharacterViewHolder holder, final int position) {
         Clientes content = contentList.get(position);
 
         creditolimite = Double.parseDouble(content.getCreditLimit());
@@ -117,13 +128,15 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
                 final String creditoLimiteClienteP = clickedDataItem.getCreditLimit();
                 final String dueClienteP = clickedDataItem.getDue();
 
+
                 LayoutInflater layoutInflater = LayoutInflater.from(QuickContext);
-                View promptView = layoutInflater.inflate(R.layout.promptclient_preventa, null);
+                View promptView = layoutInflater.inflate(R.layout.promptvisitado_preventa, null);
 
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(QuickContext);
                 alertDialogBuilder.setView(promptView);
-                final RadioButton rbcontado = (RadioButton) promptView.findViewById(R.id.contadoBill);
-                final RadioButton rbcredito = (RadioButton) promptView.findViewById(R.id.creditBill);
+                final RadioButton rbcomprado = (RadioButton) promptView.findViewById(R.id.compradoBillVisitado);
+                final RadioButton rbvisitado = (RadioButton) promptView.findViewById(R.id.visitadoBillVisitado);
+                txtObservaciones = (EditText) promptView.findViewById(R.id.txtObservaciones);
 
                 alertDialogBuilder
                     .setCancelable(false)
@@ -131,25 +144,76 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
 
                         public void onClick(DialogInterface dialog, int id) {
                             fecha = Functions.getDate() + " " + Functions.get24Time();
-                            if (rbcredito.isChecked()) {
-                                if (creditoTime == 0) {
-                                    Functions.CreateMessage(QuickContext, " ", "Este cliente no cuenta con crédito");
-                                }
-                                else {
-                                    // TRANSACCIÓN PARA ACTUALIZAR EL CAMPO METODO DE PAGO CREDITO DE LA FACTURA
-                                    metodoPagoId = "2";
-                                 //   Functions.CreateMessage(QuickContext, " ", "Se cambio la factura a crédito" + metodoPagoId);
+
+
+                            if (!rbcomprado.isChecked() && !rbvisitado.isChecked()) {
+                                Functions.CreateMessage(QuickContext, " ", "Debe seleccionar una opción");
+
+                            } else {
+                                if (rbcomprado.isChecked()) {
+                                    seleccion = "1";
+                                    metodoPagoId = "1";
+                                    LayoutInflater layoutInflater = LayoutInflater.from(QuickContext);
+                                    View promptView = layoutInflater.inflate(R.layout.promptclient_preventa, null);
+
+                                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(QuickContext);
+                                    alertDialogBuilder.setView(promptView);
+                                    final RadioButton rbcontado = (RadioButton) promptView.findViewById(R.id.contadoBill);
+                                    final RadioButton rbcredito = (RadioButton) promptView.findViewById(R.id.creditBill);
+
+                                    alertDialogBuilder
+                                            .setCancelable(false)
+                                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+                                                public void onClick(DialogInterface dialog, int id) {
+
+                                                    fecha = Functions.getDate() + " " + Functions.get24Time();
+
+
+                                                    if(!rbcontado.isChecked() && !rbcredito.isChecked()){
+                                                        Functions.CreateMessage(QuickContext, " ", "Debe seleccionar una opción");
+
+                                                    }
+                                                    else {
+                                                        if (rbcredito.isChecked()) {
+                                                            if (creditoTime == 0) {
+                                                                Functions.CreateMessage(QuickContext, " ", "Este cliente no cuenta con crédito");
+                                                            } else {
+                                                                // TRANSACCIÓN PARA ACTUALIZAR EL CAMPO METODO DE PAGO CREDITO DE LA FACTURA
+                                                                metodoPagoId = "2";
+                                                                //   Functions.CreateMessage(QuickContext, " ", "Se cambio la factura a crédito" + metodoPagoId);
+                                                                notifyDataSetChanged();
+                                                                agregar();
+                                                            }
+                                                        } else if (rbcontado.isChecked()) {
+                                                            // TRANSACCIÓN PARA ACTUALIZAR EL CAMPO METODO DE PAGO CONTADO DE LA FACTURA
+                                                            metodoPagoId = "1";
+                                                            //Functions.CreateMessage(QuickContext, " ", "Se cambio la factura a contado" + metodoPagoId);
+                                                            notifyDataSetChanged();
+                                                            agregar();
+                                                        }
+                                                    }
+                                                }
+                                            })
+                                            .setNegativeButton("Cancel",
+                                            new DialogInterface.OnClickListener() {
+
+                                                public void onClick(DialogInterface dialog, int id) {
+                                                    dialog.cancel();
+                                                }
+                                            });
+
+
+                                    AlertDialog alertD = alertDialogBuilder.create();
+                                    alertD.show();
+
+
+                                } else if (rbvisitado.isChecked()) {
+                                    seleccion = "2";
+                                    metodoPagoId = "1";
                                     notifyDataSetChanged();
                                     agregar();
                                 }
-                            }
-                            else if (rbcontado.isChecked()) {
-                                // TRANSACCIÓN PARA ACTUALIZAR EL CAMPO METODO DE PAGO CONTADO DE LA FACTURA
-                                metodoPagoId = "1";
-                                //Functions.CreateMessage(QuickContext, " ", "Se cambio la factura a contado" + metodoPagoId);
-                                notifyDataSetChanged();
-                                agregar();
-                            }
 
                             tabCliente = 1;
                             activity.setSelecClienteTabPreventa(tabCliente);
@@ -175,7 +239,7 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
                                     progresRing.dismiss();
                                 }
                             }).start();
-                        }
+                        } }
                     })
                     .setNegativeButton("Cancel",
                         new DialogInterface.OnClickListener() {
@@ -196,7 +260,9 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
             }
         });
         if (selected_position == position) {
+
             holder.cardView.setBackgroundColor(Color.parseColor("#607d8b"));
+
         }
         else {
             holder.cardView.setBackgroundColor(Color.parseColor("#009688"));
@@ -204,7 +270,144 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
 
     }
 
+    public void alertVisitado() {
+
+        LayoutInflater layoutInflater = LayoutInflater.from(activity);
+        View promptView = layoutInflater.inflate(R.layout.promptvisitado_preventa, null);
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(activity);
+        alertDialogBuilder.setView(promptView);
+        final RadioButton rbcomprado = (RadioButton) promptView.findViewById(R.id.compradoBillVisitado);
+        final RadioButton rbvisitado = (RadioButton) promptView.findViewById(R.id.visitadoBillVisitado);
+        txtObservaciones = (EditText) promptView.findViewById(R.id.txtObservaciones);
+        alertDialogBuilder
+                .setCancelable(false)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int id) {
+
+                        if (rbcomprado.isChecked()) {
+                            seleccion = "1";
+                            alertTipoVenta();
+                        }
+                        else if (rbvisitado.isChecked()) {
+                            seleccion = "2";
+                        }
+
+                    }
+
+
+                })
+                .setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+
+        AlertDialog alertD = alertDialogBuilder.create();
+        alertD.show();
+
+    }
+
+    public void alertTipoVenta() {
+
+        LayoutInflater layoutInflater = LayoutInflater.from(activity);
+        View promptView = layoutInflater.inflate(R.layout.promptvisitado_preventa, null);
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(activity);
+        alertDialogBuilder.setView(promptView);
+        final RadioButton rbcomprado = (RadioButton) promptView.findViewById(R.id.compradoBillVisitado);
+        final RadioButton rbvisitado = (RadioButton) promptView.findViewById(R.id.visitadoBillVisitado);
+        txtObservaciones = (EditText) promptView.findViewById(R.id.txtObservaciones);
+
+        alertDialogBuilder
+                .setCancelable(false)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int id) {
+
+                        if (rbcomprado.isChecked()) {
+                            seleccion = "1";
+                        }
+
+                        else if (rbvisitado.isChecked()) {
+                            seleccion = "2";
+                        }
+
+                    }
+
+
+                })
+                .setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+
+        AlertDialog alertD = alertDialogBuilder.create();
+        alertD.show();
+
+    }
+
+ /*   protected void actualizarClienteVisitado() {
+
+        Realm realm = Realm.getDefaultInstance();
+        usuer = session.getUsuarioPrefs();
+        Usuarios usuarios = realm.where(Usuarios.class).equalTo("email", usuer).findFirst();
+        String idUsuario = usuarios.getId();
+
+        sale sale = realm.where(sale.class).equalTo("invoice_id", facturaId).findFirst();
+        String clienteid = sale.getCustomer_id();
+        Log.d("ClienteVisitadoFact", facturaId + "");
+        Log.d("ClienteVisitadoClient", clienteid + "");
+        realm.close();
+
+        final Realm realm5 = Realm.getDefaultInstance();
+
+        realm5.beginTransaction();
+        Number currentIdNum = realm5.where(visit.class).max("id");
+
+        if (currentIdNum == null) {
+            nextId = 1;
+        }
+        else {
+            nextId = currentIdNum.intValue() + 1;
+        }
+
+
+        visit visitadonuevo = new visit();
+
+        visitadonuevo.setId(nextId);
+        visitadonuevo.setCustomer_id(clienteid);
+        visitadonuevo.setVisit(seleccion);
+        visitadonuevo.setObservation(txtObservaciones.getText().toString());
+        visitadonuevo.setDate(Functions.getDate());
+        visitadonuevo.setLongitud(longitude);
+        visitadonuevo.setLatitud(latitude);
+        visitadonuevo.setUser_id(idUsuario);
+        visitadonuevo.setSubida(1);
+
+
+        realm5.copyToRealmOrUpdate(visitadonuevo);
+        realm5.commitTransaction();
+        Log.d("ClienteVisitado", visitadonuevo + "");
+        realm5.close();
+    }
+
+*/
     public void agregar(){
+
+        Realm realm = Realm.getDefaultInstance();
+        usuer = session.getUsuarioPrefs();
+        Usuarios usuarios = realm.where(Usuarios.class).equalTo("email", usuer).findFirst();
+        String idUsuario = usuarios.getId();
+        realm.close();
 
         final Realm realm2 = Realm.getDefaultInstance();
 
@@ -241,7 +444,7 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
         });
 
         //TODO MODIFICAR CON EL IDS CONSECUTIVOS (FACTURA Y NUMERACION)
-        activity.initCurrentInvoice(String.valueOf(nextId), "3", "0000-"+nextId, 0.0, 0.0, Functions.getDate(), Functions.get24Time(),
+        activity.initCurrentInvoice(String.valueOf(nextId), "3", idUsuario + "01-"+ "000000"+nextId, 0.0, 0.0, Functions.getDate(), Functions.get24Time(),
                 Functions.getDate(), Functions.get24Time(), Functions.getDate(), "3", metodoPagoId, "", "", "", "", "", "", "", "", "", "", "", "", fecha,
                 "", "");
 
