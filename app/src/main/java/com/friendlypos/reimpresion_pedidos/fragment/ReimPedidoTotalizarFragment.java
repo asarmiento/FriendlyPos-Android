@@ -36,12 +36,12 @@ public class ReimPedidoTotalizarFragment extends BaseFragment {
     private static TextView ivaSub;
     private static TextView discount;
     private static TextView Total;
-    private static TextView change;
+  //  private static TextView change;
 
 
     private static EditText notes;
     private static EditText client_name;
-    private static EditText paid;
+  //  private static EditText paid;
 
     double totalGrabado = 0.0;
     double totalExento = 0.0;
@@ -98,9 +98,9 @@ public class ReimPedidoTotalizarFragment extends BaseFragment {
         discount = (TextView) rootView.findViewById(R.id.Discount);
         Total = (TextView) rootView.findViewById(R.id.Total);
 
-        paid = (EditText) rootView.findViewById(R.id.txtPaid);
+        //paid = (EditText) rootView.findViewById(R.id.txtPaid);
 
-        change = (TextView) rootView.findViewById(R.id.txtChange);
+       // change = (TextView) rootView.findViewById(R.id.txtChange);
         slecTAB = ((ReimprimirPedidosActivity) getActivity()).getSelecClienteTab();
 
         if (slecTAB == 1) {
@@ -111,15 +111,17 @@ public class ReimPedidoTotalizarFragment extends BaseFragment {
             if (metodoPagoCliente.equals("1")) {
                 //bill_type = 1;
                 try {
-                    paid.setEnabled(true);
+                    Toast.makeText(getActivity(), "1", Toast.LENGTH_LONG).show();
+                    //paid.setEnabled(true);
 
                 } catch (Exception e) {
                     Log.d("JD", "Error " + e.getMessage());
                 }
 
             } else if (metodoPagoCliente.equals("2")) {
+                Toast.makeText(getActivity(), "2", Toast.LENGTH_LONG).show();
                 //  bill_type = 2;
-                paid.setEnabled(false);
+               // paid.setEnabled(false);
             }
         }
         else{
@@ -148,25 +150,25 @@ public class ReimPedidoTotalizarFragment extends BaseFragment {
                             // Log.d("total", String.valueOf(Functions.sGetDecimalStringAnyLocaleAsDouble(Total.getText().toString())));
 
                             if (metodoPagoCliente.equals("1")) {
-                                pagoCon = Double.parseDouble(paid.getText().toString());
+                               /* pagoCon = Double.parseDouble(paid.getText().toString());
                                 totalPagoCon = String.format("%,.2f", pagoCon);
                                 double total = totalTotal;
 
                                 if (pagoCon >= total) {
                                     vuelto = pagoCon - total;
-                                    totalVuelvo = String.format("%,.2f", vuelto);
+                                    totalVuelvo = String.format("%,.2f", vuelto);*/
 
                                     int tabCliente = 0;
                                     ((ReimprimirPedidosActivity) getActivity()).setSelecClienteTab(tabCliente);
 
-                                    change.setText(totalVuelvo);
+                                //    change.setText(totalVuelvo);
                                     obtenerLocalización();
                                     aplicarFactura();
                                 }
-                                else {
+                               /* else {
                                     Toast.makeText(getActivity(), "Digite una cantidad mayor al total", Toast.LENGTH_LONG).show();
                                 }
-                            }
+                            }*/
                             else if (metodoPagoCliente.equals("2")) {
                                 Toast.makeText(getActivity(), "Crédito", Toast.LENGTH_LONG).show();
                                 obtenerLocalización();
@@ -217,7 +219,7 @@ public class ReimPedidoTotalizarFragment extends BaseFragment {
     @Override
     public void updateData() {
         if (slecTAB == 1) {
-            paid.getText().clear();
+         //   paid.getText().clear();
 
             totalGrabado = ((ReimprimirPedidosActivity) getActivity()).getTotalizarSubGrabado();
             totalExento = ((ReimprimirPedidosActivity) getActivity()).getTotalizarSubExento();
@@ -351,7 +353,7 @@ public class ReimPedidoTotalizarFragment extends BaseFragment {
     }
 
     protected void aplicarFactura() {
-        paid.setEnabled(false);
+       // paid.setEnabled(false);
 
         actualizarFactura();
         actualizarVenta();
@@ -368,7 +370,7 @@ public class ReimPedidoTotalizarFragment extends BaseFragment {
         if (apply_done == 1) {
 
             apply_done = 0;
-            paid.getText().clear();
+         //   paid.getText().clear();
         }
         try {
             System.gc();
@@ -378,36 +380,5 @@ public class ReimPedidoTotalizarFragment extends BaseFragment {
 
     }
 
-
-
-/*
-    protected void validateData() throws Exception {
-
-        if (CurrentSale == null) {
-            client_name.requestFocus();
-            throw new IOException("Debe Seleccionar un cliente de la primera vista");
-        }
-
-        if (CurrentSale.costumer.company_name.equals("Cliente Generico") && client_name.getText().toString().isEmpty()) {
-            throw new IOException("Para el Cliente a Contado, debe ingresar un nombre");
-        }
-
-
-        //ClimDataValidator.validateSpinnerHasNotDefaultText("Seleccione condición compra",  spinnerPaymentMethods, "Debe seleccionar una condición de compra");
-
-        if (!(mAdapterBill.getItemCount() > 0)) {
-            throw new IOException("Debe ingresar al menos un producto");
-        }
-
-        if (bill_type == 1) {
-            if (paid.getText().toString().isEmpty()) {
-                throw new IOException("Aun no ha cobrado !!");
-            }
-            if (Functions.sGetDecimalStringAnyLocaleAsDouble(paid.getText().toString()) < Functions.sGetDecimalStringAnyLocaleAsDouble(Total.getText().toString())) {
-                throw new IOException("El cobro no es correcto");
-
-            }
-        }
-    }*/
 
 }

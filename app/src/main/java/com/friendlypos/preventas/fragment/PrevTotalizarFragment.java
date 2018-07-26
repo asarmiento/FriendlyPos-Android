@@ -407,12 +407,8 @@ public class PrevTotalizarFragment extends BaseFragment {
 
 
     protected void aplicarFactura() {
-       // paid.setEnabled(false);
 
         actualizarFacturaDetalles();
-       // actualizarVenta();
-    /*    actualizarFactura();
-        actualizarVenta();*/
 
         Toast.makeText(getActivity(), "Venta realizada correctamente", Toast.LENGTH_LONG).show();
 
@@ -438,37 +434,5 @@ public class PrevTotalizarFragment extends BaseFragment {
 
 
     }
-
-
-
-/*
-    protected void validateData() throws Exception {
-
-        if (CurrentSale == null) {
-            client_name.requestFocus();
-            throw new IOException("Debe Seleccionar un cliente de la primera vista");
-        }
-
-        if (CurrentSale.costumer.company_name.equals("Cliente Generico") && client_name.getText().toString().isEmpty()) {
-            throw new IOException("Para el Cliente a Contado, debe ingresar un nombre");
-        }
-
-
-        //ClimDataValidator.validateSpinnerHasNotDefaultText("Seleccione condición compra",  spinnerPaymentMethods, "Debe seleccionar una condición de compra");
-
-        if (!(mAdapterBill.getItemCount() > 0)) {
-            throw new IOException("Debe ingresar al menos un producto");
-        }
-
-        if (bill_type == 1) {
-            if (paid.getText().toString().isEmpty()) {
-                throw new IOException("Aun no ha cobrado !!");
-            }
-            if (Functions.sGetDecimalStringAnyLocaleAsDouble(paid.getText().toString()) < Functions.sGetDecimalStringAnyLocaleAsDouble(Total.getText().toString())) {
-                throw new IOException("El cobro no es correcto");
-
-            }
-        }
-    }*/
 
 }
