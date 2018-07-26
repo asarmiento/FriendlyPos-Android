@@ -110,8 +110,6 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
             public void onClick(View view) {
                 activa = 1;
 
-
-
                 int pos = position;
                 if (pos == RecyclerView.NO_POSITION) return;
 
@@ -150,9 +148,39 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
                                 Functions.CreateMessage(QuickContext, " ", "Debe seleccionar una opción");
 
                             } else {
-                                if (rbcomprado.isChecked()) {
-                                    seleccion = "1";
+
+                                if (rbvisitado.isChecked()) {
+                                    seleccion = "2";
                                     metodoPagoId = "1";
+                                    notifyDataSetChanged();
+                                    agregar();
+                                    tabCliente = 1;
+                                    activity.setSelecClienteTabPreventa(tabCliente);
+                                    activity.setCreditoLimiteClientePreventa(creditoLimiteClienteP);
+                                    activity.setDueClientePreventa(dueClienteP);
+
+                                    //TODO MODIFICAR CON EL ID CONSECUTIVOS
+                                    activity.setInvoiceIdPreventa(nextId);
+                                    activity.setMetodoPagoClientePreventa(metodoPagoId);
+
+                                    final ProgressDialog progresRing = ProgressDialog.show(QuickContext, "Cargando", "Seleccionando Cliente", true);
+                                    progresRing.setCancelable(true);
+                                    new Thread(new Runnable() {
+
+                                        @Override
+                                        public void run() {
+                                            try {
+                                                Thread.sleep(5000);
+                                            }
+                                            catch (Exception e) {
+
+                                            }
+                                            progresRing.dismiss();
+                                        }
+                                    }).start();
+                                }
+                                else if (rbcomprado.isChecked()) {
+                                    seleccion = "1";
                                     LayoutInflater layoutInflater = LayoutInflater.from(QuickContext);
                                     View promptView = layoutInflater.inflate(R.layout.promptclient_preventa, null);
 
@@ -184,6 +212,30 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
                                                                 //   Functions.CreateMessage(QuickContext, " ", "Se cambio la factura a crédito" + metodoPagoId);
                                                                 notifyDataSetChanged();
                                                                 agregar();
+                                                                tabCliente = 1;
+                                                                activity.setSelecClienteTabPreventa(tabCliente);
+                                                                activity.setCreditoLimiteClientePreventa(creditoLimiteClienteP);
+                                                                activity.setDueClientePreventa(dueClienteP);
+
+                                                                //TODO MODIFICAR CON EL ID CONSECUTIVOS
+                                                                activity.setInvoiceIdPreventa(nextId);
+                                                                activity.setMetodoPagoClientePreventa(metodoPagoId);
+
+                                                                final ProgressDialog progresRing = ProgressDialog.show(QuickContext, "Cargando", "Seleccionando Cliente", true);
+                                                                progresRing.setCancelable(true);
+                                                                new Thread(new Runnable() {
+
+                                                                    @Override
+                                                                    public void run() {
+                                                                        try {
+                                                                            Thread.sleep(5000);
+                                                                        }
+                                                                        catch (Exception e) {
+
+                                                                        }
+                                                                        progresRing.dismiss();
+                                                                    }
+                                                                }).start();
                                                             }
                                                         } else if (rbcontado.isChecked()) {
                                                             // TRANSACCIÓN PARA ACTUALIZAR EL CAMPO METODO DE PAGO CONTADO DE LA FACTURA
@@ -191,7 +243,32 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
                                                             //Functions.CreateMessage(QuickContext, " ", "Se cambio la factura a contado" + metodoPagoId);
                                                             notifyDataSetChanged();
                                                             agregar();
+                                                            tabCliente = 1;
+                                                            activity.setSelecClienteTabPreventa(tabCliente);
+                                                            activity.setCreditoLimiteClientePreventa(creditoLimiteClienteP);
+                                                            activity.setDueClientePreventa(dueClienteP);
+
+                                                            //TODO MODIFICAR CON EL ID CONSECUTIVOS
+                                                            activity.setInvoiceIdPreventa(nextId);
+                                                            activity.setMetodoPagoClientePreventa(metodoPagoId);
+
+                                                            final ProgressDialog progresRing = ProgressDialog.show(QuickContext, "Cargando", "Seleccionando Cliente", true);
+                                                            progresRing.setCancelable(true);
+                                                            new Thread(new Runnable() {
+
+                                                                @Override
+                                                                public void run() {
+                                                                    try {
+                                                                        Thread.sleep(5000);
+                                                                    }
+                                                                    catch (Exception e) {
+
+                                                                    }
+                                                                    progresRing.dismiss();
+                                                                }
+                                                            }).start();
                                                         }
+
                                                     }
                                                 }
                                             })
@@ -206,39 +283,9 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
 
                                     AlertDialog alertD = alertDialogBuilder.create();
                                     alertD.show();
-
-
-                                } else if (rbvisitado.isChecked()) {
-                                    seleccion = "2";
-                                    metodoPagoId = "1";
-                                    notifyDataSetChanged();
-                                    agregar();
                                 }
 
-                            tabCliente = 1;
-                            activity.setSelecClienteTabPreventa(tabCliente);
-                            activity.setCreditoLimiteClientePreventa(creditoLimiteClienteP);
-                            activity.setDueClientePreventa(dueClienteP);
 
-                            //TODO MODIFICAR CON EL ID CONSECUTIVOS
-                            activity.setInvoiceIdPreventa(nextId);
-                            activity.setMetodoPagoClientePreventa(metodoPagoId);
-
-                            final ProgressDialog progresRing = ProgressDialog.show(QuickContext, "Cargando", "Seleccionando Cliente", true);
-                            progresRing.setCancelable(true);
-                            new Thread(new Runnable() {
-
-                                @Override
-                                public void run() {
-                                    try {
-                                        Thread.sleep(5000);
-                                    }
-                                    catch (Exception e) {
-
-                                    }
-                                    progresRing.dismiss();
-                                }
-                            }).start();
                         } }
                     })
                     .setNegativeButton("Cancel",
@@ -269,6 +316,8 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
         }
 
     }
+
+
 
     public void alertVisitado() {
 
