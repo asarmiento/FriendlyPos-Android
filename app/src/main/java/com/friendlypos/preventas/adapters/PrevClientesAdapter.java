@@ -20,40 +20,26 @@ import com.friendlypos.R;
 import com.friendlypos.application.util.Functions;
 import com.friendlypos.distribucion.modelo.Inventario;
 import com.friendlypos.distribucion.modelo.Pivot;
-import com.friendlypos.distribucion.modelo.invoice;
-import com.friendlypos.distribucion.modelo.sale;
 import com.friendlypos.login.modelo.Usuarios;
 import com.friendlypos.login.util.SessionPrefes;
 import com.friendlypos.preventas.activity.PreventaActivity;
 import com.friendlypos.preventas.modelo.Numeracion;
 import com.friendlypos.preventas.modelo.invoiceDetallePreventa;
-import com.friendlypos.preventas.modelo.visit;
 import com.friendlypos.principal.modelo.Clientes;
-
 import java.util.List;
-
 import io.realm.Realm;
-import io.realm.RealmResults;
-
-import static io.realm.internal.SyncObjectServerFacade.getApplicationContext;
 
 public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapter.CharacterViewHolder> {
 
     public List<Clientes> contentList;
     private PreventaActivity activity;
     private int selected_position = -1;
-    private int selected_position1 = -1;
     private static Context QuickContext = null;
-    RealmResults<Pivot> facturaid1;
-    int idInvetarioSelec;
-    Double amount_inventario = 0.0;
-    String facturaID, clienteID;
-    int nextId, numeration;
+
+    int nextId;
     int tabCliente = 0;
     int activa = 0;
-    String nombreMetodoPago;
     String metodoPagoId;
-    int contador = 0;
     String fecha;
     String idCliente;
     String nombreCliente;
@@ -61,13 +47,13 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
     SessionPrefes session;
     private static EditText txtObservaciones;
     String seleccion;
-    invoiceDetallePreventa factura_nueva = new invoiceDetallePreventa();
+
+    int ColorActivo= 0;
 
     private static Double creditolimite = 0.0;
     private static Double descuentoFixed = 0.0;
     private static Double cleintedue = 0.0;
     private static Double credittime = 0.0;
-
 
     public PrevClientesAdapter(Context context, PreventaActivity activity, List<Clientes> contentList) {
         this.contentList = contentList;
@@ -75,17 +61,19 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
         this.QuickContext = context;
         session = new SessionPrefes(context);
     }
-
     @Override
     public PrevClientesAdapter.CharacterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
             .inflate(R.layout.lista_preventa_clientes, parent, false);
 
         return new PrevClientesAdapter.CharacterViewHolder(view);
+
+
     }
 
     @Override
     public void onBindViewHolder(final PrevClientesAdapter.CharacterViewHolder holder, final int position) {
+
         Clientes content = contentList.get(position);
 
         creditolimite = Double.parseDouble(content.getCreditLimit());
@@ -108,7 +96,7 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
 
             @Override
             public void onClick(View view) {
-                activa = 1;
+
 
                 int pos = position;
                 if (pos == RecyclerView.NO_POSITION) return;
@@ -154,8 +142,18 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
                                     metodoPagoId = "1";
                                     notifyDataSetChanged();
                                     agregar();
+
+                                    activa = 1;
+                                    session.guardarDatosColorActivo(activa);
+
+                                    ColorActivo = session.getDatosColorActivo();
+
+
+                                    activity.setActivoColorPreventa(activa);
+                                    //Toast.makeText(QuickContext, "ACTIVO COLOR CLIENTE" + activa, Toast.LENGTH_SHORT).show();
                                     tabCliente = 1;
                                     activity.setSelecClienteTabPreventa(tabCliente);
+
                                     activity.setCreditoLimiteClientePreventa(creditoLimiteClienteP);
                                     activity.setDueClientePreventa(dueClienteP);
 
@@ -180,6 +178,7 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
                                     }).start();
                                 }
                                 else if (rbcomprado.isChecked()) {
+
                                     seleccion = "1";
                                     LayoutInflater layoutInflater = LayoutInflater.from(QuickContext);
                                     View promptView = layoutInflater.inflate(R.layout.promptclient_preventa, null);
@@ -188,6 +187,10 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
                                     alertDialogBuilder.setView(promptView);
                                     final RadioButton rbcontado = (RadioButton) promptView.findViewById(R.id.contadoBill);
                                     final RadioButton rbcredito = (RadioButton) promptView.findViewById(R.id.creditBill);
+
+                                    if (creditoTime == 0) {
+                                        rbcredito.setVisibility(View.GONE);
+                                    }
 
                                     alertDialogBuilder
                                             .setCancelable(false)
@@ -204,9 +207,7 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
                                                     }
                                                     else {
                                                         if (rbcredito.isChecked()) {
-                                                            if (creditoTime == 0) {
-                                                                Functions.CreateMessage(QuickContext, " ", "Este cliente no cuenta con crédito");
-                                                            } else {
+
                                                                 // TRANSACCIÓN PARA ACTUALIZAR EL CAMPO METODO DE PAGO CREDITO DE LA FACTURA
                                                                 metodoPagoId = "2";
                                                                 //   Functions.CreateMessage(QuickContext, " ", "Se cambio la factura a crédito" + metodoPagoId);
@@ -236,7 +237,7 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
                                                                         progresRing.dismiss();
                                                                     }
                                                                 }).start();
-                                                            }
+
                                                         } else if (rbcontado.isChecked()) {
                                                             // TRANSACCIÓN PARA ACTUALIZAR EL CAMPO METODO DE PAGO CONTADO DE LA FACTURA
                                                             metodoPagoId = "1";
@@ -300,156 +301,25 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
                 AlertDialog alertD = alertDialogBuilder.create();
                 alertD.show();
 
-
-                //  Toast.makeText(QuickContext, "You clicked FACTURA NUEVA " + factura_nueva.getP_id(), Toast.LENGTH_SHORT).show();
-
-
             }
         });
-        if (selected_position == position) {
 
-            holder.cardView.setBackgroundColor(Color.parseColor("#607d8b"));
+        if (ColorActivo == 1 && selected_position == position) {
 
+            holder.cardView.setCardBackgroundColor(Color.parseColor("#607d8b"));
         }
         else {
-            holder.cardView.setBackgroundColor(Color.parseColor("#009688"));
+            holder.cardView.setCardBackgroundColor(Color.parseColor("#009688"));
         }
 
     }
-
-
-
-    public void alertVisitado() {
-
-        LayoutInflater layoutInflater = LayoutInflater.from(activity);
-        View promptView = layoutInflater.inflate(R.layout.promptvisitado_preventa, null);
-
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(activity);
-        alertDialogBuilder.setView(promptView);
-        final RadioButton rbcomprado = (RadioButton) promptView.findViewById(R.id.compradoBillVisitado);
-        final RadioButton rbvisitado = (RadioButton) promptView.findViewById(R.id.visitadoBillVisitado);
-        txtObservaciones = (EditText) promptView.findViewById(R.id.txtObservaciones);
-        alertDialogBuilder
-                .setCancelable(false)
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-
-                    public void onClick(DialogInterface dialog, int id) {
-
-                        if (rbcomprado.isChecked()) {
-                            seleccion = "1";
-                            alertTipoVenta();
-                        }
-                        else if (rbvisitado.isChecked()) {
-                            seleccion = "2";
-                        }
-
-                    }
-
-
-                })
-                .setNegativeButton("Cancel",
-                        new DialogInterface.OnClickListener() {
-
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                            }
-                        });
-
-
-        AlertDialog alertD = alertDialogBuilder.create();
-        alertD.show();
+    public void updateData() {
+      /*  ColorActivo = session.getDatosColorActivo();
+        if (ColorActivo == 1 && selected_position == -1) {
+            Toast.makeText(QuickContext, "POSICION " + selected_position, Toast.LENGTH_SHORT).show();
+        }*/
 
     }
-
-    public void alertTipoVenta() {
-
-        LayoutInflater layoutInflater = LayoutInflater.from(activity);
-        View promptView = layoutInflater.inflate(R.layout.promptvisitado_preventa, null);
-
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(activity);
-        alertDialogBuilder.setView(promptView);
-        final RadioButton rbcomprado = (RadioButton) promptView.findViewById(R.id.compradoBillVisitado);
-        final RadioButton rbvisitado = (RadioButton) promptView.findViewById(R.id.visitadoBillVisitado);
-        txtObservaciones = (EditText) promptView.findViewById(R.id.txtObservaciones);
-
-        alertDialogBuilder
-                .setCancelable(false)
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-
-                    public void onClick(DialogInterface dialog, int id) {
-
-                        if (rbcomprado.isChecked()) {
-                            seleccion = "1";
-                        }
-
-                        else if (rbvisitado.isChecked()) {
-                            seleccion = "2";
-                        }
-
-                    }
-
-
-                })
-                .setNegativeButton("Cancel",
-                        new DialogInterface.OnClickListener() {
-
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                            }
-                        });
-
-
-        AlertDialog alertD = alertDialogBuilder.create();
-        alertD.show();
-
-    }
-
- /*   protected void actualizarClienteVisitado() {
-
-        Realm realm = Realm.getDefaultInstance();
-        usuer = session.getUsuarioPrefs();
-        Usuarios usuarios = realm.where(Usuarios.class).equalTo("email", usuer).findFirst();
-        String idUsuario = usuarios.getId();
-
-        sale sale = realm.where(sale.class).equalTo("invoice_id", facturaId).findFirst();
-        String clienteid = sale.getCustomer_id();
-        Log.d("ClienteVisitadoFact", facturaId + "");
-        Log.d("ClienteVisitadoClient", clienteid + "");
-        realm.close();
-
-        final Realm realm5 = Realm.getDefaultInstance();
-
-        realm5.beginTransaction();
-        Number currentIdNum = realm5.where(visit.class).max("id");
-
-        if (currentIdNum == null) {
-            nextId = 1;
-        }
-        else {
-            nextId = currentIdNum.intValue() + 1;
-        }
-
-
-        visit visitadonuevo = new visit();
-
-        visitadonuevo.setId(nextId);
-        visitadonuevo.setCustomer_id(clienteid);
-        visitadonuevo.setVisit(seleccion);
-        visitadonuevo.setObservation(txtObservaciones.getText().toString());
-        visitadonuevo.setDate(Functions.getDate());
-        visitadonuevo.setLongitud(longitude);
-        visitadonuevo.setLatitud(latitude);
-        visitadonuevo.setUser_id(idUsuario);
-        visitadonuevo.setSubida(1);
-
-
-        realm5.copyToRealmOrUpdate(visitadonuevo);
-        realm5.commitTransaction();
-        Log.d("ClienteVisitado", visitadonuevo + "");
-        realm5.close();
-    }
-
-*/
     public void agregar(){
 
         Realm realm = Realm.getDefaultInstance();
@@ -517,12 +387,10 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
         realm5.close();
        // realm2.close();
     }
-
     @Override
     public int getItemCount() {
         return contentList.size();
     }
-
     public class CharacterViewHolder extends RecyclerView.ViewHolder {
 
 
@@ -545,18 +413,6 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
             txt_prev_credittime = (TextView) view.findViewById(R.id.txt_prev_credittime);
         }
     }
-
-    /* private int getContador() {
-         Realm realm = Realm.getDefaultInstance();
-         realmResultado = realm.where(InvoiceDetallePreventa.class).findAll();
-         realmResultado.sort("p_id");
-
- //        InvoiceDetallePreventa invoiceDetallePreventa = activity.getCurrentInvoice();
- //        invoiceDetallePreventa.setP_code(weqweq);
- //
-         return realmResultado.size();
-     }
- */
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);

@@ -41,8 +41,6 @@ public class PrevSelecProductoFragment extends BaseFragment implements SearchVie
     private Realm realm;
     RecyclerView recyclerView;
     private PrevSeleccionarProductoAdapter adapter;
-  //  private PrevResumenAdapter adapter2;
-  //  private PrevResumenFragment resumenFrag1;
     private static int bill_type = 1;
     static TextView creditoLimite;
     static double creditoLimiteCliente = 0.0;

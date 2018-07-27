@@ -1,6 +1,7 @@
 package com.friendlypos.preventas.adapters;
 
 
+import android.content.Context;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -83,6 +84,9 @@ public class PrevResumenAdapter extends RecyclerView.Adapter<PrevResumenAdapter.
         String pivotTotal = String.format("%,.2f", (Double.valueOf(pivot.getPrice()) * Double.parseDouble(pivot.getAmount())));
 
         holder.txt_resumen_factura_total.setText("T: " + pivotTotal);
+
+        int activa = activity.getActivoColorPreventa();
+        Toast.makeText(activity, "ACTIVO COLOR RESUMEN" + activa, Toast.LENGTH_SHORT).show();
     }
 
     @Override

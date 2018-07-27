@@ -40,6 +40,7 @@ public class PreventaActivity extends BluetoothActivity {
     private String metodoPagoClientePreventa;
     private String creditoLimiteClientePreventa = null;
     private int selecClienteTabPreventa;
+    private int activoColorPreventa;
     private String dueClientePreventa;
 
     private double totalizarSubGrabado;
@@ -142,6 +143,13 @@ public class PreventaActivity extends BluetoothActivity {
         this.dueClientePreventa = dueClientePreventa;
     }
 
+    public int getActivoColorPreventa() {
+        return activoColorPreventa;
+    }
+
+    public void setActivoColorPreventa(int activoColorPreventa) {
+        this.activoColorPreventa = activoColorPreventa;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -247,6 +255,7 @@ public class PreventaActivity extends BluetoothActivity {
 
             @Override
             public void onPageSelected(int position) {
+
                 list.get(position).updateData();
             }
 

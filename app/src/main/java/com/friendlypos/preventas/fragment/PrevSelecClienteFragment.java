@@ -32,11 +32,7 @@ public class PrevSelecClienteFragment extends BaseFragment {
     public RecyclerView recyclerView;
 
     private PrevClientesAdapter adapter;
-   // private DistrResumenAdapter adapter2;
 
-   /* public static DistSelecProductoFragment getInstance() {
-        return new DistSelecProductoFragment();
-    }*/
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -64,7 +60,6 @@ public class PrevSelecClienteFragment extends BaseFragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);
 
-      //  adapter2 = new DistrResumenAdapter();
     }
 
     private List<Clientes> getList(){
@@ -86,5 +81,6 @@ public class PrevSelecClienteFragment extends BaseFragment {
 
     @Override
     public void updateData() {
+        adapter.updateData();
     }
 }
