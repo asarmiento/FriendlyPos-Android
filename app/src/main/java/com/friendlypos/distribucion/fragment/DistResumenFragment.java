@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.friendlypos.R;
 import com.friendlypos.distribucion.activity.DistribucionActivity;
@@ -105,7 +104,7 @@ public class DistResumenFragment extends BaseFragment {
             totalizeHelper.totalize(list);
         }
         else {
-            Toast.makeText(getActivity(), "nadaresumenUpdate", Toast.LENGTH_LONG).show();
+            Log.d("SelecUpdateResumen", "No hay productos");
         }
     }
 }

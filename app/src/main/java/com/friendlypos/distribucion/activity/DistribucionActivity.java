@@ -36,7 +36,6 @@ public class DistribucionActivity extends BluetoothActivity {
 
     private Toolbar toolbar;
     private TabLayout tabLayout;
-    private ViewPager viewPager;
 
     private String invoiceId;
     private String metodoPagoCliente;
@@ -50,12 +49,7 @@ public class DistribucionActivity extends BluetoothActivity {
     private double totalizarImpuestoIVA;
     private double totalizarTotal;
     private double totalizarTotalDouble;
-
     private int selecClienteTab;
-
-    private int selecColorCliente;
-
-    ProgressDialog progressDialog;
 
     public void cleanTotalize() {
         totalizarSubGrabado = 0.0;

@@ -15,7 +15,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.friendlypos.R;
 import com.friendlypos.distribucion.activity.DistribucionActivity;
@@ -26,6 +25,7 @@ import com.friendlypos.distribucion.fragment.DistResumenFragment;
 import com.friendlypos.distribucion.fragment.DistSelecProductoFragment;
 import com.friendlypos.distribucion.modelo.Inventario;
 import com.friendlypos.preventas.activity.PreventaActivity;
+import com.friendlypos.preventas.adapters.PrevResumenAdapter;
 import com.friendlypos.preventas.adapters.PrevSeleccionarProductoAdapter;
 import com.friendlypos.preventas.modelo.invoiceDetallePreventa;
 import com.friendlypos.preventas.util.TotalizeHelperPreventa;
@@ -41,6 +41,7 @@ public class PrevSelecProductoFragment extends BaseFragment implements SearchVie
     private Realm realm;
     RecyclerView recyclerView;
     private PrevSeleccionarProductoAdapter adapter;
+    private PrevResumenAdapter adapter2;
     private static int bill_type = 1;
     static TextView creditoLimite;
     static double creditoLimiteCliente = 0.0;
@@ -85,12 +86,16 @@ public class PrevSelecProductoFragment extends BaseFragment implements SearchVie
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerViewPrevSeleccProducto);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setHasFixedSize(true);
-        adapter = new PrevSeleccionarProductoAdapter(activity, this, getListProductos());
+
+        if(adapter == null) {
+            adapter = new PrevSeleccionarProductoAdapter(activity, this, getListProductos());
+        }
         recyclerView.setAdapter(adapter);
+
         creditoLimite = (TextView) rootView.findViewById(R.id.restCreditPreventa);
 
         Log.d("listaProducto", getListProductos() + "");
-       // adapter2 = new DistrResumenAdapter();
+        adapter2 = new PrevResumenAdapter();
         creditoDisponible();
 
         return rootView;
@@ -150,7 +155,7 @@ public class PrevSelecProductoFragment extends BaseFragment implements SearchVie
                 }
             }}
         else{
-            Toast.makeText(getActivity(),"nadaSelecProducto",Toast.LENGTH_LONG).show();
+            Log.d("Selec", "No hay productos");
         }
 
     }
@@ -158,16 +163,13 @@ public class PrevSelecProductoFragment extends BaseFragment implements SearchVie
     @Override
     public void updateData() {
         adapter.updateData(getListProductos());
-      //  adapter2.notifyDataSetChanged();
-       /* totalizeHelper = new TotalizeHelperPreventa(activity);
-        totalizeHelper.totalize(resumenFrag1.getListResumen());*/
-
+        adapter2.notifyDataSetChanged();
         if (slecTAB == 1) {
             creditoLimiteCliente = Double.parseDouble(((PreventaActivity) getActivity()).getCreditoLimiteClientePreventa());
             creditoLimite.setText("C.Disponible: " + String.format("%,.2f", creditoLimiteCliente));
         }
         else{
-            Toast.makeText(getActivity(),"nadaSelecProducto",Toast.LENGTH_LONG).show();
+            Log.d("SelecUpdate", "No hay productos");
         }
     }
 

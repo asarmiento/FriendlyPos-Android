@@ -249,7 +249,6 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
                 String dueCliente = clientes.getDue();
                 realm.close();
 
-                Toast.makeText(QuickContext, "You clicked " + facturaID, Toast.LENGTH_SHORT).show();
                 Log.d("PRODUCTOSFACTURATO", facturaid1 + "");
                 Log.d("metodoPago", metodoPago + "");
                 tabCliente = 1;
@@ -438,7 +437,7 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
                                         realm5.insertOrUpdate(inv_actualizado);
                                     }
                                     else{
-                                        Toast.makeText(QuickContext, "ya sta 1", Toast.LENGTH_LONG).show();
+                                        Log.d("devuelto", "ya esta 1");
                                     }
 
 

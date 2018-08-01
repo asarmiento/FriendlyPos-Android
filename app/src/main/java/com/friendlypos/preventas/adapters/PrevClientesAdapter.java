@@ -14,17 +14,15 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.friendlypos.R;
 import com.friendlypos.application.util.Functions;
-import com.friendlypos.distribucion.modelo.Inventario;
-import com.friendlypos.distribucion.modelo.Pivot;
+import com.friendlypos.distribucion.modelo.sale;
+import com.friendlypos.distribucion.util.GPSTracker;
 import com.friendlypos.login.modelo.Usuarios;
 import com.friendlypos.login.util.SessionPrefes;
 import com.friendlypos.preventas.activity.PreventaActivity;
 import com.friendlypos.preventas.modelo.Numeracion;
-import com.friendlypos.preventas.modelo.invoiceDetallePreventa;
+import com.friendlypos.preventas.modelo.visit;
 import com.friendlypos.principal.modelo.Clientes;
 import java.util.List;
 import io.realm.Realm;
@@ -35,7 +33,8 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
     private PreventaActivity activity;
     private int selected_position = -1;
     private static Context QuickContext = null;
-
+    double latitude;
+    double longitude;
     int nextId;
     int tabCliente = 0;
     int activa = 0;
@@ -47,8 +46,7 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
     SessionPrefes session;
     private static EditText txtObservaciones;
     String seleccion;
-
-    int ColorActivo= 0;
+    GPSTracker gps;
 
     private static Double creditolimite = 0.0;
     private static Double descuentoFixed = 0.0;
@@ -129,6 +127,7 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
                     .setPositiveButton("OK", new DialogInterface.OnClickListener() {
 
                         public void onClick(DialogInterface dialog, int id) {
+                            obtenerLocalización();
                             fecha = Functions.getDate() + " " + Functions.get24Time();
 
 
@@ -143,17 +142,9 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
                                     notifyDataSetChanged();
                                     agregar();
 
-                                    activa = 1;
-                                    session.guardarDatosColorActivo(activa);
-
-                                    ColorActivo = session.getDatosColorActivo();
-
-
                                     activity.setActivoColorPreventa(activa);
-                                    //Toast.makeText(QuickContext, "ACTIVO COLOR CLIENTE" + activa, Toast.LENGTH_SHORT).show();
                                     tabCliente = 1;
                                     activity.setSelecClienteTabPreventa(tabCliente);
-
                                     activity.setCreditoLimiteClientePreventa(creditoLimiteClienteP);
                                     activity.setDueClientePreventa(dueClienteP);
 
@@ -287,7 +278,9 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
                                 }
 
 
-                        } }
+                        }  actualizarClienteVisitado();
+                        }
+
                     })
                     .setNegativeButton("Cancel",
                         new DialogInterface.OnClickListener() {
@@ -304,7 +297,7 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
             }
         });
 
-        if (ColorActivo == 1 && selected_position == position) {
+        if (selected_position == position) {
 
             holder.cardView.setCardBackgroundColor(Color.parseColor("#607d8b"));
         }
@@ -316,7 +309,6 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
     public void updateData() {
       /*  ColorActivo = session.getDatosColorActivo();
         if (ColorActivo == 1 && selected_position == -1) {
-            Toast.makeText(QuickContext, "POSICION " + selected_position, Toast.LENGTH_SHORT).show();
         }*/
 
     }
@@ -349,15 +341,6 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
                     nextId = numero.intValue() + 1;
                 }
 
-                                  /*  // increment index
-                                    Number NumFactura = realm.where(invoice.class).max("numeration");
-
-                                    if (NumFactura == null) {
-                                        numeration = 1;
-                                    }
-                                    else {
-                                        numeration = NumFactura.intValue() + 1;
-                                    }*/
 
             }
         });
@@ -387,6 +370,80 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
         realm5.close();
        // realm2.close();
     }
+    public void obtenerLocalización() {
+
+        gps = new GPSTracker(activity);
+
+        // check if GPS enabled
+        if (gps.canGetLocation()) {
+
+            latitude = gps.getLatitude();
+            longitude = gps.getLongitude();
+
+           /* messageTextView2.setText("Mi direccion es: \n"
+                    + latitude + "log "  + longitude );
+            // \n is for new line
+            Toast.makeText(getActivity(), "Your Location is - \nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();*/
+        }
+        else {
+            // can't get location
+            // GPS or Network is not enabled
+            // Ask user to enable GPS/network in settings
+            gps.showSettingsAlert();
+
+
+        }
+
+    }
+
+    protected void actualizarClienteVisitado() {
+
+        Realm realm = Realm.getDefaultInstance();
+        usuer = session.getUsuarioPrefs();
+        Usuarios usuarios = realm.where(Usuarios.class).equalTo("email", usuer).findFirst();
+        String idUsuario = usuarios.getId();
+
+        String clienteid = activity.getCurrentVenta().getCustomer_id();
+
+       /* sale sale = realm.where(sale.class).equalTo("invoice_id", String.valueOf(nextId)).findFirst();
+        String clienteid = sale.getCustomer_id();*/
+        Log.d("ClienteVisitadoFact", String.valueOf(nextId) + "");
+        Log.d("ClienteVisitadoClient", clienteid + "");
+        realm.close();
+
+        final Realm realm5 = Realm.getDefaultInstance();
+
+        realm5.beginTransaction();
+        Number currentIdNum = realm5.where(visit.class).max("id");
+
+        if (currentIdNum == null) {
+            nextId = 1;
+        }
+        else {
+            nextId = currentIdNum.intValue() + 1;
+        }
+
+
+        visit visitadonuevo = new visit();
+
+        visitadonuevo.setId(nextId);
+        visitadonuevo.setCustomer_id(clienteid);
+        visitadonuevo.setVisit(seleccion);
+        visitadonuevo.setObservation(txtObservaciones.getText().toString());
+        visitadonuevo.setDate(Functions.getDate());
+        visitadonuevo.setLongitud(longitude);
+        visitadonuevo.setLatitud(latitude);
+        visitadonuevo.setUser_id(idUsuario);
+        visitadonuevo.setSubida(1);
+
+
+        realm5.copyToRealmOrUpdate(visitadonuevo);
+        realm5.commitTransaction();
+        Log.d("ClienteVisitado", visitadonuevo + "");
+        realm5.close();
+    }
+
+
     @Override
     public int getItemCount() {
         return contentList.size();

@@ -1,8 +1,6 @@
 package com.friendlypos.preventas.delegate;
 
 import android.util.Log;
-import android.widget.Toast;
-
 import com.friendlypos.distribucion.modelo.Pivot;
 import com.friendlypos.distribucion.modelo.invoice;
 import com.friendlypos.distribucion.modelo.sale;
@@ -25,6 +23,7 @@ public class PreSellInvoiceDelegate {
 
     public PreSellInvoiceDelegate(PreventaActivity preventaActivity) {
         this.preventaActivity = preventaActivity;
+        productofacturas = new ArrayList<>();
     }
 
     public void initInvoiceDetallePreventa(String id, String branch_office_id, String numeration, double latitude, double longitude,
@@ -34,7 +33,7 @@ public class PreSellInvoiceDelegate {
                                            String totalTotal, String changing, String notes, String canceled,
                                            String paid_up, String paid, String created_at, String idUsuario,
                                            String idUsuarioAplicado) {
-        productofacturas = new ArrayList<>();
+
         newInvoice = new invoiceDetallePreventa();
 
         newInvoice.setP_id(Integer.parseInt(id));
@@ -129,7 +128,7 @@ public class PreSellInvoiceDelegate {
     public List<Pivot> initProduct(int pos) {
 
         if (productofacturas.isEmpty()) {
-            Toast.makeText(preventaActivity, "vacio", Toast.LENGTH_LONG).show();
+            Log.d("vacio", "vacio");
             // send = "No hay invoice emitidas";
         }
         else {
@@ -143,8 +142,7 @@ public class PreSellInvoiceDelegate {
             }
             else {
                 //  productofacturas.get(pos).removeAllChangeListeners();
-                Toast.makeText(preventaActivity, "no hay", Toast.LENGTH_LONG).show();
-            }
+                Log.d("vacio", "No hay productos");            }
         }
         Log.d("invoiceremover", productofacturas + "");
         return productofacturas;
@@ -162,7 +160,7 @@ public class PreSellInvoiceDelegate {
     public List<Pivot> getAllPivot() {
 
         if (productofacturas.isEmpty()) {
-            Toast.makeText(preventaActivity, "vacio", Toast.LENGTH_LONG).show();
+            Log.d("vacio", "vacio");
             // send = "No hay invoice emitidas";
         }
         else {
@@ -178,7 +176,7 @@ public class PreSellInvoiceDelegate {
                 }
                 else {
                     productofacturas.remove(i);
-                    Toast.makeText(preventaActivity, "no hay", Toast.LENGTH_LONG).show();
+                    Log.d("vacio", "No hay productos");
                 }
 
             }

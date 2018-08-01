@@ -85,8 +85,6 @@ public class PrevResumenAdapter extends RecyclerView.Adapter<PrevResumenAdapter.
 
         holder.txt_resumen_factura_total.setText("T: " + pivotTotal);
 
-        int activa = activity.getActivoColorPreventa();
-        Toast.makeText(activity, "ACTIVO COLOR RESUMEN" + activa, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -125,10 +123,10 @@ public class PrevResumenAdapter extends RecyclerView.Adapter<PrevResumenAdapter.
 
                 @Override
                 public void onClick(View view) {
+
                     activity.cleanTotalize();
                     int pos = getAdapterPosition();
 
-                    // Updating old as well as new positions
                     notifyItemChanged(selected_position1);
                     selected_position1 = getAdapterPosition();
                     notifyItemChanged(selected_position1);
@@ -138,8 +136,7 @@ public class PrevResumenAdapter extends RecyclerView.Adapter<PrevResumenAdapter.
                     final int resumenProductoId = clickedDataItem.getId();
                     final double cantidadProducto = Double.parseDouble(clickedDataItem.getAmount());
 
-                    Toast.makeText(view.getContext(), "You clicked " + resumenProductoId + " pos " +
-                            pos , Toast.LENGTH_SHORT).show();
+                    Toast.makeText(view.getContext(), "Se borró el producto" , Toast.LENGTH_SHORT).show();
 
                     // TRANSACCIÓN BD PARA SELECCIONAR LOS DATOS DEL INVENTARIO
                     Realm realm3 = Realm.getDefaultInstance();

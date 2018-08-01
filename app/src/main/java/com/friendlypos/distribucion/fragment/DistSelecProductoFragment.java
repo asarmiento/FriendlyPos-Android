@@ -84,7 +84,10 @@ public class DistSelecProductoFragment extends BaseFragment implements SearchVie
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerViewDistrSeleccProducto);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setHasFixedSize(true);
-        adapter = new DistrSeleccionarProductosAdapter(activity, this, getListProductos());
+
+        if(adapter == null) {
+            adapter = new DistrSeleccionarProductosAdapter(activity, this, getListProductos());
+        }
         recyclerView.setAdapter(adapter);
         creditoLimite = (TextView) rootView.findViewById(R.id.restCredit);
 
@@ -95,8 +98,6 @@ public class DistSelecProductoFragment extends BaseFragment implements SearchVie
         return rootView;
 
     }
-
-
 
     private List<Inventario> getListProductos() {
         realm = Realm.getDefaultInstance();
@@ -117,11 +118,8 @@ public class DistSelecProductoFragment extends BaseFragment implements SearchVie
         slecTAB = activity.getSelecClienteTab();
 
         if (slecTAB == 1){
-        // creditoLimiteCliente = Double.parseDouble(((DistribucionActivity) getActivity()).getCreditoLimiteClienteSlecc());
-    //    creditoLimiteCliente = 0.0;
+
         String metodoPagoCliente = activity.getMetodoPagoCliente();
-        String limite = activity.getCreditoLimiteCliente();
-       // creditoLimiteCliente = Double.parseDouble(limite);
         String dueCliente = activity.getDueCliente();
 
         Log.d("PagoProductoSelec", metodoPagoCliente + "");
@@ -150,10 +148,10 @@ public class DistSelecProductoFragment extends BaseFragment implements SearchVie
 
     @Override
     public void updateData() {
+        Log.d("jd", "init2");
         adapter.updateData(getListProductos());
         adapter2.notifyDataSetChanged();
-       /* totalizeHelper = new TotalizeHelper(activity);
-        totalizeHelper.totalize(resumenFrag1.getListResumen());*/
+
 
         if (slecTAB == 1) {
             creditoLimiteCliente = Double.parseDouble(((DistribucionActivity) getActivity()).getCreditoLimiteCliente());

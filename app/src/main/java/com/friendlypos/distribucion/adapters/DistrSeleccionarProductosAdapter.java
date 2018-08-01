@@ -38,6 +38,8 @@ import java.util.List;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
+import static com.bumptech.glide.gifdecoder.GifHeaderParser.TAG;
+
 /**
  * Created by DelvoM on 21/09/2017.
  */
@@ -48,7 +50,6 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
     public List<Inventario> productosList;
     private DistribucionActivity activity;
     private DistSelecProductoFragment fragment;
-    private DistResumenFragment fragment1;
     private static double producto_amount_dist_add = 0;
     private static double producto_descuento_add = 0;
     private int selected_position = -1;
@@ -66,7 +67,6 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
     }
 
     public void updateData(List<Inventario> productosList) {
-
         this.productosList = productosList;
         notifyDataSetChanged();
     }
@@ -79,9 +79,10 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
         return new CharacterViewHolder(view);
     }
 
+
     @Override
     public void onBindViewHolder(final DistrSeleccionarProductosAdapter.CharacterViewHolder holder, final int position) {
-
+        List<Pivot> pivots = getListResumen();
         final Inventario inventario = productosList.get(position);
 
         Realm realm = Realm.getDefaultInstance();
@@ -122,22 +123,25 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
 
         }
 
-/*
-        if(inventario.getAmount().equals("0")){
-
-            holder.cardView.setVisibility(View.GONE);
-        }else{
-*/
-        holder.fillData(producto);
-
         holder.txt_producto_factura_nombre.setText(description);
         holder.txt_producto_factura_marca.setText("Marca: " + marca2);
         holder.txt_producto_factura_tipo.setText("Tipo: " + tipoProducto);
         holder.txt_producto_factura_precio.setText(precio);
         holder.txt_producto_factura_disponible.setText("Disp: " + inventario.getAmount());
-        holder.cardView.setBackgroundColor(selected_position == position ? Color.parseColor("#607d8b") : Color.parseColor("#009688"));
+        holder.fillData(producto);
+
+        for (Pivot pivot: pivots){
+            if(producto.getId().equals(pivot.getProduct_id())){
+                Log.d("jd", "seteando color x lista");
+                holder.cardView.setBackgroundColor(Color.parseColor("#607d8b"));
+                return;
+            }else{
+                Log.d("jd", "se limpia");
+                holder.cardView.setBackgroundColor(Color.parseColor("#009688"));
+            }
+        }
+
     }
-    //}
 
 
     public void addProduct(final int inventario_id, final String producto_id, final
@@ -196,8 +200,6 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
 
             public void onClick(DialogInterface dialog, int id) {
                 try {
-
-
                     producto_amount_dist_add = Double.parseDouble(((input.getText().toString().isEmpty()) ? "0" : input.getText().toString()));
                     Log.d("productoAmountDistAdd", producto_amount_dist_add + "");
                     //  productoAmountDistAdd = String.format("%,.2f", producto_amount_dist_add);
@@ -207,7 +209,7 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
                     Log.d("productoDescuentoAdd", producto_descuento_add + "");
 
                     if (producto_descuento_add >= 0 && producto_descuento_add <= 10) {
-                        Toast.makeText(context, "agregodesc", Toast.LENGTH_LONG).show();
+
                         if (producto_amount_dist_add > 0 && producto_amount_dist_add <= cantidadDisponible) {
 
 
@@ -315,7 +317,7 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
                                 });
 
 
-                                Toast.makeText(context, nextId + "agregocanti ", Toast.LENGTH_LONG).show();
+                                Toast.makeText(context, "Se agregó el producto", Toast.LENGTH_LONG).show();
 
 
                             }
@@ -332,7 +334,8 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
                     else {
                         Toast.makeText(context, "El producto no se agrego, El descuento debe ser >0 <11", Toast.LENGTH_LONG).show();
                     }
-                    notifyDataSetChanged();
+
+              //      notifyDataSetChanged();
 
                 }
                 catch (Exception e) {
@@ -362,6 +365,7 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
         realm.close();
         return facturaid1;
     }
+
     @Override
     public long getItemId(int position) {
         return 0;
@@ -433,7 +437,6 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
 
                     realm1.close();
 
-                    Toast.makeText(view.getContext(), "You clicked " + ProductoID, Toast.LENGTH_SHORT).show();
                     addProduct(InventarioID, ProductoID, ProductoAmount, description, precio, precio2, precio3, precio4, precio5);
 
                 }

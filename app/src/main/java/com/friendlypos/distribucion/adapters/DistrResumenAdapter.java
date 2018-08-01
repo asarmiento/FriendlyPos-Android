@@ -122,10 +122,10 @@ public class DistrResumenAdapter extends RecyclerView.Adapter<DistrResumenAdapte
 
                 @Override
                 public void onClick(View view) {
+
                     activity.cleanTotalize();
                     int pos = getAdapterPosition();
 
-                    // Updating old as well as new positions
                     notifyItemChanged(selected_position1);
                     selected_position1 = getAdapterPosition();
                     notifyItemChanged(selected_position1);
@@ -135,7 +135,7 @@ public class DistrResumenAdapter extends RecyclerView.Adapter<DistrResumenAdapte
                     final int resumenProductoId = clickedDataItem.getId();
                     final double cantidadProducto = Double.parseDouble(clickedDataItem.getAmount());
 
-                    Toast.makeText(view.getContext(), "You clicked " + resumenProductoId, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(view.getContext(), "Se borró el producto" , Toast.LENGTH_SHORT).show();
 
                     // TRANSACCIÓN BD PARA SELECCIONAR LOS DATOS DEL INVENTARIO
                     Realm realm3 = Realm.getDefaultInstance();
@@ -171,45 +171,6 @@ public class DistrResumenAdapter extends RecyclerView.Adapter<DistrResumenAdapte
                     });
 
 
-/*
-                    // TRANSACCIÓN PARA COPIAR DATOS EN LA BASE DEVUELTA
-                    final Realm realmInvDevolver = Realm.getDefaultInstance();
-                    realmInvDevolver.executeTransaction(new Realm.Transaction() {
-
-                        @Override
-                        public void execute(Realm realmInvDevolver) {
-
-                            // increment index
-                            Number currentIdNum = realmInvDevolver.where(InventarioDevuelto.class).max("id_devuelto");
-
-                            if (currentIdNum == null) {
-                                nextId = 1;
-                            }
-                            else {
-                                nextId = currentIdNum.intValue() + 1;
-                            }
-
-                            InventarioDevuelto inv_actualizado = realmInvDevolver.where(InventarioDevuelto.class).findFirst();
-                            inv_actualizado.setId_devuelto(nextId);
-                            inv_actualizado.setDate_devuelto(Functions.getDate());
-                            inv_actualizado.setTimes_devuelto(Functions.get24Time());
-                            realmInvDevolver.insertOrUpdate(inv_actualizado);
-                            realmInvDevolver.close();
-                        }
-                    });*/
-
-                    // TRANSACCIÓN PARA ACTUALIZAR EL CAMPO CREDIT_LIMIT EN LA FACTURA
-                /*    final Realm realm5 = Realm.getDefaultInstance();
-                    realm5.executeTransaction(new Realm.Transaction() {
-                        @Override
-                        public void execute(Realm realm5) {
-                            Clientes inv_actualizado = realm5.where(Clientes.class).equalTo("id", ventas.getCustomer_id()).findFirst();
-                            inv_actualizado.setCreditLimit(String.valueOf(credi));
-                            realm5.insertOrUpdate(inv_actualizado);
-                            realm5.close();
-                        }
-                    });*/
-
                     // TRANSACCIÓN BD PARA BORRAR EL CAMPO
 
                     final Realm realm5 = Realm.getDefaultInstance();
@@ -223,18 +184,6 @@ public class DistrResumenAdapter extends RecyclerView.Adapter<DistrResumenAdapte
                         }
                     });
 
-
-             /*     final Realm realm = Realm.getDefaultInstance();
-                    realm.executeTransaction(new Realm.Transaction() {
-
-                        @Override
-                        public void execute(Realm realm) {
-                            RealmResults<Pivot> result = realm.where(Pivot.class).equalTo("id", resumenProductoId).findAll();
-                            result.deleteAllFromRealm();
-                            realm.close();
-                        }
-
-                    });*/
                     notifyDataSetChanged();
                     fragment.updateData();
 

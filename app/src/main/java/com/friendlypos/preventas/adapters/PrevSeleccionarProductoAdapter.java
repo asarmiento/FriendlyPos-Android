@@ -86,7 +86,8 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
 
     @Override
     public void onBindViewHolder(final PrevSeleccionarProductoAdapter.CharacterViewHolder holder, final int position) {
-        //final Realm realm3 = Realm.getDefaultInstance();
+
+        List<Pivot> pivots = activity.getAllPivotDelegate();
         final Inventario inventario = productosList.get(position);
 
         Realm realm = Realm.getDefaultInstance();
@@ -99,7 +100,6 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
 
         String marca2 = realm.where(Marcas.class).equalTo("id", marca).findFirst().getName();
         String tipoProducto = realm.where(TipoProducto.class).equalTo("id", tipo).findFirst().getName();
-
 
 
         // TRANSACCION PARA ACTUALIZAR CAMPOS DE LA TABLA VENTAS
@@ -131,13 +131,32 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
             holder.cardView.setVisibility(View.GONE);
         }else{
 */
-        holder.fillData(producto);
+
         holder.txt_producto_factura_nombre.setText(description);
         holder.txt_producto_factura_marca.setText("Marca: " + marca2);
         holder.txt_producto_factura_tipo.setText("Tipo: " + tipoProducto);
         holder.txt_producto_factura_precio.setText(precio);
         holder.txt_producto_factura_disponible.setText("Disp: " + inventario.getAmount());
-        holder.cardView.setBackgroundColor(selected_position == position ? Color.parseColor("#607d8b") : Color.parseColor("#009688"));
+        holder.fillData(producto);
+
+        if(pivots.size() == 0){
+            Log.d("jd", "se limpia x 0");
+            holder.cardView.setBackgroundColor(Color.parseColor("#009688"));
+        }
+        else{
+
+        for (Pivot pivot: pivots){
+       /*  for (int i = 0; i <= pivots.size(); i++){*/
+            if(producto.getId().equals(pivot.getProduct_id())){
+                Log.d("jd", "seteando color x lista");
+                holder.cardView.setBackgroundColor(Color.parseColor("#607d8b"));
+                return;
+            }else{
+                Log.d("jd", "se limpia");
+                holder.cardView.setBackgroundColor(Color.parseColor("#009688"));
+            }
+        }
+        }
         realm.close();
     }
     //}
@@ -221,7 +240,7 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
 
 
                 if (producto_descuento_add >= 0 && producto_descuento_add <= 10) {
-                    Toast.makeText(context, "agregodesc", Toast.LENGTH_LONG).show();
+
                     if (producto_amount_dist_add > 0 && producto_amount_dist_add <= cantidadDisponible) {
 
                         if (bonusProducto.equals("1")){
@@ -280,7 +299,6 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
 
                         // LIMITAR SEGUN EL LIMITE DEL CREDITO
                         if (totalCredito >= 0) {
-                            Toast.makeText(context, "ENTROOOO", Toast.LENGTH_LONG).show();
                             int numero = session.getDatosPivotPreventa();
                             // increment index
                             Number currentIdNum = numero;
@@ -361,7 +379,7 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
                                 }
                             });
                              //   activity.getAllPivotDelegate();
-
+                            Toast.makeText(context, "Se agregó el producto", Toast.LENGTH_LONG).show();
                         }
                     else {
                             Toast.makeText(context, "Has excedido el monto del crédito", Toast.LENGTH_SHORT).show();
@@ -397,13 +415,15 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
         alertD.show();
     }
 
-   /* public List<Pivot> getListResumen() {
-        int facturaId = activity.getInvoiceIdPreventa();
+    public List<Pivot> getListResumen() {
+        String facturaId = String.valueOf(activity.getInvoiceIdPreventa());
         Realm realm = Realm.getDefaultInstance();
-        RealmResults<Pivot> facturaid1 = realm.where(Pivot.class).equalTo("invoice_id", facturaId).findAll();
+        RealmResults<Pivot> facturaid1 = realm.where(Pivot.class).equalTo("invoice_id", facturaId).equalTo("devuelvo", 0).findAll();
         realm.close();
+        Log.d("jd", "getListResumen: " + facturaid1);
         return facturaid1;
-    }*/
+
+    }
 
     @Override
     public long getItemId(int position) {
@@ -476,7 +496,6 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
 
                     realm1.close();
 
-                    Toast.makeText(view.getContext(), "You clicked " + ProductoID, Toast.LENGTH_SHORT).show();
                    addProduct(InventarioID, ProductoID, ProductoAmount, description, precio, precio2, precio3, precio4, precio5, bonusProducto);
 
                 }

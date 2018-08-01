@@ -136,7 +136,7 @@ public class PrevTotalizarFragment extends BaseFragment {
             if (metodoPagoCliente.equals("1")) {
                 //bill_type = 1;
                 try {
-                    Toast.makeText(getActivity(), "1", Toast.LENGTH_LONG).show();
+                    Log.d("Pago", "1 Contado");
 
                 }
                 catch (Exception e) {
@@ -145,7 +145,7 @@ public class PrevTotalizarFragment extends BaseFragment {
 
             }
             else if (metodoPagoCliente.equals("2")) {
-                Toast.makeText(getActivity(), "2", Toast.LENGTH_LONG).show();
+                Log.d("Pago", "2 Credito");
                 //  bill_type = 2;
             //    paid.setEnabled(false);
             }

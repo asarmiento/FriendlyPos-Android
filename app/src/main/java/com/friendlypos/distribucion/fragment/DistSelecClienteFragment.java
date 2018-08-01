@@ -4,6 +4,7 @@ import android.support.annotation.Nullable;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,13 +60,14 @@ public class DistSelecClienteFragment extends BaseFragment{
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        if(adapter == null) {
+            adapter = new DistrClientesAdapter(getContext(), ((DistribucionActivity) getActivity()), getListClientes());
 
-        adapter = new DistrClientesAdapter(getContext(), ((DistribucionActivity)getActivity()), getListClientes());
+            adapter2 = new DistrResumenAdapter();
+        }
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);
-
-        adapter2 = new DistrResumenAdapter();
     }
 
     private List<sale> getListClientes(){
