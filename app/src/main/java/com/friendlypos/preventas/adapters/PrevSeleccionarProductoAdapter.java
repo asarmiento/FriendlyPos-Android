@@ -103,8 +103,6 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
 
 
         // TRANSACCION PARA ACTUALIZAR CAMPOS DE LA TABLA VENTAS
-
-
         try {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
@@ -136,7 +134,7 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
         holder.txt_producto_factura_marca.setText("Marca: " + marca2);
         holder.txt_producto_factura_tipo.setText("Tipo: " + tipoProducto);
         holder.txt_producto_factura_precio.setText(precio);
-        holder.txt_producto_factura_disponible.setText("Disp: " + inventario.getAmount());
+       /* holder.txt_producto_factura_disponible.setText("Disp: " + inventario.getAmount());*/
         holder.fillData(producto);
 
         if(pivots.size() == 0){
@@ -162,8 +160,8 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
     //}
 
 
-    public void addProduct(final int inventario_id, final String producto_id, final
-    Double cantidadDisponible, final String description, String Precio1, String Precio2,
+    public void addProduct(final int inventario_id, final String producto_id,/*  final Double cantidadDisponible, */
+    final String description, String Precio1, String Precio2,
                            String Precio3, String Precio4, String Precio5, final String bonusProducto) {
 
         final invoiceDetallePreventa invoiceDetallePreventa = activity.getCurrentInvoice();
@@ -188,7 +186,9 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
         txtNombreProducto.setText(description);
 
         final TextView label = (TextView) promptView.findViewById(R.id.promtClabel);
-        label.setText("Escriba una cantidad maxima de " + cantidadDisponible + " minima de 1");
+       // label.setText("Escriba una cantidad maxima de " + cantidadDisponible + " minima de 1");
+        label.setText("Escriba la cantidad requerida del producto");
+
         final EditText input = (EditText) promptView.findViewById(R.id.promtCtext);
         final EditText desc = (EditText) promptView.findViewById(R.id.promtCDesc);
 
@@ -227,21 +227,14 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
             public void onClick(DialogInterface dialog, int id) {
                 try {
 
-
+                    // TODO obtiene la cantidad del producto
                 producto_amount_dist_add = Double.parseDouble(((input.getText().toString().isEmpty()) ? "0" : input.getText().toString()));
-               // Log.d("productoAmountDistAdd", producto_amount_dist_add + "");
-                //  productoAmountDistAdd = String.format("%,.2f", producto_amount_dist_add);
 
+                    // TODO obtiene el descuento del producto
                 producto_descuento_add = Double.parseDouble(((desc.getText().toString().isEmpty()) ? "0" : desc.getText().toString()));
-                // productoDescuentoAdd = String.format("%,.2f", producto_descuento_add);
-              //  Log.d("productoDescuentoAdd", producto_descuento_add + "");
-
-
 
 
                 if (producto_descuento_add >= 0 && producto_descuento_add <= 10) {
-
-                    if (producto_amount_dist_add > 0 && producto_amount_dist_add <= cantidadDisponible) {
 
                         if (bonusProducto.equals("1")){
 
@@ -324,11 +317,11 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
                             numero++;
                             session.guardarDatosPivotPreventa(numero);
 
-                            final Double nuevoAmount = cantidadDisponible - producto_amount_dist_add;
-                            Log.d("nuevoAmount", nuevoAmount + "");
+                          /*  final Double nuevoAmount = cantidadDisponible - producto_amount_dist_add;
+                            Log.d("nuevoAmount", nuevoAmount + "");*/
 
 
-                            final Realm realm6 = Realm.getDefaultInstance();
+                          /*  final Realm realm6 = Realm.getDefaultInstance();
 
                             realm6.executeTransaction(new Realm.Transaction() {
 
@@ -341,7 +334,7 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
                                     realm6.insertOrUpdate(inv_actualizado); // using insert API
                                 }
                             });
-
+*/
 
                             sale ventaDetallePreventa = activity.getCurrentVenta();
                             ventaDetallePreventa.getInvoice_id();
@@ -383,10 +376,6 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
                         }
                     else {
                             Toast.makeText(context, "Has excedido el monto del crédito", Toast.LENGTH_SHORT).show();
-                    }
-                }
-                    else {
-                           Toast.makeText(context, "El producto no se agrego, verifique la cantidad que esta ingresando", Toast.LENGTH_LONG).show();
                     }
                 }
                     else {
@@ -459,7 +448,7 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
             txt_producto_factura_marca = (TextView) view.findViewById(R.id.txt_prev_producto_factura_marca);
             txt_producto_factura_tipo = (TextView) view.findViewById(R.id.txt_prev_producto_factura_tipo);
             txt_producto_factura_precio = (TextView) view.findViewById(R.id.txt_prev_producto_factura_precio);
-            txt_producto_factura_disponible = (TextView) view.findViewById(R.id.txt_prev_producto_factura_disponible);
+           /* txt_producto_factura_disponible = (TextView) view.findViewById(R.id.txt_prev_producto_factura_disponible);*/
             txt_producto_factura_seleccionado = (TextView) view.findViewById(R.id.txt_prev_producto_factura_seleccionado);
         }
 
@@ -487,7 +476,7 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
                     String precio5 = producto.getSale_price5();
                     String bonusProducto = producto.getBonus();
 
-                    Double ProductoAmount = Double.valueOf(clickedDataItem.getAmount());
+                  /*  Double ProductoAmount = Double.valueOf(clickedDataItem.getAmount());*/
 
                     Realm realm1 = Realm.getDefaultInstance();
                     Productos producto = realm1.where(Productos.class).equalTo("id", ProductoID).findFirst();
@@ -496,7 +485,7 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
 
                     realm1.close();
 
-                   addProduct(InventarioID, ProductoID, ProductoAmount, description, precio, precio2, precio3, precio4, precio5, bonusProducto);
+                   addProduct(InventarioID, ProductoID, /*ProductoAmount,*/ description, precio, precio2, precio3, precio4, precio5, bonusProducto);
 
                 }
             });

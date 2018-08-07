@@ -319,7 +319,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                 //cambioDatosEmpresa = getDescargaDatosEmpresa();
 
                 if (cambioDatosEmpresa == 0) {
-                Toast.makeText(MenuPrincipal.this, "descargar_datosEmpresa", Toast.LENGTH_SHORT).show();
+
                     download1.descargarDatosEmpresa(MenuPrincipal.this);
                     download1.descargarUsuarios(MenuPrincipal.this);
                     cambioDatosEmpresa = 1;
@@ -334,11 +334,10 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                 break;
 
             case R.id.btn_descargar_catalogo:
-              //  cambioDatosEmpresa = getDescargaDatosEmpresa();
+                //  cambioDatosEmpresa = getDescargaDatosEmpresa();
                 cambioDatosEmpresa = session.getPrefDescargaDatos();
 
                     if (cambioDatosEmpresa == 1) {
-                        Toast.makeText(MenuPrincipal.this, "descargar_catalogo", Toast.LENGTH_SHORT).show();
                         download1.descargarCatalogo(MenuPrincipal.this);
 
                     } else {
@@ -361,7 +360,6 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                     // cambioDatosEmpresa = getDescargaDatosEmpresa();
 
                     if (cambioDatosEmpresa == 1) {
-                        Toast.makeText(MenuPrincipal.this, "descargar_inventario", Toast.LENGTH_SHORT).show();
                         download1.descargarInventario(MenuPrincipal.this);
 
                     } else {
