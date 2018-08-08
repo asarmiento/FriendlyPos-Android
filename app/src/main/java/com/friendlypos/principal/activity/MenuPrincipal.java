@@ -642,7 +642,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
 
             case R.id.clickVentaDirecta:
 
-                try
+             /*   try
                 {
                     // Launch Waze to look for Hawaii:
                     String url = "https://waze.com/ul?ll=9.9261253,-84.0889091&navigate=yes";
@@ -659,9 +659,9 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
 
                 /*    // If Waze is not installed, open it in Google Play:
                     Intent intent = new Intent( Intent.ACTION_VIEW, Uri.parse( "market://details?id=com.waze" ) );
-                    startActivity(intent);*/
+                    startActivity(intent);
                 }
-
+*/
                 Toast.makeText(this, "Botón no disponible por el momento", Toast.LENGTH_SHORT).show();
                 break;
 
