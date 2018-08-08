@@ -167,6 +167,7 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
                                             progresRing.dismiss();
                                         }
                                     }).start();
+                                    actualizarClienteVisitado();
                                 }
                                 else if (rbcomprado.isChecked()) {
 
@@ -228,6 +229,7 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
                                                                         progresRing.dismiss();
                                                                     }
                                                                 }).start();
+                                                            actualizarClienteVisitado();
 
                                                         } else if (rbcontado.isChecked()) {
                                                             // TRANSACCIÓN PARA ACTUALIZAR EL CAMPO METODO DE PAGO CONTADO DE LA FACTURA
@@ -259,6 +261,7 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
                                                                     progresRing.dismiss();
                                                                 }
                                                             }).start();
+                                                            actualizarClienteVisitado();
                                                         }
 
                                                     }
@@ -278,7 +281,7 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
                                 }
 
 
-                        }  actualizarClienteVisitado();
+                        }
                         }
 
                     })
