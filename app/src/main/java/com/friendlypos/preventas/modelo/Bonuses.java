@@ -1,5 +1,7 @@
 package com.friendlypos.preventas.modelo;
 
+import java.util.Date;
+
 import io.realm.RealmModel;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
@@ -10,18 +12,6 @@ import io.realm.annotations.PrimaryKey;
 
 public class Bonuses extends RealmObject {
 
-    /*   {
-        "id": 1,
-            "reference": "18-000001",
-            "product_id": 2,
-            "product_sale": "12.00",
-            "bonus_product_id": 2,
-            "product_bonus": "2.00",
-            "expiration": "2018-04-30",
-            "created_at": "2018-04-26 11:29:12",
-            "updated_at": "2018-04-26 11:29:12"
-    },*/
-
     @PrimaryKey
     int id;
     String reference;
@@ -29,7 +19,7 @@ public class Bonuses extends RealmObject {
     String product_sale;
     int bonus_product_id;
     String product_bonus;
-    int expiration;
+    Date expiration;
     String created_at;
     String updated_at;
 
@@ -81,11 +71,11 @@ public class Bonuses extends RealmObject {
         this.product_bonus = product_bonus;
     }
 
-    public int getExpiration() {
+    public Date getExpiration() {
         return expiration;
     }
 
-    public void setExpiration(int expiration) {
+    public void setExpiration(Date expiration) {
         this.expiration = expiration;
     }
 

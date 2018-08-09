@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -14,6 +16,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.friendlypos.R;
@@ -48,8 +51,10 @@ public class PrevSelecProductoFragment extends BaseFragment implements SearchVie
     int slecTAB;
     PreventaActivity activity;
     TotalizeHelperPreventa totalizeHelper;
+    private EditText etSearchBox;
 
     public static PrevSelecProductoFragment getInstance() {
+
         return new PrevSelecProductoFragment();
     }
 
@@ -83,6 +88,11 @@ public class PrevSelecProductoFragment extends BaseFragment implements SearchVie
         View rootView = inflater.inflate(R.layout.fragment_prev_selecproducto, container,
                 false);
         setHasOptionsMenu(true);
+        etSearchBox = (EditText) rootView.findViewById(R.id.etSearchBox);
+
+
+
+
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerViewPrevSeleccProducto);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setHasFixedSize(true);
@@ -97,6 +107,22 @@ public class PrevSelecProductoFragment extends BaseFragment implements SearchVie
         Log.d("listaProducto", getListProductos() + "");
         adapter2 = new PrevResumenAdapter();
         creditoDisponible();
+
+
+        etSearchBox.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                final List<Inventario> filteredModelList = filter(getListProductos(), s.toString());
+                adapter.setFilter(filteredModelList);
+               // adapter.getFilter().filter(s.toString());
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
 
         return rootView;
 

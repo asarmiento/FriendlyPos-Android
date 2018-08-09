@@ -13,6 +13,8 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,18 +35,24 @@ import com.friendlypos.preventas.util.TotalizeHelperPreventa;
 import com.friendlypos.principal.modelo.Clientes;
 import com.friendlypos.principal.modelo.Productos;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import io.realm.Realm;
+import io.realm.RealmQuery;
 import io.realm.RealmResults;
 
 import static io.realm.internal.SyncObjectServerFacade.getApplicationContext;
 
-public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSeleccionarProductoAdapter.CharacterViewHolder> {
+public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSeleccionarProductoAdapter.CharacterViewHolder> implements Filterable {
 
     private Context context;
     public List<Inventario> productosList;
+    List<Inventario> countryModels;
     private PreventaActivity activity;
     private PrevSelecProductoFragment fragment;
     private static double producto_amount_dist_add = 0;
@@ -53,7 +61,7 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
     private static double producto_descuento_add = 0;
     private static double productosParaObtenerBonus = 0;
     private static double productosDelBonus = 0;
-    int fechaExpiracionBonus;
+    Date fechaExpiracionBonus;
     private int selected_position = -1;
     static double creditoLimiteCliente = 0.0;
     double totalCredito = 0.0;;
@@ -62,13 +70,25 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
     int nextId;
     String customer;
     SessionPrefes session;
+    Spinner spPrices;
+    String idProducto;
+    int idFacturaSeleccionada;
+
+    private CustomFilter mFilter;
 
     public PrevSeleccionarProductoAdapter(PreventaActivity activity, PrevSelecProductoFragment fragment, List<Inventario> productosList) {
         this.activity = activity;
         this.fragment = fragment;
         this.productosList = productosList;
+        this.countryModels = new ArrayList<>();
+        this.countryModels.addAll(productosList);
         session = new SessionPrefes(getApplicationContext());
         totalizeHelper = new TotalizeHelperPreventa(activity);
+        this.mFilter = new CustomFilter(PrevSeleccionarProductoAdapter.this);
+    }
+
+    public Filter getFilter() {
+        return mFilter;
     }
 
     public void updateData(List<Inventario> productosList) {
@@ -159,7 +179,6 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
     }
     //}
 
-
     public void addProduct(final int inventario_id, final String producto_id,/*  final Double cantidadDisponible, */
     final String description, String Precio1, String Precio2,
                            String Precio3, String Precio4, String Precio5, final String bonusProducto) {
@@ -171,8 +190,9 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
         Log.d("FACTURAIDDELEG", idDetallesFactura + "");
         // invoiceDetallePreventa.setP_code(weqweq);
 
-        final int idFacturaSeleccionada = (activity).getInvoiceIdPreventa();
+        idFacturaSeleccionada = (activity).getInvoiceIdPreventa();
         Log.d("idFacturaSeleccionada", idFacturaSeleccionada + "");
+        idProducto = producto_id;
         Log.d("idProductoSeleccionado", producto_id + "");
 
 
@@ -189,12 +209,40 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
        // label.setText("Escriba una cantidad maxima de " + cantidadDisponible + " minima de 1");
         label.setText("Escriba la cantidad requerida del producto");
 
+        final TextView txtBonificacion = (TextView) promptView.findViewById(R.id.txtBonificacion);
+
+        if (bonusProducto.equals("1")){
+            getBoni();
+            final Realm realmBonus = Realm.getDefaultInstance();
+
+            realmBonus.executeTransaction(new Realm.Transaction() {
+
+                @Override
+                public void execute(Realm realmBonus) {
+
+                    Bonuses productoConBonus = realmBonus.where(Bonuses.class).equalTo("product_id", Integer.valueOf(producto_id)).findFirst();
+                    productosParaObtenerBonus = Double.parseDouble(productoConBonus.getProduct_sale());
+                    productosDelBonus = Double.parseDouble(productoConBonus.getProduct_bonus());
+                    fechaExpiracionBonus = productoConBonus.getExpiration();
+
+                    Log.d("BONIF", productoConBonus.getProduct_id() +  " "+ productosParaObtenerBonus +  " "+ productosDelBonus +  " "+ String.valueOf(fechaExpiracionBonus));
+
+                }
+            });
+
+            txtBonificacion.setVisibility(View.VISIBLE);
+            txtBonificacion.setText(" La cantidad para bonificarle es de: " + productosParaObtenerBonus);
+
+        }
+
+
+
+
+
         final EditText input = (EditText) promptView.findViewById(R.id.promtCtext);
         final EditText desc = (EditText) promptView.findViewById(R.id.promtCDesc);
 
-        final TextView txtBonificacion = (TextView) promptView.findViewById(R.id.txtBonificacion);
-
-        final Spinner spPrices = (Spinner) promptView.findViewById(R.id.spPrices);
+        spPrices = (Spinner) promptView.findViewById(R.id.spPrices);
         ArrayList<Double> pricesList = new ArrayList<>();
         Double precio1 = Double.valueOf(Precio1);
         Double precio2 = Double.valueOf(Precio2);
@@ -237,29 +285,35 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
                 if (producto_descuento_add >= 0 && producto_descuento_add <= 10) {
 
                         if (bonusProducto.equals("1")){
+                            Log.d("idProductoBONIF", producto_id + "");
 
-                            final Realm realmBonus = Realm.getDefaultInstance();
 
-                            realmBonus.executeTransaction(new Realm.Transaction() {
+                            long fechaexp = fechaExpiracionBonus.getTime();
+                            Log.d("fechaExpBONIF", fechaexp + "");
 
-                                @Override
-                                public void execute(Realm realmBonus) {
 
-                                    Bonuses productoConBonus = realmBonus.where(Bonuses.class).equalTo("product_id", producto_id).findFirst();
-                                    productosParaObtenerBonus = Double.parseDouble(productoConBonus.getProduct_sale());
-                                    productosDelBonus = Double.parseDouble(productoConBonus.getProduct_sale());
-                                    fechaExpiracionBonus = productoConBonus.getExpiration();
+                            Calendar cal = Calendar.getInstance();
+                            long hoy = cal.getTimeInMillis();
+                            Log.d("fechaBONIF", hoy + "");
 
-                                }
-                            });
-                            txtBonificacion.setVisibility(View.VISIBLE);
-                            txtBonificacion.setText(" La cantidad para bonificarle es de: " + productosParaObtenerBonus);
-                            int fechaDia = Integer.parseInt(Functions.getDate());
+
+
+                         /*   SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                            Date date = sdf.getCalendar().getTime();
+
+                            Log.d("fechaBONIF", date + "");*/
+
+
+                          //  String fechaDia = Functions.getDate();
 
                             if(producto_amount_dist_add >= productosParaObtenerBonus ){
-                                if(fechaExpiracionBonus >= fechaDia){
+
+                                if(hoy <= fechaexp){
                                 producto_bonus_add =  producto_amount_dist_add + productosDelBonus;
-                                Log.d("PRODUCTO DEL BONUS", producto_bonus_add + "");
+                                    Log.d("PRODUCTODELBONUS", producto_bonus_add + "");
+                                    agregarBonificacion();
+                                    Toast.makeText(context, "Se realizó una bonificación de " + productosDelBonus + " productos", Toast.LENGTH_LONG).show();
+
                             }
                                 else{
                                     Toast.makeText(context, "Fecha expirada", Toast.LENGTH_LONG).show();
@@ -271,112 +325,10 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
 
                         }
 
-
-                        final double precioSeleccionado = (double) spPrices.getSelectedItem();
-                        Log.d("precioSeleccionado", precioSeleccionado + "");
-
-                        //  CREDITO
-                        String metodoPagoCliente = invoiceDetallePreventa.getP_payment_method_id();
-                        Double cred = Double.parseDouble(activity.getCreditoLimiteClientePreventa());
-                        if (metodoPagoCliente.equals("1")) {
-                            creditoLimiteCliente = cred;
-                            totalCredito = creditoLimiteCliente;
-                            Log.d("ads", creditoLimiteCliente + "");
-                        }
-                        else if (metodoPagoCliente.equals("2")) {
-                            double totalProducSlecc = precioSeleccionado * producto_amount_dist_add;
-                            creditoLimiteCliente = cred;
-                            totalCredito = creditoLimiteCliente - totalProducSlecc;
-                            Log.d("ads", totalCredito + "");
+                        else{
+                            agregar();
                         }
 
-                        // LIMITAR SEGUN EL LIMITE DEL CREDITO
-                        if (totalCredito >= 0) {
-                            int numero = session.getDatosPivotPreventa();
-                            // increment index
-                            Number currentIdNum = numero;
-
-                            if (currentIdNum == null) {
-                                nextId = 1;
-                            }
-                            else {
-                                nextId = currentIdNum.intValue() + 1;
-                            }
-
-                            Pivot pivotnuevo = new Pivot(); // unmanaged
-                            pivotnuevo.setId(nextId);
-                            pivotnuevo.setInvoice_id(String.valueOf(idDetallesFactura));
-                            pivotnuevo.setProduct_id(producto_id);
-                            pivotnuevo.setPrice(String.valueOf(precioSeleccionado));
-                            pivotnuevo.setAmount(String.valueOf(producto_amount_dist_add));
-                            pivotnuevo.setDiscount(String.valueOf(producto_descuento_add));
-                            pivotnuevo.setDelivered(String.valueOf(producto_amount_dist_add));
-                            pivotnuevo.setDevuelvo(0);
-
-                            activity.insertProduct(pivotnuevo);
-                            numero++;
-                            session.guardarDatosPivotPreventa(numero);
-
-                          /*  final Double nuevoAmount = cantidadDisponible - producto_amount_dist_add;
-                            Log.d("nuevoAmount", nuevoAmount + "");*/
-
-
-                          /*  final Realm realm6 = Realm.getDefaultInstance();
-
-                            realm6.executeTransaction(new Realm.Transaction() {
-
-                                @Override
-                                public void execute(Realm realm6) {
-
-                                    Inventario inv_actualizado = realm6.where(Inventario.class).equalTo("id", inventario_id).findFirst();
-                                    inv_actualizado.setAmount(String.valueOf(nuevoAmount));
-
-                                    realm6.insertOrUpdate(inv_actualizado); // using insert API
-                                }
-                            });
-*/
-
-                            sale ventaDetallePreventa = activity.getCurrentVenta();
-                            ventaDetallePreventa.getInvoice_id();
-
-                            if(ventaDetallePreventa.getInvoice_id().equals(String.valueOf(idFacturaSeleccionada))){
-
-                                customer = ventaDetallePreventa.getCustomer_id();
-
-                            }
-
-                            // TRANSACCION PARA ACTUALIZAR EL CREDIT_LIMIT DEL CLIENTE
-                            final Realm realm4 = Realm.getDefaultInstance();
-                            realm4.executeTransaction(new Realm.Transaction() {
-
-                                @Override
-                                public void execute(Realm realm4) {
-
-                                    //final sale ventas = realm4.where(sale.class).equalTo("invoice_id", idFacturaSeleccionada).findFirst();
-                                    Clientes clientes = realm4.where(Clientes.class).equalTo("id", customer).findFirst();
-                                    Log.d("ads", clientes + "");
-                                    clientes.setCreditLimit(String.valueOf(totalCredito));
-
-                                    realm4.insertOrUpdate(clientes); // using insert API
-
-                                    realm4.close();
-                                    activity.setCreditoLimiteClientePreventa(String.valueOf(totalCredito));
-
-                                    fragment.updateData();
-                                    List<Pivot> list = activity.getAllPivotDelegate();
-                                    activity.cleanTotalize();
-                                    totalizeHelper = new TotalizeHelperPreventa(activity);
-                                   totalizeHelper.totalize(list);
-                                    Log.d("listaResumenADD", list + "");
-
-                                }
-                            });
-                             //   activity.getAllPivotDelegate();
-                            Toast.makeText(context, "Se agregó el producto", Toast.LENGTH_LONG).show();
-                        }
-                    else {
-                            Toast.makeText(context, "Has excedido el monto del crédito", Toast.LENGTH_SHORT).show();
-                    }
                 }
                     else {
                     Toast.makeText(context, "El producto no se agrego, El descuento debe ser >0 <11", Toast.LENGTH_LONG).show();
@@ -404,15 +356,234 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
         alertD.show();
     }
 
-    public List<Pivot> getListResumen() {
-        String facturaId = String.valueOf(activity.getInvoiceIdPreventa());
-        Realm realm = Realm.getDefaultInstance();
-        RealmResults<Pivot> facturaid1 = realm.where(Pivot.class).equalTo("invoice_id", facturaId).equalTo("devuelvo", 0).findAll();
-        realm.close();
-        Log.d("jd", "getListResumen: " + facturaid1);
-        return facturaid1;
+    public void agregar(){
+
+        final double precioSeleccionado = (double) spPrices.getSelectedItem();
+        Log.d("precioSeleccionado", precioSeleccionado + "");
+
+        //  CREDITO
+        String metodoPagoCliente = invoiceDetallePreventa.getP_payment_method_id();
+        Double cred = Double.parseDouble(activity.getCreditoLimiteClientePreventa());
+        if (metodoPagoCliente.equals("1")) {
+            creditoLimiteCliente = cred;
+            totalCredito = creditoLimiteCliente;
+            Log.d("ads", creditoLimiteCliente + "");
+        }
+        else if (metodoPagoCliente.equals("2")) {
+            double totalProducSlecc = precioSeleccionado * producto_amount_dist_add;
+            creditoLimiteCliente = cred;
+            totalCredito = creditoLimiteCliente - totalProducSlecc;
+            Log.d("ads", totalCredito + "");
+        }
+
+        // LIMITAR SEGUN EL LIMITE DEL CREDITO
+        if (totalCredito >= 0) {
+            int numero = session.getDatosPivotPreventa();
+            // increment indexrev
+            Number currentIdNum = numero;
+
+            if (currentIdNum == null) {
+                nextId = 1;
+            }
+            else {
+                nextId = currentIdNum.intValue() + 1;
+            }
+
+            Pivot pivotnuevo = new Pivot(); // unmanaged
+            pivotnuevo.setId(nextId);
+            pivotnuevo.setInvoice_id(String.valueOf(idDetallesFactura));
+            pivotnuevo.setProduct_id(idProducto);
+            pivotnuevo.setPrice(String.valueOf(precioSeleccionado));
+            pivotnuevo.setAmount(String.valueOf(producto_amount_dist_add));
+            pivotnuevo.setDiscount(String.valueOf(producto_descuento_add));
+            pivotnuevo.setDelivered(String.valueOf(producto_amount_dist_add));
+            pivotnuevo.setDevuelvo(0);
+
+            activity.insertProduct(pivotnuevo);
+            numero++;
+            session.guardarDatosPivotPreventa(numero);
+
+                          /*  final Double nuevoAmount = cantidadDisponible - producto_amount_dist_add;
+                            Log.d("nuevoAmount", nuevoAmount + "");*/
+
+
+                          /*  final Realm realm6 = Realm.getDefaultInstance();
+
+                            realm6.executeTransaction(new Realm.Transaction() {
+
+                                @Override
+                                public void execute(Realm realm6) {
+
+                                    Inventario inv_actualizado = realm6.where(Inventario.class).equalTo("id", inventario_id).findFirst();
+                                    inv_actualizado.setAmount(String.valueOf(nuevoAmount));
+
+                                    realm6.insertOrUpdate(inv_actualizado); // using insert API
+                                }
+                            });
+*/
+
+            sale ventaDetallePreventa = activity.getCurrentVenta();
+            ventaDetallePreventa.getInvoice_id();
+
+            if(ventaDetallePreventa.getInvoice_id().equals(String.valueOf(idFacturaSeleccionada))){
+
+                customer = ventaDetallePreventa.getCustomer_id();
+
+            }
+
+            // TRANSACCION PARA ACTUALIZAR EL CREDIT_LIMIT DEL CLIENTE
+            final Realm realm4 = Realm.getDefaultInstance();
+            realm4.executeTransaction(new Realm.Transaction() {
+
+                @Override
+                public void execute(Realm realm4) {
+
+                    //final sale ventas = realm4.where(sale.class).equalTo("invoice_id", idFacturaSeleccionada).findFirst();
+                    Clientes clientes = realm4.where(Clientes.class).equalTo("id", customer).findFirst();
+                    Log.d("ads", clientes + "");
+                    clientes.setCreditLimit(String.valueOf(totalCredito));
+
+                    realm4.insertOrUpdate(clientes); // using insert API
+
+                    realm4.close();
+                    activity.setCreditoLimiteClientePreventa(String.valueOf(totalCredito));
+
+                    fragment.updateData();
+                    List<Pivot> list = activity.getAllPivotDelegate();
+                    activity.cleanTotalize();
+                    totalizeHelper = new TotalizeHelperPreventa(activity);
+                    totalizeHelper.totalize(list);
+                    Log.d("listaResumenADD", list + "");
+
+                }
+            });
+            //   activity.getAllPivotDelegate();
+            Toast.makeText(context, "Se agregó el producto", Toast.LENGTH_LONG).show();
+        }
+        else {
+            Toast.makeText(context, "Has excedido el monto del crédito", Toast.LENGTH_SHORT).show();
+        }
 
     }
+
+    public void agregarBonificacion(){
+
+        final double precioSeleccionado = (double) spPrices.getSelectedItem();
+        Log.d("precioSeleccionado", precioSeleccionado + "");
+
+        //  CREDITO
+        String metodoPagoCliente = invoiceDetallePreventa.getP_payment_method_id();
+        Double cred = Double.parseDouble(activity.getCreditoLimiteClientePreventa());
+        if (metodoPagoCliente.equals("1")) {
+            creditoLimiteCliente = cred;
+            totalCredito = creditoLimiteCliente;
+            Log.d("ads", creditoLimiteCliente + "");
+        }
+        else if (metodoPagoCliente.equals("2")) {
+            double totalProducSlecc = precioSeleccionado * producto_amount_dist_add;
+            creditoLimiteCliente = cred;
+            totalCredito = creditoLimiteCliente - totalProducSlecc;
+            Log.d("ads", totalCredito + "");
+        }
+
+        // LIMITAR SEGUN EL LIMITE DEL CREDITO
+        if (totalCredito >= 0) {
+            int numero = session.getDatosPivotPreventa();
+            // increment indexrev
+            Number currentIdNum = numero;
+
+            if (currentIdNum == null) {
+                nextId = 1;
+            }
+            else {
+                nextId = currentIdNum.intValue() + 1;
+            }
+
+            Pivot pivotnuevo = new Pivot(); // unmanaged
+            pivotnuevo.setId(nextId);
+            pivotnuevo.setInvoice_id(String.valueOf(idDetallesFactura));
+            pivotnuevo.setProduct_id(idProducto);
+            pivotnuevo.setPrice(String.valueOf(precioSeleccionado));
+            pivotnuevo.setAmount(String.valueOf(producto_bonus_add));
+            pivotnuevo.setDiscount(String.valueOf(producto_descuento_add));
+            pivotnuevo.setDelivered(String.valueOf(producto_bonus_add));
+            pivotnuevo.setDevuelvo(0);
+
+            activity.insertProduct(pivotnuevo);
+            numero++;
+            session.guardarDatosPivotPreventa(numero);
+
+                          /*  final Double nuevoAmount = cantidadDisponible - producto_amount_dist_add;
+                            Log.d("nuevoAmount", nuevoAmount + "");*/
+
+
+                          /*  final Realm realm6 = Realm.getDefaultInstance();
+
+                            realm6.executeTransaction(new Realm.Transaction() {
+
+                                @Override
+                                public void execute(Realm realm6) {
+
+                                    Inventario inv_actualizado = realm6.where(Inventario.class).equalTo("id", inventario_id).findFirst();
+                                    inv_actualizado.setAmount(String.valueOf(nuevoAmount));
+
+                                    realm6.insertOrUpdate(inv_actualizado); // using insert API
+                                }
+                            });
+*/
+
+            sale ventaDetallePreventa = activity.getCurrentVenta();
+            ventaDetallePreventa.getInvoice_id();
+
+            if(ventaDetallePreventa.getInvoice_id().equals(String.valueOf(idFacturaSeleccionada))){
+
+                customer = ventaDetallePreventa.getCustomer_id();
+
+            }
+
+            // TRANSACCION PARA ACTUALIZAR EL CREDIT_LIMIT DEL CLIENTE
+            final Realm realm4 = Realm.getDefaultInstance();
+            realm4.executeTransaction(new Realm.Transaction() {
+
+                @Override
+                public void execute(Realm realm4) {
+
+                    //final sale ventas = realm4.where(sale.class).equalTo("invoice_id", idFacturaSeleccionada).findFirst();
+                    Clientes clientes = realm4.where(Clientes.class).equalTo("id", customer).findFirst();
+                    Log.d("ads", clientes + "");
+                    clientes.setCreditLimit(String.valueOf(totalCredito));
+
+                    realm4.insertOrUpdate(clientes); // using insert API
+
+                    realm4.close();
+                    activity.setCreditoLimiteClientePreventa(String.valueOf(totalCredito));
+
+                    fragment.updateData();
+                    List<Pivot> list = activity.getAllPivotDelegate();
+                    activity.cleanTotalize();
+                    totalizeHelper = new TotalizeHelperPreventa(activity);
+                    totalizeHelper.totalize(list);
+                    Log.d("listaResumenADD", list + "");
+
+                }
+            });
+            //   activity.getAllPivotDelegate();
+            Toast.makeText(context, "Se agregó el producto", Toast.LENGTH_LONG).show();
+        }
+        else {
+            Toast.makeText(context, "Has excedido el monto del crédito", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    private List<Bonuses> getBoni(){
+        Realm realm = Realm.getDefaultInstance();
+        RealmQuery<Bonuses> query = realm.where(Bonuses.class);
+        RealmResults<Bonuses> result1 = query.findAll();
+        Log.d("BONIFICACION", result1 + "");
+        return result1;
+    }
+
 
     @Override
     public long getItemId(int position) {
@@ -422,6 +593,41 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
     @Override
     public int getItemCount() {
         return productosList.size();
+    }
+
+
+    /*Filtro*/
+    public class CustomFilter extends Filter {
+        private PrevSeleccionarProductoAdapter listAdapter;
+
+        private CustomFilter(PrevSeleccionarProductoAdapter listAdapter) {
+            super();
+            this.listAdapter = listAdapter;
+        }
+
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            countryModels.clear();
+            final FilterResults results = new FilterResults();
+            if (constraint.length() == 0) {
+                countryModels.addAll(productosList);
+            } else {
+                final String filterPattern = constraint.toString().toLowerCase().trim();
+                for (final Inventario person : productosList) {
+                    if (person.getNombre_producto().toLowerCase().contains(filterPattern)) {
+                        countryModels.add(person);
+                    }
+                }
+            }
+            results.values = countryModels;
+            results.count = countryModels.size();
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            this.listAdapter.notifyDataSetChanged();
+        }
     }
 
     public void setFilter(List<Inventario> countryModels){

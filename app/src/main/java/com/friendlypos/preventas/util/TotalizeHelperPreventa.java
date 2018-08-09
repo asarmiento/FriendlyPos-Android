@@ -1,10 +1,12 @@
 package com.friendlypos.preventas.util;
 
 import android.util.Log;
+import android.view.View;
 
 import com.friendlypos.distribucion.modelo.Pivot;
 import com.friendlypos.distribucion.modelo.sale;
 import com.friendlypos.preventas.activity.PreventaActivity;
+import com.friendlypos.preventas.modelo.Bonuses;
 import com.friendlypos.principal.modelo.Clientes;
 import com.friendlypos.principal.modelo.Productos;
 
@@ -17,6 +19,7 @@ public class TotalizeHelperPreventa {
     private static final double IVA = 13.0;
     String customer;
     PreventaActivity activity;
+    private static double productosDelBonus = 0;
 
     public TotalizeHelperPreventa(PreventaActivity activity) {
         this.activity = activity;
@@ -31,6 +34,13 @@ public class TotalizeHelperPreventa {
         String tipo = realm.where(Productos.class).equalTo("id", id).findFirst().getProduct_type_id();
         realm.close();
         return tipo;
+    }
+
+    private String getProductBonusByPivotId(String id) {
+        Realm realm = Realm.getDefaultInstance();
+        String bonus = realm.where(Productos.class).equalTo("id", id).findFirst().getBonus();
+        realm.close();
+        return bonus;
     }
 
     private Double getClienteFixedDescuentoByPivotId(String id) {
@@ -59,9 +69,36 @@ public class TotalizeHelperPreventa {
         }
     }
 
-    private void totalize(Pivot currentPivot) {
+    private void totalize(final Pivot currentPivot) {
+        Double cantidad;
+
         Double clienteFixedDescuento = getClienteFixedDescuentoByPivotId(currentPivot.getInvoice_id());
         String tipo = getProductTypeByPivotId(currentPivot.getProduct_id());
+
+        String bonus = getProductBonusByPivotId(currentPivot.getProduct_id());
+
+        if (bonus.equals("1")){
+
+            final Realm realmBonus = Realm.getDefaultInstance();
+
+            realmBonus.executeTransaction(new Realm.Transaction() {
+
+                @Override
+                public void execute(Realm realmBonus) {
+
+                    Bonuses productoConBonus = realmBonus.where(Bonuses.class).equalTo("product_id", Integer.valueOf(currentPivot.getProduct_id())).findFirst();
+                    productosDelBonus = Double.parseDouble(productoConBonus.getProduct_bonus());
+
+                    Log.d("BONIFTOTAL", productoConBonus.getProduct_id() +  " " + productosDelBonus);
+
+                }
+            });
+
+            cantidad = Double.valueOf(currentPivot.getAmount()) - productosDelBonus;
+        }
+        else{
+            cantidad = Double.valueOf(currentPivot.getAmount());
+        }
 
         Double subGrab = 0.0;
         Double discountBill = 0.0;
@@ -72,7 +109,6 @@ public class TotalizeHelperPreventa {
         Double total = 0.0;
 
         Double precio = Double.valueOf(currentPivot.getPrice());
-        Double cantidad = Double.valueOf(currentPivot.getAmount());
         Double descuento = Double.valueOf(currentPivot.getDiscount());
 
 

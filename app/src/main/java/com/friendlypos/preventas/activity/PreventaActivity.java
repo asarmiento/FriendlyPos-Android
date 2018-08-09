@@ -12,6 +12,8 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.os.Handler;
+import android.widget.EditText;
+
 import com.friendlypos.R;
 import com.friendlypos.application.bluetooth.PrinterService;
 import com.friendlypos.application.util.Functions;
@@ -53,6 +55,8 @@ public class PreventaActivity extends BluetoothActivity {
     private double totalizarImpuestoIVA;
     private double totalizarTotal;
     private double totalizarTotalDouble;
+
+
 
     private PreSellInvoiceDelegate preSellInvoiceDelegate;
 
@@ -160,6 +164,7 @@ public class PreventaActivity extends BluetoothActivity {
         setContentView(R.layout.activity_preventa);
         ButterKnife.bind(this);
         toolbar = (Toolbar) findViewById(R.id.toolbarPreventa);
+
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
 

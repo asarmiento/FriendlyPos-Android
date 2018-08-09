@@ -19,6 +19,7 @@ import com.friendlypos.distribucion.modelo.Inventario;
 import com.friendlypos.distribucion.modelo.Pivot;
 import com.friendlypos.preventas.activity.PreventaActivity;
 import com.friendlypos.preventas.fragment.PrevResumenFragment;
+import com.friendlypos.preventas.modelo.Bonuses;
 import com.friendlypos.principal.modelo.Productos;
 
 import java.util.ArrayList;
@@ -39,6 +40,7 @@ public class PrevResumenAdapter extends RecyclerView.Adapter<PrevResumenAdapter.
     int idInvetarioSelec;
     int nextId;
     private PrevResumenFragment fragment;
+    private static double productosDelBonus = 0;
 
     public PrevResumenAdapter(PreventaActivity activity, PrevResumenFragment fragment, List<Pivot> productosList) {
         this.productosList = productosList;
@@ -75,13 +77,41 @@ public class PrevResumenAdapter extends RecyclerView.Adapter<PrevResumenAdapter.
     public void onBindViewHolder(PrevResumenAdapter.CharacterViewHolder holder, final int position) {
 
         final Pivot pivot = productosList.get(position);
-
+        String pivotTotal;
+        double amountBonif;
         holder.txt_resumen_factura_nombre.setText(getProductDescriptionByPivotId(pivot.getProduct_id()));
         holder.txt_resumen_factura_precio.setText("P: " + Double.valueOf(pivot.getPrice()));
         holder.txt_resumen_factura_descuento.setText("Descuento de: " + Double.valueOf(pivot.getDiscount()));
         holder.txt_resumen_factura_cantidad.setText("C: " + Double.parseDouble(pivot.getAmount()));
 
-        String pivotTotal = String.format("%,.2f", (Double.valueOf(pivot.getPrice()) * Double.parseDouble(pivot.getAmount())));
+            Realm realm0 = Realm.getDefaultInstance();
+            String bonus = realm0.where(Productos.class).equalTo("id", pivot.getProduct_id()).findFirst().getBonus();
+            realm0.close();
+
+        if (bonus.equals("1")){
+
+            final Realm realmBonus = Realm.getDefaultInstance();
+
+            realmBonus.executeTransaction(new Realm.Transaction() {
+
+                @Override
+                public void execute(Realm realmBonus) {
+
+                    Bonuses productoConBonus = realmBonus.where(Bonuses.class).equalTo("product_id", Integer.valueOf(pivot.getProduct_id())).findFirst();
+                    productosDelBonus = Double.parseDouble(productoConBonus.getProduct_bonus());
+
+                    Log.d("BONIFTOTAL", productoConBonus.getProduct_id() +  " " + productosDelBonus);
+
+                }
+            });
+            amountBonif = Double.parseDouble(pivot.getAmount()) - productosDelBonus;
+            pivotTotal = String.format("%,.2f", (Double.valueOf(pivot.getPrice()))* amountBonif);
+            Log.d("BONIFTOTALPIVOT", pivotTotal +  " ");
+        }
+        else{
+            pivotTotal = String.format("%,.2f", (Double.valueOf(pivot.getPrice()) * Double.parseDouble(pivot.getAmount())));
+            Log.d("TOTALPIVOT", pivotTotal +  " ");
+        }
 
         holder.txt_resumen_factura_total.setText("T: " + pivotTotal);
 

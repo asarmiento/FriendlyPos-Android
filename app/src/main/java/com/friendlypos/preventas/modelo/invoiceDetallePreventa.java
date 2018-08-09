@@ -61,7 +61,7 @@ public class invoiceDetallePreventa {
 
     private String p_invoice_type_id;
 
-    private String p_payment_method_id;
+    private static String p_payment_method_id;
 
     private sale p_sale;
 
@@ -278,7 +278,7 @@ public class invoiceDetallePreventa {
         this.p_invoice_type_id = p_invoice_type_id;
     }
 
-    public String getP_payment_method_id() {
+    public static String getP_payment_method_id() {
         return p_payment_method_id;
     }
 

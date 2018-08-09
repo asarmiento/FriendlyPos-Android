@@ -117,7 +117,45 @@ public class DescargasHelper {
                     // Toast.makeText(context, getString(R.string.error), Toast.LENGTH_LONG).show();
                 }
             });
+            // TODO descarga Bonuses
+            Call<BonusesResponse> callBonuses = api.getBonusesTable(token);
+            callBonuses.enqueue(new Callback<BonusesResponse>() {
 
+                @Override
+                public void onResponse(Call<BonusesResponse> callBonuses, Response<BonusesResponse> response) {
+                    mContentsArrayBonuses.clear();
+
+
+                    if (response.isSuccessful()) {
+                        mContentsArrayBonuses.addAll(response.body().getBonuses());
+
+                        try {
+                            realmBonuses = Realm.getDefaultInstance();
+
+                            // Work with Realm
+                            realmBonuses.beginTransaction();
+                            realmBonuses.copyToRealmOrUpdate(mContentsArrayBonuses);
+                            realmBonuses.commitTransaction();
+                            //realm.close();
+                        }
+                        finally {
+                            realmBonuses.close();
+                        }
+                        Log.d(DescargasHelper.class.getName()+"Bonuses", mContentsArrayBonuses.toString());
+                        //  Toast.makeText(DescargarInventario.this, getString(R.string.success), Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        //  Toast.makeText(DescargarInventario.this, getString(R.string.error) + " CODE: " +response.code(), Toast.LENGTH_LONG).show();
+                        RealmResults<Bonuses> results = realmBonuses.where(Bonuses.class).findAll();
+                        mContentsArrayBonuses.addAll(results);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<BonusesResponse> callBonuses, Throwable t) {
+                    // Toast.makeText(context, getString(R.string.error), Toast.LENGTH_LONG).show();
+                }
+            });
             // TODO descarga Marcas
             Call<MarcasResponse> callMarcas = api.getMarcas(token);
             callMarcas.enqueue(new Callback<MarcasResponse>() {
@@ -193,7 +231,7 @@ public class DescargasHelper {
                 }
 
                 @Override
-                public void onFailure(Call<NumeracionResponse> callMarcas, Throwable t) {
+                public void onFailure(Call<NumeracionResponse> callNumeracion, Throwable t) {
                     // Toast.makeText(context, getString(R.string.error), Toast.LENGTH_LONG).show();
                 }
             });
@@ -240,45 +278,7 @@ public class DescargasHelper {
                 }
             });
 
-            // TODO descarga Bonuses
-            Call<BonusesResponse> callBonuses = api.getBonusesTable(token);
-            callBonuses.enqueue(new Callback<BonusesResponse>() {
 
-                @Override
-                public void onResponse(Call<BonusesResponse> callBonuses, Response<BonusesResponse> response) {
-                    mContentsArrayBonuses.clear();
-
-
-                    if (response.isSuccessful()) {
-                        mContentsArrayBonuses.addAll(response.body().getBonuses());
-
-                        try {
-                            realmBonuses = Realm.getDefaultInstance();
-
-                            // Work with Realm
-                            realmBonuses.beginTransaction();
-                            realmBonuses.copyToRealmOrUpdate(mContentsArrayBonuses);
-                            realmBonuses.commitTransaction();
-                            //realm.close();
-                        }
-                        finally {
-                            realmBonuses.close();
-                        }
-                        Log.d(DescargasHelper.class.getName()+"Bonuses", mContentsArrayBonuses.toString());
-                        //  Toast.makeText(DescargarInventario.this, getString(R.string.success), Toast.LENGTH_SHORT).show();
-                    }
-                    else {
-                        //  Toast.makeText(DescargarInventario.this, getString(R.string.error) + " CODE: " +response.code(), Toast.LENGTH_LONG).show();
-                        RealmResults<Bonuses> results = realmBonuses.where(Bonuses.class).findAll();
-                        mContentsArrayBonuses.addAll(results);
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<BonusesResponse> callBonuses, Throwable t) {
-                    // Toast.makeText(context, getString(R.string.error), Toast.LENGTH_LONG).show();
-                }
-            });
 
             // TODO descarga Tipo Productos
             Call<TipoProductoResponse> callTipoProducto = api.getTipoProducto(token);

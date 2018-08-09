@@ -4,6 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
+
     <android.support.v4.view.ViewPager
         android:id="@+id/viewpagerPreventa"
         android:layout_width="match_parent"
@@ -29,4 +31,6 @@
             android:layout_height="wrap_content"
             app:tabMode="scrollable" />
     </android.support.design.widget.AppBarLayout>
+
+
 </android.support.design.widget.CoordinatorLayout>

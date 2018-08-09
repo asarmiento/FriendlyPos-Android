@@ -2,7 +2,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
-
+    <EditText
+        android:id="@+id/etSearchBox"
+        style="@style/EditTextFind"
+        android:hint="Buscar"
+        android:visibility="gone"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -16,12 +20,14 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
+
+
     <android.support.v7.widget.RecyclerView
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/recyclerViewPrevSeleccProducto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/restCreditPreventa"
-        android:layout_alignParentStart="true" />
+        android:layout_below="@+id/etSearchBox"
+        android:layout_toEndOf="@+id/restCreditPreventa" />
 
 </RelativeLayout>
