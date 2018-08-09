@@ -11,9 +11,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.friendlypos.R;
 import com.friendlypos.application.util.Functions;
 import com.friendlypos.distribucion.modelo.sale;
@@ -26,6 +30,8 @@ import com.friendlypos.preventas.modelo.visit;
 import com.friendlypos.principal.modelo.Clientes;
 import java.util.List;
 import io.realm.Realm;
+
+import static io.realm.internal.SyncObjectServerFacade.getApplicationContext;
 
 public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapter.CharacterViewHolder> {
 
@@ -47,7 +53,7 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
     private static EditText txtObservaciones;
     String seleccion;
     GPSTracker gps;
-
+    String observ;
     private static Double creditolimite = 0.0;
     private static Double descuentoFixed = 0.0;
     private static Double cleintedue = 0.0;
@@ -107,24 +113,23 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
                 Clientes clickedDataItem = contentList.get(pos);
 
                 idCliente = clickedDataItem.getId();
+                Toast.makeText(QuickContext,"ID CLIENTE" + idCliente, Toast.LENGTH_LONG).show();
                 nombreCliente = clickedDataItem.getName();
                 final int creditoTime = Integer.parseInt(clickedDataItem.getCreditTime());
                 final String creditoLimiteClienteP = clickedDataItem.getCreditLimit();
                 final String dueClienteP = clickedDataItem.getDue();
-
-
                 LayoutInflater layoutInflater = LayoutInflater.from(QuickContext);
-                View promptView = layoutInflater.inflate(R.layout.promptvisitado_preventa, null);
+
 
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(QuickContext);
-                alertDialogBuilder.setView(promptView);
+                View promptView = layoutInflater.inflate(R.layout.promptvisitado_preventa, null);
                 final RadioButton rbcomprado = (RadioButton) promptView.findViewById(R.id.compradoBillVisitado);
                 final RadioButton rbvisitado = (RadioButton) promptView.findViewById(R.id.visitadoBillVisitado);
                 txtObservaciones = (EditText) promptView.findViewById(R.id.txtObservaciones);
+                alertDialogBuilder.setView(promptView);
 
-                alertDialogBuilder
-                    .setCancelable(false)
-                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+                alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 
                         public void onClick(DialogInterface dialog, int id) {
                             obtenerLocalización();
@@ -139,10 +144,32 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
                                 if (rbvisitado.isChecked()) {
                                     seleccion = "2";
                                     metodoPagoId = "1";
-                                    notifyDataSetChanged();
-                                    agregar();
 
-                                    activity.setActivoColorPreventa(activa);
+
+                                  /*  if(!txtObservaciones.getText().toString().equals("")){
+                                        observ = txtObservaciones.getText().toString();
+                                    Toast.makeText(getApplicationContext(), "Input Accepted", Toast.LENGTH_SHORT).show();
+
+                                    dialog.dismiss();
+                                    //added soft keyboard code to make keyboard go away.
+
+                                } else{ // here edittext is empty.. show user a toast and return,
+                                    Toast.makeText(getApplicationContext(), "Input is empty", Toast.LENGTH_SHORT).show();
+
+                                }*/
+
+                                 /*   if(isValidName(observ)){
+                                        txtObservaciones.setError(null);
+                                        actualizarClienteVisitado();
+                                    }
+                                    else if(!isValidName(observ)){
+                                        txtObservaciones.setError("Campo requerido");
+                                        txtObservaciones.requestFocus();
+                                    }*/
+                                    //notifyDataSetChanged();
+                                   // agregar();
+
+                                    /*activity.setActivoColorPreventa(activa);
                                     tabCliente = 1;
                                     activity.setSelecClienteTabPreventa(tabCliente);
                                     activity.setCreditoLimiteClientePreventa(creditoLimiteClienteP);
@@ -166,11 +193,11 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
                                             }
                                             progresRing.dismiss();
                                         }
-                                    }).start();
-                                    actualizarClienteVisitado();
+                                    }).start();*/
+
                                 }
                                 else if (rbcomprado.isChecked()) {
-
+                                    txtObservaciones.setText("_");
                                     seleccion = "1";
                                     LayoutInflater layoutInflater = LayoutInflater.from(QuickContext);
                                     View promptView = layoutInflater.inflate(R.layout.promptclient_preventa, null);
@@ -185,7 +212,7 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
                                     }
 
                                     alertDialogBuilder
-                                            .setCancelable(false)
+                                            .setCancelable(true)
                                             .setPositiveButton("OK", new DialogInterface.OnClickListener() {
 
                                                 public void onClick(DialogInterface dialog, int id) {
@@ -276,8 +303,9 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
                                             });
 
 
-                                    AlertDialog alertD = alertDialogBuilder.create();
-                                    alertD.show();
+                                    AlertDialog alertSeg = alertDialogBuilder.create();
+                                    alertSeg.show();
+
                                 }
 
 
@@ -294,9 +322,27 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
                         });
 
 
-                AlertDialog alertD = alertDialogBuilder.create();
-                alertD.show();
+                AlertDialog alertPrimero = alertDialogBuilder.create();
+                alertPrimero.show();
+                alertPrimero.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (rbvisitado.isChecked()) {
 
+                        if(!txtObservaciones.getText().toString().isEmpty()){
+                            actualizarClienteVisitado();
+                        }
+                        else{
+                            txtObservaciones.setError("Campo requerido");
+                            txtObservaciones.requestFocus();}
+                    }
+                        else{
+                            Toast.makeText(getApplicationContext(), "Contado", Toast.LENGTH_SHORT).show();
+
+                        }
+                    }
+
+                });
             }
         });
 
@@ -432,7 +478,7 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
         visitadonuevo.setId(nextId);
         visitadonuevo.setCustomer_id(clienteid);
         visitadonuevo.setVisit(seleccion);
-        visitadonuevo.setObservation(txtObservaciones.getText().toString());
+        visitadonuevo.setObservation(observ);
         visitadonuevo.setDate(Functions.getDate());
         visitadonuevo.setLongitud(longitude);
         visitadonuevo.setLatitud(latitude);
@@ -446,7 +492,13 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
         realm5.close();
     }
 
-
+    private boolean isValidName(String name) {
+        boolean check = false;
+        if (name.matches("^[\\p{L} .'-]+$") && name.length() > 2) {
+            check = true;
+        }
+        return check;
+    }
     @Override
     public int getItemCount() {
         return contentList.size();
