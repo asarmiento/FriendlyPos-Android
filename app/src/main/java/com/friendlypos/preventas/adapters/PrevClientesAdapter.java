@@ -1,5 +1,6 @@
 package com.friendlypos.preventas.adapters;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -11,10 +12,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,6 +34,7 @@ import com.friendlypos.principal.modelo.Clientes;
 import java.util.List;
 import io.realm.Realm;
 
+import static android.R.attr.id;
 import static io.realm.internal.SyncObjectServerFacade.getApplicationContext;
 
 public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapter.CharacterViewHolder> {
@@ -54,6 +58,8 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
     String seleccion;
     GPSTracker gps;
     String observ;
+    AlertDialog alertPrimero;
+    RadioButton rbcomprado, rbvisitado;
     private static Double creditolimite = 0.0;
     private static Double descuentoFixed = 0.0;
     private static Double cleintedue = 0.0;
@@ -101,7 +107,6 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
             @Override
             public void onClick(View view) {
 
-
                 int pos = position;
                 if (pos == RecyclerView.NO_POSITION) return;
 
@@ -120,233 +125,207 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
                 final String dueClienteP = clickedDataItem.getDue();
                 LayoutInflater layoutInflater = LayoutInflater.from(QuickContext);
 
+                final Dialog dialogInicial = new Dialog(QuickContext);
+                dialogInicial.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialogInicial.setContentView(R.layout.promptvisitado_preventa);
+                dialogInicial.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+                rbcomprado = (RadioButton) dialogInicial.findViewById(R.id.compradoBillVisitado);
+                rbvisitado = (RadioButton) dialogInicial.findViewById(R.id.visitadoBillVisitado);
+                final Button btnOkVisitado = (Button) dialogInicial.findViewById(R.id.btnOKV);
+                final Button btnOkComprado = (Button) dialogInicial.findViewById(R.id.btnOKC);
+                final Button btnCancel = (Button) dialogInicial.findViewById(R.id.btnCancel);
+                txtObservaciones = (EditText) dialogInicial.findViewById(R.id.txtObservaciones);
+                dialogInicial.show();
 
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(QuickContext);
-                View promptView = layoutInflater.inflate(R.layout.promptvisitado_preventa, null);
-                final RadioButton rbcomprado = (RadioButton) promptView.findViewById(R.id.compradoBillVisitado);
-                final RadioButton rbvisitado = (RadioButton) promptView.findViewById(R.id.visitadoBillVisitado);
-                txtObservaciones = (EditText) promptView.findViewById(R.id.txtObservaciones);
-                alertDialogBuilder.setView(promptView);
-
-
-                alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-
-                        public void onClick(DialogInterface dialog, int id) {
-                            obtenerLocalización();
-                            fecha = Functions.getDate() + " " + Functions.get24Time();
-
-
-                            if (!rbcomprado.isChecked() && !rbvisitado.isChecked()) {
-                                Functions.CreateMessage(QuickContext, " ", "Debe seleccionar una opción");
-
-                            } else {
-
-                                if (rbvisitado.isChecked()) {
-                                    seleccion = "2";
-                                    metodoPagoId = "1";
-
-
-                                  /*  if(!txtObservaciones.getText().toString().equals("")){
-                                        observ = txtObservaciones.getText().toString();
-                                    Toast.makeText(getApplicationContext(), "Input Accepted", Toast.LENGTH_SHORT).show();
-
-                                    dialog.dismiss();
-                                    //added soft keyboard code to make keyboard go away.
-
-                                } else{ // here edittext is empty.. show user a toast and return,
-                                    Toast.makeText(getApplicationContext(), "Input is empty", Toast.LENGTH_SHORT).show();
-
-                                }*/
-
-                                 /*   if(isValidName(observ)){
-                                        txtObservaciones.setError(null);
-                                        actualizarClienteVisitado();
-                                    }
-                                    else if(!isValidName(observ)){
-                                        txtObservaciones.setError("Campo requerido");
-                                        txtObservaciones.requestFocus();
-                                    }*/
-                                    //notifyDataSetChanged();
-                                   // agregar();
-
-                                    /*activity.setActivoColorPreventa(activa);
-                                    tabCliente = 1;
-                                    activity.setSelecClienteTabPreventa(tabCliente);
-                                    activity.setCreditoLimiteClientePreventa(creditoLimiteClienteP);
-                                    activity.setDueClientePreventa(dueClienteP);
-
-                                    //TODO MODIFICAR CON EL ID CONSECUTIVOS
-                                    activity.setInvoiceIdPreventa(nextId);
-                                    activity.setMetodoPagoClientePreventa(metodoPagoId);
-
-                                    final ProgressDialog progresRing = ProgressDialog.show(QuickContext, "Cargando", "Seleccionando Cliente", true);
-                                    progresRing.setCancelable(true);
-                                    new Thread(new Runnable() {
-
-                                        @Override
-                                        public void run() {
-                                            try {
-                                                Thread.sleep(5000);
-                                            }
-                                            catch (Exception e) {
-
-                                            }
-                                            progresRing.dismiss();
-                                        }
-                                    }).start();*/
-
-                                }
-                                else if (rbcomprado.isChecked()) {
-                                    txtObservaciones.setText("_");
-                                    seleccion = "1";
-                                    LayoutInflater layoutInflater = LayoutInflater.from(QuickContext);
-                                    View promptView = layoutInflater.inflate(R.layout.promptclient_preventa, null);
-
-                                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(QuickContext);
-                                    alertDialogBuilder.setView(promptView);
-                                    final RadioButton rbcontado = (RadioButton) promptView.findViewById(R.id.contadoBill);
-                                    final RadioButton rbcredito = (RadioButton) promptView.findViewById(R.id.creditBill);
-
-                                    if (creditoTime == 0) {
-                                        rbcredito.setVisibility(View.GONE);
-                                    }
-
-                                    alertDialogBuilder
-                                            .setCancelable(true)
-                                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-
-                                                public void onClick(DialogInterface dialog, int id) {
-
-                                                    fecha = Functions.getDate() + " " + Functions.get24Time();
-
-
-                                                    if(!rbcontado.isChecked() && !rbcredito.isChecked()){
-                                                        Functions.CreateMessage(QuickContext, " ", "Debe seleccionar una opción");
-
-                                                    }
-                                                    else {
-                                                        if (rbcredito.isChecked()) {
-
-                                                                // TRANSACCIÓN PARA ACTUALIZAR EL CAMPO METODO DE PAGO CREDITO DE LA FACTURA
-                                                                metodoPagoId = "2";
-                                                                //   Functions.CreateMessage(QuickContext, " ", "Se cambio la factura a crédito" + metodoPagoId);
-                                                                notifyDataSetChanged();
-                                                                agregar();
-                                                                tabCliente = 1;
-                                                                activity.setSelecClienteTabPreventa(tabCliente);
-                                                                activity.setCreditoLimiteClientePreventa(creditoLimiteClienteP);
-                                                                activity.setDueClientePreventa(dueClienteP);
-
-                                                                //TODO MODIFICAR CON EL ID CONSECUTIVOS
-                                                                activity.setInvoiceIdPreventa(nextId);
-                                                                activity.setMetodoPagoClientePreventa(metodoPagoId);
-
-                                                                final ProgressDialog progresRing = ProgressDialog.show(QuickContext, "Cargando", "Seleccionando Cliente", true);
-                                                                progresRing.setCancelable(true);
-                                                                new Thread(new Runnable() {
-
-                                                                    @Override
-                                                                    public void run() {
-                                                                        try {
-                                                                            Thread.sleep(5000);
-                                                                        }
-                                                                        catch (Exception e) {
-
-                                                                        }
-                                                                        progresRing.dismiss();
-                                                                    }
-                                                                }).start();
-                                                            actualizarClienteVisitado();
-
-                                                        } else if (rbcontado.isChecked()) {
-                                                            // TRANSACCIÓN PARA ACTUALIZAR EL CAMPO METODO DE PAGO CONTADO DE LA FACTURA
-                                                            metodoPagoId = "1";
-                                                            //Functions.CreateMessage(QuickContext, " ", "Se cambio la factura a contado" + metodoPagoId);
-                                                            notifyDataSetChanged();
-                                                            agregar();
-                                                            tabCliente = 1;
-                                                            activity.setSelecClienteTabPreventa(tabCliente);
-                                                            activity.setCreditoLimiteClientePreventa(creditoLimiteClienteP);
-                                                            activity.setDueClientePreventa(dueClienteP);
-
-                                                            //TODO MODIFICAR CON EL ID CONSECUTIVOS
-                                                            activity.setInvoiceIdPreventa(nextId);
-                                                            activity.setMetodoPagoClientePreventa(metodoPagoId);
-
-                                                            final ProgressDialog progresRing = ProgressDialog.show(QuickContext, "Cargando", "Seleccionando Cliente", true);
-                                                            progresRing.setCancelable(true);
-                                                            new Thread(new Runnable() {
-
-                                                                @Override
-                                                                public void run() {
-                                                                    try {
-                                                                        Thread.sleep(5000);
-                                                                    }
-                                                                    catch (Exception e) {
-
-                                                                    }
-                                                                    progresRing.dismiss();
-                                                                }
-                                                            }).start();
-                                                            actualizarClienteVisitado();
-                                                        }
-
-                                                    }
-                                                }
-                                            })
-                                            .setNegativeButton("Cancel",
-                                            new DialogInterface.OnClickListener() {
-
-                                                public void onClick(DialogInterface dialog, int id) {
-                                                    dialog.cancel();
-                                                }
-                                            });
-
-
-                                    AlertDialog alertSeg = alertDialogBuilder.create();
-                                    alertSeg.show();
-
-                                }
-
-
-                        }
-                        }
-
-                    })
-                    .setNegativeButton("Cancel",
-                        new DialogInterface.OnClickListener() {
-
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                            }
-                        });
-
-
-                AlertDialog alertPrimero = alertDialogBuilder.create();
-                alertPrimero.show();
-                alertPrimero.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+                RadioGroup yourRadioGroup = (RadioGroup) dialogInicial.findViewById(R.id.rgTipoVisitado);
+                yourRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
+                {
                     @Override
-                    public void onClick(View v) {
-                        if (rbvisitado.isChecked()) {
+                    public void onCheckedChanged(RadioGroup group, int checkedId)
+                    {
+                        switch(checkedId)
+                        {
+                            case R.id.visitadoBillVisitado:
+                                btnOkVisitado.setVisibility(View.VISIBLE);
+                                btnOkComprado.setVisibility(View.INVISIBLE);
+                                break;
+                            case R.id.compradoBillVisitado:
+                                btnOkVisitado.setVisibility(View.INVISIBLE);
+                                btnOkComprado.setVisibility(View.VISIBLE);
+                                break;
+
+                        }
+                    }
+                });
+
+                btnOkVisitado.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        obtenerLocalización();
+
 
                         if(!txtObservaciones.getText().toString().isEmpty()){
+                            observ = txtObservaciones.getText().toString();
+                            seleccion = "2";
+
                             actualizarClienteVisitado();
+                            dialogInicial.dismiss();
+                            Toast.makeText(QuickContext, "Visitado", Toast.LENGTH_SHORT).show();
                         }
                         else{
                             txtObservaciones.setError("Campo requerido");
-                            txtObservaciones.requestFocus();}
+                            txtObservaciones.requestFocus();
+                            Toast.makeText(QuickContext, "VisitadoMAL", Toast.LENGTH_SHORT).show();}
                     }
-                        else{
-                            Toast.makeText(getApplicationContext(), "Contado", Toast.LENGTH_SHORT).show();
-
-                        }
-                    }
-
                 });
+
+                btnOkComprado.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialogInicial.dismiss();
+                        obtenerLocalización();
+                        fecha = Functions.getDate() + " " + Functions.get24Time();
+                        seleccion = "1";
+                        LayoutInflater layoutInflater = LayoutInflater.from(QuickContext);
+                        View promptView = layoutInflater.inflate(R.layout.promptclient_preventa, null);
+
+                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(QuickContext);
+                        alertDialogBuilder.setView(promptView);
+                        final RadioButton rbcontado = (RadioButton) promptView.findViewById(R.id.contadoBill);
+                        final RadioButton rbcredito = (RadioButton) promptView.findViewById(R.id.creditBill);
+
+                        if (creditoTime == 0) {
+                            rbcredito.setVisibility(View.GONE);
+                        }
+
+                        alertDialogBuilder
+                                .setCancelable(true)
+                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+                                    public void onClick(DialogInterface dialog, int id) {
+
+                                        fecha = Functions.getDate() + " " + Functions.get24Time();
+
+
+                                        if(!rbcontado.isChecked() && !rbcredito.isChecked()){
+                                            Functions.CreateMessage(QuickContext, " ", "Debe seleccionar una opción");
+
+                                        }
+                                        else {
+                                            if (rbcredito.isChecked()) {
+                                                txtObservaciones.setText(" ");
+                                                observ = txtObservaciones.getText().toString();
+                                                // TRANSACCIÓN PARA ACTUALIZAR EL CAMPO METODO DE PAGO CREDITO DE LA FACTURA
+                                                metodoPagoId = "2";
+                                                notifyDataSetChanged();
+                                                agregar();
+                                                tabCliente = 1;
+                                                activity.setSelecClienteTabPreventa(tabCliente);
+                                                activity.setCreditoLimiteClientePreventa(creditoLimiteClienteP);
+                                                activity.setDueClientePreventa(dueClienteP);
+
+                                                //TODO MODIFICAR CON EL ID CONSECUTIVOS
+                                                activity.setInvoiceIdPreventa(nextId);
+                                                activity.setMetodoPagoClientePreventa(metodoPagoId);
+
+                                                final ProgressDialog progresRing = ProgressDialog.show(QuickContext, "Cargando",
+                                                        "Seleccionando Cliente", true);
+                                                progresRing.setCancelable(true);
+                                                new Thread(new Runnable() {
+
+                                                    @Override
+                                                    public void run() {
+                                                        try {
+                                                            Thread.sleep(5000);
+                                                        }
+                                                        catch (Exception e) {
+
+                                                        }
+                                                        progresRing.dismiss();
+                                                    }
+                                                }).start();
+                                                actualizarClienteVisitado();
+
+                                            } else if (rbcontado.isChecked()) {
+                                                txtObservaciones.setText(" ");
+                                                observ = txtObservaciones.getText().toString();
+                                                metodoPagoId = "1";
+                                                //Functions.CreateMessage(QuickContext, " ", "Se cambio la factura a contado" + metodoPagoId);
+                                                notifyDataSetChanged();
+                                                agregar();
+                                                tabCliente = 1;
+                                                activity.setSelecClienteTabPreventa(tabCliente);
+                                                activity.setCreditoLimiteClientePreventa(creditoLimiteClienteP);
+                                                activity.setDueClientePreventa(dueClienteP);
+
+                                                //TODO MODIFICAR CON EL ID CONSECUTIVOS
+                                                activity.setInvoiceIdPreventa(nextId);
+                                                activity.setMetodoPagoClientePreventa(metodoPagoId);
+
+                                                final ProgressDialog progresRing = ProgressDialog.show(QuickContext, "Cargando", "Seleccionando Cliente", true);
+                                                        progresRing.setCancelable(true);
+                                                new Thread(new Runnable() {
+
+                                                    @Override
+                                                    public void run() {
+                                                        try {
+                                                            Thread.sleep(5000);
+                                                        }
+                                                        catch (Exception e) {
+
+                                                        }
+                                                        progresRing.dismiss();
+                                                    }
+                                                }).start();
+                                                actualizarClienteVisitado();
+                                            }
+
+                                        }
+
+                                    }
+                                })
+                                .setNegativeButton("Cancel",
+                                        new DialogInterface.OnClickListener() {
+
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                dialog.cancel();
+
+                                            }
+                                        });
+
+
+                        AlertDialog alertSeg = alertDialogBuilder.create();
+                        alertSeg.show();
+
+                    }
+                });
+
+                btnCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialogInicial.dismiss();
+                    }
+                });
+
+ /*
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(QuickContext);
+                final View promptView = layoutInflater.inflate(R.layout., null);
+
+
+
+                Button btnLogin = (Button) promptView.findViewById(R.id.button_login);
+
+
+                alertDialogBuilder.setView(promptView);
+
+                alertPrimero = alertDialogBuilder.create();
+                alertPrimero.show();*/
             }
         });
 
-        if (selected_position == position) {
+
+        if (selected_position == position && rbcomprado.isChecked()) {
 
             holder.cardView.setCardBackgroundColor(Color.parseColor("#607d8b"));
         }
@@ -452,12 +431,12 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
         Usuarios usuarios = realm.where(Usuarios.class).equalTo("email", usuer).findFirst();
         String idUsuario = usuarios.getId();
 
-        String clienteid = activity.getCurrentVenta().getCustomer_id();
+    //    String clienteid = activity.getCurrentVenta().getCustomer_id();
 
        /* sale sale = realm.where(sale.class).equalTo("invoice_id", String.valueOf(nextId)).findFirst();
         String clienteid = sale.getCustomer_id();*/
         Log.d("ClienteVisitadoFact", String.valueOf(nextId) + "");
-        Log.d("ClienteVisitadoClient", clienteid + "");
+        Log.d("ClienteVisitadoClient", idCliente + "");
         realm.close();
 
         final Realm realm5 = Realm.getDefaultInstance();
@@ -476,7 +455,7 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
         visit visitadonuevo = new visit();
 
         visitadonuevo.setId(nextId);
-        visitadonuevo.setCustomer_id(clienteid);
+        visitadonuevo.setCustomer_id(idCliente);
         visitadonuevo.setVisit(seleccion);
         visitadonuevo.setObservation(observ);
         visitadonuevo.setDate(Functions.getDate());

@@ -60,6 +60,34 @@
         android:layout_below="@+id/textoObservaciones"
         android:layout_centerHorizontal="true" />
 
+    <Button
+        android:id="@+id/btnOKV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="OK"
+        android:layout_below="@+id/txtObservaciones"
+        android:layout_alignEnd="@+id/txtObservaciones"
+        android:background="@null"
+        android:visibility="invisible"/>
+
+    <Button
+        android:id="@+id/btnOKC"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="OK"
+        android:layout_below="@+id/txtObservaciones"
+        android:layout_alignEnd="@+id/txtObservaciones"
+        android:background="@null"
+        android:visibility="invisible"/>
+
+    <Button
+        android:id="@+id/btnCancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtObservaciones"
+        android:layout_toStartOf="@+id/btnOKV"
+        android:text="Cancel"
+        android:background="@null"/>
 
 
 </RelativeLayout>
