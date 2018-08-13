@@ -29,6 +29,9 @@ import com.friendlypos.preventas.fragment.PrevTotalizarFragment;
 import com.friendlypos.preventas.modelo.invoiceDetallePreventa;
 import com.friendlypos.principal.activity.BluetoothActivity;
 import com.friendlypos.principal.activity.MenuPrincipal;
+import com.friendlypos.ventadirecta.delegate.PreSellInvoiceDelegateVD;
+import com.friendlypos.ventadirecta.fragment.VentaDirSelecClienteFragment;
+import com.friendlypos.ventadirecta.modelo.invoiceDetalleVentaDirecta;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,10 +43,10 @@ public class VentaDirectaActivity extends BluetoothActivity {
     private Toolbar toolbar;
     private TabLayout tabLayout;
     private int invoiceIdPreventa;
-    private String metodoPagoClientePreventa;
-    private String creditoLimiteClientePreventa = null;
-    private int selecClienteTabPreventa;
-    private String dueClientePreventa;
+    private String metodoPagoClienteVentaDirecta;
+    private String creditoLimiteClienteVentaDirecta = null;
+    private int selecClienteTabVentaDirecta;
+    private String dueClienteVentaDirecta;
 
     private double totalizarSubGrabado;
     private double totalizarSubExento;
@@ -53,9 +56,9 @@ public class VentaDirectaActivity extends BluetoothActivity {
     private double totalizarTotal;
     private double totalizarTotalDouble;
 
-    private PreSellInvoiceDelegate preSellInvoiceDelegate;
+    private PreSellInvoiceDelegateVD preSellInvoiceDelegate;
 
-    public int getInvoiceIdPreventa() {
+    public int getInvoiceIdVentaDirecta() {
         return invoiceIdPreventa;
     }
 
@@ -113,36 +116,36 @@ public class VentaDirectaActivity extends BluetoothActivity {
     }
 
 
-    public String getMetodoPagoClientePreventa() {
-        return metodoPagoClientePreventa;
+    public String getMetodoPagoClienteVentaDirecta() {
+        return metodoPagoClienteVentaDirecta;
     }
 
-    public void setMetodoPagoClientePreventa(String metodoPagoClientePreventa) {
-        this.metodoPagoClientePreventa = metodoPagoClientePreventa;
+    public void setMetodoPagoClienteVentaDirecta(String metodoPagoClienteVentaDirecta) {
+        this.metodoPagoClienteVentaDirecta = metodoPagoClienteVentaDirecta;
     }
 
-    public String getCreditoLimiteClientePreventa() {
-        return creditoLimiteClientePreventa;
+    public String getCreditoLimiteClienteVentaDirecta() {
+        return creditoLimiteClienteVentaDirecta;
     }
 
-    public void setCreditoLimiteClientePreventa(String creditoLimiteClientePreventa) {
-        this.creditoLimiteClientePreventa = creditoLimiteClientePreventa;
+    public void setCreditoLimiteClienteVentaDirecta(String creditoLimiteClienteVentaDirecta) {
+        this.creditoLimiteClienteVentaDirecta = creditoLimiteClienteVentaDirecta;
     }
 
-    public int getSelecClienteTabPreventa() {
-        return selecClienteTabPreventa;
+    public int getSelecClienteTabVentaDirecta() {
+        return selecClienteTabVentaDirecta;
     }
 
-    public void setSelecClienteTabPreventa(int selecClienteTabPreventa) {
-        this.selecClienteTabPreventa = selecClienteTabPreventa;
+    public void setSelecClienteTabVentaDirecta(int selecClienteTabVentaDirecta) {
+        this.selecClienteTabVentaDirecta = selecClienteTabVentaDirecta;
     }
 
-    public String getDueClientePreventa() {
-        return dueClientePreventa;
+    public String getDueClienteVentaDirecta() {
+        return dueClienteVentaDirecta;
     }
 
-    public void setDueClientePreventa(String dueClientePreventa) {
-        this.dueClientePreventa = dueClientePreventa;
+    public void setDueClienteVentaDirecta(String dueClienteVentaDirecta) {
+        this.dueClienteVentaDirecta = dueClienteVentaDirecta;
     }
 
 
@@ -156,7 +159,7 @@ public class VentaDirectaActivity extends BluetoothActivity {
         ActionBar actionBar = getSupportActionBar();
 
         actionBar.setDisplayHomeAsUpEnabled(true);
-        preSellInvoiceDelegate = new PreSellInvoiceDelegate(this);
+        preSellInvoiceDelegate = new PreSellInvoiceDelegateVD(this);
         connectToPrinter();
         /*toolbar = (Toolbar) findViewById(R.id.toolbarDistribucion);
 
@@ -177,7 +180,7 @@ public class VentaDirectaActivity extends BluetoothActivity {
 
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                int tabCliente = getSelecClienteTabPreventa();
+                int tabCliente = getSelecClienteTabVentaDirecta();
                 if (tabCliente == 0 && tab.getPosition() != 0) {
 
                     Functions.CreateMessage(VentaDirectaActivity.this, "Venta Directa", "Seleccione una factura.");
@@ -232,14 +235,14 @@ public class VentaDirectaActivity extends BluetoothActivity {
 
         Adapter adapter = new Adapter(getSupportFragmentManager());
         final List<BaseFragment> list = new ArrayList<>();
-        list.add(new PrevSelecClienteFragment());
-        list.add(new PrevSelecProductoFragment());
+        list.add(new VentaDirSelecClienteFragment());
+     /*   list.add(new PrevSelecProductoFragment());
         list.add(new PrevResumenFragment());
-        list.add(new PrevTotalizarFragment());
+        list.add(new PrevTotalizarFragment());*/
         adapter.addFragment(list.get(0), "Seleccionar Cliente");
-        adapter.addFragment(list.get(1), "Seleccionar Productos");
+     /*   adapter.addFragment(list.get(1), "Seleccionar Productos");
         adapter.addFragment(list.get(2), "Resumen");
-        adapter.addFragment(list.get(3), "Totalizar");
+        adapter.addFragment(list.get(3), "Totalizar");*/
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
@@ -289,31 +292,31 @@ public class VentaDirectaActivity extends BluetoothActivity {
         return false;
     }
 
-    public invoiceDetallePreventa getCurrentInvoice() {
-        return preSellInvoiceDelegate.getCurrentInvoice();
+    public invoiceDetalleVentaDirecta getCurrentInvoice() {
+        return preSellInvoiceDelegate.getCurrentInvoiceVentaDirecta();
     }
 
     public sale getCurrentVenta() {
-        return preSellInvoiceDelegate.getCurrentVenta();
+        return preSellInvoiceDelegate.getCurrentVentaVentaDirecta();
     }
 
     public invoice getInvoiceByInvoiceDetalles() {
-        return preSellInvoiceDelegate.getInvoiceByInvoiceDetalle();
+        return preSellInvoiceDelegate.getInvoiceByInvoiceDetalleVentaDirecta();
     }
 
 
 
 
     public List<Pivot> getAllPivotDelegate() {
-        return preSellInvoiceDelegate.getAllPivot();
+        return preSellInvoiceDelegate.getAllPivotVentaDirecta();
     }
 
     public void insertProduct(Pivot pivot) {
-        preSellInvoiceDelegate.insertProduct(pivot);
+        preSellInvoiceDelegate.insertProductVentaDirecta(pivot);
     }
 
     public void borrarProduct(Pivot pivot) {
-        preSellInvoiceDelegate.borrarProducto(pivot);
+        preSellInvoiceDelegate.borrarProductoVentaDirecta(pivot);
     }
 
     public void initCurrentInvoice(String id, String branch_office_id, String numeration, double latitude, double longitude,
@@ -323,7 +326,7 @@ public class VentaDirectaActivity extends BluetoothActivity {
                                    String totalTotal, String changing, String notes, String canceled,
                                    String paid_up, String paid, String created_at, String idUsuario,
                                    String idUsuarioAplicado) {
-        preSellInvoiceDelegate.initInvoiceDetallePreventa(id, branch_office_id, numeration, latitude, longitude,
+        preSellInvoiceDelegate.initInvoiceDetalleVentaDirecta(id, branch_office_id, numeration, latitude, longitude,
                 date, times, date_presale, times_presale, due_data,
                 invoice_type_id, payment_method_id, totalSubtotal, totalGrabado,
                 totalExento, totalDescuento, percent_discount, totalImpuesto,
@@ -335,13 +338,13 @@ public class VentaDirectaActivity extends BluetoothActivity {
     public void initCurrentVenta(String p_id, String p_invoice_id, String p_customer_id, String p_customer_name,
                                  String p_cash_desk_id, String p_sale_type, String p_viewed, String p_applied,
                                  String p_created_at, String p_updated_at, String p_reserved, int aplicada, int subida, int facturaDePreventa) {
-        preSellInvoiceDelegate.initVentaDetallesPreventa(p_id, p_invoice_id, p_customer_id, p_customer_name,
+        preSellInvoiceDelegate.initVentaDetallesVentaDirecta(p_id, p_invoice_id, p_customer_id, p_customer_name,
                 p_cash_desk_id, p_sale_type, p_viewed, p_applied,
                 p_created_at, p_updated_at, p_reserved, aplicada, subida, facturaDePreventa);
     }
 
     public void initProducto(int pos) {
-        preSellInvoiceDelegate.initProduct(pos);
+        preSellInvoiceDelegate.initProductVentaDirecta(pos);
     }
 
     public void cleanTotalize() {

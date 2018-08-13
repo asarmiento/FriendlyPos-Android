@@ -49,6 +49,7 @@ import com.friendlypos.principal.helpers.SubirHelperClienteVisitado;
 import com.friendlypos.principal.helpers.SubirHelperPreventa;
 import com.friendlypos.reimpresion.activity.ReimprimirActivity;
 import com.friendlypos.reimpresion_pedidos.activity.ReimprimirPedidosActivity;
+import com.friendlypos.ventadirecta.activity.VentaDirectaActivity;
 import com.github.clans.fab.FloatingActionButton;
 
 import java.lang.reflect.Field;
@@ -176,10 +177,10 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
         but2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               /* if (!properties.getBlockedApp()) {
-                    Intent intent = new Intent(getApplication(), PresaleActivity.class);
+                if (!properties.getBlockedApp()) {
+                    Intent intent = new Intent(getApplication(), VentaDirectaActivity.class);
                     startActivity(intent);
-                }*/
+                }
             }
         });
 
@@ -641,28 +642,10 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                 break;
 
             case R.id.clickVentaDirecta:
-
-             /*   try
-                {
-                    // Launch Waze to look for Hawaii:
-                    String url = "https://waze.com/ul?ll=9.9261253,-84.0889091&navigate=yes";
-                    Intent intent = new Intent( Intent.ACTION_VIEW, Uri.parse( url ) );
-                    startActivity( intent );
-                }
-                catch ( ActivityNotFoundException ex  )
-                {
-
-                    Uri gmmIntentUri = Uri.parse("geo:9.9261253,-84.0889091");
-                    Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-                    mapIntent.setPackage("com.google.android.apps.maps");
-                    startActivity(mapIntent);
-
-                /*    // If Waze is not installed, open it in Google Play:
-                    Intent intent = new Intent( Intent.ACTION_VIEW, Uri.parse( "market://details?id=com.waze" ) );
-                    startActivity(intent);
-                }
-*/
-                Toast.makeText(this, "Botón no disponible por el momento", Toast.LENGTH_SHORT).show();
+                Intent vd;
+                vd = new Intent(MenuPrincipal.this, VentaDirectaActivity.class);
+                startActivity(vd);
+                finish();
                 break;
 
             case R.id.clickPreventa:

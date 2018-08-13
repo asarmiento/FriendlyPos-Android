@@ -192,13 +192,13 @@ public class VentaDirClienteAdapter extends RecyclerView.Adapter<VentaDirCliente
 
                                 activity.initCurrentVenta("1", "1", idCliente, nombreCliente, "6", "2", "0", "0", fecha, fecha, "0", 1 , 0, 1);
                                 tabCliente = 1;
-                                activity.setSelecClienteTabPreventa(tabCliente);
-                                activity.setCreditoLimiteClientePreventa(creditoLimiteClienteP);
-                                activity.setDueClientePreventa(dueClienteP);
+                                activity.setSelecClienteTabVentaDirecta(tabCliente);
+                                activity.setCreditoLimiteClienteVentaDirecta(creditoLimiteClienteP);
+                                activity.setDueClienteVentaDirecta(dueClienteP);
 
                                 //TODO MODIFICAR CON EL ID CONSECUTIVOS
                                 activity.setInvoiceIdPreventa(1);
-                                activity.setMetodoPagoClientePreventa(metodoPagoId);
+                                activity.setMetodoPagoClienteVentaDirecta(metodoPagoId);
                             }
                         })
                         .setNegativeButton("Cancel",

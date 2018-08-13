@@ -170,6 +170,10 @@
     <string name="seleccioneproductos_preventa">Seleccionar productos</string>
     <string name="totalizar_preventa">Totalizar</string>
 
+    <!-- VENTA DIRECTA -->
+
+    <string name="title_activity_ventadirecta">Venta Directa</string>
+
 
     <string name="title_activity_reimprimirpedido">Reimprimir Pedido</string>
 

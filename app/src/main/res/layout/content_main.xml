@@ -88,6 +88,7 @@
             android:id="@+id/nav_ventadirecta"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:src="@mipmap/ic_direcsale_nav"
             fab:fab_size="normal"
             fab:fab_label="Venta Directa" />
 

@@ -228,7 +228,7 @@
                         <ImageView
                             android:tint="@color/icons"
                             android:padding="10dp"
-                            android:src="@mipmap/ic_trans"
+                            android:src="@mipmap/ic_direcsale"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:text="Home"
