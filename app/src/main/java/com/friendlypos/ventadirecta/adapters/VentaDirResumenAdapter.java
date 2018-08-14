@@ -12,12 +12,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.friendlypos.R;
-import com.friendlypos.distribucion.activity.DistribucionActivity;
-import com.friendlypos.distribucion.fragment.DistResumenFragment;
 import com.friendlypos.distribucion.modelo.Inventario;
 import com.friendlypos.distribucion.modelo.Pivot;
-import com.friendlypos.preventas.activity.PreventaActivity;
-import com.friendlypos.preventas.fragment.PrevResumenFragment;
 import com.friendlypos.principal.modelo.Productos;
 import com.friendlypos.ventadirecta.activity.VentaDirectaActivity;
 import com.friendlypos.ventadirecta.fragment.VentaDirResumenFragment;

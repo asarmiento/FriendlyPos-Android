@@ -13,8 +13,6 @@ import android.widget.Toast;
 import com.friendlypos.R;
 import com.friendlypos.distribucion.fragment.BaseFragment;
 import com.friendlypos.distribucion.modelo.Pivot;
-import com.friendlypos.preventas.activity.PreventaActivity;
-import com.friendlypos.preventas.util.TotalizeHelperPreventa;
 import com.friendlypos.ventadirecta.activity.VentaDirectaActivity;
 import com.friendlypos.ventadirecta.adapters.VentaDirResumenAdapter;
 import com.friendlypos.ventadirecta.util.TotalizeHelperVentaDirecta;

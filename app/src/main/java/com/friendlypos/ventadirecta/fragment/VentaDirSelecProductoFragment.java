@@ -1,9 +1,8 @@
 package com.friendlypos.ventadirecta.fragment;
 
 import android.app.Activity;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -18,16 +17,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.friendlypos.R;
-import com.friendlypos.distribucion.activity.DistribucionActivity;
-import com.friendlypos.distribucion.adapters.DistrResumenAdapter;
-import com.friendlypos.distribucion.adapters.DistrSeleccionarProductosAdapter;
 import com.friendlypos.distribucion.fragment.BaseFragment;
-import com.friendlypos.distribucion.fragment.DistResumenFragment;
-import com.friendlypos.distribucion.fragment.DistSelecProductoFragment;
 import com.friendlypos.distribucion.modelo.Inventario;
-import com.friendlypos.preventas.activity.PreventaActivity;
-import com.friendlypos.preventas.adapters.PrevSeleccionarProductoAdapter;
-import com.friendlypos.preventas.modelo.invoiceDetallePreventa;
 import com.friendlypos.preventas.util.TotalizeHelperPreventa;
 import com.friendlypos.ventadirecta.activity.VentaDirectaActivity;
 import com.friendlypos.ventadirecta.adapters.VentaDirSeleccionarProductoAdapter;
@@ -165,7 +156,7 @@ public class VentaDirSelecProductoFragment extends BaseFragment implements Searc
         totalizeHelper.totalize(resumenFrag1.getListResumen());*/
 
         if (slecTAB == 1) {
-            creditoLimiteCliente = Double.parseDouble(((PreventaActivity) getActivity()).getCreditoLimiteClientePreventa());
+            creditoLimiteCliente = Double.parseDouble(((VentaDirectaActivity) getActivity()).getCreditoLimiteClienteVentaDirecta());
             creditoLimite.setText("C.Disponible: " + String.format("%,.2f", creditoLimiteCliente));
         }
         else{

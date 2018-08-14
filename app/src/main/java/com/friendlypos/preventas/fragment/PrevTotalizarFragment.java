@@ -112,9 +112,7 @@ public class PrevTotalizarFragment extends BaseFragment {
 
         View rootView = inflater.inflate(R.layout.fragment_prev_totalizar, container, false);
 
-
         client_name = (EditText) rootView.findViewById(R.id.client_name);
-
 
         subExe = (TextView) rootView.findViewById(R.id.subExento);
         subGra = (TextView) rootView.findViewById(R.id.subGrabado);

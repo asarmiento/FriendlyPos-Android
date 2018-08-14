@@ -11,8 +11,6 @@ import android.widget.Toast;
 
 import com.friendlypos.R;
 import com.friendlypos.distribucion.fragment.BaseFragment;
-import com.friendlypos.preventas.activity.PreventaActivity;
-import com.friendlypos.preventas.adapters.PrevClientesAdapter;
 import com.friendlypos.principal.modelo.Clientes;
 import com.friendlypos.ventadirecta.activity.VentaDirectaActivity;
 import com.friendlypos.ventadirecta.adapters.VentaDirClienteAdapter;

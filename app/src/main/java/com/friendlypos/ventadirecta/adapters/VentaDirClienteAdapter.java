@@ -3,6 +3,7 @@ package com.friendlypos.ventadirecta.adapters;
 /**
  * Created by DelvoM on 13/08/2018.
  */
+
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -18,17 +19,10 @@ import android.widget.TextView;
 
 import com.friendlypos.R;
 import com.friendlypos.application.util.Functions;
-import com.friendlypos.distribucion.modelo.Pivot;
-import com.friendlypos.distribucion.modelo.invoice;
-import com.friendlypos.preventas.activity.PreventaActivity;
-import com.friendlypos.preventas.modelo.invoiceDetallePreventa;
 import com.friendlypos.principal.modelo.Clientes;
 import com.friendlypos.ventadirecta.activity.VentaDirectaActivity;
 
 import java.util.List;
-
-import io.realm.Realm;
-import io.realm.RealmResults;
 
 public class VentaDirClienteAdapter extends RecyclerView.Adapter<VentaDirClienteAdapter.CharacterViewHolder> {
 
