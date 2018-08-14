@@ -82,7 +82,6 @@ public class VentaDirSelecProductoFragment extends BaseFragment implements Searc
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
 
         View rootView = inflater.inflate(R.layout.fragment_ventadir_selecproducto, container,
                 false);
@@ -95,18 +94,16 @@ public class VentaDirSelecProductoFragment extends BaseFragment implements Searc
         creditoLimite = (TextView) rootView.findViewById(R.id.restCreditVentaDirecta);
 
         Log.d("listaProducto", getListProductos() + "");
-        // adapter2 = new DistrResumenAdapter();
         creditoDisponible();
 
         return rootView;
-
     }
 
 
 
     private List<Inventario> getListProductos() {
         realm = Realm.getDefaultInstance();
-        RealmQuery<Inventario> query = realm.where(Inventario.class).notEqualTo("amount", "0").notEqualTo("amount", "0.0");
+        RealmQuery<Inventario> query = realm.where(Inventario.class).notEqualTo("amount", "0").notEqualTo("amount", "0.0").notEqualTo("amount", "0.000");
         RealmResults<Inventario> result1 = query.findAll();
 
         return result1;

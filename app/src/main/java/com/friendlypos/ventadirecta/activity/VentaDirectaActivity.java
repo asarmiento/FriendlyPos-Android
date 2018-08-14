@@ -30,6 +30,7 @@ import com.friendlypos.preventas.modelo.invoiceDetallePreventa;
 import com.friendlypos.principal.activity.BluetoothActivity;
 import com.friendlypos.principal.activity.MenuPrincipal;
 import com.friendlypos.ventadirecta.delegate.PreSellInvoiceDelegateVD;
+import com.friendlypos.ventadirecta.fragment.VentaDirResumenFragment;
 import com.friendlypos.ventadirecta.fragment.VentaDirSelecClienteFragment;
 import com.friendlypos.ventadirecta.fragment.VentaDirSelecProductoFragment;
 import com.friendlypos.ventadirecta.modelo.invoiceDetalleVentaDirecta;
@@ -238,12 +239,12 @@ public class VentaDirectaActivity extends BluetoothActivity {
         final List<BaseFragment> list = new ArrayList<>();
         list.add(new VentaDirSelecClienteFragment());
        list.add(new VentaDirSelecProductoFragment());
-     /*    list.add(new PrevResumenFragment());
-        list.add(new PrevTotalizarFragment());*/
+        list.add(new VentaDirResumenFragment());
+      /*   list.add(new PrevTotalizarFragment());*/
         adapter.addFragment(list.get(0), "Seleccionar Cliente");
       adapter.addFragment(list.get(1), "Seleccionar Productos");
-       /*   adapter.addFragment(list.get(2), "Resumen");
-        adapter.addFragment(list.get(3), "Totalizar");*/
+         adapter.addFragment(list.get(2), "Resumen");
+      /*   adapter.addFragment(list.get(3), "Totalizar");*/
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
