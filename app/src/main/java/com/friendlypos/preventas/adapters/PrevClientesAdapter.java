@@ -374,7 +374,7 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
         });
 
         //TODO MODIFICAR CON EL IDS CONSECUTIVOS (FACTURA Y NUMERACION)
-        activity.initCurrentInvoice(String.valueOf(nextId), "3", idUsuario + "01-"+ "000000"+nextId, 0.0, 0.0, Functions.getDate(), Functions.get24Time(),
+        activity.initCurrentInvoice(String.valueOf(nextId), "3", idUsuario + "02-"+ "000000"+nextId, 0.0, 0.0, Functions.getDate(), Functions.get24Time(),
                 Functions.getDate(), Functions.get24Time(), Functions.getDate(), "3", metodoPagoId, "", "", "", "", "", "", "", "", "", "", "", "", fecha,
                 "", "");
 
