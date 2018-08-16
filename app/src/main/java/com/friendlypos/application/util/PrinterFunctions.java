@@ -34,7 +34,15 @@ import io.realm.RealmResults;
 public class PrinterFunctions {
 
     private static double printSalesCashTotal = 0.0;
-
+    static String totalGrabado= "";
+    static String totalExento= "";
+    static String totalSubtotal= "";
+    static String totalDescuento= "";
+    static String totalImpuesto= "";
+    static String totalTotal = "";
+    static String totalCancelado= "";
+    static String totalVuelto= "";
+    static String totalNotas= "";
 
     //TODO imprimir TOTALIZAR DISTRIBUCION
 
@@ -67,15 +75,15 @@ public class PrinterFunctions {
         String fechaFactura = invoice.getDue_date();
         String numeracionFactura = invoice.getNumeration();
         String metodoPago = invoice.getPayment_method_id();
-        String totalGrabado= Functions.doubleToString1(Double.parseDouble(invoice.getSubtotal_taxed()));
-        String totalExento= Functions.doubleToString1(Double.parseDouble(invoice.getSubtotal_exempt()));
-        String totalSubtotal= Functions.doubleToString1(Double.parseDouble(invoice.getSubtotal()));
-        String totalDescuento= Functions.doubleToString1(Double.parseDouble(invoice.getDiscount()));
-        String totalImpuesto= Functions.doubleToString1(Double.parseDouble(invoice.getTax()));
-        String totalTotal= Functions.doubleToString1(Double.parseDouble(invoice.getTotal()));
-        String totalCancelado= Functions.doubleToString1(Double.parseDouble(invoice.getPaid()));
-        String totalVuelto= Functions.doubleToString1(Double.parseDouble(invoice.getChanging()));
-        String totalNotas= invoice.getNote();
+        totalGrabado= Functions.doubleToString1(Double.parseDouble(invoice.getSubtotal_taxed()));
+        totalExento= Functions.doubleToString1(Double.parseDouble(invoice.getSubtotal_exempt()));
+        totalSubtotal= Functions.doubleToString1(Double.parseDouble(invoice.getSubtotal()));
+        totalDescuento= Functions.doubleToString1(Double.parseDouble(invoice.getDiscount()));
+        totalImpuesto= Functions.doubleToString1(Double.parseDouble(invoice.getTax()));
+        totalTotal= Functions.doubleToString1(Double.parseDouble(invoice.getTotal()));
+        totalCancelado= Functions.doubleToString1(Double.parseDouble(invoice.getPaid()));
+        totalVuelto= Functions.doubleToString1(Double.parseDouble(invoice.getChanging()));
+        totalNotas= invoice.getNote();
         String idUsuario = invoice.getUser_id();
 
         Usuarios usuarios = realm.where(Usuarios.class).equalTo("id", idUsuario).findFirst();
@@ -190,9 +198,11 @@ public class PrinterFunctions {
                     " \n\n" +
                     " \n\n" +
                     " \n ";
+
             Intent intent2 = new Intent(PrinterService.BROADCAST_CLASS);
             intent2.putExtra(PrinterService.BROADCAST_CLASS + "TO_PRINT", "true");
             intent2.putExtra("bill_to_print", bill);
+            Log.d("IMPR DISTR ZEBRA", preview);
             QuickContext.sendBroadcast(intent2);
         }
         else if(prefList.equals("2")){
@@ -235,6 +245,9 @@ public class PrinterFunctions {
                     preview += Html.fromHtml("<h1>")   + "Mantenga el documento para reclamos." +  Html.fromHtml("</h1></center><br/><br/>");
                     preview += Html.fromHtml("<h1>")   + "Autorizado mediante oficio" +  Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>")   + "N : 11-1997 de la D.G.T.D" +  Html.fromHtml("</h1></center><br/>");
+
+
+                    Log.d("IMPR DISTR CONTADO", preview);
                     break;
                 case "2":
                     payment = "Credito";
@@ -265,8 +278,8 @@ public class PrinterFunctions {
                     preview += Html.fromHtml("<h1>") +  String.format("%20s %-20s", "Descuento", totalDescuento) + Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>") +  String.format("%20s %-20s", "IVA", totalImpuesto) + Html.fromHtml("</h1></center><br/><br/><br/>");
                     preview += Html.fromHtml("<h1>") +   String.format("%20s %-20s", "Total", totalTotal) + Html.fromHtml("</h1></center><br/><br/>");
-                    preview += Html.fromHtml("<h1>") +  String.format("%20s %-20s", "Cancelado con", totalCancelado) + Html.fromHtml("</h1></center><br/>");
-                    preview += Html.fromHtml("<h1>") +   String.format("%20s %-20s", "Cambio", totalVuelto) + Html.fromHtml("</h1></center><br/><br/>");
+                  /*  preview += Html.fromHtml("<h1>") +  String.format("%20s %-20s", "Cancelado con", totalCancelado) + Html.fromHtml("</h1></center><br/>");
+                    preview += Html.fromHtml("<h1>") +   String.format("%20s %-20s", "Cambio", totalVuelto) + Html.fromHtml("</h1></center><br/><br/>");*/
                     preview += Html.fromHtml("<h1>") +  "Notas: " + totalNotas + Html.fromHtml("</h1></center><br/><br/><br/>");
                     preview += Html.fromHtml("<h1>") +  "Recibo conforme ____________________________" + Html.fromHtml("</h1></center><br/><br/>");
                     preview += Html.fromHtml("<h1>") +  "Cedula ____________________________" +  Html.fromHtml("</h1></center><br/><br/>");
@@ -277,6 +290,7 @@ public class PrinterFunctions {
                     preview += Html.fromHtml("<h1>")   + "Mantenga el documento para reclamos." +  Html.fromHtml("</h1></center><br/><br/>");
                     preview += Html.fromHtml("<h1>")   + "Autorizado mediante oficio" +  Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>")   + "N : 11-1997 de la D.G.T.D" +  Html.fromHtml("</h1></center><br/>");
+                    Log.d("IMPR DISTR CREDITO", preview);
                     break;
             }
             Intent intent2 = new Intent(PrinterService.BROADCAST_CLASS);
@@ -284,6 +298,15 @@ public class PrinterFunctions {
             intent2.putExtra("bill_to_print", preview);
             QuickContext.sendBroadcast(intent2);
         }
+        totalGrabado= "";
+        totalExento= "";
+        totalSubtotal= "";
+        totalDescuento= "";
+        totalImpuesto= "";
+        totalTotal = "";
+        totalCancelado= "";
+        totalVuelto= "";
+        totalNotas= "";
     }
 
     public static void imprimirFacturaDistrTotal (final sale saleB, final Context QuickContext, final int ptype){

@@ -206,8 +206,6 @@ public class DistTotalizarFragment extends BaseFragment  {
                                 Functions.CreateMessage(getActivity(), "Error", "La conexión del bluetooth ha fallado, favor revisar o conectar el dispositivo");
                             }
 
-
-
                         } catch (Exception e) {
                             Functions.CreateMessage(getActivity(), "Error", e.getMessage() + "\n" + e.getStackTrace().toString());
                         }
@@ -252,27 +250,13 @@ public class DistTotalizarFragment extends BaseFragment  {
 
     public void obtenerLocalización() {
 
-
-
         gps = new GPSTracker(getActivity());
-
-        // check if GPS enabled
         if(gps.canGetLocation()){
 
             latitude = gps.getLatitude();
             longitude = gps.getLongitude();
-
-           /* messageTextView2.setText("Mi direccion es: \n"
-                    + latitude + "log "  + longitude );
-            // \n is for new line
-            Toast.makeText(getActivity(), "Your Location is - \nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();*/
         }else{
-            // can't get location
-            // GPS or Network is not enabled
-            // Ask user to enable GPS/network in settings
             gps.showSettingsAlert();
-
-
         }
 
     }
@@ -391,37 +375,5 @@ public class DistTotalizarFragment extends BaseFragment  {
 
 
     }
-
-
-
-/*
-    protected void validateData() throws Exception {
-
-        if (CurrentSale == null) {
-            client_name.requestFocus();
-            throw new IOException("Debe Seleccionar un cliente de la primera vista");
-        }
-
-        if (CurrentSale.costumer.company_name.equals("Cliente Generico") && client_name.getText().toString().isEmpty()) {
-            throw new IOException("Para el Cliente a Contado, debe ingresar un nombre");
-        }
-
-
-        //ClimDataValidator.validateSpinnerHasNotDefaultText("Seleccione condición compra",  spinnerPaymentMethods, "Debe seleccionar una condición de compra");
-
-        if (!(mAdapterBill.getItemCount() > 0)) {
-            throw new IOException("Debe ingresar al menos un producto");
-        }
-
-        if (bill_type == 1) {
-            if (paid.getText().toString().isEmpty()) {
-                throw new IOException("Aun no ha cobrado !!");
-            }
-            if (Functions.sGetDecimalStringAnyLocaleAsDouble(paid.getText().toString()) < Functions.sGetDecimalStringAnyLocaleAsDouble(Total.getText().toString())) {
-                throw new IOException("El cobro no es correcto");
-
-            }
-        }
-    }*/
 
 }
