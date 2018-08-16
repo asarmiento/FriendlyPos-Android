@@ -257,7 +257,7 @@ public class VentaDirClienteAdapter extends RecyclerView.Adapter<VentaDirCliente
             @Override
             public void execute(Realm realm5) {
                 Numeracion numNuevo= new Numeracion(); // unmanaged
-                numNuevo.setSale_type("3");
+                numNuevo.setSale_type("2");
                 numNuevo.setNumeracion_numero(nextId);
 
                 realm5.insertOrUpdate(numNuevo);

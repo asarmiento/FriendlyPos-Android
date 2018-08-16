@@ -149,7 +149,7 @@ public class VentaDirSelecProductoFragment extends BaseFragment implements Searc
                 }
             }}
         else{
-            Toast.makeText(getActivity(),"nadaSelecProducto",Toast.LENGTH_LONG).show();
+            Log.d("Selec", "No hay productos");
         }
 
     }
@@ -157,16 +157,13 @@ public class VentaDirSelecProductoFragment extends BaseFragment implements Searc
     @Override
     public void updateData() {
         adapter.updateData(getListProductos());
-        //  adapter2.notifyDataSetChanged();
-       /* totalizeHelper = new TotalizeHelperPreventa(activity);
-        totalizeHelper.totalize(resumenFrag1.getListResumen());*/
 
         if (slecTAB == 1) {
             creditoLimiteCliente = Double.parseDouble(((VentaDirectaActivity) getActivity()).getCreditoLimiteClienteVentaDirecta());
             creditoLimite.setText("C.Disponible: " + String.format("%,.2f", creditoLimiteCliente));
         }
         else{
-            Toast.makeText(getActivity(),"nadaSelecProducto",Toast.LENGTH_LONG).show();
+            Log.d("SelecUpdate", "No hay productos");
         }
     }
 
@@ -214,7 +211,7 @@ public class VentaDirSelecProductoFragment extends BaseFragment implements Searc
         final List<Inventario> filteredModelList = new ArrayList<>();
         for (Inventario model : models) {
             final String text = model.getNombre_producto().toLowerCase();
-            Log.d("dasdad", text);
+            Log.d("FiltroVentaDirecta", text);
             if (text.contains(query)) {
                 filteredModelList.add(model);
             }
