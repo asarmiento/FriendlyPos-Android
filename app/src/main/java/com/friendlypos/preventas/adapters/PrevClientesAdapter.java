@@ -124,6 +124,7 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
                 final Dialog dialogInicial = new Dialog(QuickContext);
                 dialogInicial.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 dialogInicial.setContentView(R.layout.promptvisitado_preventa);
+
                 dialogInicial.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
                 rbcomprado = (RadioButton) dialogInicial.findViewById(R.id.compradoBillVisitado);
                 rbvisitado = (RadioButton) dialogInicial.findViewById(R.id.visitadoBillVisitado);
@@ -458,7 +459,7 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
         visitadonuevo.setLatitud(latitude);
         visitadonuevo.setUser_id(idUsuario);
         visitadonuevo.setSubida(1);
-
+        visitadonuevo.setTipoVisitado("PREV");
 
         realm5.copyToRealmOrUpdate(visitadonuevo);
         realm5.commitTransaction();

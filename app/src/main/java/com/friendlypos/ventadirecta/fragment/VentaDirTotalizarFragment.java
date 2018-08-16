@@ -364,8 +364,8 @@ public class VentaDirTotalizarFragment extends BaseFragment  {
         invoiceDetallePreventa1.setP_user_id(idUsuario);
         invoiceDetallePreventa1.setP_user_id_applied(idUsuario);
         invoiceDetallePreventa1.setP_sale(activity.getCurrentVenta());
-/*
-        invoiceDetallePreventa1.setAplicada(1);
+
+    /*    invoiceDetallePreventa1.setAplicada(1);
         invoiceDetallePreventa1.setSubida(1);*/
 
 

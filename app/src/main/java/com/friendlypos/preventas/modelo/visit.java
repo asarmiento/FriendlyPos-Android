@@ -28,6 +28,9 @@ public class visit extends RealmObject {
     double latitud;
     String user_id;
 
+    String tipoVisitado;
+
+
     private int subida = 0;
 
     public int getId() {
@@ -102,6 +105,14 @@ public class visit extends RealmObject {
         this.subida = subida;
     }
 
+    public String getTipoVisitado() {
+        return tipoVisitado;
+    }
+
+    public void setTipoVisitado(String tipoVisitado) {
+        this.tipoVisitado = tipoVisitado;
+    }
+
     @Override
     public String toString() {
         return "visit{" +
@@ -114,6 +125,7 @@ public class visit extends RealmObject {
                 ", latitud=" + latitud +
                 ", user_id='" + user_id + '\'' +
                 ", subida='" + subida + '\'' +
+                ", tipoVisitado='" + tipoVisitado + '\'' +
                 '}';
     }
 }

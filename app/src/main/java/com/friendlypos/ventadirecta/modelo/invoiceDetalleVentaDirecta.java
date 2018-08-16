@@ -308,7 +308,7 @@ public class invoiceDetalleVentaDirecta {
 
     @Override
     public String toString() {
-        return "InvoiceDetallePreventa{" +
+        return "InvoiceDetalleVentaDir{" +
             "p_id=" + p_id +
             ", p_branch_office_id='" + p_branch_office_id + '\'' +
             ", p_numeration='" + p_numeration + '\'' +

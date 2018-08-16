@@ -4,6 +4,7 @@ package com.friendlypos.ventadirecta.adapters;
  * Created by DelvoM on 13/08/2018.
  */
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -15,15 +16,22 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.friendlypos.R;
 import com.friendlypos.application.util.Functions;
+import com.friendlypos.distribucion.util.GPSTracker;
 import com.friendlypos.login.modelo.Usuarios;
 import com.friendlypos.login.util.SessionPrefes;
 import com.friendlypos.preventas.modelo.Numeracion;
+import com.friendlypos.preventas.modelo.visit;
 import com.friendlypos.principal.modelo.Clientes;
 import com.friendlypos.ventadirecta.activity.VentaDirectaActivity;
 
@@ -40,6 +48,13 @@ public class VentaDirClienteAdapter extends RecyclerView.Adapter<VentaDirCliente
     int tabCliente, nextId;
     String metodoPagoId, idCliente, nombreCliente, fecha, usuer;
     SessionPrefes session;
+    RadioButton rbcomprado, rbvisitado;
+    private static EditText txtObservaciones;
+    double latitude;
+    double longitude;
+    String seleccion;
+    GPSTracker gps;
+    String observ;
 
     private static Double creditolimite = 0.0;
     private static Double descuentoFixed = 0.0;
@@ -106,101 +121,202 @@ public class VentaDirClienteAdapter extends RecyclerView.Adapter<VentaDirCliente
                 LayoutInflater layoutInflater = LayoutInflater.from(QuickContext);
                 View promptView = layoutInflater.inflate(R.layout.promptclient_preventa, null);
 
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(QuickContext);
-                alertDialogBuilder.setView(promptView);
-                final RadioButton rbcontado = (RadioButton) promptView.findViewById(R.id.contadoBill);
-                final RadioButton rbcredito = (RadioButton) promptView.findViewById(R.id.creditBill);
+                final Dialog dialogInicial = new Dialog(QuickContext);
+                dialogInicial.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialogInicial.setContentView(R.layout.promptvisitado_preventa);
 
-                if (creditoTime == 0) {
-                    rbcredito.setVisibility(View.GONE);
-                }
+                dialogInicial.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+                rbcomprado = (RadioButton) dialogInicial.findViewById(R.id.compradoBillVisitado);
+                rbvisitado = (RadioButton) dialogInicial.findViewById(R.id.visitadoBillVisitado);
+                final Button btnOkVisitado = (Button) dialogInicial.findViewById(R.id.btnOKV);
+                final Button btnOkComprado = (Button) dialogInicial.findViewById(R.id.btnOKC);
+                final Button btnCancel = (Button) dialogInicial.findViewById(R.id.btnCancel);
+                txtObservaciones = (EditText) dialogInicial.findViewById(R.id.txtObservaciones);
+                dialogInicial.show();
 
-                alertDialogBuilder
-                        .setCancelable(false)
-                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                RadioGroup yourRadioGroup = (RadioGroup) dialogInicial.findViewById(R.id.rgTipoVisitado);
+                yourRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
+                {
+                    @Override
+                    public void onCheckedChanged(RadioGroup group, int checkedId)
+                    {
+                        switch(checkedId)
+                        {
+                            case R.id.visitadoBillVisitado:
+                                btnOkVisitado.setVisibility(View.VISIBLE);
+                                btnOkComprado.setVisibility(View.INVISIBLE);
+                                break;
+                            case R.id.compradoBillVisitado:
+                                btnOkVisitado.setVisibility(View.INVISIBLE);
+                                btnOkComprado.setVisibility(View.VISIBLE);
+                                break;
 
-                            public void onClick(DialogInterface dialog, int id) {
+                        }
+                    }
+                });
 
-                                fecha = Functions.getDate() + " " + Functions.get24Time();
+                btnOkVisitado.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
 
-                                if(!rbcontado.isChecked() && !rbcredito.isChecked()){
-                                    Functions.CreateMessage(QuickContext, " ", "Debe seleccionar una opción");
-
-                                } else {
-                                    if (rbcredito.isChecked()) {
-                                            metodoPagoId = "2";
-                                            notifyDataSetChanged();
-                                            agregar();
-                                             tabCliente = 1;
-                                            activity.setSelecClienteTabVentaDirecta(tabCliente);
-                                            activity.setCreditoLimiteClienteVentaDirecta(creditoLimiteClienteP);
-                                            activity.setDueClienteVentaDirecta(dueClienteP);
-                                            activity.setInvoiceIdPreventa(nextId);
-                                            activity.setMetodoPagoClienteVentaDirecta(metodoPagoId);
-
-                                        final ProgressDialog progresRing = ProgressDialog.show(QuickContext, "Cargando",
-                                                "Seleccionando Cliente", true);
-                                        progresRing.setCancelable(true);
-                                        new Thread(new Runnable() {
-
-                                            @Override
-                                            public void run() {
-                                                try {
-                                                    Thread.sleep(5000);
-                                                }
-                                                catch (Exception e) {
-
-                                                }
-                                                progresRing.dismiss();
-                                            }
-                                        }).start();
-
-                                    }
-                                    else if (rbcontado.isChecked()) {
-                                        metodoPagoId = "1";
-                                        notifyDataSetChanged();
-                                        agregar();
-                                        tabCliente = 1;
-                                        activity.setSelecClienteTabVentaDirecta(tabCliente);
-                                        activity.setCreditoLimiteClienteVentaDirecta(creditoLimiteClienteP);
-                                        activity.setDueClienteVentaDirecta(dueClienteP);
-                                        activity.setInvoiceIdPreventa(nextId);
-                                        activity.setMetodoPagoClienteVentaDirecta(metodoPagoId);
-
-                                        final ProgressDialog progresRing = ProgressDialog.show(QuickContext, "Cargando",
-                                                "Seleccionando Cliente", true);
-                                        progresRing.setCancelable(true);
-                                        new Thread(new Runnable() {
-
-                                            @Override
-                                            public void run() {
-                                                try {
-                                                    Thread.sleep(5000);
-                                                }
-                                                catch (Exception e) {
-
-                                                }
-                                                progresRing.dismiss();
-                                            }
-                                        }).start();
-                                    }
+                        obtenerLocalización();
 
 
+                        if(!txtObservaciones.getText().toString().isEmpty()){
+                            observ = txtObservaciones.getText().toString();
+                            seleccion = "2";
 
-                                }
-                            }
-                        })
-                        .setNegativeButton("Cancel",
-                                new DialogInterface.OnClickListener() {
+                            actualizarClienteVisitado();
+                            dialogInicial.dismiss();
+                            Toast.makeText(QuickContext, "Visitado", Toast.LENGTH_SHORT).show();
+                        }
+                        else{
+                            txtObservaciones.setError("Campo requerido");
+                            txtObservaciones.requestFocus();
+                            Toast.makeText(QuickContext, "VisitadoMAL", Toast.LENGTH_SHORT).show();}
+                    }
+                });
+
+                btnOkComprado.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialogInicial.dismiss();
+                        obtenerLocalización();
+                        fecha = Functions.getDate() + " " + Functions.get24Time();
+                        seleccion = "1";
+                        LayoutInflater layoutInflater = LayoutInflater.from(QuickContext);
+                        View promptView = layoutInflater.inflate(R.layout.promptclient_preventa, null);
+
+                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(QuickContext);
+                        alertDialogBuilder.setView(promptView);
+                        final RadioButton rbcontado = (RadioButton) promptView.findViewById(R.id.contadoBill);
+                        final RadioButton rbcredito = (RadioButton) promptView.findViewById(R.id.creditBill);
+
+                        if (creditoTime == 0) {
+                            rbcredito.setVisibility(View.GONE);
+                        }
+
+                        alertDialogBuilder
+                                .setCancelable(true)
+                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
 
                                     public void onClick(DialogInterface dialog, int id) {
-                                        dialog.cancel();
+
+                                        fecha = Functions.getDate() + " " + Functions.get24Time();
+
+
+                                        if(!rbcontado.isChecked() && !rbcredito.isChecked()){
+                                            Functions.CreateMessage(QuickContext, " ", "Debe seleccionar una opción");
+
+                                        }
+                                        else {
+                                            if (rbcredito.isChecked()) {
+                                                txtObservaciones.setText(" ");
+                                                observ = txtObservaciones.getText().toString();
+                                                // TRANSACCIÓN PARA ACTUALIZAR EL CAMPO METODO DE PAGO CREDITO DE LA FACTURA
+                                                metodoPagoId = "2";
+                                                notifyDataSetChanged();
+                                                agregar();
+                                                tabCliente = 1;
+                                                activity.setSelecClienteTabVentaDirecta(tabCliente);
+                                                activity.setCreditoLimiteClienteVentaDirecta(creditoLimiteClienteP);
+                                                activity.setDueClienteVentaDirecta(dueClienteP);
+
+                                                //TODO MODIFICAR CON EL ID CONSECUTIVOS
+                                                activity.setInvoiceIdPreventa(nextId);
+                                                activity.setMetodoPagoClienteVentaDirecta(metodoPagoId);
+
+                                                final ProgressDialog progresRing = ProgressDialog.show(QuickContext, "Cargando",
+                                                        "Seleccionando Cliente", true);
+                                                progresRing.setCancelable(true);
+                                                new Thread(new Runnable() {
+
+                                                    @Override
+                                                    public void run() {
+                                                        try {
+                                                            Thread.sleep(5000);
+                                                        }
+                                                        catch (Exception e) {
+
+                                                        }
+                                                        progresRing.dismiss();
+                                                    }
+                                                }).start();
+                                                actualizarClienteVisitado();
+
+                                            } else if (rbcontado.isChecked()) {
+                                                txtObservaciones.setText(" ");
+                                                observ = txtObservaciones.getText().toString();
+                                                metodoPagoId = "1";
+                                                notifyDataSetChanged();
+                                                agregar();
+                                                tabCliente = 1;
+                                                activity.setSelecClienteTabVentaDirecta(tabCliente);
+                                                activity.setCreditoLimiteClienteVentaDirecta(creditoLimiteClienteP);
+                                                activity.setDueClienteVentaDirecta(dueClienteP);
+
+                                                //TODO MODIFICAR CON EL ID CONSECUTIVOS
+                                                activity.setInvoiceIdPreventa(nextId);
+                                                activity.setMetodoPagoClienteVentaDirecta(metodoPagoId);
+
+                                                final ProgressDialog progresRing = ProgressDialog.show(QuickContext, "Cargando", "Seleccionando Cliente", true);
+                                                progresRing.setCancelable(true);
+                                                new Thread(new Runnable() {
+
+                                                    @Override
+                                                    public void run() {
+                                                        try {
+                                                            Thread.sleep(5000);
+                                                        }
+                                                        catch (Exception e) {
+
+                                                        }
+                                                        progresRing.dismiss();
+                                                    }
+                                                }).start();
+                                                actualizarClienteVisitado();
+                                            }
+
+                                        }
+
                                     }
-                                });
+                                })
+                                .setNegativeButton("Cancel",
+                                        new DialogInterface.OnClickListener() {
 
-                AlertDialog alertD = alertDialogBuilder.create();
-                alertD.show();
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                dialog.cancel();
 
+                                            }
+                                        });
+
+
+                        AlertDialog alertSeg = alertDialogBuilder.create();
+                        alertSeg.show();
+
+                    }
+                });
+
+                btnCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialogInicial.dismiss();
+                    }
+                });
+
+ /*
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(QuickContext);
+                final View promptView = layoutInflater.inflate(R.layout., null);
+
+
+
+                Button btnLogin = (Button) promptView.findViewById(R.id.button_login);
+
+
+                alertDialogBuilder.setView(promptView);
+
+                alertPrimero = alertDialogBuilder.create();
+                alertPrimero.show();*/
             }
         });
         if (selected_position == position) {
@@ -270,7 +386,78 @@ public class VentaDirClienteAdapter extends RecyclerView.Adapter<VentaDirCliente
         realm5.close();
         // realm2.close();
     }
+    public void obtenerLocalización() {
 
+        gps = new GPSTracker(activity);
+
+        // check if GPS enabled
+        if (gps.canGetLocation()) {
+
+            latitude = gps.getLatitude();
+            longitude = gps.getLongitude();
+
+           /* messageTextView2.setText("Mi direccion es: \n"
+                    + latitude + "log "  + longitude );
+            // \n is for new line
+            Toast.makeText(getActivity(), "Your Location is - \nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();*/
+        }
+        else {
+            // can't get location
+            // GPS or Network is not enabled
+            // Ask user to enable GPS/network in settings
+            gps.showSettingsAlert();
+
+
+        }
+
+    }
+
+    protected void actualizarClienteVisitado() {
+
+        Realm realm = Realm.getDefaultInstance();
+        usuer = session.getUsuarioPrefs();
+        Usuarios usuarios = realm.where(Usuarios.class).equalTo("email", usuer).findFirst();
+        String idUsuario = usuarios.getId();
+
+        //    String clienteid = activity.getCurrentVenta().getCustomer_id();
+
+       /* sale sale = realm.where(sale.class).equalTo("invoice_id", String.valueOf(nextId)).findFirst();
+        String clienteid = sale.getCustomer_id();*/
+        Log.d("ClienteVisitadoFact", String.valueOf(nextId) + "");
+        Log.d("ClienteVisitadoClient", idCliente + "");
+        realm.close();
+
+        final Realm realm5 = Realm.getDefaultInstance();
+
+        realm5.beginTransaction();
+        Number currentIdNum = realm5.where(visit.class).max("id");
+
+        if (currentIdNum == null) {
+            nextId = 1;
+        }
+        else {
+            nextId = currentIdNum.intValue() + 1;
+        }
+
+
+        visit visitadonuevo = new visit();
+
+        visitadonuevo.setId(nextId);
+        visitadonuevo.setCustomer_id(idCliente);
+        visitadonuevo.setVisit(seleccion);
+        visitadonuevo.setObservation(observ);
+        visitadonuevo.setDate(Functions.getDate());
+        visitadonuevo.setLongitud(longitude);
+        visitadonuevo.setLatitud(latitude);
+        visitadonuevo.setUser_id(idUsuario);
+        visitadonuevo.setSubida(1);
+        visitadonuevo.setTipoVisitado("VD");
+
+        realm5.copyToRealmOrUpdate(visitadonuevo);
+        realm5.commitTransaction();
+        Log.d("ClienteVisitado", visitadonuevo + "");
+        realm5.close();
+    }
 
     @Override
     public int getItemCount() {
