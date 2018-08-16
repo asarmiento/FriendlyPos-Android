@@ -184,7 +184,7 @@ public class VentaDirClienteAdapter extends RecyclerView.Adapter<VentaDirCliente
                                         "","","","","","","",fecha,
                                         "","");
 
-                                activity.initCurrentVenta("1", "1", idCliente, nombreCliente, "6", "2", "0", "0", fecha, fecha, "0", 1 , 0, 1);
+                                activity.initCurrentVenta("1", "1", idCliente, nombreCliente, "6", "2", "0", "0", fecha, fecha, "0", 1 , 0, 2);
                                 tabCliente = 1;
                                 activity.setSelecClienteTabVentaDirecta(tabCliente);
                                 activity.setCreditoLimiteClienteVentaDirecta(creditoLimiteClienteP);

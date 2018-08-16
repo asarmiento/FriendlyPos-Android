@@ -233,7 +233,10 @@ public class PreSellInvoiceDelegateVD {
 
         invoice.setAplicada(1);
         invoice.setSubida(1);
-        invoice.setFacturaDePreventa(1);
+        invoice.setFacturaDePreventa(2);
+
+        Log.d("CREAR VENTA DIR", invoice + "");
+
         return invoice;
     }
 }

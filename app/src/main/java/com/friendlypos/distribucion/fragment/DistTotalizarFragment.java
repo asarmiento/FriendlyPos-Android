@@ -312,12 +312,13 @@ public class DistTotalizarFragment extends BaseFragment  {
                 factura_actualizada.setCanceled("1");
                 factura_actualizada.setAplicada(1);
                 factura_actualizada.setSubida(1);
+                factura_actualizada.setFacturaDePreventa(0);
 
                 realm2.insertOrUpdate(factura_actualizada);
                 realm2.close();
 
 
-                Log.d("FACTURANUEVA", factura_actualizada + "");
+                Log.d("CREAR DISTRIBUCION", factura_actualizada + "");
                 Realm realm5 = Realm.getDefaultInstance();
                 RealmResults<Pivot> result = realm.where(Pivot.class).equalTo("invoice_id", facturaId)/*.equalTo("devuelvo", 0)*/.findAll();
                 Log.d("FACTURANUEVA", result + "");
@@ -352,6 +353,7 @@ public class DistTotalizarFragment extends BaseFragment  {
                 sale_actualizada.setUpdated_at(Functions.getDate() + " " + Functions.get24Time());
                 sale_actualizada.setAplicada(1);
                 sale_actualizada.setSubida(1);
+                sale_actualizada.setFacturaDePreventa(0);
 
                 realm3.insertOrUpdate(sale_actualizada);
                 realm3.close();
