@@ -47,7 +47,6 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
     double longitude;
     int nextId;
     int tabCliente = 0;
-    int activa = 0;
     String metodoPagoId;
     String fecha;
     String idCliente;
@@ -58,7 +57,6 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
     String seleccion;
     GPSTracker gps;
     String observ;
-    AlertDialog alertPrimero;
     RadioButton rbcomprado, rbvisitado;
     private static Double creditolimite = 0.0;
     private static Double descuentoFixed = 0.0;
@@ -110,7 +108,6 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
                 int pos = position;
                 if (pos == RecyclerView.NO_POSITION) return;
 
-                // Updating old as well as new positions
                 notifyItemChanged(selected_position);
                 selected_position = position;
                 notifyItemChanged(selected_position);
@@ -123,7 +120,6 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
                 final int creditoTime = Integer.parseInt(clickedDataItem.getCreditTime());
                 final String creditoLimiteClienteP = clickedDataItem.getCreditLimit();
                 final String dueClienteP = clickedDataItem.getDue();
-                LayoutInflater layoutInflater = LayoutInflater.from(QuickContext);
 
                 final Dialog dialogInicial = new Dialog(QuickContext);
                 dialogInicial.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -251,7 +247,6 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
                                                 txtObservaciones.setText(" ");
                                                 observ = txtObservaciones.getText().toString();
                                                 metodoPagoId = "1";
-                                                //Functions.CreateMessage(QuickContext, " ", "Se cambio la factura a contado" + metodoPagoId);
                                                 notifyDataSetChanged();
                                                 agregar();
                                                 tabCliente = 1;

@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.friendlypos.R;
 import com.friendlypos.distribucion.fragment.BaseFragment;
 import com.friendlypos.distribucion.modelo.Inventario;
+import com.friendlypos.preventas.adapters.PrevSeleccionarProductoAdapter;
 import com.friendlypos.preventas.util.TotalizeHelperPreventa;
 import com.friendlypos.ventadirecta.activity.VentaDirectaActivity;
 import com.friendlypos.ventadirecta.adapters.VentaDirSeleccionarProductoAdapter;
@@ -77,11 +78,16 @@ public class VentaDirSelecProductoFragment extends BaseFragment implements Searc
         View rootView = inflater.inflate(R.layout.fragment_ventadir_selecproducto, container,
                 false);
         setHasOptionsMenu(true);
+
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerViewVentaDirectaSeleccProducto);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setHasFixedSize(true);
-        adapter = new VentaDirSeleccionarProductoAdapter(activity, this, getListProductos());
+
+        if(adapter == null) {
+            adapter = new VentaDirSeleccionarProductoAdapter(activity, this, getListProductos());
+        }
         recyclerView.setAdapter(adapter);
+
         creditoLimite = (TextView) rootView.findViewById(R.id.restCreditVentaDirecta);
 
         Log.d("listaProducto", getListProductos() + "");

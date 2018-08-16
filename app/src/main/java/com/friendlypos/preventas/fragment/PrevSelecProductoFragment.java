@@ -90,9 +90,6 @@ public class PrevSelecProductoFragment extends BaseFragment implements SearchVie
         setHasOptionsMenu(true);
         etSearchBox = (EditText) rootView.findViewById(R.id.etSearchBox);
 
-
-
-
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerViewPrevSeleccProducto);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setHasFixedSize(true);

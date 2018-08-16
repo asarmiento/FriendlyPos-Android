@@ -38,10 +38,8 @@ public class VentaDirClienteAdapter extends RecyclerView.Adapter<VentaDirCliente
     private int selected_position = -1;
     private static Context QuickContext = null;
     int tabCliente, nextId;
-    int activa = 0;
     String metodoPagoId, idCliente, nombreCliente, fecha, usuer;
     SessionPrefes session;
-
 
     private static Double creditolimite = 0.0;
     private static Double descuentoFixed = 0.0;
@@ -88,28 +86,10 @@ public class VentaDirClienteAdapter extends RecyclerView.Adapter<VentaDirCliente
 
             @Override
             public void onClick(View view) {
-                activa = 1;
-
-                final ProgressDialog progresRing = ProgressDialog.show(QuickContext, "Cargando", "Seleccionando Cliente", true);
-                progresRing.setCancelable(true);
-                new Thread(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        try {
-                            Thread.sleep(5000);
-                        }
-                        catch (Exception e) {
-
-                        }
-                        progresRing.dismiss();
-                    }
-                }).start();
 
                 int pos = position;
                 if (pos == RecyclerView.NO_POSITION) return;
 
-                // Updating old as well as new positions
                 notifyItemChanged(selected_position);
                 selected_position = position;
                 notifyItemChanged(selected_position);
@@ -131,6 +111,10 @@ public class VentaDirClienteAdapter extends RecyclerView.Adapter<VentaDirCliente
                 final RadioButton rbcontado = (RadioButton) promptView.findViewById(R.id.contadoBill);
                 final RadioButton rbcredito = (RadioButton) promptView.findViewById(R.id.creditBill);
 
+                if (creditoTime == 0) {
+                    rbcredito.setVisibility(View.GONE);
+                }
+
                 alertDialogBuilder
                         .setCancelable(false)
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -138,33 +122,72 @@ public class VentaDirClienteAdapter extends RecyclerView.Adapter<VentaDirCliente
                             public void onClick(DialogInterface dialog, int id) {
 
                                 fecha = Functions.getDate() + " " + Functions.get24Time();
-                                if (rbcredito.isChecked()) {
-                                    if (creditoTime == 0) {
-                                        Functions.CreateMessage(QuickContext, " ", "Este cliente no cuenta con crédito");
+
+                                if(!rbcontado.isChecked() && !rbcredito.isChecked()){
+                                    Functions.CreateMessage(QuickContext, " ", "Debe seleccionar una opción");
+
+                                } else {
+                                    if (rbcredito.isChecked()) {
+                                            metodoPagoId = "2";
+                                            notifyDataSetChanged();
+                                            agregar();
+                                             tabCliente = 1;
+                                            activity.setSelecClienteTabVentaDirecta(tabCliente);
+                                            activity.setCreditoLimiteClienteVentaDirecta(creditoLimiteClienteP);
+                                            activity.setDueClienteVentaDirecta(dueClienteP);
+                                            activity.setInvoiceIdPreventa(nextId);
+                                            activity.setMetodoPagoClienteVentaDirecta(metodoPagoId);
+
+                                        final ProgressDialog progresRing = ProgressDialog.show(QuickContext, "Cargando",
+                                                "Seleccionando Cliente", true);
+                                        progresRing.setCancelable(true);
+                                        new Thread(new Runnable() {
+
+                                            @Override
+                                            public void run() {
+                                                try {
+                                                    Thread.sleep(5000);
+                                                }
+                                                catch (Exception e) {
+
+                                                }
+                                                progresRing.dismiss();
+                                            }
+                                        }).start();
+
                                     }
-                                    else {
-                                        // TRANSACCIÓN PARA ACTUALIZAR EL CAMPO METODO DE PAGO CREDITO DE LA FACTURA
-                                        metodoPagoId = "2";
-                                        Functions.CreateMessage(QuickContext, " ", "Se cambio la factura a crédito" + metodoPagoId);
+                                    else if (rbcontado.isChecked()) {
+                                        metodoPagoId = "1";
                                         notifyDataSetChanged();
+                                        agregar();
+                                        tabCliente = 1;
+                                        activity.setSelecClienteTabVentaDirecta(tabCliente);
+                                        activity.setCreditoLimiteClienteVentaDirecta(creditoLimiteClienteP);
+                                        activity.setDueClienteVentaDirecta(dueClienteP);
+                                        activity.setInvoiceIdPreventa(nextId);
+                                        activity.setMetodoPagoClienteVentaDirecta(metodoPagoId);
+
+                                        final ProgressDialog progresRing = ProgressDialog.show(QuickContext, "Cargando",
+                                                "Seleccionando Cliente", true);
+                                        progresRing.setCancelable(true);
+                                        new Thread(new Runnable() {
+
+                                            @Override
+                                            public void run() {
+                                                try {
+                                                    Thread.sleep(5000);
+                                                }
+                                                catch (Exception e) {
+
+                                                }
+                                                progresRing.dismiss();
+                                            }
+                                        }).start();
                                     }
-                                }
-                                else if (rbcontado.isChecked()) {
-                                    // TRANSACCIÓN PARA ACTUALIZAR EL CAMPO METODO DE PAGO CONTADO DE LA FACTURA
-                                    metodoPagoId = "1";
-                                    Functions.CreateMessage(QuickContext, " ", "Se cambio la factura a contado" + metodoPagoId);
-                                    notifyDataSetChanged();
-                                }
-                                agregar();
 
-                                tabCliente = 1;
-                                activity.setSelecClienteTabVentaDirecta(tabCliente);
-                                activity.setCreditoLimiteClienteVentaDirecta(creditoLimiteClienteP);
-                                activity.setDueClienteVentaDirecta(dueClienteP);
 
-                                //TODO MODIFICAR CON EL ID CONSECUTIVOS
-                                activity.setInvoiceIdPreventa(1);
-                                activity.setMetodoPagoClienteVentaDirecta(metodoPagoId);
+
+                                }
                             }
                         })
                         .setNegativeButton("Cancel",

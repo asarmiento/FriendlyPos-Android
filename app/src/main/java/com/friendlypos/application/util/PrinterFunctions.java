@@ -462,7 +462,7 @@ public class PrinterFunctions {
         } else if (ptype == 2) {
             billptype = "P r o f o r m a";
         } else if (ptype == 3) {
-            billptype = "Orden de pedido";
+            billptype = "F a c t u r a";
         }
 
         if (type == 1) {
@@ -483,22 +483,11 @@ public class PrinterFunctions {
                     "! U1 SETLP 7 0 14\r\n" + "\r\n" +
                     "N# Factura: " + numeracionFactura + "\r\n" +
                     "! U1 LMARGIN 120\r\n" +
-                    "Factura de: ! U1 LMARGIN 350 " + metodoPago + "\r\n" +
-                    ((metodoPago == "2") ? "! U1 LMARGIN 120\r\n" +
-                            "Fecha Limite: ! U1 LMARGIN 350 " + messageC + "\r\n" : "\r\n") +
-                    "! U1 LMARGIN 0\r\n" +
-                    "! U1 SETLP 5 1 35\r\n" +
                     sysNombreNegocio + "\r\n" +
                     "! U1 SETLP 5 0 24\r\n" +
                     "Fecha y hora: " + fechayhora + "\r\n" +
                     "Vendedor:  " + nombreUsuario + "\r\n" +
-                  /*  "\r\n" +
-                    "! U1 LMARGIN 50\r\n" +
-                    "Cedula: " + cardCliente + " \r\n" +
-                    "Razon Social: " + companyCliente + "\r\n" +
-                    ((!nombreCliente.isEmpty()) ? "A nombre de: " + nombreCliente + "\r\n" : "") +
-                    "Nombre fantasia: " + fantasyCliente + "\r\n" +
-                    "# Telefono: " + telefonoCliente + "\r\n" +*/
+
                     "! U1 LMARGIN 0\r\n" +
                     "! U1 SETSP 0\r\n" +
                     "Descripcion           Codigo\r\n" +
@@ -551,19 +540,11 @@ public class PrinterFunctions {
                     payment = "Contado";
                     preview += Html.fromHtml("<h1>") + String.format("%s", billptype) + Html.fromHtml("</h1><br/><br/><br/>");
                     preview += Html.fromHtml("<h1>") + "N# Factura: " + numeracionFactura + Html.fromHtml("</h1><br/><br/>");
-                    preview += Html.fromHtml("<h1>") + "Factura de: " + payment + Html.fromHtml("</h1><br/><br/>");
-                 /*   preview += Html.fromHtml("<h1>") + sysNombre + Html.fromHtml("</h1><br/><br/>");*/
                     preview += Html.fromHtml("<h1>") + sysNombreNegocio + Html.fromHtml("</h1><br/><br/>");
-                  /*  preview += Html.fromHtml("<h1>") + sysDireccion + Html.fromHtml("</h1><br/><br/>");
-                    preview += Html.fromHtml("<h1>") + "Cedula " + sysIdentificacion + "  Tel. " + sysTelefono + Html.fromHtml("</h1></center><br/><br/>");
-                    preview += Html.fromHtml("<h1>") +  "E-mail " + sysCorreo + Html.fromHtml("</h1></center><br/><br/>");*/
                     preview += Html.fromHtml("<h1>") +  "Fecha y hora: " + fechayhora + Html.fromHtml("</h1></center><br/><br/>");
                     preview += Html.fromHtml("<h1>") +  "Vendedor:  " + nombreUsuario + Html.fromHtml("</h1></center><br/><br/><br/>");
-                  /*  preview += Html.fromHtml("<h1>") +  "Cedula: " + cardCliente + Html.fromHtml("</h1></center><br/><br/>");
-                    preview += Html.fromHtml("<h1>") + "Razon Social: " + companyCliente + Html.fromHtml("</h1></center><br/><br/>");
-                    preview += Html.fromHtml("<h1>") + "A nombre de: " + nombreCliente + Html.fromHtml("</h1></center><br/><br/>");
-                    preview += Html.fromHtml("<h1>") +  "Nombre fantasia: " + fantasyCliente + Html.fromHtml("</h1></center><br/><br/>");
-                    preview += Html.fromHtml("<h1>") +  "# Telefono: " + telefonoCliente + Html.fromHtml("</h1></center><br/><br/><br/>");*/
+
+
                     preview += Html.fromHtml("<h1>") +  "Descripcion           Codigo" + Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>") +   "Cantidad      Precio       P.Sug       Total" + Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>") +   "Tipo " + Html.fromHtml("</h1></center><br/>");
@@ -587,24 +568,13 @@ public class PrinterFunctions {
                     preview += Html.fromHtml("<h1>")   + "N : 11-1997 de la D.G.T.D" +  Html.fromHtml("</h1></center><br/>");
                     break;
                 case "2":
-                    payment = "Credito";
-                    messageC = fechaFactura;
                     preview += Html.fromHtml("<h1>") + String.format("%s", billptype) + Html.fromHtml("</h1><br/><br/><br/>");
                     preview += Html.fromHtml("<h1>") + "N# Factura: " + numeracionFactura + Html.fromHtml("</h1><br/><br/>");
-                    preview += Html.fromHtml("<h1>") + "Factura de: " + payment + Html.fromHtml("</h1><br/><br/>");
-                    preview += Html.fromHtml("<h1>") + "Fecha Limite: " + messageC + Html.fromHtml("</h1><br/><br/>");
-                 /*   preview += Html.fromHtml("<h1>") + sysNombre + Html.fromHtml("</h1><br/><br/>");*/
                     preview += Html.fromHtml("<h1>") + sysNombreNegocio + Html.fromHtml("</h1><br/><br/>");
-                  /*  preview += Html.fromHtml("<h1>") + sysDireccion + Html.fromHtml("</h1><br/><br/>");
-                    preview += Html.fromHtml("<h1>") + "Cedula " + sysIdentificacion + "  Tel. " + sysTelefono + Html.fromHtml("</h1></center><br/><br/>");
-                    preview += Html.fromHtml("<h1>") +  "E-mail " + sysCorreo + Html.fromHtml("</h1></center><br/><br/>");*/
                     preview += Html.fromHtml("<h1>") +  "Fecha y hora: " + fechayhora + Html.fromHtml("</h1></center><br/><br/>");
                     preview += Html.fromHtml("<h1>") +  "Vendedor:  " + nombreUsuario + Html.fromHtml("</h1></center><br/><br/><br/>");
-                  /*  preview += Html.fromHtml("<h1>") +  "Cedula: " + cardCliente + Html.fromHtml("</h1></center><br/><br/>");
-                    preview += Html.fromHtml("<h1>") + "Razon Social: " + companyCliente + Html.fromHtml("</h1></center><br/><br/>");
-                    preview += Html.fromHtml("<h1>") + "A nombre de: " + nombreCliente + Html.fromHtml("</h1></center><br/><br/>");
-                    preview += Html.fromHtml("<h1>") +  "Nombre fantasia: " + fantasyCliente + Html.fromHtml("</h1></center><br/><br/>");
-                    preview += Html.fromHtml("<h1>") +  "# Telefono: " + telefonoCliente + Html.fromHtml("</h1></center><br/><br/><br/>");*/
+
+
                     preview += Html.fromHtml("<h1>") +  "#  Descripcion      Codigo" + Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>") +  "Cant     Precio       P.Sug        Total      I" + Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>") +  "------------------------------------------------" + Html.fromHtml("</h1></center><br/>");

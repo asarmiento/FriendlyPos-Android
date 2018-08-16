@@ -11,6 +11,8 @@ import android.widget.Toast;
 
 import com.friendlypos.R;
 import com.friendlypos.distribucion.fragment.BaseFragment;
+import com.friendlypos.preventas.activity.PreventaActivity;
+import com.friendlypos.preventas.adapters.PrevClientesAdapter;
 import com.friendlypos.principal.modelo.Clientes;
 import com.friendlypos.ventadirecta.activity.VentaDirectaActivity;
 import com.friendlypos.ventadirecta.adapters.VentaDirClienteAdapter;
@@ -58,13 +60,12 @@ public class VentaDirSelecClienteFragment extends BaseFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        adapter = new VentaDirClienteAdapter(getContext(), ((VentaDirectaActivity) getActivity()), getList());
+        if(adapter == null) {
+            adapter = new VentaDirClienteAdapter(getContext(), ((VentaDirectaActivity) getActivity()), getList());
+        }
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);
-
-        //  adapter2 = new DistrResumenAdapter();
     }
 
     private List<Clientes> getList(){

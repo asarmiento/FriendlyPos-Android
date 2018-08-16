@@ -219,7 +219,7 @@ public class VentaDirTotalizarFragment extends BaseFragment  {
                         try {
 
                             if(bluetoothStateChangeReceiver.isBluetoothAvailable()== true) {
-                                PrinterFunctions.imprimirFacturaPrevTotal(sale_actualizada, getActivity(), 1);
+                                PrinterFunctions.imprimirFacturaPrevTotal(sale_actualizada, getActivity(), 3);
                                 Toast.makeText(getActivity(), "imprimir Totalizar Preventa", Toast.LENGTH_SHORT).show();
                             }
                             else if(bluetoothStateChangeReceiver.isBluetoothAvailable() == false){
