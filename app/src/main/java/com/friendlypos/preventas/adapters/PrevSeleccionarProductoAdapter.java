@@ -244,7 +244,7 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
 
         spPrices = (Spinner) promptView.findViewById(R.id.spPrices);
         ArrayList<Double> pricesList = new ArrayList<>();
-        Double precio1 = Double.valueOf(Precio1);
+        final Double precio1 = Double.valueOf(Precio1);
         Double precio2 = Double.valueOf(Precio2);
         Double precio3 = Double.valueOf(Precio3);
         Double precio4 = Double.valueOf(Precio4);
@@ -309,6 +309,13 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
                             if(producto_amount_dist_add >= productosParaObtenerBonus ){
 
                                 if(hoy <= fechaexp){
+                                    Log.d("PROD OBTE", productosParaObtenerBonus + "");
+                                    Log.d("PROD DEL BO", productosDelBonus + "");
+                                    Log.d("PROD ADD", producto_amount_dist_add + "");
+
+                                    double productos = producto_amount_dist_add / productosParaObtenerBonus;
+                                    Log.d("PROD DIV", productos + "");
+
                                 producto_bonus_add =  producto_amount_dist_add + productosDelBonus;
                                     Log.d("PRODUCTODELBONUS", producto_bonus_add + "");
                                     agregarBonificacion();
@@ -474,6 +481,7 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
         //  CREDITO
         String metodoPagoCliente = invoiceDetallePreventa.getP_payment_method_id();
         Double cred = Double.parseDouble(activity.getCreditoLimiteClientePreventa());
+
         if (metodoPagoCliente.equals("1")) {
             creditoLimiteCliente = cred;
             totalCredito = creditoLimiteCliente;
@@ -512,25 +520,6 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
             activity.insertProduct(pivotnuevo);
             numero++;
             session.guardarDatosPivotPreventa(numero);
-
-                          /*  final Double nuevoAmount = cantidadDisponible - producto_amount_dist_add;
-                            Log.d("nuevoAmount", nuevoAmount + "");*/
-
-
-                          /*  final Realm realm6 = Realm.getDefaultInstance();
-
-                            realm6.executeTransaction(new Realm.Transaction() {
-
-                                @Override
-                                public void execute(Realm realm6) {
-
-                                    Inventario inv_actualizado = realm6.where(Inventario.class).equalTo("id", inventario_id).findFirst();
-                                    inv_actualizado.setAmount(String.valueOf(nuevoAmount));
-
-                                    realm6.insertOrUpdate(inv_actualizado); // using insert API
-                                }
-                            });
-*/
 
             sale ventaDetallePreventa = activity.getCurrentVenta();
             ventaDetallePreventa.getInvoice_id();
