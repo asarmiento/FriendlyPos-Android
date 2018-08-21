@@ -287,39 +287,34 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
                         if (bonusProducto.equals("1")){
                             Log.d("idProductoBONIF", producto_id + "");
 
-
                             long fechaexp = fechaExpiracionBonus.getTime();
                             Log.d("fechaExpBONIF", fechaexp + "");
-
 
                             Calendar cal = Calendar.getInstance();
                             long hoy = cal.getTimeInMillis();
                             Log.d("fechaBONIF", hoy + "");
 
 
-
-                         /*   SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-                            Date date = sdf.getCalendar().getTime();
-
-                            Log.d("fechaBONIF", date + "");*/
-
-
-                          //  String fechaDia = Functions.getDate();
-
                             if(producto_amount_dist_add >= productosParaObtenerBonus ){
 
                                 if(hoy <= fechaexp){
-                                    Log.d("PROD OBTE", productosParaObtenerBonus + "");
-                                    Log.d("PROD DEL BO", productosDelBonus + "");
-                                    Log.d("PROD ADD", producto_amount_dist_add + "");
+                                    Log.d("PRODOBTE", productosParaObtenerBonus + "");
+                                    Log.d("PRODDELBO", productosDelBonus + "");
+                                    Log.d("PRODADD", producto_amount_dist_add + "");
 
                                     double productos = producto_amount_dist_add / productosParaObtenerBonus;
-                                    Log.d("PROD DIV", productos + "");
 
-                                producto_bonus_add =  producto_amount_dist_add + productosDelBonus;
+                                    String prod = String.format("%.0f", productos);
+                                    double productoBonusTotal = Double.parseDouble(prod) * productosDelBonus;
+
+
+                                    Log.d("PROD DIV", productos + "");
+                                    Log.d("PROD TOTAL", productoBonusTotal + "");
+
+                                    producto_bonus_add =  producto_amount_dist_add + productoBonusTotal;
                                     Log.d("PRODUCTODELBONUS", producto_bonus_add + "");
                                     agregarBonificacion();
-                                    Toast.makeText(context, "Se realizó una bonificación de " + productosDelBonus + " productos", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(context, "Se realizó una bonificación de " + productoBonusTotal + " productos", Toast.LENGTH_LONG).show();
 
                             }
                                 else{
