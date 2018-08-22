@@ -260,6 +260,7 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
                                         pivotnuevo.setAmount(String.valueOf(producto_amount_dist_add));
                                         pivotnuevo.setDiscount(String.valueOf(producto_descuento_add));
                                         pivotnuevo.setDelivered(String.valueOf(producto_amount_dist_add));
+                                        pivotnuevo.setBonus(0);
 
                                         realm2.insertOrUpdate(pivotnuevo); // using insert API
 

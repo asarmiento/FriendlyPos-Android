@@ -318,11 +318,13 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
 
                             }
                                 else{
-                                    Toast.makeText(context, "Fecha expirada", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(context, "Fecha expirada para el bonus", Toast.LENGTH_LONG).show();
+                                    agregar();
                                 }
                             }
                             else{
                                 Toast.makeText(context, "No alcanza la cantidad deseada para el bonus", Toast.LENGTH_LONG).show();
+                                agregar();
                             }
 
                         }
@@ -400,6 +402,7 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
             pivotnuevo.setDiscount(String.valueOf(producto_descuento_add));
             pivotnuevo.setDelivered(String.valueOf(producto_amount_dist_add));
             pivotnuevo.setDevuelvo(0);
+            pivotnuevo.setBonus(0);
 
             activity.insertProduct(pivotnuevo);
             numero++;
@@ -511,6 +514,7 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
             pivotnuevo.setDiscount(String.valueOf(producto_descuento_add));
             pivotnuevo.setDelivered(String.valueOf(producto_bonus_add));
             pivotnuevo.setDevuelvo(0);
+            pivotnuevo.setBonus(1);
 
             activity.insertProduct(pivotnuevo);
             numero++;

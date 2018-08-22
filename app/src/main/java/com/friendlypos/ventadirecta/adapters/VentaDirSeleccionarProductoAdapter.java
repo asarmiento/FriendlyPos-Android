@@ -251,7 +251,7 @@ public class VentaDirSeleccionarProductoAdapter  extends RecyclerView.Adapter<Ve
                                 pivotnuevo.setDiscount(String.valueOf(producto_descuento_add));
                                 pivotnuevo.setDelivered(String.valueOf(producto_amount_dist_add));
                                 pivotnuevo.setDevuelvo(0);
-
+                                pivotnuevo.setBonus(0);
                                 activity.insertProduct(pivotnuevo);
                                 numero++;
                                 session.guardarDatosPivotPreventa(numero);

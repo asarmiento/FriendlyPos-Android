@@ -3,6 +3,7 @@ package com.friendlypos.principal.helpers;
 import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.friendlypos.app.broadcastreceiver.NetworkStateChangeReceiver;
 import com.friendlypos.application.datamanager.BaseManager;
@@ -10,6 +11,7 @@ import com.friendlypos.application.interfaces.RequestInterface;
 import com.friendlypos.distribucion.modelo.EnviarFactura;
 import com.friendlypos.distribucion.modelo.invoice;
 import com.friendlypos.login.util.SessionPrefes;
+import com.friendlypos.principal.activity.MenuPrincipal;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -47,6 +49,7 @@ public class SubirHelperPreventa {
                 if(response.isSuccessful()) {
                    // showResponse(response.body().toString());
                     Log.d("respuestaFactura",response.body().toString());
+                    Toast.makeText(activity, response.body().toString(), Toast.LENGTH_SHORT).show();
                 }
             }
 
