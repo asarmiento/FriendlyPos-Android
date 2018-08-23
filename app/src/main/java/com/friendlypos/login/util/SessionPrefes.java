@@ -69,6 +69,23 @@ public class SessionPrefes {
         }
     }
 
+    public void guardarDatosPivotVentaDirecta(int numero) {
+        if (numero != 0) {
+            //todo revisar que es PREF_USER_EXPIRES_IN
+            // referencia https://www.timecalculator.net/milliseconds-to-date
+            SharedPreferences.Editor editor = mPrefs.edit();
+            editor.putInt(PREF_PREV_NUMERO, numero);
+           /* editor.putString(PREF_USER_ACCESS_TOKEN, userresp.getAccess_token());
+            editor.putString(PREF_USER_REFRESH_TOKEN, userresp.getRefresh_token());*/
+            editor.apply();
+        }
+    }
+
+    public int getDatosPivotVentaDirecta(){
+        int numero = mPrefs.getInt(PREF_PREV_NUMERO, 0);
+        return numero;
+    }
+
     public void guardarDatosPivotPreventa(int numero) {
         if (numero != 0) {
             //todo revisar que es PREF_USER_EXPIRES_IN

@@ -24,7 +24,6 @@ public class VentaDirResumenFragment extends BaseFragment {
     int slecTAB;
 
     TotalizeHelperVentaDirecta totalizeHelper;
-
     VentaDirectaActivity activity;
 
     @Override
@@ -42,8 +41,8 @@ public class VentaDirResumenFragment extends BaseFragment {
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerViewVentaDirectaResumen);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         slecTAB = activity.getSelecClienteTabVentaDirecta();
-
         totalizeHelper = new TotalizeHelperVentaDirecta(activity);
+
 
         if (slecTAB == 1) {
             List<Pivot> list = activity.getAllPivotDelegate();

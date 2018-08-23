@@ -30,9 +30,7 @@ public class DistResumenFragment extends BaseFragment {
     RecyclerView recyclerView;
     private DistrResumenAdapter adapter;
     int slecTAB;
-
     TotalizeHelper totalizeHelper;
-
     DistribucionActivity activity;
 
     @Override
@@ -44,9 +42,6 @@ public class DistResumenFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-       /* FragmentTransaction ftr = getFragmentManager().beginTransaction();
-        ftr.detach(DistResumenFragment.this).attach(DistResumenFragment.this).commit();
-*/
         View rootView = inflater.inflate(R.layout.fragment_distribucion_resumen, container,
             false);
 

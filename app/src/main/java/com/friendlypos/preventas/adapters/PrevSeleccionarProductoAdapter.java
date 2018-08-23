@@ -142,19 +142,11 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
             Toast.makeText(context,"error", Toast.LENGTH_SHORT).show();
 
         }
-       // realm3.close();
-/*
-        if(inventario.getAmount().equals("0")){
-
-            holder.cardView.setVisibility(View.GONE);
-        }else{
-*/
 
         holder.txt_producto_factura_nombre.setText(description);
         holder.txt_producto_factura_marca.setText("Marca: " + marca2);
         holder.txt_producto_factura_tipo.setText("Tipo: " + tipoProducto);
         holder.txt_producto_factura_precio.setText(precio);
-       /* holder.txt_producto_factura_disponible.setText("Disp: " + inventario.getAmount());*/
         holder.fillData(producto);
 
         if(pivots.size() == 0){
@@ -341,8 +333,7 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
                 }
                 catch (Exception e) {
                     e.printStackTrace();
-                       /* Functions.createSnackBar(QuickContext, coordinatorLayout, "Sucedio un error Revise que el producto y sus dependientes tengan existencias", 2, Snackbar.LENGTH_LONG);
-                        Functions.CreateMessage(QuickContext, "Error", e.getMessage());*/
+
                 }
 
                 }
