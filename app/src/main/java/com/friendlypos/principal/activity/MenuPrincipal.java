@@ -47,6 +47,7 @@ import com.friendlypos.principal.helpers.DescargasHelper;
 import com.friendlypos.principal.helpers.SubirHelper;
 import com.friendlypos.principal.helpers.SubirHelperClienteVisitado;
 import com.friendlypos.principal.helpers.SubirHelperPreventa;
+import com.friendlypos.principal.helpers.SubirHelperVentaDirecta;
 import com.friendlypos.reimpresion.activity.ReimprimirActivity;
 import com.friendlypos.reimpresion_pedidos.activity.ReimprimirPedidosActivity;
 import com.friendlypos.ventadirecta.activity.VentaDirectaActivity;
@@ -106,6 +107,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
     DescargasHelper download1;
     SubirHelper subir1;
     SubirHelperPreventa subirPreventa;
+    SubirHelperVentaDirecta subirVentaDirecta;
     SubirHelperClienteVisitado subirClienteVisitado;
     String usuer;
     String idUsuario;
@@ -130,6 +132,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
         download1 = new DescargasHelper(MenuPrincipal.this);
         subir1 = new SubirHelper(MenuPrincipal.this);
         subirPreventa = new SubirHelperPreventa(MenuPrincipal.this);
+        subirVentaDirecta = new SubirHelperVentaDirecta(MenuPrincipal.this);
         subirClienteVisitado = new SubirHelperClienteVisitado(MenuPrincipal.this);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
             this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -412,9 +415,9 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
 
                 RealmQuery<invoice> queryPedidos = realmPedidos.where(invoice.class).equalTo("subida", 1).equalTo("facturaDePreventa", 1);
                 final RealmResults<invoice> invoicePedidos = queryPedidos.findAll();
-                Log.d("qweqweq", invoicePedidos.toString());
+                Log.d("SubFacturaInvP", invoicePedidos.toString());
                 List<invoice> listaFacturasPedidos = realmPedidos.copyFromRealm(invoicePedidos);
-                Log.d("qweqweq1", listaFacturasPedidos + "");
+                Log.d("SubFacturaListaP", listaFacturasPedidos + "");
                 realmPedidos.close();
 
                 if(listaFacturasPedidos.size()== 0){
@@ -424,7 +427,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                     for (int i = 0; i < listaFacturasPedidos.size(); i++) {
                         Toast.makeText(MenuPrincipal.this, "hay", Toast.LENGTH_SHORT).show();
 
-                       facturaId = String.valueOf(listaFacturasPedidos.get(i).getId());
+                        facturaId = String.valueOf(listaFacturasPedidos.get(i).getId());
                         Log.d("facturaId", facturaId + "");
                         EnviarFactura obj = new EnviarFactura(listaFacturasPedidos.get(i));
                         Log.d("My App", obj + "");
@@ -436,6 +439,39 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                 }
 
                 Toast.makeText(MenuPrincipal.this, "subir_Pedidos", Toast.LENGTH_SHORT).show();
+
+                break;
+
+            case R.id.btn_subir_ventadirecta:
+
+                Realm realmVentaDirecta = Realm.getDefaultInstance();
+
+                RealmQuery<invoice> queryVentaDirecta = realmVentaDirecta.where(invoice.class).equalTo("subida", 1).equalTo("facturaDePreventa", 2);
+                final RealmResults<invoice> invoiceVentaDirecta = queryVentaDirecta.findAll();
+                Log.d("SubFacturaInvV", invoiceVentaDirecta.toString());
+                List<invoice> listaFacturasVentaDirecta = realmVentaDirecta.copyFromRealm(invoiceVentaDirecta);
+                Log.d("SubFacturaListaV", listaFacturasVentaDirecta + "");
+                realmVentaDirecta.close();
+
+                if(listaFacturasVentaDirecta.size()== 0){
+                    Toast.makeText(MenuPrincipal.this,"No hay facturas para subir", Toast.LENGTH_LONG).show();
+                }else {
+
+                    for (int i = 0; i < listaFacturasVentaDirecta.size(); i++) {
+                        Toast.makeText(MenuPrincipal.this, "hay", Toast.LENGTH_SHORT).show();
+
+                        facturaId = String.valueOf(listaFacturasVentaDirecta.get(i).getId());
+                        Log.d("facturaId", facturaId + "");
+                        EnviarFactura obj = new EnviarFactura(listaFacturasVentaDirecta.get(i));
+                        Log.d("My App", obj + "");
+                        subirVentaDirecta.sendPostVentaDirecta(obj);
+
+                        actualizarVenta();
+                        actualizarFactura();
+                    }
+                }
+
+                Toast.makeText(MenuPrincipal.this, "subir_Venta Directa", Toast.LENGTH_SHORT).show();
 
                 break;
 

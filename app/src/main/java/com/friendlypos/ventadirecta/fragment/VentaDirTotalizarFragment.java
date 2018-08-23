@@ -86,7 +86,12 @@ public class VentaDirTotalizarFragment extends BaseFragment  {
         super.onAttach(activity);
         this.activity = (VentaDirectaActivity) activity;
     }
+    @Override
+    public void onPause() {
+        super.onPause();
 
+        getActivity().unregisterReceiver(bluetoothStateChangeReceiver);
+    }
     @Override
     public void onDetach(){
         super.onDetach();
@@ -169,10 +174,9 @@ public class VentaDirTotalizarFragment extends BaseFragment  {
                     @Override
                     public void onClick(View v) {
                         try {
-                            //validateData();
-                            // Log.d("total", String.valueOf(Functions.sGetDecimalStringAnyLocaleAsDouble(Total.getText().toString())));
 
                             if (metodoPagoCliente.equals("1")) {
+
                                 pagoCon = Double.parseDouble(paid.getText().toString());
                                 totalPagoCon = String.format("%,.2f", pagoCon);
                                 double total = totalTotal;
@@ -198,7 +202,6 @@ public class VentaDirTotalizarFragment extends BaseFragment  {
                                 aplicarFactura();
                             }
                             actualizarFactura();
-                            alertVisitado();
 
                         }
                         catch (Exception e) {
@@ -220,7 +223,7 @@ public class VentaDirTotalizarFragment extends BaseFragment  {
 
                             if(bluetoothStateChangeReceiver.isBluetoothAvailable()== true) {
                                 PrinterFunctions.imprimirFacturaPrevTotal(sale_actualizada, getActivity(), 3);
-                                Toast.makeText(getActivity(), "imprimir Totalizar Preventa", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getActivity(), "imprimir Totalizar Venta Directa", Toast.LENGTH_SHORT).show();
                             }
                             else if(bluetoothStateChangeReceiver.isBluetoothAvailable() == false){
                                 Functions.CreateMessage(getActivity(), "Error", "La conexión del bluetooth ha fallado, favor revisar o conectar el dispositivo");
@@ -295,49 +298,6 @@ public class VentaDirTotalizarFragment extends BaseFragment  {
 
     }
 
-    public void alertVisitado(){
-
-        LayoutInflater layoutInflater = LayoutInflater.from(activity);
-        View promptView = layoutInflater.inflate(R.layout.promptvisitado_preventa, null);
-
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(activity);
-        alertDialogBuilder.setView(promptView);
-        final RadioButton rbcomprado = (RadioButton) promptView.findViewById(R.id.compradoBillVisitado);
-        final RadioButton rbvisitado = (RadioButton) promptView.findViewById(R.id.visitadoBillVisitado);
-
-
-        alertDialogBuilder
-                .setCancelable(false)
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-
-                    public void onClick(DialogInterface dialog, int id) {
-
-                        if(rbcomprado.isChecked()) {seleccion = "1";}
-
-                        else if(rbvisitado.isChecked()){seleccion = "2";}
-
-                        actualizarClienteVisitado();
-
-                    }
-
-
-                })
-                .setNegativeButton("Cancel",
-                        new DialogInterface.OnClickListener() {
-
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                            }
-                        });
-
-
-
-        AlertDialog alertD = alertDialogBuilder.create();
-        alertD.show();
-
-    }
-
-
     public void actualizarFacturaDetalles() {
 
         Realm realm = Realm.getDefaultInstance();
@@ -358,63 +318,53 @@ public class VentaDirTotalizarFragment extends BaseFragment  {
         invoiceDetallePreventa1.setP_total(String.valueOf(totalTotal));
 
         invoiceDetallePreventa1.setP_changing(String.valueOf(vuelto));
-        invoiceDetallePreventa1.setP_note(notes.getText().toString());
+        String nota;
+        if(notes.getText().toString().isEmpty()){
+            nota = "ninguna";
+        }else{
+            nota = notes.getText().toString();
+        }
+
+        invoiceDetallePreventa1.setP_note(nota);
         invoiceDetallePreventa1.setP_canceled("1");
         invoiceDetallePreventa1.setP_paid(String.valueOf(pagoCon));
         invoiceDetallePreventa1.setP_user_id(idUsuario);
         invoiceDetallePreventa1.setP_user_id_applied(idUsuario);
         invoiceDetallePreventa1.setP_sale(activity.getCurrentVenta());
+        invoiceDetallePreventa1.setFacturaDePreventa(2);
 
-    /*    invoiceDetallePreventa1.setAplicada(1);
-        invoiceDetallePreventa1.setSubida(1);*/
-
-
-        Log.d("codigoooo", invoiceDetallePreventa1 + "");
+        Log.d("actFactDetVD", invoiceDetallePreventa1 + "");
 
     }
 
     protected void actualizarFactura() {
 
-        activity.getInvoiceByInvoiceDetalles();
+        final invoice invoice =  activity.getInvoiceByInvoiceDetalles();
 
-     /*   // TRANSACCION PARA ACTUALIZAR CAMPOS DE LA TABLA FACTURAS
-        final Realm realm2 = Realm.getDefaultInstance();
-        realm2.executeTransaction(new Realm.Transaction() {
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransactionAsync(new Realm.Transaction() {
 
             @Override
-            public void execute(Realm realm2) {
-                invoice factura_actualizada = realm2.where(invoice.class).equalTo("id", facturaId).findFirst();
-                Realm realm = Realm.getDefaultInstance();
-                usuer = session.getUsuarioPrefs();
-                Usuarios usuarios = realm.where(Usuarios.class).equalTo("email", usuer).findFirst();
-                String idUsuario = usuarios.getId();
-                realm.close();
-
-                factura_actualizada.setDate(Functions.getDate());
-                factura_actualizada.setTimes(Functions.get24Time());
-
-                factura_actualizada.setLatitud(latitude);
-                factura_actualizada.setLongitud(longitude);
-
-                factura_actualizada.setSubtotal_taxed(String.valueOf(totalGrabado));
-                factura_actualizada.setSubtotal_exempt(String.valueOf(totalExento));
-                factura_actualizada.setSubtotal(String.valueOf(totalSubtotal));
-                factura_actualizada.setDiscount(String.valueOf(totalDescuento));
-                factura_actualizada.setTax(String.valueOf(totalImpuesto));
-                factura_actualizada.setTotal(String.valueOf(totalTotal));
-
-                factura_actualizada.setPaid(String.valueOf(pagoCon));
-                factura_actualizada.setChanging(String.valueOf(vuelto));
-                factura_actualizada.setUser_id_applied(idUsuario);
-                factura_actualizada.setNote(notes.getText().toString());
-                factura_actualizada.setCanceled("1");
-                factura_actualizada.setAplicada(1);
-                factura_actualizada.setSubida(1);
-
-                realm2.insertOrUpdate(factura_actualizada);
-                realm2.close();
+            public void execute(Realm realm) {
+                realm.copyToRealmOrUpdate(invoice);
             }
-        });*/
+        }, new Realm.Transaction.OnSuccess() {
+
+            @Override
+            public void onSuccess() {
+                actualizarVenta();
+
+            }
+        }, new Realm.Transaction.OnError() {
+
+            @Override
+            public void onError(Throwable error) {
+                Log.e("actualizarFactura ", error.getMessage());
+            }
+        });
+
+        Log.d("invoicetotal", invoice + "");
+
     }
 
     protected void actualizarVenta() {
@@ -438,7 +388,6 @@ public class VentaDirTotalizarFragment extends BaseFragment  {
                     sale_actualizada.setCustomer_name(client_name.getText().toString());
                 }
 
-                sale_actualizada.setSale_type("1");
                 sale_actualizada.setApplied("1");
                 sale_actualizada.setUpdated_at(Functions.getDate() + " " + Functions.get24Time());
                 sale_actualizada.setAplicada(1);
@@ -453,52 +402,11 @@ public class VentaDirTotalizarFragment extends BaseFragment  {
 
     }
 
-    protected void actualizarClienteVisitado() {
-        final Realm realm5 = Realm.getDefaultInstance();
-
-        realm5.executeTransaction(new Realm.Transaction() {
-
-            @Override
-            public void execute(Realm realm5) {
-
-                Number currentIdNum = realm5.where(visit.class).max("id");
-
-                if (currentIdNum == null) {
-                    nextId = 1;
-                }
-                else {
-                    nextId = currentIdNum.intValue() + 1;
-                }
-
-                visit visitadonuevo = new visit();
-
-                visitadonuevo.setId(nextId);
-                visitadonuevo.setCustomer_id(facturaId);
-                visitadonuevo.setVisit(seleccion);
-                visitadonuevo.setObservation("Prueba");
-                visitadonuevo.setDate(Functions.getDate());
-                visitadonuevo.setLongitud(longitude);
-                visitadonuevo.setLatitud(latitude);
-                visitadonuevo.setUser_id("USER");
-                visitadonuevo.setSubida(1);
-
-
-
-                realm5.insertOrUpdate(visitadonuevo);
-                Log.d("ClienteVisitado", visitadonuevo + "" );
-            }
-        });
-
-    }
-
 
     protected void aplicarFactura() {
         paid.setEnabled(false);
 
         actualizarFacturaDetalles();
-
-    /*    actualizarFactura();
-        actualizarVenta();*/
 
         Toast.makeText(getActivity(), "Venta realizada correctamente", Toast.LENGTH_LONG).show();
 
@@ -523,37 +431,4 @@ public class VentaDirTotalizarFragment extends BaseFragment  {
 
 
     }
-
-
-
-/*
-    protected void validateData() throws Exception {
-
-        if (CurrentSale == null) {
-            client_name.requestFocus();
-            throw new IOException("Debe Seleccionar un cliente de la primera vista");
-        }
-
-        if (CurrentSale.costumer.company_name.equals("Cliente Generico") && client_name.getText().toString().isEmpty()) {
-            throw new IOException("Para el Cliente a Contado, debe ingresar un nombre");
-        }
-
-
-        //ClimDataValidator.validateSpinnerHasNotDefaultText("Seleccione condición compra",  spinnerPaymentMethods, "Debe seleccionar una condición de compra");
-
-        if (!(mAdapterBill.getItemCount() > 0)) {
-            throw new IOException("Debe ingresar al menos un producto");
-        }
-
-        if (bill_type == 1) {
-            if (paid.getText().toString().isEmpty()) {
-                throw new IOException("Aun no ha cobrado !!");
-            }
-            if (Functions.sGetDecimalStringAnyLocaleAsDouble(paid.getText().toString()) < Functions.sGetDecimalStringAnyLocaleAsDouble(Total.getText().toString())) {
-                throw new IOException("El cobro no es correcto");
-
-            }
-        }
-    }*/
-
 }

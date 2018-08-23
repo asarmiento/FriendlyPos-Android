@@ -310,7 +310,6 @@ public class VentaDirSeleccionarProductoAdapter  extends RecyclerView.Adapter<Ve
 
                                     }
                                 });
-                                //   activity.getAllPivotDelegate();
 
                             }
                             else {

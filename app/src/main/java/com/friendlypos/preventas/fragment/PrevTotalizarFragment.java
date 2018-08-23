@@ -171,29 +171,16 @@ public class PrevTotalizarFragment extends BaseFragment {
                 @Override
                 public void onClick(View v) {
                     try {
-                        //validateData();
-                        // Log.d("total", String.valueOf(Functions.sGetDecimalStringAnyLocaleAsDouble(Total.getText().toString())));
 
                         if (metodoPagoCliente.equals("1")) {
-                          /*  pagoCon = Double.parseDouble(paid.getText().toString());
-                            totalPagoCon = String.format("%,.2f", pagoCon);
-                            double total = totalTotal;
-
-                            if (pagoCon >= total) {
-                                vuelto = pagoCon - total;
-                                totalVuelvo = String.format("%,.2f", vuelto);*/
 
                                 int tabCliente = 0;
                                 ((PreventaActivity) getActivity()).setSelecClienteTabPreventa(tabCliente);
 
-                            /*    change.setText(totalVuelvo);*/
-                            Toast.makeText(getActivity(), "Contado", Toast.LENGTH_LONG).show();
+                                Toast.makeText(getActivity(), "Contado", Toast.LENGTH_LONG).show();
                                 obtenerLocalización();
                                 aplicarFactura();
                             }
-                            /*else {
-                                Toast.makeText(getActivity(), "Digite una cantidad mayor al total", Toast.LENGTH_LONG).show();
-                            }*/
 
                         else if (metodoPagoCliente.equals("2")) {
                             Toast.makeText(getActivity(), "Crédito", Toast.LENGTH_LONG).show();
@@ -327,12 +314,8 @@ public class PrevTotalizarFragment extends BaseFragment {
         invoiceDetallePreventa1.setP_user_id_applied(idUsuario);
         invoiceDetallePreventa1.setP_sale(activity.getCurrentVenta());
         invoiceDetallePreventa1.setFacturaDePreventa(1);
-/*
-        invoiceDetallePreventa1.setAplicada(1);
-        invoiceDetallePreventa1.setSubida(1);*/
 
-
-        Log.d("codigoooo", invoiceDetallePreventa1 + "");
+        Log.d("actFactDetPrev", invoiceDetallePreventa1 + "");
 
     }
 
@@ -401,8 +384,6 @@ public class PrevTotalizarFragment extends BaseFragment {
         });
 
     }
-
-
 
 
     protected void aplicarFactura() {
