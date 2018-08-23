@@ -22,6 +22,8 @@ public class SessionPrefes {
     public static final String PREF_USER_PASS = "PREF_USER_PASS";
 
     public static final String PREF_PREV_NUMERO = "PREF_PREV_NUMERO";
+    public static final String PREF_BONUS_EXIST = "PREF_BONUS_EXIST";
+
 
     public static final String PREF_DESCARGA_DATOS = "PREF_DESCARGA_DATOS";
 
@@ -67,6 +69,21 @@ public class SessionPrefes {
 
             mIsLoggedIn = true;
         }
+    }
+
+    public void guardarDatosBonus(int bonus) {
+        if (bonus != 0) {
+
+            SharedPreferences.Editor editor = mPrefs.edit();
+            editor.putInt(PREF_BONUS_EXIST, bonus);
+
+            editor.apply();
+        }
+    }
+
+    public int getDatosBonus(){
+        int bonus = mPrefs.getInt(PREF_BONUS_EXIST, 0);
+        return bonus;
     }
 
     public void guardarDatosPivotVentaDirecta(int numero) {

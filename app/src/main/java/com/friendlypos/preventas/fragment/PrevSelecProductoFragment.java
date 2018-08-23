@@ -83,7 +83,6 @@ public class PrevSelecProductoFragment extends BaseFragment implements SearchVie
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
 
         View rootView = inflater.inflate(R.layout.fragment_prev_selecproducto, container,
                 false);

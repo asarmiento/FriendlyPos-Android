@@ -176,7 +176,8 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
                            String Precio3, String Precio4, String Precio5, final String bonusProducto) {
 
         final invoiceDetallePreventa invoiceDetallePreventa = activity.getCurrentInvoice();
-
+        session.guardarDatosBonus(0);
+        Toast.makeText(context,"Add limpia " + session.getDatosBonus() ,Toast.LENGTH_LONG).show();
 
         idDetallesFactura =  invoiceDetallePreventa.getP_id();
         Log.d("FACTURAIDDELEG", idDetallesFactura + "");
@@ -352,7 +353,8 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
     }
 
     public void agregar(){
-
+        session.guardarDatosBonus(0);
+        Toast.makeText(context,"Add 0 " + session.getDatosBonus() ,Toast.LENGTH_LONG).show();
         final double precioSeleccionado = (double) spPrices.getSelectedItem();
         Log.d("precioSeleccionado", precioSeleccionado + "");
 
@@ -463,7 +465,8 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
     }
 
     public void agregarBonificacion(){
-
+        session.guardarDatosBonus(1);
+        Toast.makeText(context,"Add 1 " + session.getDatosBonus() ,Toast.LENGTH_LONG).show();
         final double precioSeleccionado = (double) spPrices.getSelectedItem();
         Log.d("precioSeleccionado", precioSeleccionado + "");
 

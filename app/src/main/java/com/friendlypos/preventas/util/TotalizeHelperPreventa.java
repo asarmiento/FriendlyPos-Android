@@ -5,6 +5,7 @@ import android.view.View;
 
 import com.friendlypos.distribucion.modelo.Pivot;
 import com.friendlypos.distribucion.modelo.sale;
+import com.friendlypos.login.util.SessionPrefes;
 import com.friendlypos.preventas.activity.PreventaActivity;
 import com.friendlypos.preventas.modelo.Bonuses;
 import com.friendlypos.principal.modelo.Clientes;
@@ -14,15 +15,20 @@ import java.util.List;
 
 import io.realm.Realm;
 
+import static io.realm.internal.SyncObjectServerFacade.getApplicationContext;
+
 public class TotalizeHelperPreventa {
 
     private static final double IVA = 13.0;
     String customer;
     PreventaActivity activity;
     private static double productosDelBonus = 0;
+    SessionPrefes session;
+
 
     public TotalizeHelperPreventa(PreventaActivity activity) {
         this.activity = activity;
+        session = new SessionPrefes(getApplicationContext());
     }
 
     public void destroy() {
@@ -74,10 +80,11 @@ public class TotalizeHelperPreventa {
 
         Double clienteFixedDescuento = getClienteFixedDescuentoByPivotId(currentPivot.getInvoice_id());
         String tipo = getProductTypeByPivotId(currentPivot.getProduct_id());
-
+       int esBonus = session.getDatosBonus();
         String bonus = getProductBonusByPivotId(currentPivot.getProduct_id());
 
-        if (bonus.equals("1")){
+        // TODO limpiar esBonus y cambiar en resumen el total
+        if (bonus.equals("1") && esBonus == 1){
 
             final Realm realmBonus = Realm.getDefaultInstance();
 
