@@ -72,13 +72,10 @@ public class SessionPrefes {
     }
 
     public void guardarDatosBonus(int bonus) {
-        if (bonus != 0) {
-
             SharedPreferences.Editor editor = mPrefs.edit();
             editor.putInt(PREF_BONUS_EXIST, bonus);
-
             editor.apply();
-        }
+
     }
 
     public int getDatosBonus(){

@@ -176,8 +176,7 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
                            String Precio3, String Precio4, String Precio5, final String bonusProducto) {
 
         final invoiceDetallePreventa invoiceDetallePreventa = activity.getCurrentInvoice();
-        session.guardarDatosBonus(0);
-        Toast.makeText(context,"Add limpia " + session.getDatosBonus() ,Toast.LENGTH_LONG).show();
+
 
         idDetallesFactura =  invoiceDetallePreventa.getP_id();
         Log.d("FACTURAIDDELEG", idDetallesFactura + "");
@@ -645,6 +644,9 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
 
                 @Override
                 public void onClick(View view) {
+                    session.guardarDatosBonus(0);
+
+
 
                     int pos = getAdapterPosition();
                     if (pos == RecyclerView.NO_POSITION) return;
@@ -674,7 +676,7 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
                     realm1.close();
 
                    addProduct(InventarioID, ProductoID, /*ProductoAmount,*/ description, precio, precio2, precio3, precio4, precio5, bonusProducto);
-
+                    Toast.makeText(context,"Add limpia " + session.getDatosBonus() ,Toast.LENGTH_LONG).show();
                 }
             });
         }
