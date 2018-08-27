@@ -77,7 +77,7 @@ public class TotalizeHelperVentaDirecta {
 
         String bonus = getProductBonusByPivotId(currentPivot.getProduct_id());
 
-        if (bonus.equals("1")){
+        if (bonus.equals("1") && currentPivot.getBonus() == 1){
 
             final Realm realmBonus = Realm.getDefaultInstance();
 

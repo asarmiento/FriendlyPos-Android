@@ -84,7 +84,7 @@ public class TotalizeHelperPreventa {
         String bonus = getProductBonusByPivotId(currentPivot.getProduct_id());
 
         // TODO limpiar esBonus y cambiar en resumen el total
-        if (bonus.equals("1") && esBonus == 1){
+        if (bonus.equals("1") && currentPivot.getBonus() == 1){
 
             final Realm realmBonus = Realm.getDefaultInstance();
 
