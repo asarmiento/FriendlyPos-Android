@@ -54,15 +54,9 @@ public class TotalizeHelperPreventa {
         sale ventaDetallePreventa = activity.getCurrentVenta();
         ventaDetallePreventa.getInvoice_id();
         customer = ventaDetallePreventa.getCustomer_id();
-       /* if(ventaDetallePreventa.getP_invoice_id() == id){
-
-
-
-        }*/
 
         Realm realm = Realm.getDefaultInstance();
 
-        //sale venta = realm.where(sale.class).equalTo("invoice_id", id).findFirst();
         Double clienteFixedDescuento = Double.valueOf(realm.where(Clientes.class).equalTo("id", customer).findFirst().getFixedDiscount());
 
         realm.close();
