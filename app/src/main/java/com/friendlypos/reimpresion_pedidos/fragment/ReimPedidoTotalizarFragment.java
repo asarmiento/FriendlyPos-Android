@@ -308,7 +308,7 @@ public class ReimPedidoTotalizarFragment extends BaseFragment {
                 factura_actualizada.setCanceled("1");
                 factura_actualizada.setAplicada(1);
                 factura_actualizada.setSubida(1);
-                factura_actualizada.setFacturaDePreventa(1);
+                factura_actualizada.setFacturaDePreventa("Preventa");
 
                 realm2.insertOrUpdate(factura_actualizada);
                 realm2.close();

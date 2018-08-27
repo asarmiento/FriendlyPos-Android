@@ -9,11 +9,6 @@ import io.realm.annotations.PrimaryKey;
  */
 
 public class Numeracion extends RealmObject {
-/*
-    {
-        "sale_type": 1,
-            "number": 0
-    },*/
 
     @PrimaryKey
     String sale_type;

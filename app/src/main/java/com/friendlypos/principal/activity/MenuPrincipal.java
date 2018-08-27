@@ -381,7 +381,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
 
                 Realm realm = Realm.getDefaultInstance();
 
-                RealmQuery<invoice> query = realm.where(invoice.class).equalTo("subida", 1).equalTo("facturaDePreventa", 0);
+                RealmQuery<invoice> query = realm.where(invoice.class).equalTo("subida", 1).equalTo("facturaDePreventa", "Distribucion");
                 final RealmResults<invoice> invoice1 = query.findAll();
                 Log.d("qweqweq", invoice1.toString());
                 List<invoice> listaFacturas = realm.copyFromRealm(invoice1);
@@ -413,7 +413,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
 
                 Realm realmPedidos = Realm.getDefaultInstance();
 
-                RealmQuery<invoice> queryPedidos = realmPedidos.where(invoice.class).equalTo("subida", 1).equalTo("facturaDePreventa", 1);
+                RealmQuery<invoice> queryPedidos = realmPedidos.where(invoice.class).equalTo("subida", 1).equalTo("facturaDePreventa", "Preventa");
                 final RealmResults<invoice> invoicePedidos = queryPedidos.findAll();
                 Log.d("SubFacturaInvP", invoicePedidos.toString());
                 List<invoice> listaFacturasPedidos = realmPedidos.copyFromRealm(invoicePedidos);
@@ -446,7 +446,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
 
                 Realm realmVentaDirecta = Realm.getDefaultInstance();
 
-                RealmQuery<invoice> queryVentaDirecta = realmVentaDirecta.where(invoice.class).equalTo("subida", 1).equalTo("facturaDePreventa", 2);
+                RealmQuery<invoice> queryVentaDirecta = realmVentaDirecta.where(invoice.class).equalTo("subida", 1).equalTo("facturaDePreventa", "VentaDirecta");
                 final RealmResults<invoice> invoiceVentaDirecta = queryVentaDirecta.findAll();
                 Log.d("SubFacturaInvV", invoiceVentaDirecta.toString());
                 List<invoice> listaFacturasVentaDirecta = realmVentaDirecta.copyFromRealm(invoiceVentaDirecta);

@@ -348,7 +348,10 @@ public class VentaDirClienteAdapter extends RecyclerView.Adapter<VentaDirCliente
 
                                     if(numeracion.getId()){}
 */
-                Number numero = realm.where(Numeracion.class).equalTo("sale_type", "2").max("numeracion_numero");
+
+                // TODO NUMERACION = VENTA DIRECTA :01, PREVENTA:02, DISTRIBUCION:03 Y PROFORMA: 04
+
+                Number numero = realm.where(Numeracion.class).equalTo("sale_type", "1").max("numeracion_numero");
 
                 if (numero == null) {
                     nextId = 1;
@@ -366,14 +369,14 @@ public class VentaDirClienteAdapter extends RecyclerView.Adapter<VentaDirCliente
                 Functions.getDate(), Functions.get24Time(), Functions.getDate(), "2", metodoPagoId, "", "", "", "", "", "", "", "", "", "", "", "", fecha,
                 "", "");
 
-        activity.initCurrentVenta(String.valueOf(nextId), String.valueOf(nextId), idCliente, nombreCliente, "6", "2", "0", "0", fecha, fecha, "0", 1, 1, 2);
+        activity.initCurrentVenta(String.valueOf(nextId), String.valueOf(nextId), idCliente, nombreCliente, "6", "2", "0", "0", fecha, fecha, "0", 1, 1, "VentaDirecta");
 
         final Realm realm5 = Realm.getDefaultInstance();
         realm5.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm5) {
                 Numeracion numNuevo= new Numeracion(); // unmanaged
-                numNuevo.setSale_type("2");
+                numNuevo.setSale_type("1");
                 numNuevo.setNumeracion_numero(nextId);
 
                 realm5.insertOrUpdate(numNuevo);

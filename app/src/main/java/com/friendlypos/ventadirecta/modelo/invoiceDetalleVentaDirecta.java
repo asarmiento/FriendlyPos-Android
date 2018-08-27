@@ -63,7 +63,7 @@ public class invoiceDetalleVentaDirecta {
 
     private List<Pivot> p_productofacturas;
 
-    private int facturaDePreventa = 0;
+    private String facturaDePreventa;
 
 
     public int getP_id() {
@@ -298,11 +298,11 @@ public class invoiceDetalleVentaDirecta {
         this.p_productofacturas = p_productofacturas;
     }
 
-    public int getFacturaDePreventa() {
+    public String getFacturaDePreventa() {
         return facturaDePreventa;
     }
 
-    public void setFacturaDePreventa(int facturaDePreventa) {
+    public void setFacturaDePreventa(String facturaDePreventa) {
         this.facturaDePreventa = facturaDePreventa;
     }
 

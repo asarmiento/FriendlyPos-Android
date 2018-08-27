@@ -296,7 +296,7 @@ public class DistTotalizarFragment extends BaseFragment  {
                 factura_actualizada.setCanceled("1");
                 factura_actualizada.setAplicada(1);
                 factura_actualizada.setSubida(1);
-                factura_actualizada.setFacturaDePreventa(0);
+                factura_actualizada.setFacturaDePreventa("Distribucion");
 
                 realm2.insertOrUpdate(factura_actualizada);
                 realm2.close();
@@ -337,7 +337,7 @@ public class DistTotalizarFragment extends BaseFragment  {
                 sale_actualizada.setUpdated_at(Functions.getDate() + " " + Functions.get24Time());
                 sale_actualizada.setAplicada(1);
                 sale_actualizada.setSubida(1);
-                sale_actualizada.setFacturaDePreventa(0);
+                sale_actualizada.setFacturaDePreventa("Distribucion");
 
                 realm3.insertOrUpdate(sale_actualizada);
                 realm3.close();

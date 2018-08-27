@@ -71,7 +71,7 @@ public class PrevTotalizarFragment extends BaseFragment {
     int nextId;
     GPSTracker gps;
     BluetoothStateChangeReceiver bluetoothStateChangeReceiver;
-
+    String tipoFacturacion;
 
     @Override
     public void onAttach(Activity activity) {
@@ -265,21 +265,13 @@ public class PrevTotalizarFragment extends BaseFragment {
 
         gps = new GPSTracker(getActivity());
 
-        // check if GPS enabled
         if (gps.canGetLocation()) {
 
             latitude = gps.getLatitude();
             longitude = gps.getLongitude();
 
-           /* messageTextView2.setText("Mi direccion es: \n"
-                    + latitude + "log "  + longitude );
-            // \n is for new line
-            Toast.makeText(getActivity(), "Your Location is - \nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();*/
         }
         else {
-            // can't get location
-            // GPS or Network is not enabled
-            // Ask user to enable GPS/network in settings
             gps.showSettingsAlert();
 
 
@@ -294,6 +286,18 @@ public class PrevTotalizarFragment extends BaseFragment {
         Usuarios usuarios = realm.where(Usuarios.class).equalTo("email", usuer).findFirst();
         String idUsuario = usuarios.getId();
         realm.close();
+
+        final Realm realm3 = Realm.getDefaultInstance();
+        realm3.executeTransaction(new Realm.Transaction() {
+
+            @Override
+            public void execute(Realm realm3) {
+                Log.d("ENVIADOSALE", facturaId);
+                sale_actualizada = realm3.where(sale.class).equalTo("invoice_id", facturaId).findFirst();
+                tipoFacturacion = sale_actualizada.getFacturaDePreventa();
+
+            }
+        });
 
         final invoiceDetallePreventa invoiceDetallePreventa1 = activity.getCurrentInvoice();
         invoiceDetallePreventa1.setP_longitud(longitude);
@@ -313,7 +317,14 @@ public class PrevTotalizarFragment extends BaseFragment {
         invoiceDetallePreventa1.setP_user_id(idUsuario);
         invoiceDetallePreventa1.setP_user_id_applied(idUsuario);
         invoiceDetallePreventa1.setP_sale(activity.getCurrentVenta());
-        invoiceDetallePreventa1.setFacturaDePreventa(1);
+
+        if(tipoFacturacion.equals("Preventa")){
+            invoiceDetallePreventa1.setFacturaDePreventa("Preventa");
+        }
+        else if(tipoFacturacion.equals("Proforma")){
+            invoiceDetallePreventa1.setFacturaDePreventa("Proforma");
+        }
+
 
         Log.d("actFactDetPrev", invoiceDetallePreventa1 + "");
 

@@ -76,7 +76,7 @@ public class PreSellInvoiceDelegateVD {
 
     public void initVentaDetallesVentaDirecta(String p_id, String p_invoice_id, String p_customer_id, String p_customer_name,
                                           String p_cash_desk_id, String p_sale_type, String p_viewed, String p_applied,
-                                          String p_created_at, String p_updated_at, String p_reserved, int aplicada, int subida, int facturaDePreventa) {
+                                          String p_created_at, String p_updated_at, String p_reserved, int aplicada, int subida, String facturaDePreventa) {
         newSale = new sale();
 
       /*  newSale.setP_id(p_id);
@@ -233,7 +233,7 @@ public class PreSellInvoiceDelegateVD {
 
         invoice.setAplicada(1);
         invoice.setSubida(1);
-        invoice.setFacturaDePreventa(2);
+       // invoice.setFacturaDePreventa(2);
 
         Log.d("CREAR VENTA DIR", invoice + "");
 
