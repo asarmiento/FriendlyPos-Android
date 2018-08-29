@@ -287,17 +287,9 @@ public class PrevTotalizarFragment extends BaseFragment {
         String idUsuario = usuarios.getId();
         realm.close();
 
-        final Realm realm3 = Realm.getDefaultInstance();
-        realm3.executeTransaction(new Realm.Transaction() {
-
-            @Override
-            public void execute(Realm realm3) {
-                Log.d("ENVIADOSALE", facturaId);
-                sale_actualizada = realm3.where(sale.class).equalTo("invoice_id", facturaId).findFirst();
-                tipoFacturacion = sale_actualizada.getFacturaDePreventa();
-
-            }
-        });
+        sale ventaDetallePreventa = activity.getCurrentVenta();
+        ventaDetallePreventa.getInvoice_id();
+        tipoFacturacion = ventaDetallePreventa.getFacturaDePreventa();
 
         final invoiceDetallePreventa invoiceDetallePreventa1 = activity.getCurrentInvoice();
         invoiceDetallePreventa1.setP_longitud(longitude);

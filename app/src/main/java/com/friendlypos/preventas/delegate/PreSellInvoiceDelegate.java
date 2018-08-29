@@ -231,7 +231,8 @@ public class PreSellInvoiceDelegate {
 
         invoice.setAplicada(1);
         invoice.setSubida(1);
-      //  invoice.setFacturaDePreventa(1);
+
+        invoice.setFacturaDePreventa(newInvoice.getFacturaDePreventa());
 
         Log.d("CREAR PREVENTA", invoice + "");
 

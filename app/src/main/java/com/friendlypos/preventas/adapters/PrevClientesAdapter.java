@@ -123,6 +123,11 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
                 final String creditoLimiteClienteP = clickedDataItem.getCreditLimit();
                 final String dueClienteP = clickedDataItem.getDue();
 
+                final Dialog dialogInicial = new Dialog(QuickContext);
+                dialogInicial.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialogInicial.setContentView(R.layout.promptvisitado_preventa);
+
+
                 final Dialog dialogInicial1 = new Dialog(QuickContext);
                 dialogInicial1.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 dialogInicial1.setContentView(R.layout.promptclient_proforma);
@@ -131,197 +136,49 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
                 rbfactPrev = (RadioButton) dialogInicial1.findViewById(R.id.rbfactPrev);
                 rbfactProf = (RadioButton) dialogInicial1.findViewById(R.id.rbfactProf);
                 final Button btnOkProforma = (Button) dialogInicial1.findViewById(R.id.btnOKProforma);
+                final Button btnOkPreventa = (Button) dialogInicial1.findViewById(R.id.btnOKPreventa);
                 final Button btnCancelProforma = (Button) dialogInicial1.findViewById(R.id.btnCancelProforma);
                 dialogInicial1.show();
+
+                RadioGroup yourRadioGroup2 = (RadioGroup) dialogInicial1.findViewById(R.id.rgTipo);
+                yourRadioGroup2.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
+                {
+                    @Override
+                    public void onCheckedChanged(RadioGroup group, int checkedId)
+                    {
+                        switch(checkedId)
+                        {
+                            case R.id.rbfactPrev:
+                                btnOkPreventa.setVisibility(View.VISIBLE);
+                                btnOkProforma.setVisibility(View.INVISIBLE);
+                                break;
+                            case R.id.rbfactProf:
+                                btnOkPreventa.setVisibility(View.INVISIBLE);
+                                btnOkProforma.setVisibility(View.VISIBLE);
+                                break;
+
+                        }
+                    }
+                });
 
                 btnOkProforma.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
 
                         tipoFacturacion = "Proforma";
-
-                        final Dialog dialogInicial = new Dialog(QuickContext);
-                        dialogInicial.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                        dialogInicial.setContentView(R.layout.promptvisitado_preventa);
-
-                        dialogInicial.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
-                        rbcomprado = (RadioButton) dialogInicial.findViewById(R.id.compradoBillVisitado);
-                        rbvisitado = (RadioButton) dialogInicial.findViewById(R.id.visitadoBillVisitado);
-                        final Button btnOkVisitado = (Button) dialogInicial.findViewById(R.id.btnOKV);
-                        final Button btnOkComprado = (Button) dialogInicial.findViewById(R.id.btnOKC);
-                        final Button btnCancel = (Button) dialogInicial.findViewById(R.id.btnCancel);
-                        txtObservaciones = (EditText) dialogInicial.findViewById(R.id.txtObservaciones);
+                        dialogInicial1.dismiss();
                         dialogInicial.show();
 
-                        RadioGroup yourRadioGroup = (RadioGroup) dialogInicial.findViewById(R.id.rgTipoVisitado);
-                        yourRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
-                        {
-                            @Override
-                            public void onCheckedChanged(RadioGroup group, int checkedId)
-                            {
-                                switch(checkedId)
-                                {
-                                    case R.id.visitadoBillVisitado:
-                                        btnOkVisitado.setVisibility(View.VISIBLE);
-                                        btnOkComprado.setVisibility(View.INVISIBLE);
-                                        break;
-                                    case R.id.compradoBillVisitado:
-                                        btnOkVisitado.setVisibility(View.INVISIBLE);
-                                        btnOkComprado.setVisibility(View.VISIBLE);
-                                        break;
+                    }
+                });
 
-                                }
-                            }
-                        });
+                btnOkPreventa.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
 
-                        btnOkVisitado.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-
-                                obtenerLocalización();
-
-
-                                if(!txtObservaciones.getText().toString().isEmpty()){
-                                    observ = txtObservaciones.getText().toString();
-                                    seleccion = "2";
-
-                                    actualizarClienteVisitado();
-                                    dialogInicial.dismiss();
-                                    Toast.makeText(QuickContext, "Visitado", Toast.LENGTH_SHORT).show();
-                                }
-                                else{
-                                    txtObservaciones.setError("Campo requerido");
-                                    txtObservaciones.requestFocus();
-                                    Toast.makeText(QuickContext, "VisitadoMAL", Toast.LENGTH_SHORT).show();}
-                            }
-                        });
-
-                        btnOkComprado.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                dialogInicial.dismiss();
-                                obtenerLocalización();
-                                fecha = Functions.getDate() + " " + Functions.get24Time();
-                                seleccion = "1";
-                                LayoutInflater layoutInflater = LayoutInflater.from(QuickContext);
-                                View promptView = layoutInflater.inflate(R.layout.promptclient_preventa, null);
-
-                                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(QuickContext);
-                                alertDialogBuilder.setView(promptView);
-                                final RadioButton rbcontado = (RadioButton) promptView.findViewById(R.id.contadoBill);
-                                final RadioButton rbcredito = (RadioButton) promptView.findViewById(R.id.creditBill);
-
-                                if (creditoTime == 0) {
-                                    rbcredito.setVisibility(View.GONE);
-                                }
-
-                                alertDialogBuilder
-                                        .setCancelable(true)
-                                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-
-                                            public void onClick(DialogInterface dialog, int id) {
-
-                                                fecha = Functions.getDate() + " " + Functions.get24Time();
-
-
-                                                if(!rbcontado.isChecked() && !rbcredito.isChecked()){
-                                                    Functions.CreateMessage(QuickContext, " ", "Debe seleccionar una opción");
-
-                                                }
-                                                else {
-                                                    if (rbcredito.isChecked()) {
-                                                        txtObservaciones.setText(" ");
-                                                        observ = txtObservaciones.getText().toString();
-                                                        // TRANSACCIÓN PARA ACTUALIZAR EL CAMPO METODO DE PAGO CREDITO DE LA FACTURA
-                                                        metodoPagoId = "2";
-                                                        notifyDataSetChanged();
-                                                        agregar();
-                                                        tabCliente = 1;
-                                                        activity.setSelecClienteTabPreventa(tabCliente);
-                                                        activity.setCreditoLimiteClientePreventa(creditoLimiteClienteP);
-                                                        activity.setDueClientePreventa(dueClienteP);
-
-                                                        //TODO MODIFICAR CON EL ID CONSECUTIVOS
-                                                        activity.setInvoiceIdPreventa(nextId);
-                                                        activity.setMetodoPagoClientePreventa(metodoPagoId);
-
-                                                        final ProgressDialog progresRing = ProgressDialog.show(QuickContext, "Cargando",
-                                                                "Seleccionando Cliente", true);
-                                                        progresRing.setCancelable(true);
-                                                        new Thread(new Runnable() {
-
-                                                            @Override
-                                                            public void run() {
-                                                                try {
-                                                                    Thread.sleep(5000);
-                                                                }
-                                                                catch (Exception e) {
-
-                                                                }
-                                                                progresRing.dismiss();
-                                                            }
-                                                        }).start();
-                                                        actualizarClienteVisitado();
-
-                                                    } else if (rbcontado.isChecked()) {
-                                                        txtObservaciones.setText(" ");
-                                                        observ = txtObservaciones.getText().toString();
-                                                        metodoPagoId = "1";
-                                                        notifyDataSetChanged();
-                                                        agregar();
-                                                        tabCliente = 1;
-                                                        activity.setSelecClienteTabPreventa(tabCliente);
-                                                        activity.setCreditoLimiteClientePreventa(creditoLimiteClienteP);
-                                                        activity.setDueClientePreventa(dueClienteP);
-
-                                                        //TODO MODIFICAR CON EL ID CONSECUTIVOS
-                                                        activity.setInvoiceIdPreventa(nextId);
-                                                        activity.setMetodoPagoClientePreventa(metodoPagoId);
-
-                                                        final ProgressDialog progresRing = ProgressDialog.show(QuickContext, "Cargando", "Seleccionando Cliente", true);
-                                                        progresRing.setCancelable(true);
-                                                        new Thread(new Runnable() {
-
-                                                            @Override
-                                                            public void run() {
-                                                                try {
-                                                                    Thread.sleep(5000);
-                                                                }
-                                                                catch (Exception e) {
-
-                                                                }
-                                                                progresRing.dismiss();
-                                                            }
-                                                        }).start();
-                                                        actualizarClienteVisitado();
-                                                    }
-
-                                                }
-
-                                            }
-                                        })
-                                        .setNegativeButton("Cancel",
-                                                new DialogInterface.OnClickListener() {
-
-                                                    public void onClick(DialogInterface dialog, int id) {
-                                                        dialog.cancel();
-
-                                                    }
-                                                });
-
-
-                                AlertDialog alertSeg = alertDialogBuilder.create();
-                                alertSeg.show();
-
-                            }
-                        });
-
-                        btnCancel.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                dialogInicial.dismiss();
-                            }
-                        });
+                        tipoFacturacion = "Preventa";
+                        dialogInicial1.dismiss();
+                        dialogInicial.show();
 
                     }
                 });
@@ -332,13 +189,200 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
                         dialogInicial1.dismiss();
                     }
                 });
+
+
+
+
+
+                dialogInicial.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+                rbcomprado = (RadioButton) dialogInicial.findViewById(R.id.compradoBillVisitado);
+                rbvisitado = (RadioButton) dialogInicial.findViewById(R.id.visitadoBillVisitado);
+                final Button btnOkVisitado = (Button) dialogInicial.findViewById(R.id.btnOKV);
+                final Button btnOkComprado = (Button) dialogInicial.findViewById(R.id.btnOKC);
+                final Button btnCancel = (Button) dialogInicial.findViewById(R.id.btnCancel);
+                txtObservaciones = (EditText) dialogInicial.findViewById(R.id.txtObservaciones);
+
+
+                RadioGroup yourRadioGroup = (RadioGroup) dialogInicial.findViewById(R.id.rgTipoVisitado);
+                yourRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
+                {
+                    @Override
+                    public void onCheckedChanged(RadioGroup group, int checkedId)
+                    {
+                        switch(checkedId)
+                        {
+                            case R.id.visitadoBillVisitado:
+                                btnOkVisitado.setVisibility(View.VISIBLE);
+                                btnOkComprado.setVisibility(View.INVISIBLE);
+                                break;
+                            case R.id.compradoBillVisitado:
+                                btnOkVisitado.setVisibility(View.INVISIBLE);
+                                btnOkComprado.setVisibility(View.VISIBLE);
+                                break;
+
+                        }
+                    }
+                });
+
+                btnOkVisitado.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        obtenerLocalización();
+
+
+                        if(!txtObservaciones.getText().toString().isEmpty()){
+                            observ = txtObservaciones.getText().toString();
+                            seleccion = "2";
+
+                            actualizarClienteVisitado();
+                            dialogInicial.dismiss();
+                            Toast.makeText(QuickContext, "Visitado", Toast.LENGTH_SHORT).show();
+                        }
+                        else{
+                            txtObservaciones.setError("Campo requerido");
+                            txtObservaciones.requestFocus();
+                            Toast.makeText(QuickContext, "VisitadoMAL", Toast.LENGTH_SHORT).show();}
+                    }
+                });
+
+                btnOkComprado.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialogInicial.dismiss();
+                        obtenerLocalización();
+                        fecha = Functions.getDate() + " " + Functions.get24Time();
+                        seleccion = "1";
+                        LayoutInflater layoutInflater = LayoutInflater.from(QuickContext);
+                        View promptView = layoutInflater.inflate(R.layout.promptclient_preventa, null);
+
+                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(QuickContext);
+                        alertDialogBuilder.setView(promptView);
+                        final RadioButton rbcontado = (RadioButton) promptView.findViewById(R.id.contadoBill);
+                        final RadioButton rbcredito = (RadioButton) promptView.findViewById(R.id.creditBill);
+
+                        if (creditoTime == 0) {
+                            rbcredito.setVisibility(View.GONE);
+                        }
+
+                        alertDialogBuilder
+                                .setCancelable(true)
+                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+                                    public void onClick(DialogInterface dialog, int id) {
+
+                                        fecha = Functions.getDate() + " " + Functions.get24Time();
+
+
+                                        if(!rbcontado.isChecked() && !rbcredito.isChecked()){
+                                            Functions.CreateMessage(QuickContext, " ", "Debe seleccionar una opción");
+
+                                        }
+                                        else {
+                                            if (rbcredito.isChecked()) {
+                                                txtObservaciones.setText(" ");
+                                                observ = txtObservaciones.getText().toString();
+                                                // TRANSACCIÓN PARA ACTUALIZAR EL CAMPO METODO DE PAGO CREDITO DE LA FACTURA
+                                                metodoPagoId = "2";
+                                                notifyDataSetChanged();
+                                                agregar();
+                                                tabCliente = 1;
+                                                activity.setSelecClienteTabPreventa(tabCliente);
+                                                activity.setCreditoLimiteClientePreventa(creditoLimiteClienteP);
+                                                activity.setDueClientePreventa(dueClienteP);
+
+                                                //TODO MODIFICAR CON EL ID CONSECUTIVOS
+                                                activity.setInvoiceIdPreventa(nextId);
+                                                activity.setMetodoPagoClientePreventa(metodoPagoId);
+
+                                                final ProgressDialog progresRing = ProgressDialog.show(QuickContext, "Cargando",
+                                                        "Seleccionando Cliente", true);
+                                                progresRing.setCancelable(true);
+                                                new Thread(new Runnable() {
+
+                                                    @Override
+                                                    public void run() {
+                                                        try {
+                                                            Thread.sleep(5000);
+                                                        }
+                                                        catch (Exception e) {
+
+                                                        }
+                                                        progresRing.dismiss();
+                                                    }
+                                                }).start();
+                                                actualizarClienteVisitado();
+
+                                            } else if (rbcontado.isChecked()) {
+                                                txtObservaciones.setText(" ");
+                                                observ = txtObservaciones.getText().toString();
+                                                metodoPagoId = "1";
+                                                notifyDataSetChanged();
+                                                agregar();
+                                                tabCliente = 1;
+                                                activity.setSelecClienteTabPreventa(tabCliente);
+                                                activity.setCreditoLimiteClientePreventa(creditoLimiteClienteP);
+                                                activity.setDueClientePreventa(dueClienteP);
+
+                                                //TODO MODIFICAR CON EL ID CONSECUTIVOS
+                                                activity.setInvoiceIdPreventa(nextId);
+                                                activity.setMetodoPagoClientePreventa(metodoPagoId);
+
+                                                final ProgressDialog progresRing = ProgressDialog.show(QuickContext, "Cargando", "Seleccionando Cliente", true);
+                                                progresRing.setCancelable(true);
+                                                new Thread(new Runnable() {
+
+                                                    @Override
+                                                    public void run() {
+                                                        try {
+                                                            Thread.sleep(5000);
+                                                        }
+                                                        catch (Exception e) {
+
+                                                        }
+                                                        progresRing.dismiss();
+                                                    }
+                                                }).start();
+                                                actualizarClienteVisitado();
+                                            }
+
+                                        }
+
+                                    }
+                                })
+                                .setNegativeButton("Cancel",
+                                        new DialogInterface.OnClickListener() {
+
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                dialog.cancel();
+
+                                            }
+                                        });
+
+
+                        AlertDialog alertSeg = alertDialogBuilder.create();
+                        alertSeg.show();
+
+                    }
+                });
+
+                btnCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialogInicial.dismiss();
+                    }
+                });
             }
         });
 
 
-        if (selected_position == position && rbfactProf.isChecked() ) {
+        if (selected_position == position) {
+                if(rbfactProf.isChecked() || rbfactPrev.isChecked()){
+                    if(rbcomprado.isChecked()){
 
             holder.cardView.setCardBackgroundColor(Color.parseColor("#607d8b"));
+            }
+}
         }
         else {
             holder.cardView.setCardBackgroundColor(Color.parseColor("#009688"));
