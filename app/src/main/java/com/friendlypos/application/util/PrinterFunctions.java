@@ -634,6 +634,197 @@ public class PrinterFunctions {
         totalNotas_ = "";
     }
 
+    public static void datosImprimirProformaTotal(int type, sale sale, Context QuickContext, int ptype) {
+        String stype = "";
+        String billptype = "";
+        String preview = "";
+
+        Realm realm = Realm.getDefaultInstance();
+        Sysconf sysconf = realm.where(Sysconf.class).findFirst();
+        Clientes clientes = realm.where(Clientes.class).equalTo("id", sale.getCustomer_id()).findFirst();
+        invoice invoice = realm.where(com.friendlypos.distribucion.modelo.invoice.class).equalTo("id", sale.getInvoice_id()).findFirst();
+        RealmResults<Pivot> result = realm.where(Pivot.class).equalTo("invoice_id", sale.getInvoice_id()).findAll();
+        Log.d("FACTPRODTOD", result + "");
+        String fechayhora = sale.getUpdated_at();
+        String nombreCliente = sale.getCustomer_name();
+
+        double descuentoCliente = Double.parseDouble(clientes.getFixedDiscount());
+
+        String numeracionFactura = invoice.getNumeration();
+        String metodoPago = invoice.getPayment_method_id();
+        totalGrabado_= Functions.doubleToString1(Double.parseDouble(invoice.getSubtotal_taxed()));
+        totalExento_= Functions.doubleToString1(Double.parseDouble(invoice.getSubtotal_exempt()));
+        totalSubtotal_= Functions.doubleToString1(Double.parseDouble(invoice.getSubtotal()));
+        totalDescuento_= Functions.doubleToString1(Double.parseDouble(invoice.getDiscount()));
+        totalImpuesto_= Functions.doubleToString1(Double.parseDouble(invoice.getTax()));
+        totalTotal_= Functions.doubleToString1(Double.parseDouble(invoice.getTotal()));
+        totalCancelado_= Functions.doubleToString1(Double.parseDouble(invoice.getPaid()));
+        totalVuelto_= Functions.doubleToString1(Double.parseDouble(invoice.getChanging()));
+        totalNotas_= invoice.getNote();
+        String idUsuario = invoice.getUser_id();
+
+        Usuarios usuarios = realm.where(Usuarios.class).equalTo("id", idUsuario).findFirst();
+        String nombreUsuario = usuarios.getUsername();
+
+        // VARIABLES SYSCONF
+        String sysNombreNegocio = sysconf.getBusiness_name();
+        realm.close();
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(QuickContext);
+        String prefList = sharedPreferences.getString("pref_selec_impresora","Impresora Zebra");
+
+        String condition = "Esta factura constituye titulo ejecutivo al tenor del articulo 460 del codigo de comercio. "
+                + "El deudor renuncia a los requerimientos de pago, domicilio y tramites del juicio ejecutivo. "
+                + "El suscrito da fe, bajo la gravedad de juramento que se encuentra facultado y autorizado para firmar esta factura, "
+                + "por su representada, conforme al articulo supracitado. Si realiza pago mediante transferencia electronica de "
+                + "fondos o cualquier otro medio que no sea efectivo, la validez del pago queda sujeto a su acreditacion en las cuentas "
+                + "bancarias de " + ", Por lo cual la factura original le sera entregada una vez confirme dicha acreditacion ";
+
+        if (ptype == 1) {
+            billptype = "P e d i d o";
+        } else if (ptype == 2) {
+            billptype = "P r o f o r m a";
+        } else if (ptype == 3) {
+            billptype = "F a c t u r a";
+        }
+
+        if (type == 1) {
+            stype = "Original";
+        } else if (type == 2) {
+            stype = "Contabilidad";
+        } else if (type == 3) {
+            stype = "Archivo";
+        }
+        if (prefList.equals("1")){
+            String bill = "! U1 JOURNAl\r\n" +
+                    "! U1 SETLP 0 0 0\r\n" +
+                    "\r\n" +
+                    "! U1 SETLP 5 3 70\r\n" +
+                    "! U1 LMARGIN 185\r\n" +
+                    "! U1 SETLP 7 0 14\r\n" + "\r\n" +
+                    "Cliente: " + nombreCliente + "\r\n" +
+
+                    "! U1 LMARGIN 0\r\n" +
+                    "! U1 SETSP 0\r\n" +
+                    "Descripcion           Codigo\r\n" +
+                    "Cantidad      Precio       P.Sug       Total\r\n" +
+                    "Tipo     \r\n" +
+                    "------------------------------------------------\r\n" +
+                    "! U1 SETLP 7 0 10\r\n" +
+
+                    getPrintPrevTotal(sale.getInvoice_id()) +
+                    "\r\n" +
+
+                    String.format("%20s %-20s", "Subtotal Gravado", totalGrabado_) + "\r\n" +
+                    String.format("%20s %-20s", "Subtotal Exento", totalExento_) + "\r\n" +
+                    String.format("%20s %-20s", "Subtotal", totalSubtotal_) + "\r\n" +
+                    String.format("%20s %-20s", "Descuento", totalDescuento_) + "\r\n" +
+                    String.format("%20s %-20s", "IVA", totalImpuesto_) + "\r\n" +
+                    "! U1 SETLP 5 3 70\r\n" +
+                    String.format("%20s %-20s", "Total", totalTotal_) + "\r\n" +
+                    "! U1 SETLP 7 0 10\r\n" +
+                    ((metodoPago == "1") ?
+                            String.format("%20s %-20s", "Cancelado con", totalCancelado) + "\r\n" +
+                                    String.format("%20s %-20s", "Cambio", totalVuelto) + "\r\n" : "\r\n"
+                    ) + "\r\n" +
+                    "\r\n\n" + "Notas: " + totalNotas_ + "\r\n" +
+                    ((descuentoCliente > 0) ? "Se le aplico un " + descuentoCliente + "%  de descuento" + "\r\n" : "" + "\r\n") +
+                    "! U1 SETLP 5 0 14\r\n" +
+                    "\r\n\n" +
+                    "Recibo conforme ____________________________" + "\r\n" + "\r\n" + "\r\n" +
+                    "Cedula                  ____________________________" + "\r\n" +
+                    "\r\n\n" +
+                    ((metodoPago == "2") ?
+                            "Firma y Cedula __________________________" + "\r\n"
+                                    + "! U1 SETLP 0 0 6\r\n" + "\r\n\n" + condition + "\r\n" : "\r\n"
+                    ) + "\r\n" +
+                    "! U1 SETLP 5 0 14\r\n" +
+                    "\r\n" + String.format("Factura %s", stype) + "\r\n\n" +
+                    "\r\n\n" + "Muchas Gracias por preferirnos, un placer atenderlo\r\n" +
+                    "Mantenga el documento para reclamos ." + "\r\n" + "\r\n" +
+                    " Autorizado mediante oficio\r\n" +
+                    "N° : 11-1997 de la D.G.T.D\r\n" +
+                    " \n\n" +
+                    " \n\n" +
+                    " \n ";
+            Intent intent2 = new Intent(PrinterService.BROADCAST_CLASS);
+            intent2.putExtra(PrinterService.BROADCAST_CLASS + "TO_PRINT", "true");
+            intent2.putExtra("bill_to_print", bill);
+            QuickContext.sendBroadcast(intent2);
+        }
+        else if(prefList.equals("2")){
+            switch (metodoPago) {
+                case "1":
+
+                    preview += Html.fromHtml("<h1>") +  "Cliente:  " + nombreCliente + Html.fromHtml("</h1></center><br/><br/><br/>");
+
+
+                    preview += Html.fromHtml("<h1>") +  "Descripcion           Codigo" + Html.fromHtml("</h1></center><br/>");
+                    preview += Html.fromHtml("<h1>") +   "Cantidad      Precio       P.Sug       Total" + Html.fromHtml("</h1></center><br/>");
+                    preview += Html.fromHtml("<h1>") +   "Tipo " + Html.fromHtml("</h1></center><br/>");
+                    preview += Html.fromHtml("<h1>") +  "------------------------------------------------" + Html.fromHtml("</h1></center><br/>");
+                    preview += Html.fromHtml("<h1>") +    getPrintPrevTotal(sale.getInvoice_id()) + Html.fromHtml("</h1></center><br/>");
+                    preview += Html.fromHtml("<h1>") +  String.format("%20s %-20s", "Subtotal Gravado", totalGrabado_) + Html.fromHtml("</h1></center><br/>");
+                    preview += Html.fromHtml("<h1>") +  String.format("%20s %-20s", "Subtotal Exento", totalExento_) + Html.fromHtml("</h1></center><br/>");
+                    preview += Html.fromHtml("<h1>") +  String.format("%20s %-20s", "Subtotal", totalSubtotal_) + Html.fromHtml("</h1></center><br/>");
+                    preview += Html.fromHtml("<h1>") +  String.format("%20s %-20s", "Descuento", totalDescuento_) + Html.fromHtml("</h1></center><br/>");
+                    preview += Html.fromHtml("<h1>") +  String.format("%20s %-20s", "IVA", totalImpuesto_) + Html.fromHtml("</h1></center><br/><br/><br/>");
+                    preview += Html.fromHtml("<h1>") +   String.format("%20s %-20s", "Total", totalTotal_) + Html.fromHtml("</h1></center><br/><br/>");
+                    preview += Html.fromHtml("<h1>") +  String.format("%20s %-20s", "Cancelado con", totalCancelado_) + Html.fromHtml("</h1></center><br/>");
+                    preview += Html.fromHtml("<h1>") +   String.format("%20s %-20s", "Cambio", totalVuelto_) + Html.fromHtml("</h1></center><br/><br/>");
+                    preview += Html.fromHtml("<h1>") +  "Notas: " + totalNotas_ + Html.fromHtml("</h1></center><br/><br/><br/>");
+                    preview += Html.fromHtml("<h1>") +  "Recibo conforme ____________________________" + Html.fromHtml("</h1></center><br/><br/>");
+                    preview += Html.fromHtml("<h1>") +  "Cedula ____________________________" +  Html.fromHtml("</h1></center><br/><br/>");
+                    preview += Html.fromHtml("<h1>")   + String.format("Factura %s", stype) +  Html.fromHtml("</h1></center><br/><br/><br/>");
+                    preview += Html.fromHtml("<h1>")   + "Muchas gracias por preferirnos un placer atenderlo" +  Html.fromHtml("</h1></center><br/>");
+                    preview += Html.fromHtml("<h1>")   + "Mantenga el documento para reclamos." +  Html.fromHtml("</h1></center><br/><br/>");
+                    preview += Html.fromHtml("<h1>")   + "Autorizado mediante oficio" +  Html.fromHtml("</h1></center><br/>");
+                    preview += Html.fromHtml("<h1>")   + "N : 11-1997 de la D.G.T.D" +  Html.fromHtml("</h1></center><br/>");
+                    break;
+                case "2":
+                    preview += Html.fromHtml("<h1>") +  "Cliente:  " + nombreCliente + Html.fromHtml("</h1></center><br/><br/><br/>");
+
+
+                    preview += Html.fromHtml("<h1>") +  "#  Descripcion      Codigo" + Html.fromHtml("</h1></center><br/>");
+                    preview += Html.fromHtml("<h1>") +  "Cant     Precio       P.Sug        Total      I" + Html.fromHtml("</h1></center><br/>");
+                    preview += Html.fromHtml("<h1>") +  "------------------------------------------------" + Html.fromHtml("</h1></center><br/>");
+                    preview += Html.fromHtml("<h1>") +    getPrintPrevTotal(sale.getInvoice_id()) + Html.fromHtml("</h1></center><br/>");
+                    preview += Html.fromHtml("<h1>") +  String.format("%20s %-20s", "Subtotal Gravado", totalGrabado_) + Html.fromHtml("</h1></center><br/>");
+                    preview += Html.fromHtml("<h1>") +  String.format("%20s %-20s", "Subtotal Exento", totalExento_) + Html.fromHtml("</h1></center><br/>");
+                    preview += Html.fromHtml("<h1>") +  String.format("%20s %-20s", "Subtotal", totalSubtotal_) + Html.fromHtml("</h1></center><br/>");
+                    preview += Html.fromHtml("<h1>") +  String.format("%20s %-20s", "Descuento", totalDescuento_) + Html.fromHtml("</h1></center><br/>");
+                    preview += Html.fromHtml("<h1>") +  String.format("%20s %-20s", "IVA", totalImpuesto_) + Html.fromHtml("</h1></center><br/><br/><br/>");
+                    preview += Html.fromHtml("<h1>") +   String.format("%20s %-20s", "Total", totalTotal_) + Html.fromHtml("</h1></center><br/><br/>");
+                  /*  preview += Html.fromHtml("<h1>") +  String.format("%20s %-20s", "Cancelado con", totalCancelado_) + Html.fromHtml("</h1></center><br/>");
+                    preview += Html.fromHtml("<h1>") +   String.format("%20s %-20s", "Cambio", totalVuelto_) + Html.fromHtml("</h1></center><br/><br/>");*/
+                    preview += Html.fromHtml("<h1>") +  "Notas: " + totalNotas_ + Html.fromHtml("</h1></center><br/><br/><br/>");
+                    preview += Html.fromHtml("<h1>") +  "Recibo conforme ____________________________" + Html.fromHtml("</h1></center><br/><br/>");
+                    preview += Html.fromHtml("<h1>") +  "Cedula ____________________________" +  Html.fromHtml("</h1></center><br/><br/>");
+                    preview += Html.fromHtml("<h1>") +  "Firma y Cedula __________________________" +  Html.fromHtml("</h1></center><br/><br/>");
+                    preview += Html.fromHtml("<h1>") +  condition +  Html.fromHtml("</h1></center><br/><br/>");
+                    preview += Html.fromHtml("<h1>")   + String.format("Factura %s", stype) +  Html.fromHtml("</h1></center><br/><br/><br/>");
+                    preview += Html.fromHtml("<h1>")   + "Muchas gracias por preferirnos un placer atenderlo" +  Html.fromHtml("</h1></center><br/>");
+                    preview += Html.fromHtml("<h1>")   + "Mantenga el documento para reclamos." +  Html.fromHtml("</h1></center><br/><br/>");
+                    preview += Html.fromHtml("<h1>")   + "Autorizado mediante oficio" +  Html.fromHtml("</h1></center><br/>");
+                    preview += Html.fromHtml("<h1>")   + "N : 11-1997 de la D.G.T.D" +  Html.fromHtml("</h1></center><br/>");
+                    break;
+            }
+            Intent intent2 = new Intent(PrinterService.BROADCAST_CLASS);
+            intent2.putExtra(PrinterService.BROADCAST_CLASS + "TO_PRINT", "true");
+            intent2.putExtra("bill_to_print", preview);
+            QuickContext.sendBroadcast(intent2);
+        }
+        totalGrabado_= "";
+        totalExento_= "";
+        totalSubtotal_= "";
+        totalDescuento_= "";
+        totalImpuesto_= "";
+        totalTotal_ = "";
+        totalCancelado_= "";
+        totalVuelto_= "";
+        totalNotas_ = "";
+    }
+
     public static void imprimirFacturaPrevTotal (final sale saleB, final Context QuickContext, final int ptype){
 
         CharSequence colors[] = new CharSequence[]{"Copia Cliente", "Copia Contabilidad", "Copia Archivo"};
@@ -660,10 +851,49 @@ public class PrinterFunctions {
         //}
     }
 
+    public static void imprimirFacturaProformaTotal (final sale saleB, final Context QuickContext, final int ptype){
+
+        CharSequence colors[] = new CharSequence[]{"Copia Cliente", "Copia Contabilidad", "Copia Archivo"};
+        AlertDialog.Builder builder = new AlertDialog.Builder(QuickContext);
+        builder.setTitle("Seleccione la copia a imprimir?");
+        builder.setItems(colors, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // the user clicked on colors[which]
+                switch (which) {
+                    case 0:
+                        imprimirTotalizarProform(1, saleB, QuickContext, ptype);
+                        break;
+                    case 1:
+                        imprimirTotalizarProform(2, saleB, QuickContext, ptype);
+                        break;
+                    case 2:
+                        imprimirTotalizarProform(3, saleB, QuickContext, ptype);
+                        break;
+                }
+            }
+        });
+        builder.show();
+        //}
+    }
+
     private static void imprimirTotalizarPrev(int type, sale invoices, Context QuickContext, int ptype) {
         try {
             if (invoices != null) {
                 PrinterFunctions.datosImprimirPrevTotal(type, invoices, QuickContext, ptype);
+            } else {
+                Toast.makeText(QuickContext, "Aun le falta terminar de hacer la factura" , Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e("Error PrinterFunctions", e.getMessage());
+        }
+    }
+
+    private static void imprimirTotalizarProform(int type, sale invoices, Context QuickContext, int ptype) {
+        try {
+            if (invoices != null) {
+                PrinterFunctions.datosImprimirProformaTotal(type, invoices, QuickContext, ptype);
             } else {
                 Toast.makeText(QuickContext, "Aun le falta terminar de hacer la factura" , Toast.LENGTH_SHORT).show();
             }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/btn_descargar_datosempresa"
         android:icon="@mipmap/ic_config"
@@ -24,19 +25,24 @@
         android:title="Subir Pedidos"/>
 
     <item
+        android:id="@+id/btn_subir_proforma"
+        android:icon="@mipmap/ic_config"
+        android:title="Subir Proforma"/>
+
+    <item
         android:id="@+id/btn_subir_ventadirecta"
         android:icon="@mipmap/ic_config"
         android:title="Subir Venta Directa"/>
 
     <item
+        android:id="@+id/btn_devolver_inventario"
+        android:icon="@mipmap/ic_config"
+        android:title="Devolver Inventario" />
+    <item
         android:id="@+id/btn_subir_clienteVisitados"
         android:icon="@mipmap/ic_config"
         android:title="Subir Clientes Visitados"/>
 
-    <item
-        android:id="@+id/btn_devolver_inventario"
-        android:icon="@mipmap/ic_config"
-        android:title="Devolver Inventario" />
     <item
         android:id="@+id/btn_imprimir_liquidacion"
         android:icon="@mipmap/ic_config"

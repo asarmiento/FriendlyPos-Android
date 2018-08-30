@@ -71,7 +71,7 @@ public class PrevTotalizarFragment extends BaseFragment {
     int nextId;
     GPSTracker gps;
     BluetoothStateChangeReceiver bluetoothStateChangeReceiver;
-    String tipoFacturacion;
+    String tipoFacturacion,tipoFacturacionImpr;
 
     @Override
     public void onAttach(Activity activity) {
@@ -210,8 +210,21 @@ public class PrevTotalizarFragment extends BaseFragment {
                     try {
 
                         if (bluetoothStateChangeReceiver.isBluetoothAvailable() == true) {
-                            PrinterFunctions.imprimirFacturaPrevTotal(sale_actualizada, getActivity(), 1);
-                            Toast.makeText(getActivity(), "imprimir Totalizar Preventa", Toast.LENGTH_SHORT).show();
+
+                            sale ventaDetallePreventa = activity.getCurrentVenta();
+                            ventaDetallePreventa.getInvoice_id();
+                            tipoFacturacionImpr = ventaDetallePreventa.getFacturaDePreventa();
+
+                            if(tipoFacturacionImpr.equals("Preventa")){
+                                PrinterFunctions.imprimirFacturaPrevTotal(sale_actualizada, getActivity(), 1);
+                                Toast.makeText(getActivity(), "imprimir Totalizar Preventa", Toast.LENGTH_SHORT).show();
+                            }
+                            else if(tipoFacturacionImpr.equals("Proforma")){
+                                PrinterFunctions.imprimirFacturaProformaTotal(sale_actualizada, getActivity(), 1);
+                                Toast.makeText(getActivity(), "imprimir Totalizar Preventa", Toast.LENGTH_SHORT).show();
+                            }
+
+
                         }
                         else if (bluetoothStateChangeReceiver.isBluetoothAvailable() == false) {
                             Functions.CreateMessage(getActivity(), "Error", "La conexión del bluetooth ha fallado, favor revisar o conectar el dispositivo");

@@ -47,6 +47,7 @@ import com.friendlypos.principal.helpers.DescargasHelper;
 import com.friendlypos.principal.helpers.SubirHelper;
 import com.friendlypos.principal.helpers.SubirHelperClienteVisitado;
 import com.friendlypos.principal.helpers.SubirHelperPreventa;
+import com.friendlypos.principal.helpers.SubirHelperProforma;
 import com.friendlypos.principal.helpers.SubirHelperVentaDirecta;
 import com.friendlypos.reimpresion.activity.ReimprimirActivity;
 import com.friendlypos.reimpresion_pedidos.activity.ReimprimirPedidosActivity;
@@ -108,6 +109,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
     SubirHelper subir1;
     SubirHelperPreventa subirPreventa;
     SubirHelperVentaDirecta subirVentaDirecta;
+    SubirHelperProforma subirProforma;
     SubirHelperClienteVisitado subirClienteVisitado;
     String usuer;
     String idUsuario;
@@ -133,6 +135,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
         subir1 = new SubirHelper(MenuPrincipal.this);
         subirPreventa = new SubirHelperPreventa(MenuPrincipal.this);
         subirVentaDirecta = new SubirHelperVentaDirecta(MenuPrincipal.this);
+        subirProforma = new SubirHelperProforma(MenuPrincipal.this);
         subirClienteVisitado = new SubirHelperClienteVisitado(MenuPrincipal.this);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
             this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -472,6 +475,39 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                 }
 
                 Toast.makeText(MenuPrincipal.this, "subir_Venta Directa", Toast.LENGTH_SHORT).show();
+
+                break;
+
+            case R.id.btn_subir_proforma:
+
+                Realm realmProforma = Realm.getDefaultInstance();
+
+                RealmQuery<invoice> queryProforma = realmProforma.where(invoice.class).equalTo("subida", 1).equalTo("facturaDePreventa", "Proforma");
+                final RealmResults<invoice> invoiceProforma = queryProforma.findAll();
+                Log.d("SubFacturaInvPRO", invoiceProforma.toString());
+                List<invoice> listaFacturasProforma = realmProforma.copyFromRealm(invoiceProforma);
+                Log.d("SubFacturaListaPROV", listaFacturasProforma + "");
+                realmProforma.close();
+
+                if(listaFacturasProforma.size()== 0){
+                    Toast.makeText(MenuPrincipal.this,"No hay facturas para subir", Toast.LENGTH_LONG).show();
+                }else {
+
+                    for (int i = 0; i < listaFacturasProforma.size(); i++) {
+                        Toast.makeText(MenuPrincipal.this, "hay", Toast.LENGTH_SHORT).show();
+
+                        facturaId = String.valueOf(listaFacturasProforma.get(i).getId());
+                        Log.d("facturaId", facturaId + "");
+                        EnviarFactura obj = new EnviarFactura(listaFacturasProforma.get(i));
+                        Log.d("My App", obj + "");
+                        subirProforma.sendPostProforma(obj);
+
+                        actualizarVenta();
+                        actualizarFactura();
+                    }
+                }
+
+                Toast.makeText(MenuPrincipal.this, "subir Proforma", Toast.LENGTH_SHORT).show();
 
                 break;
 
