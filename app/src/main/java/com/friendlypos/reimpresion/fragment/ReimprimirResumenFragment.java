@@ -19,10 +19,12 @@ import com.friendlypos.distribucion.modelo.invoice;
 import com.friendlypos.distribucion.modelo.Pivot;
 import com.friendlypos.distribucion.modelo.sale;
 import com.friendlypos.login.modelo.Usuarios;
+import com.friendlypos.preventas.activity.PreventaActivity;
 import com.friendlypos.principal.modelo.Clientes;
 import com.friendlypos.principal.modelo.Productos;
 import com.friendlypos.principal.modelo.Sysconf;
 import com.friendlypos.reimpresion.activity.ReimprimirActivity;
+import com.friendlypos.ventadirecta.activity.VentaDirectaActivity;
 
 import org.sufficientlysecure.htmltextview.HtmlTextView;
 
@@ -42,16 +44,18 @@ public class ReimprimirResumenFragment extends BaseFragment {
     @Bind(R.id.btnReimprimirFactura)
     public ImageButton btnReimprimirFactura;
     BluetoothStateChangeReceiver bluetoothStateChangeReceiver;
-
+    VentaDirectaActivity activity;
     sale sale_actualizada = null;
     String facturaId = "";
     String nombreMetodoPago;
     int slecTAB;
+    String tipoFacturacion;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         bluetoothStateChangeReceiver = new BluetoothStateChangeReceiver();
         bluetoothStateChangeReceiver.setBluetoothStateChangeReceiver(getContext());
+        activity = new VentaDirectaActivity();
     }
 
     @Override
@@ -71,11 +75,19 @@ public class ReimprimirResumenFragment extends BaseFragment {
                 if (sale_actualizada.getSale_type() == "2") {
                     a = "2";
                 }
+                if (bluetoothStateChangeReceiver.isBluetoothAvailable() == true) {
 
-                if(bluetoothStateChangeReceiver.isBluetoothAvailable()== true) {
-                    PrinterFunctions.imprimirFacturaDistrTotal(sale_actualizada, getActivity(), Integer.parseInt(a));
-                    Toast.makeText(getActivity(), "imprimir liquidacion", Toast.LENGTH_SHORT).show();
+                    tipoFacturacion = sale_actualizada.getFacturaDePreventa();
+
+                    if (tipoFacturacion.equals("Distribucion")) {
+                        PrinterFunctions.imprimirFacturaDistrTotal(sale_actualizada, getActivity(), Integer.parseInt(a));
+                        Toast.makeText(getActivity(), "imprimir Totalizar Dist", Toast.LENGTH_SHORT).show();
+                    } else if (tipoFacturacion.equals("VentaDirecta")) {
+                        PrinterFunctions.imprimirFacturaPrevTotal(sale_actualizada, getActivity(), 3);
+                        Toast.makeText(getActivity(), "imprimir Totalizar VentaD", Toast.LENGTH_SHORT).show();
+                    }
                 }
+
                 else if(bluetoothStateChangeReceiver.isBluetoothAvailable() == false){
                     Functions.CreateMessage(getActivity(), "Error", "La conexión del bluetooth ha fallado, favor revisar o conectar el dispositivo");
                 }

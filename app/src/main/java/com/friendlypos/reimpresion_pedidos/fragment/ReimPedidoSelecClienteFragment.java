@@ -13,6 +13,8 @@ import com.friendlypos.R;
 import com.friendlypos.distribucion.fragment.BaseFragment;
 import com.friendlypos.distribucion.fragment.DistSelecProductoFragment;
 import com.friendlypos.distribucion.modelo.sale;
+import com.friendlypos.preventas.activity.PreventaActivity;
+import com.friendlypos.preventas.adapters.PrevClientesAdapter;
 import com.friendlypos.reimpresion_pedidos.activity.ReimprimirPedidosActivity;
 import com.friendlypos.reimpresion_pedidos.adapters.ReimPedidoClientesAdapter;
 
@@ -59,11 +61,12 @@ public class ReimPedidoSelecClienteFragment extends BaseFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        adapter = new ReimPedidoClientesAdapter(getContext(), ((ReimprimirPedidosActivity) getActivity()), getListClientes());
+        if(adapter == null) {
+            adapter = new ReimPedidoClientesAdapter(getContext(), ((ReimprimirPedidosActivity) getActivity()), getListClientes());
+        }
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);
-
     }
 
 
