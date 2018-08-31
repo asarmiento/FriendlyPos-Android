@@ -74,7 +74,6 @@ public class TotalizeHelperPreventa {
 
         Double clienteFixedDescuento = getClienteFixedDescuentoByPivotId(currentPivot.getInvoice_id());
         String tipo = getProductTypeByPivotId(currentPivot.getProduct_id());
-       int esBonus = session.getDatosBonus();
         String bonus = getProductBonusByPivotId(currentPivot.getProduct_id());
 
         // TODO limpiar esBonus y cambiar en resumen el total
@@ -82,7 +81,7 @@ public class TotalizeHelperPreventa {
 
             final Realm realmBonus = Realm.getDefaultInstance();
 
-            realmBonus.executeTransaction(new Realm.Transaction() {
+            realmBonus.executeTransactionAsync(new Realm.Transaction() {
 
                 @Override
                 public void execute(Realm realmBonus) {
