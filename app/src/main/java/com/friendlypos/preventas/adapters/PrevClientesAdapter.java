@@ -64,6 +64,8 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
     static Double credittime = 0.0;
     int creditoTime;
     String creditoLimiteClienteP, dueClienteP;
+    String idUsuario;
+    String numFactura;
 
     public PrevClientesAdapter(Context context, PreventaActivity activity, List<Clientes> contentList) {
         this.contentList = contentList;
@@ -399,7 +401,7 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
         Realm realm = Realm.getDefaultInstance();
         usuer = session.getUsuarioPrefs();
         Usuarios usuarios = realm.where(Usuarios.class).equalTo("email", usuer).findFirst();
-        String idUsuario = usuarios.getId();
+     idUsuario = usuarios.getId();
         realm.close();
 
         if(tipoFacturacion.equals("Preventa")) {
@@ -411,16 +413,46 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
                 public void execute(Realm realm) {
                     // TODO NUMERACION = VENTA DIRECTA :01, PREVENTA:02, DISTRIBUCION:03 Y PROFORMA: 04
 
-                    Number numero = realm.where(Numeracion.class).equalTo("sale_type", "2").max("numeracion_numero");
+                    Number numero = realm.where(Numeracion.class).equalTo("sale_type", "2").max("number");
+
+                    Toast.makeText(activity,"num"+ numero, Toast.LENGTH_LONG).show();
                     if (numero == null) {
                         nextId = 1;
                     } else {
                         nextId = numero.intValue() + 1;
                     }
+                    int valor = numero.intValue();
+
+                    int length = String.valueOf(valor).length();
+
+                    if(length == 1){
+                        numFactura = idUsuario + "02-" + "000000" + nextId;
+                    }
+                    else if(length == 2){
+                        numFactura = idUsuario + "02-" + "00000" + nextId;
+                    }
+                    else if(length == 3){
+                        numFactura = idUsuario + "02-" + "0000" + nextId;
+                    }
+                    else if(length == 4){
+                        numFactura = idUsuario + "02-" + "000" + nextId;
+                    }
+                    else if(length == 5){
+                        numFactura = idUsuario + "02-" + "00" + nextId;
+                    }
+                    else if(length == 6){
+                        numFactura = idUsuario + "02-" + "0" + nextId;
+                    }
+                    else if(length == 7){
+                        numFactura = idUsuario + "02-" + nextId;
+                    }
+
+
+
                 }
             });
 
-            activity.initCurrentInvoice(String.valueOf(nextId), "3", idUsuario + "02-" + "000000" + nextId, 0.0, 0.0, Functions.getDate(), Functions.get24Time(),
+            activity.initCurrentInvoice(String.valueOf(nextId), "3", numFactura, 0.0, 0.0, Functions.getDate(), Functions.get24Time(),
                     Functions.getDate(), Functions.get24Time(), Functions.getDate(), "3", metodoPagoId, "", "", "", "", "", "", "", "", "", "", "", "", fecha,
                     "", "");
 
@@ -453,17 +485,43 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
                 @Override
                 public void execute(Realm realm) {
 
-                    Number numero = realm.where(Numeracion.class).equalTo("sale_type", "4").max("numeracion_numero");
+                    Number numero = realm.where(Numeracion.class).equalTo("sale_type", "3").max("number");
                     if (numero == null) {
                         nextId = 1;
                     } else {
                         nextId = numero.intValue() + 1;
                     }
+
+                    int valor = numero.intValue();
+
+                    int length = String.valueOf(valor).length();
+
+                    if(length == 1){
+                        numFactura = idUsuario + "02-" + "000000" + nextId;
+                    }
+                    else if(length == 2){
+                        numFactura = idUsuario + "02-" + "00000" + nextId;
+                    }
+                    else if(length == 3){
+                        numFactura = idUsuario + "02-" + "0000" + nextId;
+                    }
+                    else if(length == 4){
+                        numFactura = idUsuario + "02-" + "000" + nextId;
+                    }
+                    else if(length == 5){
+                        numFactura = idUsuario + "02-" + "00" + nextId;
+                    }
+                    else if(length == 6){
+                        numFactura = idUsuario + "02-" + "0" + nextId;
+                    }
+                    else if(length == 7){
+                        numFactura = idUsuario + "02-" + nextId;
+                    }
                 }
             });
 
             //TODO MODIFICAR CON EL IDS CONSECUTIVOS (FACTURA Y NUMERACION)
-            activity.initCurrentInvoice(String.valueOf(nextId), "3", idUsuario + "04-" + "000000" + nextId, 0.0, 0.0, Functions.getDate(), Functions.get24Time(),
+            activity.initCurrentInvoice(String.valueOf(nextId), "3", numFactura, 0.0, 0.0, Functions.getDate(), Functions.get24Time(),
                     Functions.getDate(), Functions.get24Time(), Functions.getDate(), "3", metodoPagoId, "", "", "", "", "", "", "", "", "", "", "", "", fecha,
                     "", "");
 
@@ -474,7 +532,7 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
                 @Override
                 public void execute(Realm realm5) {
                     Numeracion numNuevo = new Numeracion(); // unmanaged
-                    numNuevo.setSale_type("4");
+                    numNuevo.setSale_type("3");
                     numNuevo.setNumeracion_numero(nextId);
 
                     realm5.insertOrUpdate(numNuevo);

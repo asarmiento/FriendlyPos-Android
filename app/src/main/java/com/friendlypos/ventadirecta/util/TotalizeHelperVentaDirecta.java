@@ -81,7 +81,7 @@ public class TotalizeHelperVentaDirecta {
 
             final Realm realmBonus = Realm.getDefaultInstance();
 
-            realmBonus.executeTransaction(new Realm.Transaction() {
+            realmBonus.executeTransactionAsync(new Realm.Transaction() {
 
                 @Override
                 public void execute(Realm realmBonus) {

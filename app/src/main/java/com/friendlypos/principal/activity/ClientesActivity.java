@@ -159,6 +159,7 @@ public class ClientesActivity extends BluetoothActivity implements SearchView.On
         final List<Clientes> filteredModelList = new ArrayList<>();
         for (Clientes model : models) {
             final String text = model.getFantasyName().toLowerCase();
+            Log.d("FiltroPreventa", text);
             if (text.contains(query)) {
                 filteredModelList.add(model);
             }

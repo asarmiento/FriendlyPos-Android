@@ -12,7 +12,7 @@ public class Numeracion extends RealmObject {
 
     @PrimaryKey
     String sale_type;
-    int numeracion_numero;
+    int number;
 
     public String getSale_type() {
         return sale_type;
@@ -23,18 +23,18 @@ public class Numeracion extends RealmObject {
     }
 
     public int getNumeracion_numero() {
-        return numeracion_numero;
+        return number;
     }
 
     public void setNumeracion_numero(int numeracion_numero) {
-        this.numeracion_numero = numeracion_numero;
+        this.number = numeracion_numero;
     }
 
     @Override
     public String toString() {
         return "Numeracion{" +
                 "sale_type='" + sale_type + '\'' +
-                ", numeracion_numero=" + numeracion_numero +
+                ", numeracion_numero=" + number +
                 '}';
     }
 }

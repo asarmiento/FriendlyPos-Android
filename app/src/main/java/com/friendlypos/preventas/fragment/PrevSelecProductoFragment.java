@@ -51,7 +51,6 @@ public class PrevSelecProductoFragment extends BaseFragment implements SearchVie
     int slecTAB;
     PreventaActivity activity;
     TotalizeHelperPreventa totalizeHelper;
-    private EditText etSearchBox;
 
     public static PrevSelecProductoFragment getInstance() {
 
@@ -87,7 +86,6 @@ public class PrevSelecProductoFragment extends BaseFragment implements SearchVie
         View rootView = inflater.inflate(R.layout.fragment_prev_selecproducto, container,
                 false);
         setHasOptionsMenu(true);
-        etSearchBox = (EditText) rootView.findViewById(R.id.etSearchBox);
 
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerViewPrevSeleccProducto);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -103,22 +101,6 @@ public class PrevSelecProductoFragment extends BaseFragment implements SearchVie
         Log.d("listaProducto", getListProductos() + "");
         adapter2 = new PrevResumenAdapter();
         creditoDisponible();
-
-
-        etSearchBox.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                final List<Inventario> filteredModelList = filter(getListProductos(), s.toString());
-                adapter.setFilter(filteredModelList);
-               // adapter.getFilter().filter(s.toString());
-            }
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-        });
 
         return rootView;
 
@@ -236,6 +218,7 @@ public class PrevSelecProductoFragment extends BaseFragment implements SearchVie
     private List<Inventario> filter(List<Inventario> models, String query) {
         query = query.toLowerCase();
 
+        Log.d("listaProductoFiltro", getListProductos() + "");
         final List<Inventario> filteredModelList = new ArrayList<>();
         for (Inventario model : models) {
             final String text = model.getNombre_producto().toLowerCase();

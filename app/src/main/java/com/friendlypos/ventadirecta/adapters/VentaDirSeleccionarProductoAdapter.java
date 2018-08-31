@@ -268,9 +268,7 @@ public class VentaDirSeleccionarProductoAdapter  extends RecyclerView.Adapter<Ve
                                 long hoy = cal.getTimeInMillis();
                                 Log.d("fechaBONIF", hoy + "");
 
-
                                 if (producto_amount_dist_add >= productosParaObtenerBonus) {
-
                                     if (hoy <= fechaexp) {
                                         Log.d("PRODOBTE", productosParaObtenerBonus + "");
                                         Log.d("PRODDELBO", productosDelBonus + "");
@@ -287,8 +285,9 @@ public class VentaDirSeleccionarProductoAdapter  extends RecyclerView.Adapter<Ve
 
                                         producto_bonus_add = producto_amount_dist_add + productoBonusTotal;
                                         Log.d("PRODUCTODELBONUS", producto_bonus_add + "");
-                                        agregarBonificacion();
                                         Toast.makeText(context, "Se realizó una bonificación de " + productoBonusTotal + " productos", Toast.LENGTH_LONG).show();
+                                        agregarBonificacion();
+
 
                                     } else {
                                         Toast.makeText(context, "Fecha expirada para el bonus", Toast.LENGTH_LONG).show();
@@ -453,7 +452,7 @@ public class VentaDirSeleccionarProductoAdapter  extends RecyclerView.Adapter<Ve
         Log.d("precioSeleccionado", precioSeleccionado + "");
 
         //  CREDITO
-        String metodoPagoCliente = invoiceDetallePreventa.getP_payment_method_id();
+        String metodoPagoCliente = invoiceDetalleVentaDirecta.getP_payment_method_id();
         Double cred = Double.parseDouble(activity.getCreditoLimiteClienteVentaDirecta());
 
         if (metodoPagoCliente.equals("1")) {
@@ -496,6 +495,25 @@ public class VentaDirSeleccionarProductoAdapter  extends RecyclerView.Adapter<Ve
             numero++;
             session.guardarDatosPivotVentaDirecta(numero);
 
+            final Double nuevoAmount = d_cantidadDisponible - producto_amount_dist_add;
+            Log.d("nuevoAmount", nuevoAmount + "");
+
+
+            final Realm realm3 = Realm.getDefaultInstance();
+
+            realm3.executeTransaction(new Realm.Transaction() {
+
+                @Override
+                public void execute(Realm realm3) {
+
+                    Inventario inv_actualizado = realm3.where(Inventario.class).equalTo("id", idInventario).findFirst();
+                    inv_actualizado.setAmount(String.valueOf(nuevoAmount));
+
+                    realm3.insertOrUpdate(inv_actualizado); // using insert API
+                }
+            });
+
+
             sale ventaDetallePreventa = activity.getCurrentVenta();
             ventaDetallePreventa.getInvoice_id();
 
@@ -506,20 +524,20 @@ public class VentaDirSeleccionarProductoAdapter  extends RecyclerView.Adapter<Ve
             }
 
             // TRANSACCION PARA ACTUALIZAR EL CREDIT_LIMIT DEL CLIENTE
-            final Realm realm4 = Realm.getDefaultInstance();
-            realm4.executeTransaction(new Realm.Transaction() {
+            final Realm realmPB = Realm.getDefaultInstance();
+            realmPB.executeTransaction(new Realm.Transaction() {
 
                 @Override
-                public void execute(Realm realm4) {
+                public void execute(Realm realmPB) {
 
                     //final sale ventas = realm4.where(sale.class).equalTo("invoice_id", idFacturaSeleccionada).findFirst();
-                    Clientes clientes = realm4.where(Clientes.class).equalTo("id", customer).findFirst();
+                    Clientes clientes = realmPB.where(Clientes.class).equalTo("id", customer).findFirst();
                     Log.d("ads", clientes + "");
                     clientes.setCreditLimit(String.valueOf(totalCredito));
 
-                    realm4.insertOrUpdate(clientes); // using insert API
+                    realmPB.insertOrUpdate(clientes); // using insert API
 
-                    realm4.close();
+                    realmPB.close();
                     activity.setCreditoLimiteClienteVentaDirecta(String.valueOf(totalCredito));
 
                     fragment.updateData();
@@ -531,7 +549,6 @@ public class VentaDirSeleccionarProductoAdapter  extends RecyclerView.Adapter<Ve
 
                 }
             });
-            //   activity.getAllPivotDelegate();
             Toast.makeText(context, "Se agregó el producto", Toast.LENGTH_LONG).show();
         }
         else {
