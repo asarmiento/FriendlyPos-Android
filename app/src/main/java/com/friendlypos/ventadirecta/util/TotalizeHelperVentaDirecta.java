@@ -20,7 +20,7 @@ public class TotalizeHelperVentaDirecta {
     String customer;
     VentaDirectaActivity activity;
     private static double productosDelBonus = 0;
-
+    private static double productosParaObtenerBonus = 0;
     public TotalizeHelperVentaDirecta(VentaDirectaActivity activity) {
         this.activity = activity;
     }
@@ -75,6 +75,8 @@ public class TotalizeHelperVentaDirecta {
         Double clienteFixedDescuento = getClienteFixedDescuentoByPivotId(currentPivot.getInvoice_id());
         String tipo = getProductTypeByPivotId(currentPivot.getProduct_id());
 
+        double agrego = currentPivot.getAmountSinBonus();
+
         String bonus = getProductBonusByPivotId(currentPivot.getProduct_id());
 
         if (bonus.equals("1") && currentPivot.getBonus() == 1){
@@ -88,13 +90,14 @@ public class TotalizeHelperVentaDirecta {
 
                     Bonuses productoConBonus = realmBonus.where(Bonuses.class).equalTo("product_id", Integer.valueOf(currentPivot.getProduct_id())).findFirst();
                     productosDelBonus = Double.parseDouble(productoConBonus.getProduct_bonus());
+                    productosParaObtenerBonus = Double.parseDouble(productoConBonus.getProduct_sale());
 
                     Log.d("BONIFTOTAL", productoConBonus.getProduct_id() +  " " + productosDelBonus);
 
                 }
             });
 
-            cantidad = Double.valueOf(currentPivot.getAmount()) - productosDelBonus;
+            cantidad = agrego;
         }
         else{
             cantidad = Double.valueOf(currentPivot.getAmount());

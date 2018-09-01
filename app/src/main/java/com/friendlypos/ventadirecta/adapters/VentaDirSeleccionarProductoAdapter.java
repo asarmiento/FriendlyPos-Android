@@ -51,6 +51,9 @@ public class VentaDirSeleccionarProductoAdapter  extends RecyclerView.Adapter<Ve
     public List<Inventario> productosList;
     private VentaDirectaActivity activity;
     private VentaDirSelecProductoFragment fragment;
+
+    private static double prod_mostrar = 0;
+
     private static double producto_amount_dist_add = 0;
     private static double producto_descuento_add = 0;
     private static double productosParaObtenerBonus = 0;
@@ -270,21 +273,25 @@ public class VentaDirSeleccionarProductoAdapter  extends RecyclerView.Adapter<Ve
 
                                 if (producto_amount_dist_add >= productosParaObtenerBonus) {
                                     if (hoy <= fechaexp) {
-                                        Log.d("PRODOBTE", productosParaObtenerBonus + "");
-                                        Log.d("PRODDELBO", productosDelBonus + "");
-                                        Log.d("PRODADD", producto_amount_dist_add + "");
 
+                        // TODO PRODUCTO QUE SE AGREGO
+                                        Log.d("PROD_AGREGO", producto_amount_dist_add + "");
+
+                        //  TODO PARA TENER BONIFICACION OCUPA
+                                        Log.d("PROD_OCUPA", productosParaObtenerBonus + "");
+
+                        //  TODO DIVIDIR AGREGADO Y PROD DEL BONUS
                                         double productos = producto_amount_dist_add / productosParaObtenerBonus;
 
                                         String prod = String.format("%.0f", productos);
                                         double productoBonusTotal = Double.parseDouble(prod) * productosDelBonus;
 
+                        //  TODO PRODUCTOS QUE SE BONIFICAN GRATIS
+                                        Log.d("PROD_GRATIS", productoBonusTotal + "");
 
-                                        Log.d("PROD DIV", productos + "");
-                                        Log.d("PROD TOTAL", productoBonusTotal + "");
 
                                         producto_bonus_add = producto_amount_dist_add + productoBonusTotal;
-                                        Log.d("PRODUCTODELBONUS", producto_bonus_add + "");
+
                                         Toast.makeText(context, "Se realizó una bonificación de " + productoBonusTotal + " productos", Toast.LENGTH_LONG).show();
                                         agregarBonificacion();
 
@@ -490,12 +497,13 @@ public class VentaDirSeleccionarProductoAdapter  extends RecyclerView.Adapter<Ve
             pivotnuevo.setDelivered(String.valueOf(producto_bonus_add));
             pivotnuevo.setDevuelvo(0);
             pivotnuevo.setBonus(1);
+            pivotnuevo.setAmountSinBonus(producto_amount_dist_add);
 
             activity.insertProduct(pivotnuevo);
             numero++;
             session.guardarDatosPivotVentaDirecta(numero);
 
-            final Double nuevoAmount = d_cantidadDisponible - producto_amount_dist_add;
+            final Double nuevoAmount = d_cantidadDisponible - producto_bonus_add;
             Log.d("nuevoAmount", nuevoAmount + "");
 
 
@@ -546,6 +554,7 @@ public class VentaDirSeleccionarProductoAdapter  extends RecyclerView.Adapter<Ve
                     totalizeHelper = new TotalizeHelperVentaDirecta(activity);
                     totalizeHelper.totalize(list);
                     Log.d("listaResumenADD", list + "");
+                    prod_mostrar = 0;
 
                 }
             });

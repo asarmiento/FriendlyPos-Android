@@ -36,6 +36,7 @@ public class VentaDirResumenAdapter extends RecyclerView.Adapter<VentaDirResumen
     int idInvetarioSelec;
     int nextId;
     private VentaDirResumenFragment fragment;
+    String pivotTotal;
 
     public VentaDirResumenAdapter(VentaDirectaActivity activity, VentaDirResumenFragment fragment, List<Pivot> productosList) {
         this.productosList = productosList;
@@ -78,7 +79,15 @@ public class VentaDirResumenAdapter extends RecyclerView.Adapter<VentaDirResumen
         holder.txt_resumen_factura_descuento.setText("Descuento de: " + Double.valueOf(pivot.getDiscount()));
         holder.txt_resumen_factura_cantidad.setText("C: " + Double.parseDouble(pivot.getAmount()));
 
-        String pivotTotal = String.format("%,.2f", (Double.valueOf(pivot.getPrice()) * Double.parseDouble(pivot.getAmount())));
+        String bonus = getProductBonusByPivotId(pivot.getProduct_id());
+
+        if (bonus.equals("1") && pivot.getBonus() == 1){
+
+            pivotTotal = String.format("%,.2f", (Double.valueOf(pivot.getPrice()) * pivot.getAmountSinBonus()));
+        }
+        else{
+            pivotTotal = String.format("%,.2f", (Double.valueOf(pivot.getPrice()) * Double.parseDouble(pivot.getAmount())));
+        }
 
         holder.txt_resumen_factura_total.setText("T: " + pivotTotal);
     }
@@ -211,5 +220,11 @@ public class VentaDirResumenAdapter extends RecyclerView.Adapter<VentaDirResumen
         super.onAttachedToRecyclerView(recyclerView);
     }
 
+    private String getProductBonusByPivotId(String id) {
+            Realm realm = Realm.getDefaultInstance();
+            String bonus = realm.where(Productos.class).equalTo("id", id).findFirst().getBonus();
+            realm.close();
+            return bonus;
+        }
 
 }
