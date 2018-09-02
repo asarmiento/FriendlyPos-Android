@@ -390,34 +390,17 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
             pivotnuevo.setInvoice_id(String.valueOf(idDetallesFactura));
             pivotnuevo.setProduct_id(idProducto);
             pivotnuevo.setPrice(String.valueOf(precioSeleccionado));
-            pivotnuevo.setAmount(String.valueOf(producto_amount_dist_add));
+            pivotnuevo.setAmount(String.valueOf(producto_bonus_add));
             pivotnuevo.setDiscount(String.valueOf(producto_descuento_add));
-            pivotnuevo.setDelivered(String.valueOf(producto_amount_dist_add));
+            pivotnuevo.setDelivered(String.valueOf(producto_bonus_add));
             pivotnuevo.setDevuelvo(0);
             pivotnuevo.setBonus(0);
+            pivotnuevo.setAmountSinBonus(producto_amount_dist_add);
 
             activity.insertProduct(pivotnuevo);
             numero++;
             session.guardarDatosPivotPreventa(numero);
 
-                          /*  final Double nuevoAmount = cantidadDisponible - producto_amount_dist_add;
-                            Log.d("nuevoAmount", nuevoAmount + "");*/
-
-
-                          /*  final Realm realm6 = Realm.getDefaultInstance();
-
-                            realm6.executeTransaction(new Realm.Transaction() {
-
-                                @Override
-                                public void execute(Realm realm6) {
-
-                                    Inventario inv_actualizado = realm6.where(Inventario.class).equalTo("id", inventario_id).findFirst();
-                                    inv_actualizado.setAmount(String.valueOf(nuevoAmount));
-
-                                    realm6.insertOrUpdate(inv_actualizado); // using insert API
-                                }
-                            });
-*/
 
             sale ventaDetallePreventa = activity.getCurrentVenta();
             ventaDetallePreventa.getInvoice_id();

@@ -74,6 +74,7 @@ public class TotalizeHelperPreventa {
 
         Double clienteFixedDescuento = getClienteFixedDescuentoByPivotId(currentPivot.getInvoice_id());
         String tipo = getProductTypeByPivotId(currentPivot.getProduct_id());
+        double agrego = currentPivot.getAmountSinBonus();
         String bonus = getProductBonusByPivotId(currentPivot.getProduct_id());
 
         // TODO limpiar esBonus y cambiar en resumen el total
@@ -94,7 +95,7 @@ public class TotalizeHelperPreventa {
                 }
             });
 
-            cantidad = Double.valueOf(currentPivot.getAmount()) - productosDelBonus;
+            cantidad = agrego;
         }
         else{
             cantidad = Double.valueOf(currentPivot.getAmount());

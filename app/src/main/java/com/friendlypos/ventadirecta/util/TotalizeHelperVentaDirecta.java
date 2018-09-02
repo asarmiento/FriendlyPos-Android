@@ -74,9 +74,7 @@ public class TotalizeHelperVentaDirecta {
 
         Double clienteFixedDescuento = getClienteFixedDescuentoByPivotId(currentPivot.getInvoice_id());
         String tipo = getProductTypeByPivotId(currentPivot.getProduct_id());
-
         double agrego = currentPivot.getAmountSinBonus();
-
         String bonus = getProductBonusByPivotId(currentPivot.getProduct_id());
 
         if (bonus.equals("1") && currentPivot.getBonus() == 1){

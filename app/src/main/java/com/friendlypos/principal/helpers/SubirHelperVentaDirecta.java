@@ -40,7 +40,10 @@ public class SubirHelperVentaDirecta {
         String token = "Bearer " + SessionPrefes.get(mContext).getToken();
         Log.d("tokenCliente", token + " ");
         if (isOnline()) {
+
             Log.d("factura1", facturaQuery + " ");
+
+
         mAPIService.savePostVentaDirecta(facturaQuery, token).enqueue(new Callback<invoice>() {
 
             @Override
@@ -49,6 +52,10 @@ public class SubirHelperVentaDirecta {
                    // showResponse(response.body().toString());
                     Log.d("respVentaDirecta",response.body().toString());
                     Toast.makeText(activity, response.body().toString(), Toast.LENGTH_SHORT).show();
+                }
+                else{
+
+                    Toast.makeText(activity, "nada " + response.body().toString(), Toast.LENGTH_SHORT).show();
                 }
             }
 
