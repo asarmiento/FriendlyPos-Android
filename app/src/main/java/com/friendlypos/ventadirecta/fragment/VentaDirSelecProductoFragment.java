@@ -178,7 +178,6 @@ public class VentaDirSelecProductoFragment extends BaseFragment implements Searc
                 new MenuItemCompat.OnActionExpandListener() {
                     @Override
                     public boolean onMenuItemActionCollapse(MenuItem item) {
-                        adapter.updateData(getListProductos());
                         adapter.setFilter(getListProductos());
                         return true; // Return true to collapse action view
                     }
@@ -195,7 +194,7 @@ public class VentaDirSelecProductoFragment extends BaseFragment implements Searc
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        final List<Inventario> filteredModelList = filter(getListProductos(), newText);
+        final List<Inventario> filteredModelList = filter(listaInventario, newText);
         adapter.setFilter(filteredModelList);
         return true;
     }
@@ -215,7 +214,9 @@ public class VentaDirSelecProductoFragment extends BaseFragment implements Searc
                 Log.d("vacioModel","dasda");
             }else{
             String text = model.getNombre_producto().toLowerCase();
-            if (text.contains(query)) {
+                Log.d("FiltroVentaDirecta", text);
+
+                if (text.contains(query)) {
                 filteredModelList.add(model);
             }
         }

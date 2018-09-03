@@ -575,7 +575,7 @@ public class VentaDirSeleccionarProductoAdapter  extends RecyclerView.Adapter<Ve
         productosList = new ArrayList<>();
         productosList.addAll(countryModels);
         notifyDataSetChanged();
-
+            Log.d("country", countryModels + "");
     }
 
     public class CharacterViewHolder extends RecyclerView.ViewHolder {
@@ -639,5 +639,9 @@ public class VentaDirSeleccionarProductoAdapter  extends RecyclerView.Adapter<Ve
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
     }
+
+
+
+
 }
 
