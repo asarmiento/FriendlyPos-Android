@@ -73,10 +73,10 @@ public class VentaDirSeleccionarProductoAdapter  extends RecyclerView.Adapter<Ve
     int idFacturaSeleccionada, idInventario;
     double d_cantidadDisponible;
 
-    public VentaDirSeleccionarProductoAdapter(VentaDirectaActivity activity, VentaDirSelecProductoFragment fragment, List<Inventario> productosList) {
+    public VentaDirSeleccionarProductoAdapter(VentaDirectaActivity activity, VentaDirSelecProductoFragment fragment, List<Inventario> productosList2) {
         this.activity = activity;
         this.fragment = fragment;
-        this.productosList = productosList;
+        this.productosList = productosList2;
         session = new SessionPrefes(getApplicationContext());
         totalizeHelper = new TotalizeHelperVentaDirecta(activity);
     }
@@ -106,7 +106,6 @@ public class VentaDirSeleccionarProductoAdapter  extends RecyclerView.Adapter<Ve
         String marca = producto.getBrand_id();
         String tipo = producto.getProduct_type_id();
         String precio = producto.getSale_price();
-
         String marca2 = realm.where(Marcas.class).equalTo("id", marca).findFirst().getName();
         String tipoProducto = realm.where(TipoProducto.class).equalTo("id", tipo).findFirst().getName();
 
@@ -567,11 +566,6 @@ public class VentaDirSeleccionarProductoAdapter  extends RecyclerView.Adapter<Ve
     }
 
     @Override
-    public long getItemId(int position) {
-        return 0;
-    }
-
-    @Override
     public int getItemCount() {
         return productosList.size();
     }
@@ -581,11 +575,7 @@ public class VentaDirSeleccionarProductoAdapter  extends RecyclerView.Adapter<Ve
         productosList = new ArrayList<>();
         productosList.addAll(countryModels);
         notifyDataSetChanged();
-    }
 
-    @Override
-    public int getItemViewType(int position) {
-        return 0;
     }
 
     public class CharacterViewHolder extends RecyclerView.ViewHolder {

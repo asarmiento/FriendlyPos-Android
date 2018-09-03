@@ -14,13 +14,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.friendlypos.R;
 import com.friendlypos.distribucion.fragment.BaseFragment;
 import com.friendlypos.distribucion.modelo.Inventario;
-import com.friendlypos.preventas.adapters.PrevSeleccionarProductoAdapter;
 import com.friendlypos.preventas.util.TotalizeHelperPreventa;
+import com.friendlypos.principal.modelo.Clientes;
 import com.friendlypos.ventadirecta.activity.VentaDirectaActivity;
 import com.friendlypos.ventadirecta.adapters.VentaDirSeleccionarProductoAdapter;
 import com.friendlypos.ventadirecta.modelo.invoiceDetalleVentaDirecta;
@@ -36,14 +35,15 @@ public class VentaDirSelecProductoFragment extends BaseFragment implements Searc
     private Realm realm;
     RecyclerView recyclerView;
     private VentaDirSeleccionarProductoAdapter adapter;
-    //  private PrevResumenAdapter adapter2;
-    //  private PrevResumenFragment resumenFrag1;
+
     private static int bill_type = 1;
     static TextView creditoLimite;
     static double creditoLimiteCliente = 0.0;
     int slecTAB;
     VentaDirectaActivity activity;
     TotalizeHelperPreventa totalizeHelper;
+
+    List<Inventario> listaInventario;
 
     public static VentaDirSelecProductoFragment getInstance() {
         return new VentaDirSelecProductoFragment();
@@ -89,7 +89,7 @@ public class VentaDirSelecProductoFragment extends BaseFragment implements Searc
         recyclerView.setAdapter(adapter);
 
         creditoLimite = (TextView) rootView.findViewById(R.id.restCreditVentaDirecta);
-
+        listaInventario = getListProductos();
         Log.d("listaProducto", getListProductos() + "");
         creditoDisponible();
 
@@ -170,6 +170,62 @@ public class VentaDirSelecProductoFragment extends BaseFragment implements Searc
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_main, menu);
+        final MenuItem item = menu.findItem(R.id.action_search);
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
+        searchView.setOnQueryTextListener(this);
+
+        MenuItemCompat.setOnActionExpandListener(item,
+                new MenuItemCompat.OnActionExpandListener() {
+                    @Override
+                    public boolean onMenuItemActionCollapse(MenuItem item) {
+                        adapter.updateData(getListProductos());
+                        adapter.setFilter(getListProductos());
+                        return true; // Return true to collapse action view
+                    }
+
+                    @Override
+                    public boolean onMenuItemActionExpand(MenuItem item) {
+                        // Do something when expanded
+                        return true; // Return true to expand action view
+                    }
+                });
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        final List<Inventario> filteredModelList = filter(getListProductos(), newText);
+        adapter.setFilter(filteredModelList);
+        return true;
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+
+    private List<Inventario> filter(List<Inventario> models, String query) {
+        query = query.toLowerCase();
+        final List<Inventario> filteredModelList = new ArrayList<>();
+
+        for (Inventario model : models) {
+            if(models.isEmpty()){
+                Log.d("vacioModel","dasda");
+            }else{
+            String text = model.getNombre_producto().toLowerCase();
+            if (text.contains(query)) {
+                filteredModelList.add(model);
+            }
+        }
+        }
+        return filteredModelList;
+    }
+
+   /* @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_main, menu);
 
         final MenuItem item = menu.findItem(R.id.action_search);
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
@@ -209,7 +265,7 @@ public class VentaDirSelecProductoFragment extends BaseFragment implements Searc
         query = query.toLowerCase();
 
         final List<Inventario> filteredModelList = new ArrayList<>();
-        for (Inventario model : models) {
+        for (Inventario model : listaInventario) {
             final String text = model.getNombre_producto().toLowerCase();
             Log.d("FiltroVentaDirecta", text);
             if (text.contains(query)) {
@@ -218,6 +274,6 @@ public class VentaDirSelecProductoFragment extends BaseFragment implements Searc
         }
         return filteredModelList;
     }
-
+*/
 
 }

@@ -30,6 +30,16 @@ public class SubirHelper {
     private Context mContext;
     private RequestInterface mAPIService;
 
+    public String respuestaServer;
+
+    public String getRespuestaServer() {
+        return respuestaServer;
+    }
+
+    public void setRespuestaServer(String respuestaServer) {
+        this.respuestaServer = respuestaServer;
+    }
+
     public SubirHelper(Activity activity) {
         this.activity = activity;
         this.mContext = activity;
@@ -49,6 +59,9 @@ public class SubirHelper {
                 if(response.isSuccessful()) {
                    // showResponse(response.body().toString());
                     Log.d("respuestaFactura",response.body().toString());
+                    setRespuestaServer(response.message());
+
+
                 }
             }
 
