@@ -27,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.friendlypos.R;
+import com.friendlypos.Recibos.activity.RecibosActivity;
 import com.friendlypos.app.broadcastreceiver.NetworkStateChangeReceiver;
 import com.friendlypos.application.bluetooth.PrinterService;
 import com.friendlypos.application.util.Functions;
@@ -65,6 +66,7 @@ import io.realm.RealmQuery;
 import io.realm.RealmResults;
 
 import static com.friendlypos.R.id.btn_descargar_datosempresa;
+import static com.friendlypos.R.id.btn_descargar_recibos;
 
 public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenuItemClickListener
        /* implements NavigationView.OnNavigationItemSelectedListener*/ {
@@ -75,6 +77,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
     private FloatingActionButton but1 = null;
     private FloatingActionButton but2 = null;
     private FloatingActionButton but3 = null;
+    private FloatingActionButton but4 = null;
     @Bind(R.id.clickClientes)
     LinearLayout clickClientes;
 
@@ -89,6 +92,9 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
 
     @Bind(R.id.clickPreventa)
     LinearLayout clickPreventa;
+
+    @Bind(R.id.clickRecibos)
+    LinearLayout clickRecibos;
 
     @Bind(R.id.clickReimprimirVentas)
     LinearLayout clickReimprimirVentas;
@@ -197,6 +203,18 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
             public void onClick(View v) {
                 if (!properties.getBlockedApp()) {
                     Intent intent = new Intent(getApplication(), PreventaActivity.class);
+                    startActivity(intent);
+                }
+            }
+        });
+
+        but4 = (FloatingActionButton) findViewById(R.id.nav_recibos);
+
+        but4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!properties.getBlockedApp()) {
+                    Intent intent = new Intent(getApplication(), RecibosActivity.class);
                     startActivity(intent);
                 }
             }
@@ -335,9 +353,17 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                     Toast.makeText(MenuPrincipal.this, "Ya los datos están descargados", Toast.LENGTH_LONG).show();
                 }
 
+            case btn_descargar_recibos:
+                cambioDatosEmpresa = session.getPrefDescargaDatos();
 
+                if (cambioDatosEmpresa == 1) {
+                    download1.descargarRecibos(MenuPrincipal.this);
 
-              //  setDescargaDatosEmpresa(cambioDatosEmpresa);
+                } else {
+                    Toast.makeText(MenuPrincipal.this, "Descargar datos de la empresa primero", Toast.LENGTH_LONG).show();
+
+                }
+
                 break;
 
             case R.id.btn_descargar_catalogo:
@@ -731,6 +757,13 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                 Intent preventa;
                 preventa = new Intent(MenuPrincipal.this, PreventaActivity.class);
                 startActivity(preventa);
+                finish();
+                break;
+
+            case R.id.clickRecibos:
+                Intent recibos;
+                recibos = new Intent(MenuPrincipal.this, RecibosActivity.class);
+                startActivity(recibos);
                 finish();
                 break;
 

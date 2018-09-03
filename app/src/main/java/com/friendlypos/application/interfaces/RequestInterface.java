@@ -1,6 +1,7 @@
 package com.friendlypos.application.interfaces;
 
 
+import com.friendlypos.Recibos.modelo.RecibosResponse;
 import com.friendlypos.distribucion.modelo.EnviarFactura;
 import com.friendlypos.distribucion.modelo.invoice;
 import com.friendlypos.distribucion.modelo.FacturasResponse;
@@ -62,6 +63,10 @@ public interface RequestInterface {
 
     @GET("api/donwload-inventory-products")
     Call<FacturasResponse> getFacturas(@Header("Authorization") String token);
+
+    @GET("api/download-customers-debts")
+    Call<RecibosResponse> getRecibos(@Header("Authorization") String token);
+
 
     // TODO DEFINIR CUAL ES EL KEY PARA ENVIAR (KEY, VALUE)
     @POST("/api/upload-invoices")

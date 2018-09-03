@@ -15,6 +15,11 @@
         android:title="Descargar Inventario" />
 
     <item
+        android:id="@+id/btn_descargar_recibos"
+        android:icon="@mipmap/ic_config"
+        android:title="Descargar Recibos" />
+
+    <item
         android:id="@+id/btn_subir_ventas"
         android:icon="@mipmap/ic_config"
         android:title="Subir Ventas"/>

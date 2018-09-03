@@ -5,6 +5,8 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.util.Log;
 
+import com.friendlypos.Recibos.modelo.Recibos;
+import com.friendlypos.Recibos.modelo.RecibosResponse;
 import com.friendlypos.app.broadcastreceiver.NetworkStateChangeReceiver;
 import com.friendlypos.application.datamanager.BaseManager;
 import com.friendlypos.application.interfaces.RequestInterface;
@@ -50,7 +52,7 @@ public class DescargasHelper {
     private NetworkStateChangeReceiver networkStateChangeReceiver;
     private Activity activity;
     private Context mContext;
-    private Realm realm, realm2, realmSysconfig, realmMarcas, realmNumeracion, realmBonuses,  realmTipoProducto,realmUsuarios, realmMetodoPago;
+    private Realm realm, realm2, realmSysconfig, realmRecibos, realmMarcas, realmNumeracion, realmBonuses,  realmTipoProducto,realmUsuarios, realmMetodoPago;
 
     public DescargasHelper(Activity activity) {
         this.activity = activity;
@@ -604,6 +606,73 @@ public class DescargasHelper {
                 }
             });
         }
+
+    public void descargarRecibos(Context context) {
+        String token = "Bearer " + SessionPrefes.get(context).getToken();
+        Log.d("tokenCliente", token + " ");
+
+        final RequestInterface api = BaseManager.getApi();
+        final ArrayList<Recibos> mContentsArrayRecibos = new ArrayList<>();
+        final ProgressDialog dialog = new ProgressDialog(context);
+        dialog.setMessage("Cargando Recibos disponibles");
+
+        if (isOnline()) {
+            dialog.show();
+
+            Call<RecibosResponse> call2 = api.getRecibos(token);
+
+            call2.enqueue(new Callback<RecibosResponse>() {
+
+                @Override
+                public void onResponse(Call<RecibosResponse> call2, Response<RecibosResponse> response2) {
+                    mContentsArrayRecibos.clear();
+
+                    if (response2.isSuccessful()) {
+
+
+                       /* int id =response.body().getId();
+                        String userName = response.body().getUsername();
+                        String level = response.body().getLevel();
+*/
+                        mContentsArrayRecibos.addAll(response2.body().getRecibos());
+
+                        try {
+                            realmRecibos = Realm.getDefaultInstance();
+                            realmRecibos.beginTransaction();
+                            //TODO verificar cada cuanto se va a actualizar el inventario.
+                            //realm.copyToRealm(mContentsArray2);
+                            realmRecibos.copyToRealmOrUpdate(mContentsArrayRecibos);
+                            realmRecibos.commitTransaction();
+                        }
+                        finally {
+                            realmRecibos.close();
+                        }
+
+                        Log.d("descargaRecibos", mContentsArrayRecibos + " ");
+
+                        //Toast.makeText(ProductosActivity.this, getString(R.string.success), Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        // Toast.makeText(ProductosActivity.this, getString(R.string.error) + " CODE: " +response.code(), Toast.LENGTH_LONG).show();
+                        RealmResults<Recibos> results2 = realmRecibos.where(Recibos.class).findAll();
+                        mContentsArrayRecibos.addAll(results2);
+                    }
+                    dialog.dismiss();
+
+                }
+
+                @Override
+                public void onFailure(Call<RecibosResponse> call2, Throwable t) {
+                    dialog.dismiss();
+
+                }
+            });
+        }
+        else {
+            //     Toast.makeText(context, getString(R.string.failed), Toast.LENGTH_LONG).show();
+        }
+
+    }
 
     private boolean isOnline() {
         return networkStateChangeReceiver.isNetworkAvailable(mContext);
