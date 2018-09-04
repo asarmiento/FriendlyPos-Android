@@ -19,7 +19,7 @@ public class Recibos extends RealmObject {
 
 
     @PrimaryKey
-    int invoice_id;
+    String invoice_id;
     String numeration;
     String date;
     String paid_up;
@@ -27,11 +27,11 @@ public class Recibos extends RealmObject {
     double total;
     double paid;
 
-    public int getInvoice_id() {
+    public String getInvoice_id() {
         return invoice_id;
     }
 
-    public void setInvoice_id(int invoice_id) {
+    public void setInvoice_id(String invoice_id) {
         this.invoice_id = invoice_id;
     }
 

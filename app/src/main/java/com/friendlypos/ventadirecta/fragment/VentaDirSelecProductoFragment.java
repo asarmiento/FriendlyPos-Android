@@ -81,7 +81,7 @@ public class VentaDirSelecProductoFragment extends BaseFragment implements Searc
 
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerViewVentaDirectaSeleccProducto);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setHasFixedSize(true);
+       // recyclerView.setHasFixedSize(true);
 
         if(adapter == null) {
             adapter = new VentaDirSeleccionarProductoAdapter(activity, this, getListProductos());
@@ -221,6 +221,10 @@ public class VentaDirSelecProductoFragment extends BaseFragment implements Searc
             }
         }
         }
+        adapter = new VentaDirSeleccionarProductoAdapter(activity, this, filteredModelList);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
         return filteredModelList;
     }
 
