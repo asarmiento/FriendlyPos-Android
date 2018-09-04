@@ -174,11 +174,13 @@ public class VentaDirSelecProductoFragment extends BaseFragment implements Searc
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
         searchView.setOnQueryTextListener(this);
 
-        MenuItemCompat.setOnActionExpandListener(item,
+
+
+        /*MenuItemCompat.setOnActionExpandListener(item,
                 new MenuItemCompat.OnActionExpandListener() {
                     @Override
                     public boolean onMenuItemActionCollapse(MenuItem item) {
-                        adapter.setFilter(getListProductos());
+                        adapter.setFilter(listaInventario);
                         return true; // Return true to collapse action view
                     }
 
@@ -187,7 +189,7 @@ public class VentaDirSelecProductoFragment extends BaseFragment implements Searc
                         // Do something when expanded
                         return true; // Return true to expand action view
                     }
-                });
+                });*/
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -208,11 +210,18 @@ public class VentaDirSelecProductoFragment extends BaseFragment implements Searc
     private List<Inventario> filter(List<Inventario> models, String query) {
         query = query.toLowerCase();
         final List<Inventario> filteredModelList = new ArrayList<>();
-
+        adapter.notifyDataSetChanged();
         for (Inventario model : models) {
             if(models.isEmpty()){
                 Log.d("vacioModel","dasda");
             }else{
+                getListProductos();
+                Log.d("todos", getListProductos()+"");
+                int as = model.getId();
+
+                String text1 = model.getNombre_producto();
+                Log.d("id todos", as+"");
+                Log.d("nombre todos", text1+"");
             String text = model.getNombre_producto().toLowerCase();
                 Log.d("FiltroVentaDirecta", text);
 
@@ -221,10 +230,6 @@ public class VentaDirSelecProductoFragment extends BaseFragment implements Searc
             }
         }
         }
-        adapter = new VentaDirSeleccionarProductoAdapter(activity, this, filteredModelList);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
         return filteredModelList;
     }
 
