@@ -390,12 +390,12 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
             pivotnuevo.setInvoice_id(String.valueOf(idDetallesFactura));
             pivotnuevo.setProduct_id(idProducto);
             pivotnuevo.setPrice(String.valueOf(precioSeleccionado));
-            pivotnuevo.setAmount(String.valueOf(producto_bonus_add));
+            pivotnuevo.setAmount(String.valueOf(producto_amount_dist_add));
             pivotnuevo.setDiscount(String.valueOf(producto_descuento_add));
-            pivotnuevo.setDelivered(String.valueOf(producto_bonus_add));
+            pivotnuevo.setDelivered(String.valueOf(producto_amount_dist_add));
             pivotnuevo.setDevuelvo(0);
             pivotnuevo.setBonus(0);
-            pivotnuevo.setAmountSinBonus(producto_amount_dist_add);
+            pivotnuevo.setAmountSinBonus(0);
 
             activity.insertProduct(pivotnuevo);
             numero++;
@@ -491,6 +491,7 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
             pivotnuevo.setDelivered(String.valueOf(producto_bonus_add));
             pivotnuevo.setDevuelvo(0);
             pivotnuevo.setBonus(1);
+            pivotnuevo.setAmountSinBonus(producto_amount_dist_add);
 
             activity.insertProduct(pivotnuevo);
             numero++;
