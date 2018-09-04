@@ -259,12 +259,17 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
         }
     }
 
-    public boolean onMenuItemSelect(MenuItem item) {
-        showPopup(findViewById(item.getItemId()));
+    public boolean onMenuItemSelecDescarga(MenuItem item) {
+        showPopupD(findViewById(item.getItemId()));
         return true;
     }
 
-    public void showPopup(View view) {
+    public boolean onMenuItemSelecSubida(MenuItem item) {
+        showPopupS(findViewById(item.getItemId()));
+        return true;
+    }
+
+    public void showPopupD(View view) {
         PopupMenu popup = new PopupMenu(MenuPrincipal.this, view);
         try {
             Field[] fields = popup.getClass().getDeclaredFields();
@@ -283,6 +288,29 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
             e.printStackTrace();
         }
         popup.getMenuInflater().inflate(R.menu.popup_menu, popup.getMenu());
+        popup.setOnMenuItemClickListener(this);
+        popup.show();
+    }
+
+    public void showPopupS(View view) {
+        PopupMenu popup = new PopupMenu(MenuPrincipal.this, view);
+        try {
+            Field[] fields = popup.getClass().getDeclaredFields();
+            for (Field field : fields) {
+                if (field.getName().equals(POPUP_CONSTANT)) {
+                    field.setAccessible(true);
+                    Object menuPopupHelper = field.get(popup);
+                    Class<?> classPopupHelper = Class.forName(menuPopupHelper.getClass().getName());
+                    Method setForceIcons = classPopupHelper.getMethod(POPUP_FORCE_SHOW_ICON, boolean.class);
+                    setForceIcons.invoke(menuPopupHelper, true);
+                    break;
+                }
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        popup.getMenuInflater().inflate(R.menu.popup_menu_s, popup.getMenu());
         popup.setOnMenuItemClickListener(this);
         popup.show();
     }
@@ -316,29 +344,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                 alertDialog.setMessage("Seguro que quiere cerrar Sesion?");
                 alertDialog.show();
                 break;
-/*
-            case btn_descargar_datosempresa:
-                bloquear = 1;
-                Toast.makeText(MenuPrincipal.this, "descargar_datosEmpresa", Toast.LENGTH_SHORT).show();
-                download1.descargarDatosEmpresa(MenuPrincipal.this);
-                break;
 
-            case R.id.btn_descargar_catalogo:
-                if (bloquear == 0){
-                    Toast.makeText(MenuPrincipal.this, "Descargar datos de la empresa primero", Toast.LENGTH_LONG).show();
-                }else{
-                    Toast.makeText(MenuPrincipal.this, "descargar_catalogo", Toast.LENGTH_SHORT).show();
-                    download1.descargarCatalogo(MenuPrincipal.this);}
-                break;
-
-            case R.id.btn_descargar_inventario:
-                if (bloquear == 0){
-                    Toast.makeText(MenuPrincipal.this, "Descargar datos de la empresa primero", Toast.LENGTH_LONG).show();
-                }else{
-                    Toast.makeText(MenuPrincipal.this, "descargar_inventario", Toast.LENGTH_SHORT).show();
-                    download1.descargarInventario(MenuPrincipal.this);}
-                break;
-*/
             case btn_descargar_datosempresa:
                 cambioDatosEmpresa = session.getPrefDescargaDatos();
                 //cambioDatosEmpresa = getDescargaDatosEmpresa();

@@ -19,34 +19,6 @@
         android:icon="@mipmap/ic_config"
         android:title="Descargar Recibos" />
 
-    <item
-        android:id="@+id/btn_subir_ventas"
-        android:icon="@mipmap/ic_config"
-        android:title="Subir Ventas"/>
-
-    <item
-        android:id="@+id/btn_subir_pedidos"
-        android:icon="@mipmap/ic_config"
-        android:title="Subir Pedidos"/>
-
-    <item
-        android:id="@+id/btn_subir_proforma"
-        android:icon="@mipmap/ic_config"
-        android:title="Subir Proforma"/>
-
-    <item
-        android:id="@+id/btn_subir_ventadirecta"
-        android:icon="@mipmap/ic_config"
-        android:title="Subir Venta Directa"/>
-
-    <item
-        android:id="@+id/btn_devolver_inventario"
-        android:icon="@mipmap/ic_config"
-        android:title="Devolver Inventario" />
-    <item
-        android:id="@+id/btn_subir_clienteVisitados"
-        android:icon="@mipmap/ic_config"
-        android:title="Subir Clientes Visitados"/>
 
     <item
         android:id="@+id/btn_imprimir_liquidacion"

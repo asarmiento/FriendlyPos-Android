@@ -7,11 +7,18 @@
     >
     <item
 
-        android:id="@+id/menu_sincronizar"
-        android:icon="@mipmap/ic_menu_desc_sub"
+        android:id="@+id/menu_descargar"
+        android:icon="@mipmap/ic_menu_descarga"
         android:title="List"
         app:showAsAction="always"
-        android:onClick="onMenuItemSelect"
+        android:onClick="onMenuItemSelecDescarga"
+        />
+    <item
+        android:id="@+id/menu_subir"
+        android:icon="@mipmap/ic_menu_subida"
+        android:title="List"
+        app:showAsAction="always"
+        android:onClick="onMenuItemSelecSubida"
         />
     <item
         android:id="@+id/menu_cerrarsesion"
