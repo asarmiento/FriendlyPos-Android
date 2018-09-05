@@ -168,7 +168,7 @@ public class PrevResumenAdapter extends RecyclerView.Adapter<PrevResumenAdapter.
 
                     Toast.makeText(view.getContext(), "Se borró el producto" , Toast.LENGTH_SHORT).show();
 
-                    // TRANSACCIÓN BD PARA SELECCIONAR LOS DATOS DEL INVENTARIO
+                /*    // TRANSACCIÓN BD PARA SELECCIONAR LOS DATOS DEL INVENTARIO
                     Realm realm3 = Realm.getDefaultInstance();
                     realm3.executeTransaction(new Realm.Transaction() {
 
@@ -201,7 +201,7 @@ public class PrevResumenAdapter extends RecyclerView.Adapter<PrevResumenAdapter.
                         }
                     });
 
-
+*/
 
                     // TRANSACCIÓN BD PARA BORRAR EL CAMPO
 

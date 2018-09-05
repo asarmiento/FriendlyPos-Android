@@ -99,11 +99,10 @@ public class VentaDirSeleccionarProductoAdapter  extends RecyclerView.Adapter<Ve
         List<Pivot> pivots = activity.getAllPivotDelegate();
         final Inventario inventario = productosList.get(position);
 
-
-
-
         Realm realm = Realm.getDefaultInstance();
         Productos producto = realm.where(Productos.class).equalTo("id", inventario.getProduct_id()).findFirst();
+
+        Log.d("inventario", inventario+ "");
 
         final String description = producto.getDescription();
         String marca = producto.getBrand_id();

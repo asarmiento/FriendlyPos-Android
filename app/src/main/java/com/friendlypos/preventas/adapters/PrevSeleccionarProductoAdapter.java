@@ -51,8 +51,8 @@ import static io.realm.internal.SyncObjectServerFacade.getApplicationContext;
 public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSeleccionarProductoAdapter.CharacterViewHolder> implements Filterable {
 
     private Context context;
-    public List<Inventario> productosList;
-    List<Inventario> countryModels;
+    public List<Productos> productosList;
+    List<Productos> countryModels;
     private PreventaActivity activity;
     private PrevSelecProductoFragment fragment;
     private static double producto_amount_dist_add = 0;
@@ -76,7 +76,7 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
 
     private CustomFilter mFilter;
 
-    public PrevSeleccionarProductoAdapter(PreventaActivity activity, PrevSelecProductoFragment fragment, List<Inventario> productosList) {
+    public PrevSeleccionarProductoAdapter(PreventaActivity activity, PrevSelecProductoFragment fragment, List<Productos> productosList) {
         this.activity = activity;
         this.fragment = fragment;
         this.productosList = productosList;
@@ -91,7 +91,7 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
         return mFilter;
     }
 
-    public void updateData(List<Inventario> productosList) {
+    public void updateData(List<Productos> productosList) {
         this.productosList = productosList;
         notifyDataSetChanged();
     }
@@ -108,10 +108,10 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
     public void onBindViewHolder(final PrevSeleccionarProductoAdapter.CharacterViewHolder holder, final int position) {
 
         List<Pivot> pivots = activity.getAllPivotDelegate();
-        final Inventario inventario = productosList.get(position);
+        final Productos producto = productosList.get(position);
 
         Realm realm = Realm.getDefaultInstance();
-        Productos producto = realm.where(Productos.class).equalTo("id", inventario.getProduct_id()).findFirst();
+       // Productos producto = realm.where(Productos.class).equalTo("id", inventario.getProduct_id()).findFirst();
 
         final String description = producto.getDescription();
         String marca = producto.getBrand_id();
@@ -122,7 +122,7 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
         String tipoProducto = realm.where(TipoProducto.class).equalTo("id", tipo).findFirst().getName();
 
 
-        // TRANSACCION PARA ACTUALIZAR CAMPOS DE LA TABLA VENTAS
+      /*  // TRANSACCION PARA ACTUALIZAR CAMPOS DE LA TABLA VENTAS
         try {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
@@ -141,7 +141,7 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
             Log.e("error", "error", e);
             Toast.makeText(context,"error", Toast.LENGTH_SHORT).show();
 
-        }
+        }*/
 
         holder.txt_producto_factura_nombre.setText(description);
         holder.txt_producto_factura_marca.setText("Marca: " + marca2);
@@ -171,7 +171,7 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
     }
     //}
 
-    public void addProduct(final int inventario_id, final String producto_id,/*  final Double cantidadDisponible, */
+    public void addProduct(final String producto_id,/*  final Double cantidadDisponible, */
     final String description, String Precio1, String Precio2,
                            String Precio3, String Precio4, String Precio5, final String bonusProducto) {
 
@@ -578,8 +578,8 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
                 countryModels.addAll(productosList);
             } else {
                 final String filterPattern = constraint.toString().toLowerCase().trim();
-                for (final Inventario person : productosList) {
-                    if (person.getNombre_producto().toLowerCase().contains(filterPattern)) {
+                for (final Productos person : productosList) {
+                    if (person.getDescription().toLowerCase().contains(filterPattern)) {
                         countryModels.add(person);
                     }
                 }
@@ -595,7 +595,7 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
         }
     }
 
-    public void setFilter(List<Inventario> countryModels){
+    public void setFilter(List<Productos> countryModels){
 
         productosList = new ArrayList<>();
         productosList.addAll(countryModels);
@@ -639,9 +639,9 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
                     selected_position = getAdapterPosition();
                     notifyItemChanged(selected_position);
 
-                    Inventario clickedDataItem = productosList.get(pos);
-                    String ProductoID = clickedDataItem.getProduct_id();
-                    int InventarioID = clickedDataItem.getId();
+                    Productos clickedDataItem = productosList.get(pos);
+                    String ProductoID = clickedDataItem.getId();
+                   // int InventarioID = clickedDataItem.getId();
 
                     String precio = producto.getSale_price();
                     String precio2 = producto.getSale_price2();
@@ -659,7 +659,7 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
 
                     realm1.close();
 
-                   addProduct(InventarioID, ProductoID, /*ProductoAmount,*/ description, precio, precio2, precio3, precio4, precio5, bonusProducto);
+                   addProduct(ProductoID, /*ProductoAmount,*/ description, precio, precio2, precio3, precio4, precio5, bonusProducto);
                     Toast.makeText(context,"Add limpia " + session.getDatosBonus() ,Toast.LENGTH_LONG).show();
                 }
             });
