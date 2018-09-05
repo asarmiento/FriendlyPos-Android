@@ -1,5 +1,6 @@
 package com.friendlypos.reimpresion_pedidos.fragment;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -21,6 +22,7 @@ import com.friendlypos.distribucion.modelo.sale;
 import com.friendlypos.distribucion.util.GPSTracker;
 import com.friendlypos.login.modelo.Usuarios;
 import com.friendlypos.login.util.SessionPrefes;
+import com.friendlypos.preventas.activity.PreventaActivity;
 import com.friendlypos.reimpresion_pedidos.activity.ReimprimirPedidosActivity;
 
 import io.realm.Realm;
@@ -61,14 +63,20 @@ public class ReimPedidoTotalizarFragment extends BaseFragment {
     String metodoPagoCliente;
     private static Button applyBill;
     private static Button printBill;
-
+    ReimprimirPedidosActivity activity;
     private static int apply_done = 0;
     int slecTAB;
     sale sale_actualizada;
-
+    String tipoFacturacionImpr;
     GPSTracker gps;
     BluetoothStateChangeReceiver bluetoothStateChangeReceiver;
+
     @Override
+    public void onDetach() {
+        super.onDetach();
+        activity = null;
+    }
+
     public void onDestroy() {
         super.onDestroy();
         clearAll();
@@ -78,6 +86,11 @@ public class ReimPedidoTotalizarFragment extends BaseFragment {
         super.onPause();
 
         getActivity().unregisterReceiver(bluetoothStateChangeReceiver);
+    }
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        this.activity = (ReimprimirPedidosActivity) activity;
     }
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -199,17 +212,28 @@ public class ReimPedidoTotalizarFragment extends BaseFragment {
 
                         try {
 
-                            if(bluetoothStateChangeReceiver.isBluetoothAvailable()== true) {
-                                PrinterFunctions.imprimirFacturaDistrTotal(sale_actualizada, getActivity(), 1);
-                                Toast.makeText(getActivity(), "imprimir liquidacion", Toast.LENGTH_SHORT).show();
+                            if (bluetoothStateChangeReceiver.isBluetoothAvailable() == true) {
+
+                                tipoFacturacionImpr = sale_actualizada.getFacturaDePreventa();
+
+                                if(tipoFacturacionImpr.equals("Preventa")){
+                                    PrinterFunctions.imprimirFacturaPrevTotal(sale_actualizada, getActivity(), 1);
+                                    Toast.makeText(getActivity(), "imprimir Totalizar Preventa", Toast.LENGTH_SHORT).show();
+                                }
+                                else if(tipoFacturacionImpr.equals("Proforma")){
+                                    PrinterFunctions.imprimirFacturaProformaTotal(sale_actualizada, getActivity(), 1);
+                                    Toast.makeText(getActivity(), "imprimir Totalizar Preventa", Toast.LENGTH_SHORT).show();
+                                }
+
+
                             }
-                            else if(bluetoothStateChangeReceiver.isBluetoothAvailable() == false){
+                            else if (bluetoothStateChangeReceiver.isBluetoothAvailable() == false) {
                                 Functions.CreateMessage(getActivity(), "Error", "La conexión del bluetooth ha fallado, favor revisar o conectar el dispositivo");
                             }
 
 
-
-                        } catch (Exception e) {
+                        }
+                        catch (Exception e) {
                             Functions.CreateMessage(getActivity(), "Error", e.getMessage() + "\n" + e.getStackTrace().toString());
                         }
                     }

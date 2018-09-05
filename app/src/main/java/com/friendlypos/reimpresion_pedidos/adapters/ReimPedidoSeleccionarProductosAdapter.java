@@ -24,6 +24,7 @@ import com.friendlypos.distribucion.modelo.Marcas;
 import com.friendlypos.distribucion.modelo.Pivot;
 import com.friendlypos.distribucion.modelo.TipoProducto;
 import com.friendlypos.distribucion.modelo.sale;
+import com.friendlypos.preventas.modelo.Bonuses;
 import com.friendlypos.principal.modelo.Clientes;
 import com.friendlypos.principal.modelo.Productos;
 import com.friendlypos.reimpresion_pedidos.activity.ReimprimirPedidosActivity;
@@ -31,9 +32,11 @@ import com.friendlypos.reimpresion_pedidos.fragment.ReimPedidoSelecProductoFragm
 import com.friendlypos.reimpresion_pedidos.util.TotalizeHelperReimPedido;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import io.realm.Realm;
+import io.realm.RealmQuery;
 import io.realm.RealmResults;
 
 /**
@@ -43,26 +46,29 @@ import io.realm.RealmResults;
 public class ReimPedidoSeleccionarProductosAdapter extends RecyclerView.Adapter<ReimPedidoSeleccionarProductosAdapter.CharacterViewHolder> {
 
     private Context context;
-    public List<Inventario> productosList;
+    public List<Productos> productosList;
     private ReimprimirPedidosActivity activity;
     private ReimPedidoSelecProductoFragment fragment;
     private static double producto_amount_dist_add = 0;
     private static double producto_descuento_add = 0;
+    Date fechaExpiracionBonus;
     private int selected_position = -1;
     static double creditoLimiteCliente = 0.0;
     double totalCredito = 0.0;;
     TotalizeHelperReimPedido totalizeHelper;
+    private static double productosParaObtenerBonus = 0;
+    private static double productosDelBonus = 0;
 
     int nextId;
 
-    public ReimPedidoSeleccionarProductosAdapter(ReimprimirPedidosActivity activity, ReimPedidoSelecProductoFragment fragment, List<Inventario> productosList) {
+    public ReimPedidoSeleccionarProductosAdapter(ReimprimirPedidosActivity activity, ReimPedidoSelecProductoFragment fragment, List<Productos> productosList) {
         this.activity = activity;
         this.fragment = fragment;
         this.productosList = productosList;
         totalizeHelper = new TotalizeHelperReimPedido(activity);
     }
 
-    public void updateData(List<Inventario> productosList) {
+    public void updateData(List<Productos> productosList) {
 
         this.productosList = productosList;
         notifyDataSetChanged();
@@ -79,10 +85,10 @@ public class ReimPedidoSeleccionarProductosAdapter extends RecyclerView.Adapter<
     @Override
     public void onBindViewHolder(final ReimPedidoSeleccionarProductosAdapter.CharacterViewHolder holder, final int position) {
 
-        final Inventario inventario = productosList.get(position);
+        final Productos producto = productosList.get(position);
 
         Realm realm = Realm.getDefaultInstance();
-        Productos producto = realm.where(Productos.class).equalTo("id", inventario.getProduct_id()).findFirst();
+      //  Productos producto = realm.where(Productos.class).equalTo("id", inventario.getProduct_id()).findFirst();
 
 
         final String description = producto.getDescription();
@@ -95,51 +101,20 @@ public class ReimPedidoSeleccionarProductosAdapter extends RecyclerView.Adapter<
 
         realm.close();
 
-  /*      // TRANSACCION PARA ACTUALIZAR CAMPOS DE LA TABLA VENTAS
-        final Realm realm3 = Realm.getDefaultInstance();
 
-        try {
-            realm3.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm3) {
-
-                  //  Inventario inv_actualizado = realm3.where(Inventario.class).equalTo("id", inventario_id).findFirst();
-                  //  inv_actualizado.setAmount_dist(String.valueOf(nuevoAmount));
-                    inventario.setNombre_producto(description);
-                    realm3.insertOrUpdate(inventario); // using insert API
-
-                    Log.d("asda", inventario.getNombre_producto());
-                }
-
-            });
-
-        } catch (Exception e) {
-            Log.e("error", "error", e);
-            Toast.makeText(context,"error", Toast.LENGTH_SHORT).show();
-
-        }
-        realm3.close();*/
-/*
-        if(inventario.getAmount().equals("0")){
-
-            holder.cardView.setVisibility(View.GONE);
-        }else{
-*/
-        holder.fillData(producto);
 
         holder.txt_producto_factura_nombre.setText(description);
         holder.txt_producto_factura_marca.setText("Marca: " + marca2);
         holder.txt_producto_factura_tipo.setText("Tipo: " + tipoProducto);
         holder.txt_producto_factura_precio.setText(precio);
-        holder.txt_producto_factura_disponible.setText("Disp: " + inventario.getAmount());
         holder.cardView.setBackgroundColor(selected_position == position ? Color.parseColor("#607d8b") : Color.parseColor("#009688"));
+        holder.fillData(producto);
     }
     //}
 
 
-    public void addProduct(final int inventario_id, final String producto_id, final
-    Double cantidadDisponible, final String description, String Precio1, String Precio2,
-                           String Precio3, String Precio4, String Precio5) {
+    public void addProduct(final String producto_id, final String description, String Precio1, String Precio2,
+                           String Precio3, String Precio4, String Precio5, final String bonusProducto) {
 
         final String idFacturaSeleccionada = (activity).getInvoiceId();
         Log.d("idFacturaSeleccionada", idFacturaSeleccionada + "");
@@ -156,7 +131,34 @@ public class ReimPedidoSeleccionarProductosAdapter extends RecyclerView.Adapter<
         txtNombreProducto.setText(description);
 
         final TextView label = (TextView) promptView.findViewById(R.id.promtClabel);
-        label.setText("Escriba una cantidad maxima de " + cantidadDisponible + " minima de 1");
+        label.setText("Escriba la cantidad requerida del producto");
+
+        final TextView txtBonificacion = (TextView) promptView.findViewById(R.id.txtBonificacion);
+
+        if (bonusProducto.equals("1")){
+            getBoni();
+            final Realm realmBonus = Realm.getDefaultInstance();
+
+            realmBonus.executeTransaction(new Realm.Transaction() {
+
+                @Override
+                public void execute(Realm realmBonus) {
+
+                    Bonuses productoConBonus = realmBonus.where(Bonuses.class).equalTo("product_id", Integer.valueOf(producto_id)).findFirst();
+                    productosParaObtenerBonus = Double.parseDouble(productoConBonus.getProduct_sale());
+                    productosDelBonus = Double.parseDouble(productoConBonus.getProduct_bonus());
+                    fechaExpiracionBonus = productoConBonus.getExpiration();
+
+                    Log.d("BONIF", productoConBonus.getProduct_id() +  " "+ productosParaObtenerBonus +  " "+ productosDelBonus +  " "+ String.valueOf(fechaExpiracionBonus));
+
+                }
+            });
+
+            txtBonificacion.setVisibility(View.VISIBLE);
+            txtBonificacion.setText(" La cantidad para bonificarle es de: " + productosParaObtenerBonus);
+
+        }
+
         final EditText input = (EditText) promptView.findViewById(R.id.promtCtext);
         final EditText desc = (EditText) promptView.findViewById(R.id.promtCDesc);
 
@@ -194,19 +196,11 @@ public class ReimPedidoSeleccionarProductosAdapter extends RecyclerView.Adapter<
             public void onClick(DialogInterface dialog, int id) {
                 try {
 
-
                     producto_amount_dist_add = Double.parseDouble(((input.getText().toString().isEmpty()) ? "0" : input.getText().toString()));
-                    Log.d("productoAmountDistAdd", producto_amount_dist_add + "");
-                    //  productoAmountDistAdd = String.format("%,.2f", producto_amount_dist_add);
-
                     producto_descuento_add = Double.parseDouble(((desc.getText().toString().isEmpty()) ? "0" : desc.getText().toString()));
-                    // productoDescuentoAdd = String.format("%,.2f", producto_descuento_add);
-                    Log.d("productoDescuentoAdd", producto_descuento_add + "");
+
 
                     if (producto_descuento_add >= 0 && producto_descuento_add <= 10) {
-                        Toast.makeText(context, "agregodesc", Toast.LENGTH_LONG).show();
-                        if (producto_amount_dist_add > 0 && producto_amount_dist_add <= cantidadDisponible) {
-
 
                             final double precioSeleccionado = (double) spPrices.getSelectedItem();
                             Log.d("precioSeleccionado", precioSeleccionado + "");
@@ -265,7 +259,7 @@ public class ReimPedidoSeleccionarProductosAdapter extends RecyclerView.Adapter<
                                     }
                                 });
 
-                                final Double nuevoAmount = cantidadDisponible - producto_amount_dist_add;
+                             /*   final Double nuevoAmount = cantidadDisponible - producto_amount_dist_add;
                                 Log.d("nuevoAmount", nuevoAmount + "");
 
 
@@ -283,7 +277,7 @@ public class ReimPedidoSeleccionarProductosAdapter extends RecyclerView.Adapter<
                                     }
                                 });
 
-
+*/
                                 // TRANSACCION PARA ACTUALIZAR EL CREDIT_LIMIT DEL CLIENTE
                                 final Realm realm4 = Realm.getDefaultInstance();
                                 realm4.executeTransaction(new Realm.Transaction() {
@@ -321,11 +315,6 @@ public class ReimPedidoSeleccionarProductosAdapter extends RecyclerView.Adapter<
                                 Toast.makeText(context, "Has excedido el monto del crédito", Toast.LENGTH_SHORT).show();
                             }
                         }
-                        else {
-                            Toast.makeText(context, "El producto no se agrego, verifique la cantidad que esta ingresando", Toast.LENGTH_LONG).show();
-                        }
-
-                    }
                     else {
                         Toast.makeText(context, "El producto no se agrego, El descuento debe ser >0 <11", Toast.LENGTH_LONG).show();
                     }
@@ -369,11 +358,19 @@ public class ReimPedidoSeleccionarProductosAdapter extends RecyclerView.Adapter<
         return productosList.size();
     }
 
-    public void setFilter(List<Inventario> countryModels){
+    public void setFilter(List<Productos> countryModels){
 
         productosList = new ArrayList<>();
         productosList.addAll(countryModels);
         notifyDataSetChanged();
+    }
+
+    private List<Bonuses> getBoni(){
+        Realm realm = Realm.getDefaultInstance();
+        RealmQuery<Bonuses> query = realm.where(Bonuses.class);
+        RealmResults<Bonuses> result1 = query.findAll();
+        Log.d("BONIFICACION", result1 + "");
+        return result1;
     }
 
     @Override
@@ -410,17 +407,16 @@ public class ReimPedidoSeleccionarProductosAdapter extends RecyclerView.Adapter<
                     selected_position = getAdapterPosition();
                     notifyItemChanged(selected_position);
 
-                    Inventario clickedDataItem = productosList.get(pos);
-                    String ProductoID = clickedDataItem.getProduct_id();
-                    int InventarioID = clickedDataItem.getId();
+                    Productos clickedDataItem = productosList.get(pos);
+                    String ProductoID = clickedDataItem.getId();
 
                     String precio = producto.getSale_price();
                     String precio2 = producto.getSale_price2();
                     String precio3 = producto.getSale_price3();
                     String precio4 = producto.getSale_price4();
                     String precio5 = producto.getSale_price5();
-
-                    Double ProductoAmount = Double.valueOf(clickedDataItem.getAmount());
+                    String bonusProducto = producto.getBonus();
+                 //   Double ProductoAmount = Double.valueOf(clickedDataItem.getAmount());
 
                     Realm realm1 = Realm.getDefaultInstance();
                     Productos producto = realm1.where(Productos.class).equalTo("id", ProductoID).findFirst();
@@ -431,7 +427,7 @@ public class ReimPedidoSeleccionarProductosAdapter extends RecyclerView.Adapter<
                     realm1.close();
 
                     Toast.makeText(view.getContext(), "You clicked " + ProductoID, Toast.LENGTH_SHORT).show();
-                    addProduct(InventarioID, ProductoID, ProductoAmount, description, precio, precio2, precio3, precio4, precio5);
+                    addProduct(ProductoID, description, precio, precio2, precio3, precio4, precio5, bonusProducto);
 
                 }
             });

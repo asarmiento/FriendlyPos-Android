@@ -122,27 +122,6 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
         String tipoProducto = realm.where(TipoProducto.class).equalTo("id", tipo).findFirst().getName();
 
 
-      /*  // TRANSACCION PARA ACTUALIZAR CAMPOS DE LA TABLA VENTAS
-        try {
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    //  Inventario inv_actualizado = realm3.where(Inventario.class).equalTo("id", inventario_id).findFirst();
-                    //  inv_actualizado.setAmount_dist(String.valueOf(nuevoAmount));
-                    inventario.setNombre_producto(description);
-                    realm.copyToRealmOrUpdate(inventario); // using insert API
-
-                    Log.d("asda", inventario.getNombre_producto());
-                }
-
-            });
-
-        } catch (Exception e) {
-            Log.e("error", "error", e);
-            Toast.makeText(context,"error", Toast.LENGTH_SHORT).show();
-
-        }*/
-
         holder.txt_producto_factura_nombre.setText(description);
         holder.txt_producto_factura_marca.setText("Marca: " + marca2);
         holder.txt_producto_factura_tipo.setText("Tipo: " + tipoProducto);
@@ -171,8 +150,7 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
     }
     //}
 
-    public void addProduct(final String producto_id,/*  final Double cantidadDisponible, */
-    final String description, String Precio1, String Precio2,
+    public void addProduct(final String producto_id, final String description, String Precio1, String Precio2,
                            String Precio3, String Precio4, String Precio5, final String bonusProducto) {
 
         final invoiceDetallePreventa invoiceDetallePreventa = activity.getCurrentInvoice();
@@ -352,7 +330,6 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
     }
 
     public void agregar(){
-        session.guardarDatosBonus(0);
         Toast.makeText(context,"Add 0 " + session.getDatosBonus() ,Toast.LENGTH_LONG).show();
         final double precioSeleccionado = (double) spPrices.getSelectedItem();
         Log.d("precioSeleccionado", precioSeleccionado + "");

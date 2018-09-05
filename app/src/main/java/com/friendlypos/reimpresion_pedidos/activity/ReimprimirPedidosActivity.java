@@ -22,6 +22,7 @@ import com.friendlypos.distribucion.fragment.DistResumenFragment;
 import com.friendlypos.distribucion.fragment.DistSelecClienteFragment;
 import com.friendlypos.distribucion.fragment.DistSelecProductoFragment;
 import com.friendlypos.distribucion.fragment.DistTotalizarFragment;
+import com.friendlypos.distribucion.modelo.sale;
 import com.friendlypos.distribucion.util.Adapter;
 import com.friendlypos.principal.activity.BluetoothActivity;
 import com.friendlypos.principal.activity.MenuPrincipal;
@@ -85,6 +86,7 @@ public class ReimprimirPedidosActivity extends BluetoothActivity {
     public void setMetodoPagoCliente(String metodoPagoCliente) {
         this.metodoPagoCliente = metodoPagoCliente;
     }
+
 
     public String getCreditoLimiteCliente() {
         return creditoLimiteCliente;

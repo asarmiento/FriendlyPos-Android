@@ -21,6 +21,7 @@ import com.friendlypos.distribucion.adapters.DistrResumenAdapter;
 import com.friendlypos.distribucion.fragment.BaseFragment;
 import com.friendlypos.distribucion.modelo.Inventario;
 import com.friendlypos.distribucion.util.TotalizeHelper;
+import com.friendlypos.principal.modelo.Productos;
 import com.friendlypos.reimpresion_pedidos.activity.ReimprimirPedidosActivity;
 import com.friendlypos.reimpresion_pedidos.adapters.ReimPedidoSeleccionarProductosAdapter;
 
@@ -93,10 +94,10 @@ public class ReimPedidoSelecProductoFragment extends BaseFragment implements Sea
     }
 
 
-    private List<Inventario> getListProductos() {
+    private List<Productos> getListProductos() {
         realm = Realm.getDefaultInstance();
-        RealmQuery<Inventario> query = realm.where(Inventario.class).notEqualTo("amount", "0").notEqualTo("amount", "0.0").notEqualTo("amount", "0.000");
-        RealmResults<Inventario> result1 = query.findAll();
+        RealmQuery<Productos> query = realm.where(Productos.class);
+        RealmResults<Productos> result1 = query.findAll();
 
         return result1;
 
@@ -186,7 +187,7 @@ public class ReimPedidoSelecProductoFragment extends BaseFragment implements Sea
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        final List<Inventario> filteredModelList = filter(getListProductos(), newText);
+        final List<Productos> filteredModelList = filter(getListProductos(), newText);
         adapter.setFilter(filteredModelList);
         return true;
     }
@@ -197,12 +198,12 @@ public class ReimPedidoSelecProductoFragment extends BaseFragment implements Sea
     }
 
 
-    private List<Inventario> filter(List<Inventario> models, String query) {
+    private List<Productos> filter(List<Productos> models, String query) {
         query = query.toLowerCase();
 
-        final List<Inventario> filteredModelList = new ArrayList<>();
-        for (Inventario model : models) {
-            final String text = model.getNombre_producto().toLowerCase();
+        final List<Productos> filteredModelList = new ArrayList<>();
+        for (Productos model : models) {
+            final String text = model.getDescription().toLowerCase();
             Log.d("dasdad", text);
             if (text.contains(query)) {
                 filteredModelList.add(model);
