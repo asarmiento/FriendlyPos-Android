@@ -78,11 +78,6 @@ public class RecibosClientesAdapter extends RecyclerView.Adapter<RecibosClientes
         String companyCliente = clientes.getCompanyName();
         String fantasyCliente = clientes.getFantasyName();
         String numeracionFactura = recibo.getNumeration();
-        //String nombreVenta = recibo.getCustomer_name();
-
-       // final double longitud = invoice.getLongitud();
-      //  final double latitud = invoice.getLatitud();
-
 
 
         holder.txt_cliente_factura_card.setText(cardCliente);
