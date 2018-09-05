@@ -16,6 +16,7 @@ import android.view.MenuItem;
 
 import com.friendlypos.R;
 import com.friendlypos.Recibos.fragments.RecibosClientesFragment;
+import com.friendlypos.Recibos.fragments.RecibosResumenFragment;
 import com.friendlypos.application.bluetooth.PrinterService;
 import com.friendlypos.application.util.Functions;
 import com.friendlypos.distribucion.activity.DistribucionActivity;
@@ -37,6 +38,8 @@ public class RecibosActivity extends BluetoothActivity {
     private Toolbar toolbar;
     private TabLayout tabLayout;
     private int selecClienteTabRecibos;
+    private String invoiceIdRecibos;
+    private String clienteIdRecibos;
 
     public int getSelecClienteTabRecibos() {
         return selecClienteTabRecibos;
@@ -44,6 +47,22 @@ public class RecibosActivity extends BluetoothActivity {
 
     public void setSelecClienteTabRecibos(int selecClienteTabRecibos) {
         this.selecClienteTabRecibos = selecClienteTabRecibos;
+    }
+
+    public String getInvoiceIdRecibos() {
+        return invoiceIdRecibos;
+    }
+
+    public void setInvoiceIdRecibos(String invoiceIdRecibos) {
+        this.invoiceIdRecibos = invoiceIdRecibos;
+    }
+
+    public String getClienteIdRecibos() {
+        return clienteIdRecibos;
+    }
+
+    public void setClienteIdRecibos(String clienteIdRecibos) {
+        this.clienteIdRecibos = clienteIdRecibos;
     }
 
     @Override
@@ -126,12 +145,12 @@ public class RecibosActivity extends BluetoothActivity {
         Adapter adapter = new Adapter(getSupportFragmentManager());
         final List<BaseFragment> list = new ArrayList<>();
         list.add(new RecibosClientesFragment());
-     /*   list.add(new DistResumenFragment());
-        list.add(new DistSelecProductoFragment());
+       list.add(new RecibosResumenFragment());
+       /*  list.add(new DistSelecProductoFragment());
         list.add(new DistTotalizarFragment());*/
         adapter.addFragment(list.get(0), "Seleccionar Cliente");
-     /*   adapter.addFragment(list.get(1), "Selecionar Factura");
-        adapter.addFragment(list.get(2), "Facturas");
+      adapter.addFragment(list.get(1), "Selecionar Factura");
+      /*    adapter.addFragment(list.get(2), "Facturas");
         adapter.addFragment(list.get(3), "Aplicar");*/
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
