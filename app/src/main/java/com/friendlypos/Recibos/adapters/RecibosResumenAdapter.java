@@ -1,43 +1,19 @@
 package com.friendlypos.Recibos.adapters;
 
 import android.content.Context;
-import android.content.DialogInterface;
-import android.graphics.Color;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.friendlypos.R;
 import com.friendlypos.Recibos.activity.RecibosActivity;
 import com.friendlypos.Recibos.fragments.RecibosResumenFragment;
 import com.friendlypos.Recibos.modelo.Recibos;
-import com.friendlypos.distribucion.activity.DistribucionActivity;
-import com.friendlypos.distribucion.adapters.DistrSeleccionarProductosAdapter;
-import com.friendlypos.distribucion.fragment.DistSelecProductoFragment;
-import com.friendlypos.distribucion.modelo.Inventario;
-import com.friendlypos.distribucion.modelo.Marcas;
-import com.friendlypos.distribucion.modelo.Pivot;
-import com.friendlypos.distribucion.modelo.TipoProducto;
-import com.friendlypos.distribucion.modelo.sale;
-import com.friendlypos.distribucion.util.TotalizeHelper;
-import com.friendlypos.principal.modelo.Clientes;
-import com.friendlypos.principal.modelo.Productos;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import io.realm.Realm;
-import io.realm.RealmResults;
 
 
 public class RecibosResumenAdapter extends RecyclerView.Adapter<RecibosResumenAdapter.CharacterViewHolder> {
@@ -79,16 +55,10 @@ public class RecibosResumenAdapter extends RecyclerView.Adapter<RecibosResumenAd
      //   List<Pivot> pivots = getListResumen();
         final Recibos inventario = productosList.get(position);
 
-        Realm realm = Realm.getDefaultInstance();
-      //  Productos producto = realm.where(Productos.class).equalTo("id", inventario.getProduct_id()).findFirst();
-
-
         final String id = inventario.getInvoice_id();
         String numeracion = inventario.getNumeration();
         double total = inventario.getTotal();
         double pago = inventario.getPaid();
-
-
 
         holder.txt_producto_factura_idRecibos.setText(id);
         holder.txt_producto_factura_numeracionRecibos.setText(numeracion);

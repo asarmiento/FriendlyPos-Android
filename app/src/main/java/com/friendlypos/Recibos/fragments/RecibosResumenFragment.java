@@ -97,9 +97,11 @@ public class RecibosResumenFragment extends BaseFragment {
     }
 
     private List<Recibos> getListProductos() {
-        realm = Realm.getDefaultInstance();
-        RealmQuery<Recibos> query = realm.where(Recibos.class);
-        RealmResults<Recibos> result1 = query.findAll();
+        String clienteId = activity.getClienteIdRecibos();
+
+        Realm realm = Realm.getDefaultInstance();
+        RealmResults<Recibos> result1 = realm.where(Recibos.class).equalTo("customer_id", clienteId).findAll();
+        realm.close();
 
         return result1;
 
