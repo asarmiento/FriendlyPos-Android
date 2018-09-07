@@ -625,7 +625,6 @@ public class VentaDirSeleccionarProductoAdapter  extends RecyclerView.Adapter<Ve
 
                     realm1.close();
 
-                    Toast.makeText(view.getContext(), "You clicked " + ProductoID, Toast.LENGTH_SHORT).show();
                     addProduct(InventarioID, ProductoID, ProductoAmount, description, precio, precio2, precio3, precio4, precio5, bonusProducto);
 
                 }

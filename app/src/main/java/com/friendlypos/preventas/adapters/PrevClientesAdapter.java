@@ -19,11 +19,9 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.friendlypos.R;
 import com.friendlypos.application.util.Functions;
-import com.friendlypos.distribucion.modelo.sale;
 import com.friendlypos.distribucion.util.GPSTracker;
 import com.friendlypos.login.modelo.Usuarios;
 import com.friendlypos.login.util.SessionPrefes;
@@ -33,9 +31,6 @@ import com.friendlypos.preventas.modelo.visit;
 import com.friendlypos.principal.modelo.Clientes;
 import java.util.List;
 import io.realm.Realm;
-
-import static android.R.attr.id;
-import static io.realm.internal.SyncObjectServerFacade.getApplicationContext;
 
 public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapter.CharacterViewHolder> {
 
@@ -119,7 +114,6 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
                 Clientes clickedDataItem = contentList.get(pos);
 
                 idCliente = clickedDataItem.getId();
-                Toast.makeText(QuickContext,"ID CLIENTE" + idCliente, Toast.LENGTH_LONG).show();
                 nombreCliente = clickedDataItem.getName();
                 final int creditoTime = Integer.parseInt(clickedDataItem.getCreditTime());
                 final String creditoLimiteClienteP = clickedDataItem.getCreditLimit();
@@ -239,12 +233,11 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
 
                             actualizarClienteVisitado();
                             dialogInicial.dismiss();
-                            Toast.makeText(QuickContext, "Visitado", Toast.LENGTH_SHORT).show();
                         }
                         else{
                             txtObservaciones.setError("Campo requerido");
                             txtObservaciones.requestFocus();
-                            Toast.makeText(QuickContext, "VisitadoMAL", Toast.LENGTH_SHORT).show();}
+                            }
                     }
                 });
 
@@ -415,7 +408,6 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
 
                     Number numero = realm.where(Numeracion.class).equalTo("sale_type", "2").max("number");
 
-                    Toast.makeText(activity,"num"+ numero, Toast.LENGTH_LONG).show();
                     if (numero == null) {
                         nextId = 1;
                     } else {
@@ -556,10 +548,6 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
             latitude = gps.getLatitude();
             longitude = gps.getLongitude();
 
-           /* messageTextView2.setText("Mi direccion es: \n"
-                    + latitude + "log "  + longitude );
-            // \n is for new line
-            Toast.makeText(getActivity(), "Your Location is - \nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();*/
         }
         else {
             // can't get location

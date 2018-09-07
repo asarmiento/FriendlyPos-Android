@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.friendlypos.R;
 import com.friendlypos.distribucion.modelo.Inventario;
@@ -138,11 +137,8 @@ public class VentaDirResumenAdapter extends RecyclerView.Adapter<VentaDirResumen
 
                     final Pivot clickedDataItem = productosList.get(pos);
 
-                    final int resumenProductoId = clickedDataItem.getId();
                     final double cantidadProducto = Double.parseDouble(clickedDataItem.getAmount());
 
-                    Toast.makeText(view.getContext(), "You clicked " + resumenProductoId + " pos " +
-                            pos , Toast.LENGTH_SHORT).show();
 
                     // TRANSACCIÓN BD PARA SELECCIONAR LOS DATOS DEL INVENTARIO
                     Realm realm3 = Realm.getDefaultInstance();

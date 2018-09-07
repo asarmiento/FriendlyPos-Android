@@ -149,7 +149,7 @@ public class PrevTotalizarFragment extends BaseFragment {
             }
         }
         else {
-            Toast.makeText(getActivity(), "nadaTotalizar", Toast.LENGTH_LONG).show();
+     Log.d("nadaTotalizar", "nadaTotalizar");
         }
         notes = (EditText) rootView.findViewById(R.id.txtNotes);
 
@@ -214,15 +214,14 @@ public class PrevTotalizarFragment extends BaseFragment {
                             sale ventaDetallePreventa = activity.getCurrentVenta();
                             ventaDetallePreventa.getInvoice_id();
                             tipoFacturacionImpr = ventaDetallePreventa.getFacturaDePreventa();
-                            Toast.makeText(getActivity(), tipoFacturacionImpr, Toast.LENGTH_SHORT).show();
 
                             if(tipoFacturacionImpr.equals("Preventa")){
                                 PrinterFunctions.imprimirFacturaPrevTotal(sale_actualizada, getActivity(), 1);
-                                Toast.makeText(getActivity(), "imprimir Totalizar Preventa", Toast.LENGTH_SHORT).show();
+
                             }
                             else if(tipoFacturacionImpr.equals("Proforma")){
                                 PrinterFunctions.imprimirFacturaProformaTotal(sale_actualizada, getActivity(), 1);
-                                Toast.makeText(getActivity(), "imprimir Totalizar Preventa", Toast.LENGTH_SHORT).show();
+
                             }
 
 
@@ -270,7 +269,7 @@ public class PrevTotalizarFragment extends BaseFragment {
             Log.d("FACTURAIDTOTALIZAR", facturaId);
         }
         else {
-            Toast.makeText(getActivity(), "nadaTotalizarupdate", Toast.LENGTH_LONG).show();
+            Log.d("nadaTotalizarupdate",  "nadaTotalizarupdate");
         }
 
     }
@@ -381,11 +380,10 @@ public class PrevTotalizarFragment extends BaseFragment {
                 String nombreEscrito = client_name.getText().toString();
 
                 if (nombreEscrito.matches("")) {
-                    Toast.makeText(getActivity(), "Nombre no cambio", Toast.LENGTH_SHORT).show();
-
+                    Log.d("NombrenoCambio", "Nombre no cambio");
                 }
                 else {
-                    Toast.makeText(getActivity(), "Nombre cambio", Toast.LENGTH_SHORT).show();
+                    Log.d("NombreCambio", "Nombre cambio");
                     sale_actualizada.setCustomer_name(client_name.getText().toString());
                 }
 

@@ -23,7 +23,6 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.friendlypos.R;
 import com.friendlypos.application.util.Functions;
@@ -114,7 +113,6 @@ public class VentaDirClienteAdapter extends RecyclerView.Adapter<VentaDirCliente
                 Clientes clickedDataItem = contentList.get(pos);
 
                 idCliente = clickedDataItem.getId();
-                Toast.makeText(QuickContext,"ID CLIENTE" + idCliente, Toast.LENGTH_LONG).show();
                 nombreCliente = clickedDataItem.getName();
                 final int creditoTime = Integer.parseInt(clickedDataItem.getCreditTime());
                 final String creditoLimiteClienteP = clickedDataItem.getCreditLimit();
@@ -170,12 +168,12 @@ public class VentaDirClienteAdapter extends RecyclerView.Adapter<VentaDirCliente
 
                             actualizarClienteVisitado();
                             dialogInicial.dismiss();
-                            Toast.makeText(QuickContext, "Visitado", Toast.LENGTH_SHORT).show();
                         }
                         else{
                             txtObservaciones.setError("Campo requerido");
                             txtObservaciones.requestFocus();
-                            Toast.makeText(QuickContext, "VisitadoMAL", Toast.LENGTH_SHORT).show();}
+
+                        }
                     }
                 });
 
@@ -419,21 +417,13 @@ public class VentaDirClienteAdapter extends RecyclerView.Adapter<VentaDirCliente
 
         gps = new GPSTracker(activity);
 
-        // check if GPS enabled
         if (gps.canGetLocation()) {
 
             latitude = gps.getLatitude();
             longitude = gps.getLongitude();
-
-           /* messageTextView2.setText("Mi direccion es: \n"
-                    + latitude + "log "  + longitude );
-            // \n is for new line
-            Toast.makeText(getActivity(), "Your Location is - \nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();*/
         }
         else {
-            // can't get location
-            // GPS or Network is not enabled
-            // Ask user to enable GPS/network in settings
+
             gps.showSettingsAlert();
 
 

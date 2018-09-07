@@ -20,8 +20,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.friendlypos.R;
-import com.friendlypos.application.util.Functions;
-import com.friendlypos.distribucion.modelo.Inventario;
 import com.friendlypos.distribucion.modelo.Marcas;
 import com.friendlypos.distribucion.modelo.Pivot;
 import com.friendlypos.distribucion.modelo.TipoProducto;
@@ -35,8 +33,6 @@ import com.friendlypos.preventas.util.TotalizeHelperPreventa;
 import com.friendlypos.principal.modelo.Clientes;
 import com.friendlypos.principal.modelo.Productos;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -330,7 +326,6 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
     }
 
     public void agregar(){
-        Toast.makeText(context,"Add 0 " + session.getDatosBonus() ,Toast.LENGTH_LONG).show();
         final double precioSeleccionado = (double) spPrices.getSelectedItem();
         Log.d("precioSeleccionado", precioSeleccionado + "");
 
@@ -425,7 +420,6 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
 
     public void agregarBonificacion(){
         session.guardarDatosBonus(1);
-        Toast.makeText(context,"Add 1 " + session.getDatosBonus() ,Toast.LENGTH_LONG).show();
         final double precioSeleccionado = (double) spPrices.getSelectedItem();
         Log.d("precioSeleccionado", precioSeleccionado + "");
 
@@ -636,8 +630,7 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
 
                     realm1.close();
 
-                   addProduct(ProductoID, /*ProductoAmount,*/ description, precio, precio2, precio3, precio4, precio5, bonusProducto);
-                    Toast.makeText(context,"Add limpia " + session.getDatosBonus() ,Toast.LENGTH_LONG).show();
+                   addProduct(ProductoID, description, precio, precio2, precio3, precio4, precio5, bonusProducto);
                 }
             });
         }

@@ -153,7 +153,7 @@ public class VentaDirTotalizarFragment extends BaseFragment  {
             }
         }
         else{
-            Toast.makeText(getActivity(),"nadaTotalizar",Toast.LENGTH_LONG).show();
+            Log.d("nadaTotalizar", "nadaTotalizar");
         }
         notes = (EditText) rootView.findViewById(R.id.txtNotes);
 
@@ -223,7 +223,6 @@ public class VentaDirTotalizarFragment extends BaseFragment  {
 
                             if(bluetoothStateChangeReceiver.isBluetoothAvailable()== true) {
                                 PrinterFunctions.imprimirFacturaPrevTotal(sale_actualizada, getActivity(), 3);
-                                Toast.makeText(getActivity(), "imprimir Totalizar Venta Directa", Toast.LENGTH_SHORT).show();
                             }
                             else if(bluetoothStateChangeReceiver.isBluetoothAvailable() == false){
                                 Functions.CreateMessage(getActivity(), "Error", "La conexión del bluetooth ha fallado, favor revisar o conectar el dispositivo");
@@ -268,7 +267,7 @@ public class VentaDirTotalizarFragment extends BaseFragment  {
             Log.d("FACTURAIDTOTALIZAR", facturaId);
         }
         else{
-            Toast.makeText(getActivity(),"nadaTotalizarupdate",Toast.LENGTH_LONG).show();
+            Log.d("nadaTotalizarupdate", "nadaTotalizarupdate");
         }
 
     }
@@ -277,20 +276,13 @@ public class VentaDirTotalizarFragment extends BaseFragment  {
 
         gps = new GPSTracker(getActivity());
 
-        // check if GPS enabled
         if(gps.canGetLocation()){
 
             latitude = gps.getLatitude();
             longitude = gps.getLongitude();
 
-           /* messageTextView2.setText("Mi direccion es: \n"
-                    + latitude + "log "  + longitude );
-            // \n is for new line
-            Toast.makeText(getActivity(), "Your Location is - \nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();*/
         }else{
-            // can't get location
-            // GPS or Network is not enabled
-            // Ask user to enable GPS/network in settings
+
             gps.showSettingsAlert();
 
 
@@ -381,10 +373,9 @@ public class VentaDirTotalizarFragment extends BaseFragment  {
                 String nombreEscrito = client_name.getText().toString();
 
                 if (nombreEscrito.matches("")) {
-                    Toast.makeText(getActivity(), "Nombre no cambio", Toast.LENGTH_SHORT).show();
-
+                    Log.d("nombreCam",  "Nombre no cambio");
                 }else{
-                    Toast.makeText(getActivity(), "Nombre cambio", Toast.LENGTH_SHORT).show();
+                    Log.d("nombreCam",  "Nombre cambio");
                     sale_actualizada.setCustomer_name(client_name.getText().toString());
                 }
 
