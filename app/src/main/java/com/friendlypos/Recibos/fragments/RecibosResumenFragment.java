@@ -110,7 +110,7 @@ public class RecibosResumenFragment extends BaseFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        realm.close();
+       // realm.close();
     }
 
     @Override

@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +24,11 @@ import com.friendlypos.distribucion.fragment.BaseFragment;
 import com.friendlypos.distribucion.fragment.DistSelecProductoFragment;
 import com.friendlypos.distribucion.modelo.sale;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -71,13 +76,13 @@ public class RecibosClientesFragment extends BaseFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if(adapter == null) {
-            adapter = new RecibosClientesAdapter(getContext(), ((RecibosActivity) getActivity()), getListClientes());
+            adapter = new RecibosClientesAdapter(getContext(), ((RecibosActivity) getActivity()),  removeDuplicates(getListClientes()));
 
-         //   adapter2 = new DistrResumenAdapter();
         }
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);
+
     }
 
     private List<Recibos> getListClientes(){
@@ -90,6 +95,26 @@ public class RecibosClientesFragment extends BaseFragment {
         return result1;
     }
 
+
+
+    public ArrayList<Recibos> removeDuplicates(List<Recibos> list){
+        Set set = new TreeSet(new Comparator() {
+
+            @Override
+            public int compare(Object o1, Object o2) {
+                if(((Recibos)o1).getCustomer_id().equalsIgnoreCase(((Recibos)o2).getCustomer_id())){
+                    return 0;
+                }
+                return 1;
+            }
+        });
+        set.addAll(list);
+
+        final ArrayList newList = new ArrayList(set);
+        Log.d("dupli", newList + "");
+        return newList;
+
+    }
 
     @Override
     public void onDestroyView() {
