@@ -214,6 +214,7 @@ public class PrevTotalizarFragment extends BaseFragment {
                             sale ventaDetallePreventa = activity.getCurrentVenta();
                             ventaDetallePreventa.getInvoice_id();
                             tipoFacturacionImpr = ventaDetallePreventa.getFacturaDePreventa();
+                            Toast.makeText(getActivity(), tipoFacturacionImpr, Toast.LENGTH_SHORT).show();
 
                             if(tipoFacturacionImpr.equals("Preventa")){
                                 PrinterFunctions.imprimirFacturaPrevTotal(sale_actualizada, getActivity(), 1);

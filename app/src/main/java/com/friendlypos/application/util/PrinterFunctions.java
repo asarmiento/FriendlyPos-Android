@@ -555,6 +555,7 @@ public class PrinterFunctions {
             intent2.putExtra(PrinterService.BROADCAST_CLASS + "TO_PRINT", "true");
             intent2.putExtra("bill_to_print", bill);
             QuickContext.sendBroadcast(intent2);
+            Log.d("imprimeZebra", bill);
         }
         else if(prefList.equals("2")){
             switch (metodoPago) {
@@ -626,6 +627,7 @@ public class PrinterFunctions {
             intent2.putExtra(PrinterService.BROADCAST_CLASS + "TO_PRINT", "true");
             intent2.putExtra("bill_to_print", preview);
             QuickContext.sendBroadcast(intent2);
+            Log.d("imprime", preview);
         }
         totalGrabado_= "";
         totalExento_= "";
@@ -755,6 +757,7 @@ public class PrinterFunctions {
             intent2.putExtra(PrinterService.BROADCAST_CLASS + "TO_PRINT", "true");
             intent2.putExtra("bill_to_print", bill);
             QuickContext.sendBroadcast(intent2);
+            Log.d("imprimeZebraProf", bill);
         }
         else if(prefList.equals("2")){
             switch (metodoPago) {
@@ -817,6 +820,7 @@ public class PrinterFunctions {
             intent2.putExtra(PrinterService.BROADCAST_CLASS + "TO_PRINT", "true");
             intent2.putExtra("bill_to_print", preview);
             QuickContext.sendBroadcast(intent2);
+            Log.d("imprimeProf", preview);
         }
         totalGrabado_= "";
         totalExento_= "";
