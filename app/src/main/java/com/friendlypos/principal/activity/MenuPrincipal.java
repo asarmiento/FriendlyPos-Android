@@ -359,6 +359,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                 }else{
                     Toast.makeText(MenuPrincipal.this, "Ya los datos están descargados", Toast.LENGTH_LONG).show();
                 }
+                break;
 
             case btn_descargar_recibos:
                 cambioDatosEmpresa = session.getPrefDescargaDatos();
