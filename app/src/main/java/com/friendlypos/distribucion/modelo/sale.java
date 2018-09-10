@@ -172,6 +172,7 @@ public class sale extends RealmObject {
                 ", reserved='" + reserved + '\'' +
                 ", aplicada=" + aplicada +
                 ", subida=" + subida +
+                ", clientes=" + clientes +
                 ", facturaDePreventa=" + facturaDePreventa +
                 '}';
     }

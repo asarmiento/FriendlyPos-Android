@@ -82,19 +82,12 @@ public class DistSelecClienteFragment extends BaseFragment  implements SearchVie
         realm = Realm.getDefaultInstance();
         RealmQuery<sale> query = realm.where(sale.class).equalTo("aplicada", 0);
         RealmResults<sale> result1 = query.findAll();
-        if(result1.size() == 0){
-            Toast.makeText(getApplicationContext(),"Favor descargar datos primero",Toast.LENGTH_LONG).show();
-        }
-        return result1;
-    }
 
-    private List<Clientes> getList(){
-        realm = Realm.getDefaultInstance();
-        RealmQuery<Clientes> query = realm.where(Clientes.class);
-        RealmResults<Clientes> result1 = query.findAll();
         if(result1.size() == 0){
             Toast.makeText(getApplicationContext(),"Favor descargar datos primero",Toast.LENGTH_LONG).show();
         }
+
+        Log.d("SALE", result1+"");
         return result1;
     }
 
@@ -122,7 +115,7 @@ public class DistSelecClienteFragment extends BaseFragment  implements SearchVie
                     @Override
                     public boolean onMenuItemActionCollapse(MenuItem item) {
                         // Do something when collapsed
-                        adapter.setFilter(getList());
+                        adapter.setFilter(getListClientes());
                         return true; // Return true to collapse action view
                     }
 
@@ -136,7 +129,7 @@ public class DistSelecClienteFragment extends BaseFragment  implements SearchVie
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        final List<Clientes> filteredModelList = filter(getList(), newText);
+        final List<sale> filteredModelList = filter(getListClientes(), newText);
         adapter.setFilter(filteredModelList);
         return true;
     }
@@ -147,12 +140,12 @@ public class DistSelecClienteFragment extends BaseFragment  implements SearchVie
     }
 
 
-    private List<Clientes> filter(List<Clientes> models, String query) {
+    private List<sale> filter(List<sale> models, String query) {
         query = query.toLowerCase();
 
-        final List<Clientes> filteredModelList = new ArrayList<>();
-        for (Clientes model : models) {
-            final String text = model.getFantasyName().toLowerCase();
+        final List<sale> filteredModelList = new ArrayList<>();
+        for (sale model : models) {
+            final String text = model.clientes.getFantasyName().toLowerCase();
             Log.d("FiltroPreventa", text);
             if (text.contains(query)) {
                 filteredModelList.add(model);

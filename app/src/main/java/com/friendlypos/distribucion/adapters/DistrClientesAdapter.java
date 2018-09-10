@@ -88,6 +88,7 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
         String numeracionFactura = invoice.getNumeration();
         String nombreVenta = sale.getCustomer_name();
 
+
         final double longitud = invoice.getLongitud();
         final double latitud = invoice.getLatitud();
 
@@ -496,9 +497,9 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
         super.onAttachedToRecyclerView(recyclerView);
     }
 
-    public void setFilter(List<Clientes> countryModels){
-        clientesList = new ArrayList<>();
-        clientesList.addAll(countryModels);
+    public void setFilter(List<sale> countryModels){
+        contentList = new ArrayList<>();
+        contentList.addAll(countryModels);
         notifyDataSetChanged();
     }
 
