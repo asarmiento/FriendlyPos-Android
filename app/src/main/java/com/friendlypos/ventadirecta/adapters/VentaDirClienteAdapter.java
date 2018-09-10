@@ -124,7 +124,7 @@ public class VentaDirClienteAdapter extends RecyclerView.Adapter<VentaDirCliente
 
                 final Dialog dialogInicial = new Dialog(QuickContext);
                 dialogInicial.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                dialogInicial.setContentView(R.layout.promptvisitado_preventa);
+                dialogInicial.setContentView(R.layout.promptvisitado_ventadirecta);
 
                 dialogInicial.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
                 rbcomprado = (RadioButton) dialogInicial.findViewById(R.id.compradoBillVisitado);

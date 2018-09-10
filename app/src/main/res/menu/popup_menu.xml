@@ -4,7 +4,9 @@
     <item
         android:id="@+id/btn_descargar_datosempresa"
         android:icon="@mipmap/ic_config"
-        android:title="Desc. Info. Empresa"/>
+        android:title="Desc. Info. Empresa"
+        app:itemTextAppearance="@style/menu_text_style"
+        />
     <item
         android:id="@+id/btn_descargar_catalogo"
         android:icon="@mipmap/ic_config"
@@ -23,7 +25,8 @@
     <item
         android:id="@+id/btn_imprimir_liquidacion"
         android:icon="@mipmap/ic_config"
-        android:title="Imprimir Liquidación" />
+        android:title="Imprimir Liquidación"
+        />
 
     <item
         android:id="@+id/btn_imprimir_orden_carga"

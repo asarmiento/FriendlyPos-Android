@@ -139,6 +139,14 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
                 final Button btnCancelProforma = (Button) dialogInicial1.findViewById(R.id.btnCancelProforma);
                 dialogInicial1.show();
 
+                dialogInicial.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+                rbcomprado = (RadioButton) dialogInicial.findViewById(R.id.compradoBillVisitado);
+                rbvisitado = (RadioButton) dialogInicial.findViewById(R.id.visitadoBillVisitado);
+                final Button btnOkVisitado = (Button) dialogInicial.findViewById(R.id.btnOKV);
+                final Button btnOkComprado = (Button) dialogInicial.findViewById(R.id.btnOKC);
+                final Button btnCancel = (Button) dialogInicial.findViewById(R.id.btnCancel);
+                txtObservaciones = (EditText) dialogInicial.findViewById(R.id.txtObservaciones);
+
                 RadioGroup yourRadioGroup2 = (RadioGroup) dialogInicial1.findViewById(R.id.rgTipo);
                 yourRadioGroup2.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
                 {
@@ -166,7 +174,9 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
 
                         tipoFacturacion = "Proforma";
                         dialogInicial1.dismiss();
+                        rbcomprado.setText("Generar Proforma");
                         dialogInicial.show();
+
 
                     }
                 });
@@ -177,6 +187,7 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
 
                         tipoFacturacion = "Preventa";
                         dialogInicial1.dismiss();
+                        rbcomprado.setText("Generar Pedido");
                         dialogInicial.show();
 
                     }
@@ -193,13 +204,7 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
 
 
 
-                dialogInicial.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
-                rbcomprado = (RadioButton) dialogInicial.findViewById(R.id.compradoBillVisitado);
-                rbvisitado = (RadioButton) dialogInicial.findViewById(R.id.visitadoBillVisitado);
-                final Button btnOkVisitado = (Button) dialogInicial.findViewById(R.id.btnOKV);
-                final Button btnOkComprado = (Button) dialogInicial.findViewById(R.id.btnOKC);
-                final Button btnCancel = (Button) dialogInicial.findViewById(R.id.btnCancel);
-                txtObservaciones = (EditText) dialogInicial.findViewById(R.id.txtObservaciones);
+
 
 
                 RadioGroup yourRadioGroup = (RadioGroup) dialogInicial.findViewById(R.id.rgTipoVisitado);
