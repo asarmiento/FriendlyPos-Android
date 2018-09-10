@@ -444,8 +444,11 @@ public class PrinterFunctions {
         RealmResults<Pivot> result = realm.where(Pivot.class).equalTo("invoice_id", sale.getInvoice_id()).findAll();
         Log.d("FACTPRODTOD", result + "");
         String fechayhora = sale.getUpdated_at();
-
+        String nombreCliente = sale.getCustomer_name();
         double descuentoCliente = Double.parseDouble(clientes.getFixedDiscount());
+
+        String companyCliente = clientes.getCompanyName();
+        String fantasyCliente = clientes.getFantasyName();
 
         String numeracionFactura = invoice.getNumeration();
         String metodoPago = invoice.getPayment_method_id();
@@ -478,11 +481,9 @@ public class PrinterFunctions {
                 + "bancarias de " + ", Por lo cual la factura original le sera entregada una vez confirme dicha acreditacion ";
 
         if (ptype == 1) {
-            billptype = "P e d i d o";
-        } else if (ptype == 2) {
-            billptype = "P r o f o r m a";
+            billptype = "Orden de Pedido";
         } else if (ptype == 3) {
-            billptype = "F a c t u r a";
+            billptype = "Comprobante Provisional";
         }
 
         if (type == 1) {
@@ -507,7 +508,11 @@ public class PrinterFunctions {
                     "! U1 SETLP 5 0 24\r\n" +
                     "Fecha y hora: " + fechayhora + "\r\n" +
                     "Vendedor:  " + nombreUsuario + "\r\n" +
-
+                    "\r\n" +
+                    "! U1 LMARGIN 50\r\n" +
+                    "Razon Social: " + companyCliente + "\r\n" +
+                    ((!nombreCliente.isEmpty()) ? "A nombre de: " + nombreCliente + "\r\n" : "") +
+                    "Nombre fantasia: " + fantasyCliente + "\r\n" +
                     "! U1 LMARGIN 0\r\n" +
                     "! U1 SETSP 0\r\n" +
                     "Descripcion           Codigo\r\n" +
@@ -542,6 +547,14 @@ public class PrinterFunctions {
                             "Firma y Cedula __________________________" + "\r\n"
                                     + "! U1 SETLP 0 0 6\r\n" + "\r\n\n" + condition + "\r\n" : "\r\n"
                     ) + "\r\n" +
+                    "\r\n\n" +
+                    ((ptype == 3) ?
+                            "\r\n\n" + "Este comprobante no puede ser utilizado para fines\r\n" +
+                                    "tributarios, por lo cual no se permitirá" + "\r\n" +
+                                    "su uso para respaldo de créditos o gastos" + "\r\n" + "\r\n"
+                                   : "\r\n"
+                    ) + "\r\n" +
+
                     "! U1 SETLP 5 0 14\r\n" +
                     "\r\n" + String.format("Factura %s", stype) + "\r\n\n" +
                     "\r\n\n" + "Muchas Gracias por preferirnos, un placer atenderlo\r\n" +
@@ -566,7 +579,10 @@ public class PrinterFunctions {
                     preview += Html.fromHtml("<h1>") + "N# Factura: " + numeracionFactura + Html.fromHtml("</h1><br/>");
                     preview += Html.fromHtml("<h1>") + sysNombreNegocio + Html.fromHtml("</h1><br/>");
                     preview += Html.fromHtml("<h1>") +  "Fecha y hora: " + fechayhora + Html.fromHtml("</h1><br/>");
-                    preview += Html.fromHtml("<h1>") +  "Vendedor:  " + nombreUsuario + Html.fromHtml("</h1></center><br/><br/>");
+                    preview += Html.fromHtml("<h1>") +  "Vendedor:  " + nombreUsuario + Html.fromHtml("</h1></center><br/>");
+                    preview += Html.fromHtml("<h1>") + "Razon Social: " + companyCliente + Html.fromHtml("</h1><br/>");
+                    preview += Html.fromHtml("<h1>") + "A nombre de: " + nombreCliente + Html.fromHtml("</h1><br/>");
+                    preview += Html.fromHtml("<h1>") +  "Nombre fantasia: " + fantasyCliente + Html.fromHtml("</h1><br/><br/>");
 
                     preview += Html.fromHtml("<h1>") +  "Descripcion           Codigo" + Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>") +   "Cantidad      Precio       P.Sug       Total" + Html.fromHtml("</h1></center><br/>");
@@ -596,7 +612,10 @@ public class PrinterFunctions {
                     preview += Html.fromHtml("<h1>") + "N# Factura: " + numeracionFactura + Html.fromHtml("</h1><br/>");
                     preview += Html.fromHtml("<h1>") + sysNombreNegocio + Html.fromHtml("</h1><br/>");
                     preview += Html.fromHtml("<h1>") +  "Fecha y hora: " + fechayhora + Html.fromHtml("</h1><br/>");
-                    preview += Html.fromHtml("<h1>") +  "Vendedor:  " + nombreUsuario + Html.fromHtml("</h1></center><br/><br/>");
+                    preview += Html.fromHtml("<h1>") +  "Vendedor:  " + nombreUsuario + Html.fromHtml("</h1></center><br/>");
+                    preview += Html.fromHtml("<h1>") + "Razon Social: " + companyCliente + Html.fromHtml("</h1><br/>");
+                    preview += Html.fromHtml("<h1>") + "A nombre de: " + nombreCliente + Html.fromHtml("</h1><br/>");
+                    preview += Html.fromHtml("<h1>") +  "Nombre fantasia: " + fantasyCliente + Html.fromHtml("</h1><br/><br/>");
 
 
                     preview += Html.fromHtml("<h1>") +  "#  Descripcion      Codigo" + Html.fromHtml("</h1></center><br/>");
@@ -615,6 +634,7 @@ public class PrinterFunctions {
                     preview += Html.fromHtml("<h1>") +  "Notas: " + totalNotas_ + Html.fromHtml("</h1></center><br/><br/>");
                     preview += Html.fromHtml("<h1>") +  "Recibo conforme ____________________________" + Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>") +  "Cedula ____________________________" +  Html.fromHtml("</h1></center><br/>");
+
                     preview += Html.fromHtml("<h1>") +  condition +  Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>")   + String.format("Factura %s", stype) +  Html.fromHtml("</h1></center><br/><br/>");
                     preview += Html.fromHtml("<h1>")   + "Muchas gracias por preferirnos un placer atenderlo" +  Html.fromHtml("</h1></center><br/>");
@@ -653,8 +673,10 @@ public class PrinterFunctions {
         Log.d("FACTPRODTOD", result + "");
         String fechayhora = sale.getUpdated_at();
         String nombreCliente = sale.getCustomer_name();
-
         double descuentoCliente = Double.parseDouble(clientes.getFixedDiscount());
+
+        String companyCliente = clientes.getCompanyName();
+        String fantasyCliente = clientes.getFantasyName();
 
         String numeracionFactura = invoice.getNumeration();
         String metodoPago = invoice.getPayment_method_id();
@@ -709,7 +731,9 @@ public class PrinterFunctions {
                     "! U1 LMARGIN 185\r\n" +
                     "! U1 SETLP 7 0 14\r\n" + "\r\n" +
                     "Cliente: " + nombreCliente + "\r\n" +
-
+                    "Razon Social: " + companyCliente + "\r\n" +
+                    ((!nombreCliente.isEmpty()) ? "A nombre de: " + nombreCliente + "\r\n" : "") +
+                    "Nombre fantasia: " + fantasyCliente + "\r\n" +
                     "! U1 LMARGIN 0\r\n" +
                     "! U1 SETSP 0\r\n" +
                     "Descripcion           Codigo\r\n" +
@@ -763,8 +787,9 @@ public class PrinterFunctions {
             switch (metodoPago) {
                 case "1":
 
-                    preview += Html.fromHtml("<h1>") +  "Cliente:  " + nombreCliente + Html.fromHtml("</h1></center><br/><br/><br/>");
-
+                    preview += Html.fromHtml("<h1>") + "Razon Social: " + companyCliente + Html.fromHtml("</h1><br/>");
+                    preview += Html.fromHtml("<h1>") + "A nombre de: " + nombreCliente + Html.fromHtml("</h1><br/>");
+                    preview += Html.fromHtml("<h1>") +  "Nombre fantasia: " + fantasyCliente + Html.fromHtml("</h1><br/><br/>");
 
                     preview += Html.fromHtml("<h1>") +  "Descripcion           Codigo" + Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>") +   "Cantidad      Precio       P.Sug       Total" + Html.fromHtml("</h1></center><br/>");
@@ -789,7 +814,9 @@ public class PrinterFunctions {
                     preview += Html.fromHtml("<h1>")   + "N : 11-1997 de la D.G.T.D" +  Html.fromHtml("</h1></center><br/>");
                     break;
                 case "2":
-                    preview += Html.fromHtml("<h1>") +  "Cliente:  " + nombreCliente + Html.fromHtml("</h1></center><br/><br/><br/>");
+                    preview += Html.fromHtml("<h1>") + "Razon Social: " + companyCliente + Html.fromHtml("</h1><br/>");
+                    preview += Html.fromHtml("<h1>") + "A nombre de: " + nombreCliente + Html.fromHtml("</h1><br/>");
+                    preview += Html.fromHtml("<h1>") +  "Nombre fantasia: " + fantasyCliente + Html.fromHtml("</h1><br/><br/>");
 
 
                     preview += Html.fromHtml("<h1>") +  "#  Descripcion      Codigo" + Html.fromHtml("</h1></center><br/>");
@@ -1492,7 +1519,7 @@ public class PrinterFunctions {
         String currentDateandTime = sdf.format(new Date());
 
         Realm realm = Realm.getDefaultInstance();
-        RealmResults<invoice> result = realm.where(invoice.class).equalTo("date", currentDateandTime).equalTo("facturaDePreventa", 1).findAll();
+        RealmResults<invoice> result = realm.where(invoice.class).equalTo("date", currentDateandTime).equalTo("facturaDePreventa", "Distribucion").findAll();
 
         if (result.isEmpty()) {
             send = "No hay facturas emitidas";
@@ -1500,7 +1527,7 @@ public class PrinterFunctions {
             printSalesCashTotal= 0.0;
             for (int i = 0; i < result.size(); i++) {
 
-                List<invoice> salesList1 = realm.where(invoice.class).equalTo("date", currentDateandTime).equalTo("facturaDePreventa", 1).findAll();
+                List<invoice> salesList1 = realm.where(invoice.class).equalTo("date", currentDateandTime).equalTo("facturaDePreventa", "Distribucion").findAll();
                 String idFactura = salesList1.get(i).getId();
 
                 RealmResults<Pivot> resultPivot = realm.where(Pivot.class).equalTo("invoice_id", idFactura).findAll();

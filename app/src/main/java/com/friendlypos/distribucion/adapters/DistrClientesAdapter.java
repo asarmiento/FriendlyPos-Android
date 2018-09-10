@@ -32,6 +32,7 @@ import com.friendlypos.distribucion.modelo.Pivot;
 import com.friendlypos.distribucion.modelo.sale;
 import com.friendlypos.principal.modelo.Clientes;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
@@ -41,6 +42,7 @@ import static java.lang.String.valueOf;
 
 public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdapter.CharacterViewHolder> {
 
+    public List<Clientes> clientesList;
     public List<sale> contentList;
     private DistribucionActivity activity;
     //private boolean isSelected = false;
@@ -60,6 +62,7 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
         this.contentList = contentList;
         this.activity = activity;
         this.QuickContext = context;
+
     }
 
     @Override
@@ -492,4 +495,11 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
     }
+
+    public void setFilter(List<Clientes> countryModels){
+        clientesList = new ArrayList<>();
+        clientesList.addAll(countryModels);
+        notifyDataSetChanged();
+    }
+
 }

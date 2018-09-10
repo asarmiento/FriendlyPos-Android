@@ -34,6 +34,7 @@ import com.friendlypos.preventas.modelo.visit;
 import com.friendlypos.principal.modelo.Clientes;
 import com.friendlypos.ventadirecta.activity.VentaDirectaActivity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
@@ -326,6 +327,13 @@ public class VentaDirClienteAdapter extends RecyclerView.Adapter<VentaDirCliente
             holder.cardView.setBackgroundColor(Color.parseColor("#009688"));
         }
 
+    }
+
+    public void setFilter(List<Clientes> countryModels){
+
+        contentList = new ArrayList<>();
+        contentList.addAll(countryModels);
+        notifyDataSetChanged();
     }
 
     public void agregar(){

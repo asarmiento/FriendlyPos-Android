@@ -29,6 +29,9 @@ import com.friendlypos.preventas.activity.PreventaActivity;
 import com.friendlypos.preventas.modelo.Numeracion;
 import com.friendlypos.preventas.modelo.visit;
 import com.friendlypos.principal.modelo.Clientes;
+import com.friendlypos.principal.modelo.Productos;
+
+import java.util.ArrayList;
 import java.util.List;
 import io.realm.Realm;
 
@@ -387,6 +390,13 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
 
     public void updateData() {
 
+    }
+
+    public void setFilter(List<Clientes> countryModels){
+
+        contentList = new ArrayList<>();
+        contentList.addAll(countryModels);
+        notifyDataSetChanged();
     }
 
     public void agregar(){

@@ -2,9 +2,15 @@ package com.friendlypos.ventadirecta.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -17,6 +23,7 @@ import com.friendlypos.principal.modelo.Clientes;
 import com.friendlypos.ventadirecta.activity.VentaDirectaActivity;
 import com.friendlypos.ventadirecta.adapters.VentaDirClienteAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -31,7 +38,7 @@ import static io.realm.internal.SyncObjectServerFacade.getApplicationContext;
  * Created by DelvoM on 13/08/2018.
  */
 
-public class VentaDirSelecClienteFragment extends BaseFragment {
+public class VentaDirSelecClienteFragment extends BaseFragment implements SearchView.OnQueryTextListener {
     private Realm realm;
 
     @Bind(R.id.recyclerViewVentaDirectaCliente)
@@ -53,6 +60,7 @@ public class VentaDirSelecClienteFragment extends BaseFragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_ventadir_cliente, container,
                 false);
+        setHasOptionsMenu(true);
         ButterKnife.bind(this, rootView);
         return rootView;
     }
@@ -87,5 +95,56 @@ public class VentaDirSelecClienteFragment extends BaseFragment {
 
     @Override
     public void updateData() {
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_main, menu);
+
+        final MenuItem item = menu.findItem(R.id.action_search);
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
+        searchView.setOnQueryTextListener(this);
+
+        MenuItemCompat.setOnActionExpandListener(item,
+                new MenuItemCompat.OnActionExpandListener() {
+                    @Override
+                    public boolean onMenuItemActionCollapse(MenuItem item) {
+                        // Do something when collapsed
+                        adapter.setFilter(getList());
+                        return true; // Return true to collapse action view
+                    }
+
+                    @Override
+                    public boolean onMenuItemActionExpand(MenuItem item) {
+                        // Do something when expanded
+                        return true; // Return true to expand action view
+                    }
+                });
+    }
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        final List<Clientes> filteredModelList = filter(getList(), newText);
+        adapter.setFilter(filteredModelList);
+        return true;
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+
+    private List<Clientes> filter(List<Clientes> models, String query) {
+        query = query.toLowerCase();
+
+        final List<Clientes> filteredModelList = new ArrayList<>();
+        for (Clientes model : models) {
+            final String text = model.getFantasyName().toLowerCase();
+            Log.d("FiltroPreventa", text);
+            if (text.contains(query)) {
+                filteredModelList.add(model);
+            }
+        }
+        return filteredModelList;
     }
 }

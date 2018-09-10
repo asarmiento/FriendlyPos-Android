@@ -23,7 +23,7 @@
         android:id="@+id/recyclerViewPrevSeleccProducto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/etSearchBox"
-        android:layout_toEndOf="@+id/restCreditPreventa" />
+        android:layout_below="@+id/restCreditPreventa"
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>
