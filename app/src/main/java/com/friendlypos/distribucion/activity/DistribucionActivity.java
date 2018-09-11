@@ -263,6 +263,9 @@ public class DistribucionActivity extends BluetoothActivity {
 
                         sale query3 = realm4.where(sale.class).equalTo("customer_id", idCliente).findFirst();
 
+                        if(query3.getNombreCliente().isEmpty()){
+                            query3.setNombreCliente("Nada");
+                        }
                         query3.setNombreCliente(fantasyCliente);
                         realm4.insertOrUpdate(query3);
                         Log.d("invProdNombre", query3.getNombreCliente());
