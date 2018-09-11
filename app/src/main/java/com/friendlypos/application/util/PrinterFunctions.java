@@ -498,7 +498,6 @@ public class PrinterFunctions {
                     "! U1 SETLP 0 0 0\r\n" +
                     "\r\n" +
                     "! U1 SETLP 5 3 70\r\n" +
-                    "! U1 LMARGIN 185\r\n" +
                     String.format("%s", billptype) + "\r\n" +
                     "! U1 LMARGIN 150\r\n" +
                     "! U1 SETLP 7 0 14\r\n" + "\r\n" +
@@ -508,13 +507,12 @@ public class PrinterFunctions {
                     "! U1 SETLP 5 0 24\r\n" +
                     "Fecha y hora: " + fechayhora + "\r\n" +
                     "Vendedor:  " + nombreUsuario + "\r\n" +
-                    "\r\n" +
-                    "! U1 LMARGIN 50\r\n" +
                     "Razon Social: " + companyCliente + "\r\n" +
                     ((!nombreCliente.isEmpty()) ? "A nombre de: " + nombreCliente + "\r\n" : "") +
                     "Nombre fantasia: " + fantasyCliente + "\r\n" +
                     "! U1 LMARGIN 0\r\n" +
                     "! U1 SETSP 0\r\n" +
+                    "\r\n" +
                     "Descripcion           Codigo\r\n" +
                     "Cantidad      Precio       P.Sug       Total\r\n" +
                     "Tipo     \r\n" +
@@ -727,9 +725,6 @@ public class PrinterFunctions {
             String bill = "! U1 JOURNAl\r\n" +
                     "! U1 SETLP 0 0 0\r\n" +
                     "\r\n" +
-                    "! U1 SETLP 5 3 70\r\n" +
-                    "! U1 LMARGIN 185\r\n" +
-                    "! U1 SETLP 7 0 14\r\n" + "\r\n" +
                     "Cliente: " + nombreCliente + "\r\n" +
                     "Razon Social: " + companyCliente + "\r\n" +
                     ((!nombreCliente.isEmpty()) ? "A nombre de: " + nombreCliente + "\r\n" : "") +
