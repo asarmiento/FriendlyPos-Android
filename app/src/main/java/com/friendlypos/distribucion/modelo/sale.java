@@ -39,6 +39,7 @@ public class sale extends RealmObject {
     String reserved;
     public Clientes clientes;
     public invoice invoice;
+    String nombreCliente;
 
     private int aplicada = 0;
     private int subida = 0;
@@ -152,9 +153,19 @@ public class sale extends RealmObject {
         return facturaDePreventa;
     }
 
+    public String getNombreCliente() {
+        return nombreCliente;
+    }
+
+    public void setNombreCliente(String nombreCliente) {
+        this.nombreCliente = nombreCliente;
+    }
+
     public void setFacturaDePreventa(String facturaDePreventa) {
         this.facturaDePreventa = facturaDePreventa;
     }
+
+
 
     @Override
     public String toString() {

@@ -145,7 +145,7 @@ public class DistSelecClienteFragment extends BaseFragment  implements SearchVie
 
         final List<sale> filteredModelList = new ArrayList<>();
         for (sale model : models) {
-            final String text = model.clientes.getFantasyName().toLowerCase();
+            final String text = model.getNombreCliente().toLowerCase();
             Log.d("FiltroPreventa", text);
             if (text.contains(query)) {
                 filteredModelList.add(model);

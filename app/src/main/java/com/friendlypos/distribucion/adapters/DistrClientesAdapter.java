@@ -84,15 +84,37 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
 
         final String cardCliente = clientes.getCard();
         String companyCliente = clientes.getCompanyName();
-        String fantasyCliente = clientes.getFantasyName();
+        final String fantasyCliente = clientes.getFantasyName();
         String numeracionFactura = invoice.getNumeration();
         String nombreVenta = sale.getCustomer_name();
 
 
         final double longitud = invoice.getLongitud();
         final double latitud = invoice.getLatitud();
+        realm.close();
+
+        final Realm realm3 = Realm.getDefaultInstance();
+
+        try {
+            realm3.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm3) {
+
+                    sale.setNombreCliente(fantasyCliente);
+                    realm3.copyToRealmOrUpdate(sale);
+
+                    Log.d("invProdNombre", sale.getNombreCliente());
+                }
 
 
+            });
+
+        } catch (Exception e) {
+            Log.e("error", "error", e);
+            Toast.makeText(QuickContext, "error", Toast.LENGTH_SHORT).show();
+
+
+        }
 
         holder.txt_cliente_factura_card.setText(cardCliente);
         if (fantasyCliente.equals("Cliente Generico")){
