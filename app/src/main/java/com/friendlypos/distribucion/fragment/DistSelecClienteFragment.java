@@ -19,6 +19,7 @@ import com.friendlypos.R;
 import com.friendlypos.distribucion.activity.DistribucionActivity;
 import com.friendlypos.distribucion.adapters.DistrClientesAdapter;
 import com.friendlypos.distribucion.adapters.DistrResumenAdapter;
+import com.friendlypos.distribucion.modelo.Inventario;
 import com.friendlypos.distribucion.modelo.sale;
 import com.friendlypos.principal.modelo.Clientes;
 
@@ -42,6 +43,11 @@ public class DistSelecClienteFragment extends BaseFragment  implements SearchVie
 
     private DistrClientesAdapter adapter;
     private DistrResumenAdapter adapter2;
+    int i;
+    String fantasyCliente;
+    String idCliente;
+
+
 
     public static DistSelecProductoFragment getInstance() {
         return new DistSelecProductoFragment();
@@ -80,13 +86,61 @@ public class DistSelecClienteFragment extends BaseFragment  implements SearchVie
 
     private List<sale> getListClientes(){
         realm = Realm.getDefaultInstance();
-        RealmQuery<sale> query = realm.where(sale.class).equalTo("aplicada", 0);
-        RealmResults<sale> result1 = query.findAll();
+        final RealmQuery<sale> query = realm.where(sale.class).equalTo("aplicada", 0);
+        final RealmResults<sale> result1 = query.findAll();
 
         if(result1.size() == 0){
             Toast.makeText(getApplicationContext(),"Favor descargar datos primero",Toast.LENGTH_LONG).show();
         }
 
+
+        for(i=0; i< result1.size();i++){
+
+          final Realm realm3 = Realm.getDefaultInstance();
+
+            try {
+                realm3.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm3) {
+
+                        Clientes query2 = realm3.where(Clientes.class).equalTo("id", result1.get(i).getCustomer_id()).findFirst();
+                        fantasyCliente = query2.getFantasyName();
+                        idCliente = query2.getId();
+                        Log.e("fantasyCliente", fantasyCliente);
+
+                    }
+
+
+                });
+
+            } catch (Exception e) {
+                Log.e("error", "error", e);
+                //Toast.makeText(, "error", Toast.LENGTH_SHORT).show();
+            }
+
+            final Realm realm4 = Realm.getDefaultInstance();
+
+            try {
+                realm4.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm3) {
+
+                        sale query3 = realm4.where(sale.class).equalTo("customer_id", idCliente).findFirst();
+
+                        query3.setNombreCliente(fantasyCliente);
+                        realm4.copyToRealmOrUpdate(query3);
+                        Log.d("invProdNombre", query3.getNombreCliente());
+                    }
+
+
+                });
+
+            } catch (Exception e) {
+                Log.e("error", "error", e);
+               // Toast.makeText(QuickContext, "error", Toast.LENGTH_SHORT).show();
+            }
+
+        }
         Log.d("SALE", result1+"");
         return result1;
     }
@@ -95,7 +149,7 @@ public class DistSelecClienteFragment extends BaseFragment  implements SearchVie
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        realm.close();
+       // realm.close();
     }
 
     @Override

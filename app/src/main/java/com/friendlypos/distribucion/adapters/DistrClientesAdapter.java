@@ -102,7 +102,6 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
 
                     sale.setNombreCliente(fantasyCliente);
                     realm3.copyToRealmOrUpdate(sale);
-
                     Log.d("invProdNombre", sale.getNombreCliente());
                 }
 
