@@ -20,6 +20,7 @@ import com.friendlypos.distribucion.activity.DistribucionActivity;
 import com.friendlypos.distribucion.adapters.DistrClientesAdapter;
 import com.friendlypos.distribucion.adapters.DistrResumenAdapter;
 import com.friendlypos.distribucion.modelo.Inventario;
+import com.friendlypos.distribucion.modelo.Pivot;
 import com.friendlypos.distribucion.modelo.sale;
 import com.friendlypos.principal.modelo.Clientes;
 
@@ -46,7 +47,6 @@ public class DistSelecClienteFragment extends BaseFragment  implements SearchVie
     int i;
     String fantasyCliente;
     String idCliente;
-
 
 
     public static DistSelecProductoFragment getInstance() {
@@ -76,7 +76,6 @@ public class DistSelecClienteFragment extends BaseFragment  implements SearchVie
         super.onViewCreated(view, savedInstanceState);
         if(adapter == null) {
             adapter = new DistrClientesAdapter(getContext(), ((DistribucionActivity) getActivity()), getListClientes());
-
             adapter2 = new DistrResumenAdapter();
         }
         recyclerView.setHasFixedSize(true);
@@ -85,6 +84,7 @@ public class DistSelecClienteFragment extends BaseFragment  implements SearchVie
     }
 
     private List<sale> getListClientes(){
+
         realm = Realm.getDefaultInstance();
         final RealmQuery<sale> query = realm.where(sale.class).equalTo("aplicada", 0);
         final RealmResults<sale> result1 = query.findAll();
@@ -93,56 +93,9 @@ public class DistSelecClienteFragment extends BaseFragment  implements SearchVie
             Toast.makeText(getApplicationContext(),"Favor descargar datos primero",Toast.LENGTH_LONG).show();
         }
 
-
-        for(i=0; i< result1.size();i++){
-
-          final Realm realm3 = Realm.getDefaultInstance();
-
-            try {
-                realm3.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm3) {
-
-                        Clientes query2 = realm3.where(Clientes.class).equalTo("id", result1.get(i).getCustomer_id()).findFirst();
-                        fantasyCliente = query2.getFantasyName();
-                        idCliente = query2.getId();
-                        Log.e("fantasyCliente", fantasyCliente);
-
-                    }
-
-
-                });
-
-            } catch (Exception e) {
-                Log.e("error", "error", e);
-                //Toast.makeText(, "error", Toast.LENGTH_SHORT).show();
-            }
-
-            final Realm realm4 = Realm.getDefaultInstance();
-
-            try {
-                realm4.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm3) {
-
-                        sale query3 = realm4.where(sale.class).equalTo("customer_id", idCliente).findFirst();
-
-                        query3.setNombreCliente(fantasyCliente);
-                        realm4.copyToRealmOrUpdate(query3);
-                        Log.d("invProdNombre", query3.getNombreCliente());
-                    }
-
-
-                });
-
-            } catch (Exception e) {
-                Log.e("error", "error", e);
-               // Toast.makeText(QuickContext, "error", Toast.LENGTH_SHORT).show();
-            }
-
-        }
         Log.d("SALE", result1+"");
         return result1;
+
     }
 
 
@@ -199,7 +152,7 @@ public class DistSelecClienteFragment extends BaseFragment  implements SearchVie
 
         final List<sale> filteredModelList = new ArrayList<>();
         for (sale model : models) {
-            final String text = model.getNombreCliente().toLowerCase();
+            final String text = model.getCustomer_id().toLowerCase();
             Log.d("FiltroPreventa", text);
             if (text.contains(query)) {
                 filteredModelList.add(model);

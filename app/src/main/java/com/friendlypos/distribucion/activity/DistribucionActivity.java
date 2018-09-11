@@ -25,20 +25,28 @@ import com.friendlypos.distribucion.fragment.DistResumenFragment;
 import com.friendlypos.distribucion.fragment.DistSelecClienteFragment;
 import com.friendlypos.distribucion.fragment.DistSelecProductoFragment;
 import com.friendlypos.distribucion.fragment.DistTotalizarFragment;
+import com.friendlypos.distribucion.modelo.sale;
 import com.friendlypos.distribucion.util.Adapter;
 import com.friendlypos.principal.activity.BluetoothActivity;
 import com.friendlypos.principal.activity.MenuPrincipal;
 import com.friendlypos.principal.activity.ProductosActivity;
+import com.friendlypos.principal.modelo.Clientes;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
+import io.realm.Realm;
+import io.realm.RealmQuery;
+import io.realm.RealmResults;
+
+import static io.realm.internal.SyncObjectServerFacade.getApplicationContext;
 
 public class DistribucionActivity extends BluetoothActivity {
 
     private Toolbar toolbar;
     private TabLayout tabLayout;
+    private Realm realm;
 
     private String invoiceId;
     private String metodoPagoCliente;
@@ -53,7 +61,9 @@ public class DistribucionActivity extends BluetoothActivity {
     private double totalizarTotal;
     private double totalizarTotalDouble;
     private int selecClienteTab;
-
+    String idCliente;
+    String fantasyCliente;
+    int i;
     public void cleanTotalize() {
         totalizarSubGrabado = 0.0;
         totalizarSubExento = 0.0;
@@ -211,9 +221,65 @@ public class DistribucionActivity extends BluetoothActivity {
 
             }
         });
-
+        getListClientes();
     }
 
+    private List<sale> getListClientes(){
+
+        realm = Realm.getDefaultInstance();
+        final RealmQuery<sale> query = realm.where(sale.class).equalTo("aplicada", 0);
+        final RealmResults<sale> result1 = query.findAll();
+
+        if(result1.size() == 0){
+            Toast.makeText(getApplicationContext(),"Favor descargar datos primero",Toast.LENGTH_LONG).show();
+        }
+        Realm realm3 = Realm.getDefaultInstance();
+        for(i=0; i <= result1.size();i++) {
+
+            try {
+
+                realm3.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm3) {
+
+                        Clientes query2 = realm3.where(Clientes.class).equalTo("id", result1.get(i).getCustomer_id()).findFirst();
+                        fantasyCliente = query2.getFantasyName();
+                        idCliente = query2.getId();
+                        Log.e("fantasyCliente", fantasyCliente);
+                    }
+                });
+
+            } catch (Exception e) {
+                Log.e("error", "error", e);
+                //Toast.makeText(, "error", Toast.LENGTH_SHORT).show();
+            }
+
+            final Realm realm4 = Realm.getDefaultInstance();
+
+            try {
+                realm4.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm4) {
+
+                        sale query3 = realm4.where(sale.class).equalTo("customer_id", idCliente).findFirst();
+
+                        query3.setNombreCliente(fantasyCliente);
+                        realm4.insertOrUpdate(query3);
+                        Log.d("invProdNombre", query3.getNombreCliente());
+                    }
+
+
+                });
+
+            } catch (Exception e) {
+                Log.e("error", "error", e);
+                // Toast.makeText(QuickContext, "error", Toast.LENGTH_SHORT).show();
+            }
+        }
+            Log.d("SALE", result1 + "");
+            return result1;
+
+    }
 
     private void connectToPrinter() {
         //if(bluetoothStateChangeReceiver.isBluetoothAvailable()) {
