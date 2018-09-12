@@ -72,7 +72,8 @@ public class ReimPedidoSelecClienteFragment extends BaseFragment {
 
     private List<sale> getListClientes(){
         realm = Realm.getDefaultInstance();
-        RealmQuery<sale> query = realm.where(sale.class).equalTo("aplicada", 1).equalTo("facturaDePreventa", "Preventa").or().equalTo("facturaDePreventa", "Proforma").equalTo("subida", 1);
+        RealmQuery<sale> query = realm.where(sale.class).equalTo("aplicada", 1).equalTo("subida", 1).
+                equalTo("facturaDePreventa", "Preventa").or().equalTo("facturaDePreventa", "Proforma");
         RealmResults<sale> result1 = query.findAll();
         if(result1.size() == 0){
             Toast.makeText(getApplicationContext(),"No hay facturas para editar",Toast.LENGTH_LONG).show();

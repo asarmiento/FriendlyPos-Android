@@ -437,15 +437,9 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                         Log.d("My App", obj + "");
                         subir1.sendPost(obj);
 
-                        String resp = subir1.getRespuestaServer();
-
-                        if(resp.equals("200 OK")){
                         actualizarVenta();
                         actualizarFactura();
-                        }
-                        else{
-                            Toast.makeText(MenuPrincipal.this, "no se subio", Toast.LENGTH_LONG).show();
-                        }
+
                     }
                 }
 

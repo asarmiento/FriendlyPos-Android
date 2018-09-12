@@ -504,25 +504,25 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
                     int length = String.valueOf(valor).length();
 
                     if(length == 1){
-                        numFactura = idUsuario + "02-" + "000000" + nextId;
+                        numFactura = idUsuario + "03-" + "000000" + nextId;
                     }
                     else if(length == 2){
-                        numFactura = idUsuario + "02-" + "00000" + nextId;
+                        numFactura = idUsuario + "03-" + "00000" + nextId;
                     }
                     else if(length == 3){
-                        numFactura = idUsuario + "02-" + "0000" + nextId;
+                        numFactura = idUsuario + "03-" + "0000" + nextId;
                     }
                     else if(length == 4){
-                        numFactura = idUsuario + "02-" + "000" + nextId;
+                        numFactura = idUsuario + "03-" + "000" + nextId;
                     }
                     else if(length == 5){
-                        numFactura = idUsuario + "02-" + "00" + nextId;
+                        numFactura = idUsuario + "03-" + "00" + nextId;
                     }
                     else if(length == 6){
-                        numFactura = idUsuario + "02-" + "0" + nextId;
+                        numFactura = idUsuario + "03-" + "0" + nextId;
                     }
                     else if(length == 7){
-                        numFactura = idUsuario + "02-" + nextId;
+                        numFactura = idUsuario + "03-" + nextId;
                     }
                 }
             });
