@@ -19,6 +19,8 @@ import com.friendlypos.R;
 import com.friendlypos.distribucion.activity.DistribucionActivity;
 import com.friendlypos.distribucion.adapters.DistrClientesAdapter;
 import com.friendlypos.distribucion.adapters.DistrResumenAdapter;
+import com.friendlypos.distribucion.modelo.Inventario;
+import com.friendlypos.distribucion.modelo.Pivot;
 import com.friendlypos.distribucion.modelo.sale;
 import com.friendlypos.principal.modelo.Clientes;
 
@@ -42,6 +44,10 @@ public class DistSelecClienteFragment extends BaseFragment  implements SearchVie
 
     private DistrClientesAdapter adapter;
     private DistrResumenAdapter adapter2;
+    int i;
+    String fantasyCliente;
+    String idCliente;
+
 
     public static DistSelecProductoFragment getInstance() {
         return new DistSelecProductoFragment();
@@ -70,7 +76,6 @@ public class DistSelecClienteFragment extends BaseFragment  implements SearchVie
         super.onViewCreated(view, savedInstanceState);
         if(adapter == null) {
             adapter = new DistrClientesAdapter(getContext(), ((DistribucionActivity) getActivity()), getListClientes());
-
             adapter2 = new DistrResumenAdapter();
         }
         recyclerView.setHasFixedSize(true);
@@ -79,9 +84,10 @@ public class DistSelecClienteFragment extends BaseFragment  implements SearchVie
     }
 
     private List<sale> getListClientes(){
+
         realm = Realm.getDefaultInstance();
-        RealmQuery<sale> query = realm.where(sale.class).equalTo("aplicada", 0);
-        RealmResults<sale> result1 = query.findAll();
+        final RealmQuery<sale> query = realm.where(sale.class).equalTo("aplicada", 0);
+        final RealmResults<sale> result1 = query.findAll();
 
         if(result1.size() == 0){
             Toast.makeText(getApplicationContext(),"Favor descargar datos primero",Toast.LENGTH_LONG).show();
@@ -89,13 +95,14 @@ public class DistSelecClienteFragment extends BaseFragment  implements SearchVie
 
         Log.d("SALE", result1+"");
         return result1;
+
     }
 
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        realm.close();
+       // realm.close();
     }
 
     @Override
@@ -145,7 +152,7 @@ public class DistSelecClienteFragment extends BaseFragment  implements SearchVie
 
         final List<sale> filteredModelList = new ArrayList<>();
         for (sale model : models) {
-            final String text = model.getNombreCliente().toLowerCase();
+            final String text = model.getCustomer_id().toLowerCase();
             Log.d("FiltroPreventa", text);
             if (text.contains(query)) {
                 filteredModelList.add(model);

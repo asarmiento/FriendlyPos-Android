@@ -54,20 +54,22 @@ public class TotalizeHelper {
         String tipo = getProductTypeByPivotId(currentPivot.getProduct_id());
 
         Double subGrab = 0.0;
+        Double subGrabConImp = 0.0;
         Double discountBill = 0.0;
         Double subGrabm = 0.0;
         Double subExen = 0.0;
         Double IvaT = 0.0;
         Double subt = 0.0;
         Double total = 0.0;
-
-        Double precio = Double.valueOf(currentPivot.getPrice());
         Double cantidad = Double.valueOf(currentPivot.getAmount());
+        Double precio = Double.valueOf(currentPivot.getPrice());
         Double descuento = Double.valueOf(currentPivot.getDiscount());
 
 
         if (tipo.equals("1")) {
-            subGrab = subGrab + (precio) * (cantidad);
+            subGrabConImp = subGrab + (precio) * (cantidad);
+            subGrab = (subGrab + (precio) * (cantidad))/1.13;
+
 
             subGrabm = subGrabm + ((precio) * (cantidad) - ((descuento / 100) * (precio) * (cantidad)));
         }
@@ -81,7 +83,8 @@ public class TotalizeHelper {
 
 
         if (subGrab > 0) {
-            IvaT = (subGrabm - (subGrabm * (clienteFixedDescuento / 100.00))) * (IVA / 100);
+            //  IvaT = (subGrabm - (subGrabm * (clienteFixedDescuento / 100.00))) * (IVA / 100);
+            IvaT = subGrabConImp - subGrab;
         }
         else {
             IvaT = 0.0;

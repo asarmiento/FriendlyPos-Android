@@ -102,6 +102,7 @@ public class TotalizeHelperVentaDirecta {
         }
 
         Double subGrab = 0.0;
+        Double subGrabConImp = 0.0;
         Double discountBill = 0.0;
         Double subGrabm = 0.0;
         Double subExen = 0.0;
@@ -114,7 +115,9 @@ public class TotalizeHelperVentaDirecta {
 
 
         if (tipo.equals("1")) {
-            subGrab = subGrab + (precio) * (cantidad);
+            subGrabConImp = subGrab + (precio) * (cantidad);
+            subGrab = (subGrab + (precio) * (cantidad))/1.13;
+
 
             subGrabm = subGrabm + ((precio) * (cantidad) - ((descuento / 100) * (precio) * (cantidad)));
         }
@@ -128,7 +131,8 @@ public class TotalizeHelperVentaDirecta {
 
 
         if (subGrab > 0) {
-            IvaT = (subGrabm - (subGrabm * (clienteFixedDescuento / 100.00))) * (IVA / 100);
+            //  IvaT = (subGrabm - (subGrabm * (clienteFixedDescuento / 100.00))) * (IVA / 100);
+            IvaT = subGrabConImp - subGrab;
         }
         else {
             IvaT = 0.0;
