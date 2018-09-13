@@ -5,55 +5,36 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.friendlypos.R;
 import com.friendlypos.Recibos.activity.RecibosActivity;
 import com.friendlypos.Recibos.adapters.RecibosResumenAdapter;
+import com.friendlypos.Recibos.adapters.RecibosSeleccionarFacturaAdapter;
 import com.friendlypos.Recibos.modelo.Recibos;
 import com.friendlypos.Recibos.util.TotalizeHelperRecibos;
-import com.friendlypos.distribucion.activity.DistribucionActivity;
-import com.friendlypos.distribucion.adapters.DistrResumenAdapter;
-import com.friendlypos.distribucion.adapters.DistrSeleccionarProductosAdapter;
 import com.friendlypos.distribucion.fragment.BaseFragment;
-import com.friendlypos.distribucion.fragment.DistResumenFragment;
-import com.friendlypos.distribucion.fragment.DistSelecProductoFragment;
-import com.friendlypos.distribucion.modelo.Inventario;
-import com.friendlypos.distribucion.modelo.Pivot;
-import com.friendlypos.distribucion.util.TotalizeHelper;
-import com.friendlypos.preventas.adapters.PrevResumenAdapter;
-import com.friendlypos.preventas.util.TotalizeHelperPreventa;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
-import io.realm.RealmQuery;
 import io.realm.RealmResults;
 
-
-public class RecibosResumenFragment extends BaseFragment {
+public class RecibosSeleccionarFacturaFragment extends BaseFragment {
     private Realm realm;
     RecyclerView recyclerView;
-    private RecibosResumenAdapter adapter;
+    private RecibosSeleccionarFacturaAdapter adapter;
     TotalizeHelperRecibos totalizeHelper;
     int slecTAB;
     RecibosActivity activity;
 
-    public static RecibosResumenFragment getInstance() {
-        return new RecibosResumenFragment();
+    public static RecibosSeleccionarFacturaFragment getInstance() {
+        return new RecibosSeleccionarFacturaFragment();
     }
 
     @Override
@@ -83,7 +64,7 @@ public class RecibosResumenFragment extends BaseFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-        View rootView = inflater.inflate(R.layout.fragment_recibos_resumen, container,
+        View rootView = inflater.inflate(R.layout.fragment_recibos_seleccionar_factura, container,
                 false);
         setHasOptionsMenu(true);
         totalizeHelper = new TotalizeHelperRecibos(activity);
@@ -92,7 +73,7 @@ public class RecibosResumenFragment extends BaseFragment {
         recyclerView.setHasFixedSize(true);
         slecTAB = activity.getSelecClienteTabRecibos();
         if(adapter == null) {
-            adapter = new RecibosResumenAdapter(activity, this, getListProductos());
+            adapter = new RecibosSeleccionarFacturaAdapter(activity, this, getListProductos());
 
         }
         if (slecTAB == 1) {
@@ -122,7 +103,7 @@ public class RecibosResumenFragment extends BaseFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-       // realm.close();
+        // realm.close();
     }
 
     @Override

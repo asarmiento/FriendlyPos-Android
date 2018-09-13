@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import com.friendlypos.R;
 import com.friendlypos.Recibos.fragments.RecibosClientesFragment;
 import com.friendlypos.Recibos.fragments.RecibosResumenFragment;
+import com.friendlypos.Recibos.fragments.RecibosSeleccionarFacturaFragment;
 import com.friendlypos.application.bluetooth.PrinterService;
 import com.friendlypos.application.util.Functions;
 import com.friendlypos.distribucion.activity.DistribucionActivity;
@@ -40,6 +41,15 @@ public class RecibosActivity extends BluetoothActivity {
     private int selecClienteTabRecibos;
     private String invoiceIdRecibos;
     private String clienteIdRecibos;
+    private double totalizarTotal;
+
+    public double getTotalizarTotal() {
+        return totalizarTotal;
+    }
+
+    public void setTotalizarTotal(double totalizarTotal) {
+        this.totalizarTotal = this.totalizarTotal + totalizarTotal;
+    }
 
     public int getSelecClienteTabRecibos() {
         return selecClienteTabRecibos;
@@ -145,13 +155,13 @@ public class RecibosActivity extends BluetoothActivity {
         Adapter adapter = new Adapter(getSupportFragmentManager());
         final List<BaseFragment> list = new ArrayList<>();
         list.add(new RecibosClientesFragment());
-       list.add(new RecibosResumenFragment());
-       /*  list.add(new DistSelecProductoFragment());
-        list.add(new DistTotalizarFragment());*/
+       list.add(new RecibosSeleccionarFacturaFragment());
+         list.add(new RecibosResumenFragment());
+     /*   list.add(new DistTotalizarFragment());*/
         adapter.addFragment(list.get(0), "Seleccionar Cliente");
       adapter.addFragment(list.get(1), "Selecionar Factura");
-      /*    adapter.addFragment(list.get(2), "Facturas");
-        adapter.addFragment(list.get(3), "Aplicar");*/
+          adapter.addFragment(list.get(2), "Resumen");
+       /* adapter.addFragment(list.get(3), "Aplicar");*/
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
@@ -200,6 +210,11 @@ public class RecibosActivity extends BluetoothActivity {
         }
         return false;
     }
+
+    public void cleanTotalize() {
+        totalizarTotal = 0.0;
+    }
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if ((keyCode == KeyEvent.KEYCODE_BACK)) {

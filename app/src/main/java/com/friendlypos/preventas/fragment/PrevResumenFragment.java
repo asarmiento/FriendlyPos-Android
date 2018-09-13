@@ -52,6 +52,7 @@ public class PrevResumenFragment extends BaseFragment {
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerViewPreventaResumen);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         slecTAB = activity.getSelecClienteTabPreventa();
+
         totalizeHelper = new TotalizeHelperPreventa(activity);
         if (slecTAB == 1) {
             List<Pivot> list = activity.getAllPivotDelegate();
@@ -94,7 +95,7 @@ public class PrevResumenFragment extends BaseFragment {
           List<Pivot> list = activity.getAllPivotDelegate();
 
             adapter.updateData(list);
-        totalizeHelper.totalize(list);
+            totalizeHelper.totalize(list);
         }
         else {
             Log.d("SelecUpdateResumen", "No hay productos");

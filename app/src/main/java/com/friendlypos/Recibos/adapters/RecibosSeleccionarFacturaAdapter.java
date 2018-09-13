@@ -14,17 +14,21 @@ import android.widget.Toast;
 import com.friendlypos.R;
 import com.friendlypos.Recibos.activity.RecibosActivity;
 import com.friendlypos.Recibos.fragments.RecibosResumenFragment;
+import com.friendlypos.Recibos.fragments.RecibosSeleccionarFacturaFragment;
 import com.friendlypos.Recibos.modelo.Recibos;
 
 import java.util.List;
 
+/**
+ * Created by DelvoM on 13/09/2018.
+ */
 
-public class RecibosResumenAdapter extends RecyclerView.Adapter<RecibosResumenAdapter.CharacterViewHolder> {
+public class RecibosSeleccionarFacturaAdapter extends RecyclerView.Adapter<RecibosSeleccionarFacturaAdapter.CharacterViewHolder> {
 
     private Context context;
     public List<Recibos> productosList;
     private RecibosActivity activity;
-    private RecibosResumenFragment fragment;
+    private RecibosSeleccionarFacturaFragment fragment;
     private static double producto_amount_dist_add = 0;
     private static double producto_descuento_add = 0;
     private int selected_position = -1;
@@ -34,7 +38,7 @@ public class RecibosResumenAdapter extends RecyclerView.Adapter<RecibosResumenAd
 
     int nextId;
 
-    public RecibosResumenAdapter(RecibosActivity activity, RecibosResumenFragment fragment, List<Recibos> productosList) {
+    public RecibosSeleccionarFacturaAdapter(RecibosActivity activity, RecibosSeleccionarFacturaFragment fragment, List<Recibos> productosList) {
         this.activity = activity;
         this.fragment = fragment;
         this.productosList = productosList;
@@ -46,16 +50,16 @@ public class RecibosResumenAdapter extends RecyclerView.Adapter<RecibosResumenAd
     }
 
     @Override
-    public RecibosResumenAdapter.CharacterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecibosSeleccionarFacturaAdapter.CharacterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.lista_recibos_resumen, parent, false);
+                .inflate(R.layout.lista_recibos_seleccionar_factura, parent, false);
         context = parent.getContext();
-        return new RecibosResumenAdapter.CharacterViewHolder(view);
+        return new RecibosSeleccionarFacturaAdapter.CharacterViewHolder(view);
     }
 
 
     @Override
-    public void onBindViewHolder(final RecibosResumenAdapter.CharacterViewHolder holder, final int position) {
+    public void onBindViewHolder(final RecibosSeleccionarFacturaAdapter.CharacterViewHolder holder, final int position) {
         final Recibos inventario = productosList.get(position);
 
         final String id = inventario.getInvoice_id();
@@ -105,9 +109,9 @@ public class RecibosResumenAdapter extends RecyclerView.Adapter<RecibosResumenAd
                 Toast.makeText(activity, facturaID + " " + clienteID + " " + totalPago, Toast.LENGTH_LONG).show();
 
                 //tabCliente = 1;
-               // activity.setSelecClienteTabRecibos(tabCliente);
-              //  activity.setInvoiceIdRecibos(facturaID);
-               // activity.setClienteIdRecibos(clienteID);
+                // activity.setSelecClienteTabRecibos(tabCliente);
+                //  activity.setInvoiceIdRecibos(facturaID);
+                // activity.setClienteIdRecibos(clienteID);
 
             }
         });
