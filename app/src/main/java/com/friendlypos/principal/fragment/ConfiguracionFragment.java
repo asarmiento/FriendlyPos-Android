@@ -21,6 +21,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +30,8 @@ import android.widget.Toast;
 import com.friendlypos.R;
 import com.friendlypos.application.bluetooth.PrinterService;
 import com.friendlypos.application.util.Functions;
+import com.friendlypos.distribucion.activity.DistribucionActivity;
+import com.friendlypos.principal.activity.MenuPrincipal;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -283,6 +286,5 @@ public class ConfiguracionFragment extends PreferenceFragment implements OnShare
 
         Toast.makeText(getActivity(), "Botón no disponible por el momento", Toast.LENGTH_SHORT).show();
     }
-
 
 }

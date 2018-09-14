@@ -149,7 +149,7 @@ public class RecibosSeleccionarFacturaAdapter extends RecyclerView.Adapter<Recib
 
         public CharacterViewHolder(View view) {
             super(view);
-            cardView = (CardView) view.findViewById(R.id.cardViewResumenRecibos);
+            cardView = (CardView) view.findViewById(R.id.cardViewSelecFacRecibos);
             txt_producto_factura_numeracionRecibos = (TextView) view.findViewById(R.id.txt_producto_factura_numeracionRecibos);
             txt_producto_factura_idRecibos = (TextView) view.findViewById(R.id.txt_producto_factura_idRecibos);
             txt_producto_factura_TotalRecibos = (TextView) view.findViewById(R.id.txt_producto_factura_TotalRecibos);

@@ -57,7 +57,12 @@ public class ReimprimirResumenFragment extends BaseFragment {
         bluetoothStateChangeReceiver.setBluetoothStateChangeReceiver(getContext());
         activity = new VentaDirectaActivity();
     }
+    @Override
+    public void onPause() {
+        super.onPause();
 
+        getActivity().unregisterReceiver(bluetoothStateChangeReceiver);
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

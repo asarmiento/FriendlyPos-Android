@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -63,10 +64,9 @@ public class RecibosResumenAdapter extends RecyclerView.Adapter<RecibosResumenAd
         double total = inventario.getTotal();
         double pago = inventario.getPaid();
 
-        holder.txt_producto_factura_idRecibos.setText(id);
-        holder.txt_producto_factura_numeracionRecibos.setText(numeracion);
-        holder.txt_producto_factura_TotalRecibos.setText("Total: " + String.format("%,.2f", total));
-        holder.txt_producto_factura_PagoRecibos.setText("Pagado: " + String.format("%,.2f", pago));
+        holder.txt_resumen_factura_totalUnaRecibos.setText("Total de esta factura: " + id);
+        holder.txt_resumen_factura_TotalTodosRecibos.setText("Total de tus facturas: " +numeracion);
+        holder.txt_resumen_factura_PagoRecibos.setText("Pagado: " + String.format("%,.2f", total));
         holder.fillData(inventario);
 
         holder.cardView.setOnClickListener(new View.OnClickListener() {
@@ -140,16 +140,17 @@ public class RecibosResumenAdapter extends RecyclerView.Adapter<RecibosResumenAd
 
     public class CharacterViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView txt_producto_factura_numeracionRecibos, txt_producto_factura_idRecibos, txt_producto_factura_TotalRecibos, txt_producto_factura_PagoRecibos;
+        private TextView txt_resumen_factura_totalUnaRecibos, txt_resumen_factura_TotalTodosRecibos, txt_resumen_factura_PagoRecibos;
+        private TextView txtMontoPagar;
         protected CardView cardView;
 
         public CharacterViewHolder(View view) {
             super(view);
             cardView = (CardView) view.findViewById(R.id.cardViewResumenRecibos);
-            txt_producto_factura_numeracionRecibos = (TextView) view.findViewById(R.id.txt_producto_factura_numeracionRecibos);
-            txt_producto_factura_idRecibos = (TextView) view.findViewById(R.id.txt_producto_factura_idRecibos);
-            txt_producto_factura_TotalRecibos = (TextView) view.findViewById(R.id.txt_producto_factura_TotalRecibos);
-            txt_producto_factura_PagoRecibos = (TextView) view.findViewById(R.id.txt_producto_factura_PagoRecibos);
+            txt_resumen_factura_totalUnaRecibos = (TextView) view.findViewById(R.id.txt_resumen_factura_totalUnaRecibos);
+            txt_resumen_factura_TotalTodosRecibos = (TextView) view.findViewById(R.id.txt_resumen_factura_TotalTodosRecibos);
+            txt_resumen_factura_PagoRecibos = (TextView) view.findViewById(R.id.txt_resumen_factura_PagoRecibos);
+            txtMontoPagar = (EditText) view.findViewById(R.id.txtMontoPagar);
 
         }
 

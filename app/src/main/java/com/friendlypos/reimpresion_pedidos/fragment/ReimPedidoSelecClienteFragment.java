@@ -61,9 +61,8 @@ public class ReimPedidoSelecClienteFragment extends BaseFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        if(adapter == null) {
-            adapter = new ReimPedidoClientesAdapter(getContext(), ((ReimprimirPedidosActivity) getActivity()), getListClientes());
-        }
+        adapter = new ReimPedidoClientesAdapter(getContext(), ((ReimprimirPedidosActivity) getActivity()), getListClientes());
+
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);
@@ -72,8 +71,8 @@ public class ReimPedidoSelecClienteFragment extends BaseFragment {
 
     private List<sale> getListClientes(){
         realm = Realm.getDefaultInstance();
-        RealmQuery<sale> query = realm.where(sale.class).equalTo("aplicada", 1).equalTo("subida", 1).
-                equalTo("facturaDePreventa", "Preventa").or().equalTo("facturaDePreventa", "Proforma");
+        RealmQuery<sale> query = realm.where(sale.class).equalTo("aplicada", 1).
+                equalTo("facturaDePreventa", "Proforma").or().equalTo("facturaDePreventa", "Preventa");
         RealmResults<sale> result1 = query.findAll();
         if(result1.size() == 0){
             Toast.makeText(getApplicationContext(),"No hay facturas para editar",Toast.LENGTH_LONG).show();
