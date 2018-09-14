@@ -69,6 +69,7 @@ public class RecibosResumenAdapter extends RecyclerView.Adapter<RecibosResumenAd
         holder.txt_resumen_factura_PagoRecibos.setText("Pagado: " + String.format("%,.2f", total));
         holder.fillData(inventario);
 
+
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
