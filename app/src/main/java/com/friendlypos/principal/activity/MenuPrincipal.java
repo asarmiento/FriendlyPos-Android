@@ -214,8 +214,9 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
             @Override
             public void onClick(View v) {
                 if (!properties.getBlockedApp()) {
-                    Intent intent = new Intent(getApplication(), RecibosActivity.class);
-                    startActivity(intent);
+                 /*   Intent intent = new Intent(getApplication(), RecibosActivity.class);
+                    startActivity(intent);*/
+                    Toast.makeText(MenuPrincipal.this, "Botón no disponible", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -762,10 +763,11 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                 break;
 
             case R.id.clickRecibos:
-               Intent recibos;
+              /* Intent recibos;
                 recibos = new Intent(MenuPrincipal.this, RecibosActivity.class);
                 startActivity(recibos);
-                finish();
+                finish();*/
+                Toast.makeText(MenuPrincipal.this, "Botón no disponible", Toast.LENGTH_LONG).show();
                 break;
 
             case R.id.clickReimprimirVentas:
