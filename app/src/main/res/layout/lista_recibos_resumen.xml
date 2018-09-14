@@ -19,7 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="10dp"
             android:text="Total de todas"
             android:textColor="@color/icons" />
 
@@ -28,8 +28,7 @@
             android:id="@+id/txt_resumen_factura_totalUnaRecibos"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="7dp"
-
+            android:layout_marginTop="15dp"
             android:text="Total de esta factura"
             android:textColor="@color/icons"
             android:layout_below="@+id/txt_resumen_factura_TotalTodosRecibos"
@@ -39,11 +38,11 @@
             android:id="@+id/txt_resumen_factura_PagoRecibos"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/txt_resumen_factura_TotalTodosRecibos"
-            android:layout_alignBottom="@+id/txt_resumen_factura_TotalTodosRecibos"
-            android:layout_alignParentEnd="true"
             android:text="Pagara"
-            android:textColor="@color/icons" />
+            android:layout_marginTop="15dp"
+            android:textColor="@color/icons"
+            android:layout_below="@+id/txtMontoPagar"
+            android:layout_alignParentStart="true" />
 
         <TextView
             android:id="@+id/txtTexto"
@@ -60,6 +59,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ems="10"
+            android:layout_marginTop="5dp"
+            android:paddingLeft="20dp"
             android:inputType="textPersonName"
             android:layout_below="@+id/txt_resumen_factura_totalUnaRecibos"
             android:layout_toEndOf="@+id/txtTexto" />
