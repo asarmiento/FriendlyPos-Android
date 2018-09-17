@@ -15,6 +15,7 @@ import android.view.KeyEvent;
 import android.view.MenuItem;
 
 import com.friendlypos.R;
+import com.friendlypos.Recibos.fragments.RecibosAplicarFragment;
 import com.friendlypos.Recibos.fragments.RecibosClientesFragment;
 import com.friendlypos.Recibos.fragments.RecibosResumenFragment;
 import com.friendlypos.Recibos.fragments.RecibosSeleccionarFacturaFragment;
@@ -39,9 +40,21 @@ public class RecibosActivity extends BluetoothActivity {
     private Toolbar toolbar;
     private TabLayout tabLayout;
     private int selecClienteTabRecibos;
+    private int selecFacturaTabRecibos;
     private String invoiceIdRecibos;
     private String clienteIdRecibos;
+    private double totalFacturaSelec;
     private double totalizarTotal;
+    private double totalizarPagado;
+
+
+    public double getTotalizarPagado() {
+        return totalizarPagado;
+    }
+
+    public void setTotalizarPagado(double totalizarPagado) {
+        this.totalizarPagado = totalizarPagado;
+    }
 
     public double getTotalizarTotal() {
         return totalizarTotal;
@@ -59,12 +72,28 @@ public class RecibosActivity extends BluetoothActivity {
         this.selecClienteTabRecibos = selecClienteTabRecibos;
     }
 
+    public int getSelecFacturaTabRecibos() {
+        return selecFacturaTabRecibos;
+    }
+
+    public void setSelecFacturaTabRecibos(int selecFacturaTabRecibos) {
+        this.selecFacturaTabRecibos = selecFacturaTabRecibos;
+    }
+
     public String getInvoiceIdRecibos() {
         return invoiceIdRecibos;
     }
 
     public void setInvoiceIdRecibos(String invoiceIdRecibos) {
         this.invoiceIdRecibos = invoiceIdRecibos;
+    }
+
+    public double getTotalFacturaSelec() {
+        return totalFacturaSelec;
+    }
+
+    public void setTotalFacturaSelec(double totalFacturaSelec) {
+        this.totalFacturaSelec = totalFacturaSelec;
     }
 
     public String getClienteIdRecibos() {
@@ -101,9 +130,9 @@ public class RecibosActivity extends BluetoothActivity {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 int tabCliente = getSelecClienteTabRecibos();
-                if (tabCliente == 0 && tab.getPosition() != 0) {
 
-                    Functions.CreateMessage(RecibosActivity.this, "Recibos", "Seleccione una factura.");
+                if (tabCliente == 0 && tab.getPosition() != 0) {
+                    Functions.CreateMessage(RecibosActivity.this, "Recibos", "Seleccione un cliente.");
 
                     new Handler().postDelayed(
                             new Runnable() {
@@ -114,6 +143,7 @@ public class RecibosActivity extends BluetoothActivity {
                                 }
                             }, 100);
                 }
+
                 else {
                 }
             }
@@ -157,11 +187,11 @@ public class RecibosActivity extends BluetoothActivity {
         list.add(new RecibosClientesFragment());
        list.add(new RecibosSeleccionarFacturaFragment());
          list.add(new RecibosResumenFragment());
-     /*   list.add(new DistTotalizarFragment());*/
+       list.add(new RecibosAplicarFragment());
         adapter.addFragment(list.get(0), "Seleccionar Cliente");
       adapter.addFragment(list.get(1), "Selecionar Factura");
           adapter.addFragment(list.get(2), "Resumen");
-       /* adapter.addFragment(list.get(3), "Aplicar");*/
+        adapter.addFragment(list.get(3), "Aplicar");
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 

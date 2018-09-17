@@ -1,56 +1,35 @@
 package com.friendlypos.Recibos.fragments;
 
 import android.app.Activity;
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.friendlypos.R;
 import com.friendlypos.Recibos.activity.RecibosActivity;
-import com.friendlypos.Recibos.adapters.RecibosResumenAdapter;
-import com.friendlypos.Recibos.modelo.Recibos;
 import com.friendlypos.Recibos.util.TotalizeHelperRecibos;
-import com.friendlypos.distribucion.activity.DistribucionActivity;
-import com.friendlypos.distribucion.adapters.DistrResumenAdapter;
-import com.friendlypos.distribucion.adapters.DistrSeleccionarProductosAdapter;
 import com.friendlypos.distribucion.fragment.BaseFragment;
-import com.friendlypos.distribucion.fragment.DistResumenFragment;
-import com.friendlypos.distribucion.fragment.DistSelecProductoFragment;
-import com.friendlypos.distribucion.modelo.Inventario;
-import com.friendlypos.distribucion.modelo.Pivot;
-import com.friendlypos.distribucion.util.TotalizeHelper;
-import com.friendlypos.preventas.adapters.PrevResumenAdapter;
-import com.friendlypos.preventas.util.TotalizeHelperPreventa;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import io.realm.Realm;
-import io.realm.RealmQuery;
-import io.realm.RealmResults;
 
 
 public class RecibosResumenFragment extends BaseFragment {
-    private Realm realm;
-    RecyclerView recyclerView;
-    private RecibosResumenAdapter adapter;
+
     TotalizeHelperRecibos totalizeHelper;
     int slecTAB;
     RecibosActivity activity;
+
+    private static TextView txt_resumen_factura_TotalTodosRecibos;
+    private static TextView txt_resumen_factura_totalUnaRecibos;
+    Button btnPagarFacturaRecibos;
+    private static EditText txtMontoPagar;
+
+    double totalFacturaSelec = 0.0;
+    double totalFacturaTodas = 0.0;
+    double totalFacturaPagado = 0.0;
 
     public static RecibosResumenFragment getInstance() {
         return new RecibosResumenFragment();
@@ -85,37 +64,16 @@ public class RecibosResumenFragment extends BaseFragment {
 
         View rootView = inflater.inflate(R.layout.fragment_recibos_resumen, container,
                 false);
-        setHasOptionsMenu(true);
-        totalizeHelper = new TotalizeHelperRecibos(activity);
-        recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerViewRecibosResumen);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setHasFixedSize(true);
-        slecTAB = activity.getSelecClienteTabRecibos();
-        if(adapter == null) {
-            adapter = new RecibosResumenAdapter(activity, this, getListProductos());
 
-        }
-        if (slecTAB == 1) {
-            List<Recibos> list = getListProductos();
-            activity.cleanTotalize();
-            totalizeHelper.totalizeRecibos(list);
-            Log.d("listaResumen",  list + "");
-        }
+            txtMontoPagar = (EditText) rootView.findViewById(R.id.txtMontoPagar);
+            btnPagarFacturaRecibos = (Button) rootView.findViewById(R.id.btnPagarFacturaRecibos);
+            txt_resumen_factura_TotalTodosRecibos = (TextView) rootView.findViewById(R.id.txt_resumen_factura_TotalTodosRecibos);
+            txt_resumen_factura_totalUnaRecibos = (TextView) rootView.findViewById(R.id.txt_resumen_factura_totalUnaRecibos);
 
-        recyclerView.setAdapter(adapter);
+            totalizeHelper = new TotalizeHelperRecibos(activity);
+
 
         return rootView;
-
-    }
-
-    private List<Recibos> getListProductos() {
-        String clienteId = activity.getClienteIdRecibos();
-
-        Realm realm = Realm.getDefaultInstance();
-        RealmResults<Recibos> result1 = realm.where(Recibos.class).equalTo("customer_id", clienteId).findAll();
-        realm.close();
-
-        return result1;
 
     }
 
@@ -129,18 +87,26 @@ public class RecibosResumenFragment extends BaseFragment {
     public void updateData() {
         slecTAB = activity.getSelecClienteTabRecibos();
         if (slecTAB == 1) {
-            activity.cleanTotalize();
-            List<Recibos> list = getListProductos();
+            //  paid.getText().clear();
+            totalFacturaTodas = activity.getTotalizarTotal();
+            Log.d("totalFacturaTodas",  totalFacturaTodas + "");
+            totalFacturaSelec = activity.getTotalFacturaSelec();
+            Log.d("totalFacturaSelec",  totalFacturaSelec + "");
+            totalFacturaPagado = activity.getTotalizarPagado();
+            Log.d("totalFacturaPagado",  totalFacturaPagado + "");
+            double debePagar = totalFacturaSelec - totalFacturaPagado;
+            Log.d("debePagar",  debePagar + "");
 
-            adapter.updateData(list);
-            totalizeHelper.totalizeRecibos(list);
 
-            double totalT = activity.getTotalizarTotal();
-            Log.d("totalFull", totalT + "");
+            txt_resumen_factura_TotalTodosRecibos.setText("Total de todas las facturas: " + String.format("%,.2f", totalFacturaTodas));
+            txt_resumen_factura_totalUnaRecibos.setText("Total por pagar de esta factura: " + String.format("%,.2f", debePagar));
+
         }
         else {
-            Log.d("SelecUpdateResumen", "No hay productos");
+            Log.d("nadaTotalizarupdate",  "nadaTotalizarupdate");
         }
+
     }
+
 
 }

@@ -1,10 +1,7 @@
 package com.friendlypos.Recibos.fragments;
 
 import android.app.Activity;
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -14,7 +11,6 @@ import android.view.ViewGroup;
 
 import com.friendlypos.R;
 import com.friendlypos.Recibos.activity.RecibosActivity;
-import com.friendlypos.Recibos.adapters.RecibosResumenAdapter;
 import com.friendlypos.Recibos.adapters.RecibosSeleccionarFacturaAdapter;
 import com.friendlypos.Recibos.modelo.Recibos;
 import com.friendlypos.Recibos.util.TotalizeHelperRecibos;

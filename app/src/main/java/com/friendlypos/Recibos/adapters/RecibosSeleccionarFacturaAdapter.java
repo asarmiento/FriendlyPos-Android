@@ -34,9 +34,9 @@ public class RecibosSeleccionarFacturaAdapter extends RecyclerView.Adapter<Recib
     private int selected_position = -1;
     static double creditoLimiteCliente = 0.0;
     double totalPago = 0.0;
+    double totalPagado = 0.0;
     String facturaID, clienteID;
-
-    int nextId;
+    int tabFactura;
 
     public RecibosSeleccionarFacturaAdapter(RecibosActivity activity, RecibosSeleccionarFacturaFragment fragment, List<Recibos> productosList) {
         this.activity = activity;
@@ -69,6 +69,8 @@ public class RecibosSeleccionarFacturaAdapter extends RecyclerView.Adapter<Recib
 
         holder.txt_producto_factura_idRecibos.setText(id);
         holder.txt_producto_factura_numeracionRecibos.setText(numeracion);
+
+
         holder.txt_producto_factura_TotalRecibos.setText("Total: " + String.format("%,.2f", total));
         holder.txt_producto_factura_PagoRecibos.setText("Pagado: " + String.format("%,.2f", pago));
         holder.fillData(inventario);
@@ -105,11 +107,17 @@ public class RecibosSeleccionarFacturaAdapter extends RecyclerView.Adapter<Recib
 
                 facturaID = clickedDataItem.getInvoice_id();
                 clienteID = clickedDataItem.getCustomer_id();
-                totalPago = clickedDataItem.getTotal();
-                Toast.makeText(activity, facturaID + " " + clienteID + " " + totalPago, Toast.LENGTH_LONG).show();
 
-                //tabCliente = 1;
-                // activity.setSelecClienteTabRecibos(tabCliente);
+                totalPago = clickedDataItem.getTotal();
+                totalPagado = clickedDataItem.getPaid();
+
+                Toast.makeText(activity, facturaID + " " + clienteID + " " + totalPago, Toast.LENGTH_LONG).show();
+                activity.setTotalFacturaSelec(totalPago);
+                activity.setTotalizarPagado(totalPagado);
+
+                tabFactura = 1;
+                activity.setSelecFacturaTabRecibos(tabFactura);
+
                 //  activity.setInvoiceIdRecibos(facturaID);
                 // activity.setClienteIdRecibos(clienteID);
 
