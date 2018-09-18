@@ -81,7 +81,7 @@ public class RecibosResumenFragment extends BaseFragment {
             txt_resumen_factura_TotalTodosRecibos = (TextView) rootView.findViewById(R.id.txt_resumen_factura_TotalTodosRecibos);
             txt_resumen_factura_totalUnaRecibos = (TextView) rootView.findViewById(R.id.txt_resumen_factura_totalUnaRecibos);
 
-            totalizeHelper = new TotalizeHelperRecibos(activity);
+            //totalizeHelper = new TotalizeHelperRecibos(activity);
 
         btnPagarFacturaRecibos.setOnClickListener(
                 new View.OnClickListener() {
@@ -93,6 +93,7 @@ public class RecibosResumenFragment extends BaseFragment {
                             String monto = txtMontoPagar.getText().toString();
                             double montoPagar = Double.parseDouble(monto);
                             final String facturaId = activity.getInvoiceIdRecibos();
+
                             if (montoPagar <= debePagar) {
                                 Toast.makeText(getActivity(), "Pago " + montoPagar + " " + debePagar + " " +totalFacturaPagado, Toast.LENGTH_LONG).show();
                                 montoFaltante = totalFacturaPagado + montoPagar;
@@ -114,31 +115,13 @@ public class RecibosResumenFragment extends BaseFragment {
 
                                     }
                                 });
+                                activity.setTotalizarPagado(montoFaltante);
                                 txtMontoPagar.setText(" ");
-                                updateData();
 
                             }else{
                                 Toast.makeText(getActivity(), "El monto agregado es mayor al monto de la factura", Toast.LENGTH_LONG).show();
                             }
 
-
-                          /*  if (metodoPagoCliente.equals("1")) {
-
-                                int tabCliente = 0;
-                                ((PreventaActivity) getActivity()).setSelecClienteTabPreventa(tabCliente);
-
-                                Toast.makeText(getActivity(), "Contado", Toast.LENGTH_LONG).show();
-                                obtenerLocalización();
-                                aplicarFactura();
-                            }
-
-                            else if (metodoPagoCliente.equals("2")) {
-                                Toast.makeText(getActivity(), "Crédito", Toast.LENGTH_LONG).show();
-                                obtenerLocalización();
-                                aplicarFactura();
-
-                            }
-                            actualizarFactura();*/
 
                         }
                         catch (Exception e) {
@@ -161,16 +144,18 @@ public class RecibosResumenFragment extends BaseFragment {
     }
 
     @Override
-    public void updateData() {
-        slecTAB = activity.getSelecClienteTabRecibos();
+    public void updateData() {slecTAB = activity.getSelecClienteTabRecibos();
         if (slecTAB == 1) {
-            //  paid.getText().clear();
-            totalFacturaTodas = activity.getTotalizarTotal();
-            Log.d("totalFacturaTodas",  totalFacturaTodas + "");
+
+           // totalFacturaTodas = activity.getTotalizarTotal();
+          //  Log.d("totalFacturaTodas",  totalFacturaTodas + "");
+
+
             totalFacturaSelec = activity.getTotalFacturaSelec();
             Log.d("totalFacturaSelec",  totalFacturaSelec + "");
             totalFacturaPagado = activity.getTotalizarPagado();
             Log.d("totalFacturaPagado",  totalFacturaPagado + "");
+
             debePagar = totalFacturaSelec - totalFacturaPagado;
             Log.d("debePagar",  debePagar + "");
 

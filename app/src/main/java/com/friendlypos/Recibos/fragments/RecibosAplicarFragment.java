@@ -66,7 +66,6 @@ public class RecibosAplicarFragment extends BaseFragment {
     @Override
     public void onPause() {
         super.onPause();
-
         getActivity().unregisterReceiver(bluetoothStateChangeReceiver);
     }
 

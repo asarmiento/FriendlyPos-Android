@@ -722,15 +722,19 @@ public class PrinterFunctions {
             stype = "Archivo";
         }
         if (prefList.equals("1")){
+
             String bill = "! U1 JOURNAl\r\n" +
                     "! U1 SETLP 0 0 0\r\n" +
                     "\r\n" +
+                    "! U1 SETLP 5 3 70\r\n" +
                     "Cliente: " + nombreCliente + "\r\n" +
                     "Razon Social: " + companyCliente + "\r\n" +
                     ((!nombreCliente.isEmpty()) ? "A nombre de: " + nombreCliente + "\r\n" : "") +
+                    "! U1 LMARGIN 120\r\n" +
                     "Nombre fantasia: " + fantasyCliente + "\r\n" +
                     "! U1 LMARGIN 0\r\n" +
                     "! U1 SETSP 0\r\n" +
+                    "\r\n" +
                     "Descripcion           Codigo\r\n" +
                     "Cantidad      Precio       P.Sug       Total\r\n" +
                     "Tipo     \r\n" +
@@ -767,8 +771,6 @@ public class PrinterFunctions {
                     "\r\n" + String.format("Factura %s", stype) + "\r\n\n" +
                     "\r\n\n" + "Muchas Gracias por preferirnos, un placer atenderlo\r\n" +
                     "Mantenga el documento para reclamos ." + "\r\n" + "\r\n" +
-                    " Autorizado mediante oficio\r\n" +
-                    "N° : 11-1997 de la D.G.T.D\r\n" +
                     " \n\n" +
                     " \n\n" +
                     " \n ";
@@ -784,7 +786,7 @@ public class PrinterFunctions {
 
                     preview += Html.fromHtml("<h1>") + "Razon Social: " + companyCliente + Html.fromHtml("</h1><br/>");
                     preview += Html.fromHtml("<h1>") + "A nombre de: " + nombreCliente + Html.fromHtml("</h1><br/>");
-                    preview += Html.fromHtml("<h1>") +  "Nombre fantasia: " + fantasyCliente + Html.fromHtml("</h1><br/><br/>");
+                    preview += Html.fromHtml("<h1>") + "Nombre fantasia: " + fantasyCliente + Html.fromHtml("</h1><br/><br/>");
 
                     preview += Html.fromHtml("<h1>") +  "Descripcion           Codigo" + Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>") +   "Cantidad      Precio       P.Sug       Total" + Html.fromHtml("</h1></center><br/>");
@@ -834,8 +836,6 @@ public class PrinterFunctions {
                     preview += Html.fromHtml("<h1>")   + String.format("Factura %s", stype) +  Html.fromHtml("</h1></center><br/><br/><br/>");
                     preview += Html.fromHtml("<h1>")   + "Muchas gracias por preferirnos un placer atenderlo" +  Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>")   + "Mantenga el documento para reclamos." +  Html.fromHtml("</h1></center><br/><br/>");
-                    preview += Html.fromHtml("<h1>")   + "Autorizado mediante oficio" +  Html.fromHtml("</h1></center><br/>");
-                    preview += Html.fromHtml("<h1>")   + "N : 11-1997 de la D.G.T.D" +  Html.fromHtml("</h1></center><br/>");
                     break;
             }
             Intent intent2 = new Intent(PrinterService.BROADCAST_CLASS);
@@ -949,6 +949,16 @@ public class PrinterFunctions {
             for (int i = 0; i < result.size(); i++) {
 
                 List<Pivot> salesList1 = realm.where(Pivot.class).equalTo("invoice_id", idVenta).findAll();
+
+                int esBonus = salesList1.get(i).getBonus();
+
+                    double amountsinbonus = salesList1.get(i).getAmountSinBonus();
+                    String amount = salesList1.get(i).getAmount();
+                    double amountConBonus = Double.parseDouble(amount);
+
+               double totalAmountBonus = amountConBonus - amountsinbonus;
+
+
                 Productos producto = realm.where(Productos.class).equalTo("id", salesList1.get(i).getProduct_id()).findFirst();
                 //   sale ventas = realm.where(sale.class).equalTo("invoice_id", salesList1.get(i).getInvoice_id()).findFirst();
                 //    Clientes clientes = realm.where(Clientes.class).equalTo("id", ventas.getCustomer_id()).findFirst();
@@ -968,7 +978,7 @@ public class PrinterFunctions {
                 String typeId = producto.getProduct_type_id();
                 String nombreTipo = null;
 
-                double cant = Double.parseDouble(salesList1.get(i).getAmount());
+                double cant = salesList1.get(i).getAmountSinBonus();
                 double precio = Double.parseDouble(salesList1.get(i).getPrice());
 
                 double sugerido=0.0;
@@ -985,14 +995,20 @@ public class PrinterFunctions {
                     sugerido = (precio)*(precioSugerido /100) + (precio);
                 }
 
-                send += String.format("%s  %.24s ", description1, barcode) + "\r\n" +
-                        String.format("%-12s %-10s %-12s %.10s", cant, Functions.doubleToString1(precio), Functions.doubleToString1(sugerido),Functions.doubleToString1(cant * precio)) + "\r\n" +
-                        String.format("%.10s", nombreTipo) + "\r\n";
-                send += "------------------------------------------------\r\n";
 
-             /*   send += String.format("%s  %.24s ", description1, barcode) + "\r\n" +
-                        String.format("%-5s %-10s %-15s %-12s %.1s", cant /*bill.amount, precio, precio, Functions.doubleToString1(cant * precio), nombreTipo) + "\r\n";
-                send += "------------------------------------------------\r\n";*/
+                if(esBonus == 1){
+                    send += String.format("%s  %.24s ", description1, barcode) + "\r\n" +
+                            String.format("%-12s %-10s %-12s %.10s", totalAmountBonus, "0.0", "0.0","0.0") + "\r\n" +
+                            String.format("%.10s", nombreTipo) + "\r\n";
+                    send += "------------------------------------------------\r\n";
+                }
+
+                    send += String.format("%s  %.24s ", description1, barcode) + "\r\n" +
+                            String.format("%-12s %-10s %-12s %.10s", cant, Functions.doubleToString1(precio), Functions.doubleToString1(sugerido),Functions.doubleToString1(cant * precio)) + "\r\n" +
+                            String.format("%.10s", nombreTipo) + "\r\n";
+                    send += "------------------------------------------------\r\n";
+
+
                 Log.d("FACTPRODTODFAC", send + "");
             }
         }
