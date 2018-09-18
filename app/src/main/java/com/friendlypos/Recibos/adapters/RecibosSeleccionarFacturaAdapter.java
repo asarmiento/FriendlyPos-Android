@@ -117,7 +117,7 @@ public class RecibosSeleccionarFacturaAdapter extends RecyclerView.Adapter<Recib
 
                 tabFactura = 1;
                 activity.setSelecFacturaTabRecibos(tabFactura);
-
+                activity.setInvoiceIdRecibos(facturaID);
                 //  activity.setInvoiceIdRecibos(facturaID);
                 // activity.setClienteIdRecibos(clienteID);
 

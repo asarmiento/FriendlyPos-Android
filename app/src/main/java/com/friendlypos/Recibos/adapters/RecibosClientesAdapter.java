@@ -129,7 +129,7 @@ public class RecibosClientesAdapter extends RecyclerView.Adapter<RecibosClientes
 
                 tabCliente = 1;
                 activity.setSelecClienteTabRecibos(tabCliente);
-                activity.setInvoiceIdRecibos(facturaID);
+
                 activity.setClienteIdRecibos(clienteID);
 
             }

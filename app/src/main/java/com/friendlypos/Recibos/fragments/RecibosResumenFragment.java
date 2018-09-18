@@ -9,11 +9,20 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.friendlypos.R;
 import com.friendlypos.Recibos.activity.RecibosActivity;
+import com.friendlypos.Recibos.modelo.Recibos;
 import com.friendlypos.Recibos.util.TotalizeHelperRecibos;
+import com.friendlypos.application.util.Functions;
 import com.friendlypos.distribucion.fragment.BaseFragment;
+import com.friendlypos.distribucion.modelo.Pivot;
+import com.friendlypos.distribucion.modelo.invoice;
+import com.friendlypos.login.modelo.Usuarios;
+
+import io.realm.Realm;
+import io.realm.RealmResults;
 
 
 public class RecibosResumenFragment extends BaseFragment {
@@ -30,6 +39,8 @@ public class RecibosResumenFragment extends BaseFragment {
     double totalFacturaSelec = 0.0;
     double totalFacturaTodas = 0.0;
     double totalFacturaPagado = 0.0;
+    double debePagar = 0.0;
+    double montoFaltante = 0.0;
 
     public static RecibosResumenFragment getInstance() {
         return new RecibosResumenFragment();
@@ -72,6 +83,72 @@ public class RecibosResumenFragment extends BaseFragment {
 
             totalizeHelper = new TotalizeHelperRecibos(activity);
 
+        btnPagarFacturaRecibos.setOnClickListener(
+                new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        try {
+
+                            String monto = txtMontoPagar.getText().toString();
+                            double montoPagar = Double.parseDouble(monto);
+                            final String facturaId = activity.getInvoiceIdRecibos();
+                            if (montoPagar <= debePagar) {
+                                Toast.makeText(getActivity(), "Pago " + montoPagar + " " + debePagar + " " +totalFacturaPagado, Toast.LENGTH_LONG).show();
+                                montoFaltante = totalFacturaPagado + montoPagar;
+
+                                final Realm realm2 = Realm.getDefaultInstance();
+                                realm2.executeTransaction(new Realm.Transaction() {
+
+                                    @Override
+                                    public void execute(Realm realm2) {
+                                        Recibos recibo_actualizado = realm2.where(Recibos.class).equalTo("invoice_id", facturaId).findFirst();
+
+                                        recibo_actualizado.setPaid(montoFaltante);
+
+                                        realm2.insertOrUpdate(recibo_actualizado);
+                                        realm2.close();
+
+
+                                        Log.d("ACT RECIBO", recibo_actualizado + "");
+
+                                    }
+                                });
+                                txtMontoPagar.setText(" ");
+                                updateData();
+
+                            }else{
+                                Toast.makeText(getActivity(), "El monto agregado es mayor al monto de la factura", Toast.LENGTH_LONG).show();
+                            }
+
+
+                          /*  if (metodoPagoCliente.equals("1")) {
+
+                                int tabCliente = 0;
+                                ((PreventaActivity) getActivity()).setSelecClienteTabPreventa(tabCliente);
+
+                                Toast.makeText(getActivity(), "Contado", Toast.LENGTH_LONG).show();
+                                obtenerLocalización();
+                                aplicarFactura();
+                            }
+
+                            else if (metodoPagoCliente.equals("2")) {
+                                Toast.makeText(getActivity(), "Crédito", Toast.LENGTH_LONG).show();
+                                obtenerLocalización();
+                                aplicarFactura();
+
+                            }
+                            actualizarFactura();*/
+
+                        }
+                        catch (Exception e) {
+                            Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
+                            e.printStackTrace();
+
+                        }
+                    }
+
+                });
 
         return rootView;
 
@@ -94,11 +171,11 @@ public class RecibosResumenFragment extends BaseFragment {
             Log.d("totalFacturaSelec",  totalFacturaSelec + "");
             totalFacturaPagado = activity.getTotalizarPagado();
             Log.d("totalFacturaPagado",  totalFacturaPagado + "");
-            double debePagar = totalFacturaSelec - totalFacturaPagado;
+            debePagar = totalFacturaSelec - totalFacturaPagado;
             Log.d("debePagar",  debePagar + "");
 
 
-            txt_resumen_factura_TotalTodosRecibos.setText("Total de todas las facturas: " + String.format("%,.2f", totalFacturaTodas));
+            txt_resumen_factura_TotalTodosRecibos.setText("Total de la factura: " + String.format("%,.2f", totalFacturaSelec));
             txt_resumen_factura_totalUnaRecibos.setText("Total por pagar de esta factura: " + String.format("%,.2f", debePagar));
 
         }
