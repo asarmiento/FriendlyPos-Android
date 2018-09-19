@@ -602,7 +602,6 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
                     session.guardarDatosBonus(0);
 
 
-
                     int pos = getAdapterPosition();
                     if (pos == RecyclerView.NO_POSITION) return;
 

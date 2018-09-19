@@ -17,15 +17,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textStyle="bold"
+            android:textSize="22sp"
             android:text="Numeracion"
             android:textColor="@color/icons"/>
 
 
         <TextView
-            android:id="@+id/txt_producto_factura_idRecibos"
+            android:id="@+id/txt_producto_factura_TotalRecibos"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Id"
+            android:text="Total Factura"
+            android:textSize="20sp"
             android:layout_marginTop="5dp"
             android:textColor="@color/icons"
             android:layout_below="@+id/txt_producto_factura_numeracionRecibos"
@@ -33,23 +35,23 @@
 
 
         <TextView
-            android:id="@+id/txt_producto_factura_TotalRecibos"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Total"
-            android:layout_marginTop="8dp"
-            android:textColor="@color/icons"
-            android:layout_below="@+id/txt_producto_factura_idRecibos"
-            android:layout_alignParentStart="true" />
-
-        <TextView
             android:id="@+id/txt_producto_factura_PagoRecibos"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Pago"
+            android:text="Pagado"
+            android:layout_marginTop="8dp"
             android:textColor="@color/icons"
-            android:layout_alignBaseline="@+id/txt_producto_factura_TotalRecibos"
-            android:layout_alignBottom="@+id/txt_producto_factura_TotalRecibos"
+            android:layout_below="@+id/txt_producto_factura_TotalRecibos"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:id="@+id/txt_producto_factura_FaltanteRecibos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Restante"
+            android:textColor="@color/icons"
+            android:layout_alignBaseline="@+id/txt_producto_factura_PagoRecibos"
+            android:layout_alignBottom="@+id/txt_producto_factura_PagoRecibos"
             android:layout_alignParentEnd="true" />
 
 

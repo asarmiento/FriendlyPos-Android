@@ -3,12 +3,38 @@
     android:layout_height="match_parent"
     >
 
+    <TextView
+        android:id="@+id/txtPagoTotal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Pago total"
+        android:textSize="20sp"
+        android:layout_alignBaseline="@+id/btnPagoTotal"
+        android:layout_alignBottom="@+id/btnPagoTotal"
+        android:layout_alignParentStart="true" />
+
     <android.support.v7.widget.RecyclerView
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/recyclerViewRecibosResumen"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/restCredit"
-        android:layout_alignParentStart="true" />
+        android:layout_marginTop="5dp"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/btnPagoTotal" />
+
+    <Button
+        android:id="@+id/btnPagoTotal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/fondo_botones"
+        android:text=" Pagar Todo "
+        android:textColor="@color/cardview_light_background"
+        android:visibility="visible"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true" />
+
 
 </RelativeLayout>
