@@ -26,11 +26,14 @@ import static android.content.ContentValues.TAG;
 public class SubirHelperPreventa {
 
     private NetworkStateChangeReceiver networkStateChangeReceiver;
-    private Activity activity;
+    private MenuPrincipal activity;
     private Context mContext;
     private RequestInterface mAPIService;
     int codigoServer;
-
+    int codigo;
+    String codigoS;
+    String mensajeS;
+    String resultS;
     public int getCodigoServer() {
         return codigoServer;
     }
@@ -38,7 +41,7 @@ public class SubirHelperPreventa {
     public void setCodigoServer(int codigoServer) {
         this.codigoServer = codigoServer;
     }
-    public SubirHelperPreventa(Activity activity) {
+    public SubirHelperPreventa(MenuPrincipal activity) {
         this.activity = activity;
         this.mContext = activity;
         networkStateChangeReceiver = new NetworkStateChangeReceiver();
@@ -58,13 +61,20 @@ public class SubirHelperPreventa {
 
                 if(response.isSuccessful()) {
                     Log.d("respPreventa",response.body().toString());
-                    Toast.makeText(activity, response.message().toString(), Toast.LENGTH_SHORT).show();
-                    int codigo = response.code();
-                    setCodigoServer(codigo);
+                 //   Toast.makeText(activity, response.message().toString(), Toast.LENGTH_SHORT).show();
+
+                    codigo = response.code();
+                    codigoS = response.body().getCode();
+                    mensajeS = response.body().getMessage();
+                    resultS= String.valueOf(response.body().isResult());
+
+                    activity.codigoDeRespuesta(codigoS, mensajeS, resultS, codigo);
                 }
                 else{
-                    Toast.makeText(activity, response.message().toString(), Toast.LENGTH_SHORT).show();
+                 //   Toast.makeText(activity, response.message().toString(), Toast.LENGTH_SHORT).show();
                 }
+                //setCodigoServer(codigo);
+
             }
 
             @Override
@@ -72,7 +82,12 @@ public class SubirHelperPreventa {
                 Log.e(TAG, "Unable to submit post to API.");
             }
         });}
+        else{
+            Toast.makeText(activity, "Error, por favor revisar conexión de Internet", Toast.LENGTH_SHORT).show();
+        }
     }
+
+
 
     private boolean isOnline() {
         return networkStateChangeReceiver.isNetworkAvailable(mContext);

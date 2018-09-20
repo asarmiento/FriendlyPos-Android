@@ -158,6 +158,15 @@ public class RecibosSeleccionarFacturaAdapter extends RecyclerView.Adapter<Recib
 
                                 recibo_actualizado.setPaid(montoFaltante);
                                 recibo_actualizado.setAbonado(1);
+                                double cant = recibo_actualizado.getMontoCancelado();
+                                if(cant == 0.0){
+                                    recibo_actualizado.setMontoCancelado(montoPagar);
+                                }
+                                else{
+                                    recibo_actualizado.setMontoCancelado(cant + montoPagar);
+                                }
+
+
                                 realm2.insertOrUpdate(recibo_actualizado);
                                 realm2.close();
 
@@ -165,6 +174,7 @@ public class RecibosSeleccionarFacturaAdapter extends RecyclerView.Adapter<Recib
 
                             }
                         });
+                        fragment.updateData();
                         activity.setTotalizarPagado(montoFaltante);
                         activity.setMontoPagar(montoPagar);
                         input.setText(" ");

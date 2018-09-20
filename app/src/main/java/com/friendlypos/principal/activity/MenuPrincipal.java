@@ -394,8 +394,6 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                 final RealmResults<invoice> invoice4 = query4.findAll();
                 Log.d("qweqweq", invoice4.toString());
 
-
-
                 if(invoice4.size()== 0){
                     cambioDatosEmpresa = session.getPrefDescargaDatos();
                     // cambioDatosEmpresa = getDescargaDatosEmpresa();
@@ -436,23 +434,8 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                         EnviarFactura obj = new EnviarFactura(listaFacturas.get(i));
                         Log.d("My App", obj + "");
                         subir1.sendPost(obj);
-                     //   int codigo = subir1.getCodigoServer();
-
-                     //   if(codigo == 200){
-
-                            actualizarVenta();
-                            actualizarFactura();
                         }
-                     //   else{
-                    //        Toast.makeText(MenuPrincipal.this,"Error, por favor volver a intentar", Toast.LENGTH_LONG).show();
-                   //    }
-
-
-
-                    //}
                 }
-
-                Toast.makeText(MenuPrincipal.this, "subir_ventas", Toast.LENGTH_SHORT).show();
 
                 break;
 
@@ -479,23 +462,10 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                         EnviarFactura obj = new EnviarFactura(listaFacturasPedidos.get(i));
                         Log.d("My App", obj + "");
 
-
-                            subirPreventa.sendPostPreventa(obj);
-
-                        int codigo = subirPreventa.getCodigoServer();
-
-                        if(codigo == 200){
-                            actualizarVenta();
-                            actualizarFactura();
-                        }
-                        else{
-                            Toast.makeText(MenuPrincipal.this,"Error, por favor volver a intentar", Toast.LENGTH_LONG).show();
-                        }
+                        subirPreventa.sendPostPreventa(obj);
 
                     }
                 }
-
-                Toast.makeText(MenuPrincipal.this, "subir_Pedidos", Toast.LENGTH_SHORT).show();
 
                 break;
 
@@ -522,13 +492,8 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                         EnviarFactura obj = new EnviarFactura(listaFacturasVentaDirecta.get(i));
                         Log.d("My App", obj + "");
                         subirVentaDirecta.sendPostVentaDirecta(obj);
-
-                        actualizarVenta();
-                        actualizarFactura();
                     }
                 }
-
-                Toast.makeText(MenuPrincipal.this, "subir_Venta Directa", Toast.LENGTH_SHORT).show();
 
                 break;
 
@@ -555,13 +520,8 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                         EnviarFactura obj = new EnviarFactura(listaFacturasProforma.get(i));
                         Log.d("My App", obj + "");
                         subirProforma.sendPostProforma(obj);
-
-                        actualizarVenta();
-                        actualizarFactura();
                     }
                 }
-
-                Toast.makeText(MenuPrincipal.this, "subir Proforma", Toast.LENGTH_SHORT).show();
 
                 break;
 
@@ -588,12 +548,11 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                         EnviarClienteVisitado obj = new EnviarClienteVisitado(listaVisits.get(i));
                         Log.d("My App", obj + "");
                         subirClienteVisitado.sendPostClienteVisitado(obj);
-
                         actualizarClienteVisitado();
                     }
                 }
 
-                Toast.makeText(MenuPrincipal.this, "subir_clienteVisitados", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MenuPrincipal.this, "Se subio con éxito", Toast.LENGTH_SHORT).show();
 
                 break;
 
@@ -637,7 +596,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
         return false;
     }
 
-    public void actualizarFactura() {
+    public void actualizarFactura(final String factura) {
 
         // TRANSACCION PARA ACTUALIZAR CAMPOS DE LA TABLA FACTURAS
         final Realm realm2 = Realm.getDefaultInstance();
@@ -647,7 +606,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                 @Override
                 public void execute(Realm realm) {
 
-                    invoice factura_actualizada = realm2.where(invoice.class).equalTo("id", facturaId).findFirst();
+                    invoice factura_actualizada = realm2.where(invoice.class).equalTo("id", factura).findFirst();
                     factura_actualizada.setSubida(0);
                     realm2.insertOrUpdate(factura_actualizada);
 
@@ -664,7 +623,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
 
     }
 
-    protected void actualizarVenta() {
+    protected void actualizarVenta(final String factura) {
 
         // TRANSACCION PARA ACTUALIZAR CAMPOS DE LA TABLA VENTAS
         final Realm realm3 = Realm.getDefaultInstance();
@@ -674,7 +633,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                 @Override
                 public void execute(Realm realm) {
 
-                    sale sale_actualizada = realm3.where(sale.class).equalTo("id", facturaId).findFirst();
+                    sale sale_actualizada = realm3.where(sale.class).equalTo("id", factura).findFirst();
                     sale_actualizada.setSubida(0);
                     realm3.insertOrUpdate(sale_actualizada);
 
@@ -822,6 +781,33 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
 
     private boolean isOnline() {
         return networkStateChangeReceiver.isNetworkAvailable(this);
+    }
+
+    public int codigoDeRespuesta(String codS, String messageS, String resultS, int cod){
+        Realm realmPedidos = Realm.getDefaultInstance();
+        RealmQuery<invoice> queryPedidos = realmPedidos.where(invoice.class).equalTo("subida", 1).equalTo("facturaDePreventa", "Preventa");
+        final RealmResults<invoice> invoicePedidos = queryPedidos.findAll();
+        Log.d("SubFacturaInvP", invoicePedidos.toString());
+        List<invoice> listaFacturasPedidos = realmPedidos.copyFromRealm(invoicePedidos);
+        Log.d("SubFacturaListaP", listaFacturasPedidos + "");
+        realmPedidos.close();
+
+        if(listaFacturasPedidos.size()== 0){
+            Toast.makeText(MenuPrincipal.this,"No hay más facturas para subir", Toast.LENGTH_LONG).show();
+        }else {
+
+            for (int i = 0; i < listaFacturasPedidos.size(); i++) {
+                facturaId = String.valueOf(listaFacturasPedidos.get(i).getId());
+                if (codS.equals("1") && resultS.equals("true")) {
+                    actualizarVenta(facturaId);
+                    actualizarFactura(facturaId);
+                    Toast.makeText(MenuPrincipal.this, messageS, Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(MenuPrincipal.this, messageS, Toast.LENGTH_LONG).show();
+                }
+            }
+        }
+        return cod;
     }
 
 }

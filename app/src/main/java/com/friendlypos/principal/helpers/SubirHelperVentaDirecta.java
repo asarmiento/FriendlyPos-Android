@@ -11,6 +11,7 @@ import com.friendlypos.application.interfaces.RequestInterface;
 import com.friendlypos.distribucion.modelo.EnviarFactura;
 import com.friendlypos.distribucion.modelo.invoice;
 import com.friendlypos.login.util.SessionPrefes;
+import com.friendlypos.principal.activity.MenuPrincipal;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -25,11 +26,17 @@ import static android.content.ContentValues.TAG;
 public class SubirHelperVentaDirecta {
 
     private NetworkStateChangeReceiver networkStateChangeReceiver;
-    private Activity activity;
+    private MenuPrincipal activity;
     private Context mContext;
     private RequestInterface mAPIService;
+    int codigo;
+    public String respuestaServer;
+    String codigoS;
+    String mensajeS;
+    String resultS;
+    int codigoServer;
 
-    public SubirHelperVentaDirecta(Activity activity) {
+    public SubirHelperVentaDirecta(MenuPrincipal activity) {
         this.activity = activity;
         this.mContext = activity;
         networkStateChangeReceiver = new NetworkStateChangeReceiver();
@@ -48,14 +55,18 @@ public class SubirHelperVentaDirecta {
 
             @Override
             public void onResponse(Call<invoice> call, Response<invoice> response) {
+
                 if(response.isSuccessful()) {
                    // showResponse(response.body().toString());
                     Log.d("respVentaDirecta",response.body().toString());
-                    Toast.makeText(activity, response.body().toString(), Toast.LENGTH_SHORT).show();
+                    codigo = response.code();
+                    codigoS = response.body().getCode();
+                    mensajeS = response.body().getMessage();
+                    resultS= String.valueOf(response.body().isResult());
+
+                    activity.codigoDeRespuesta(codigoS, mensajeS, resultS, codigo);
                 }
                 else{
-
-                    Toast.makeText(activity, "nada " + response.body().toString(), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -64,6 +75,9 @@ public class SubirHelperVentaDirecta {
                 Log.e(TAG, "Unable to submit post to API.");
             }
         });}
+        else{
+            Toast.makeText(activity, "Error, por favor revisar conexión de Internet", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private boolean isOnline() {

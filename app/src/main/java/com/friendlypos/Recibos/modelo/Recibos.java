@@ -27,6 +27,15 @@ public class Recibos extends RealmObject {
     double total;
     double paid;
     int abonado = 0;
+    double montoCancelado= 0.0;
+
+    public double getMontoCancelado() {
+        return montoCancelado;
+    }
+
+    public void setMontoCancelado(double montoCancelado) {
+        this.montoCancelado = montoCancelado;
+    }
 
     public String getInvoice_id() {
         return invoice_id;
