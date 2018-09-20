@@ -50,7 +50,6 @@ public class SubirHelperVentaDirecta {
 
             Log.d("factura1", facturaQuery + " ");
 
-
         mAPIService.savePostVentaDirecta(facturaQuery, token).enqueue(new Callback<invoice>() {
 
             @Override

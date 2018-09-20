@@ -24,8 +24,10 @@ public class Recibos extends RealmObject {
     String date;
     String paid_up;
     String customer_id;
+
     double total;
     double paid;
+    String observaciones;
     int abonado = 0;
     double montoCancelado= 0.0;
 
@@ -99,6 +101,14 @@ public class Recibos extends RealmObject {
 
     public void setAbonado(int abonado) {
         this.abonado = abonado;
+    }
+
+    public String getObservaciones() {
+        return observaciones;
+    }
+
+    public void setObservaciones(String observaciones) {
+        this.observaciones = observaciones;
     }
 
     @Override

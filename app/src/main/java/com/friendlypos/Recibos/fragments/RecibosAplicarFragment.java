@@ -67,10 +67,12 @@ public class RecibosAplicarFragment extends BaseFragment {
     int slecTAB;
     EditText txtFecha;
     String facturaId;
+    String clienteId;
     Recibos recibo_actualizado;
     public HtmlTextView text;
     private static EditText observaciones;
     String observ;
+    String fecha;
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -139,23 +141,6 @@ public class RecibosAplicarFragment extends BaseFragment {
                     public void onClick(View v) {
                         try {
                             aplicarFactura() ;
-                          /*  if (metodoPagoCliente.equals("1")) {
-
-                                int tabCliente = 0;
-                                ((PreventaActivity) getActivity()).setSelecClienteTabPreventa(tabCliente);
-
-                                Toast.makeText(getActivity(), "Contado", Toast.LENGTH_LONG).show();
-                                obtenerLocalización();
-                                aplicarFactura();
-                            }
-
-                            else if (metodoPagoCliente.equals("2")) {
-                                Toast.makeText(getActivity(), "Crédito", Toast.LENGTH_LONG).show();
-                                obtenerLocalización();
-                                aplicarFactura();
-
-                            }
-                            actualizarFactura();*/
 
                         }
                         catch (Exception e) {
@@ -216,17 +201,9 @@ public class RecibosAplicarFragment extends BaseFragment {
     public void updateData() {
         slecTAB = activity.getSelecClienteTabRecibos();
         if (slecTAB == 1) {
-            //  paid.getText().clear();
 
-           /* totalGrabado = ((PreventaActivity) getActivity()).getTotalizarSubGrabado();
-            totalExento = ((PreventaActivity) getActivity()).getTotalizarSubExento();
-            totalSubtotal = ((PreventaActivity) getActivity()).getTotalizarSubTotal();
-            totalDescuento = ((PreventaActivity) getActivity()).getTotalizarDescuento();
-            totalImpuesto = ((PreventaActivity) getActivity()).getTotalizarImpuestoIVA();
-            totalTotal = ((PreventaActivity) getActivity()).getTotalizarTotal();*/
             facturaId = activity.getInvoiceIdRecibos();
-            final String clienteId = activity.getClienteIdRecibos();
-            // TRANSACCION PARA ACTUALIZAR CAMPOS DE LA TABLA VENTAS
+            clienteId = activity.getClienteIdRecibos();
             final Realm realm3 = Realm.getDefaultInstance();
             realm3.executeTransaction(new Realm.Transaction() {
 
@@ -235,25 +212,12 @@ public class RecibosAplicarFragment extends BaseFragment {
 
                     recibo_actualizado = realm3.where(Recibos.class).equalTo("customer_id", clienteId).findFirst();
 
-
-
-
-                //    recibo_actualizado = realm3.where(Recibos.class).equalTo("invoice_id", facturaId).findFirst();
-
                     realm3.close();
                 }
             });
 
 
             getHtmlPreview();
-          /*  subGra.setText(String.format("%,.2f", totalGrabado));
-            subExe.setText(String.format("%,.2f", totalExento));
-
-            subT.setText(String.format("%,.2f", totalSubtotal));
-            discount.setText(String.format("%,.2f", totalDescuento));
-
-            ivaSub.setText(String.format("%,.2f", totalImpuesto));
-            Total.setText(String.format("%,.2f", totalTotal));*/
 
             Log.d("FACTURAIDTOTALIZAR", clienteId);
         }
@@ -286,17 +250,7 @@ public class RecibosAplicarFragment extends BaseFragment {
 
             Realm realm = Realm.getDefaultInstance();
             Clientes clientes = realm.where(Clientes.class).equalTo("id", recibo_actualizado.getCustomer_id()).findFirst();
-            //invoice invoice = realm.where(com.friendlypos.distribucion.modelo.invoice.class).equalTo("id", sale_actualizada.getInvoice_id()).findFirst();
-            RealmResults<Recibos> result = realm.where(Recibos.class).equalTo("invoice_id", recibo_actualizado.getInvoice_id()).findAll();
 
-           // String idUsuario = invoice.getUser_id();
-
-          //  Usuarios usuarios = realm.where(Usuarios.class).equalTo("id", idUsuario).findFirst();
-
-           // String nombreUsuario = usuarios.getUsername();
-
-            // VARIABLES VENTA
-            String fechayhora = recibo_actualizado.getDate();
             String nombreCliente = clientes.getFantasyName();
 
             String preview = "";
@@ -308,10 +262,6 @@ public class RecibosAplicarFragment extends BaseFragment {
                 preview += "<h5>" + "Recibos" + "</h5>";
 
                 preview += "<a><b>A nombre de:</b> " + nombreCliente + "</a><br><br>";
-             /*   preview += Html.fromHtml("<h1>") +  "Descripcion           Codigo" + Html.fromHtml("</h1></center><br/>");
-                preview += Html.fromHtml("<h1>") +   "Cantidad      Precio       P.Sug       Total" + Html.fromHtml("</h1></center><br/>");
-                preview += Html.fromHtml("<h1>") +   "Tipo " + Html.fromHtml("</h1></center><br/>");
-*/
                 preview += "<a><b>" + padRight("# Factura", 10) + "\t\t" + padRight("Monto total", 10) + "</b></a><br>";
                 preview += "<a><b>" + padRight("Monto Pagado", 10) + padRight("Monto restante", 10) + "</b></a><br>";
                 preview += "<a>------------------------------------------------<a><br>";
@@ -356,11 +306,9 @@ public class RecibosAplicarFragment extends BaseFragment {
             send = "No hay recibos emitidos";
         }
         else {
-            // printSalesCashTotal= 0.0;
             for (int i = 0; i < result.size(); i++) {
 
                 List<Recibos> salesList1 = realm1.where(Recibos.class).equalTo("customer_id", idVenta).equalTo("abonado", 1).findAll();
-               // Productos producto = realm1.where(Productos.class).equalTo("id", salesList1.get(i).getProduct_id()).findFirst();
 
 
                 String numeracion = salesList1.get(i).getNumeration();
@@ -376,10 +324,6 @@ public class RecibosAplicarFragment extends BaseFragment {
                         String.format("|%-1000s|  |%1000s|",pagadoS ,restanteS) + "<br>";
                 send += "<a>------------------------------------------------<a><br>";
 
-
-              /*  send += String.format("%s  %.24s ", description, barcode) + "<br>" +
-                    String.format("%-5s %-10s %-10s %-15s %.1s", cant /*bill.amount, precio, precio, Functions.doubleToString(cant * precio), typeId) + "<br>";
-                send += "<a>------------------------------------------------<a><br>";*/
                 Log.d("FACTPRODTODFAC", send + "");
 
             }
@@ -392,8 +336,7 @@ public class RecibosAplicarFragment extends BaseFragment {
 
     public void actualizarFacturaDetalles() {
 
-
-        txtFecha.getText().toString();
+        fecha = txtFecha.getText().toString();
         observaciones.getText().toString();
 
         if(!observaciones.getText().toString().isEmpty()){
@@ -406,50 +349,28 @@ public class RecibosAplicarFragment extends BaseFragment {
         }
 
 
-    /*    Realm realm = Realm.getDefaultInstance();
-        usuer = session.getUsuarioPrefs();
-        Usuarios usuarios = realm.where(Usuarios.class).equalTo("email", usuer).findFirst();
-        String idUsuario = usuarios.getId();
-        realm.close();
+        final Realm realm2 = Realm.getDefaultInstance();
+        realm2.executeTransaction(new Realm.Transaction() {
 
-        sale ventaDetallePreventa = activity.getCurrentVenta();
-        ventaDetallePreventa.getInvoice_id();
-        tipoFacturacion = ventaDetallePreventa.getFacturaDePreventa();
+            @Override
+            public void execute(Realm realm2) {
+                Recibos recibo_actualizado = realm2.where(Recibos.class).equalTo("invoice_id", facturaId).findFirst();
 
-        final invoiceDetallePreventa invoiceDetallePreventa1 = activity.getCurrentInvoice();
-        invoiceDetallePreventa1.setP_longitud(longitude);
-        invoiceDetallePreventa1.setP_latitud(latitude);
-
-        invoiceDetallePreventa1.setP_subtotal(String.valueOf(totalSubtotal));
-        invoiceDetallePreventa1.setP_subtotal_taxed(String.valueOf(totalGrabado));
-        invoiceDetallePreventa1.setP_subtotal_exempt(String.valueOf(totalExento));
-        invoiceDetallePreventa1.setP_discount(String.valueOf(totalDescuento));
-        invoiceDetallePreventa1.setP_tax(String.valueOf(totalImpuesto));
-        invoiceDetallePreventa1.setP_total(String.valueOf(totalTotal));
-
-        invoiceDetallePreventa1.setP_changing("0");
-        invoiceDetallePreventa1.setP_note(notes.getText().toString());
-        invoiceDetallePreventa1.setP_canceled("1");
-        invoiceDetallePreventa1.setP_paid("0");
-        invoiceDetallePreventa1.setP_user_id(idUsuario);
-        invoiceDetallePreventa1.setP_user_id_applied(idUsuario);
-        invoiceDetallePreventa1.setP_sale(activity.getCurrentVenta());
-
-        if(tipoFacturacion.equals("Preventa")){
-            invoiceDetallePreventa1.setFacturaDePreventa("Preventa");
-        }
-        else if(tipoFacturacion.equals("Proforma")){
-            invoiceDetallePreventa1.setFacturaDePreventa("Proforma");
-        }
+                recibo_actualizado.setDate(fecha);
+                recibo_actualizado.setObservaciones(observ);
 
 
-        Log.d("actFactDetPrev", invoiceDetallePreventa1 + "");*/
+                realm2.insertOrUpdate(recibo_actualizado);
+                realm2.close();
 
+                Log.d("ACT RECIBO", recibo_actualizado + "");
+            }
+        });
     }
 
     protected void aplicarFactura() {
 
-    /*    actualizarFacturaDetalles();*/
+        actualizarFacturaDetalles();
 
         Toast.makeText(getActivity(), "Venta realizada correctamente", Toast.LENGTH_LONG).show();
 
