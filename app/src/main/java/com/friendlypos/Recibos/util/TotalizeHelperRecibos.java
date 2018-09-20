@@ -50,8 +50,17 @@ public class TotalizeHelperRecibos {
         Double total = 0.0;
         total = totalPago;
 
+
+        Double totalPagado = currentPivot.getPaid();
+
+        Double totalPagar = 0.0;
+        totalPagar = totalPago - totalPagado;
+
         Log.d("TOTALTODOS", total +"");
 
         activity.setTotalizarTotal(total);
+        activity.setTotalizarCancelado(totalPagar);
+
+
     }
 }

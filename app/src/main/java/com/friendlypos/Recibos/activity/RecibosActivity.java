@@ -45,8 +45,18 @@ public class RecibosActivity extends BluetoothActivity {
     private String clienteIdRecibos;
     private double totalFacturaSelec;
     private double totalizarTotal;
+    private double totalizarCancelado;
     private double totalizarPagado;
+    private double montoPagar;
 
+
+    public double getMontoPagar() {
+        return montoPagar;
+    }
+
+    public void setMontoPagar(double montoPagar) {
+        this.montoPagar = montoPagar;
+    }
 
     public double getTotalizarPagado() {
         return totalizarPagado;
@@ -55,6 +65,15 @@ public class RecibosActivity extends BluetoothActivity {
     public void setTotalizarPagado(double totalizarPagado) {
         this.totalizarPagado = totalizarPagado;
     }
+
+    public double getTotalizarCancelado() {
+        return totalizarCancelado;
+    }
+
+    public void setTotalizarCancelado(double totalizarCancelado) {
+        this.totalizarCancelado = this.totalizarCancelado + totalizarCancelado;
+    }
+
 
     public double getTotalizarTotal() {
         return totalizarTotal;
@@ -243,6 +262,7 @@ public class RecibosActivity extends BluetoothActivity {
 
     public void cleanTotalize() {
         totalizarTotal = 0.0;
+        totalizarCancelado = 0.0;
     }
 
     @Override

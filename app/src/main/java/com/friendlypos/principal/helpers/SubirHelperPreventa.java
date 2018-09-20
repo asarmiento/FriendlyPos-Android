@@ -29,7 +29,15 @@ public class SubirHelperPreventa {
     private Activity activity;
     private Context mContext;
     private RequestInterface mAPIService;
+    int codigoServer;
 
+    public int getCodigoServer() {
+        return codigoServer;
+    }
+
+    public void setCodigoServer(int codigoServer) {
+        this.codigoServer = codigoServer;
+    }
     public SubirHelperPreventa(Activity activity) {
         this.activity = activity;
         this.mContext = activity;
@@ -42,14 +50,20 @@ public class SubirHelperPreventa {
         Log.d("tokenCliente", token + " ");
         if (isOnline()) {
             Log.d("factura1", facturaQuery + " ");
+
         mAPIService.savePostPreventa(facturaQuery, token).enqueue(new Callback<invoice>() {
 
             @Override
             public void onResponse(Call<invoice> call, Response<invoice> response) {
+
                 if(response.isSuccessful()) {
-                   // showResponse(response.body().toString());
                     Log.d("respPreventa",response.body().toString());
-                    Toast.makeText(activity, response.body().toString(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(activity, response.message().toString(), Toast.LENGTH_SHORT).show();
+                    int codigo = response.code();
+                    setCodigoServer(codigo);
+                }
+                else{
+                    Toast.makeText(activity, response.message().toString(), Toast.LENGTH_SHORT).show();
                 }
             }
 

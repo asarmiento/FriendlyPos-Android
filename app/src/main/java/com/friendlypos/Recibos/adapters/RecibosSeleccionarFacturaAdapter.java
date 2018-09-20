@@ -82,11 +82,12 @@ public class RecibosSeleccionarFacturaAdapter extends RecyclerView.Adapter<Recib
         String numeracion = inventario.getNumeration();
         double total = inventario.getTotal();
         double pago = inventario.getPaid();
-
+        double totalT = activity.getTotalizarTotal();
 
         holder.txt_producto_factura_numeracionRecibos.setText( "# de factura: " + numeracion);
 
         debePagar = total - pago;
+        holder.txt_producto_factura_FaltanteRecibos.setText("Restante: " + String.format("%,.2f", debePagar));
 
         holder.txt_producto_factura_FaltanteRecibos.setText("Restante: " + String.format("%,.2f", debePagar));
         holder.txt_producto_factura_TotalRecibos.setText("Total: " + String.format("%,.2f", total));
@@ -156,7 +157,7 @@ public class RecibosSeleccionarFacturaAdapter extends RecyclerView.Adapter<Recib
                                 Recibos recibo_actualizado = realm2.where(Recibos.class).equalTo("invoice_id", facturaId).findFirst();
 
                                 recibo_actualizado.setPaid(montoFaltante);
-
+                                recibo_actualizado.setAbonado(1);
                                 realm2.insertOrUpdate(recibo_actualizado);
                                 realm2.close();
 
@@ -165,6 +166,7 @@ public class RecibosSeleccionarFacturaAdapter extends RecyclerView.Adapter<Recib
                             }
                         });
                         activity.setTotalizarPagado(montoFaltante);
+                        activity.setMontoPagar(montoPagar);
                         input.setText(" ");
                         notifyDataSetChanged();
 
@@ -306,20 +308,6 @@ public class RecibosSeleccionarFacturaAdapter extends RecyclerView.Adapter<Recib
                 public void onClick(View view) {
 
 
-                final ProgressDialog progresRing = ProgressDialog.show(context, "Cargando", "Seleccionando Factura", true);
-                progresRing.setCancelable(true);
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            Thread.sleep(5000);
-                        } catch (Exception e) {
-
-                        }
-                        progresRing.dismiss();
-                    }
-                }).start();
-
                 int pos = getAdapterPosition();
                 if (pos == RecyclerView.NO_POSITION) return;
 
@@ -347,7 +335,6 @@ public class RecibosSeleccionarFacturaAdapter extends RecyclerView.Adapter<Recib
                 tabFactura = 1;
                 activity.setSelecFacturaTabRecibos(tabFactura);
                 activity.setInvoiceIdRecibos(facturaID);
-
 
                     addProduct(facturaID, totalPago, totalPagado, debePagar);
 

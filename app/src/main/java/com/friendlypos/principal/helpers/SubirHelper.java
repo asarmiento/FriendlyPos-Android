@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.friendlypos.app.broadcastreceiver.NetworkStateChangeReceiver;
 import com.friendlypos.application.datamanager.BaseManager;
@@ -32,6 +33,16 @@ public class SubirHelper {
 
     public String respuestaServer;
 
+    int codigoServer;
+
+    public int getCodigoServer() {
+        return codigoServer;
+    }
+
+    public void setCodigoServer(int codigoServer) {
+        this.codigoServer = codigoServer;
+    }
+
     public String getRespuestaServer() {
         return respuestaServer;
     }
@@ -55,14 +66,21 @@ public class SubirHelper {
         mAPIService.savePost(facturaQuery, token).enqueue(new Callback<invoice>() {
 
             @Override
-            public void onResponse(Call<invoice> call, Response<invoice> response) {
-                if(response.isSuccessful()) {
-                   // showResponse(response.body().toString());
-                    Log.d("respuestaFactura",response.body().toString());
-                    setRespuestaServer(response.message());
+                public void onResponse(Call<invoice> call, Response<invoice> response) {
 
+                        if(response.isSuccessful()) {
 
-                }
+                            int codigo = response.code();
+                            setCodigoServer(codigo);
+
+                            Log.d("respuestaFactura", response.body().toString());
+                            setRespuestaServer(response.message());
+                            Toast.makeText(activity, response.message().toString(), Toast.LENGTH_SHORT).show();
+                        }
+                    else{
+                        Toast.makeText(activity, response.message().toString(), Toast.LENGTH_SHORT).show();
+                    }
+
             }
 
             @Override

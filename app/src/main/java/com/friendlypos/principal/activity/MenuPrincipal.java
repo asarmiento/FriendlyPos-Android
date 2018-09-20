@@ -436,11 +436,20 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                         EnviarFactura obj = new EnviarFactura(listaFacturas.get(i));
                         Log.d("My App", obj + "");
                         subir1.sendPost(obj);
+                     //   int codigo = subir1.getCodigoServer();
 
-                        actualizarVenta();
-                        actualizarFactura();
+                     //   if(codigo == 200){
 
-                    }
+                            actualizarVenta();
+                            actualizarFactura();
+                        }
+                     //   else{
+                    //        Toast.makeText(MenuPrincipal.this,"Error, por favor volver a intentar", Toast.LENGTH_LONG).show();
+                   //    }
+
+
+
+                    //}
                 }
 
                 Toast.makeText(MenuPrincipal.this, "subir_ventas", Toast.LENGTH_SHORT).show();
@@ -469,10 +478,20 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                         Log.d("facturaId", facturaId + "");
                         EnviarFactura obj = new EnviarFactura(listaFacturasPedidos.get(i));
                         Log.d("My App", obj + "");
-                        subirPreventa.sendPostPreventa(obj);
 
-                        actualizarVenta();
-                        actualizarFactura();
+
+                            subirPreventa.sendPostPreventa(obj);
+
+                        int codigo = subirPreventa.getCodigoServer();
+
+                        if(codigo == 200){
+                            actualizarVenta();
+                            actualizarFactura();
+                        }
+                        else{
+                            Toast.makeText(MenuPrincipal.this,"Error, por favor volver a intentar", Toast.LENGTH_LONG).show();
+                        }
+
                     }
                 }
 

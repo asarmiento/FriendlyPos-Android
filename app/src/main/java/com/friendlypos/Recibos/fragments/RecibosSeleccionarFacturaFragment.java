@@ -8,12 +8,17 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.friendlypos.R;
 import com.friendlypos.Recibos.activity.RecibosActivity;
+import com.friendlypos.Recibos.adapters.RecibosResumenAdapter;
 import com.friendlypos.Recibos.adapters.RecibosSeleccionarFacturaAdapter;
 import com.friendlypos.Recibos.modelo.Recibos;
 import com.friendlypos.Recibos.util.TotalizeHelperRecibos;
+import com.friendlypos.distribucion.activity.DistribucionActivity;
+import com.friendlypos.distribucion.adapters.DistrResumenAdapter;
 import com.friendlypos.distribucion.fragment.BaseFragment;
 
 import java.util.List;
@@ -26,9 +31,10 @@ public class RecibosSeleccionarFacturaFragment extends BaseFragment {
     RecyclerView recyclerView;
     private RecibosSeleccionarFacturaAdapter adapter;
     TotalizeHelperRecibos totalizeHelper;
+
     int slecTAB;
     RecibosActivity activity;
-
+    TextView txtPagoTotal, txtPagoCancelado;
     public static RecibosSeleccionarFacturaFragment getInstance() {
         return new RecibosSeleccionarFacturaFragment();
     }
@@ -63,8 +69,11 @@ public class RecibosSeleccionarFacturaFragment extends BaseFragment {
         View rootView = inflater.inflate(R.layout.fragment_recibos_seleccionar_factura, container,
                 false);
         setHasOptionsMenu(true);
+
+        txtPagoTotal = (TextView) rootView.findViewById(R.id.txtPagoTotal);
+        txtPagoCancelado  = (TextView) rootView.findViewById(R.id.txtPagoCancelado);
         totalizeHelper = new TotalizeHelperRecibos(activity);
-        recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerViewRecibosResumen);
+        recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerViewRecibosSeleccFactura);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setHasFixedSize(true);
         slecTAB = activity.getSelecClienteTabRecibos();
@@ -80,7 +89,6 @@ public class RecibosSeleccionarFacturaFragment extends BaseFragment {
         }
 
         recyclerView.setAdapter(adapter);
-
         return rootView;
 
     }
@@ -102,6 +110,7 @@ public class RecibosSeleccionarFacturaFragment extends BaseFragment {
         // realm.close();
     }
 
+
     @Override
     public void updateData() {
         slecTAB = activity.getSelecClienteTabRecibos();
@@ -110,9 +119,14 @@ public class RecibosSeleccionarFacturaFragment extends BaseFragment {
             List<Recibos> list = getListProductos();
 
             adapter.updateData(list);
+           // adapter2.notifyDataSetChanged();
             totalizeHelper.totalizeRecibos(list);
 
             double totalT = activity.getTotalizarTotal();
+            double totalP = activity.getTotalizarCancelado();
+
+            txtPagoTotal.setText("Total de todas: " +  String.format("%,.2f", totalT));
+            txtPagoCancelado.setText("Total por pagar: " +  String.format("%,.2f", totalP));
             Log.d("totalFull", totalT + "");
         }
         else {

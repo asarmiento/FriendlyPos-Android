@@ -8,14 +8,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Pago total"
-        android:textSize="20sp"
-        android:layout_alignBaseline="@+id/btnPagoTotal"
-        android:layout_alignBottom="@+id/btnPagoTotal"
+        android:textSize="16sp"
+        android:layout_alignTop="@+id/btnPagoTotal"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:id="@+id/txtPagoCancelado"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Pago Cancelado"
+        android:textSize="16sp"
+        android:layout_above="@+id/recyclerViewRecibosSeleccFactura"
         android:layout_alignParentStart="true" />
 
     <android.support.v7.widget.RecyclerView
         xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/recyclerViewRecibosResumen"
+        android:id="@+id/recyclerViewRecibosSeleccFactura"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="5dp"

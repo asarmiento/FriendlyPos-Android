@@ -26,6 +26,7 @@ public class Recibos extends RealmObject {
     String customer_id;
     double total;
     double paid;
+    int abonado = 0;
 
     public String getInvoice_id() {
         return invoice_id;
@@ -81,6 +82,14 @@ public class Recibos extends RealmObject {
 
     public void setPaid(double paid) {
         this.paid = paid;
+    }
+
+    public int getAbonado() {
+        return abonado;
+    }
+
+    public void setAbonado(int abonado) {
+        this.abonado = abonado;
     }
 
     @Override
