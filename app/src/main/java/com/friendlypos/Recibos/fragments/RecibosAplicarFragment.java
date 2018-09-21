@@ -124,15 +124,6 @@ public class RecibosAplicarFragment extends BaseFragment {
             }
         });
 
-        if (apply_done == 1) {
-            applyBill.setVisibility(View.GONE);
-            printBill.setVisibility(View.VISIBLE);
-        }
-        else {
-            applyBill.setVisibility(View.VISIBLE);
-            printBill.setVisibility(View.GONE);
-        }
-
 
         applyBill.setOnClickListener(
                 new View.OnClickListener() {
@@ -305,8 +296,8 @@ public class RecibosAplicarFragment extends BaseFragment {
                 double restante = salesList1.get(i).getMontoCancelado();
                 String restanteS = String.format("%,.2f", restante);
 
-                send += String.format("|%-600s|  |%600s|", numeracion, totalS) + "<br>" +
-                        String.format("|%-1000s|  |%1000s|",pagadoS ,restanteS) + "<br>";
+                send += String.format("|%-1500s|  |%1500s|", numeracion, totalS) + "<br>" +
+                        String.format("|%-1500s| |%1500s|",pagadoS ,restanteS) + "<br>";
                 send += "<a>------------------------------------------------<a><br>";
 
                 Log.d("FACTPRODTODFAC", send + "");
@@ -320,18 +311,6 @@ public class RecibosAplicarFragment extends BaseFragment {
 
 
     public void actualizarFacturaDetalles() {
-
-        fecha = txtFecha.getText().toString();
-        observaciones.getText().toString();
-
-        if(!observaciones.getText().toString().isEmpty()){
-            observ = observaciones.getText().toString();
-
-        }
-        else{
-            observaciones.setError("Campo requerido");
-            observaciones.requestFocus();
-        }
 
 
         final Realm realm2 = Realm.getDefaultInstance();
@@ -374,14 +353,24 @@ public class RecibosAplicarFragment extends BaseFragment {
 
     protected void aplicarFactura() {
 
-        actualizarFacturaDetalles();
+        fecha = txtFecha.getText().toString();
+        observaciones.getText().toString();
 
-        Toast.makeText(getActivity(), "Venta realizada correctamente", Toast.LENGTH_LONG).show();
+        if(!observaciones.getText().toString().isEmpty()){
+            observ = observaciones.getText().toString();
+            actualizarFacturaDetalles();
 
-        applyBill.setVisibility(View.GONE);
-        printBill.setVisibility(View.VISIBLE);
-        apply_done = 1;
+            Toast.makeText(getActivity(), "Venta realizada correctamente", Toast.LENGTH_LONG).show();
 
+            applyBill.setVisibility(View.GONE);
+            printBill.setVisibility(View.VISIBLE);
+            apply_done = 1;
+
+        }
+        else{
+            observaciones.setError("Campo requerido");
+            observaciones.requestFocus();
+        }
 
     }
 

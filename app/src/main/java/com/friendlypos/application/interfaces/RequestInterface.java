@@ -1,6 +1,7 @@
 package com.friendlypos.application.interfaces;
 
 
+import com.friendlypos.Recibos.modelo.EnviarRecibos;
 import com.friendlypos.Recibos.modelo.RecibosResponse;
 import com.friendlypos.distribucion.modelo.EnviarFactura;
 import com.friendlypos.distribucion.modelo.invoice;
@@ -84,6 +85,9 @@ public interface RequestInterface {
     @POST("/api/upload-proforma")
     Call<invoice> savePostProforma(@Body EnviarFactura invoice, @Header("Authorization") String token);
 
+    // TODO DEFINIR CUAL ES EL KEY PARA ENVIAR (KEY, VALUE)
+    @POST("/api/upload-receipt")
+    Call<invoice> savePostRecibos(@Body EnviarRecibos invoice, @Header("Authorization") String token);
 
     // TODO DEFINIR CUAL ES EL KEY PARA ENVIAR (KEY, VALUE)
     @POST("/api/upload-visit")

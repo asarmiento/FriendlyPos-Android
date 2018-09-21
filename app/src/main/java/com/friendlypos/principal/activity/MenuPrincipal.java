@@ -28,6 +28,8 @@ import android.widget.Toast;
 
 import com.friendlypos.R;
 import com.friendlypos.Recibos.activity.RecibosActivity;
+import com.friendlypos.Recibos.modelo.EnviarRecibos;
+import com.friendlypos.Recibos.modelo.Recibos;
 import com.friendlypos.app.broadcastreceiver.NetworkStateChangeReceiver;
 import com.friendlypos.application.bluetooth.PrinterService;
 import com.friendlypos.application.util.Functions;
@@ -49,6 +51,7 @@ import com.friendlypos.principal.helpers.SubirHelper;
 import com.friendlypos.principal.helpers.SubirHelperClienteVisitado;
 import com.friendlypos.principal.helpers.SubirHelperPreventa;
 import com.friendlypos.principal.helpers.SubirHelperProforma;
+import com.friendlypos.principal.helpers.SubirHelperRecibos;
 import com.friendlypos.principal.helpers.SubirHelperVentaDirecta;
 import com.friendlypos.reimpresion.activity.ReimprimirActivity;
 import com.friendlypos.reimpresion_pedidos.activity.ReimprimirPedidosActivity;
@@ -117,10 +120,12 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
     SubirHelperVentaDirecta subirVentaDirecta;
     SubirHelperProforma subirProforma;
     SubirHelperClienteVisitado subirClienteVisitado;
+    SubirHelperRecibos subirHelperRecibos;
     String usuer;
     String idUsuario;
     String facturaId;
     int facturaIdCV;
+    String facturaIdRecibos;
     private Properties properties;
     private int descargaDatosEmpresa;
     private int cambioDatosEmpresa = 0;
@@ -143,6 +148,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
         subirVentaDirecta = new SubirHelperVentaDirecta(MenuPrincipal.this);
         subirProforma = new SubirHelperProforma(MenuPrincipal.this);
         subirClienteVisitado = new SubirHelperClienteVisitado(MenuPrincipal.this);
+        subirHelperRecibos = new SubirHelperRecibos(MenuPrincipal.this);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
             this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -525,6 +531,36 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
 
                 break;
 
+            case R.id.btn_subir_recibos:
+
+                Realm realmRecibos = Realm.getDefaultInstance();
+
+                RealmQuery<Recibos> queryRecibos = realmRecibos.where(Recibos.class).equalTo("abonado", 1);
+                final RealmResults<Recibos> invoiceRecibos = queryRecibos.findAll();
+                Log.d("qweqweq", invoiceRecibos.toString());
+                List<Recibos> listaRecibos = realmRecibos.copyFromRealm(invoiceRecibos);
+                Log.d("qweqweq1", listaRecibos + "");
+                realmRecibos.close();
+
+                if(listaRecibos.size()== 0){
+                    Toast.makeText(MenuPrincipal.this,"No hay facturas para subir", Toast.LENGTH_LONG).show();
+                }else {
+                    Toast.makeText(MenuPrincipal.this, "hay", Toast.LENGTH_SHORT).show();
+                    for (int i = 0; i < listaRecibos.size(); i++) {
+
+                        facturaIdRecibos = listaRecibos.get(i).getInvoice_id();
+                        Log.d("facturaIdRecibos", facturaIdRecibos + "");
+                        EnviarRecibos obj = new EnviarRecibos(listaRecibos.get(i));
+                        Log.d("My App", obj + "");
+                        subirHelperRecibos.sendPostRecibos(obj);
+                        //actualizarClienteVisitado();
+                    }
+                }
+
+                Toast.makeText(MenuPrincipal.this, "Se subio con éxito", Toast.LENGTH_SHORT).show();
+
+                break;
+
             case R.id.btn_subir_clienteVisitados:
 
                 Realm realmClienteVisitados = Realm.getDefaultInstance();
@@ -675,6 +711,33 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
         realm3.close();
     }
 
+    protected void actualizarRecibos(final String factura) {
+
+        // TRANSACCION PARA ACTUALIZAR CAMPOS DE LA TABLA VENTAS
+        final Realm realmRecibos = Realm.getDefaultInstance();
+
+        try {
+            realmRecibos.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+
+                    Recibos sale_actualizada = realmRecibos.where(Recibos.class).equalTo("invoice_id", factura).findFirst();
+                    sale_actualizada.setAbonado(0);
+                    realmRecibos.insertOrUpdate(sale_actualizada);
+
+                }
+
+            });
+
+        } catch (Exception e) {
+            Log.e("error", "error", e);
+            Toast.makeText(MenuPrincipal.this,"error", Toast.LENGTH_SHORT).show();
+
+        }
+        realmRecibos.close();
+    }
+
+
     public void ClickNavigation(View view) {
         Fragment fragment = null;
         Class fragmentClass = ConfiguracionFragment.class;
@@ -801,6 +864,34 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                 if (codS.equals("1") && resultS.equals("true")) {
                     actualizarVenta(facturaId);
                     actualizarFactura(facturaId);
+                    Toast.makeText(MenuPrincipal.this, messageS, Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(MenuPrincipal.this, messageS, Toast.LENGTH_LONG).show();
+                }
+            }
+        }
+        return cod;
+    }
+
+    public int codigoDeRespuestaRecibos(String codS, String messageS, String resultS, int cod){
+
+        Realm realmRecibos = Realm.getDefaultInstance();
+        RealmQuery<Recibos> queryRecibos = realmRecibos.where(Recibos.class).equalTo("abonado", 1);
+        final RealmResults<Recibos> invoiceRecibos = queryRecibos.findAll();
+        Log.d("SubFacturaInvP", invoiceRecibos.toString());
+        List<Recibos> listaRecibos = realmRecibos.copyFromRealm(invoiceRecibos);
+        Log.d("qweqweq1", listaRecibos + "");
+        realmRecibos.close();
+
+        if(listaRecibos.size()== 0){
+            Toast.makeText(MenuPrincipal.this,"No hay más facturas para subir", Toast.LENGTH_LONG).show();
+        }else {
+
+            for (int i = 0; i < listaRecibos.size(); i++) {
+                facturaId = String.valueOf(listaRecibos.get(i).getInvoice_id());
+                if (codS.equals("1") && resultS.equals("true")) {
+                    actualizarRecibos(facturaId);
+                   // actualizarFactura(facturaId);
                     Toast.makeText(MenuPrincipal.this, messageS, Toast.LENGTH_LONG).show();
                 } else {
                     Toast.makeText(MenuPrincipal.this, messageS, Toast.LENGTH_LONG).show();

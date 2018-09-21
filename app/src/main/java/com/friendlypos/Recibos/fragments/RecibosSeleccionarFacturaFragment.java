@@ -1,7 +1,9 @@
 package com.friendlypos.Recibos.fragments;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -21,6 +23,9 @@ import com.friendlypos.Recibos.util.TotalizeHelperRecibos;
 import com.friendlypos.distribucion.activity.DistribucionActivity;
 import com.friendlypos.distribucion.adapters.DistrResumenAdapter;
 import com.friendlypos.distribucion.fragment.BaseFragment;
+import com.friendlypos.distribucion.modelo.Inventario;
+import com.friendlypos.distribucion.modelo.Pivot;
+import com.friendlypos.distribucion.modelo.sale;
 
 import java.util.List;
 
@@ -72,14 +77,14 @@ public class RecibosSeleccionarFacturaFragment extends BaseFragment {
         setHasOptionsMenu(true);
 
         txtPagoTotal = (TextView) rootView.findViewById(R.id.txtPagoTotal);
-        txtPagoCancelado  = (TextView) rootView.findViewById(R.id.txtPagoCancelado);
+        txtPagoCancelado = (TextView) rootView.findViewById(R.id.txtPagoCancelado);
         totalizeHelper = new TotalizeHelperRecibos(activity);
         applyBill = (Button) rootView.findViewById(R.id.btnPagoTotal);
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerViewRecibosSeleccFactura);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setHasFixedSize(true);
         slecTAB = activity.getSelecClienteTabRecibos();
-        if(adapter == null) {
+        if (adapter == null) {
             adapter = new RecibosSeleccionarFacturaAdapter(activity, this, getListProductos());
 
         }
@@ -87,7 +92,7 @@ public class RecibosSeleccionarFacturaFragment extends BaseFragment {
             List<Recibos> list = getListProductos();
             activity.cleanTotalize();
             totalizeHelper.totalizeRecibos(list);
-            Log.d("listaResumen",  list + "");
+            Log.d("listaResumen", list + "");
         }
 
         recyclerView.setAdapter(adapter);
@@ -97,52 +102,99 @@ public class RecibosSeleccionarFacturaFragment extends BaseFragment {
 
                     @Override
                     public void onClick(View v) {
-                        try {
-                            //double totalT = activity.getTotalizarTotal();
-                           double totalP = activity.getTotalizarCancelado();
-                            Log.d("totalRecibos", "" + totalP);
 
-                            String clienteId = activity.getClienteIdRecibos();
+                        AlertDialog dialogReturnSale = new AlertDialog.Builder(activity)
+                                .setTitle("Pago total")
+                                .setMessage("¿Desea proceder con el pago total de las facturas?")
+                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
 
-                            Realm realm = Realm.getDefaultInstance();
-                            RealmResults<Recibos> result = realm.where(Recibos.class).equalTo("customer_id", clienteId).findAll();
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
 
-                            if (result.isEmpty()) {
-                                Toast.makeText(getActivity(), "No hay recibos emitidos", Toast.LENGTH_LONG).show();
-                            }
-                            else {
-                                for (int i = 0; i < result.size(); i++) {
+                                        try {
 
-                                    List<Recibos> salesList1 = realm.where(Recibos.class).equalTo("customer_id", clienteId).findAll();
-                                    double totalFactura = salesList1.get(i).getTotal();
-                                    double totalPagado = salesList1.get(i).getPaid();
-                                    Log.d("totalFactura", "" + totalFactura);
-                                    Log.d("totalPagado", "" + totalFactura);
+                                            //double totalT = activity.getTotalizarTotal();
+                                            double totalP = activity.getTotalizarCancelado();
+                                            Log.d("totalRecibos", "" + totalP);
 
-                                    double restante = totalFactura - totalPagado;
+                                            String clienteId = activity.getClienteIdRecibos();
+                                            Realm realm = Realm.getDefaultInstance();
+                                            RealmResults<Recibos> result = realm.where(Recibos.class).equalTo("customer_id", clienteId).findAll();
 
-                                    Log.d("restante", "" + restante);
+                                            if (result.isEmpty()) {
+                                                Toast.makeText(getActivity(), "No hay recibos emitidos", Toast.LENGTH_LONG).show();
+                                            } else {
+                                                for (int i = 0; i < result.size(); i++) {
 
-                                    double irPagando = totalP - restante;
-                                    Log.d("irPagando", "" + irPagando);
+                                                    List<Recibos> salesList1 = realm.where(Recibos.class).equalTo("customer_id", clienteId).findAll();
+                                                    double totalFactura = salesList1.get(i).getTotal();
+                                                    double totalPagado = salesList1.get(i).getPaid();
+                                                    final String facturaId = salesList1.get(i).getInvoice_id();
+                                                    Log.d("totalFactura", "" + totalFactura);
+                                                    Log.d("totalPagado", "" + totalPagado);
 
-                                }
-                            }
 
-                            realm.close();
-                        }
-                        catch (Exception e) {
-                            Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
-                            e.printStackTrace();
+                                                    double restante = totalFactura - totalPagado;
 
-                        }
+                                                    Log.d("restante", "" + String.format("%,.2f", restante));
+
+                                                    final double irPagando = totalPagado + restante;
+
+                                                    final Realm realm2 = Realm.getDefaultInstance();
+                                                    realm2.executeTransaction(new Realm.Transaction() {
+
+                                                        @Override
+                                                        public void execute(Realm realm2) {
+                                                            Recibos recibo_actualizado = realm2.where(Recibos.class).equalTo("invoice_id", facturaId).findFirst();
+
+                                                            recibo_actualizado.setPaid(irPagando);
+                                                            recibo_actualizado.setAbonado(1);
+                                                            double cant = recibo_actualizado.getMontoCancelado();
+                                                            if (cant == 0.0) {
+                                                                recibo_actualizado.setMontoCancelado(irPagando);
+                                                            } else {
+                                                                recibo_actualizado.setMontoCancelado(cant + irPagando);
+                                                            }
+
+                                                            realm2.insertOrUpdate(recibo_actualizado);
+                                                            realm2.close();
+
+                                                            Log.d("NuevoPagando", recibo_actualizado + "");
+
+                                                        }
+                                                    });
+                                                    updateData();
+                                                    Log.d("irPagando", "" + String.format("%,.2f", irPagando));
+
+                                                }
+
+                                            }
+
+                                            realm.close();
+                                            Toast.makeText(activity, "Se realizó el pago total", Toast.LENGTH_LONG).show();
+                                        } catch (Exception e) {
+                                            Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
+                                            e.printStackTrace();
+
+                                        }
+
+
+                                    }
+
+                                }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.cancel();
+                                    }
+                                }).create();
+                        dialogReturnSale.show();
                     }
-
                 });
-
         return rootView;
 
     }
+
 
     private List<Recibos> getListProductos() {
         String clienteId = activity.getClienteIdRecibos();
