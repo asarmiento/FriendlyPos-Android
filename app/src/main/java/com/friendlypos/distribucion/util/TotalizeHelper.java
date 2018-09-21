@@ -102,7 +102,6 @@ public class TotalizeHelper {
 
         activity.setTotalizarImpuestoIVA(IvaT);
         activity.setTotalizarTotal(total);
-        //  activity.setTotalizarTotalDouble(total);
 
     }
 }

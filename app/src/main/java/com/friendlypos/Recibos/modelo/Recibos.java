@@ -9,13 +9,14 @@ import io.realm.annotations.PrimaryKey;
 
 public class Recibos extends RealmObject {
 /*
-     "invoice_id": 75,
-             "numeration": "7",
-             "date": "2017-10-25",
-             "paid_up": 0,
-             "customer_id": 605,
-             "total": "20312.9817",
-             "paid": "20313.9600"*/
+        "invoice_id": 7983,
+            "numeration": "2702-0000002",
+            "date": "2017-08-10",
+            "paid_up": 0,
+            "customer_id": 3,
+            "total": "45642.07000",
+            "paid": "0.0000",
+            "observation": ""*/
 
 
     @PrimaryKey
@@ -27,7 +28,8 @@ public class Recibos extends RealmObject {
 
     double total;
     double paid;
-    String observaciones;
+    String observation;
+
     int abonado = 0;
     double montoCancelado= 0.0;
 
@@ -104,11 +106,11 @@ public class Recibos extends RealmObject {
     }
 
     public String getObservaciones() {
-        return observaciones;
+        return observation;
     }
 
     public void setObservaciones(String observaciones) {
-        this.observaciones = observaciones;
+        this.observation = observaciones;
     }
 
     @Override
@@ -121,6 +123,7 @@ public class Recibos extends RealmObject {
                 ", customer_id='" + customer_id + '\'' +
                 ", total='" + total + '\'' +
                 ", paid='" + paid + '\'' +
+                ", observation='" + observation + '\'' +
                 '}';
     }
 }
