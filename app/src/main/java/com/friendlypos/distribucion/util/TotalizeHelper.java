@@ -91,11 +91,9 @@ public class TotalizeHelper {
         }
 
         subt = subGrab + subExen;
-        // subTotal = String.format("%,.2f", subt);
+
         Log.d("subtotal", subt + "");
         total = (subt + IvaT) - discountBill;
-        // Total = String.format("%,.2f", total);
-        // Log.d("total", total + "");
 
         activity.setTotalizarSubGrabado(subGrab);
         activity.setTotalizarSubExento(subExen);
