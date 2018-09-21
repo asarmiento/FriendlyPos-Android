@@ -9,6 +9,8 @@ import android.support.v7.app.AlertDialog;
 import android.text.Html;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.friendlypos.Recibos.modelo.Recibos;
 import com.friendlypos.application.bluetooth.PrinterService;
 import com.friendlypos.distribucion.modelo.Inventario;
 import com.friendlypos.distribucion.modelo.invoice;
@@ -52,6 +54,7 @@ public class PrinterFunctions {
     static  String totalCancelado_= "";
     static  String totalVuelto_= "";
     static  String totalNotas_= "";
+    static  String totalNotasRecibos= "";
     //TODO imprimir TOTALIZAR DISTRIBUCION
 
     public static void datosImprimirDistrTotal(int type, sale sale, Context QuickContext, int ptype) {
@@ -360,6 +363,164 @@ public class PrinterFunctions {
             Log.e("Error PrinterFunctions", e.getMessage());
         }
     }
+
+    // TODO IMPRIMIR RECIBOS
+
+    public static void datosImprimirRecibosTotal(int type, Recibos sale, Context QuickContext, int ptype) {
+        String stype = "";
+        String billptype = "";
+        String preview = "";
+
+        Realm realm = Realm.getDefaultInstance();
+        Clientes clientes = realm.where(Clientes.class).equalTo("id", sale.getCustomer_id()).findFirst();
+
+        String nombreCliente = clientes.getFantasyName();
+        totalNotasRecibos = sale.getObservaciones();
+        String fecha = sale.getDate();
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(QuickContext);
+        String prefList = sharedPreferences.getString("pref_selec_impresora","Impresora Zebra");
+
+
+        if (ptype == 1) {
+            billptype = "R e c i b o s";
+        }
+
+        if (type == 1) {
+            stype = "Original";
+        } else if (type == 2) {
+            stype = "Contabilidad";
+        } else if (type == 3) {
+            stype = "Archivo";
+        }
+        if (prefList.equals("1")){
+
+            String bill = "! U1 JOURNAl\r\n" +
+                    "! U1 SETLP 0 0 0\r\n" +
+                    "\r\n" +
+                    "! U1 SETLP 5 3 70\r\n" +
+                    "! U1 LMARGIN 185\r\n" +
+                    String.format("%s", billptype) + "\r\n" +
+                    "! U1 LMARGIN 150\r\n" +
+                    "! U1 SETLP 7 0 14\r\n" + "\r\n" +
+                    "Cliente: " + nombreCliente + "\r\n" +
+                    "Fecha: " + fecha + "\r\n" +
+                    "! U1 LMARGIN 0\r\n" +
+                    "! U1 SETSP 0\r\n" +
+                    "\r\n" +
+                    "Numeracion            Monto Total\r\n" +
+                    "Monto Pagado          Monto Restante\r\n" +
+                    "------------------------------------------------\r\n" +
+                    "! U1 SETLP 7 0 10\r\n" +
+
+                    getPrintRecibosTotal(sale.getCustomer_id()) +
+                    "\r\n" +
+                    "\r\n\n" + "Notas: " + totalNotasRecibos + "\r\n" +
+                    "\r\n\n" + "Muchas Gracias por preferirnos, un placer atenderlo\r\n" +
+                    "Mantenga el documento para reclamos ." + "\r\n" + "\r\n" +
+                    " \n\n" +
+                    " \n\n" +
+                    " \n ";
+            Intent intent2 = new Intent(PrinterService.BROADCAST_CLASS);
+            intent2.putExtra(PrinterService.BROADCAST_CLASS + "TO_PRINT", "true");
+            intent2.putExtra("bill_to_print", bill);
+            QuickContext.sendBroadcast(intent2);
+            Log.d("imprimeZebraProf", bill);
+        }
+        else if(prefList.equals("2")){
+                    preview += Html.fromHtml("<h1>") + String.format("%s", billptype) + Html.fromHtml("</h1><br/><br/><br/>");
+                    preview += Html.fromHtml("<h1>") + "Cliente: " + nombreCliente + Html.fromHtml("</h1><br/>");
+            preview += Html.fromHtml("<h1>") + "Fecha: " + fecha + Html.fromHtml("</h1><br/>");
+                    preview += Html.fromHtml("<h1>") +  "Numeracion             Monto Total" + Html.fromHtml("</h1></center><br/>");
+                    preview += Html.fromHtml("<h1>") +   "Monto Pagado          Monto Restante" + Html.fromHtml("</h1></center><br/>");
+                    preview += Html.fromHtml("<h1>") +  "------------------------------------------------" + Html.fromHtml("</h1></center><br/>");
+                    preview += Html.fromHtml("<h1>") +   getPrintRecibosTotal(sale.getCustomer_id()) + Html.fromHtml("</h1></center><br/>");
+                    preview += Html.fromHtml("<h1>") +  "Notas: " + totalNotasRecibos + Html.fromHtml("</h1></center><br/><br/><br/>");
+                    preview += Html.fromHtml("<h1>")   + "Muchas gracias por preferirnos un placer atenderlo" +  Html.fromHtml("</h1></center><br/>");
+                    preview += Html.fromHtml("<h1>")   + "Mantenga el documento para reclamos." +  Html.fromHtml("</h1></center><br/><br/>");
+            }
+            Intent intent2 = new Intent(PrinterService.BROADCAST_CLASS);
+            intent2.putExtra(PrinterService.BROADCAST_CLASS + "TO_PRINT", "true");
+            intent2.putExtra("bill_to_print", preview);
+            QuickContext.sendBroadcast(intent2);
+            Log.d("imprimeProf", preview);
+        }
+
+    private static String getPrintRecibosTotal(String idVenta) {
+        String send = "";
+
+        Realm realm1 = Realm.getDefaultInstance();
+        RealmResults<Recibos> result = realm1.where(Recibos.class).equalTo("customer_id", idVenta).equalTo("abonado", 1).findAll();
+
+        if (result.isEmpty()) {
+            send = "No hay recibos emitidos";
+        }
+        else {
+            for (int i = 0; i < result.size(); i++) {
+
+                List<Recibos> salesList1 = realm1.where(Recibos.class).equalTo("customer_id", idVenta).equalTo("abonado", 1).findAll();
+
+
+                String numeracion = salesList1.get(i).getNumeration();
+                double total = salesList1.get(i).getTotal();
+                //String totalS = String.format("%,.2f", total);
+
+                double pagado = salesList1.get(i).getPaid();
+               // String pagadoS = String.format("%,.2f", pagado);
+                double restante = salesList1.get(i).getMontoCancelado();
+               // String restanteS = String.format("%,.2f", restante);
+
+                send += String.format("%-15s  %15s", numeracion, Functions.doubleToString1(total) ) + "\r\n" +
+                        String.format("%-15s  %15s", Functions.doubleToString1(pagado) ,Functions.doubleToString1(restante)) + "\r\n";
+                send += "------------------------------------------------\r\n";
+
+                Log.d("FACTPRODTODFAC", send + "");
+
+            }
+            realm1.close();
+        }
+        return send;
+    }
+
+    public static void imprimirFacturaRecibosTotal(final Recibos recibo, final Context QuickContext, final int ptype){
+
+        CharSequence colors[] = new CharSequence[]{"Copia Cliente", "Copia Contabilidad", "Copia Archivo"};
+        AlertDialog.Builder builder = new AlertDialog.Builder(QuickContext);
+        builder.setTitle("Seleccione la copia a imprimir?");
+        builder.setItems(colors, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // the user clicked on colors[which]
+                switch (which) {
+                    case 0:
+                        imprimirRecibosTotalizar(1, recibo, QuickContext, ptype);
+                        break;
+                    case 1:
+                        imprimirRecibosTotalizar(2, recibo, QuickContext, ptype);
+                        break;
+                    case 2:
+                        imprimirRecibosTotalizar(3, recibo, QuickContext, ptype);
+                        break;
+                }
+            }
+        });
+        builder.show();
+        //}
+    }
+
+    private static void imprimirRecibosTotalizar(int type, Recibos recibo, Context QuickContext, int ptype) {
+        try {
+            if (recibo != null) {
+                PrinterFunctions.datosImprimirRecibosTotal(type, recibo, QuickContext, ptype);
+            } else {
+                Toast.makeText(QuickContext, "Aun le falta terminar de hacer la factura" , Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e("Error PrinterFunctions", e.getMessage());
+        }
+    }
+
+    // TODO IMPRIMIR DISTR
 
     private static String getPrintDistTotal(String idVenta) {
         String send = "";
@@ -807,8 +968,6 @@ public class PrinterFunctions {
                     preview += Html.fromHtml("<h1>")   + String.format("Factura %s", stype) +  Html.fromHtml("</h1></center><br/><br/><br/>");
                     preview += Html.fromHtml("<h1>")   + "Muchas gracias por preferirnos un placer atenderlo" +  Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>")   + "Mantenga el documento para reclamos." +  Html.fromHtml("</h1></center><br/><br/>");
-                    preview += Html.fromHtml("<h1>")   + "Autorizado mediante oficio" +  Html.fromHtml("</h1></center><br/>");
-                    preview += Html.fromHtml("<h1>")   + "N : 11-1997 de la D.G.T.D" +  Html.fromHtml("</h1></center><br/>");
                     break;
                 case "2":
                     preview += Html.fromHtml("<h1>") + "Razon Social: " + companyCliente + Html.fromHtml("</h1><br/>");

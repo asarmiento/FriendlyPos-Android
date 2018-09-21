@@ -161,30 +161,15 @@ public class RecibosAplicarFragment extends BaseFragment {
 
                         try {
 
-                            if (bluetoothStateChangeReceiver.isBluetoothAvailable() == true) {
-
-                            /*    sale ventaDetallePreventa = activity.getCurrentVenta();
-                                ventaDetallePreventa.getInvoice_id();
-                                tipoFacturacionImpr = ventaDetallePreventa.getFacturaDePreventa();
-
-                                if(tipoFacturacionImpr.equals("Preventa")){
-                                    PrinterFunctions.imprimirFacturaPrevTotal(sale_actualizada, getActivity(), 1);
-
-                                }
-                                else if(tipoFacturacionImpr.equals("Proforma")){
-                                    PrinterFunctions.imprimirFacturaProformaTotal(sale_actualizada, getActivity(), 1);
-
-                                }
-*/
-
+                            if(bluetoothStateChangeReceiver.isBluetoothAvailable()== true) {
+                                PrinterFunctions.imprimirFacturaRecibosTotal(recibo_actualizado, getActivity(), 1);
+                                Toast.makeText(getActivity(), "imprimir liquidacion", Toast.LENGTH_SHORT).show();
                             }
-                            else if (bluetoothStateChangeReceiver.isBluetoothAvailable() == false) {
+                            else if(bluetoothStateChangeReceiver.isBluetoothAvailable() == false){
                                 Functions.CreateMessage(getActivity(), "Error", "La conexión del bluetooth ha fallado, favor revisar o conectar el dispositivo");
                             }
 
-
-                        }
-                        catch (Exception e) {
+                        } catch (Exception e) {
                             Functions.CreateMessage(getActivity(), "Error", e.getMessage() + "\n" + e.getStackTrace().toString());
                         }
                     }
@@ -354,16 +339,35 @@ public class RecibosAplicarFragment extends BaseFragment {
 
             @Override
             public void execute(Realm realm2) {
-                Recibos recibo_actualizado = realm2.where(Recibos.class).equalTo("invoice_id", facturaId).findFirst();
 
-                recibo_actualizado.setDate(fecha);
-                recibo_actualizado.setObservaciones(observ);
+                RealmResults<Recibos> result = realm2.where(Recibos.class).equalTo("customer_id", clienteId).equalTo("abonado", 1).findAll();
+
+                if (result.isEmpty()) {
+
+                    Toast.makeText(getActivity(), "No hay recibos emitidos", Toast.LENGTH_LONG).show();}
+
+                else{
+                for (int i = 0; i < result.size(); i++) {
+
+                    List<Recibos> salesList1 = realm2.where(Recibos.class).equalTo("customer_id", clienteId).equalTo("abonado", 1).findAll();
+
+                    String facturaId1 = salesList1.get(i).getInvoice_id();
+
+                    Recibos recibo_actualizado = realm2.where(Recibos.class).equalTo("invoice_id", facturaId1).findFirst();
+
+                    recibo_actualizado.setDate(fecha);
+                    recibo_actualizado.setObservaciones(observ);
+
+                    realm2.insertOrUpdate(recibo_actualizado);
+
+                    Log.d("ACT RECIBO", recibo_actualizado + "");
+                }
+                    realm2.close();
+                }
 
 
-                realm2.insertOrUpdate(recibo_actualizado);
-                realm2.close();
 
-                Log.d("ACT RECIBO", recibo_actualizado + "");
+
             }
         });
     }
