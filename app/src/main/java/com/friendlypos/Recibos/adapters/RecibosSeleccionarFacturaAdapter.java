@@ -82,7 +82,9 @@ public class RecibosSeleccionarFacturaAdapter extends RecyclerView.Adapter<Recib
         String numeracion = inventario.getNumeration();
         double total = inventario.getTotal();
         double pago = inventario.getPaid();
+
         double totalT = activity.getTotalizarTotal();
+        double totalP = activity.getTotalizarCancelado();
 
         holder.txt_producto_factura_numeracionRecibos.setText( "# de factura: " + numeracion);
 
@@ -102,6 +104,7 @@ public class RecibosSeleccionarFacturaAdapter extends RecyclerView.Adapter<Recib
         {
             holder.cardView.setBackgroundColor(Color.parseColor("#009688"));
         }
+
 
 
     }
@@ -308,6 +311,8 @@ public class RecibosSeleccionarFacturaAdapter extends RecyclerView.Adapter<Recib
             txt_producto_factura_FaltanteRecibos = (TextView) view.findViewById(R.id.txt_producto_factura_FaltanteRecibos);
             txt_producto_factura_TotalRecibos = (TextView) view.findViewById(R.id.txt_producto_factura_TotalRecibos);
             txt_producto_factura_PagoRecibos = (TextView) view.findViewById(R.id.txt_producto_factura_PagoRecibos);
+
+
 
         }
 

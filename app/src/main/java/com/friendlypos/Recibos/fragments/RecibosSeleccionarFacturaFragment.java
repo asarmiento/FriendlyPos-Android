@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,7 +32,7 @@ public class RecibosSeleccionarFacturaFragment extends BaseFragment {
     RecyclerView recyclerView;
     private RecibosSeleccionarFacturaAdapter adapter;
     TotalizeHelperRecibos totalizeHelper;
-
+    private static Button applyBill;
     int slecTAB;
     RecibosActivity activity;
     TextView txtPagoTotal, txtPagoCancelado;
@@ -73,6 +74,7 @@ public class RecibosSeleccionarFacturaFragment extends BaseFragment {
         txtPagoTotal = (TextView) rootView.findViewById(R.id.txtPagoTotal);
         txtPagoCancelado  = (TextView) rootView.findViewById(R.id.txtPagoCancelado);
         totalizeHelper = new TotalizeHelperRecibos(activity);
+        applyBill = (Button) rootView.findViewById(R.id.btnPagoTotal);
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerViewRecibosSeleccFactura);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setHasFixedSize(true);
@@ -89,6 +91,55 @@ public class RecibosSeleccionarFacturaFragment extends BaseFragment {
         }
 
         recyclerView.setAdapter(adapter);
+
+        applyBill.setOnClickListener(
+                new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        try {
+                            //double totalT = activity.getTotalizarTotal();
+                           double totalP = activity.getTotalizarCancelado();
+                            Log.d("totalRecibos", "" + totalP);
+
+                            String clienteId = activity.getClienteIdRecibos();
+
+                            Realm realm = Realm.getDefaultInstance();
+                            RealmResults<Recibos> result = realm.where(Recibos.class).equalTo("customer_id", clienteId).findAll();
+
+                            if (result.isEmpty()) {
+                                Toast.makeText(getActivity(), "No hay recibos emitidos", Toast.LENGTH_LONG).show();
+                            }
+                            else {
+                                for (int i = 0; i < result.size(); i++) {
+
+                                    List<Recibos> salesList1 = realm.where(Recibos.class).equalTo("customer_id", clienteId).findAll();
+                                    double totalFactura = salesList1.get(i).getTotal();
+                                    double totalPagado = salesList1.get(i).getPaid();
+                                    Log.d("totalFactura", "" + totalFactura);
+                                    Log.d("totalPagado", "" + totalFactura);
+
+                                    double restante = totalFactura - totalPagado;
+
+                                    Log.d("restante", "" + restante);
+
+                                    double irPagando = totalP - restante;
+                                    Log.d("irPagando", "" + irPagando);
+
+                                }
+                            }
+
+                            realm.close();
+                        }
+                        catch (Exception e) {
+                            Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
+                            e.printStackTrace();
+
+                        }
+                    }
+
+                });
+
         return rootView;
 
     }
