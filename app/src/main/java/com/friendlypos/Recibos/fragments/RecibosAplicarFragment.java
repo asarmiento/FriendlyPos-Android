@@ -3,13 +3,10 @@ package com.friendlypos.Recibos.fragments;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,27 +18,17 @@ import android.widget.Toast;
 
 import com.friendlypos.R;
 import com.friendlypos.Recibos.activity.RecibosActivity;
-import com.friendlypos.Recibos.modelo.Recibos;
+import com.friendlypos.Recibos.modelo.recibos;
 import com.friendlypos.app.broadcastreceiver.BluetoothStateChangeReceiver;
 import com.friendlypos.application.util.Functions;
 import com.friendlypos.application.util.PrinterFunctions;
 import com.friendlypos.distribucion.fragment.BaseFragment;
-import com.friendlypos.distribucion.modelo.Pivot;
-import com.friendlypos.distribucion.modelo.invoice;
-import com.friendlypos.distribucion.modelo.sale;
 import com.friendlypos.distribucion.util.GPSTracker;
-import com.friendlypos.login.modelo.Usuarios;
 import com.friendlypos.login.util.SessionPrefes;
-import com.friendlypos.preventas.activity.PreventaActivity;
-import com.friendlypos.preventas.modelo.invoiceDetallePreventa;
 import com.friendlypos.principal.modelo.Clientes;
-import com.friendlypos.principal.modelo.Productos;
-import com.friendlypos.principal.modelo.Sysconf;
 
 import org.sufficientlysecure.htmltextview.HtmlTextView;
 
-import java.io.UnsupportedEncodingException;
-import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
@@ -68,7 +55,7 @@ public class RecibosAplicarFragment extends BaseFragment {
     EditText txtFecha;
     String facturaId;
     String clienteId;
-    Recibos recibo_actualizado;
+    recibos recibo_actualizado;
     public HtmlTextView text;
     private static EditText observaciones;
     String observ;
@@ -186,7 +173,7 @@ public class RecibosAplicarFragment extends BaseFragment {
                 @Override
                 public void execute(Realm realm3) {
 
-                    recibo_actualizado = realm3.where(Recibos.class).equalTo("customer_id", clienteId).findFirst();
+                    recibo_actualizado = realm3.where(recibos.class).equalTo("customer_id", clienteId).findFirst();
 
                     realm3.close();
                 }
@@ -235,7 +222,7 @@ public class RecibosAplicarFragment extends BaseFragment {
             if (recibo_actualizado != null) {
 
 
-                preview += "<h5>" + "Recibos" + "</h5>";
+                preview += "<h5>" + "recibos" + "</h5>";
 
                 preview += "<a><b>A nombre de:</b> " + nombreCliente + "</a><br><br>";
                 preview += "<a><b>" + padRight("# Factura", 10) + "\t\t" + padRight("Monto total", 10) + "</b></a><br>";
@@ -276,7 +263,7 @@ public class RecibosAplicarFragment extends BaseFragment {
         String send = "";
 
         Realm realm1 = Realm.getDefaultInstance();
-        RealmResults<Recibos> result = realm1.where(Recibos.class).equalTo("customer_id", idVenta).equalTo("abonado", 1).findAll();
+        RealmResults<recibos> result = realm1.where(recibos.class).equalTo("customer_id", idVenta).equalTo("abonado", 1).findAll();
 
         if (result.isEmpty()) {
             send = "No hay recibos emitidos";
@@ -284,7 +271,7 @@ public class RecibosAplicarFragment extends BaseFragment {
         else {
             for (int i = 0; i < result.size(); i++) {
 
-                List<Recibos> salesList1 = realm1.where(Recibos.class).equalTo("customer_id", idVenta).equalTo("abonado", 1).findAll();
+                List<recibos> salesList1 = realm1.where(recibos.class).equalTo("customer_id", idVenta).equalTo("abonado", 1).findAll();
 
 
                 String numeracion = salesList1.get(i).getNumeration();
@@ -319,7 +306,7 @@ public class RecibosAplicarFragment extends BaseFragment {
             @Override
             public void execute(Realm realm2) {
 
-                RealmResults<Recibos> result = realm2.where(Recibos.class).equalTo("customer_id", clienteId).equalTo("abonado", 1).findAll();
+                RealmResults<recibos> result = realm2.where(recibos.class).equalTo("customer_id", clienteId).equalTo("abonado", 1).findAll();
 
                 if (result.isEmpty()) {
 
@@ -328,11 +315,11 @@ public class RecibosAplicarFragment extends BaseFragment {
                 else{
                 for (int i = 0; i < result.size(); i++) {
 
-                    List<Recibos> salesList1 = realm2.where(Recibos.class).equalTo("customer_id", clienteId).equalTo("abonado", 1).findAll();
+                    List<recibos> salesList1 = realm2.where(recibos.class).equalTo("customer_id", clienteId).equalTo("abonado", 1).findAll();
 
                     String facturaId1 = salesList1.get(i).getInvoice_id();
 
-                    Recibos recibo_actualizado = realm2.where(Recibos.class).equalTo("invoice_id", facturaId1).findFirst();
+                    recibos recibo_actualizado = realm2.where(recibos.class).equalTo("invoice_id", facturaId1).findFirst();
 
                     recibo_actualizado.setDate(fecha);
                     recibo_actualizado.setObservaciones(observ);

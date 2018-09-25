@@ -2,47 +2,35 @@ package com.friendlypos.Recibos.adapters;
 
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.friendlypos.R;
 import com.friendlypos.Recibos.activity.RecibosActivity;
-import com.friendlypos.Recibos.fragments.RecibosClientesFragment;
-import com.friendlypos.Recibos.fragments.RecibosClientesFragment$$ViewBinder;
 import com.friendlypos.Recibos.fragments.RecibosResumenFragment;
-import com.friendlypos.Recibos.modelo.Recibos;
-import com.friendlypos.distribucion.activity.DistribucionActivity;
-import com.friendlypos.distribucion.adapters.DistrResumenAdapter;
-import com.friendlypos.distribucion.fragment.DistResumenFragment;
-import com.friendlypos.distribucion.modelo.Inventario;
-import com.friendlypos.distribucion.modelo.Pivot;
-import com.friendlypos.principal.modelo.Productos;
+import com.friendlypos.Recibos.modelo.recibos;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import io.realm.Realm;
 
 /**
  * Created by Delvo on 19/09/2018.
  */
 
 public class RecibosResumenAdapter extends RecyclerView.Adapter<RecibosResumenAdapter.CharacterViewHolder> {
-    private List<Recibos> productosList;
+    private List<recibos> productosList;
     private RecibosActivity activity;
-    private static ArrayList<Recibos> aListdata = new ArrayList<Recibos>();
+    private static ArrayList<recibos> aListdata = new ArrayList<recibos>();
     private int selected_position1 = -1;
     Double amount_inventario = 0.0;
     int idInvetarioSelec;
     int nextId;
     private RecibosResumenFragment fragment;
 
-    public RecibosResumenAdapter(RecibosActivity activity, RecibosResumenFragment fragment, List<Recibos> productosList) {
+    public RecibosResumenAdapter(RecibosActivity activity, RecibosResumenFragment fragment, List<recibos> productosList) {
         this.productosList = productosList;
         this.activity = activity;
         this.fragment = fragment;
@@ -52,7 +40,7 @@ public class RecibosResumenAdapter extends RecyclerView.Adapter<RecibosResumenAd
 
     }
 
-    public void updateData(List<Recibos> productosList) {
+    public void updateData(List<recibos> productosList) {
         activity.cleanTotalize();
         this.productosList = productosList;
         notifyDataSetChanged();
@@ -70,7 +58,7 @@ public class RecibosResumenAdapter extends RecyclerView.Adapter<RecibosResumenAd
     @Override
     public void onBindViewHolder(RecibosResumenAdapter.CharacterViewHolder holder, final int position) {
 
-        final Recibos recibo = productosList.get(position);
+        final recibos recibo = productosList.get(position);
         String numeracion = recibo.getNumeration();
 
         double montoPagado = recibo.getMontoCancelado();

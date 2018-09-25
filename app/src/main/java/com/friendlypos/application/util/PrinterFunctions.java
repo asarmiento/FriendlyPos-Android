@@ -10,7 +10,7 @@ import android.text.Html;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.friendlypos.Recibos.modelo.Recibos;
+import com.friendlypos.Recibos.modelo.recibos;
 import com.friendlypos.application.bluetooth.PrinterService;
 import com.friendlypos.distribucion.modelo.Inventario;
 import com.friendlypos.distribucion.modelo.invoice;
@@ -27,10 +27,8 @@ import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import io.realm.Realm;
-import io.realm.RealmQuery;
 import io.realm.RealmResults;
 
 public class PrinterFunctions {
@@ -366,7 +364,7 @@ public class PrinterFunctions {
 
     // TODO IMPRIMIR RECIBOS
 
-    public static void datosImprimirRecibosTotal(int type, Recibos sale, Context QuickContext, int ptype) {
+    public static void datosImprimirRecibosTotal(int type, recibos sale, Context QuickContext, int ptype) {
         String stype = "";
         String billptype = "";
         String preview = "";
@@ -449,7 +447,7 @@ public class PrinterFunctions {
         String send = "";
 
         Realm realm1 = Realm.getDefaultInstance();
-        RealmResults<Recibos> result = realm1.where(Recibos.class).equalTo("customer_id", idVenta).equalTo("abonado", 1).findAll();
+        RealmResults<recibos> result = realm1.where(recibos.class).equalTo("customer_id", idVenta).equalTo("abonado", 1).findAll();
 
         if (result.isEmpty()) {
             send = "No hay recibos emitidos";
@@ -457,7 +455,7 @@ public class PrinterFunctions {
         else {
             for (int i = 0; i < result.size(); i++) {
 
-                List<Recibos> salesList1 = realm1.where(Recibos.class).equalTo("customer_id", idVenta).equalTo("abonado", 1).findAll();
+                List<recibos> salesList1 = realm1.where(recibos.class).equalTo("customer_id", idVenta).equalTo("abonado", 1).findAll();
 
 
                 String numeracion = salesList1.get(i).getNumeration();
@@ -481,7 +479,7 @@ public class PrinterFunctions {
         return send;
     }
 
-    public static void imprimirFacturaRecibosTotal(final Recibos recibo, final Context QuickContext, final int ptype){
+    public static void imprimirFacturaRecibosTotal(final recibos recibo, final Context QuickContext, final int ptype){
 
         CharSequence colors[] = new CharSequence[]{"Copia Cliente", "Copia Contabilidad", "Copia Archivo"};
         AlertDialog.Builder builder = new AlertDialog.Builder(QuickContext);
@@ -507,7 +505,7 @@ public class PrinterFunctions {
         //}
     }
 
-    private static void imprimirRecibosTotalizar(int type, Recibos recibo, Context QuickContext, int ptype) {
+    private static void imprimirRecibosTotalizar(int type, recibos recibo, Context QuickContext, int ptype) {
         try {
             if (recibo != null) {
                 PrinterFunctions.datosImprimirRecibosTotal(type, recibo, QuickContext, ptype);
@@ -1333,7 +1331,7 @@ public class PrinterFunctions {
                 //    "#     Total " + Functions.doubleToString1(printSalesCashTotal) + "\r\n" +
                     "\r\n" +
                     "\r\n" +
-                   /* "Recibos \r\n" +
+                   /* "recibos \r\n" +
                     "! U1 LMARGIN 0\r\n" +
                     "! U1 SETSP 0\r\n" +
                     " \n\n" +
@@ -1437,7 +1435,7 @@ public class PrinterFunctions {
                     "#     Total " + Functions.doubleToString1(printSalesCashTotal) + "\r\n" +
                     "\r\n" +
                     "\r\n" +
-                   /* "Recibos \r\n" +
+                   /* "recibos \r\n" +
                     "! U1 LMARGIN 0\r\n" +
                     "! U1 SETSP 0\r\n" +
                     " \n\n" +
@@ -1539,7 +1537,7 @@ public class PrinterFunctions {
                   //  "#     Total " + Functions.doubleToString1(printSalesCashTotal) + "\r\n" +
                     "\r\n" +
                     "\r\n" +
-                   /* "Recibos \r\n" +
+                   /* "recibos \r\n" +
                     "! U1 LMARGIN 0\r\n" +
                     "! U1 SETSP 0\r\n" +
                     " \n\n" +

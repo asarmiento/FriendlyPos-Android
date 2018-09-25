@@ -1,43 +1,30 @@
 package com.friendlypos.Recibos.adapters;
 
 import android.app.ProgressDialog;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Color;
-import android.net.Uri;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.friendlypos.R;
 import com.friendlypos.Recibos.activity.RecibosActivity;
-import com.friendlypos.Recibos.modelo.Recibos;
+import com.friendlypos.Recibos.modelo.receipts;
+import com.friendlypos.Recibos.modelo.recibos;
 import com.friendlypos.application.util.Functions;
-import com.friendlypos.application.util.PrinterFunctions;
-import com.friendlypos.distribucion.activity.DistribucionActivity;
-import com.friendlypos.distribucion.adapters.DistrClientesAdapter;
-import com.friendlypos.distribucion.modelo.Inventario;
-import com.friendlypos.distribucion.modelo.Pivot;
-import com.friendlypos.distribucion.modelo.invoice;
-import com.friendlypos.distribucion.modelo.sale;
+import com.friendlypos.login.modelo.Usuarios;
+import com.friendlypos.login.util.SessionPrefes;
+import com.friendlypos.preventas.modelo.Numeracion;
 import com.friendlypos.principal.modelo.Clientes;
 
 import java.util.List;
 
 import io.realm.Realm;
-import io.realm.RealmResults;
 
 /**
  * Created by DelvoM on 04/09/2018.
@@ -45,18 +32,23 @@ import io.realm.RealmResults;
 
 public class RecibosClientesAdapter extends RecyclerView.Adapter<RecibosClientesAdapter.CharacterViewHolder> {
 
-    public List<Recibos> contentList;
+    public List<recibos> contentList;
     private RecibosActivity activity;
     private int selected_position = -1;
     private static Context QuickContext = null;
     String facturaID, clienteID;
     int tabCliente;
+    String usuer;
+    SessionPrefes session;
+    String idUsuario;
+    int nextId;
+    String numFactura;
 
-
-    public RecibosClientesAdapter(Context context, RecibosActivity activity, List<Recibos> contentList) {
+    public RecibosClientesAdapter(Context context, RecibosActivity activity, List<recibos> contentList) {
         this.contentList = contentList;
         this.activity = activity;
         this.QuickContext = context;
+        session = new SessionPrefes(context);
     }
 
     @Override
@@ -70,7 +62,7 @@ public class RecibosClientesAdapter extends RecyclerView.Adapter<RecibosClientes
 
     @Override
     public void onBindViewHolder(RecibosClientesAdapter.CharacterViewHolder holder, final int position) {
-        final Recibos recibo = contentList.get(position);
+        final recibos recibo = contentList.get(position);
 
         Realm realm = Realm.getDefaultInstance();
 
@@ -114,13 +106,11 @@ public class RecibosClientesAdapter extends RecyclerView.Adapter<RecibosClientes
                 int pos = position;
                 if (pos == RecyclerView.NO_POSITION) return;
 
-                // Updating old as well as new positions
                 notifyItemChanged(selected_position);
                 selected_position = position;
                 notifyItemChanged(selected_position);
 
-                Recibos clickedDataItem = contentList.get(pos);
-
+                recibos clickedDataItem = contentList.get(pos);
 
                 facturaID = clickedDataItem.getInvoice_id();
                 clienteID = clickedDataItem.getCustomer_id();
@@ -129,9 +119,8 @@ public class RecibosClientesAdapter extends RecyclerView.Adapter<RecibosClientes
 
                 tabCliente = 1;
                 activity.setSelecClienteTabRecibos(tabCliente);
-
                 activity.setClienteIdRecibos(clienteID);
-
+                crearRecibo();
             }
         });
         if(selected_position==position){
@@ -235,5 +224,107 @@ public class RecibosClientesAdapter extends RecyclerView.Adapter<RecibosClientes
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
     }
+
+    public void crearRecibo(){
+
+        Realm realm = Realm.getDefaultInstance();
+        usuer = session.getUsuarioPrefs();
+        Usuarios usuarios = realm.where(Usuarios.class).equalTo("email", usuer).findFirst();
+        idUsuario = usuarios.getId();
+        realm.close();
+
+            final Realm realm2 = Realm.getDefaultInstance();
+
+            realm2.executeTransaction(new Realm.Transaction() {
+
+                @Override
+                public void execute(Realm realm) {
+                    // TODO NUMERACION = VENTA DIRECTA :01, PREVENTA:02, DISTRIBUCION:03 Y PROFORMA: 04
+
+                    Number numero = realm.where(Numeracion.class).equalTo("sale_type", "4").max("number");
+
+                    if (numero == null) {
+                        nextId = 1;
+                    } else {
+                        nextId = numero.intValue() + 1;
+                    }
+                    int valor = numero.intValue();
+
+                    int length = String.valueOf(valor).length();
+
+                    if(length == 1){
+                        numFactura = idUsuario + "04-" +  "000000" + nextId;
+                    }
+                    else if(length == 2){
+                        numFactura = idUsuario + "04-" +  "00000" + nextId;
+                    }
+                    else if(length == 3){
+                        numFactura = idUsuario + "04-" +  "0000" + nextId;
+                    }
+                    else if(length == 4){
+                        numFactura = idUsuario + "04-" +  "000" + nextId;
+                    }
+                    else if(length == 5){
+                        numFactura = idUsuario + "04-" +  "00" + nextId;
+                    }
+                    else if(length == 6){
+                        numFactura = idUsuario + "04-" +  "0" + nextId;
+                    }
+                    else if(length == 7){
+                        numFactura = idUsuario + "04-" +  nextId;
+                    }
+                }
+            });
+
+/*
+        String receipts_id;
+        String customer_id;
+        String reference;
+        String date;
+        String sum;
+        double balance;
+        String notes;
+        private RealmList<recibos> listaRecibos;
+        */
+                final Realm realmRecibo = Realm.getDefaultInstance();
+                realmRecibo.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realmRecibo) {
+                        receipts receipt = new receipts(); // unmanaged
+
+                        receipt.setReceipts_id(String.valueOf(nextId));
+                        receipt.setCustomer_id(clienteID);
+                        receipt.setReference(numFactura);
+                        receipt.setDate(Functions.getDate());
+
+                        realmRecibo.insertOrUpdate(receipt);
+                        Log.d("idinvNUEVOCREADO", receipt + "");
+
+
+                    }
+
+                });
+                realmRecibo.close();
+
+
+            final Realm realm5 = Realm.getDefaultInstance();
+            realm5.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm5) {
+                    Numeracion numNuevo = new Numeracion(); // unmanaged
+                    numNuevo.setSale_type("4");
+                    numNuevo.setNumeracion_numero(nextId);
+                    realm5.insertOrUpdate(numNuevo);
+                    Log.d("idinvNUEVOCREADO", numNuevo + "");
+
+
+                }
+
+            });
+            realm5.close();
+
+
+    }
+
 }
 

@@ -1,10 +1,7 @@
 package com.friendlypos.Recibos.fragments;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -16,13 +13,8 @@ import android.widget.Toast;
 import com.friendlypos.R;
 import com.friendlypos.Recibos.activity.RecibosActivity;
 import com.friendlypos.Recibos.adapters.RecibosClientesAdapter;
-import com.friendlypos.Recibos.modelo.Recibos;
-import com.friendlypos.distribucion.activity.DistribucionActivity;
-import com.friendlypos.distribucion.adapters.DistrClientesAdapter;
-import com.friendlypos.distribucion.adapters.DistrResumenAdapter;
+import com.friendlypos.Recibos.modelo.recibos;
 import com.friendlypos.distribucion.fragment.BaseFragment;
-import com.friendlypos.distribucion.fragment.DistSelecProductoFragment;
-import com.friendlypos.distribucion.modelo.sale;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -85,10 +77,10 @@ public class RecibosClientesFragment extends BaseFragment {
 
     }
 
-    private List<Recibos> getListClientes(){
+    private List<recibos> getListClientes(){
         realm = Realm.getDefaultInstance();
-        RealmQuery<Recibos> query = realm.where(Recibos.class);
-        RealmResults<Recibos> result1 = query.findAll();
+        RealmQuery<recibos> query = realm.where(recibos.class);
+        RealmResults<recibos> result1 = query.findAll();
         if(result1.size() == 0){
             Toast.makeText(getApplicationContext(),"Favor descargar datos primero",Toast.LENGTH_LONG).show();
         }
@@ -97,12 +89,12 @@ public class RecibosClientesFragment extends BaseFragment {
 
 
 
-    public ArrayList<Recibos> removeDuplicates(List<Recibos> list){
+    public ArrayList<recibos> removeDuplicates(List<recibos> list){
         Set set = new TreeSet(new Comparator() {
 
             @Override
             public int compare(Object o1, Object o2) {
-                if(((Recibos)o1).getCustomer_id().equalsIgnoreCase(((Recibos)o2).getCustomer_id())){
+                if(((recibos)o1).getCustomer_id().equalsIgnoreCase(((recibos)o2).getCustomer_id())){
                     return 0;
                 }
                 return 1;

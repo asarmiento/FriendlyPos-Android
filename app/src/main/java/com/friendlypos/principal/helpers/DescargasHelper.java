@@ -5,7 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.util.Log;
 
-import com.friendlypos.Recibos.modelo.Recibos;
+import com.friendlypos.Recibos.modelo.recibos;
 import com.friendlypos.Recibos.modelo.RecibosResponse;
 import com.friendlypos.app.broadcastreceiver.NetworkStateChangeReceiver;
 import com.friendlypos.application.datamanager.BaseManager;
@@ -612,9 +612,9 @@ public class DescargasHelper {
         Log.d("tokenCliente", token + " ");
 
         final RequestInterface api = BaseManager.getApi();
-        final ArrayList<Recibos> mContentsArrayRecibos = new ArrayList<>();
+        final ArrayList<recibos> mContentsArrayRecibos = new ArrayList<>();
         final ProgressDialog dialog = new ProgressDialog(context);
-        dialog.setMessage("Cargando Recibos disponibles");
+        dialog.setMessage("Cargando recibos disponibles");
 
         if (isOnline()) {
             dialog.show();
@@ -654,7 +654,7 @@ public class DescargasHelper {
                     }
                     else {
                         // Toast.makeText(ProductosActivity.this, getString(R.string.error) + " CODE: " +response.code(), Toast.LENGTH_LONG).show();
-                        RealmResults<Recibos> results2 = realmRecibos.where(Recibos.class).findAll();
+                        RealmResults<recibos> results2 = realmRecibos.where(recibos.class).findAll();
                         mContentsArrayRecibos.addAll(results2);
                     }
                     dialog.dismiss();

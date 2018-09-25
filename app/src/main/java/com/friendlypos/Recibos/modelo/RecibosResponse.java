@@ -1,6 +1,5 @@
 package com.friendlypos.Recibos.modelo;
 
-import com.friendlypos.distribucion.modelo.Inventario;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
@@ -15,7 +14,7 @@ public class RecibosResponse {
     private String code;
     private String message;
     @SerializedName("invoices")
-    private List<Recibos> recibos;
+    private List<com.friendlypos.Recibos.modelo.recibos> recibos;
 
     public boolean isResult() {
         return result;
@@ -41,11 +40,11 @@ public class RecibosResponse {
         this.message = message;
     }
 
-    public List<Recibos> getRecibos() {
+    public List<com.friendlypos.Recibos.modelo.recibos> getRecibos() {
         return recibos;
     }
 
-    public void setRecibos(List<Recibos> recibo) {
+    public void setRecibos(List<com.friendlypos.Recibos.modelo.recibos> recibo) {
         this.recibos = recibo;
     }
 }

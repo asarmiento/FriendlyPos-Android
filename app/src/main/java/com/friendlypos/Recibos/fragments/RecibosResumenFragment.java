@@ -8,26 +8,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.friendlypos.R;
 import com.friendlypos.Recibos.activity.RecibosActivity;
 import com.friendlypos.Recibos.adapters.RecibosResumenAdapter;
-import com.friendlypos.Recibos.modelo.Recibos;
-import com.friendlypos.Recibos.util.TotalizeHelperRecibos;
-import com.friendlypos.application.util.Functions;
-import com.friendlypos.distribucion.adapters.DistrResumenAdapter;
+import com.friendlypos.Recibos.modelo.recibos;
 import com.friendlypos.distribucion.fragment.BaseFragment;
-import com.friendlypos.distribucion.modelo.Pivot;
-import com.friendlypos.distribucion.modelo.invoice;
-import com.friendlypos.distribucion.util.TotalizeHelper;
-import com.friendlypos.login.modelo.Usuarios;
-import com.friendlypos.preventas.activity.PreventaActivity;
-import com.friendlypos.preventas.adapters.PrevResumenAdapter;
-import com.friendlypos.preventas.util.TotalizeHelperPreventa;
 
 import java.util.List;
 
@@ -68,7 +54,7 @@ public class RecibosResumenFragment extends BaseFragment {
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerViewRecibosResumen);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        List<Recibos> list = getListResumen();
+        List<recibos> list = getListResumen();
 
         adapter = new RecibosResumenAdapter(activity, this, list);
         recyclerView.setAdapter(adapter);
@@ -114,11 +100,11 @@ public class RecibosResumenFragment extends BaseFragment {
         activity = null;
     }
 
-    private List<Recibos> getListResumen() {
+    private List<recibos> getListResumen() {
         String clienteId = activity.getClienteIdRecibos();
 
         Realm realm = Realm.getDefaultInstance();
-        RealmResults<Recibos> result1 = realm.where(Recibos.class).equalTo("customer_id", clienteId).equalTo("abonado", 1).findAll();
+        RealmResults<recibos> result1 = realm.where(recibos.class).equalTo("customer_id", clienteId).equalTo("abonado", 1).findAll();
         realm.close();
 
         return result1;
@@ -130,7 +116,7 @@ public class RecibosResumenFragment extends BaseFragment {
         slecTAB = activity.getSelecClienteTabRecibos();
         if (slecTAB == 1) {
             activity.cleanTotalize();
-            List<Recibos> list = getListResumen();
+            List<recibos> list = getListResumen();
 
             adapter.updateData(list);
            // totalizeHelper.totalize(list);

@@ -3,18 +3,10 @@ package com.friendlypos.Recibos.util;
 import android.util.Log;
 
 import com.friendlypos.Recibos.activity.RecibosActivity;
-import com.friendlypos.Recibos.modelo.Recibos;
-import com.friendlypos.distribucion.modelo.Pivot;
-import com.friendlypos.distribucion.modelo.sale;
+import com.friendlypos.Recibos.modelo.recibos;
 import com.friendlypos.login.util.SessionPrefes;
-import com.friendlypos.preventas.activity.PreventaActivity;
-import com.friendlypos.preventas.modelo.Bonuses;
-import com.friendlypos.principal.modelo.Clientes;
-import com.friendlypos.principal.modelo.Productos;
 
 import java.util.List;
-
-import io.realm.Realm;
 
 import static io.realm.internal.SyncObjectServerFacade.getApplicationContext;
 
@@ -37,13 +29,13 @@ public class TotalizeHelperRecibos {
     }
 
 
-    public void totalizeRecibos(List<Recibos> pivotList) {
-        for (Recibos p : pivotList) {
+    public void totalizeRecibos(List<recibos> pivotList) {
+        for (recibos p : pivotList) {
             totalize(p);
         }
     }
 
-    private void totalize(final Recibos currentPivot) {
+    private void totalize(final recibos currentPivot) {
 
         Double totalPago = currentPivot.getTotal();
 

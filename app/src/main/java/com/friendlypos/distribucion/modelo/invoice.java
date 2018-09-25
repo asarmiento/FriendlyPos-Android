@@ -76,7 +76,6 @@ public class invoice extends RealmObject {
     @SerializedName("product_invoice")
     private RealmList<Pivot> productofacturas;
 
-
     private int aplicada = 0;
     private int subida = 0;
     private String facturaDePreventa;

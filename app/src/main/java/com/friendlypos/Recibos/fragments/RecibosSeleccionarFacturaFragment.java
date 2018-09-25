@@ -16,16 +16,10 @@ import android.widget.Toast;
 
 import com.friendlypos.R;
 import com.friendlypos.Recibos.activity.RecibosActivity;
-import com.friendlypos.Recibos.adapters.RecibosResumenAdapter;
 import com.friendlypos.Recibos.adapters.RecibosSeleccionarFacturaAdapter;
-import com.friendlypos.Recibos.modelo.Recibos;
+import com.friendlypos.Recibos.modelo.recibos;
 import com.friendlypos.Recibos.util.TotalizeHelperRecibos;
-import com.friendlypos.distribucion.activity.DistribucionActivity;
-import com.friendlypos.distribucion.adapters.DistrResumenAdapter;
 import com.friendlypos.distribucion.fragment.BaseFragment;
-import com.friendlypos.distribucion.modelo.Inventario;
-import com.friendlypos.distribucion.modelo.Pivot;
-import com.friendlypos.distribucion.modelo.sale;
 
 import java.util.List;
 
@@ -89,7 +83,7 @@ public class RecibosSeleccionarFacturaFragment extends BaseFragment {
 
         }
         if (slecTAB == 1) {
-            List<Recibos> list = getListProductos();
+            List<recibos> list = getListProductos();
             activity.cleanTotalize();
             totalizeHelper.totalizeRecibos(list);
             Log.d("listaResumen", list + "");
@@ -119,14 +113,14 @@ public class RecibosSeleccionarFacturaFragment extends BaseFragment {
 
                                             String clienteId = activity.getClienteIdRecibos();
                                             Realm realm = Realm.getDefaultInstance();
-                                            RealmResults<Recibos> result = realm.where(Recibos.class).equalTo("customer_id", clienteId).findAll();
+                                            RealmResults<recibos> result = realm.where(recibos.class).equalTo("customer_id", clienteId).findAll();
 
                                             if (result.isEmpty()) {
                                                 Toast.makeText(getActivity(), "No hay recibos emitidos", Toast.LENGTH_LONG).show();
                                             } else {
                                                 for (int i = 0; i < result.size(); i++) {
 
-                                                    List<Recibos> salesList1 = realm.where(Recibos.class).equalTo("customer_id", clienteId).findAll();
+                                                    List<recibos> salesList1 = realm.where(recibos.class).equalTo("customer_id", clienteId).findAll();
                                                     double totalFactura = salesList1.get(i).getTotal();
                                                     double totalPagado = salesList1.get(i).getPaid();
                                                     final String facturaId = salesList1.get(i).getInvoice_id();
@@ -145,7 +139,7 @@ public class RecibosSeleccionarFacturaFragment extends BaseFragment {
 
                                                         @Override
                                                         public void execute(Realm realm2) {
-                                                            Recibos recibo_actualizado = realm2.where(Recibos.class).equalTo("invoice_id", facturaId).findFirst();
+                                                            recibos recibo_actualizado = realm2.where(recibos.class).equalTo("invoice_id", facturaId).findFirst();
 
                                                             recibo_actualizado.setPaid(irPagando);
                                                             recibo_actualizado.setAbonado(1);
@@ -196,11 +190,11 @@ public class RecibosSeleccionarFacturaFragment extends BaseFragment {
     }
 
 
-    private List<Recibos> getListProductos() {
+    private List<recibos> getListProductos() {
         String clienteId = activity.getClienteIdRecibos();
 
         Realm realm = Realm.getDefaultInstance();
-        RealmResults<Recibos> result1 = realm.where(Recibos.class).equalTo("customer_id", clienteId).findAll();
+        RealmResults<recibos> result1 = realm.where(recibos.class).equalTo("customer_id", clienteId).findAll();
         realm.close();
 
         return result1;
@@ -219,7 +213,7 @@ public class RecibosSeleccionarFacturaFragment extends BaseFragment {
         slecTAB = activity.getSelecClienteTabRecibos();
         if (slecTAB == 1) {
             activity.cleanTotalize();
-            List<Recibos> list = getListProductos();
+            List<recibos> list = getListProductos();
 
             adapter.updateData(list);
            // adapter2.notifyDataSetChanged();

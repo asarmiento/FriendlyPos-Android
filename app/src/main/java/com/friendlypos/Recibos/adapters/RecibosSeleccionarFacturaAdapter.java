@@ -1,6 +1,5 @@
 package com.friendlypos.Recibos.adapters;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
@@ -12,22 +11,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.friendlypos.R;
 import com.friendlypos.Recibos.activity.RecibosActivity;
-import com.friendlypos.Recibos.fragments.RecibosResumenFragment;
 import com.friendlypos.Recibos.fragments.RecibosSeleccionarFacturaFragment;
-import com.friendlypos.Recibos.modelo.Recibos;
-import com.friendlypos.preventas.modelo.Bonuses;
-import com.friendlypos.preventas.modelo.invoiceDetallePreventa;
+import com.friendlypos.Recibos.modelo.recibos;
 
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import io.realm.Realm;
@@ -39,7 +31,7 @@ import io.realm.Realm;
 public class RecibosSeleccionarFacturaAdapter extends RecyclerView.Adapter<RecibosSeleccionarFacturaAdapter.CharacterViewHolder> {
 
     private Context context;
-    public List<Recibos> productosList;
+    public List<recibos> productosList;
     private RecibosActivity activity;
     private RecibosSeleccionarFacturaFragment fragment;
     private static double producto_amount_dist_add = 0;
@@ -54,13 +46,13 @@ public class RecibosSeleccionarFacturaAdapter extends RecyclerView.Adapter<Recib
     String facturaID, clienteID;
     int tabFactura;
 
-    public RecibosSeleccionarFacturaAdapter(RecibosActivity activity, RecibosSeleccionarFacturaFragment fragment, List<Recibos> productosList) {
+    public RecibosSeleccionarFacturaAdapter(RecibosActivity activity, RecibosSeleccionarFacturaFragment fragment, List<recibos> productosList) {
         this.activity = activity;
         this.fragment = fragment;
         this.productosList = productosList;
     }
 
-    public void updateData(List<Recibos> productosList) {
+    public void updateData(List<recibos> productosList) {
         this.productosList = productosList;
         notifyDataSetChanged();
     }
@@ -76,7 +68,7 @@ public class RecibosSeleccionarFacturaAdapter extends RecyclerView.Adapter<Recib
 
     @Override
     public void onBindViewHolder(final RecibosSeleccionarFacturaAdapter.CharacterViewHolder holder, final int position) {
-        final Recibos inventario = productosList.get(position);
+        final recibos inventario = productosList.get(position);
 
         final String id = inventario.getInvoice_id();
         String numeracion = inventario.getNumeration();
@@ -157,7 +149,7 @@ public class RecibosSeleccionarFacturaAdapter extends RecyclerView.Adapter<Recib
 
                             @Override
                             public void execute(Realm realm2) {
-                                Recibos recibo_actualizado = realm2.where(Recibos.class).equalTo("invoice_id", facturaId).findFirst();
+                                recibos recibo_actualizado = realm2.where(recibos.class).equalTo("invoice_id", facturaId).findFirst();
 
                                 recibo_actualizado.setPaid(montoFaltante);
                                 recibo_actualizado.setAbonado(1);
@@ -316,7 +308,7 @@ public class RecibosSeleccionarFacturaAdapter extends RecyclerView.Adapter<Recib
 
         }
 
-       void fillData(final Recibos producto) {
+       void fillData(final recibos producto) {
             cardView.setOnClickListener(new View.OnClickListener() {
 
                 @Override
@@ -331,7 +323,7 @@ public class RecibosSeleccionarFacturaAdapter extends RecyclerView.Adapter<Recib
                 selected_position = getAdapterPosition();
                 notifyItemChanged(selected_position);
 
-                Recibos clickedDataItem = productosList.get(pos);
+                recibos clickedDataItem = productosList.get(pos);
 
 
                 facturaID = clickedDataItem.getInvoice_id();

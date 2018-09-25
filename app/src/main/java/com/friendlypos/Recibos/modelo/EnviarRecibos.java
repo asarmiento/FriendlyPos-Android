@@ -2,9 +2,9 @@ package com.friendlypos.Recibos.modelo;
 
 public class EnviarRecibos {
 
-    private Recibos recibo;
+    private recibos recibo;
 
-    public EnviarRecibos(Recibos recibo) {
+    public EnviarRecibos(recibos recibo) {
         this.recibo = recibo;
     }
 }

@@ -7,7 +7,7 @@ import io.realm.annotations.PrimaryKey;
  * Created by DelvoM on 03/09/2018.
  */
 
-public class Recibos extends RealmObject {
+public class recibos extends RealmObject {
 /*
         "invoice_id": 7983,
             "numeration": "2702-0000002",
@@ -115,7 +115,7 @@ public class Recibos extends RealmObject {
 
     @Override
     public String toString() {
-        return "Recibos{" +
+        return "recibos{" +
                 "invoice_id=" + invoice_id +
                 ", numeration='" + numeration + '\'' +
                 ", date='" + date + '\'' +
