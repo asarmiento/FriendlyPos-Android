@@ -661,11 +661,11 @@ public class PrinterFunctions {
                     "! U1 SETLP 5 3 70\r\n" +
                     String.format("%s", billptype) + "\r\n" +
                     "! U1 LMARGIN 150\r\n" +
-                    "! U1 SETLP 7 0 14\r\n" + "\r\n" +
+                    "! U1 SETLP 7 0 26\r\n" + "\r\n" +
                     "N# Factura: " + numeracionFactura + "\r\n" +
-                    "! U1 LMARGIN 120\r\n" +
-                    sysNombreNegocio + "\r\n" +
+                    "! U1 LMARGIN 0\r\n" +
                     "! U1 SETLP 5 0 24\r\n" +
+                    sysNombreNegocio + "\r\n" +
                     "Fecha y hora: " + fechayhora + "\r\n" +
                     "Vendedor:  " + nombreUsuario + "\r\n" +
                     "Razon Social: " + companyCliente + "\r\n" +
@@ -733,7 +733,6 @@ public class PrinterFunctions {
             switch (metodoPago) {
                 case "1":
 
-
                     preview += Html.fromHtml("<h1>") + String.format("%s", billptype) + Html.fromHtml("</h1><br/><br/><br/>");
                     preview += Html.fromHtml("<h1>") + "N# Factura: " + numeracionFactura + Html.fromHtml("</h1><br/>");
                     preview += Html.fromHtml("<h1>") + sysNombreNegocio + Html.fromHtml("</h1><br/>");
@@ -742,7 +741,6 @@ public class PrinterFunctions {
                     preview += Html.fromHtml("<h1>") + "Razon Social: " + companyCliente + Html.fromHtml("</h1><br/>");
                     preview += Html.fromHtml("<h1>") + "A nombre de: " + nombreCliente + Html.fromHtml("</h1><br/>");
                     preview += Html.fromHtml("<h1>") +  "Nombre fantasia: " + fantasyCliente + Html.fromHtml("</h1><br/><br/>");
-
                     preview += Html.fromHtml("<h1>") +  "Descripcion           Codigo" + Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>") +   "Cantidad      Precio       P.Sug       Total" + Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>") +   "Tipo " + Html.fromHtml("</h1></center><br/>");
@@ -887,11 +885,11 @@ public class PrinterFunctions {
             String bill = "! U1 JOURNAl\r\n" +
                     "! U1 SETLP 0 0 0\r\n" +
                     "\r\n" +
-                    "! U1 SETLP 5 3 70\r\n" +
+                    "! U1 SETLP 5 3 24\r\n" +
                     "Cliente: " + nombreCliente + "\r\n" +
                     "Razon Social: " + companyCliente + "\r\n" +
                     ((!nombreCliente.isEmpty()) ? "A nombre de: " + nombreCliente + "\r\n" : "") +
-                    "! U1 LMARGIN 120\r\n" +
+                    "! U1 LMARGIN 0\r\n" +
                     "Nombre fantasia: " + fantasyCliente + "\r\n" +
                     "! U1 LMARGIN 0\r\n" +
                     "! U1 SETSP 0\r\n" +
@@ -985,8 +983,6 @@ public class PrinterFunctions {
                     preview += Html.fromHtml("<h1>") +  String.format("%20s %-20s", "Descuento", totalDescuento_) + Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>") +  String.format("%20s %-20s", "IVA", totalImpuesto_) + Html.fromHtml("</h1></center><br/><br/><br/>");
                     preview += Html.fromHtml("<h1>") +   String.format("%20s %-20s", "Total", totalTotal_) + Html.fromHtml("</h1></center><br/><br/>");
-                  /*  preview += Html.fromHtml("<h1>") +  String.format("%20s %-20s", "Cancelado con", totalCancelado_) + Html.fromHtml("</h1></center><br/>");
-                    preview += Html.fromHtml("<h1>") +   String.format("%20s %-20s", "Cambio", totalVuelto_) + Html.fromHtml("</h1></center><br/><br/>");*/
                     preview += Html.fromHtml("<h1>") +  "Notas: " + totalNotas_ + Html.fromHtml("</h1></center><br/><br/><br/>");
                     preview += Html.fromHtml("<h1>") +  "Recibo conforme ____________________________" + Html.fromHtml("</h1></center><br/><br/>");
                     preview += Html.fromHtml("<h1>") +  "Cedula ____________________________" +  Html.fromHtml("</h1></center><br/><br/>");
@@ -1097,7 +1093,8 @@ public class PrinterFunctions {
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String currentDateandTime = sdf.format(new Date());
-
+        double amountsinbonus = 0.0;
+        double amountConBonus = 0.0;
         Realm realm = Realm.getDefaultInstance();
         RealmResults<Pivot> result = realm.where(Pivot.class).equalTo("invoice_id", idVenta).equalTo("devuelvo", 0).findAll();
 
@@ -1110,13 +1107,6 @@ public class PrinterFunctions {
                 List<Pivot> salesList1 = realm.where(Pivot.class).equalTo("invoice_id", idVenta).findAll();
 
                 int esBonus = salesList1.get(i).getBonus();
-
-                    double amountsinbonus = salesList1.get(i).getAmountSinBonus();
-                    String amount = salesList1.get(i).getAmount();
-                    double amountConBonus = Double.parseDouble(amount);
-
-               double totalAmountBonus = amountConBonus - amountsinbonus;
-
 
                 Productos producto = realm.where(Productos.class).equalTo("id", salesList1.get(i).getProduct_id()).findFirst();
                 //   sale ventas = realm.where(sale.class).equalTo("invoice_id", salesList1.get(i).getInvoice_id()).findFirst();
@@ -1137,7 +1127,7 @@ public class PrinterFunctions {
                 String typeId = producto.getProduct_type_id();
                 String nombreTipo = null;
 
-                double cant = salesList1.get(i).getAmountSinBonus();
+                double cant = Double.parseDouble(salesList1.get(i).getAmount());
                 double precio = Double.parseDouble(salesList1.get(i).getPrice());
 
                 double sugerido=0.0;
@@ -1155,18 +1145,30 @@ public class PrinterFunctions {
                 }
 
 
-                if(esBonus == 1){
+                if(esBonus == 1) {
+
+                    amountsinbonus = salesList1.get(i).getAmountSinBonus();
+
+                        String amount = salesList1.get(i).getAmount();
+                        amountConBonus = Double.parseDouble(amount);
+
+                        double totalAmountBonus = amountConBonus - amountsinbonus;
+
+                        send += String.format("%s  %.24s ", description1, barcode) + "\r\n" +
+                                String.format("%-12s %-10s %-12s %.10s", totalAmountBonus, "0.0", "0.0", "0.0") + "\r\n" +
+                                String.format("%.10s", nombreTipo) + "\r\n";
+                        send += "------------------------------------------------\r\n";
+
                     send += String.format("%s  %.24s ", description1, barcode) + "\r\n" +
-                            String.format("%-12s %-10s %-12s %.10s", totalAmountBonus, "0.0", "0.0","0.0") + "\r\n" +
+                            String.format("%-12s %-10s %-12s %.10s", amountsinbonus, Functions.doubleToString1(precio), Functions.doubleToString1(sugerido), Functions.doubleToString1(amountsinbonus * precio)) + "\r\n" +
+                            String.format("%.10s", nombreTipo) + "\r\n";
+                    send += "------------------------------------------------\r\n";
+                }else{
+                    send += String.format("%s  %.24s ", description1, barcode) + "\r\n" +
+                            String.format("%-12s %-10s %-12s %.10s", cant, Functions.doubleToString1(precio), Functions.doubleToString1(sugerido), Functions.doubleToString1(cant * precio)) + "\r\n" +
                             String.format("%.10s", nombreTipo) + "\r\n";
                     send += "------------------------------------------------\r\n";
                 }
-
-                    send += String.format("%s  %.24s ", description1, barcode) + "\r\n" +
-                            String.format("%-12s %-10s %-12s %.10s", cant, Functions.doubleToString1(precio), Functions.doubleToString1(sugerido),Functions.doubleToString1(cant * precio)) + "\r\n" +
-                            String.format("%.10s", nombreTipo) + "\r\n";
-                    send += "------------------------------------------------\r\n";
-
 
                 Log.d("FACTPRODTODFAC", send + "");
             }

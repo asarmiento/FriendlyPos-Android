@@ -367,7 +367,7 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
             pivotnuevo.setDelivered(String.valueOf(producto_amount_dist_add));
             pivotnuevo.setDevuelvo(0);
             pivotnuevo.setBonus(0);
-            pivotnuevo.setAmountSinBonus(0);
+            pivotnuevo.setAmountSinBonus(0.0);
 
             activity.insertProduct(pivotnuevo);
             numero++;
