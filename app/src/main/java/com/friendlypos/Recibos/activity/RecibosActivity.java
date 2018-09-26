@@ -15,10 +15,14 @@ import android.view.KeyEvent;
 import android.view.MenuItem;
 
 import com.friendlypos.R;
+import com.friendlypos.Recibos.delegate.PreSellRecibosDelegate;
 import com.friendlypos.Recibos.fragments.RecibosAplicarFragment;
 import com.friendlypos.Recibos.fragments.RecibosClientesFragment;
 import com.friendlypos.Recibos.fragments.RecibosResumenFragment;
 import com.friendlypos.Recibos.fragments.RecibosSeleccionarFacturaFragment;
+import com.friendlypos.Recibos.modelo.receipts;
+import com.friendlypos.Recibos.modelo.receiptsDetalle;
+import com.friendlypos.Recibos.modelo.recibos;
 import com.friendlypos.application.bluetooth.PrinterService;
 import com.friendlypos.application.util.Functions;
 import com.friendlypos.distribucion.activity.DistribucionActivity;
@@ -27,7 +31,11 @@ import com.friendlypos.distribucion.fragment.DistResumenFragment;
 import com.friendlypos.distribucion.fragment.DistSelecClienteFragment;
 import com.friendlypos.distribucion.fragment.DistSelecProductoFragment;
 import com.friendlypos.distribucion.fragment.DistTotalizarFragment;
+import com.friendlypos.distribucion.modelo.Pivot;
+import com.friendlypos.distribucion.modelo.invoice;
 import com.friendlypos.distribucion.util.Adapter;
+import com.friendlypos.preventas.delegate.PreSellInvoiceDelegate;
+import com.friendlypos.preventas.modelo.invoiceDetallePreventa;
 import com.friendlypos.principal.activity.BluetoothActivity;
 import com.friendlypos.principal.activity.MenuPrincipal;
 
@@ -35,6 +43,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
+import io.realm.RealmList;
 
 public class RecibosActivity extends BluetoothActivity {
     private Toolbar toolbar;
@@ -46,9 +55,10 @@ public class RecibosActivity extends BluetoothActivity {
     private double totalFacturaSelec;
     private double totalizarTotal;
     private double totalizarCancelado;
+    private double totalizarFinal;
     private double totalizarPagado;
     private double montoPagar;
-
+    private PreSellRecibosDelegate preSellRecibosDelegate;
 
     public double getMontoPagar() {
         return montoPagar;
@@ -74,6 +84,13 @@ public class RecibosActivity extends BluetoothActivity {
         this.totalizarCancelado = this.totalizarCancelado + totalizarCancelado;
     }
 
+    public double getTotalizarFinal() {
+        return totalizarFinal;
+    }
+
+    public void setTotalizarFinal(double totalizarFinal) {
+        this.totalizarFinal = this.totalizarFinal + totalizarFinal;
+    }
 
     public double getTotalizarTotal() {
         return totalizarTotal;
@@ -139,7 +156,7 @@ public class RecibosActivity extends BluetoothActivity {
         if (viewPager != null) {
             setupViewPager(viewPager);
         }
-
+        preSellRecibosDelegate = new PreSellRecibosDelegate(this);
         tabLayout = (TabLayout) findViewById(R.id.tabsRecibos);
         tabLayout.setupWithViewPager(viewPager);
 
@@ -264,6 +281,35 @@ public class RecibosActivity extends BluetoothActivity {
         totalizarTotal = 0.0;
         totalizarCancelado = 0.0;
     }
+
+
+    public receiptsDetalle getCurrentRecibos() {
+        return preSellRecibosDelegate.getCurrentRecibos();
+    }
+
+
+    public receipts getReceiptsByReceiptsDetalle() {
+        return preSellRecibosDelegate.getReceiptsByReceiptsDetalle();
+    }
+
+    public List<recibos> getAllRecibosDelegate() {
+        return preSellRecibosDelegate.getAllRecibos();
+    }
+
+    public void initCurrentRecibos(String receipts_id, String customer_id, String reference,
+                                   String date, String sum, double balance, String notes) {
+        preSellRecibosDelegate.initReciboDetalle(receipts_id, customer_id, reference,
+                date, sum, balance, notes);
+    }
+
+    public void insertRecibo(recibos recibo) {
+        preSellRecibosDelegate.insertRecibo(recibo);
+    }
+
+    public void initRecibo(int pos) {
+        preSellRecibosDelegate.initRecibo(pos);
+    }
+
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {

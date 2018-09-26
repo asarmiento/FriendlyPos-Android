@@ -409,7 +409,6 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
 
                 }
             });
-            //   activity.getAllPivotDelegate();
             Toast.makeText(context, "Se agregó el producto", Toast.LENGTH_LONG).show();
         }
         else {
@@ -503,7 +502,6 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
 
                 }
             });
-            //   activity.getAllPivotDelegate();
             Toast.makeText(context, "Se agregó el producto", Toast.LENGTH_LONG).show();
         }
         else {

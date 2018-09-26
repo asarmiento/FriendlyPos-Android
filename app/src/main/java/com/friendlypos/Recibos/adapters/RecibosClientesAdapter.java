@@ -286,7 +286,11 @@ public class RecibosClientesAdapter extends RecyclerView.Adapter<RecibosClientes
         String notes;
         private RealmList<recibos> listaRecibos;
         */
-                final Realm realmRecibo = Realm.getDefaultInstance();
+
+
+       // activity.initCurrentRecibos(String.valueOf(nextId), clienteID, numFactura, Functions.getDate(), "", 0.0, "");
+
+               final Realm realmRecibo = Realm.getDefaultInstance();
                 realmRecibo.executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realmRecibo) {

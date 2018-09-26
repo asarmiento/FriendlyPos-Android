@@ -18,13 +18,19 @@ import android.widget.Toast;
 
 import com.friendlypos.R;
 import com.friendlypos.Recibos.activity.RecibosActivity;
+import com.friendlypos.Recibos.modelo.receipts;
+import com.friendlypos.Recibos.modelo.receiptsDetalle;
 import com.friendlypos.Recibos.modelo.recibos;
 import com.friendlypos.app.broadcastreceiver.BluetoothStateChangeReceiver;
 import com.friendlypos.application.util.Functions;
 import com.friendlypos.application.util.PrinterFunctions;
 import com.friendlypos.distribucion.fragment.BaseFragment;
+import com.friendlypos.distribucion.modelo.invoice;
+import com.friendlypos.distribucion.modelo.sale;
 import com.friendlypos.distribucion.util.GPSTracker;
+import com.friendlypos.login.modelo.Usuarios;
 import com.friendlypos.login.util.SessionPrefes;
+import com.friendlypos.preventas.modelo.invoiceDetallePreventa;
 import com.friendlypos.principal.modelo.Clientes;
 
 import org.sufficientlysecure.htmltextview.HtmlTextView;
@@ -34,6 +40,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import io.realm.Realm;
+import io.realm.RealmList;
 import io.realm.RealmResults;
 
 import static io.realm.internal.SyncObjectServerFacade.getApplicationContext;
@@ -46,6 +53,8 @@ public class RecibosAplicarFragment extends BaseFragment {
     private static Button printBill;
     RecibosActivity activity;
     private static int apply_done = 0;
+    double pagado= 0.0;
+    static String pagadoMostrarS;
     GPSTracker gps;
     BluetoothStateChangeReceiver bluetoothStateChangeReceiver;
     SessionPrefes session;
@@ -60,6 +69,7 @@ public class RecibosAplicarFragment extends BaseFragment {
     private static EditText observaciones;
     String observ;
     String fecha;
+    double totalP;
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -76,6 +86,8 @@ public class RecibosAplicarFragment extends BaseFragment {
     public void onDestroy() {
         super.onDestroy();
         clearAll();
+        pagado= 0.0;
+
     }
 
     @Override
@@ -111,7 +123,6 @@ public class RecibosAplicarFragment extends BaseFragment {
             }
         });
 
-
         applyBill.setOnClickListener(
                 new View.OnClickListener() {
 
@@ -119,7 +130,7 @@ public class RecibosAplicarFragment extends BaseFragment {
                     public void onClick(View v) {
                         try {
                             aplicarFactura() ;
-
+                          //  actualizarRecibo();
                         }
                         catch (Exception e) {
                             Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
@@ -167,6 +178,8 @@ public class RecibosAplicarFragment extends BaseFragment {
 
             facturaId = activity.getInvoiceIdRecibos();
             clienteId = activity.getClienteIdRecibos();
+            totalP = activity.getTotalizarCancelado();
+
             final Realm realm3 = Realm.getDefaultInstance();
             realm3.executeTransaction(new Realm.Transaction() {
 
@@ -186,24 +199,6 @@ public class RecibosAplicarFragment extends BaseFragment {
         }
         else {
             Log.d("nadaTotalizarupdate",  "nadaTotalizarupdate");
-        }
-
-    }
-
-    public void obtenerLocalización() {
-
-        gps = new GPSTracker(getActivity());
-
-        if (gps.canGetLocation()) {
-
-            latitude = gps.getLatitude();
-            longitude = gps.getLongitude();
-
-        }
-        else {
-            gps.showSettingsAlert();
-
-
         }
 
     }
@@ -283,6 +278,8 @@ public class RecibosAplicarFragment extends BaseFragment {
                 double restante = salesList1.get(i).getMontoCancelado();
                 String restanteS = String.format("%,.2f", restante);
 
+
+
                 send += String.format("|%-1500s|  |%1500s|", numeracion, totalS) + "<br>" +
                         String.format("|%-1500s| |%1500s|",pagadoS ,restanteS) + "<br>";
                 send += "<a>------------------------------------------------<a><br>";
@@ -331,8 +328,47 @@ public class RecibosAplicarFragment extends BaseFragment {
                     realm2.close();
                 }
 
+            }
+        });
+    }
 
 
+    public void actualizarReceiptsDetalles() {
+
+
+
+        final Realm realm2 = Realm.getDefaultInstance();
+        realm2.executeTransaction(new Realm.Transaction() {
+
+            @Override
+            public void execute(Realm realm2) {
+
+                RealmResults<recibos> result = realm2.where(recibos.class).equalTo("customer_id", clienteId).equalTo("abonado", 1).findAll();
+
+                if (result.isEmpty()) {
+
+                    Toast.makeText(getActivity(), "No hay recibos emitidos", Toast.LENGTH_LONG).show();}
+
+                else{
+                    for (int i = 0; i < result.size(); i++) {
+
+                        List<recibos> salesList1 = realm2.where(recibos.class).equalTo("customer_id", clienteId).equalTo("abonado", 1).findAll();
+
+                        pagado = salesList1.get(i).getPaid();
+                        activity.setTotalizarFinal(pagado);
+                        receipts recibo_actua = realm2.where(receipts.class).equalTo("customer_id", clienteId).findFirst();
+
+                        recibo_actua.setListaRecibos(new RealmList<recibos>(salesList1.toArray(new recibos[salesList1.size()])));
+                        recibo_actua.setBalance(activity.getTotalizarFinal());
+
+                        realm2.insertOrUpdate(recibo_actua);
+
+                        Log.d("ACTRECIBO", recibo_actua + "");
+                        Log.d("ACTRECIBO3",salesList1 + "");
+                    }
+                    realm2.close();
+                    pagado= 0.0;
+                }
 
             }
         });
@@ -346,7 +382,8 @@ public class RecibosAplicarFragment extends BaseFragment {
         if(!observaciones.getText().toString().isEmpty()){
             observ = observaciones.getText().toString();
             actualizarFacturaDetalles();
-
+          //  actualizarRecibosDetalles();
+            actualizarReceiptsDetalles();
             Toast.makeText(getActivity(), "Venta realizada correctamente", Toast.LENGTH_LONG).show();
 
             applyBill.setVisibility(View.GONE);
@@ -427,7 +464,27 @@ public class RecibosAplicarFragment extends BaseFragment {
         });
         newFragment.show(getFragmentManager(), "datePicker");
     }
+/*
+    public void actualizarRecibosDetalles() {
 
 
+        final receiptsDetalle invoiceDetallePreventa1 = activity.getCurrentRecibos();
+
+        invoiceDetallePreventa1.setD_sum(observ);
+
+
+
+        Log.d("actFactDetPrev", invoiceDetallePreventa1 + "");
+
+    }
+
+
+    protected void actualizarRecibo() {
+
+        final receipts receipt = activity.getReceiptsByReceiptsDetalle();
+
+        Log.d("invoicetotal", receipt + "");
+
+    }*/
 
 }
