@@ -25,6 +25,7 @@
 
     <string name="products">Productos</string>
     <string name="clients">Clientes</string>
+    <string name="recibos">Recibos</string>
     <string name="directsale">Venta Directa</string>
     <string name="distributor">Distribución</string>
     <string name="presale">Preventa</string>

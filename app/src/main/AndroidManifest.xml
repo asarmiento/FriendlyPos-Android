@@ -131,7 +131,16 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".principal.activity.MenuPrincipal" />
         </activity>
-        <activity android:name=".Recibos.activity.RecibosActivity"></activity>
+        <activity
+            android:name=".Recibos.activity.RecibosActivity"
+            android:label="@string/recibos"
+            android:parentActivityName=".principal.activity.MenuPrincipal"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".principal.activity.MenuPrincipal" />
+
+            ></activity>
     </application>
 
 </manifest>

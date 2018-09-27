@@ -58,7 +58,20 @@ public class RecibosActivity extends BluetoothActivity {
     private double totalizarFinal;
     private double totalizarPagado;
     private double montoPagar;
+
+    private double montoAgregadoRestante;
+
+
     private PreSellRecibosDelegate preSellRecibosDelegate;
+
+
+    public double getMontoAgregadoRestante() {
+        return montoAgregadoRestante;
+    }
+
+    public void setMontoAgregadoRestante(double montoAgregadoRestante) {
+        this.montoAgregadoRestante = this.montoAgregadoRestante - montoAgregadoRestante;
+    }
 
     public double getMontoPagar() {
         return montoPagar;

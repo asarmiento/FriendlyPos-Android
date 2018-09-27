@@ -10,7 +10,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,6 +27,7 @@ import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
+import io.realm.Sort;
 
 public class RecibosSeleccionarFacturaFragment extends BaseFragment {
     private Realm realm;
@@ -35,6 +38,9 @@ public class RecibosSeleccionarFacturaFragment extends BaseFragment {
     int slecTAB;
     RecibosActivity activity;
     TextView txtPagoTotal, txtPagoCancelado;
+
+    double cantidadPagar;
+
     public static RecibosSeleccionarFacturaFragment getInstance() {
         return new RecibosSeleccionarFacturaFragment();
     }
@@ -97,92 +103,180 @@ public class RecibosSeleccionarFacturaFragment extends BaseFragment {
                     @Override
                     public void onClick(View v) {
 
-                        AlertDialog dialogReturnSale = new AlertDialog.Builder(activity)
-                                .setTitle("Pago total")
-                                .setMessage("¿Desea proceder con el pago total de las facturas?")
-                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        //double totalT = activity.getTotalizarTotal();
+                        double totalP = activity.getTotalizarCancelado();
+                        Log.d("totalRecibos", "" + totalP);
 
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
+                        LayoutInflater layoutInflater = LayoutInflater.from(activity);
+                        View promptView = layoutInflater.inflate(R.layout.promptrecibospagototal, null);
 
-                                        try {
+                        final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(activity);
+                        alertDialogBuilder.setView(promptView);
 
-                                            //double totalT = activity.getTotalizarTotal();
-                                            double totalP = activity.getTotalizarCancelado();
-                                            Log.d("totalRecibos", "" + totalP);
+                        final TextView label = (TextView) promptView.findViewById(R.id.promtClabelRecibosPagoTotal);
+                        label.setText("Escriba un pago maximo de " + String.format("%,.2f", totalP) + " minima de 1");
 
-                                            String clienteId = activity.getClienteIdRecibos();
-                                            Realm realm = Realm.getDefaultInstance();
-                                            RealmResults<recibos> result = realm.where(recibos.class).equalTo("customer_id", clienteId).findAll();
+                        final EditText input = (EditText) promptView.findViewById(R.id.promtCtextRecibosPagoTotal);
 
-                                            if (result.isEmpty()) {
-                                                Toast.makeText(getActivity(), "No hay recibos emitidos", Toast.LENGTH_LONG).show();
-                                            } else {
-                                                for (int i = 0; i < result.size(); i++) {
+                        alertDialogBuilder.setCancelable(false);
+                        alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 
-                                                    List<recibos> salesList1 = realm.where(recibos.class).equalTo("customer_id", clienteId).findAll();
-                                                    double totalFactura = salesList1.get(i).getTotal();
-                                                    double totalPagado = salesList1.get(i).getPaid();
-                                                    final String facturaId = salesList1.get(i).getInvoice_id();
-                                                    Log.d("totalFactura", "" + totalFactura);
-                                                    Log.d("totalPagado", "" + totalPagado);
+                            public void onClick(DialogInterface dialog, int id) {
 
 
-                                                    double restante = totalFactura - totalPagado;
+                                if(!input.getText().toString().isEmpty()){
+                                    cantidadPagar = Double.parseDouble(input.getText().toString());
+                                    Log.d("cantidadPagar1", "" + String.format("%,.2f", cantidadPagar));
+                                    AlertDialog dialogReturnSale = new AlertDialog.Builder(activity)
+                                            .setTitle("Pago total")
+                                            .setMessage("¿Desea proceder con el pago de las facturas?")
+                                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
 
-                                                    Log.d("restante", "" + String.format("%,.2f", restante));
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int which) {
 
-                                                    final double irPagando = totalPagado + restante;
+                                                    try {
 
-                                                    final Realm realm2 = Realm.getDefaultInstance();
-                                                    realm2.executeTransaction(new Realm.Transaction() {
+                                                        String clienteId = activity.getClienteIdRecibos();
+                                                        Realm realm = Realm.getDefaultInstance();
+                                                        RealmResults<recibos> result = realm.where(recibos.class).equalTo("customer_id", clienteId).findAllSorted("date", Sort.DESCENDING);
 
-                                                        @Override
-                                                        public void execute(Realm realm2) {
-                                                            recibos recibo_actualizado = realm2.where(recibos.class).equalTo("invoice_id", facturaId).findFirst();
+                                                        if (result.isEmpty()) {
+                                                            Toast.makeText(getActivity(), "No hay recibos emitidos", Toast.LENGTH_LONG).show();
+                                                        } else {
+                                                            for (int i = 0; i < result.size(); i++) {
+                                                                Log.d("cantidadPagarfor", "" + String.format("%,.2f", cantidadPagar));
+                                                                List<recibos> salesList1 = realm.where(recibos.class).equalTo("customer_id", clienteId).findAllSorted("date", Sort.DESCENDING);
+                                                                double totalFactura = salesList1.get(i).getTotal();
+                                                                double totalPagado = salesList1.get(i).getPaid();
+                                                                final String facturaId = salesList1.get(i).getInvoice_id();
+                                                                Log.d("totalFactura", "" + totalFactura);
+                                                                Log.d("totalPagado", "" + totalPagado);
 
-                                                            recibo_actualizado.setPaid(irPagando);
-                                                            recibo_actualizado.setAbonado(1);
-                                                            double cant = recibo_actualizado.getMontoCancelado();
-                                                            if (cant == 0.0) {
-                                                                recibo_actualizado.setMontoCancelado(irPagando);
-                                                            } else {
-                                                                recibo_actualizado.setMontoCancelado(cant + irPagando);
-                                                            }
 
-                                                            realm2.insertOrUpdate(recibo_actualizado);
-                                                            realm2.close();
+                                                                if(totalFactura == totalPagado){
+                                                                    Log.d("ya", "" + "ya");
+                                                                }
+else {
+                                                                    double restante = totalFactura - totalPagado;
 
-                                                            Log.d("NuevoPagando", recibo_actualizado + "");
+                                                                    Log.d("restante", "" + String.format("%,.2f", restante));
 
+                                                                    double cantidadPagarRestante = 0.0;
+                                                                    if (cantidadPagar > restante) {
+
+                                                                        cantidadPagarRestante = cantidadPagar - restante;
+                                                                        cantidadPagar = cantidadPagarRestante;
+
+                                                                        Log.d("cantidadPagar2", "" + String.format("%,.2f", cantidadPagar));
+
+
+                                                                        //  double cantidadPagarRestanteS = activity.getMontoAgregadoRestante();
+                                                                        final double irPagando = restante + totalPagado;
+
+                                                                        final Realm realm2 = Realm.getDefaultInstance();
+                                                                        realm2.executeTransaction(new Realm.Transaction() {
+
+                                                                            @Override
+                                                                            public void execute(Realm realm2) {
+                                                                                recibos recibo_actualizado = realm2.where(recibos.class).equalTo("invoice_id", facturaId).findFirst();
+
+                                                                                recibo_actualizado.setPaid(irPagando);
+                                                                                recibo_actualizado.setAbonado(1);
+                                                                                double cant = recibo_actualizado.getMontoCancelado();
+                                                                                if (cant == 0.0) {
+                                                                                    recibo_actualizado.setMontoCancelado(irPagando);
+                                                                                } else {
+                                                                                    recibo_actualizado.setMontoCancelado(cant + irPagando);
+                                                                                }
+
+                                                                                realm2.insertOrUpdate(recibo_actualizado);
+                                                                                realm2.close();
+
+                                                                                Log.d("NuevoPagando", recibo_actualizado + "");
+
+                                                                            }
+                                                                        });
+                                                                        updateData();
+                                                                        Log.d("irPagando", "" + String.format("%,.2f", irPagando));
+
+
+                                                                    } else {
+                                                                        //  double cantidadPagarRestanteS = activity.getMontoAgregadoRestante();
+                                                                        final double irPagando = cantidadPagar + totalPagado;
+
+                                                                        final Realm realm2 = Realm.getDefaultInstance();
+                                                                        realm2.executeTransaction(new Realm.Transaction() {
+
+                                                                            @Override
+                                                                            public void execute(Realm realm2) {
+                                                                                recibos recibo_actualizado = realm2.where(recibos.class).equalTo("invoice_id", facturaId).findFirst();
+
+                                                                                recibo_actualizado.setPaid(irPagando);
+                                                                                recibo_actualizado.setAbonado(1);
+                                                                                double cant = recibo_actualizado.getMontoCancelado();
+                                                                                if (cant == 0.0) {
+                                                                                    recibo_actualizado.setMontoCancelado(irPagando);
+                                                                                } else {
+                                                                                    recibo_actualizado.setMontoCancelado(cant + irPagando);
+                                                                                }
+
+                                                                                realm2.insertOrUpdate(recibo_actualizado);
+                                                                                realm2.close();
+
+                                                                                Log.d("NuevoPagando", recibo_actualizado + "");
+
+                                                                            }
+                                                                        });
+                                                                        updateData();
+                                                                        Log.d("irPagando", "" + String.format("%,.2f", irPagando));
+
+                                                                    }
+                                                                }
                                                         }
-                                                    });
-                                                    updateData();
-                                                    Log.d("irPagando", "" + String.format("%,.2f", irPagando));
+
+                                                        realm.close();
+                                                        Toast.makeText(activity, "Se realizó el pago total", Toast.LENGTH_LONG).show();
+                                                        }
+                                                    } catch (Exception e) {
+                                                        Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
+                                                        e.printStackTrace();
+
+                                                    }
+
 
                                                 }
 
-                                            }
+                                            }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
 
-                                            realm.close();
-                                            Toast.makeText(activity, "Se realizó el pago total", Toast.LENGTH_LONG).show();
-                                        } catch (Exception e) {
-                                            Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
-                                            e.printStackTrace();
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    dialog.cancel();
+                                                }
+                                            }).create();
+                                    dialogReturnSale.show();
 
-                                        }
+                                }
+                                else{
+                                    input.setError("Campo requerido");
+                                    input.requestFocus();
+                                }
 
 
-                                    }
 
-                                }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            }
+                        });
+                        alertDialogBuilder.setNegativeButton("Cancel",
+                                new DialogInterface.OnClickListener() {
 
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
+                                    public void onClick(DialogInterface dialog, int id) {
                                         dialog.cancel();
                                     }
-                                }).create();
-                        dialogReturnSale.show();
+                                });
+
+                        AlertDialog alertD = alertDialogBuilder.create();
+                        alertD.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+                        alertD.show();
                     }
                 });
         return rootView;
@@ -194,7 +288,7 @@ public class RecibosSeleccionarFacturaFragment extends BaseFragment {
         String clienteId = activity.getClienteIdRecibos();
 
         Realm realm = Realm.getDefaultInstance();
-        RealmResults<recibos> result1 = realm.where(recibos.class).equalTo("customer_id", clienteId).findAll();
+        RealmResults<recibos> result1 = realm.where(recibos.class).equalTo("customer_id", clienteId).findAllSorted("date", Sort.DESCENDING);
         realm.close();
 
         return result1;

@@ -101,20 +101,7 @@ public class RecibosSeleccionarFacturaAdapter extends RecyclerView.Adapter<Recib
 
     }
 
-
     public void addProduct(final String facturaID, final double totalPago, final double totalPagado, final double debePagar) {
-
-      /*  final invoiceDetallePreventa invoiceDetallePreventa = activity.getCurrentInvoice();
-
-        idDetallesFactura =  invoiceDetallePreventa.getP_id();
-        Log.d("FACTURAIDDELEG", idDetallesFactura + "");
-        // invoiceDetallePreventa.setP_code(weqweq);
-
-        idFacturaSeleccionada = (activity).getInvoiceIdPreventa();
-        Log.d("idFacturaSeleccionada", idFacturaSeleccionada + "");
-        idProducto = producto_id;
-        Log.d("idProductoSeleccionado", producto_id + "");
-*/
 
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         View promptView = layoutInflater.inflate(R.layout.promptrecibos, null);
@@ -125,7 +112,6 @@ public class RecibosSeleccionarFacturaAdapter extends RecyclerView.Adapter<Recib
 
         final TextView label = (TextView) promptView.findViewById(R.id.promtClabelRecibos);
         label.setText("Escriba un pago maximo de " + String.format("%,.2f", debePagar) + " minima de 1");
-       // label.setText("Escriba la cantidad requerida del producto");
 
 
         final EditText input = (EditText) promptView.findViewById(R.id.promtCtextRecibos);
