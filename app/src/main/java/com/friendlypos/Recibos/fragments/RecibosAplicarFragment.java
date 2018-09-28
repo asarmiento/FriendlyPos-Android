@@ -283,6 +283,7 @@ public class RecibosAplicarFragment extends BaseFragment {
 
 
 
+
                 send += String.format("|%-5000s|  |%10s|", numeracion, totalS) + "<br>" +
                         String.format("|%-5000s| |%10s|",pagadoS ,restanteS) + "<br>";
                 send += "<a>------------------------------------------------<a><br>";
