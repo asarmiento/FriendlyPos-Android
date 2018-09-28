@@ -275,13 +275,16 @@ public class RecibosAplicarFragment extends BaseFragment {
 
                 double pagado = salesList1.get(i).getPaid();
                 String pagadoS = String.format("%,.2f", pagado);
-                double restante = salesList1.get(i).getMontoCancelado();
+
+
+
+                double restante = total - pagado;
                 String restanteS = String.format("%,.2f", restante);
 
 
 
-                send += String.format("|%-1500s|  |%1500s|", numeracion, totalS) + "<br>" +
-                        String.format("|%-1500s| |%1500s|",pagadoS ,restanteS) + "<br>";
+                send += String.format("|%-5000s|  |%10s|", numeracion, totalS) + "<br>" +
+                        String.format("|%-5000s| |%10s|",pagadoS ,restanteS) + "<br>";
                 send += "<a>------------------------------------------------<a><br>";
 
                 Log.d("FACTPRODTODFAC", send + "");

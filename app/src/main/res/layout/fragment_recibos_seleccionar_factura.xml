@@ -7,7 +7,7 @@
         android:id="@+id/txtPagoTotal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Pago total"
+        android:text="Abonar"
         android:textSize="16sp"
         android:layout_alignTop="@+id/btnPagoTotal"
         android:layout_alignParentStart="true" />
@@ -35,7 +35,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/fondo_botones"
-        android:text=" Pagar Todo "
+        android:text="  Abonar  "
         android:textColor="@color/cardview_light_background"
         android:visibility="visible"
         android:layout_marginTop="5dp"

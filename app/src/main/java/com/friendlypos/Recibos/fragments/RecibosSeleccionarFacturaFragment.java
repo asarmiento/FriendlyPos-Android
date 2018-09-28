@@ -157,7 +157,7 @@ public class RecibosSeleccionarFacturaFragment extends BaseFragment {
                                                                 if(totalFactura == totalPagado){
                                                                     Log.d("ya", "" + "ya");
                                                                 }
-else {
+                                                        else {
                                                                     double restante = totalFactura - totalPagado;
 
                                                                     Log.d("restante", "" + String.format("%,.2f", restante));
@@ -202,6 +202,11 @@ else {
 
 
                                                                     } else {
+
+                                                                        if(cantidadPagar < 0.0){
+                                                                            Log.d("nohay","no hay");
+                                                                        }
+                                                                        else{
                                                                         //  double cantidadPagarRestanteS = activity.getMontoAgregadoRestante();
                                                                         final double irPagando = cantidadPagar + totalPagado;
 
@@ -228,9 +233,13 @@ else {
 
                                                                             }
                                                                         });
+                                                                        cantidadPagarRestante = cantidadPagar - restante;
+                                                                        cantidadPagar = cantidadPagarRestante;
                                                                         updateData();
+
                                                                         Log.d("irPagando", "" + String.format("%,.2f", irPagando));
 
+                                                                    }
                                                                     }
                                                                 }
                                                         }
