@@ -94,6 +94,8 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
         String tipo = producto.getProduct_type_id();
         String precio = producto.getSale_price();
 
+        String status = producto.getStatus();
+
         String marca2 = realm.where(Marcas.class).equalTo("id", marca).findFirst().getName();
         String tipoProducto = realm.where(TipoProducto.class).equalTo("id", tipo).findFirst().getName();
 
@@ -123,24 +125,31 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
 
         }
 
-        holder.txt_producto_factura_nombre.setText(description);
-        holder.txt_producto_factura_marca.setText("Marca: " + marca2);
-        holder.txt_producto_factura_tipo.setText("Tipo: " + tipoProducto);
-        holder.txt_producto_factura_precio.setText(precio);
-        holder.txt_producto_factura_disponible.setText("Disp: " + inventario.getAmount());
-        holder.fillData(producto);
 
-        for (Pivot pivot: pivots){
-            if(producto.getId().equals(pivot.getProduct_id())){
-                Log.d("jd", "seteando color x lista");
-                holder.cardView.setBackgroundColor(Color.parseColor("#607d8b"));
-                return;
-            }else{
-                Log.d("jd", "se limpia");
-                holder.cardView.setBackgroundColor(Color.parseColor("#009688"));
+        if (status.equals("Activo")) {
+            holder.txt_producto_factura_nombre.setText(description);
+            // holder.txt_producto_factura_marca.setText("Marca: " + marca2);
+            holder.txt_producto_factura_marca.setText("Marca: " + status);
+
+            holder.txt_producto_factura_tipo.setText("Tipo: " + tipoProducto);
+            holder.txt_producto_factura_precio.setText(precio);
+            holder.txt_producto_factura_disponible.setText("Disp: " + inventario.getAmount());
+            holder.fillData(producto);
+
+            for (Pivot pivot : pivots) {
+                if (producto.getId().equals(pivot.getProduct_id())) {
+                    Log.d("jd", "seteando color x lista");
+                    holder.cardView.setBackgroundColor(Color.parseColor("#607d8b"));
+                    return;
+                } else {
+                    Log.d("jd", "se limpia");
+                    holder.cardView.setBackgroundColor(Color.parseColor("#009688"));
+                }
             }
         }
-
+        else{
+            Log.d("inactivo", "inactivo");
+        }
     }
 
 

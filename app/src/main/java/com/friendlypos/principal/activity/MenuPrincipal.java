@@ -27,6 +27,7 @@ import android.widget.Toast;
 import com.friendlypos.R;
 import com.friendlypos.Recibos.activity.RecibosActivity;
 import com.friendlypos.Recibos.modelo.EnviarRecibos;
+import com.friendlypos.Recibos.modelo.receipts;
 import com.friendlypos.Recibos.modelo.recibos;
 import com.friendlypos.app.broadcastreceiver.NetworkStateChangeReceiver;
 import com.friendlypos.application.bluetooth.PrinterService;
@@ -534,10 +535,10 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
 
                 Realm realmRecibos = Realm.getDefaultInstance();
 
-                RealmQuery<recibos> queryRecibos = realmRecibos.where(recibos.class).equalTo("abonado", 1);
-                final RealmResults<recibos> invoiceRecibos = queryRecibos.findAll();
+                RealmQuery<receipts> queryRecibos = realmRecibos.where(receipts.class).equalTo("aplicado", 1);
+                final RealmResults<receipts> invoiceRecibos = queryRecibos.findAll();
                 Log.d("qweqweq", invoiceRecibos.toString());
-                List<recibos> listaRecibos = realmRecibos.copyFromRealm(invoiceRecibos);
+                List<receipts> listaRecibos = realmRecibos.copyFromRealm(invoiceRecibos);
                 Log.d("qweqweq1", listaRecibos + "");
                 realmRecibos.close();
 
@@ -547,7 +548,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                     Toast.makeText(MenuPrincipal.this, "hay", Toast.LENGTH_SHORT).show();
                     for (int i = 0; i < listaRecibos.size(); i++) {
 
-                        facturaIdRecibos = listaRecibos.get(i).getInvoice_id();
+                        facturaIdRecibos = listaRecibos.get(i).getCustomer_id();
                         Log.d("facturaIdRecibos", facturaIdRecibos + "");
                         EnviarRecibos obj = new EnviarRecibos(listaRecibos.get(i));
                         Log.d("My App", obj + "");
@@ -718,8 +719,8 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                 @Override
                 public void execute(Realm realm) {
 
-                    recibos sale_actualizada = realmRecibos.where(recibos.class).equalTo("invoice_id", factura).findFirst();
-                    sale_actualizada.setAbonado(0);
+                    receipts sale_actualizada = realmRecibos.where(receipts.class).equalTo("customer_id", factura).findFirst();
+                    sale_actualizada.setAplicado(0);
                     realmRecibos.insertOrUpdate(sale_actualizada);
 
                 }
@@ -873,10 +874,10 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
     public int codigoDeRespuestaRecibos(String codS, String messageS, String resultS, int cod){
 
         Realm realmRecibos = Realm.getDefaultInstance();
-        RealmQuery<recibos> queryRecibos = realmRecibos.where(recibos.class).equalTo("abonado", 1);
-        final RealmResults<recibos> invoiceRecibos = queryRecibos.findAll();
+        RealmQuery<receipts> queryRecibos = realmRecibos.where(receipts.class).equalTo("aplicado", 1);
+        final RealmResults<receipts> invoiceRecibos = queryRecibos.findAll();
         Log.d("SubFacturaInvP", invoiceRecibos.toString());
-        List<recibos> listaRecibos = realmRecibos.copyFromRealm(invoiceRecibos);
+        List<receipts> listaRecibos = realmRecibos.copyFromRealm(invoiceRecibos);
         Log.d("qweqweq1", listaRecibos + "");
         realmRecibos.close();
 
@@ -885,7 +886,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
         }else {
 
             for (int i = 0; i < listaRecibos.size(); i++) {
-                facturaId = String.valueOf(listaRecibos.get(i).getInvoice_id());
+                facturaId = String.valueOf(listaRecibos.get(i).getCustomer_id());
                 if (codS.equals("1") && resultS.equals("true")) {
                     actualizarRecibos(facturaId);
                    // actualizarFactura(facturaId);

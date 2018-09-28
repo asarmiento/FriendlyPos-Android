@@ -22,6 +22,11 @@ public class receipts extends RealmObject {
 
     @PrimaryKey
     String receipts_id;
+
+    private boolean result;
+    private String code;
+    private String messages;
+
     String customer_id;
     String reference;
     String date;
@@ -30,6 +35,15 @@ public class receipts extends RealmObject {
     String notes;
     private RealmList<recibos> listaRecibos;
 
+    int aplicado = 0;
+
+    public int getAplicado() {
+        return aplicado;
+    }
+
+    public void setAplicado(int aplicado) {
+        this.aplicado = aplicado;
+    }
 
     public String getReceipts_id() {
         return receipts_id;
@@ -93,6 +107,30 @@ public class receipts extends RealmObject {
 
     public void setListaRecibos(RealmList<recibos> listaRecibos) {
         this.listaRecibos = listaRecibos;
+    }
+
+    public boolean isResult() {
+        return result;
+    }
+
+    public void setResult(boolean result) {
+        this.result = result;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getMessage() {
+        return messages;
+    }
+
+    public void setMessage(String message) {
+        this.messages = message;
     }
 
     @Override

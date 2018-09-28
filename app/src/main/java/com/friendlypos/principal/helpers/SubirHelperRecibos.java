@@ -5,6 +5,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.friendlypos.Recibos.modelo.EnviarRecibos;
+import com.friendlypos.Recibos.modelo.receipts;
 import com.friendlypos.app.broadcastreceiver.NetworkStateChangeReceiver;
 import com.friendlypos.application.datamanager.BaseManager;
 import com.friendlypos.application.interfaces.RequestInterface;
@@ -47,14 +48,13 @@ public class SubirHelperRecibos {
         if (isOnline()) {
             Log.d("factura1", facturaQuery + " ");
 
-        mAPIService.savePostRecibos(facturaQuery, token).enqueue(new Callback<invoice>() {
+        mAPIService.savePostRecibos(facturaQuery, token).enqueue(new Callback<receipts>() {
 
             @Override
-            public void onResponse(Call<invoice> call, Response<invoice> response) {
+            public void onResponse(Call<receipts> call, Response<receipts> response) {
 
                 if(response.isSuccessful()) {
                     Log.d("respRecibos",response.body().toString());
-                 //   Toast.makeText(activity, response.message().toString(), Toast.LENGTH_SHORT).show();
 
                     codigo = response.code();
                     codigoS = response.body().getCode();
@@ -64,14 +64,11 @@ public class SubirHelperRecibos {
                     activity.codigoDeRespuestaRecibos(codigoS, mensajeS, resultS, codigo);
                 }
                 else{
-                 //   Toast.makeText(activity, response.message().toString(), Toast.LENGTH_SHORT).show();
                 }
-                //setCodigoServer(codigo);
-
             }
 
             @Override
-            public void onFailure(Call<invoice> call, Throwable t) {
+            public void onFailure(Call<receipts> call, Throwable t) {
                 Log.e(TAG, "Unable to submit post to API.");
             }
         });}

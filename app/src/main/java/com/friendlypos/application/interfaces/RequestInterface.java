@@ -3,6 +3,7 @@ package com.friendlypos.application.interfaces;
 
 import com.friendlypos.Recibos.modelo.EnviarRecibos;
 import com.friendlypos.Recibos.modelo.RecibosResponse;
+import com.friendlypos.Recibos.modelo.receipts;
 import com.friendlypos.distribucion.modelo.EnviarFactura;
 import com.friendlypos.distribucion.modelo.invoice;
 import com.friendlypos.distribucion.modelo.FacturasResponse;
@@ -87,7 +88,7 @@ public interface RequestInterface {
 
     // TODO DEFINIR CUAL ES EL KEY PARA ENVIAR (KEY, VALUE)
     @POST("/api/upload-receipt")
-    Call<invoice> savePostRecibos(@Body EnviarRecibos invoice, @Header("Authorization") String token);
+    Call<receipts> savePostRecibos(@Body EnviarRecibos receipts, @Header("Authorization") String token);
 
     // TODO DEFINIR CUAL ES EL KEY PARA ENVIAR (KEY, VALUE)
     @POST("/api/upload-visit")

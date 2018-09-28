@@ -360,7 +360,9 @@ public class RecibosAplicarFragment extends BaseFragment {
 
                         recibo_actua.setListaRecibos(new RealmList<recibos>(salesList1.toArray(new recibos[salesList1.size()])));
                         recibo_actua.setBalance(activity.getTotalizarFinal());
-
+                        recibo_actua.setAplicado(1);
+                        recibo_actua.setSum(observ);
+                        recibo_actua.setNotes(observ);
                         realm2.insertOrUpdate(recibo_actua);
 
                         Log.d("ACTRECIBO", recibo_actua + "");
