@@ -17,6 +17,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.friendlypos.R;
+import com.friendlypos.Recibos.modelo.receipts;
+import com.friendlypos.Recibos.modelo.recibos;
 import com.friendlypos.distribucion.activity.DistribucionActivity;
 import com.friendlypos.distribucion.adapters.DistrResumenAdapter;
 import com.friendlypos.distribucion.adapters.DistrSeleccionarProductosAdapter;
@@ -101,11 +103,27 @@ public class DistSelecProductoFragment extends BaseFragment implements SearchVie
 
     private List<Inventario> getListProductos() {
         realm = Realm.getDefaultInstance();
-        RealmQuery<Inventario> query = realm.where(Inventario.class).notEqualTo("amount", "0").notEqualTo("amount", "0.0").notEqualTo("amount", "0.000");
-        RealmResults<Inventario> result1 = query.findAll();
 
-        return result1;
+   /*   RealmQuery<Productos> query = realm.where(Productos.class).equalTo("status", "Activo");
+        RealmResults<Productos> result1 = query.findAll();
 
+        if (result1.isEmpty()) {
+
+            Toast.makeText(getActivity(), "No hay recibos emitidos", Toast.LENGTH_LONG).show();}
+
+        else {
+            for (int i = 0; i < result1.size(); i++) {
+
+                Productos salesList1 = realm.where(Productos.class).equalTo("status", "Activo").findFirst();
+                String id = salesList1.getId();*/
+
+                RealmQuery<Inventario> query1 = realm.where(Inventario.class).notEqualTo("amount", "0").notEqualTo("amount", "0.0").notEqualTo("amount", "0.000");
+                RealmResults<Inventario> result2 = query1.findAll();
+                Log.d("result2", result2 + "");
+                return result2;
+       /*   }
+        }
+        return null;*/
     }
 
     @Override

@@ -107,6 +107,7 @@ public class VentaDirSeleccionarProductoAdapter  extends RecyclerView.Adapter<Ve
         final String description = producto.getDescription();
         String marca = producto.getBrand_id();
         String tipo = producto.getProduct_type_id();
+        String status = producto.getStatus();
         String precio = producto.getSale_price();
         String marca2 = realm.where(Marcas.class).equalTo("id", marca).findFirst().getName();
         String tipoProducto = realm.where(TipoProducto.class).equalTo("id", tipo).findFirst().getName();
@@ -136,32 +137,37 @@ public class VentaDirSeleccionarProductoAdapter  extends RecyclerView.Adapter<Ve
 
         }
 
-        holder.txt_producto_factura_nombre.setText(description);
-        holder.txt_producto_factura_marca.setText("Marca: " + marca2);
-        holder.txt_producto_factura_tipo.setText("Tipo: " + tipoProducto);
-        holder.txt_producto_factura_precio.setText(precio);
-        holder.txt_producto_factura_disponible.setText("Disp: " + inventario.getAmount());
-        holder.fillData(producto);
-        Log.d("productosList", "" + productosList);
+        if (status.equals("Activo")) {
+            holder.txt_producto_factura_nombre.setText(description);
+            holder.txt_producto_factura_marca.setText("Marca: " + marca2);
+            holder.txt_producto_factura_tipo.setText("Tipo: " + tipoProducto);
+            holder.txt_producto_factura_precio.setText(precio);
+            holder.txt_producto_factura_disponible.setText("Disp: " + inventario.getAmount());
+            holder.fillData(producto);
+            Log.d("productosList", "" + productosList);
 
-        if(pivots.size() == 0){
-            holder.cardView.setBackgroundColor(Color.parseColor("#009688"));
-        }
-        else{
+            if (pivots.size() == 0) {
+                holder.cardView.setBackgroundColor(Color.parseColor("#009688"));
+            } else {
 
-            for (Pivot pivot: pivots){
-                if(producto.getId().equals(pivot.getProduct_id())){
-                    holder.cardView.setBackgroundColor(Color.parseColor("#607d8b"));
-                    return;
-                }else{
-                    holder.cardView.setBackgroundColor(Color.parseColor("#009688"));
+                for (Pivot pivot : pivots) {
+                    if (producto.getId().equals(pivot.getProduct_id())) {
+                        holder.cardView.setBackgroundColor(Color.parseColor("#607d8b"));
+                        return;
+                    } else {
+                        holder.cardView.setBackgroundColor(Color.parseColor("#009688"));
+                    }
                 }
+
             }
         }
-        realm3.close();
-    }
 
-
+        else{
+            holder.cardView.setVisibility(View.GONE);
+            holder.cardView.getLayoutParams().height = 0;
+            Log.d("inactivo", "inactivo");
+        }
+        }
 
     public void addProduct(final int inventario_id, final String producto_id, final
     Double cantidadDisponible, final String description, String Precio1, String Precio2,

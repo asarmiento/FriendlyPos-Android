@@ -111,7 +111,7 @@ public class PrevSelecProductoFragment extends BaseFragment implements SearchVie
 
     private List<Productos> getListProductos() {
         realm = Realm.getDefaultInstance();
-        RealmQuery<Productos> query = realm.where(Productos.class)/*.notEqualTo("amount", "0").notEqualTo("amount", "0.0").notEqualTo("amount", "0.000")*/;
+        RealmQuery<Productos> query = realm.where(Productos.class).equalTo("status", "Activo");
         RealmResults<Productos> result1 = query.findAll();
 
         return result1;

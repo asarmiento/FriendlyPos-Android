@@ -125,11 +125,10 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
 
         }
 
-
-        if (status.equals("Activo")) {
+          if (status.equals("Activo")) {
             holder.txt_producto_factura_nombre.setText(description);
-            // holder.txt_producto_factura_marca.setText("Marca: " + marca2);
-            holder.txt_producto_factura_marca.setText("Marca: " + status);
+             holder.txt_producto_factura_marca.setText("Marca: " + marca2);
+         //   holder.txt_producto_factura_marca.setText("Marca: " + status);
 
             holder.txt_producto_factura_tipo.setText("Tipo: " + tipoProducto);
             holder.txt_producto_factura_precio.setText(precio);
@@ -148,7 +147,9 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
             }
         }
         else{
-            Log.d("inactivo", "inactivo");
+        holder.cardView.setVisibility(View.GONE);
+              holder.cardView.getLayoutParams().height = 0;
+           Log.d("inactivo", "inactivo");
         }
     }
 
