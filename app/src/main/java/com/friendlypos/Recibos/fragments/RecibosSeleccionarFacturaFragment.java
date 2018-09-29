@@ -104,7 +104,7 @@ public class RecibosSeleccionarFacturaFragment extends BaseFragment {
                     public void onClick(View v) {
 
                         //double totalT = activity.getTotalizarTotal();
-                        double totalP = activity.getTotalizarCancelado();
+                        final double totalP = activity.getTotalizarCancelado();
                         Log.d("totalRecibos", "" + totalP);
 
                         LayoutInflater layoutInflater = LayoutInflater.from(activity);
@@ -123,9 +123,16 @@ public class RecibosSeleccionarFacturaFragment extends BaseFragment {
 
                             public void onClick(DialogInterface dialog, int id) {
 
+                                double numIngresado = Double.parseDouble(input.getText().toString());
+
+
 
                                 if(!input.getText().toString().isEmpty()){
-                                    cantidadPagar = Double.parseDouble(input.getText().toString());
+
+                                    if(numIngresado > totalP){
+                                        Toast.makeText(getActivity(), "Ingrese una cantidad menor al total", Toast.LENGTH_LONG).show();
+                                    }else{
+                                    cantidadPagar = numIngresado;
                                     Log.d("cantidadPagar1", "" + String.format("%,.2f", cantidadPagar));
                                     AlertDialog dialogReturnSale = new AlertDialog.Builder(activity)
                                             .setTitle("Pago total")
@@ -265,6 +272,7 @@ public class RecibosSeleccionarFacturaFragment extends BaseFragment {
                                             }).create();
                                     dialogReturnSale.show();
 
+                                }
                                 }
                                 else{
                                     input.setError("Campo requerido");
