@@ -89,13 +89,18 @@ public class PrevTotalizarFragment extends BaseFragment {
     public void onDestroy() {
         super.onDestroy();
         clearAll();
+        getActivity().unregisterReceiver(bluetoothStateChangeReceiver);
     }
 
     @Override
     public void onPause() {
         super.onPause();
 
-        getActivity().unregisterReceiver(bluetoothStateChangeReceiver);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
     @Override

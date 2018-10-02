@@ -87,13 +87,12 @@ public class RecibosAplicarFragment extends BaseFragment {
         super.onDestroy();
         clearAll();
         pagado= 0.0;
-
+        getActivity().unregisterReceiver(bluetoothStateChangeReceiver);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        getActivity().unregisterReceiver(bluetoothStateChangeReceiver);
     }
 
     @Override

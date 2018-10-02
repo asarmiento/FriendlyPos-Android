@@ -60,9 +60,14 @@ public class ReimprimirResumenFragment extends BaseFragment {
     @Override
     public void onPause() {
         super.onPause();
+    }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
         getActivity().unregisterReceiver(bluetoothStateChangeReceiver);
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

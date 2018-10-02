@@ -90,7 +90,7 @@ public class VentaDirTotalizarFragment extends BaseFragment  {
     public void onPause() {
         super.onPause();
 
-        getActivity().unregisterReceiver(bluetoothStateChangeReceiver);
+
     }
     @Override
     public void onDetach(){
@@ -102,6 +102,7 @@ public class VentaDirTotalizarFragment extends BaseFragment  {
     public void onDestroy() {
         super.onDestroy();
         clearAll();
+        getActivity().unregisterReceiver(bluetoothStateChangeReceiver);
     }
 
     @Override
