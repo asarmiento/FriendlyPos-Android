@@ -1,16 +1,31 @@
 package com.friendlypos.principal.adapters;
 
+import android.app.ProgressDialog;
+import android.content.ActivityNotFoundException;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
+import android.net.Uri;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.friendlypos.R;
+import com.friendlypos.distribucion.modelo.Pivot;
+import com.friendlypos.distribucion.modelo.invoice;
+import com.friendlypos.distribucion.modelo.sale;
 import com.friendlypos.principal.modelo.Clientes;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.realm.Realm;
 
 
 public class ClientesAdapter extends RecyclerView.Adapter<ClientesAdapter.CharacterViewHolder>{
@@ -20,9 +35,15 @@ public class ClientesAdapter extends RecyclerView.Adapter<ClientesAdapter.Charac
     private static Double descuentoFixed = 0.0;
     private static Double cleintedue = 0.0;
     private static Double credittime = 0.0;
+    int activa = 0;
+    private int selected_position = -1;
+     double longitud, latitud;
+    private static Context QuickContext = null;
 
-    public ClientesAdapter(List<Clientes> contentList) {
+
+    public ClientesAdapter(Context context,List<Clientes> contentList) {
         this.contentList = contentList;
+        this.QuickContext = context;
     }
 
     @Override
@@ -34,8 +55,8 @@ public class ClientesAdapter extends RecyclerView.Adapter<ClientesAdapter.Charac
     }
 
     @Override
-    public void onBindViewHolder(CharacterViewHolder holder, int position) {
-        Clientes content = contentList.get(position);
+    public void onBindViewHolder(CharacterViewHolder holder, final int position) {
+        final Clientes content = contentList.get(position);
 
         creditolimite = Double.parseDouble(content.getCreditLimit());
         descuentoFixed =   Double.parseDouble(content.getFixedDiscount());
@@ -51,6 +72,86 @@ public class ClientesAdapter extends RecyclerView.Adapter<ClientesAdapter.Charac
         holder.txt_cliente_fixeddescount.setText(String.format("%,.2f", (descuentoFixed)));
         holder.txt_cliente_due.setText(String.format("%,.2f", (cleintedue)));
         holder.txt_cliente_credittime.setText(String.format("%,.2f", (credittime)));
+
+        holder.cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                activa = 1;
+
+                final ProgressDialog progresRing = ProgressDialog.show(QuickContext, "Cargando", "Seleccionando Cliente", true);
+                progresRing.setCancelable(true);
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            Thread.sleep(5000);
+                        } catch (Exception e) {
+
+                        }
+                        progresRing.dismiss();
+                    }
+                }).start();
+
+                int pos = position;
+                if (pos == RecyclerView.NO_POSITION) return;
+
+                // Updating old as well as new positions
+                notifyItemChanged(selected_position);
+                selected_position = position;
+                notifyItemChanged(selected_position);
+
+                content.getId();
+               longitud = content.getLongitud();
+                latitud = content.getLatitud();
+
+            }
+        });
+        if(selected_position==position){
+            holder.cardView.setBackgroundColor(Color.parseColor("#607d8b"));
+        }
+        else
+        {
+            holder.cardView.setBackgroundColor(Color.parseColor("#009688"));
+        }
+
+
+        holder.btnUbicacionCliente.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                if(activa == 1) {
+
+                    if (longitud != 0.0 && latitud != 0.0) {
+
+                        try {
+                            // Launch Waze to look for Hawaii:
+                            //   String url = "https://waze.com/ul?ll=9.9261253,-84.0889091&navigate=yes";
+
+                            String url = "https://waze.com/ul?ll="+ latitud + "," + longitud + "&navigate=yes";
+                            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                            QuickContext.startActivity(intent);
+                        } catch (ActivityNotFoundException ex) {
+
+                            Uri gmmIntentUri = Uri.parse("geo:"+latitud + "," + longitud);
+                            Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                            mapIntent.setPackage("com.google.android.apps.maps");
+                            QuickContext.startActivity(mapIntent);
+
+                        }
+                    } else {
+                        Toast.makeText(QuickContext, "El cliente no cuenta con dirección GPS", Toast.LENGTH_SHORT).show();
+
+                    }
+                }
+                else{
+                    Toast.makeText(QuickContext, "Selecciona una factura primero", Toast.LENGTH_SHORT).show();
+
+                }
+            }
+        });
+
+
+
     }
 
     @Override
@@ -66,10 +167,10 @@ public class ClientesAdapter extends RecyclerView.Adapter<ClientesAdapter.Charac
 
 
     public static class CharacterViewHolder extends RecyclerView.ViewHolder {
-
+        public CardView cardView;
         private TextView txt_cliente_card,txt_cliente_fantasyname,txt_cliente_companyname, txt_cliente_address,txt_cliente_creditlimit,
                 txt_cliente_fixeddescount, txt_cliente_due,txt_cliente_credittime, txt_cliente_telefono;
-
+        private ImageButton btnUbicacionCliente;
         public CharacterViewHolder(View view) {
             super(view);
             txt_cliente_card = (TextView)view.findViewById(R.id.txt_cliente_card);
@@ -81,6 +182,9 @@ public class ClientesAdapter extends RecyclerView.Adapter<ClientesAdapter.Charac
             txt_cliente_fixeddescount = (TextView)view.findViewById(R.id.txt_cliente_fixeddescount);
             txt_cliente_due = (TextView)view.findViewById(R.id.txt_cliente_due);
             txt_cliente_credittime = (TextView)view.findViewById(R.id.txt_cliente_credittime);
+            btnUbicacionCliente = (ImageButton)view.findViewById(R.id.btnUbicacionCliente);
+            cardView = (CardView) view.findViewById(R.id.cardViewClientes);
+
         }
     }
 

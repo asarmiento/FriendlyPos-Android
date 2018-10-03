@@ -1,5 +1,7 @@
 package com.friendlypos.principal.modelo;
 
+import com.google.gson.annotations.SerializedName;
+
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
@@ -11,6 +13,8 @@ public class Clientes extends RealmObject {
     private String placa;
     private String doors;
     private String name;
+    private double longitud;
+    private double latitud;
     private String fantasy_name;
     private String company_name;
     private String phone;
@@ -143,6 +147,22 @@ public class Clientes extends RealmObject {
         this.updated_at = updatedAt;
     }
 
+    public double getLongitud() {
+        return longitud;
+    }
+
+    public void setLongitud(double longitud) {
+        this.longitud = longitud;
+    }
+
+    public double getLatitud() {
+        return latitud;
+    }
+
+    public void setLatitud(double latitud) {
+        this.latitud = latitud;
+    }
+
     @Override
     public String toString() {
         return "Clientes{" +
@@ -151,6 +171,8 @@ public class Clientes extends RealmObject {
                 ", placa='" + placa + '\'' +
                 ", doors='" + doors + '\'' +
                 ", name='" + name + '\'' +
+                ", longitud='" + longitud + '\'' +
+                ", latitud='" + latitud + '\'' +
                 ", fantasy_name='" + fantasy_name + '\'' +
                 ", company_name='" + company_name + '\'' +
                 ", phone='" + phone + '\'' +

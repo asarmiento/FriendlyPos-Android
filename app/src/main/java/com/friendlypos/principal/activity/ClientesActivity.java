@@ -79,7 +79,7 @@ public class ClientesActivity extends BluetoothActivity implements SearchView.On
         connectToPrinter();
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
-        adapter = new ClientesAdapter(getList());
+        adapter = new ClientesAdapter(ClientesActivity.this, getList());
         recyclerView.setAdapter(adapter);
 
         Log.d("lista", getList() + "");
