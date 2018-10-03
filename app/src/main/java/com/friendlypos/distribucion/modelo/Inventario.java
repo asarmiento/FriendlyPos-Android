@@ -2,6 +2,7 @@ package com.friendlypos.distribucion.modelo;
 
 import com.friendlypos.principal.modelo.Productos;
 
+import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
@@ -18,8 +19,8 @@ public class Inventario extends RealmObject {
     String amount;
     String amount_dist;
     String distributor;
-
     String nombre_producto;
+
 
     public int getId() {
         return id;
@@ -76,6 +77,7 @@ public class Inventario extends RealmObject {
     public void setNombre_producto(String nombre_producto) {
         this.nombre_producto = nombre_producto;
     }
+
 
     @Override
     public String toString() {

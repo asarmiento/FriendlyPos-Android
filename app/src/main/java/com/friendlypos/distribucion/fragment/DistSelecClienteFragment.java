@@ -23,6 +23,7 @@ import com.friendlypos.distribucion.modelo.Inventario;
 import com.friendlypos.distribucion.modelo.Pivot;
 import com.friendlypos.distribucion.modelo.sale;
 import com.friendlypos.principal.modelo.Clientes;
+import com.friendlypos.principal.modelo.Productos;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,6 +82,7 @@ public class DistSelecClienteFragment extends BaseFragment  implements SearchVie
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);
+        Log.d("listaProducto", getListClientes() + "");
     }
 
     private List<sale> getListClientes(){
@@ -89,11 +91,41 @@ public class DistSelecClienteFragment extends BaseFragment  implements SearchVie
         final RealmQuery<sale> query = realm.where(sale.class).equalTo("aplicada", 0);
         final RealmResults<sale> result1 = query.findAll();
 
-        if(result1.size() == 0){
+
+        if (result1.isEmpty()) {
+
             Toast.makeText(getApplicationContext(),"Favor descargar datos primero",Toast.LENGTH_LONG).show();
         }
 
-        Log.d("SALE", result1+"");
+        else {
+            for (int i = 0; i < result1.size(); i++) {
+
+                List<sale> salesList1 = realm.where(sale.class).equalTo("aplicada", 0).findAll();
+                String nombre = salesList1.get(i).getNombreCliente();
+                if (nombre == null) {
+                    String facturaId1 = salesList1.get(i).getCustomer_id();
+
+                    Clientes salesList2 = realm.where(Clientes.class).equalTo("id", facturaId1).findFirst();
+
+                    final String facturaId2 = salesList2.getId();
+                    final String desc = salesList2.getFantasyName();
+
+                    final Realm realm3 = Realm.getDefaultInstance();
+
+                    realm3.executeTransaction(new Realm.Transaction() {
+
+                        @Override
+                        public void execute(Realm realm3) {
+
+                            sale inv_actualizado = realm3.where(sale.class).equalTo("customer_id", facturaId2).findFirst();
+                            //  inv_actualizado.setProducto(new RealmList<Productos>(salesList2.toArray(new Productos[salesList2.size()])));
+                            inv_actualizado.setNombreCliente(desc);
+                            realm3.insertOrUpdate(inv_actualizado); // using insert API
+                        }
+                    });
+                }
+            }
+        }
         return result1;
 
     }
@@ -149,13 +181,19 @@ public class DistSelecClienteFragment extends BaseFragment  implements SearchVie
 
     private List<sale> filter(List<sale> models, String query) {
         query = query.toLowerCase();
-
         final List<sale> filteredModelList = new ArrayList<>();
+
         for (sale model : models) {
-            final String text = model.getCustomer_id().toLowerCase();
+
+            if(model.getNombreCliente() == null){
+
+            }else{
+
+            final String text = model.getNombreCliente().toLowerCase();
             Log.d("FiltroPreventa", text);
             if (text.contains(query)) {
                 filteredModelList.add(model);
+            }
             }
         }
         return filteredModelList;

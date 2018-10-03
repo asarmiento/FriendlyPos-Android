@@ -35,6 +35,8 @@ import io.realm.Realm;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
 
+import static io.realm.internal.SyncObjectServerFacade.getApplicationContext;
+
 
 public class DistSelecProductoFragment extends BaseFragment implements SearchView.OnQueryTextListener {
     private Realm realm;
@@ -104,26 +106,55 @@ public class DistSelecProductoFragment extends BaseFragment implements SearchVie
     private List<Inventario> getListProductos() {
         realm = Realm.getDefaultInstance();
 
-   /*   RealmQuery<Productos> query = realm.where(Productos.class).equalTo("status", "Activo");
-        RealmResults<Productos> result1 = query.findAll();
-
-        if (result1.isEmpty()) {
-
-            Toast.makeText(getActivity(), "No hay recibos emitidos", Toast.LENGTH_LONG).show();}
-
-        else {
-            for (int i = 0; i < result1.size(); i++) {
-
-                Productos salesList1 = realm.where(Productos.class).equalTo("status", "Activo").findFirst();
-                String id = salesList1.getId();*/
 
                 RealmQuery<Inventario> query1 = realm.where(Inventario.class).notEqualTo("amount", "0").notEqualTo("amount", "0.0").notEqualTo("amount", "0.000");
                 RealmResults<Inventario> result2 = query1.findAll();
-                Log.d("result2", result2 + "");
-                return result2;
-       /*   }
+
+        if (result2.isEmpty()) {
+
+            Toast.makeText(getApplicationContext(),"Favor descargar datos primero",Toast.LENGTH_LONG).show();}
+
+        else{
+            for (int i = 0; i < result2.size(); i++) {
+
+                List<Inventario> salesList1 = realm.where(Inventario.class).notEqualTo("amount", "0").notEqualTo("amount", "0.0").notEqualTo("amount", "0.000").findAll();
+                String nombre = salesList1.get(i).getNombre_producto();
+                if (nombre == null){
+                    String facturaId1 = salesList1.get(i).getProduct_id();
+
+                    Productos salesList2 = realm.where(Productos.class).equalTo("id", facturaId1).findFirst();
+
+                    final String facturaId2 = salesList2.getId();
+                    final String desc = salesList2.getDescription();
+
+                    final Realm realm3 = Realm.getDefaultInstance();
+
+                    realm3.executeTransaction(new Realm.Transaction() {
+
+                        @Override
+                        public void execute(Realm realm3) {
+
+                            Inventario inv_actualizado = realm3.where(Inventario.class).equalTo("product_id", facturaId2).findFirst();
+                            //  inv_actualizado.setProducto(new RealmList<Productos>(salesList2.toArray(new Productos[salesList2.size()])));
+                            inv_actualizado.setNombre_producto(desc);
+                            realm3.insertOrUpdate(inv_actualizado); // using insert API
+                        }
+                    });
+                }
+
+
+
+
+
+                //  realm.insertOrUpdate(recibo_actualizado);
+
+                // Log.d("ACT RECIBO", recibo_actualizado + "");
+            }
+            //realm2.close();
         }
-        return null;*/
+
+        return result2;
+
     }
 
     @Override
@@ -223,11 +254,16 @@ public class DistSelecProductoFragment extends BaseFragment implements SearchVie
 
         final List<Inventario> filteredModelList = new ArrayList<>();
         for (Inventario model : models) {
+
+                if(model.getNombre_producto() == null){
+
+                }else{
+
             final String text = model.getNombre_producto().toLowerCase();
             Log.d("dasdad", text);
             if (text.contains(query)) {
                 filteredModelList.add(model);
-            }
+            }}
         }
         return filteredModelList;
     }

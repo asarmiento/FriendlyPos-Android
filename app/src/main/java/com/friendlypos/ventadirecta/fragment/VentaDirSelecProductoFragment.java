@@ -14,12 +14,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.friendlypos.R;
+import com.friendlypos.Recibos.modelo.recibos;
 import com.friendlypos.distribucion.fragment.BaseFragment;
 import com.friendlypos.distribucion.modelo.Inventario;
 import com.friendlypos.preventas.util.TotalizeHelperPreventa;
 import com.friendlypos.principal.modelo.Clientes;
+import com.friendlypos.principal.modelo.Productos;
 import com.friendlypos.ventadirecta.activity.VentaDirectaActivity;
 import com.friendlypos.ventadirecta.adapters.VentaDirSeleccionarProductoAdapter;
 import com.friendlypos.ventadirecta.modelo.invoiceDetalleVentaDirecta;
@@ -28,8 +31,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
+import io.realm.RealmList;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
+
+import static io.realm.internal.SyncObjectServerFacade.getApplicationContext;
 
 public class VentaDirSelecProductoFragment extends BaseFragment implements SearchView.OnQueryTextListener {
     private Realm realm;
@@ -102,6 +108,49 @@ public class VentaDirSelecProductoFragment extends BaseFragment implements Searc
         realm = Realm.getDefaultInstance();
         RealmQuery<Inventario> query = realm.where(Inventario.class).notEqualTo("amount", "0").notEqualTo("amount", "0.0").notEqualTo("amount", "0.000");
         RealmResults<Inventario> result1 = query.findAll();
+
+        if (result1.isEmpty()) {
+
+            Toast.makeText(getApplicationContext(),"Favor descargar datos primero",Toast.LENGTH_LONG).show();}
+
+        else{
+            for (int i = 0; i < result1.size(); i++) {
+
+                List<Inventario> salesList1 = realm.where(Inventario.class).notEqualTo("amount", "0").notEqualTo("amount", "0.0").notEqualTo("amount", "0.000").findAll();
+                String nombre = salesList1.get(i).getNombre_producto();
+                if (nombre == null){
+                    String facturaId1 = salesList1.get(i).getProduct_id();
+
+                    Productos salesList2 = realm.where(Productos.class).equalTo("id", facturaId1).findFirst();
+
+                    final String facturaId2 = salesList2.getId();
+                    final String desc = salesList2.getDescription();
+
+                    final Realm realm3 = Realm.getDefaultInstance();
+
+                    realm3.executeTransaction(new Realm.Transaction() {
+
+                        @Override
+                        public void execute(Realm realm3) {
+
+                            Inventario inv_actualizado = realm3.where(Inventario.class).equalTo("product_id", facturaId2).findFirst();
+                            //  inv_actualizado.setProducto(new RealmList<Productos>(salesList2.toArray(new Productos[salesList2.size()])));
+                            inv_actualizado.setNombre_producto(desc);
+                            realm3.insertOrUpdate(inv_actualizado); // using insert API
+                        }
+                    });
+                }
+
+
+
+
+
+              //  realm.insertOrUpdate(recibo_actualizado);
+
+               // Log.d("ACT RECIBO", recibo_actualizado + "");
+            }
+            //realm2.close();
+        }
 
         return result1;
 
@@ -210,21 +259,15 @@ public class VentaDirSelecProductoFragment extends BaseFragment implements Searc
     private List<Inventario> filter(List<Inventario> models, String query) {
         query = query.toLowerCase();
         final List<Inventario> filteredModelList = new ArrayList<>();
-        adapter.notifyDataSetChanged();
-        for (Inventario model : models) {
-            if(models.isEmpty()){
-                Log.d("vacioModel","dasda");
-            }else{
-                getListProductos();
-                Log.d("todos", getListProductos()+"");
-                int as = model.getId();
 
-                String text1 = model.getNombre_producto();
-                Log.d("id todos", as+"");
-                Log.d("nombre todos", text1+"");
+        for (Inventario model : models) {
+
+            if(model.getNombre_producto() == null){
+
+            }else{
+
             String text = model.getNombre_producto().toLowerCase();
                 Log.d("FiltroVentaDirecta", text);
-
                 if (text.contains(query)) {
                 filteredModelList.add(model);
             }

@@ -122,7 +122,7 @@ public class VentaDirSeleccionarProductoAdapter  extends RecyclerView.Adapter<Ve
                     public void execute(Realm realm3) {
 
                         inventario.setNombre_producto(description);
-                        realm3.copyToRealmOrUpdate(inventario);
+                        realm3.insertOrUpdate(inventario);
 
                         Log.d("invProdNombre", inventario.getNombre_producto());
                     }
@@ -509,7 +509,7 @@ public class VentaDirSeleccionarProductoAdapter  extends RecyclerView.Adapter<Ve
             final Double nuevoAmount = d_cantidadDisponible - producto_bonus_add;
             Log.d("nuevoAmount", nuevoAmount + "");
 
-
+/*
             final Realm realm3 = Realm.getDefaultInstance();
 
             realm3.executeTransaction(new Realm.Transaction() {
@@ -524,7 +524,7 @@ public class VentaDirSeleccionarProductoAdapter  extends RecyclerView.Adapter<Ve
                 }
             });
 
-
+*/
             sale ventaDetallePreventa = activity.getCurrentVenta();
             ventaDetallePreventa.getInvoice_id();
 
