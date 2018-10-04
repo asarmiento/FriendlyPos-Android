@@ -873,6 +873,33 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
         return cod;
     }
 
+    public int codigoDeRespuestaVD(String codS, String messageS, String resultS, int cod){
+        Realm realmPedidos = Realm.getDefaultInstance();
+        RealmQuery<invoice> queryPedidos = realmPedidos.where(invoice.class).equalTo("subida", 1).equalTo("facturaDePreventa", "VentaDirecta");
+        final RealmResults<invoice> invoicePedidos = queryPedidos.findAll();
+        Log.d("SubFacturaInvP", invoicePedidos.toString());
+        List<invoice> listaFacturasPedidos = realmPedidos.copyFromRealm(invoicePedidos);
+        Log.d("SubFacturaListaP", listaFacturasPedidos + "");
+        realmPedidos.close();
+
+        if(listaFacturasPedidos.size()== 0){
+            Toast.makeText(MenuPrincipal.this,"No hay más facturas para subir", Toast.LENGTH_LONG).show();
+        }else {
+
+            for (int i = 0; i < listaFacturasPedidos.size(); i++) {
+                facturaId = String.valueOf(listaFacturasPedidos.get(i).getId());
+                if (codS.equals("1") && resultS.equals("true")) {
+                    actualizarVenta(facturaId);
+                    actualizarFactura(facturaId);
+                    Toast.makeText(MenuPrincipal.this, messageS, Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(MenuPrincipal.this, messageS, Toast.LENGTH_LONG).show();
+                }
+            }
+        }
+        return cod;
+    }
+
     public int codigoDeRespuestaRecibos(String codS, String messageS, String resultS, int cod){
 
         Realm realmRecibos = Realm.getDefaultInstance();

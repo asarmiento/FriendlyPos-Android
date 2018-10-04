@@ -141,13 +141,6 @@ public class VentaDirSelecProductoFragment extends BaseFragment implements Searc
                     });
                 }
 
-
-
-
-
-              //  realm.insertOrUpdate(recibo_actualizado);
-
-               // Log.d("ACT RECIBO", recibo_actualizado + "");
             }
             //realm2.close();
         }
@@ -223,22 +216,6 @@ public class VentaDirSelecProductoFragment extends BaseFragment implements Searc
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
         searchView.setOnQueryTextListener(this);
 
-
-
-        /*MenuItemCompat.setOnActionExpandListener(item,
-                new MenuItemCompat.OnActionExpandListener() {
-                    @Override
-                    public boolean onMenuItemActionCollapse(MenuItem item) {
-                        adapter.setFilter(listaInventario);
-                        return true; // Return true to collapse action view
-                    }
-
-                    @Override
-                    public boolean onMenuItemActionExpand(MenuItem item) {
-                        // Do something when expanded
-                        return true; // Return true to expand action view
-                    }
-                });*/
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -276,57 +253,5 @@ public class VentaDirSelecProductoFragment extends BaseFragment implements Searc
         return filteredModelList;
     }
 
-   /* @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_main, menu);
-
-        final MenuItem item = menu.findItem(R.id.action_search);
-        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
-        searchView.setOnQueryTextListener(this);
-
-        MenuItemCompat.setOnActionExpandListener(item,
-                new MenuItemCompat.OnActionExpandListener() {
-                    @Override
-                    public boolean onMenuItemActionCollapse(MenuItem item) {
-                        // Do something when collapsed
-                        adapter.setFilter(getListProductos());
-                        return true; // Return true to collapse action view
-                    }
-
-                    @Override
-                    public boolean onMenuItemActionExpand(MenuItem item) {
-                        // Do something when expanded
-                        return true; // Return true to expand action view
-                    }
-                });
-    }
-
-    @Override
-    public boolean onQueryTextChange(String newText) {
-        final List<Inventario> filteredModelList = filter(getListProductos(), newText);
-        adapter.setFilter(filteredModelList);
-        return true;
-    }
-
-    @Override
-    public boolean onQueryTextSubmit(String query) {
-        return false;
-    }
-
-
-    private List<Inventario> filter(List<Inventario> models, String query) {
-        query = query.toLowerCase();
-
-        final List<Inventario> filteredModelList = new ArrayList<>();
-        for (Inventario model : listaInventario) {
-            final String text = model.getNombre_producto().toLowerCase();
-            Log.d("FiltroVentaDirecta", text);
-            if (text.contains(query)) {
-                filteredModelList.add(model);
-            }
-        }
-        return filteredModelList;
-    }
-*/
 
 }

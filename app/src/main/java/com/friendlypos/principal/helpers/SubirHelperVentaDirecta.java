@@ -63,7 +63,7 @@ public class SubirHelperVentaDirecta {
                     mensajeS = response.body().getMessage();
                     resultS= String.valueOf(response.body().isResult());
 
-                    activity.codigoDeRespuesta(codigoS, mensajeS, resultS, codigo);
+                    activity.codigoDeRespuestaVD(codigoS, mensajeS, resultS, codigo);
                 }
                 else{
                 }

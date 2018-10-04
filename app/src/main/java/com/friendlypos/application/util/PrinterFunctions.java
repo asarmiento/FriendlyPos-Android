@@ -19,6 +19,7 @@ import com.friendlypos.distribucion.modelo.Pivot;
 import com.friendlypos.distribucion.modelo.sale;
 import com.friendlypos.login.modelo.Usuarios;
 import com.friendlypos.login.util.SessionPrefes;
+import com.friendlypos.preventas.activity.PreventaActivity;
 import com.friendlypos.principal.activity.MenuPrincipal;
 import com.friendlypos.principal.modelo.Clientes;
 import com.friendlypos.principal.modelo.Productos;
@@ -736,16 +737,27 @@ public class PrinterFunctions {
             QuickContext.sendBroadcast(intent2);
             Log.d("imprimeZebra", bill);
 
-            handler = new Handler();
-            runnable = new Runnable() {
-                public void run() {
-                    Intent intent = new Intent(QuickContext, VentaDirectaActivity.class);
-                    QuickContext.startActivity(intent);
-                }
-            };
+
+            if (ptype == 1) {
+                handler = new Handler();
+                runnable = new Runnable() {
+                    public void run() {
+                        Intent intent = new Intent(QuickContext, PreventaActivity.class);
+                        QuickContext.startActivity(intent);
+                    }
+                };
+            } else if (ptype == 3) {
+                handler = new Handler();
+                runnable = new Runnable() {
+                    public void run() {
+                        Intent intent = new Intent(QuickContext, VentaDirectaActivity.class);
+                        QuickContext.startActivity(intent);
+                    }
+                };
+            }
 
             handler.removeCallbacks(runnable);
-            handler.postDelayed(runnable, 5000);
+            handler.postDelayed(runnable, 4000);
 
 
         }
@@ -826,6 +838,26 @@ public class PrinterFunctions {
             QuickContext.sendBroadcast(intent2);
             Log.d("imprime", preview);
 
+            if (ptype == 1) {
+                handler = new Handler();
+                runnable = new Runnable() {
+                    public void run() {
+                        Intent intent = new Intent(QuickContext, PreventaActivity.class);
+                        QuickContext.startActivity(intent);
+                    }
+                };
+            } else if (ptype == 3) {
+                handler = new Handler();
+                runnable = new Runnable() {
+                    public void run() {
+                        Intent intent = new Intent(QuickContext, VentaDirectaActivity.class);
+                        QuickContext.startActivity(intent);
+                    }
+                };
+            }
+
+            handler.removeCallbacks(runnable);
+            handler.postDelayed(runnable, 4000);
 
 
         }
