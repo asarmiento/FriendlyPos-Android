@@ -3,23 +3,32 @@ package com.friendlypos.principal.adapters;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.friendlypos.R;
+import com.friendlypos.distribucion.modelo.Inventario;
 import com.friendlypos.distribucion.modelo.Pivot;
 import com.friendlypos.distribucion.modelo.invoice;
 import com.friendlypos.distribucion.modelo.sale;
+import com.friendlypos.distribucion.util.TotalizeHelper;
 import com.friendlypos.principal.modelo.Clientes;
 
 import java.util.ArrayList;
@@ -144,13 +153,25 @@ public class ClientesAdapter extends RecyclerView.Adapter<ClientesAdapter.Charac
                     }
                 }
                 else{
-                    Toast.makeText(QuickContext, "Selecciona una factura primero", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(QuickContext, "Selecciona un cliente primero", Toast.LENGTH_SHORT).show();
 
                 }
             }
         });
 
+        holder.btnEditarCliente.setOnClickListener(new View.OnClickListener() {
 
+            @Override
+            public void onClick(View v) {
+                if(activa == 1){
+                    editarCliente();
+                    }
+                else{
+                    Toast.makeText(QuickContext, "Selecciona una factura primero", Toast.LENGTH_SHORT).show();
+
+                }
+            }
+        });
 
     }
 
@@ -171,6 +192,7 @@ public class ClientesAdapter extends RecyclerView.Adapter<ClientesAdapter.Charac
         private TextView txt_cliente_card,txt_cliente_fantasyname,txt_cliente_companyname, txt_cliente_address,txt_cliente_creditlimit,
                 txt_cliente_fixeddescount, txt_cliente_due,txt_cliente_credittime, txt_cliente_telefono;
         private ImageButton btnUbicacionCliente;
+        Button btnEditarCliente;
         public CharacterViewHolder(View view) {
             super(view);
             txt_cliente_card = (TextView)view.findViewById(R.id.txt_cliente_card);
@@ -183,6 +205,7 @@ public class ClientesAdapter extends RecyclerView.Adapter<ClientesAdapter.Charac
             txt_cliente_due = (TextView)view.findViewById(R.id.txt_cliente_due);
             txt_cliente_credittime = (TextView)view.findViewById(R.id.txt_cliente_credittime);
             btnUbicacionCliente = (ImageButton)view.findViewById(R.id.btnUbicacionCliente);
+            btnEditarCliente = (Button)view.findViewById(R.id.btnEditarCliente);
             cardView = (CardView) view.findViewById(R.id.cardViewClientes);
 
         }
@@ -191,6 +214,50 @@ public class ClientesAdapter extends RecyclerView.Adapter<ClientesAdapter.Charac
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
+    }
+
+
+    public void editarCliente() {
+
+        LayoutInflater layoutInflater = LayoutInflater.from(QuickContext);
+        View promptView = layoutInflater.inflate(R.layout.prompt_editar_clientes, null);
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(QuickContext);
+        alertDialogBuilder.setView(promptView);
+
+        final TextView label = (TextView) promptView.findViewById(R.id.promtClabel);
+        final Button btnObtenerGPS = (Button) promptView.findViewById(R.id.btnObtenerGPS);
+        final TextView txtEditarLongitud = (TextView) promptView.findViewById(R.id.txtEditarLongitud);
+        final TextView txtEditarLatitud = (TextView) promptView.findViewById(R.id.txtEditarLatitud);
+
+        label.setText("Obtenga la nueva ubicación GPS");
+
+        alertDialogBuilder.setCancelable(false);
+        alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface dialog, int id) {
+                try {
+
+
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                       /* Functions.createSnackBar(QuickContext, coordinatorLayout, "Sucedio un error Revise que el producto y sus dependientes tengan existencias", 2, Snackbar.LENGTH_LONG);
+                        Functions.CreateMessage(QuickContext, "Error", e.getMessage());*/
+                }
+            }
+        });
+        alertDialogBuilder.setNegativeButton("Cancel",
+                new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        AlertDialog alertD = alertDialogBuilder.create();
+        alertD.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        alertD.show();
     }
 
 }

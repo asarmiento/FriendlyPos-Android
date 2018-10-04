@@ -10,155 +10,171 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="10dp"
-        android:orientation="vertical"
-        >
+        android:orientation="vertical">
+
         <TextView
             android:id="@+id/txt_cliente_card"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textStyle="bold"
             android:text="Card"
-            android:textColor="@color/icons"/>
+            android:textColor="@color/icons"
+            android:textStyle="bold" />
+
         <TextView
             android:id="@+id/txt_cliente_fantasyname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Fantasy Name"
-            android:textStyle="bold"
-            android:textColor="@color/icons"
             android:layout_below="@+id/txt_cliente_card"
-             />
+            android:text="Fantasy Name"
+            android:textColor="@color/icons"
+            android:textStyle="bold" />
+
         <TextView
             android:id="@+id/txt_cliente_companyname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/txt_cliente_fantasyname"
             android:text="Company Name"
             android:textColor="@color/icons"
-            android:textStyle="bold"
-            android:layout_below="@+id/txt_cliente_fantasyname"
-            android:layout_alignParentStart="true" />
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/txt_cliente_address"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Address"
-            android:textColor="@color/icons"
+            android:layout_alignParentStart="true"
             android:layout_below="@+id/txt_cliente_companyname"
-            android:layout_alignParentStart="true" />
+            android:text="Address"
+            android:textColor="@color/icons" />
 
         <TextView
             android:id="@+id/txt_texto_cliente_telefono"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Teléfono:"
-            android:textStyle="bold"
-            android:textColor="@color/icons"
+            android:layout_alignParentStart="true"
             android:layout_below="@+id/txt_cliente_address"
-            android:layout_alignParentStart="true" />
+            android:text="Teléfono:"
+            android:textColor="@color/icons"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/txt_cliente_telefono"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Telefono"
-            android:textColor="@color/icons"
             android:layout_alignBaseline="@+id/txt_texto_cliente_telefono"
             android:layout_alignBottom="@+id/txt_texto_cliente_telefono"
+            android:layout_marginLeft="5dp"
             android:layout_toEndOf="@+id/txt_texto_cliente_telefono"
-            android:layout_marginLeft="5dp"/>
+            android:text="Telefono"
+            android:textColor="@color/icons" />
 
         <TextView
             android:id="@+id/txt_texto_cliente_creditlimit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Crédito:"
-            android:textStyle="bold"
-            android:layout_marginTop="5dp"
-            android:textColor="@color/icons"
+            android:layout_alignParentStart="true"
             android:layout_below="@+id/txt_texto_cliente_telefono"
-            android:layout_alignParentStart="true" />
+            android:layout_marginTop="5dp"
+            android:text="Crédito:"
+            android:textColor="@color/icons"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/txt_cliente_creditlimit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Credit Limit"
-            android:textColor="@color/icons"
             android:layout_alignBaseline="@+id/txt_texto_cliente_creditlimit"
             android:layout_alignBottom="@+id/txt_texto_cliente_creditlimit"
+            android:layout_marginLeft="5dp"
             android:layout_toEndOf="@+id/txt_texto_cliente_creditlimit"
-            android:layout_marginLeft="5dp"/>
+            android:text="Credit Limit"
+            android:textColor="@color/icons" />
+
         <TextView
             android:id="@+id/txt_texto_cliente_fixeddescount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Descuento:"
-            android:textStyle="bold"
-            android:textColor="@color/icons"
-            android:layout_marginStart="35dp"
             android:layout_alignBaseline="@+id/txt_cliente_creditlimit"
             android:layout_alignBottom="@+id/txt_cliente_creditlimit"
-            android:layout_toEndOf="@+id/txt_cliente_creditlimit" />
+            android:layout_marginStart="35dp"
+            android:layout_toEndOf="@+id/txt_cliente_creditlimit"
+            android:text="Descuento:"
+            android:textColor="@color/icons"
+            android:textStyle="bold" />
+
         <TextView
             android:id="@+id/txt_cliente_fixeddescount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Fixed descount"
-            android:textColor="@color/icons"
-            android:layout_marginLeft="5dp"
             android:layout_alignBaseline="@+id/txt_texto_cliente_fixeddescount"
             android:layout_alignBottom="@+id/txt_texto_cliente_fixeddescount"
-            android:layout_toEndOf="@+id/txt_texto_cliente_fixeddescount" />
+            android:layout_marginLeft="5dp"
+            android:layout_toEndOf="@+id/txt_texto_cliente_fixeddescount"
+            android:text="Fixed descount"
+            android:textColor="@color/icons" />
 
         <TextView
             android:id="@+id/txt_texto_cliente_due"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Saldo:"
-            android:textStyle="bold"
-            android:textColor="@color/icons"
-            android:layout_marginTop="3dp"
+            android:layout_alignParentStart="true"
             android:layout_below="@+id/txt_texto_cliente_creditlimit"
-            android:layout_alignParentStart="true" />
+            android:layout_marginTop="3dp"
+            android:text="Saldo:"
+            android:textColor="@color/icons"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/txt_cliente_due"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Due"
-            android:layout_marginTop="3dp"
-            android:textColor="@color/icons"
+            android:layout_alignStart="@+id/txt_cliente_creditlimit"
             android:layout_below="@+id/txt_cliente_creditlimit"
-            android:layout_alignStart="@+id/txt_cliente_creditlimit" />
+            android:layout_marginTop="3dp"
+            android:text="Due"
+            android:textColor="@color/icons" />
 
         <TextView
             android:id="@+id/txt_texto_cliente_credittime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="T. Limite:"
-            android:textStyle="bold"
-            android:layout_marginTop="3dp"
-            android:textColor="@color/icons"
+            android:layout_alignStart="@+id/txt_texto_cliente_fixeddescount"
             android:layout_below="@+id/txt_texto_cliente_fixeddescount"
-            android:layout_alignStart="@+id/txt_texto_cliente_fixeddescount" />
+            android:layout_marginTop="3dp"
+            android:text="T. Limite:"
+            android:textColor="@color/icons"
+            android:textStyle="bold" />
+
         <TextView
             android:id="@+id/txt_cliente_credittime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Credit time"
-            android:textColor="@color/icons"
-            android:layout_marginTop="3dp"
+            android:layout_alignStart="@+id/txt_cliente_fixeddescount"
             android:layout_below="@+id/txt_cliente_fixeddescount"
-            android:layout_alignStart="@+id/txt_cliente_fixeddescount" />
+            android:layout_marginTop="3dp"
+            android:text="Credit time"
+            android:textColor="@color/icons" />
 
         <ImageButton
+            android:id="@+id/btnUbicacionCliente"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/ic_ubicacion"
-            android:id="@+id/btnUbicacionCliente"
-            android:background="@null"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true" />
+            android:background="@null"
+            android:src="@mipmap/ic_ubicacion" />
+
+        <Button
+            android:id="@+id/btnEditarCliente"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:background="@color/colorPrimary"
+            android:capitalize="none"
+            android:text="Editar"
+            android:textAlignment="center"
+            android:textColor="@color/cardview_light_background"
+            android:layout_alignParentTop="true"
+            android:layout_toStartOf="@+id/btnUbicacionCliente" />
     </RelativeLayout>
 </android.support.v7.widget.CardView>
