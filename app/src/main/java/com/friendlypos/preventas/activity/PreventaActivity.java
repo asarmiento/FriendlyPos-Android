@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.os.Handler;
+import android.view.WindowManager;
 import android.widget.EditText;
 
 import com.friendlypos.R;
@@ -161,6 +162,7 @@ public class PreventaActivity extends BluetoothActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.activity_preventa);
         ButterKnife.bind(this);
         toolbar = (Toolbar) findViewById(R.id.toolbarPreventa);

@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 
 import com.friendlypos.R;
 import com.friendlypos.application.bluetooth.PrinterService;
@@ -62,6 +63,7 @@ public class ReimprimirActivity extends BluetoothActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.activity_reimprimir);
         toolbar = (Toolbar) findViewById(R.id.toolbarReimprimir);
         setSupportActionBar(toolbar);

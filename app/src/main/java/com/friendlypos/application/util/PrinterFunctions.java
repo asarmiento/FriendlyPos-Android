@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
 import android.text.Html;
@@ -18,6 +19,7 @@ import com.friendlypos.distribucion.modelo.Pivot;
 import com.friendlypos.distribucion.modelo.sale;
 import com.friendlypos.login.modelo.Usuarios;
 import com.friendlypos.login.util.SessionPrefes;
+import com.friendlypos.principal.activity.MenuPrincipal;
 import com.friendlypos.principal.modelo.Clientes;
 import com.friendlypos.principal.modelo.Productos;
 import com.friendlypos.principal.modelo.Sysconf;
@@ -33,6 +35,9 @@ import io.realm.Realm;
 import io.realm.RealmResults;
 
 public class PrinterFunctions {
+
+    static Handler handler;
+    static Runnable runnable;
 
     private static double printSalesCashTotal = 0.0;
     static String totalGrabado= "";
@@ -594,7 +599,7 @@ public class PrinterFunctions {
 
     //TODO imprimir TOTALIZAR PREVENTA
 
-    public static void datosImprimirPrevTotal(int type, sale sale, Context QuickContext, int ptype) {
+    public static void datosImprimirPrevTotal(int type, sale sale, final Context QuickContext, int ptype) {
         String stype = "";
         String billptype = "";
         String preview = "";
@@ -731,8 +736,18 @@ public class PrinterFunctions {
             QuickContext.sendBroadcast(intent2);
             Log.d("imprimeZebra", bill);
 
-            Intent intent = new Intent(QuickContext, VentaDirectaActivity.class);
-            QuickContext.startActivity(intent);
+            handler = new Handler();
+            runnable = new Runnable() {
+                public void run() {
+                    Intent intent = new Intent(QuickContext, VentaDirectaActivity.class);
+                    QuickContext.startActivity(intent);
+                }
+            };
+
+            handler.removeCallbacks(runnable);
+            handler.postDelayed(runnable, 5000);
+
+
         }
         else if(prefList.equals("2")){
             switch (metodoPago) {
