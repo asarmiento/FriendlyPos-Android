@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -230,6 +231,20 @@ public class ClientesAdapter extends RecyclerView.Adapter<ClientesAdapter.Charac
         final TextView txtEditarLongitud = (TextView) promptView.findViewById(R.id.txtEditarLongitud);
         final TextView txtEditarLatitud = (TextView) promptView.findViewById(R.id.txtEditarLatitud);
 
+        btnObtenerGPS.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                if(activa == 1){
+                    editarCliente();
+                }
+                else{
+                    Toast.makeText(QuickContext, "Selecciona un cliente primero", Toast.LENGTH_SHORT).show();
+
+                }
+            }
+        });
+
         label.setText("Obtenga la nueva ubicación GPS");
 
         alertDialogBuilder.setCancelable(false);
@@ -259,5 +274,6 @@ public class ClientesAdapter extends RecyclerView.Adapter<ClientesAdapter.Charac
         alertD.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         alertD.show();
     }
+
 
 }
