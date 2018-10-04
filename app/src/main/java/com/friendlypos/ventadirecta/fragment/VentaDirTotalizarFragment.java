@@ -2,6 +2,7 @@ package com.friendlypos.ventadirecta.fragment;
 
 import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
@@ -27,8 +28,10 @@ import com.friendlypos.distribucion.modelo.sale;
 import com.friendlypos.distribucion.util.GPSTracker;
 import com.friendlypos.login.modelo.Usuarios;
 import com.friendlypos.login.util.SessionPrefes;
+import com.friendlypos.preventas.activity.PreventaActivity;
 import com.friendlypos.preventas.modelo.visit;
 import com.friendlypos.preventas.modelo.invoiceDetallePreventa;
+import com.friendlypos.principal.activity.MenuPrincipal;
 import com.friendlypos.ventadirecta.activity.VentaDirectaActivity;
 import com.friendlypos.ventadirecta.modelo.invoiceDetalleVentaDirecta;
 
@@ -234,6 +237,7 @@ public class VentaDirTotalizarFragment extends BaseFragment  {
                         } catch (Exception e) {
                             Functions.CreateMessage(getActivity(), "Error", e.getMessage() + "\n" + e.getStackTrace().toString());
                         }
+
                     }
                 }
 

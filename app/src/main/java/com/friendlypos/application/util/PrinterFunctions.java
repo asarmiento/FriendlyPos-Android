@@ -21,6 +21,7 @@ import com.friendlypos.login.util.SessionPrefes;
 import com.friendlypos.principal.modelo.Clientes;
 import com.friendlypos.principal.modelo.Productos;
 import com.friendlypos.principal.modelo.Sysconf;
+import com.friendlypos.ventadirecta.activity.VentaDirectaActivity;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
@@ -444,7 +445,9 @@ public class PrinterFunctions {
         }
 
     private static String getPrintRecibosTotal(String idVenta) {
-        String send = "";
+        String send;
+
+        send = " ";
 
         Realm realm1 = Realm.getDefaultInstance();
         RealmResults<recibos> result = realm1.where(recibos.class).equalTo("customer_id", idVenta).equalTo("abonado", 1).findAll();
@@ -477,6 +480,7 @@ public class PrinterFunctions {
             realm1.close();
         }
         return send;
+
     }
 
     public static void imprimirFacturaRecibosTotal(final recibos recibo, final Context QuickContext, final int ptype){
@@ -726,6 +730,9 @@ public class PrinterFunctions {
             intent2.putExtra("bill_to_print", bill);
             QuickContext.sendBroadcast(intent2);
             Log.d("imprimeZebra", bill);
+
+            Intent intent = new Intent(QuickContext, VentaDirectaActivity.class);
+            QuickContext.startActivity(intent);
         }
         else if(prefList.equals("2")){
             switch (metodoPago) {
@@ -803,6 +810,9 @@ public class PrinterFunctions {
             intent2.putExtra("bill_to_print", preview);
             QuickContext.sendBroadcast(intent2);
             Log.d("imprime", preview);
+
+
+
         }
         totalGrabado_= "";
         totalExento_= "";
@@ -1086,7 +1096,7 @@ public class PrinterFunctions {
     }
 
     private static String getPrintPrevTotal(String idVenta) {
-        String send = "";
+        String send = " ";
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String currentDateandTime = sdf.format(new Date());
