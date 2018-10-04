@@ -29,6 +29,7 @@ import com.friendlypos.distribucion.modelo.Inventario;
 import com.friendlypos.distribucion.modelo.Pivot;
 import com.friendlypos.distribucion.modelo.invoice;
 import com.friendlypos.distribucion.modelo.sale;
+import com.friendlypos.distribucion.util.GPSTracker;
 import com.friendlypos.distribucion.util.TotalizeHelper;
 import com.friendlypos.principal.modelo.Clientes;
 
@@ -49,7 +50,9 @@ public class ClientesAdapter extends RecyclerView.Adapter<ClientesAdapter.Charac
     private int selected_position = -1;
      double longitud, latitud;
     private static Context QuickContext = null;
-
+    GPSTracker gps;
+    double latitude;
+    double longitude;
 
     public ClientesAdapter(Context context,List<Clientes> contentList) {
         this.contentList = contentList;
@@ -134,9 +137,6 @@ public class ClientesAdapter extends RecyclerView.Adapter<ClientesAdapter.Charac
                     if (longitud != 0.0 && latitud != 0.0) {
 
                         try {
-                            // Launch Waze to look for Hawaii:
-                            //   String url = "https://waze.com/ul?ll=9.9261253,-84.0889091&navigate=yes";
-
                             String url = "https://waze.com/ul?ll="+ latitud + "," + longitud + "&navigate=yes";
                             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                             QuickContext.startActivity(intent);
@@ -235,13 +235,10 @@ public class ClientesAdapter extends RecyclerView.Adapter<ClientesAdapter.Charac
 
             @Override
             public void onClick(View v) {
-                if(activa == 1){
-                    editarCliente();
-                }
-                else{
-                    Toast.makeText(QuickContext, "Selecciona un cliente primero", Toast.LENGTH_SHORT).show();
+                obtenerLocalizacion();
+                txtEditarLongitud.setText("Longitud: " + longitude);
+                txtEditarLatitud.setText("Latitud: " + latitude);
 
-                }
             }
         });
 
@@ -275,5 +272,19 @@ public class ClientesAdapter extends RecyclerView.Adapter<ClientesAdapter.Charac
         alertD.show();
     }
 
+    public void obtenerLocalizacion() {
 
+        gps = new GPSTracker(QuickContext);
+        if(gps.canGetLocation()){
+
+            latitude = gps.getLatitude();
+            longitude = gps.getLongitude();
+
+
+
+        }else{
+            gps.showSettingsAlert();
+        }
+
+    }
 }
