@@ -443,7 +443,6 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                         subir1.sendPost(obj);
                         }
                 }
-
                 break;
 
             case R.id.btn_subir_pedidos:
