@@ -69,7 +69,6 @@ public interface RequestInterface {
     @GET("api/download-customers-debts")
     Call<RecibosResponse> getRecibos(@Header("Authorization") String token);
 
-
     // TODO DEFINIR CUAL ES EL KEY PARA ENVIAR (KEY, VALUE)
     @POST("/api/upload-invoices")
     Call<invoice> savePost(@Body EnviarFactura invoice, @Header("Authorization") String token);
