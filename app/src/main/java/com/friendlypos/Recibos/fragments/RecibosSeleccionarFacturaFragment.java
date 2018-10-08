@@ -129,7 +129,7 @@ public class RecibosSeleccionarFacturaFragment extends BaseFragment {
 
                                 if(!input.getText().toString().isEmpty()){
 
-                                    if(numIngresado > totalP){
+                                    if(numIngresado >= totalP){
                                         Toast.makeText(getActivity(), "Ingrese una cantidad menor al total", Toast.LENGTH_LONG).show();
                                     }else{
                                     cantidadPagar = numIngresado;

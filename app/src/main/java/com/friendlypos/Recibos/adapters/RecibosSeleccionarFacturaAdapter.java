@@ -20,6 +20,7 @@ import com.friendlypos.Recibos.activity.RecibosActivity;
 import com.friendlypos.Recibos.fragments.RecibosSeleccionarFacturaFragment;
 import com.friendlypos.Recibos.modelo.recibos;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 import io.realm.Realm;
@@ -111,8 +112,7 @@ public class RecibosSeleccionarFacturaAdapter extends RecyclerView.Adapter<Recib
 
 
         final TextView label = (TextView) promptView.findViewById(R.id.promtClabelRecibos);
-        label.setText("Escriba un pago maximo de " + String.format("%,.2f", debePagar) + " minima de 1");
-
+        label.setText("Escriba un pago maximo de " + debePagar + " minima de 1");
 
         final EditText input = (EditText) promptView.findViewById(R.id.promtCtextRecibos);
 

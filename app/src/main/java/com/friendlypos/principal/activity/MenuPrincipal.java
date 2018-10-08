@@ -532,8 +532,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                 break;
 
             case R.id.btn_subir_recibos:
-                Toast.makeText(MenuPrincipal.this, "Botón no disponible", Toast.LENGTH_LONG).show();
-/*
+
                 Realm realmRecibos = Realm.getDefaultInstance();
 
                 RealmQuery<receipts> queryRecibos = realmRecibos.where(receipts.class).equalTo("aplicado", 1);
@@ -557,7 +556,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                         //actualizarClienteVisitado();
                     }
                 }
-*/
+
                 break;
 
             case R.id.btn_subir_clienteVisitados:

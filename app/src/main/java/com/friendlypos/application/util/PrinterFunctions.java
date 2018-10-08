@@ -575,18 +575,15 @@ public class PrinterFunctions {
 
                 // gravado Sugerido =( (preciode venta/1.13)*(suggested /100) )+ (preciode venta* 0.13)+(preciode venta/1.13);
                 // en caso de exento Sugerido =( (preciode venta)*(suggested /100)) + (preciode venta);
+                sugerido = (precio)*(precioSugerido /100) + (precio);
 
                 if (typeId.equals("1")){
                     nombreTipo = "Gravado";
-                    sugerido = (precio/1.13)
-
-                            *(precioSugerido /100) + (precio * 0.13)+(precio/1.13);
                 }
                 else if (typeId.equals("2")){
                     nombreTipo = "Exento";
-                    sugerido = (precio)*(precioSugerido /100) + (precio);
-                }
 
+                }
 
                 send += String.format("%s  %.24s ", description1, barcode) + "\r\n" +
                         String.format("%-12s %-10s %-12s %.10s", cant, Functions.doubleToString1(precio), Functions.doubleToString1(sugerido),Functions.doubleToString1(cant * precio)) + "\r\n" +
@@ -1072,7 +1069,6 @@ public class PrinterFunctions {
         builder.setItems(colors, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                // the user clicked on colors[which]
                 switch (which) {
                     case 0:
                         imprimirTotalizarPrev(1, saleB, QuickContext, ptype);
@@ -1087,8 +1083,8 @@ public class PrinterFunctions {
             }
         });
         builder.show();
-        //}
     }
+
 
     public static void imprimirFacturaProformaTotal (final sale saleB, final Context QuickContext, final int ptype){
 
@@ -1113,7 +1109,7 @@ public class PrinterFunctions {
             }
         });
         builder.show();
-        //}
+
     }
 
     private static void imprimirTotalizarPrev(int type, sale invoices, Context QuickContext, int ptype) {
@@ -1163,14 +1159,11 @@ public class PrinterFunctions {
                 int esBonus = salesList1.get(i).getBonus();
 
                 Productos producto = realm.where(Productos.class).equalTo("id", salesList1.get(i).getProduct_id()).findFirst();
-                //   sale ventas = realm.where(sale.class).equalTo("invoice_id", salesList1.get(i).getInvoice_id()).findFirst();
-                //    Clientes clientes = realm.where(Clientes.class).equalTo("id", ventas.getCustomer_id()).findFirst();
-
 
                 double precioSugerido = Double.parseDouble(producto.getSuggested());
                 String description = producto.getDescription();
                 byte[] byteText = description.getBytes(Charset.forName("UTF-8"));
-//To get original string from byte.
+
                 String description1 = null;
                 try {
                     description1 = new String(byteText, "UTF-8");
@@ -1188,14 +1181,12 @@ public class PrinterFunctions {
 
                 // gravado Sugerido =( (preciode venta/1.13)*(suggested /100) )+ (preciode venta* 0.13)+(preciode venta/1.13);
                 // en caso de exento Sugerido =( (preciode venta)*(suggested /100)) + (preciode venta);
-
+                sugerido = (precio)*(precioSugerido /100) + (precio);
                 if (typeId.equals("1")){
                     nombreTipo = "Gravado";
-                    sugerido = (precio/1.13)*(precioSugerido /100) + (precio * 0.13)+(precio/1.13);
                 }
                 else if (typeId.equals("2")){
                     nombreTipo = "Exento";
-                    sugerido = (precio)*(precioSugerido /100) + (precio);
                 }
 
 
@@ -1669,8 +1660,6 @@ public class PrinterFunctions {
         Realm realm = Realm.getDefaultInstance();
 
         RealmResults<Inventario> result = realm.where(Inventario.class).notEqualTo("amount", "0").notEqualTo("amount", "0.0").findAll();
-
-       // RealmResults<invoice> result = realm.where(invoice.class).equalTo("date", currentDateandTime).findAll();
 
         if (result.isEmpty()) {
             send = "No hay devoluciones emitidas";
