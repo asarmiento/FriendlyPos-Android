@@ -2,11 +2,13 @@ package com.friendlypos.preventas.activity;
 
 import android.app.ActivityManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -28,15 +30,18 @@ import com.friendlypos.preventas.fragment.PrevResumenFragment;
 import com.friendlypos.preventas.fragment.PrevSelecClienteFragment;
 import com.friendlypos.preventas.fragment.PrevSelecProductoFragment;
 import com.friendlypos.preventas.fragment.PrevTotalizarFragment;
+import com.friendlypos.preventas.modelo.Numeracion;
 import com.friendlypos.preventas.modelo.invoiceDetallePreventa;
 import com.friendlypos.principal.activity.BluetoothActivity;
 import com.friendlypos.principal.activity.MenuPrincipal;
 import com.friendlypos.principal.activity.ProductosActivity;
+import com.friendlypos.ventadirecta.activity.VentaDirectaActivity;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
+import io.realm.Realm;
 
 public class PreventaActivity extends BluetoothActivity {
 
@@ -46,9 +51,10 @@ public class PreventaActivity extends BluetoothActivity {
     private String metodoPagoClientePreventa;
     private String creditoLimiteClientePreventa = null;
     private int selecClienteTabPreventa;
+    private String selecClienteFacturacionPreventa;
     private int activoColorPreventa;
     private String dueClientePreventa;
-
+    int nextId;
     private double totalizarSubGrabado;
     private double totalizarSubExento;
     private double totalizarSubTotal;
@@ -118,6 +124,13 @@ public class PreventaActivity extends BluetoothActivity {
         this.totalizarTotal = this.totalizarTotal + totalizarTotal;
     }
 
+    public String getSelecClienteFacturacionPreventa() {
+        return selecClienteFacturacionPreventa;
+    }
+
+    public void setSelecClienteFacturacionPreventa(String selecClienteFacturacionPreventa) {
+        this.selecClienteFacturacionPreventa = selecClienteFacturacionPreventa;
+    }
 
     public String getMetodoPagoClientePreventa() {
         return metodoPagoClientePreventa;
@@ -281,10 +294,117 @@ public class PreventaActivity extends BluetoothActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
 
-                Intent intent = new Intent(PreventaActivity.this, MenuPrincipal.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-                finish();
+                int tabCliente = getSelecClienteTabPreventa();
+                if (tabCliente == 1) {
+                    AlertDialog dialogReturnSale = new AlertDialog.Builder(PreventaActivity.this)
+                            .setTitle("Salir")
+                            .setMessage("¿Desea cancelar la factura en proceso?")
+                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                    String tipoFacturacion = getSelecClienteFacturacionPreventa();
+
+                                    if (tipoFacturacion.equals("Preventa")) {
+                                        final Realm realm2 = Realm.getDefaultInstance();
+
+                                        realm2.executeTransaction(new Realm.Transaction() {
+
+                                            @Override
+                                            public void execute(Realm realm) {
+                                                // TODO NUMERACION = VENTA DIRECTA :01, PREVENTA:02, DISTRIBUCION:03 Y PROFORMA: 04
+
+                                                Number numero = realm.where(Numeracion.class).equalTo("sale_type", "2").max("number");
+
+                                                if (numero == null) {
+                                                    nextId = 1;
+                                                } else {
+                                                    nextId = numero.intValue() - 1;
+                                                }
+
+
+                                            }
+                                        });
+
+
+                                        final Realm realm5 = Realm.getDefaultInstance();
+                                        realm5.executeTransaction(new Realm.Transaction() {
+                                            @Override
+                                            public void execute(Realm realm5) {
+                                                Numeracion numNuevo = new Numeracion(); // unmanaged
+                                                numNuevo.setSale_type("2");
+                                                numNuevo.setNumeracion_numero(nextId);
+
+                                                realm5.insertOrUpdate(numNuevo);
+                                                Log.d("idinvNUEVOCREADO", numNuevo + "");
+
+
+                                            }
+
+                                        });
+                                        realm5.close();
+                                    } else if (tipoFacturacion.equals("Proforma")) {
+                                        final Realm realm2 = Realm.getDefaultInstance();
+
+                                        // TODO NUMERACION = VENTA DIRECTA :01, PREVENTA:02, DISTRIBUCION:03 Y PROFORMA: 04
+
+                                        realm2.executeTransaction(new Realm.Transaction() {
+
+                                            @Override
+                                            public void execute(Realm realm) {
+
+                                                Number numero = realm.where(Numeracion.class).equalTo("sale_type", "3").max("number");
+                                                if (numero == null) {
+                                                    nextId = 1;
+                                                } else {
+                                                    nextId = numero.intValue() - 1;
+                                                }
+                                            }
+                                        });
+
+
+                                        final Realm realm5 = Realm.getDefaultInstance();
+                                        realm5.executeTransaction(new Realm.Transaction() {
+                                            @Override
+                                            public void execute(Realm realm5) {
+                                                Numeracion numNuevo = new Numeracion(); // unmanaged
+                                                numNuevo.setSale_type("3");
+                                                numNuevo.setNumeracion_numero(nextId);
+
+                                                realm5.insertOrUpdate(numNuevo);
+                                                Log.d("idinvNUEVOCREADO", numNuevo + "");
+
+
+                                            }
+
+                                        });
+                                        realm5.close();
+
+
+                                    }
+                                    Intent intent = new Intent(PreventaActivity.this, MenuPrincipal.class);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    startActivity(intent);
+                                    finish();
+                                }
+                            }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                    dialog.cancel();
+                                }
+                            }).create();
+                    dialogReturnSale.show();
+
+
+
+                }else{
+                    Intent intent = new Intent(PreventaActivity.this, MenuPrincipal.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                    finish();}
                 return true;
 
             default:
@@ -364,8 +484,6 @@ public class PreventaActivity extends BluetoothActivity {
         totalizarTotalDouble = 0.0;
     }
 
-
-
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -376,11 +494,122 @@ public class PreventaActivity extends BluetoothActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if ((keyCode == KeyEvent.KEYCODE_BACK)) {
-            Intent intent = new Intent(PreventaActivity.this, MenuPrincipal.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-            finish();
-            Log.d("ATRAS", "Atras");
+
+            int tabCliente = getSelecClienteTabPreventa();
+            if (tabCliente == 1) {
+
+
+                AlertDialog dialogReturnSale = new AlertDialog.Builder(PreventaActivity.this)
+                        .setTitle("Salir")
+                        .setMessage("¿Desea cancelar la factura en proceso?")
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                String tipoFacturacion = getSelecClienteFacturacionPreventa();
+
+                                if (tipoFacturacion.equals("Preventa")) {
+                                    final Realm realm2 = Realm.getDefaultInstance();
+
+                                    realm2.executeTransaction(new Realm.Transaction() {
+
+                                        @Override
+                                        public void execute(Realm realm) {
+                                            // TODO NUMERACION = VENTA DIRECTA :01, PREVENTA:02, DISTRIBUCION:03 Y PROFORMA: 04
+
+                                            Number numero = realm.where(Numeracion.class).equalTo("sale_type", "2").max("number");
+
+                                            if (numero == null) {
+                                                nextId = 1;
+                                            } else {
+                                                nextId = numero.intValue() - 1;
+                                            }
+
+
+                                        }
+                                    });
+
+
+                                    final Realm realm5 = Realm.getDefaultInstance();
+                                    realm5.executeTransaction(new Realm.Transaction() {
+                                        @Override
+                                        public void execute(Realm realm5) {
+                                            Numeracion numNuevo = new Numeracion(); // unmanaged
+                                            numNuevo.setSale_type("2");
+                                            numNuevo.setNumeracion_numero(nextId);
+
+                                            realm5.insertOrUpdate(numNuevo);
+                                            Log.d("idinvNUEVOCREADO", numNuevo + "");
+
+
+                                        }
+
+                                    });
+                                    realm5.close();
+                                } else if (tipoFacturacion.equals("Proforma")) {
+                                    final Realm realm2 = Realm.getDefaultInstance();
+
+                                    // TODO NUMERACION = VENTA DIRECTA :01, PREVENTA:02, DISTRIBUCION:03 Y PROFORMA: 04
+
+                                    realm2.executeTransaction(new Realm.Transaction() {
+
+                                        @Override
+                                        public void execute(Realm realm) {
+
+                                            Number numero = realm.where(Numeracion.class).equalTo("sale_type", "3").max("number");
+                                            if (numero == null) {
+                                                nextId = 1;
+                                            } else {
+                                                nextId = numero.intValue() - 1;
+                                            }
+                                        }
+                                    });
+
+
+                                    final Realm realm5 = Realm.getDefaultInstance();
+                                    realm5.executeTransaction(new Realm.Transaction() {
+                                        @Override
+                                        public void execute(Realm realm5) {
+                                            Numeracion numNuevo = new Numeracion(); // unmanaged
+                                            numNuevo.setSale_type("3");
+                                            numNuevo.setNumeracion_numero(nextId);
+
+                                            realm5.insertOrUpdate(numNuevo);
+                                            Log.d("idinvNUEVOCREADO", numNuevo + "");
+
+
+                                        }
+
+                                    });
+                                    realm5.close();
+
+
+                            }
+                                Intent intent = new Intent(PreventaActivity.this, MenuPrincipal.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+                                finish();
+                            }
+                        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                dialog.cancel();
+                            }
+                        }).create();
+                dialogReturnSale.show();
+
+
+
+            }else{
+                Intent intent = new Intent(PreventaActivity.this, MenuPrincipal.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                finish();}
+
+
         }
         return super.onKeyDown(keyCode, event);
     }

@@ -173,6 +173,7 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
                     public void onClick(View view) {
 
                         tipoFacturacion = "Proforma";
+                        activity.setSelecClienteFacturacionPreventa(tipoFacturacion);
                         dialogInicial1.dismiss();
                         rbcomprado.setText("Generar Proforma");
                         dialogInicial.show();
@@ -186,6 +187,7 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
                     public void onClick(View view) {
 
                         tipoFacturacion = "Preventa";
+                        activity.setSelecClienteFacturacionPreventa(tipoFacturacion);
                         dialogInicial1.dismiss();
                         rbcomprado.setText("Generar Pedido");
                         dialogInicial.show();

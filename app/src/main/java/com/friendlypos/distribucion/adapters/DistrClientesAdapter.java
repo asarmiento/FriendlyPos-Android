@@ -47,7 +47,6 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
     private DistribucionActivity activity;
     //private boolean isSelected = false;
     private int selected_position = -1;
-    private int selected_position1 = -1;
     private static Context QuickContext = null;
     RealmResults<Pivot> facturaid1;
     int idInvetarioSelec;
