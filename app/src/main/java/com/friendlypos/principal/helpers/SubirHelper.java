@@ -76,10 +76,10 @@ public class SubirHelper {
                     codigoS = response.body().getCode();
                     mensajeS = response.body().getMessage();
                     resultS= String.valueOf(response.body().isResult());
-                    activity.codigoDeRespuesta(codigoS, mensajeS, resultS, codigo);
+                    activity.codigoDeRespuestaDistr(codigoS, mensajeS, resultS, codigo);
                 }
                 else{
-                  //  Toast.makeText(activity, response.message().toString(), Toast.LENGTH_SHORT).show();
+
                 }
 
             }

@@ -59,11 +59,10 @@ public class SubirHelperProforma {
                     codigoS = response.body().getCode();
                     mensajeS = response.body().getMessage();
                     resultS= String.valueOf(response.body().isResult());
-                    activity.codigoDeRespuesta(codigoS, mensajeS, resultS, codigo);
+                    activity.codigoDeRespuestaProforma(codigoS, mensajeS, resultS, codigo);
 
                 }
                 else{
-                    //   Toast.makeText(activity, response.message().toString(), Toast.LENGTH_SHORT).show();
                 }
             }
 

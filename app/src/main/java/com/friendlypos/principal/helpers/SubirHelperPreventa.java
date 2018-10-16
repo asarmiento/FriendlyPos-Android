@@ -61,7 +61,6 @@ public class SubirHelperPreventa {
 
                 if(response.isSuccessful()) {
                     Log.d("respPreventa",response.body().toString());
-                 //   Toast.makeText(activity, response.message().toString(), Toast.LENGTH_SHORT).show();
 
                     codigo = response.code();
                     codigoS = response.body().getCode();
@@ -71,7 +70,6 @@ public class SubirHelperPreventa {
                     activity.codigoDeRespuesta(codigoS, mensajeS, resultS, codigo);
                 }
                 else{
-                 //   Toast.makeText(activity, response.message().toString(), Toast.LENGTH_SHORT).show();
                 }
                 //setCodigoServer(codigo);
 
