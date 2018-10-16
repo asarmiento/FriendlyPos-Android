@@ -665,9 +665,35 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
         try {
             realm3.executeTransaction(new Realm.Transaction() {
                 @Override
-                public void execute(Realm realm) {
+                public void execute(Realm realm3) {
 
                     sale sale_actualizada = realm3.where(sale.class).equalTo("id", factura).findFirst();
+                    sale_actualizada.setSubida(0);
+                    realm3.insertOrUpdate(sale_actualizada);
+
+                }
+
+            });
+
+        } catch (Exception e) {
+            Log.e("error", "error", e);
+            Toast.makeText(MenuPrincipal.this,"errorACTVEN", Toast.LENGTH_SHORT).show();
+
+        }
+        realm3.close();
+    }
+
+    protected void actualizarVentaDist(final String factura) {
+
+        // TRANSACCION PARA ACTUALIZAR CAMPOS DE LA TABLA VENTAS
+        final Realm realm3 = Realm.getDefaultInstance();
+
+        try {
+            realm3.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm3) {
+
+                    sale sale_actualizada = realm3.where(sale.class).equalTo("invoice_id", factura).findFirst();
                     sale_actualizada.setSubida(0);
                     realm3.insertOrUpdate(sale_actualizada);
 
@@ -914,7 +940,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
             for (int i = 0; i < listaFacturasPedidos.size(); i++) {
                 facturaId = String.valueOf(listaFacturasPedidos.get(i).getId());
                 if (codS.equals("1") && resultS.equals("true")) {
-                    actualizarVenta(facturaId);
+                    actualizarVentaDist(facturaId);
                     actualizarFactura(facturaId);
                     Toast.makeText(MenuPrincipal.this, messageS, Toast.LENGTH_LONG).show();
                 } else {
