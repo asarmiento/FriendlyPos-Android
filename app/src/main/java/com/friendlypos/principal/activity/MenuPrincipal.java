@@ -435,7 +435,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                 }else {
 
                     for (int i = 0; i < listaFacturas.size(); i++) {
-                        Toast.makeText(MenuPrincipal.this, "hay", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MenuPrincipal.this, "Subiendo información...", Toast.LENGTH_SHORT).show();
                         facturaId = String.valueOf(listaFacturas.get(i).getId());
                         Log.d("facturaId", facturaId + "");
                         EnviarFactura obj = new EnviarFactura(listaFacturas.get(i));
@@ -461,7 +461,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                 }else {
 
                     for (int i = 0; i < listaFacturasPedidos.size(); i++) {
-                        Toast.makeText(MenuPrincipal.this, "hay", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MenuPrincipal.this, "Subiendo información...", Toast.LENGTH_SHORT).show();
 
                         facturaId = String.valueOf(listaFacturasPedidos.get(i).getId());
                         Log.d("facturaId", facturaId + "");
@@ -491,7 +491,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                 }else {
 
                     for (int i = 0; i < listaFacturasVentaDirecta.size(); i++) {
-                        Toast.makeText(MenuPrincipal.this, "hay", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MenuPrincipal.this, "Subiendo información...", Toast.LENGTH_SHORT).show();
 
                         facturaId = String.valueOf(listaFacturasVentaDirecta.get(i).getId());
                         Log.d("facturaId", facturaId + "");
@@ -519,7 +519,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                 }else {
 
                     for (int i = 0; i < listaFacturasProforma.size(); i++) {
-                        Toast.makeText(MenuPrincipal.this, "hay", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MenuPrincipal.this, "Subiendo información...", Toast.LENGTH_SHORT).show();
 
                         facturaId = String.valueOf(listaFacturasProforma.get(i).getId());
                         Log.d("facturaId", facturaId + "");
@@ -545,7 +545,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                 if(listaRecibos.size()== 0){
                     Toast.makeText(MenuPrincipal.this,"No hay facturas para subir", Toast.LENGTH_LONG).show();
                 }else {
-                    Toast.makeText(MenuPrincipal.this, "hay", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MenuPrincipal.this, "Subiendo información...", Toast.LENGTH_SHORT).show();
                     for (int i = 0; i < listaRecibos.size(); i++) {
 
                         facturaIdRecibos = listaRecibos.get(i).getCustomer_id();
@@ -575,7 +575,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                 }else {
 
                     for (int i = 0; i < listaVisits.size(); i++) {
-                        Toast.makeText(MenuPrincipal.this, "hay", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MenuPrincipal.this, "Subiendo información...", Toast.LENGTH_SHORT).show();
 
                         facturaIdCV = listaVisits.get(i).getId();
                         Log.d("facturaIdCV", facturaIdCV + "");
