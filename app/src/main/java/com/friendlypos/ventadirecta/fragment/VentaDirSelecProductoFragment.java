@@ -48,7 +48,7 @@ public class VentaDirSelecProductoFragment extends BaseFragment implements Searc
     int slecTAB;
     VentaDirectaActivity activity;
     TotalizeHelperPreventa totalizeHelper;
-
+  //  int datosEnFiltro=0;
     List<Inventario> listaInventario;
 
     public static VentaDirSelecProductoFragment getInstance() {
@@ -70,12 +70,12 @@ public class VentaDirSelecProductoFragment extends BaseFragment implements Searc
     public void onDetach(){
         super.onDetach();
         activity = null;
-
     }
     @Override
     public void onResume() {
         super.onResume();
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -92,6 +92,7 @@ public class VentaDirSelecProductoFragment extends BaseFragment implements Searc
         if(adapter == null) {
             adapter = new VentaDirSeleccionarProductoAdapter(activity, this, getListProductos());
         }
+
         recyclerView.setAdapter(adapter);
 
         creditoLimite = (TextView) rootView.findViewById(R.id.restCreditVentaDirecta);
@@ -198,7 +199,15 @@ public class VentaDirSelecProductoFragment extends BaseFragment implements Searc
 
     @Override
     public void updateData() {
-        adapter.updateData(getListProductos());
+
+    /*    if(datosEnFiltro == 1){
+            Log.d("OSCARUpdate", "No actualiza xq esta en " + datosEnFiltro);
+        }
+        else{
+            datosEnFiltro = 0;*/
+            adapter.updateData(getListProductos());
+          /*  Log.d("OSCARUpdate1", "Actualiza xq esta en " + datosEnFiltro);
+        }*/
 
         if (slecTAB == 1) {
             creditoLimiteCliente = Double.parseDouble(((VentaDirectaActivity) getActivity()).getCreditoLimiteClienteVentaDirecta());
@@ -207,6 +216,7 @@ public class VentaDirSelecProductoFragment extends BaseFragment implements Searc
         else{
             Log.d("SelecUpdate", "No hay productos");
         }
+
     }
 
     @Override
@@ -234,6 +244,19 @@ public class VentaDirSelecProductoFragment extends BaseFragment implements Searc
 
 
     private List<Inventario> filter(List<Inventario> models, String query) {
+
+/*
+        if(query.isEmpty()){
+            Log.d("OSCARVAC", "esta vacio la consulta");
+            datosEnFiltro = 0;
+
+        }else{
+
+            datosEnFiltro = 1;
+
+            Log.d("OSCARLLE", "esta llena la consulta");
+        }
+*/
         query = query.toLowerCase();
         final List<Inventario> filteredModelList = new ArrayList<>();
 
