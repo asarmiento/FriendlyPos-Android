@@ -869,7 +869,7 @@ public class PrinterFunctions {
         totalNotas_ = "";
     }
 
-    public static void datosImprimirProformaTotal(int type, sale sale, Context QuickContext, int ptype) {
+    public static void datosImprimirProformaTotal(int type, sale sale, final Context QuickContext, int ptype) {
         String stype = "";
         String billptype = "";
         String preview = "";
@@ -990,6 +990,20 @@ public class PrinterFunctions {
             intent2.putExtra("bill_to_print", bill);
             QuickContext.sendBroadcast(intent2);
             Log.d("imprimeZebraProf", bill);
+
+            if (ptype == 2) {
+                handler = new Handler();
+                runnable = new Runnable() {
+                    public void run() {
+                        Intent intent = new Intent(QuickContext, MenuPrincipal.class);
+                        QuickContext.startActivity(intent);
+                    }
+                };
+
+
+            }
+            handler.removeCallbacks(runnable);
+            handler.postDelayed(runnable, 4000);
         }
         else if(prefList.equals("2")){
             switch (metodoPago) {
@@ -1049,6 +1063,20 @@ public class PrinterFunctions {
             intent2.putExtra("bill_to_print", preview);
             QuickContext.sendBroadcast(intent2);
             Log.d("imprimeProf", preview);
+
+            if (ptype == 2) {
+                handler = new Handler();
+                runnable = new Runnable() {
+                    public void run() {
+                        Intent intent = new Intent(QuickContext, MenuPrincipal.class);
+                        QuickContext.startActivity(intent);
+                    }
+                };
+
+
+            }
+            handler.removeCallbacks(runnable);
+            handler.postDelayed(runnable, 4000);
         }
         totalGrabado_= "";
         totalExento_= "";

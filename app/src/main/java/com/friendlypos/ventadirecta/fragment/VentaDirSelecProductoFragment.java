@@ -48,7 +48,7 @@ public class VentaDirSelecProductoFragment extends BaseFragment implements Searc
     int slecTAB;
     VentaDirectaActivity activity;
     TotalizeHelperPreventa totalizeHelper;
-  //  int datosEnFiltro=0;
+    int datosEnFiltro=0;
     List<Inventario> listaInventario;
 
     public static VentaDirSelecProductoFragment getInstance() {
@@ -87,7 +87,7 @@ public class VentaDirSelecProductoFragment extends BaseFragment implements Searc
 
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerViewVentaDirectaSeleccProducto);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-       // recyclerView.setHasFixedSize(true);
+        recyclerView.setHasFixedSize(true);
 
         if(adapter == null) {
             adapter = new VentaDirSeleccionarProductoAdapter(activity, this, getListProductos());
@@ -200,14 +200,14 @@ public class VentaDirSelecProductoFragment extends BaseFragment implements Searc
     @Override
     public void updateData() {
 
-    /*    if(datosEnFiltro == 1){
+       if(datosEnFiltro == 1){
             Log.d("OSCARUpdate", "No actualiza xq esta en " + datosEnFiltro);
         }
         else{
-            datosEnFiltro = 0;*/
+            datosEnFiltro = 0;
             adapter.updateData(getListProductos());
-          /*  Log.d("OSCARUpdate1", "Actualiza xq esta en " + datosEnFiltro);
-        }*/
+            Log.d("OSCARUpdate1", "Actualiza xq esta en " + datosEnFiltro);
+        }
 
         if (slecTAB == 1) {
             creditoLimiteCliente = Double.parseDouble(((VentaDirectaActivity) getActivity()).getCreditoLimiteClienteVentaDirecta());
@@ -225,7 +225,6 @@ public class VentaDirSelecProductoFragment extends BaseFragment implements Searc
         final MenuItem item = menu.findItem(R.id.action_search);
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
         searchView.setOnQueryTextListener(this);
-
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -245,7 +244,7 @@ public class VentaDirSelecProductoFragment extends BaseFragment implements Searc
 
     private List<Inventario> filter(List<Inventario> models, String query) {
 
-/*
+
         if(query.isEmpty()){
             Log.d("OSCARVAC", "esta vacio la consulta");
             datosEnFiltro = 0;
@@ -256,7 +255,7 @@ public class VentaDirSelecProductoFragment extends BaseFragment implements Searc
 
             Log.d("OSCARLLE", "esta llena la consulta");
         }
-*/
+
         query = query.toLowerCase();
         final List<Inventario> filteredModelList = new ArrayList<>();
 

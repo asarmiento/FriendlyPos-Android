@@ -50,6 +50,7 @@ public class DistSelecProductoFragment extends BaseFragment implements SearchVie
     int slecTAB;
     DistribucionActivity activity;
     TotalizeHelper totalizeHelper;
+    int datosEnFiltro=0;
 
     public static DistSelecProductoFragment getInstance() {
         return new DistSelecProductoFragment();
@@ -197,9 +198,17 @@ public class DistSelecProductoFragment extends BaseFragment implements SearchVie
 
     @Override
     public void updateData() {
-        Log.d("jd", "init2");
-        adapter.updateData(getListProductos());
-        adapter2.notifyDataSetChanged();
+
+
+        if(datosEnFiltro == 1){
+            Log.d("OSCARUpdate", "No actualiza xq esta en " + datosEnFiltro);
+        }
+        else{
+            datosEnFiltro = 0;
+            adapter.updateData(getListProductos());
+            adapter2.notifyDataSetChanged();
+            Log.d("OSCARUpdate1", "Actualiza xq esta en " + datosEnFiltro);
+        }
 
 
         if (slecTAB == 1) {
@@ -218,22 +227,7 @@ public class DistSelecProductoFragment extends BaseFragment implements SearchVie
         final MenuItem item = menu.findItem(R.id.action_search);
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
         searchView.setOnQueryTextListener(this);
-
-        MenuItemCompat.setOnActionExpandListener(item,
-                new MenuItemCompat.OnActionExpandListener() {
-                    @Override
-                    public boolean onMenuItemActionCollapse(MenuItem item) {
-                        // Do something when collapsed
-                        adapter.setFilter(getListProductos());
-                        return true; // Return true to collapse action view
-                    }
-
-                    @Override
-                    public boolean onMenuItemActionExpand(MenuItem item) {
-                        // Do something when expanded
-                        return true; // Return true to expand action view
-                    }
-                });
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
@@ -250,6 +244,19 @@ public class DistSelecProductoFragment extends BaseFragment implements SearchVie
 
 
     private List<Inventario> filter(List<Inventario> models, String query) {
+
+
+        if(query.isEmpty()){
+            Log.d("OSCARVAC", "esta vacio la consulta");
+            datosEnFiltro = 0;
+
+        }else{
+
+            datosEnFiltro = 1;
+
+            Log.d("OSCARLLE", "esta llena la consulta");
+        }
+
         query = query.toLowerCase();
 
         final List<Inventario> filteredModelList = new ArrayList<>();

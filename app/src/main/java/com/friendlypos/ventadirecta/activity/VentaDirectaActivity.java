@@ -370,7 +370,6 @@ public class VentaDirectaActivity extends BluetoothActivity {
         }
     }
 
-    //Check if the printing service is running
     public boolean isServiceRunning(String serviceClassName) {
         final ActivityManager activityManager = (ActivityManager) getApplicationContext().getSystemService(Context.ACTIVITY_SERVICE);
         final List<ActivityManager.RunningServiceInfo> services = activityManager.getRunningServices(Integer.MAX_VALUE);
@@ -394,9 +393,6 @@ public class VentaDirectaActivity extends BluetoothActivity {
     public invoice getInvoiceByInvoiceDetalles() {
         return preSellInvoiceDelegate.getInvoiceByInvoiceDetalleVentaDirecta();
     }
-
-
-
 
     public List<Pivot> getAllPivotDelegate() {
         return preSellInvoiceDelegate.getAllPivotVentaDirecta();

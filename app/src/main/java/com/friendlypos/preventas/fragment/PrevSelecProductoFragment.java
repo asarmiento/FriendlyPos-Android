@@ -52,9 +52,9 @@ public class PrevSelecProductoFragment extends BaseFragment implements SearchVie
     int slecTAB;
     PreventaActivity activity;
     TotalizeHelperPreventa totalizeHelper;
+    int datosEnFiltro=0;
 
     public static PrevSelecProductoFragment getInstance() {
-
         return new PrevSelecProductoFragment();
     }
 
@@ -98,7 +98,6 @@ public class PrevSelecProductoFragment extends BaseFragment implements SearchVie
         recyclerView.setAdapter(adapter);
 
         creditoLimite = (TextView) rootView.findViewById(R.id.restCreditPreventa);
-
         Log.d("listaProducto", getListProductos() + "");
         adapter2 = new PrevResumenAdapter();
         creditoDisponible();
@@ -165,8 +164,18 @@ public class PrevSelecProductoFragment extends BaseFragment implements SearchVie
 
     @Override
     public void updateData() {
-        adapter.updateData(getListProductos());
-        adapter2.notifyDataSetChanged();
+
+        if(datosEnFiltro == 1){
+            Log.d("OSCARUpdate", "No actualiza xq esta en " + datosEnFiltro);
+        }
+        else{
+            datosEnFiltro = 0;
+            adapter.updateData(getListProductos());
+            adapter2.notifyDataSetChanged();
+            Log.d("OSCARUpdate1", "Actualiza xq esta en " + datosEnFiltro);
+        }
+
+
         if (slecTAB == 1) {
             creditoLimiteCliente = Double.parseDouble(((PreventaActivity) getActivity()).getCreditoLimiteClientePreventa());
             creditoLimite.setText("C.Disponible: " + String.format("%,.2f", creditoLimiteCliente));
@@ -183,22 +192,7 @@ public class PrevSelecProductoFragment extends BaseFragment implements SearchVie
         final MenuItem item = menu.findItem(R.id.action_search);
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
         searchView.setOnQueryTextListener(this);
-
-        MenuItemCompat.setOnActionExpandListener(item,
-                new MenuItemCompat.OnActionExpandListener() {
-                    @Override
-                    public boolean onMenuItemActionCollapse(MenuItem item) {
-                        // Do something when collapsed
-                        adapter.setFilter(getListProductos());
-                        return true; // Return true to collapse action view
-                    }
-
-                    @Override
-                    public boolean onMenuItemActionExpand(MenuItem item) {
-                        // Do something when expanded
-                        return true; // Return true to expand action view
-                    }
-                });
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
@@ -215,6 +209,18 @@ public class PrevSelecProductoFragment extends BaseFragment implements SearchVie
 
 
     private List<Productos> filter(List<Productos> models, String query) {
+
+        if(query.isEmpty()){
+            Log.d("OSCARVAC", "esta vacio la consulta");
+            datosEnFiltro = 0;
+
+        }else{
+
+            datosEnFiltro = 1;
+
+            Log.d("OSCARLLE", "esta llena la consulta");
+        }
+
         query = query.toLowerCase();
 
         Log.d("listaProductoFiltro", getListProductos() + "");

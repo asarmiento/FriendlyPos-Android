@@ -228,7 +228,7 @@ public class PrevTotalizarFragment extends BaseFragment {
                                 PrinterFunctions.imprimirFacturaProformaTotal(sale_actualizada, getActivity(), 1);
 
                             }
-
+                            clearAll();
 
                         }
                         else if (bluetoothStateChangeReceiver.isBluetoothAvailable() == false) {
