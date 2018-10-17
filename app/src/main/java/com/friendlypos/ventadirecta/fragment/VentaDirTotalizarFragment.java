@@ -181,24 +181,30 @@ public class VentaDirTotalizarFragment extends BaseFragment  {
 
                             if (metodoPagoCliente.equals("1")) {
 
-                                pagoCon = Double.parseDouble(paid.getText().toString());
-                                totalPagoCon = String.format("%,.2f", pagoCon);
-                                double total = totalTotal;
-
-                                if (pagoCon >= total) {
-                                    vuelto = pagoCon - total;
+                                if(paid.getText().toString().isEmpty()){
+                                    pagoCon = 0;
+                                    vuelto = 0;
                                     totalVuelvo = String.format("%,.2f", vuelto);
+                                    change.setText(totalVuelvo);
+                                }
+                                else{
+                                    pagoCon = Double.parseDouble(paid.getText().toString());
+                                    totalPagoCon = String.format("%,.2f", pagoCon);
+                                    double total = totalTotal;
 
+                                    if (pagoCon >= total) {
+                                        vuelto = pagoCon - total;
+                                        totalVuelvo = String.format("%,.2f", vuelto);
+                                        change.setText(totalVuelvo);
+                                    }else {
+                                        Toast.makeText(getActivity(), "Digite una cantidad mayor al total", Toast.LENGTH_LONG).show();
+                                    }
+                                }
                                     int tabCliente = 0;
                                     ((VentaDirectaActivity) getActivity()).setSelecClienteTabVentaDirecta(tabCliente);
-
-                                    change.setText(totalVuelvo);
                                     obtenerLocalización();
                                     aplicarFactura();
-                                }
-                                else {
-                                    Toast.makeText(getActivity(), "Digite una cantidad mayor al total", Toast.LENGTH_LONG).show();
-                                }
+
                             }
                             else if (metodoPagoCliente.equals("2")) {
                                 Toast.makeText(getActivity(), "Crédito", Toast.LENGTH_LONG).show();

@@ -739,7 +739,7 @@ public class PrinterFunctions {
                 handler = new Handler();
                 runnable = new Runnable() {
                     public void run() {
-                        Intent intent = new Intent(QuickContext, PreventaActivity.class);
+                        Intent intent = new Intent(QuickContext, MenuPrincipal.class);
                         QuickContext.startActivity(intent);
                     }
                 };
@@ -747,7 +747,7 @@ public class PrinterFunctions {
                 handler = new Handler();
                 runnable = new Runnable() {
                     public void run() {
-                        Intent intent = new Intent(QuickContext, VentaDirectaActivity.class);
+                        Intent intent = new Intent(QuickContext, MenuPrincipal.class);
                         QuickContext.startActivity(intent);
                     }
                 };
@@ -839,7 +839,7 @@ public class PrinterFunctions {
                 handler = new Handler();
                 runnable = new Runnable() {
                     public void run() {
-                        Intent intent = new Intent(QuickContext, PreventaActivity.class);
+                        Intent intent = new Intent(QuickContext, MenuPrincipal.class);
                         QuickContext.startActivity(intent);
                     }
                 };
@@ -847,7 +847,7 @@ public class PrinterFunctions {
                 handler = new Handler();
                 runnable = new Runnable() {
                     public void run() {
-                        Intent intent = new Intent(QuickContext, VentaDirectaActivity.class);
+                        Intent intent = new Intent(QuickContext, MenuPrincipal.class);
                         QuickContext.startActivity(intent);
                     }
                 };
