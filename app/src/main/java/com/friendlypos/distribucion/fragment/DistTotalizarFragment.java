@@ -85,6 +85,8 @@ public class DistTotalizarFragment extends BaseFragment  {
         bluetoothStateChangeReceiver = new BluetoothStateChangeReceiver();
         bluetoothStateChangeReceiver.setBluetoothStateChangeReceiver(getContext());
         session = new SessionPrefes(getApplicationContext());
+        Log.d("applydone", apply_done +"");
+
     }
 
     @Override
@@ -208,6 +210,8 @@ public class DistTotalizarFragment extends BaseFragment  {
                             if(bluetoothStateChangeReceiver.isBluetoothAvailable()== true) {
                                 PrinterFunctions.imprimirFacturaDistrTotal(sale_actualizada, getActivity(), 1);
                                 Toast.makeText(getActivity(), "imprimir liquidacion", Toast.LENGTH_SHORT).show();
+                                clearAll();
+                                Log.d("applydoneImp", apply_done +"");
                             }
                             else if(bluetoothStateChangeReceiver.isBluetoothAvailable() == false){
                                 Functions.CreateMessage(getActivity(), "Error", "La conexión del bluetooth ha fallado, favor revisar o conectar el dispositivo");
@@ -216,6 +220,7 @@ public class DistTotalizarFragment extends BaseFragment  {
                         } catch (Exception e) {
                             Functions.CreateMessage(getActivity(), "Error", e.getMessage() + "\n" + e.getStackTrace().toString());
                         }
+
                     }
                 }
 
@@ -374,6 +379,7 @@ public class DistTotalizarFragment extends BaseFragment  {
 
             apply_done = 0;
             paid.getText().clear();
+            Log.d("applydoneClear", apply_done +"");
         }
         try {
             System.gc();

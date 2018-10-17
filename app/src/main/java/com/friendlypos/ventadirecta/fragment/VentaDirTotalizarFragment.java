@@ -114,6 +114,7 @@ public class VentaDirTotalizarFragment extends BaseFragment  {
         bluetoothStateChangeReceiver = new BluetoothStateChangeReceiver();
         bluetoothStateChangeReceiver.setBluetoothStateChangeReceiver(getContext());
         session = new SessionPrefes(getApplicationContext());
+        Log.d("applydone", apply_done +"");
     }
 
     @Override
@@ -233,6 +234,8 @@ public class VentaDirTotalizarFragment extends BaseFragment  {
 
                             if(bluetoothStateChangeReceiver.isBluetoothAvailable()== true) {
                                 PrinterFunctions.imprimirFacturaPrevTotal(sale_actualizada, getActivity(), 3);
+                                clearAll();
+                                Log.d("applydoneImp", apply_done +"");
                             }
                             else if(bluetoothStateChangeReceiver.isBluetoothAvailable() == false){
                                 Functions.CreateMessage(getActivity(), "Error", "La conexión del bluetooth ha fallado, favor revisar o conectar el dispositivo");
@@ -425,6 +428,7 @@ public class VentaDirTotalizarFragment extends BaseFragment  {
 
             apply_done = 0;
             paid.getText().clear();
+            Log.d("applydoneClear", apply_done +"");
         }
         try {
             System.gc();
