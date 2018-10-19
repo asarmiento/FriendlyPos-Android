@@ -78,7 +78,6 @@ public class PrinterFunctions {
         Log.d("FACTPRODTOD", result + "");
         // VARIABLES VENTA
         String fechayhora = sale.getUpdated_at();
-        String nombreCliente = sale.getCustomer_name();
 
         // VARIABLES CLIENTES
         final String cardCliente = clientes.getCard();
@@ -126,7 +125,7 @@ public class PrinterFunctions {
                 + "bancarias de " + ", Por lo cual la factura original le sera entregada una vez confirme dicha acreditacion ";
 
         if (ptype == 1) {
-            billptype = "F a c t u r a";
+            billptype = "Comprobante Provisional";
         } else if (ptype == 2) {
             billptype = "P r o f o r m a";
         } else if (ptype == 3) {
@@ -170,7 +169,6 @@ public class PrinterFunctions {
                     "! U1 LMARGIN 50\r\n" +
                     "Cedula: " + cardCliente + " \r\n" +
                     "Razon Social: " + companyCliente + "\r\n" +
-                    ((!nombreCliente.isEmpty()) ? "A nombre de: " + nombreCliente + "\r\n" : "") +
                     "Nombre fantasia: " + fantasyCliente + "\r\n" +
                     "# Telefono: " + telefonoCliente + "\r\n" +
                     "! U1 LMARGIN 0\r\n" +
@@ -208,13 +206,25 @@ public class PrinterFunctions {
                     ((metodoPago == "2") ?
                             "Firma y Cedula __________________________" + "\r\n"
                                     + "! U1 SETLP 0 0 6\r\n" + "\r\n\n" + condition + "\r\n" : "\r\n"
+
                     ) + "\r\n" +
+                    "\r\n\n" +
+                    ((ptype == 1) ?
+                            "\r\n\n" + "Este comprobante no puede ser utilizado para fines\r\n" +
+                                    "tributarios, por lo cual no se permitirá" + "\r\n" +
+                                    "su uso para respaldo de créditos o gastos" + "\r\n" + "\r\n"
+                            : "\r\n"
+                    ) + "\r\n" +
+
                     "! U1 SETLP 5 0 14\r\n" +
                     "\r\n" + String.format("Factura %s", stype) + "\r\n\n" +
+
+
                     "\r\n\n" + "Muchas Gracias por preferirnos, un placer atenderlo\r\n" +
                     "Mantenga el documento para reclamos ." + "\r\n" + "\r\n" +
-                    " Autorizado mediante oficio\r\n" +
-                    "N° : 11-1997 de la D.G.T.D\r\n" +
+
+                    " Autorizada mediante resolución Nº DGT-R-48-2016\r\n" +
+                    "del 7 de octubre de 2016.\r\n" +
                     " \n\n" +
                     " \n\n" +
                     " \n ";
@@ -241,7 +251,6 @@ public class PrinterFunctions {
                     preview += Html.fromHtml("<h1>") +  "Vendedor:  " + nombreUsuario + Html.fromHtml("</h1><br/>");
                     preview += Html.fromHtml("<h1>") +  "Cedula: " + cardCliente + Html.fromHtml("</h1><br/>");
                     preview += Html.fromHtml("<h1>") + "Razon Social: " + companyCliente + Html.fromHtml("</h1><br/>");
-                    preview += Html.fromHtml("<h1>") + "A nombre de: " + nombreCliente + Html.fromHtml("</h1><br/>");
                     preview += Html.fromHtml("<h1>") +  "Nombre fantasia: " + fantasyCliente + Html.fromHtml("</h1><br/>");
                     preview += Html.fromHtml("<h1>") +  "# Telefono: " + telefonoCliente + Html.fromHtml("</h1></center><br/><br/>");
                     preview += Html.fromHtml("<h1>") +  "Descripcion           Codigo" + Html.fromHtml("</h1></center><br/>");
@@ -260,11 +269,17 @@ public class PrinterFunctions {
                     preview += Html.fromHtml("<h1>") +  "Notas: " + totalNotas + Html.fromHtml("</h1></center><br/><br/><br/>");
                     preview += Html.fromHtml("<h1>") +  "Recibo conforme ____________________________" + Html.fromHtml("</h1></center><br/><br/>");
                     preview += Html.fromHtml("<h1>") +  "Cedula ____________________________" +  Html.fromHtml("</h1></center><br/><br/>");
+
+                    preview += Html.fromHtml("<h1>")   + "Este comprobante no puede ser utilizado para fines" +  Html.fromHtml("</h1></center><br/>");
+                    preview += Html.fromHtml("<h1>")   + "tributarios, por lo cual no se permitira" +  Html.fromHtml("</h1></center><br/>");
+                    preview += Html.fromHtml("<h1>")   + "su uso para respaldo de créditos o gastos." +  Html.fromHtml("</h1></center><br/><br/>");
+
                     preview += Html.fromHtml("<h1>")   + String.format("Factura %s", stype) +  Html.fromHtml("</h1></center><br/><br/><br/>");
                     preview += Html.fromHtml("<h1>")   + "Muchas gracias por preferirnos un placer atenderlo" +  Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>")   + "Mantenga el documento para reclamos." +  Html.fromHtml("</h1></center><br/><br/>");
-                    preview += Html.fromHtml("<h1>")   + "Autorizado mediante oficio" +  Html.fromHtml("</h1></center><br/>");
-                    preview += Html.fromHtml("<h1>")   + "N : 11-1997 de la D.G.T.D" +  Html.fromHtml("</h1></center><br/>");
+
+                    preview += Html.fromHtml("<h1>")   + "Autorizada mediante resolución Nº DGT-R-48-2016" +  Html.fromHtml("</h1></center><br/>");
+                    preview += Html.fromHtml("<h1>")   + "del 7 de octubre de 2016." +  Html.fromHtml("</h1></center><br/>");
 
 
                     Log.d("IMPR DISTR CONTADO", preview);
@@ -286,7 +301,6 @@ public class PrinterFunctions {
                     preview += Html.fromHtml("<h1>") +  "Vendedor:  " + nombreUsuario + Html.fromHtml("</h1><br/>");
                     preview += Html.fromHtml("<h1>") +  "Cedula: " + cardCliente + Html.fromHtml("</h1><br/>");
                     preview += Html.fromHtml("<h1>") + "Razon Social: " + companyCliente + Html.fromHtml("</h1><br/>");
-                    preview += Html.fromHtml("<h1>") + "A nombre de: " + nombreCliente + Html.fromHtml("</h1><br/>");
                     preview += Html.fromHtml("<h1>") +  "Nombre fantasia: " + fantasyCliente + Html.fromHtml("</h1><br/>");
                     preview += Html.fromHtml("<h1>") +  "# Telefono: " + telefonoCliente + Html.fromHtml("</h1></center><br/><br/>");
                     preview += Html.fromHtml("<h1>") +  "#  Descripcion      Codigo" + Html.fromHtml("</h1></center><br/>");
@@ -306,11 +320,14 @@ public class PrinterFunctions {
                     preview += Html.fromHtml("<h1>") +  "Cedula ____________________________" +  Html.fromHtml("</h1></center><br/><br/>");
                     preview += Html.fromHtml("<h1>") +  "Firma y Cedula __________________________" +  Html.fromHtml("</h1></center><br/><br/>");
                     preview += Html.fromHtml("<h1>") +  condition +  Html.fromHtml("</h1></center><br/><br/>");
+                    preview += Html.fromHtml("<h1>")   + "Este comprobante no puede ser utilizado para fines" +  Html.fromHtml("</h1></center><br/>");
+                    preview += Html.fromHtml("<h1>")   + "tributarios, por lo cual no se permitira" +  Html.fromHtml("</h1></center><br/>");
+                    preview += Html.fromHtml("<h1>")   + "su uso para respaldo de créditos o gastos." +  Html.fromHtml("</h1></center><br/><br/>");
                     preview += Html.fromHtml("<h1>")   + String.format("Factura %s", stype) +  Html.fromHtml("</h1></center><br/><br/><br/>");
                     preview += Html.fromHtml("<h1>")   + "Muchas gracias por preferirnos un placer atenderlo" +  Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>")   + "Mantenga el documento para reclamos." +  Html.fromHtml("</h1></center><br/><br/>");
-                    preview += Html.fromHtml("<h1>")   + "Autorizado mediante oficio" +  Html.fromHtml("</h1></center><br/>");
-                    preview += Html.fromHtml("<h1>")   + "N : 11-1997 de la D.G.T.D" +  Html.fromHtml("</h1></center><br/>");
+                    preview += Html.fromHtml("<h1>")   + "Autorizada mediante resolución Nº DGT-R-48-2016" +  Html.fromHtml("</h1></center><br/>");
+                    preview += Html.fromHtml("<h1>")   + "del 7 de octubre de 2016." +  Html.fromHtml("</h1></center><br/>");
                     Log.d("IMPR DISTR CREDITO", preview);
                     break;
             }
@@ -378,6 +395,14 @@ public class PrinterFunctions {
 
         Realm realm = Realm.getDefaultInstance();
         Clientes clientes = realm.where(Clientes.class).equalTo("id", sale.getCustomer_id()).findFirst();
+        Sysconf sysconf = realm.where(Sysconf.class).findFirst();
+
+        String sysNombre = sysconf.getName();
+        String sysNombreNegocio = sysconf.getBusiness_name();
+        String sysDireccion = sysconf.getDirection();
+        String sysIdentificacion = sysconf.getIdentification();
+        String sysTelefono = sysconf.getPhone();
+        String sysCorreo = sysconf.getEmail();
 
         String nombreCliente = clientes.getFantasyName();
         totalNotasRecibos = sale.getObservaciones();
@@ -405,7 +430,17 @@ public class PrinterFunctions {
                     "! U1 SETLP 5 3 70\r\n" +
                     "! U1 LMARGIN 185\r\n" +
                     String.format("%s", billptype) + "\r\n" +
-                    "! U1 LMARGIN 150\r\n" +
+
+                    "! U1 LMARGIN 0\r\n" +
+                    "! U1 SETLP 5 0 24\r\n" +
+                    sysNombre + "\r\n" +
+                    "! U1 SETLP 5 1 35\r\n" +
+                    sysNombreNegocio + "\r\n" +
+                    "! U1 SETLP 5 0 24\r\n" +
+                    sysDireccion + "\r\n" +
+                    "Cedula " + sysIdentificacion + "  Tel. " + sysTelefono + "\r\n" +
+                    "E-mail " + sysCorreo + "\r\n" +
+
                     "! U1 SETLP 7 0 14\r\n" + "\r\n" +
                     "Cliente: " + nombreCliente + "\r\n" +
                     "Fecha: " + fecha + "\r\n" +
@@ -433,8 +468,15 @@ public class PrinterFunctions {
         }
         else if(prefList.equals("2")){
                     preview += Html.fromHtml("<h1>") + String.format("%s", billptype) + Html.fromHtml("</h1><br/><br/><br/>");
+
+                    preview += Html.fromHtml("<h1>") + sysNombre + Html.fromHtml("</h1><br/>");
+                    preview += Html.fromHtml("<h1>") + sysNombreNegocio + Html.fromHtml("</h1><br/>");
+                    preview += Html.fromHtml("<h1>") + sysDireccion + Html.fromHtml("</h1><br/>");
+                    preview += Html.fromHtml("<h1>") + "Cedula " + sysIdentificacion + "  Tel. " + sysTelefono + Html.fromHtml("</h1></center><br/>");
+                    preview += Html.fromHtml("<h1>") +  "E-mail " + sysCorreo + Html.fromHtml("</h1><br/><br/>");
+
                     preview += Html.fromHtml("<h1>") + "Cliente: " + nombreCliente + Html.fromHtml("</h1><br/>");
-            preview += Html.fromHtml("<h1>") + "Fecha: " + fecha + Html.fromHtml("</h1><br/>");
+                    preview += Html.fromHtml("<h1>") + "Fecha: " + fecha + Html.fromHtml("</h1><br/>");
                     preview += Html.fromHtml("<h1>") +  "Numeracion             Monto Total" + Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>") +   "Monto Pagado          Monto Restante" + Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>") +  "------------------------------------------------" + Html.fromHtml("</h1></center><br/>");
@@ -723,8 +765,9 @@ public class PrinterFunctions {
                     "\r\n" + String.format("Factura %s", stype) + "\r\n\n" +
                     "\r\n\n" + "Muchas Gracias por preferirnos, un placer atenderlo\r\n" +
                     "Mantenga el documento para reclamos ." + "\r\n" + "\r\n" +
-                    " Autorizado mediante oficio\r\n" +
-                    "N° : 11-1997 de la D.G.T.D\r\n" +
+
+                    " Autorizada mediante resolución Nº DGT-R-48-2016\r\n" +
+                    "del 7 de octubre de 2016.\r\n" +
                     " \n\n" +
                     " \n\n" +
                     " \n ";
@@ -786,11 +829,19 @@ public class PrinterFunctions {
                     preview += Html.fromHtml("<h1>") +  "Notas: " + totalNotas_ + Html.fromHtml("</h1></center><br/><br/>");
                     preview += Html.fromHtml("<h1>") +  "Recibo conforme ____________________________" + Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>") +  "Cedula ____________________________" +  Html.fromHtml("</h1></center><br/>");
+
+                    if(ptype == 3){
+
+                    preview += Html.fromHtml("<h1>")   + "Este comprobante no puede ser utilizado para fines" +  Html.fromHtml("</h1></center><br/>");
+                    preview += Html.fromHtml("<h1>")   + "tributarios, por lo cual no se permitira" +  Html.fromHtml("</h1></center><br/>");
+                    preview += Html.fromHtml("<h1>")   + "su uso para respaldo de créditos o gastos." +  Html.fromHtml("</h1></center><br/><br/>");
+                    }
+
                     preview += Html.fromHtml("<h1>")   + String.format("Factura %s", stype) +  Html.fromHtml("</h1></center><br/><br/>");
                     preview += Html.fromHtml("<h1>")   + "Muchas gracias por preferirnos un placer atenderlo" +  Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>")   + "Mantenga el documento para reclamos." +  Html.fromHtml("</h1></center><br/><br/>");
-                    preview += Html.fromHtml("<h1>")   + "Autorizado mediante oficio" +  Html.fromHtml("</h1></center><br/>");
-                    preview += Html.fromHtml("<h1>")   + "N : 11-1997 de la D.G.T.D" +  Html.fromHtml("</h1></center><br/>");
+                    preview += Html.fromHtml("<h1>")   + "Autorizada mediante resolución Nº DGT-R-48-2016" +  Html.fromHtml("</h1></center><br/>");
+                    preview += Html.fromHtml("<h1>")   + "del 7 de octubre de 2016." +  Html.fromHtml("</h1></center><br/>");
                     break;
                 case "2":
 
@@ -822,11 +873,19 @@ public class PrinterFunctions {
                     preview += Html.fromHtml("<h1>") +  "Cedula ____________________________" +  Html.fromHtml("</h1></center><br/>");
 
                     preview += Html.fromHtml("<h1>") +  condition +  Html.fromHtml("</h1></center><br/>");
+
+                    if(ptype == 3){
+
+                        preview += Html.fromHtml("<h1>")   + "Este comprobante no puede ser utilizado para fines" +  Html.fromHtml("</h1></center><br/>");
+                        preview += Html.fromHtml("<h1>")   + "tributarios, por lo cual no se permitira" +  Html.fromHtml("</h1></center><br/>");
+                        preview += Html.fromHtml("<h1>")   + "su uso para respaldo de créditos o gastos." +  Html.fromHtml("</h1></center><br/><br/>");
+                    }
+
                     preview += Html.fromHtml("<h1>")   + String.format("Factura %s", stype) +  Html.fromHtml("</h1></center><br/><br/>");
                     preview += Html.fromHtml("<h1>")   + "Muchas gracias por preferirnos un placer atenderlo" +  Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>")   + "Mantenga el documento para reclamos." +  Html.fromHtml("</h1></center><br/><br/>");
-                    preview += Html.fromHtml("<h1>")   + "Autorizado mediante oficio" +  Html.fromHtml("</h1></center><br/>");
-                    preview += Html.fromHtml("<h1>")   + "N : 11-1997 de la D.G.T.D" +  Html.fromHtml("</h1></center><br/>");
+                    preview += Html.fromHtml("<h1>")   + "Autorizada mediante resolución Nº DGT-R-48-2016" +  Html.fromHtml("</h1></center><br/>");
+                    preview += Html.fromHtml("<h1>")   + "del 7 de octubre de 2016." +  Html.fromHtml("</h1></center><br/>");
                     break;
             }
             Intent intent2 = new Intent(PrinterService.BROADCAST_CLASS);
