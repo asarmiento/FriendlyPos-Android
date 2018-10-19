@@ -211,6 +211,8 @@ public class VentaDirTotalizarFragment extends BaseFragment  {
                                 Toast.makeText(getActivity(), "Crédito", Toast.LENGTH_LONG).show();
                                 obtenerLocalización();
                                 aplicarFactura();
+                                int tabCliente = 0;
+                                ((VentaDirectaActivity) getActivity()).setSelecClienteTabVentaDirecta(tabCliente);
                             }
                             actualizarFactura();
 
@@ -406,7 +408,6 @@ public class VentaDirTotalizarFragment extends BaseFragment  {
         });
 
     }
-
 
     protected void aplicarFactura() {
         paid.setEnabled(false);

@@ -28,6 +28,7 @@ import com.friendlypos.login.util.SessionPrefes;
 import com.friendlypos.preventas.activity.PreventaActivity;
 import com.friendlypos.preventas.modelo.visit;
 import com.friendlypos.preventas.modelo.invoiceDetallePreventa;
+import com.friendlypos.ventadirecta.activity.VentaDirectaActivity;
 
 import io.realm.Realm;
 
@@ -188,6 +189,9 @@ public class PrevTotalizarFragment extends BaseFragment {
                             }
 
                         else if (metodoPagoCliente.equals("2")) {
+
+                            int tabCliente = 0;
+                            ((PreventaActivity) getActivity()).setSelecClienteTabPreventa(tabCliente);
                             Toast.makeText(getActivity(), "Crédito", Toast.LENGTH_LONG).show();
                             obtenerLocalización();
                             aplicarFactura();
