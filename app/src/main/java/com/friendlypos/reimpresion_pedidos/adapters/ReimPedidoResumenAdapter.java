@@ -134,8 +134,9 @@ public class ReimPedidoResumenAdapter extends RecyclerView.Adapter<ReimPedidoRes
 
                     Toast.makeText(view.getContext(), "You clicked " + resumenProductoId, Toast.LENGTH_SHORT).show();
 
+                    activity.initProducto(pos);
                     // TRANSACCIÓN BD PARA SELECCIONAR LOS DATOS DEL INVENTARIO
-                    Realm realm3 = Realm.getDefaultInstance();
+                 /*   Realm realm3 = Realm.getDefaultInstance();
                     realm3.executeTransaction(new Realm.Transaction() {
 
                         @Override
@@ -168,7 +169,7 @@ public class ReimPedidoResumenAdapter extends RecyclerView.Adapter<ReimPedidoRes
                     });
 
 
-/*
+
                     // TRANSACCIÓN PARA COPIAR DATOS EN LA BASE DEVUELTA
                     final Realm realmInvDevolver = Realm.getDefaultInstance();
                     realmInvDevolver.executeTransaction(new Realm.Transaction() {
@@ -193,10 +194,10 @@ public class ReimPedidoResumenAdapter extends RecyclerView.Adapter<ReimPedidoRes
                             realmInvDevolver.insertOrUpdate(inv_actualizado);
                             realmInvDevolver.close();
                         }
-                    });*/
+                    });
 
                     // TRANSACCIÓN PARA ACTUALIZAR EL CAMPO CREDIT_LIMIT EN LA FACTURA
-                /*    final Realm realm5 = Realm.getDefaultInstance();
+                   final Realm realm5 = Realm.getDefaultInstance();
                     realm5.executeTransaction(new Realm.Transaction() {
                         @Override
                         public void execute(Realm realm5) {
@@ -205,7 +206,7 @@ public class ReimPedidoResumenAdapter extends RecyclerView.Adapter<ReimPedidoRes
                             realm5.insertOrUpdate(inv_actualizado);
                             realm5.close();
                         }
-                    });*/
+                    });
 
                     // TRANSACCIÓN BD PARA BORRAR EL CAMPO
 
@@ -220,8 +221,8 @@ public class ReimPedidoResumenAdapter extends RecyclerView.Adapter<ReimPedidoRes
                         }
                     });
 
-
-             /*     final Realm realm = Realm.getDefaultInstance();
+*/
+             /*   final Realm realm = Realm.getDefaultInstance();
                     realm.executeTransaction(new Realm.Transaction() {
 
                         @Override
@@ -230,7 +231,6 @@ public class ReimPedidoResumenAdapter extends RecyclerView.Adapter<ReimPedidoRes
                             result.deleteAllFromRealm();
                             realm.close();
                         }
-
                     });*/
                     notifyDataSetChanged();
                     fragment.updateData();

@@ -6,6 +6,7 @@ import com.friendlypos.distribucion.modelo.invoice;
 import com.friendlypos.distribucion.modelo.sale;
 import com.friendlypos.preventas.activity.PreventaActivity;
 import com.friendlypos.preventas.modelo.invoiceDetallePreventa;
+import com.friendlypos.reimpresion_pedidos.activity.ReimprimirPedidosActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,13 +17,18 @@ import io.realm.RealmList;
 public class PreSellInvoiceDelegate {
 
     PreventaActivity preventaActivity;
-
+    ReimprimirPedidosActivity reimprimirPedidosActivity;
     invoiceDetallePreventa newInvoice;
     sale newSale;
     List<Pivot> productofacturas;
 
     public PreSellInvoiceDelegate(PreventaActivity preventaActivity) {
         this.preventaActivity = preventaActivity;
+        productofacturas = new ArrayList<>();
+    }
+
+    public PreSellInvoiceDelegate(ReimprimirPedidosActivity reimprimirPedidosActivity) {
+        this.reimprimirPedidosActivity = reimprimirPedidosActivity;
         productofacturas = new ArrayList<>();
     }
 
@@ -180,6 +186,7 @@ public class PreSellInvoiceDelegate {
 
     public void destroy() {
         this.preventaActivity = null;
+        this.reimprimirPedidosActivity = null;
         this.newInvoice = null;
     }
 

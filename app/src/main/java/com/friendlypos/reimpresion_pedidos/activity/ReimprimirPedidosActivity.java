@@ -25,6 +25,7 @@ import com.friendlypos.distribucion.fragment.DistSelecProductoFragment;
 import com.friendlypos.distribucion.fragment.DistTotalizarFragment;
 import com.friendlypos.distribucion.modelo.sale;
 import com.friendlypos.distribucion.util.Adapter;
+import com.friendlypos.preventas.delegate.PreSellInvoiceDelegate;
 import com.friendlypos.principal.activity.BluetoothActivity;
 import com.friendlypos.principal.activity.MenuPrincipal;
 import com.friendlypos.principal.activity.ProductosActivity;
@@ -42,7 +43,7 @@ public class ReimprimirPedidosActivity extends BluetoothActivity {
 
     private Toolbar toolbar;
     private TabLayout tabLayout;
-
+    private PreSellInvoiceDelegate preSellInvoiceDelegate;
     private String invoiceId;
     private String metodoPagoCliente;
     private String creditoLimiteCliente = null;
@@ -171,7 +172,7 @@ public class ReimprimirPedidosActivity extends BluetoothActivity {
         toolbar = (Toolbar) findViewById(R.id.toolbarReimprimirPedido);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
-
+        preSellInvoiceDelegate = new PreSellInvoiceDelegate(this);
         actionBar.setDisplayHomeAsUpEnabled(true);
         connectToPrinter();
         /*toolbar = (Toolbar) findViewById(R.id.toolbarDistribucion);
@@ -315,6 +316,10 @@ public class ReimprimirPedidosActivity extends BluetoothActivity {
             Log.d("ATRAS", "Atras");
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    public void initProducto(int pos) {
+        preSellInvoiceDelegate.initProduct(pos);
     }
 
 }
