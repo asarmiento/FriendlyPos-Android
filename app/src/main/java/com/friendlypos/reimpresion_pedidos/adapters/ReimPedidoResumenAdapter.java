@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
+import io.realm.RealmResults;
 
 /**
  * Created by DelvoM on 21/09/2017.
@@ -134,7 +135,7 @@ public class ReimPedidoResumenAdapter extends RecyclerView.Adapter<ReimPedidoRes
 
                     Toast.makeText(view.getContext(), "You clicked " + resumenProductoId, Toast.LENGTH_SHORT).show();
 
-                    activity.initProducto(pos);
+               //     activity.initProducto(pos);
                     // TRANSACCIÓN BD PARA SELECCIONAR LOS DATOS DEL INVENTARIO
                  /*   Realm realm3 = Realm.getDefaultInstance();
                     realm3.executeTransaction(new Realm.Transaction() {
@@ -207,7 +208,7 @@ public class ReimPedidoResumenAdapter extends RecyclerView.Adapter<ReimPedidoRes
                             realm5.close();
                         }
                     });
-
+*/
                     // TRANSACCIÓN BD PARA BORRAR EL CAMPO
 
                     final Realm realm5 = Realm.getDefaultInstance();
@@ -221,8 +222,8 @@ public class ReimPedidoResumenAdapter extends RecyclerView.Adapter<ReimPedidoRes
                         }
                     });
 
-*/
-             /*   final Realm realm = Realm.getDefaultInstance();
+
+                final Realm realm = Realm.getDefaultInstance();
                     realm.executeTransaction(new Realm.Transaction() {
 
                         @Override
@@ -231,7 +232,8 @@ public class ReimPedidoResumenAdapter extends RecyclerView.Adapter<ReimPedidoRes
                             result.deleteAllFromRealm();
                             realm.close();
                         }
-                    });*/
+                    });
+
                     notifyDataSetChanged();
                     fragment.updateData();
 
