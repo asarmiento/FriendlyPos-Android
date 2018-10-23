@@ -564,7 +564,7 @@ public class VentaDirectaActivity extends BluetoothActivity {
 
         if(result1.size() == 0){
             Log.d("nadaCreados", "nada" + "");
-            Toast.makeText(getApplicationContext(),"Nada" ,Toast.LENGTH_LONG).show();
+           // Toast.makeText(getApplicationContext(),"Nada" ,Toast.LENGTH_LONG).show();
         }
         else{
             for (int i = 0; i < result1.size(); i++) {
@@ -590,7 +590,7 @@ public class VentaDirectaActivity extends BluetoothActivity {
                 });
                 realm5.close();
             }
-            devolverTodo();
+          //  devolverTodo();
         }
         return result1;
     }

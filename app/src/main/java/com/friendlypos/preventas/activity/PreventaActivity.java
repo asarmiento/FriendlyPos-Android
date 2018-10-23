@@ -504,7 +504,7 @@ public class PreventaActivity extends BluetoothActivity {
 
             if(result1.size() == 0){
                 Log.d("nadaCreados", "nada" + "");
-                Toast.makeText(getApplicationContext(),"NadaPrev" ,Toast.LENGTH_LONG).show();
+                //Toast.makeText(getApplicationContext(),"NadaPrev" ,Toast.LENGTH_LONG).show();
             }
             else{
                 for (int i = 0; i < result1.size(); i++) {
