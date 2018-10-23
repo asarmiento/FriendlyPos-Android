@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import com.friendlypos.R;
 import com.friendlypos.application.bluetooth.PrinterService;
@@ -28,6 +29,7 @@ import com.friendlypos.distribucion.util.Adapter;
 import com.friendlypos.preventas.modelo.Numeracion;
 import com.friendlypos.principal.activity.BluetoothActivity;
 import com.friendlypos.principal.activity.MenuPrincipal;
+import com.friendlypos.principal.modelo.Clientes;
 import com.friendlypos.ventadirecta.delegate.PreSellInvoiceDelegateVD;
 import com.friendlypos.ventadirecta.fragment.VentaDirResumenFragment;
 import com.friendlypos.ventadirecta.fragment.VentaDirSelecClienteFragment;
@@ -40,6 +42,10 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import io.realm.Realm;
+import io.realm.RealmQuery;
+import io.realm.RealmResults;
+
+import static io.realm.internal.SyncObjectServerFacade.getApplicationContext;
 
 public class VentaDirectaActivity extends BluetoothActivity {
 
@@ -217,6 +223,8 @@ public class VentaDirectaActivity extends BluetoothActivity {
             }
         });
 
+
+        getList();
     }
 
 
@@ -412,14 +420,14 @@ public class VentaDirectaActivity extends BluetoothActivity {
                                    String totalExento, String totalDescuento, String percent_discount, String totalImpuesto,
                                    String totalTotal, String changing, String notes, String canceled,
                                    String paid_up, String paid, String created_at, String idUsuario,
-                                   String idUsuarioAplicado) {
+                                   String idUsuarioAplicado, int creada, int aplicada) {
         preSellInvoiceDelegate.initInvoiceDetalleVentaDirecta(id, branch_office_id, numeration, latitude, longitude,
                 date, times, date_presale, times_presale, due_data,
                 invoice_type_id, payment_method_id, totalSubtotal, totalGrabado,
                 totalExento, totalDescuento, percent_discount, totalImpuesto,
                 totalTotal, changing, notes, canceled,
                 paid_up, paid, created_at, idUsuario,
-                idUsuarioAplicado);
+                idUsuarioAplicado, creada, aplicada);
     }
 
     public void initCurrentVenta(String p_id, String p_invoice_id, String p_customer_id, String p_customer_name,
@@ -537,6 +545,54 @@ public class VentaDirectaActivity extends BluetoothActivity {
 
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+
+    public void borrarCreadas(){
+
+
+
+
+    }
+
+
+    private List<Numeracion> getList(){
+        Realm realm = Realm.getDefaultInstance();
+        RealmQuery<Numeracion> query = realm.where(Numeracion.class).equalTo("sale_type", "1").equalTo("rec_creada", 1).equalTo("rec_aplicada", 0);
+        RealmResults<Numeracion> result1 = query.findAll();
+
+
+        if(result1.size() == 0){
+            Log.d("nadaCreados", "nada" + "");
+            Toast.makeText(getApplicationContext(),"Nada" ,Toast.LENGTH_LONG).show();
+        }
+        else{
+            for (int i = 0; i < result1.size(); i++) {
+                List<Numeracion> salesList1 = realm.where(Numeracion.class).equalTo("sale_type", "1").equalTo("rec_creada", 1).equalTo("rec_aplicada", 0).findAll();
+                int numero = salesList1.get(i).getNumeracion_numero();
+
+                nextId = numero - 1;
+
+                final Realm realm5 = Realm.getDefaultInstance();
+                realm5.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm5) {
+                        Numeracion numNuevo = new Numeracion(); // unmanaged
+                        numNuevo.setSale_type("1");
+                        numNuevo.setNumeracion_numero(nextId);
+
+                        realm5.insertOrUpdate(numNuevo);
+                        Log.d("VDNumNuevaAtras", numNuevo + "");
+
+
+                    }
+
+                });
+                realm5.close();
+            }
+            devolverTodo();
+        }
+        return result1;
     }
 
 

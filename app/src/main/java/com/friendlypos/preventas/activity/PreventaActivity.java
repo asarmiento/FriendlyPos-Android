@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.os.Handler;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.friendlypos.R;
 import com.friendlypos.application.bluetooth.PrinterService;
@@ -42,6 +43,8 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import io.realm.Realm;
+import io.realm.RealmQuery;
+import io.realm.RealmResults;
 
 public class PreventaActivity extends BluetoothActivity {
 
@@ -233,7 +236,7 @@ public class PreventaActivity extends BluetoothActivity {
 
             }
         });
-
+        getList();
     }
 
 
@@ -490,6 +493,71 @@ public class PreventaActivity extends BluetoothActivity {
         preSellInvoiceDelegate.destroy();
         preSellInvoiceDelegate = null;
     }
+
+
+    private List<Numeracion> getList(){
+
+        Realm realm = Realm.getDefaultInstance();
+
+            RealmQuery<Numeracion> query = realm.where(Numeracion.class).equalTo("rec_creada", 1).equalTo("rec_aplicada", 0);
+        RealmResults<Numeracion> result1 = query.findAll();
+
+            if(result1.size() == 0){
+                Log.d("nadaCreados", "nada" + "");
+                Toast.makeText(getApplicationContext(),"NadaPrev" ,Toast.LENGTH_LONG).show();
+            }
+            else{
+                for (int i = 0; i < result1.size(); i++) {
+                    List<Numeracion> salesList1 = realm.where(Numeracion.class).equalTo("rec_creada", 1).equalTo("rec_aplicada", 0).findAll();
+                    int numero = salesList1.get(i).getNumeracion_numero();
+                    String tipo = salesList1.get(i).getSale_type();
+
+                    nextId = numero - 1;
+
+                    if(tipo.equals("2")){
+                        final Realm realm5 = Realm.getDefaultInstance();
+                        realm5.executeTransaction(new Realm.Transaction() {
+                            @Override
+                            public void execute(Realm realm5) {
+                                Numeracion numNuevo = new Numeracion(); // unmanaged
+                                numNuevo.setSale_type("2");
+                                numNuevo.setNumeracion_numero(nextId);
+
+                                realm5.insertOrUpdate(numNuevo);
+                                Log.d("VDNumNuevaAtras", numNuevo + "");
+
+
+                            }
+
+                        });
+                        realm5.close();
+                    }
+                    else if(tipo.equals("3")){
+
+                        final Realm realm5 = Realm.getDefaultInstance();
+                        realm5.executeTransaction(new Realm.Transaction() {
+                            @Override
+                            public void execute(Realm realm5) {
+                                Numeracion numNuevo = new Numeracion(); // unmanaged
+                                numNuevo.setSale_type("3");
+                                numNuevo.setNumeracion_numero(nextId);
+                                realm5.insertOrUpdate(numNuevo);
+                                Log.d("VDNumNuevaAtras", numNuevo + "");
+
+
+                            }
+
+                        });
+                        realm5.close();
+                    }
+                }
+
+            }
+
+        return result1;
+    }
+
+
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {

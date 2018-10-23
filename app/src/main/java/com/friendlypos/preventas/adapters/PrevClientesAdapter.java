@@ -474,7 +474,7 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
                     Numeracion numNuevo = new Numeracion(); // unmanaged
                     numNuevo.setSale_type("2");
                     numNuevo.setNumeracion_numero(nextId);
-
+                    numNuevo.setRec_creada(1);
                     realm5.insertOrUpdate(numNuevo);
                     Log.d("idinvNUEVOCREADO", numNuevo + "");
 
@@ -543,7 +543,7 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
                     Numeracion numNuevo = new Numeracion(); // unmanaged
                     numNuevo.setSale_type("3");
                     numNuevo.setNumeracion_numero(nextId);
-
+                    numNuevo.setRec_creada(1);
                     realm5.insertOrUpdate(numNuevo);
                     Log.d("idinvNUEVOCREADO", numNuevo + "");
 

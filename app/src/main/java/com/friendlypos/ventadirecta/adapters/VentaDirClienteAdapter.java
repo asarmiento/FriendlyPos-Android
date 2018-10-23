@@ -399,7 +399,7 @@ public class VentaDirClienteAdapter extends RecyclerView.Adapter<VentaDirCliente
         //TODO MODIFICAR CON EL IDS CONSECUTIVOS (FACTURA Y NUMERACION)
         activity.initCurrentInvoice(String.valueOf(nextId), "3", idUsuario + "01-"+ "000000"+nextId, 0.0, 0.0, Functions.getDate(), Functions.get24Time(),
                 Functions.getDate(), Functions.get24Time(), Functions.getDate(), "2", metodoPagoId, "", "", "", "", "", "", "", "", "", "", "", "", fecha,
-                "", "");
+                "", "", 1, 0);
 
         activity.initCurrentVenta(String.valueOf(nextId), String.valueOf(nextId), idCliente, nombreCliente, "6", "2", "0", "0", fecha, fecha, "0", 1, 1, "VentaDirecta");
 
@@ -410,7 +410,7 @@ public class VentaDirClienteAdapter extends RecyclerView.Adapter<VentaDirCliente
                 Numeracion numNuevo= new Numeracion(); // unmanaged
                 numNuevo.setSale_type("1");
                 numNuevo.setNumeracion_numero(nextId);
-
+                numNuevo.setRec_creada(1);
                 realm5.insertOrUpdate(numNuevo);
                 Log.d("idinvNUEVOCREADO", numNuevo +"");
 

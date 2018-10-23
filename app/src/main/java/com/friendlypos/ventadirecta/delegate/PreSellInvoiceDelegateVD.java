@@ -34,7 +34,7 @@ public class PreSellInvoiceDelegateVD {
                                            String totalExento, String totalDescuento, String percent_discount, String totalImpuesto,
                                            String totalTotal, String changing, String notes, String canceled,
                                            String paid_up, String paid, String created_at, String idUsuario,
-                                           String idUsuarioAplicado) {
+                                           String idUsuarioAplicado, int creada, int aplicada) {
 
         newInvoice = new invoiceDetalleVentaDirecta();
 
@@ -68,7 +68,8 @@ public class PreSellInvoiceDelegateVD {
         // newInvoice.setP_sale(newSale);
 
         newInvoice.setP_productofacturas(productofacturas);
-
+        newInvoice.setP_Creada(creada);
+        newInvoice.setP_Aplicada(aplicada);
 
         Log.d("invoice1", newInvoice + "");
 

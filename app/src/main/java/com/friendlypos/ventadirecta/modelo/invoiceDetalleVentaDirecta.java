@@ -66,6 +66,9 @@ public class invoiceDetalleVentaDirecta {
     private String facturaDePreventa;
 
 
+    private int p_creada = 0;
+    private int p_aplicada = 0;
+
     public int getP_id() {
         return p_id;
     }
@@ -306,6 +309,22 @@ public class invoiceDetalleVentaDirecta {
         this.facturaDePreventa = facturaDePreventa;
     }
 
+    public int getP_Creada() {
+        return p_creada;
+    }
+
+    public void setP_Creada(int p_creada) {
+        this.p_creada = p_creada;
+    }
+
+    public int getP_Aplicada() {
+        return p_aplicada;
+    }
+
+    public void setP_Aplicada(int p_aplicada) {
+        this.p_aplicada = p_aplicada;
+    }
+
     @Override
     public String toString() {
         return "InvoiceDetalleVentaDir{" +
@@ -339,6 +358,8 @@ public class invoiceDetalleVentaDirecta {
             ", p_sale=" + p_sale +
             ", p_productofacturas=" + p_productofacturas +
                 ",facturaDePreventa=" + facturaDePreventa +
+        ",creada=" + p_creada +
+                ",p_aplicada=" + p_aplicada +
             '}';
     }
 }

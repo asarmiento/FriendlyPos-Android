@@ -29,6 +29,7 @@ import com.friendlypos.distribucion.util.GPSTracker;
 import com.friendlypos.login.modelo.Usuarios;
 import com.friendlypos.login.util.SessionPrefes;
 import com.friendlypos.preventas.activity.PreventaActivity;
+import com.friendlypos.preventas.modelo.Numeracion;
 import com.friendlypos.preventas.modelo.visit;
 import com.friendlypos.preventas.modelo.invoiceDetallePreventa;
 import com.friendlypos.principal.activity.MenuPrincipal;
@@ -77,6 +78,8 @@ public class VentaDirTotalizarFragment extends BaseFragment  {
     private static int apply_done = 0;
     int slecTAB;
     sale sale_actualizada;
+
+    Numeracion num_actualizada;
     VentaDirectaActivity activity;
     int nextId;
     GPSTracker gps;
@@ -215,7 +218,7 @@ public class VentaDirTotalizarFragment extends BaseFragment  {
                                 ((VentaDirectaActivity) getActivity()).setSelecClienteTabVentaDirecta(tabCliente);
                             }
                             actualizarFactura();
-
+                            actualizarNumeracion();
                         }
                         catch (Exception e) {
                             Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
@@ -306,6 +309,30 @@ public class VentaDirTotalizarFragment extends BaseFragment  {
 
     }
 
+
+
+    protected void actualizarNumeracion() {
+        final int id = Integer.parseInt(facturaId);
+        // TRANSACCION PARA ACTUALIZAR CAMPOS DE LA TABLA VENTAS
+        final Realm realm3 = Realm.getDefaultInstance();
+        realm3.executeTransaction(new Realm.Transaction() {
+
+            @Override
+            public void execute(Realm realm3) {
+                num_actualizada = realm3.where(Numeracion.class).equalTo("number", id).equalTo("sale_type","1").findFirst();
+
+                num_actualizada.setRec_aplicada(1);
+                realm3.insertOrUpdate(num_actualizada);
+                realm3.close();
+
+                Log.d("Numeracion", num_actualizada + "" );
+            }
+        });
+
+    }
+
+
+
     public void actualizarFacturaDetalles() {
 
         Realm realm = Realm.getDefaultInstance();
@@ -326,6 +353,7 @@ public class VentaDirTotalizarFragment extends BaseFragment  {
         invoiceDetallePreventa1.setP_total(String.valueOf(totalTotal));
 
         invoiceDetallePreventa1.setP_changing(String.valueOf(vuelto));
+
         String nota;
         if(notes.getText().toString().isEmpty()){
             nota = "ninguna";
@@ -340,6 +368,7 @@ public class VentaDirTotalizarFragment extends BaseFragment  {
         invoiceDetallePreventa1.setP_user_id_applied(idUsuario);
         invoiceDetallePreventa1.setP_sale(activity.getCurrentVenta());
         invoiceDetallePreventa1.setFacturaDePreventa("VentaDirecta");
+        invoiceDetallePreventa1.setP_Aplicada(1);
 
         Log.d("actFactDetVD", invoiceDetallePreventa1 + "");
 

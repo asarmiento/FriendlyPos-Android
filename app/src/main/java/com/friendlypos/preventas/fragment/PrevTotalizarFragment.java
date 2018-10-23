@@ -26,6 +26,7 @@ import com.friendlypos.distribucion.util.GPSTracker;
 import com.friendlypos.login.modelo.Usuarios;
 import com.friendlypos.login.util.SessionPrefes;
 import com.friendlypos.preventas.activity.PreventaActivity;
+import com.friendlypos.preventas.modelo.Numeracion;
 import com.friendlypos.preventas.modelo.visit;
 import com.friendlypos.preventas.modelo.invoiceDetallePreventa;
 import com.friendlypos.ventadirecta.activity.VentaDirectaActivity;
@@ -45,7 +46,7 @@ public class PrevTotalizarFragment extends BaseFragment {
     private static TextView Total;
    // private static TextView change;
 
-
+    Numeracion num_actualizada;
     private static EditText notes;
     private static EditText client_name;
    // private static EditText paid;
@@ -198,7 +199,7 @@ public class PrevTotalizarFragment extends BaseFragment {
 
                         }
                         actualizarFactura();
-
+                        actualizarNumeracion();
                     }
                     catch (Exception e) {
                         Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
@@ -342,6 +343,45 @@ public class PrevTotalizarFragment extends BaseFragment {
 
         Log.d("actFactDetPrev", invoiceDetallePreventa1 + "");
 
+    }
+
+
+    protected void actualizarNumeracion() {
+        final int id = Integer.parseInt(facturaId);
+        // TRANSACCION PARA ACTUALIZAR CAMPOS DE LA TABLA VENTAS
+
+        if(tipoFacturacion.equals("Preventa")){
+            final Realm realm3 = Realm.getDefaultInstance();
+            realm3.executeTransaction(new Realm.Transaction() {
+
+                @Override
+                public void execute(Realm realm3) {
+                    num_actualizada = realm3.where(Numeracion.class).equalTo("number", id).equalTo("sale_type","2").findFirst();
+
+                    num_actualizada.setRec_aplicada(1);
+                    realm3.insertOrUpdate(num_actualizada);
+                    realm3.close();
+
+                    Log.d("Numeracion", num_actualizada + "" );
+                }
+            });
+        }
+        else if(tipoFacturacion.equals("Proforma")){
+            final Realm realm3 = Realm.getDefaultInstance();
+            realm3.executeTransaction(new Realm.Transaction() {
+
+                @Override
+                public void execute(Realm realm3) {
+                    num_actualizada = realm3.where(Numeracion.class).equalTo("number", id).equalTo("sale_type","3").findFirst();
+
+                    num_actualizada.setRec_aplicada(1);
+                    realm3.insertOrUpdate(num_actualizada);
+                    realm3.close();
+
+                    Log.d("Numeracion", num_actualizada + "" );
+                }
+            });
+        }
     }
 
     protected void actualizarFactura() {
