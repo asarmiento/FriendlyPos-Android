@@ -68,7 +68,7 @@ public class RecibosClientesFragment extends BaseFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if(adapter == null) {
-            adapter = new RecibosClientesAdapter(getContext(), ((RecibosActivity) getActivity()),  removeDuplicates(getListClientes()));
+            adapter = new RecibosClientesAdapter(getContext(), ((RecibosActivity) getActivity()), /* removeDuplicates(*/getListClientes()/*)*/);
 
         }
         recyclerView.setHasFixedSize(true);
@@ -80,7 +80,7 @@ public class RecibosClientesFragment extends BaseFragment {
     private List<recibos> getListClientes(){
         realm = Realm.getDefaultInstance();
         RealmQuery<recibos> query = realm.where(recibos.class);
-        RealmResults<recibos> result1 = query.findAll();
+        RealmResults<recibos> result1 = query.distinct("customer_id");
         if(result1.size() == 0){
             Toast.makeText(getApplicationContext(),"Favor descargar datos primero",Toast.LENGTH_LONG).show();
         }
@@ -88,7 +88,7 @@ public class RecibosClientesFragment extends BaseFragment {
     }
 
 
-
+/*
     public ArrayList<recibos> removeDuplicates(List<recibos> list){
         Set set = new TreeSet(new Comparator() {
 
@@ -106,7 +106,7 @@ public class RecibosClientesFragment extends BaseFragment {
         Log.d("dupli", newList + "");
         return newList;
 
-    }
+    }*/
 
     @Override
     public void onDestroyView() {

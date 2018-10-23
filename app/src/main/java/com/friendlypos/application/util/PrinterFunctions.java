@@ -11,6 +11,7 @@ import android.text.Html;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.friendlypos.Recibos.modelo.receipts;
 import com.friendlypos.Recibos.modelo.recibos;
 import com.friendlypos.application.bluetooth.PrinterService;
 import com.friendlypos.distribucion.modelo.Inventario;
@@ -41,6 +42,12 @@ public class PrinterFunctions {
     static Runnable runnable;
 
     private static double printSalesCashTotal = 0.0;
+
+
+    private static double printLiqContadoTotal = 0.0;
+    private static double printLiqCreditoTotal = 0.0;
+    private static double printLiqRecibosTotal = 0.0;
+
     static String totalGrabado= "";
     static String totalExento= "";
     static String totalSubtotal= "";
@@ -1541,7 +1548,10 @@ public class PrinterFunctions {
         String preview = "";
 
         //String salesCash = getPrintSalesCash();
-        String salesCredit = getPrintProductInvoices();
+        String ventaContado = getPrintProductInvoicesLiqContado();
+        String ventaCredito = getPrintProductInvoicesLiqCredito();
+        String ventaRecibos = getPrintProductRecibosLiq();
+
         // String receipts = getPrintReceipts();
         String billptype = "L i q u i d a c i o n";
 
@@ -1557,19 +1567,60 @@ public class PrinterFunctions {
                     "\r\n" +
                     "Usuario: " + getUserName(QuickContext) + "\r\n" +
                     "! U1 LMARGIN 0\r\n" +
-                    "! U1 SETSP 0\r\n" +
+                    "! U1 SETLP 7 0 10\r\n" +
+
+                    "Facturas de Contado" + "\r\n" +
+                    "! U1 LMARGIN 0\r\n" +
+                    "! U1 SETLP 7 0 10\r\n" +
                     "#     Factura           Fecha         Monto\r\n" +
                     "------------------------------------------------\r\n" +
                     "! U1 SETLP 7 0 10\r\n" +
                     "\r\n" +
                     "\r\n" +
-                    salesCredit +
+                    ventaContado +
                     "\r\n" +
                     "\r\n" +
                     "------------------------------------------------\r\n" +
-                    "#     Total " + Functions.doubleToString1(printSalesCashTotal) + "\r\n" +
+                    "#     Total " + Functions.doubleToString1(printLiqContadoTotal) + "\r\n" +
                     "\r\n" +
                     "\r\n" +
+
+                    "! U1 LMARGIN 0\r\n" +
+                    "! U1 SETLP 7 0 10\r\n" +
+                    "Facturas de Credito" + "\r\n" +
+                    "! U1 LMARGIN 0\r\n" +
+                    "! U1 SETLP 7 0 10\r\n" +
+                    "#     Factura           Fecha         Monto\r\n" +
+                    "------------------------------------------------\r\n" +
+                    "! U1 SETLP 7 0 10\r\n" +
+                    "\r\n" +
+                    "\r\n" +
+                    ventaCredito +
+                    "\r\n" +
+                    "\r\n" +
+                    "------------------------------------------------\r\n" +
+                    "#     Total " + Functions.doubleToString1(printLiqCreditoTotal) + "\r\n" +
+                    "\r\n" +
+                    "\r\n" +
+
+                    "! U1 LMARGIN 0\r\n" +
+                    "! U1 SETLP 7 0 10\r\n" +
+                    "Recibos" + "\r\n" +
+                    "! U1 LMARGIN 0\r\n" +
+                    "! U1 SETLP 7 0 10\r\n" +
+                    "#     Recibo           Fecha         Monto\r\n" +
+                    "------------------------------------------------\r\n" +
+                    "! U1 SETLP 7 0 10\r\n" +
+                    "\r\n" +
+                    "\r\n" +
+                    ventaRecibos +
+                    "\r\n" +
+                    "\r\n" +
+                    "------------------------------------------------\r\n" +
+                    "#     Total " + Functions.doubleToString1(printLiqRecibosTotal) + "\r\n" +
+                    "\r\n" +
+                    "\r\n" +
+
                    /* "recibos \r\n" +
                     "! U1 LMARGIN 0\r\n" +
                     "! U1 SETSP 0\r\n" +
@@ -1585,7 +1636,7 @@ public class PrinterFunctions {
                     "\r\n" +
                     "\r\n" +*/
                     "------------------------------------------------\r\n" +
-                    "#     Total " + Functions.doubleToString1(printSalesCashTotal /*+ printSalesCreditTotal + printReceiptsTotal*/) + "\r\n" +
+                    "#     Total " + Functions.doubleToString1(printLiqContadoTotal + printLiqRecibosTotal /*+ printReceiptsTotal*/) + "\r\n" +
                     " \r\n" +
                     " \r\n" +
                     " \r\n" +
@@ -1600,12 +1651,24 @@ public class PrinterFunctions {
         else if(prefList.equals("2")){
 
             preview += Html.fromHtml("<h1>") + String.format("%s", billptype) + Html.fromHtml("</h1><br/><br/><br/>");
-            //  preview += Html.fromHtml("<h1>") + "Usuario: " + getUserName(QuickContext) + Html.fromHtml("</h1><br/><br/>");
+            preview += Html.fromHtml("<h1>") + "Usuario: " + getUserName(QuickContext) + Html.fromHtml("</h1><br/><br/>");
+
+            preview += Html.fromHtml("<h1>") + "Facturas de Contado" + Html.fromHtml("</h1><br/><br/>");
+
             preview += Html.fromHtml("<h1>") +  "#     Factura           Fecha         Monto" + Html.fromHtml("</h1></center><br/>");
             preview += Html.fromHtml("<h1>") +  "------------------------------------------------" + Html.fromHtml("</h1></center><br/>");
-            preview += Html.fromHtml("<h1>") +   salesCredit + Html.fromHtml("</h1></center><br/>");
-            preview += Html.fromHtml("<h1>") +  "#     Total " + Functions.doubleToString1(printSalesCashTotal) + Html.fromHtml("</h1><br/><br/><br/>");
-            preview += Html.fromHtml("<h1>") +  "#     Total " + Functions.doubleToString1(printSalesCashTotal /*+ printSalesCreditTotal + printReceiptsTotal*/) + Html.fromHtml("</h1><br/><br/><br/>");
+            preview += Html.fromHtml("<h1>") +   ventaContado + Html.fromHtml("</h1></center><br/>");
+            preview += Html.fromHtml("<h1>") +  "#     Total " + Functions.doubleToString1(printLiqContadoTotal) + Html.fromHtml("</h1><br/><br/><br/>");
+
+            preview += Html.fromHtml("<h1>") + "Facturas de Credito" + Html.fromHtml("</h1><br/><br/>");
+
+            preview += Html.fromHtml("<h1>") +  "#     Factura           Fecha         Monto" + Html.fromHtml("</h1></center><br/>");
+            preview += Html.fromHtml("<h1>") +  "------------------------------------------------" + Html.fromHtml("</h1></center><br/>");
+            preview += Html.fromHtml("<h1>") +   ventaCredito + Html.fromHtml("</h1></center><br/>");
+            preview += Html.fromHtml("<h1>") +  "#     Total " + Functions.doubleToString1(printLiqCreditoTotal) + Html.fromHtml("</h1><br/><br/><br/>");
+
+
+            preview += Html.fromHtml("<h1>") +  "#     Total " + Functions.doubleToString1(printLiqContadoTotal /*+ printSalesCreditTotal + printReceiptsTotal*/) + Html.fromHtml("</h1><br/><br/><br/>");
 
             Intent intent2 = new Intent(PrinterService.BROADCAST_CLASS);
             intent2.putExtra(PrinterService.BROADCAST_CLASS + "TO_PRINT", "true");
@@ -1781,36 +1844,103 @@ public class PrinterFunctions {
         return send;
     }
 
-    private static String getPrintProductInvoices() {
+    private static String getPrintProductInvoicesLiqContado() {
         String send = "";
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String currentDateandTime = sdf.format(new Date());
 
         Realm realm = Realm.getDefaultInstance();
-        RealmResults<invoice> result = realm.where(invoice.class).equalTo("date", currentDateandTime).findAll();
+        RealmResults<invoice> result = realm.where(invoice.class).equalTo("date", currentDateandTime).equalTo("payment_method_id", "1").findAll();
 
         if (result.isEmpty()) {
             send = "No hay facturas emitidas";
         } else {
-            printSalesCashTotal= 0.0;
+            printLiqContadoTotal= 0.0;
             for (int i = 0; i < result.size(); i++) {
 
-                List<invoice> salesList1 = realm.where(invoice.class).equalTo("date", currentDateandTime).findAll();
+                List<invoice> salesList1 = realm.where(invoice.class).equalTo("date", currentDateandTime).equalTo("payment_method_id", "1").findAll();
 
                 String factNum = salesList1.get(i).getNumeration();
                 String factFecha = salesList1.get(i).getDate();
 
                 double factTotal = Double.parseDouble(salesList1.get(i).getTotal());
 
-
                 send += String.format("%-5s      %.20s      %-6s", factNum, factFecha, Functions.doubleToString1(factTotal)) + "\r\n";
-                printSalesCashTotal = printSalesCashTotal + factTotal;
+                printLiqContadoTotal = printLiqContadoTotal + factTotal;
 
-                Log.d("FACTPRODTODFACSI", send + "");
+                Log.d("LiqContado", send + "");
             }
         }
-        Log.d("FACTPRODTODFAC", send + "");
+        return send;
+    }
+
+    private static String getPrintProductInvoicesLiqCredito() {
+        String send = "";
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String currentDateandTime = sdf.format(new Date());
+
+        Realm realm = Realm.getDefaultInstance();
+        RealmResults<invoice> result = realm.where(invoice.class).equalTo("date", currentDateandTime).equalTo("payment_method_id", "2").findAll();
+
+        if (result.isEmpty()) {
+            send = "No hay facturas emitidas";
+        } else {
+            printLiqCreditoTotal= 0.0;
+            for (int i = 0; i < result.size(); i++) {
+
+                List<invoice> salesList1 = realm.where(invoice.class).equalTo("date", currentDateandTime).equalTo("payment_method_id", "2").findAll();
+
+                String factNum = salesList1.get(i).getNumeration();
+                String factFecha = salesList1.get(i).getDate();
+
+                double factTotal = Double.parseDouble(salesList1.get(i).getTotal());
+
+                send += String.format("%-5s      %.20s      %-6s", factNum, factFecha, Functions.doubleToString1(factTotal)) + "\r\n";
+                printLiqCreditoTotal = printLiqCreditoTotal + factTotal;
+
+                Log.d("LiqCredito", send + "");
+            }
+        }
+        return send;
+    }
+
+
+    private static String getPrintProductRecibosLiq() {
+        String send = "";
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String currentDateandTime = sdf.format(new Date());
+
+        Realm realm = Realm.getDefaultInstance();
+        RealmResults<receipts> result = realm.where(receipts.class).equalTo("date", currentDateandTime).findAll();
+
+        if (result.isEmpty()) {
+            send = "No hay facturas emitidas";
+        } else {
+            printLiqRecibosTotal= 0.0;
+            for (int i = 0; i < result.size(); i++) {
+
+                List<receipts> salesList1 = realm.where(receipts.class).equalTo("date", currentDateandTime).findAll();
+
+                String factNum = salesList1.get(i).getReference();
+                String factFecha = salesList1.get(i).getDate();
+
+                double factTotal = salesList1.get(i).getBalance();
+
+                if(factTotal == 0.0){
+                    Log.d("es0", "es 0");
+                }
+                else {
+
+                    send += String.format("%-5s      %.20s      %-6s", factNum, factFecha, Functions.doubleToString1(factTotal)) + "\r\n";
+                    printLiqRecibosTotal = printLiqRecibosTotal + factTotal;
+                    Log.d("LiqRecibos", send + "");
+                }
+
+            }
+        }
         return send;
     }
 

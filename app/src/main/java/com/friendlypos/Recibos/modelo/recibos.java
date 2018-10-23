@@ -1,6 +1,7 @@
 package com.friendlypos.Recibos.modelo;
 
 import io.realm.RealmObject;
+import io.realm.annotations.Index;
 import io.realm.annotations.PrimaryKey;
 
 /**
@@ -24,6 +25,7 @@ public class recibos extends RealmObject {
     String numeration;
     String date;
     String paid_up;
+    @Index
     String customer_id;
 
     double total;
