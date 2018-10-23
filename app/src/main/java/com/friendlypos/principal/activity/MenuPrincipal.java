@@ -124,6 +124,9 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
     String usuer;
     String idUsuario;
     String facturaId;
+    String facturaIdA;
+
+    String facturaCostumer;
     int facturaIdCV;
     String facturaIdRecibos;
     private Properties properties;
@@ -683,6 +686,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
         realm3.close();
     }
 
+
     protected void actualizarVentaDist(final String factura) {
 
         // TRANSACCION PARA ACTUALIZAR CAMPOS DE LA TABLA VENTAS
@@ -735,7 +739,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
         realm3.close();
     }
 
-    protected void actualizarRecibos(final String factura) {
+    protected void actualizarAplicadoRecibo(final String factura) {
 
         // TRANSACCION PARA ACTUALIZAR CAMPOS DE LA TABLA VENTAS
         final Realm realmRecibos = Realm.getDefaultInstance();
@@ -759,6 +763,32 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
 
         }
         realmRecibos.close();
+    }
+
+    protected void actualizarAbonadoRecibo(final String factura) {
+
+        // TRANSACCION PARA ACTUALIZAR CAMPOS DE LA TABLA VENTAS
+        final Realm realm3 = Realm.getDefaultInstance();
+
+        try {
+            realm3.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm3) {
+
+                    recibos sale_actualizada = realm3.where(recibos.class).equalTo("invoice_id", factura).findFirst();
+                    sale_actualizada.setAbonado(0);
+                    realm3.insertOrUpdate(sale_actualizada);
+
+                }
+
+            });
+
+        } catch (Exception e) {
+            Log.e("error", "error", e);
+            Toast.makeText(MenuPrincipal.this,"errorACTVEN", Toast.LENGTH_SHORT).show();
+
+        }
+        realm3.close();
     }
 
 
@@ -993,14 +1023,26 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
         }else {
 
             for (int i = 0; i < listaRecibos.size(); i++) {
+                facturaCostumer = String.valueOf(listaRecibos.get(i).getCustomer_id());
+
                 facturaId = String.valueOf(listaRecibos.get(i).getCustomer_id());
+
+                List<recibos> listaRecibosa = listaRecibos.get(i).getListaRecibos();
+
+
                 if (codS.equals("1") && resultS.equals("true")) {
-                    actualizarRecibos(facturaId);
-                   // actualizarFactura(facturaId);
+                    actualizarAplicadoRecibo(facturaCostumer);
+
+                    for (int a = 0; a < listaRecibosa.size(); a++) {
+                        facturaIdA = String.valueOf(listaRecibosa.get(a).getInvoice_id());
+                        actualizarAbonadoRecibo(facturaIdA);
+                    }
+
                     Toast.makeText(MenuPrincipal.this, messageS, Toast.LENGTH_LONG).show();
                 } else {
                     Toast.makeText(MenuPrincipal.this, messageS, Toast.LENGTH_LONG).show();
                 }
+
             }
         }
         return cod;

@@ -124,6 +124,8 @@ public class recibos extends RealmObject {
                 ", total='" + total + '\'' +
                 ", paid='" + paid + '\'' +
                 ", observation='" + observation + '\'' +
+                ", abonado='" + abonado + '\'' +
+
                 '}';
     }
 }
