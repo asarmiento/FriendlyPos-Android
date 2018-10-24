@@ -48,11 +48,14 @@ import com.friendlypos.preventas.modelo.visit;
 import com.friendlypos.principal.fragment.ConfiguracionFragment;
 import com.friendlypos.principal.helpers.DescargasHelper;
 import com.friendlypos.principal.helpers.SubirHelper;
+import com.friendlypos.principal.helpers.SubirHelperClienteGPS;
 import com.friendlypos.principal.helpers.SubirHelperClienteVisitado;
 import com.friendlypos.principal.helpers.SubirHelperPreventa;
 import com.friendlypos.principal.helpers.SubirHelperProforma;
 import com.friendlypos.principal.helpers.SubirHelperRecibos;
 import com.friendlypos.principal.helpers.SubirHelperVentaDirecta;
+import com.friendlypos.principal.modelo.EnviarClienteGPS;
+import com.friendlypos.principal.modelo.customer_location;
 import com.friendlypos.reimpresion.activity.ReimprimirActivity;
 import com.friendlypos.reimpresion_pedidos.activity.ReimprimirPedidosActivity;
 import com.friendlypos.ventadirecta.activity.VentaDirectaActivity;
@@ -120,6 +123,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
     SubirHelperVentaDirecta subirVentaDirecta;
     SubirHelperProforma subirProforma;
     SubirHelperClienteVisitado subirClienteVisitado;
+    SubirHelperClienteGPS subirClienteGPS;
     SubirHelperRecibos subirHelperRecibos;
     String usuer;
     String idUsuario;
@@ -152,6 +156,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
         subirVentaDirecta = new SubirHelperVentaDirecta(MenuPrincipal.this);
         subirProforma = new SubirHelperProforma(MenuPrincipal.this);
         subirClienteVisitado = new SubirHelperClienteVisitado(MenuPrincipal.this);
+        subirClienteGPS  = new SubirHelperClienteGPS(MenuPrincipal.this);
         subirHelperRecibos = new SubirHelperRecibos(MenuPrincipal.this);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
             this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -562,6 +567,38 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
 
                 break;
 
+            case R.id.btn_subir_gpscliente:
+
+                Realm realmClienteGPS = Realm.getDefaultInstance();
+
+                RealmQuery<customer_location> queryClienteGPS = realmClienteGPS.where(customer_location.class).equalTo("subidaEdit", 1);
+                final RealmResults<customer_location> invoiceGPS = queryClienteGPS.findAll();
+                Log.d("qweqweq", invoiceGPS.toString());
+                List<customer_location> listaGPS = realmClienteGPS.copyFromRealm(invoiceGPS);
+                Log.d("qweqweq1", listaGPS + "");
+                realmClienteGPS.close();
+
+                if(listaGPS.size()== 0){
+                    Toast.makeText(MenuPrincipal.this,"No hay clientes para subir", Toast.LENGTH_LONG).show();
+                }else {
+
+                    for (int i = 0; i < listaGPS.size(); i++) {
+                        Toast.makeText(MenuPrincipal.this, "Subiendo información...", Toast.LENGTH_SHORT).show();
+
+                        facturaIdCV = listaGPS.get(i).getId_location();
+                        Log.d("facturaIdCV", facturaIdCV + "");
+                        EnviarClienteGPS obj = new EnviarClienteGPS(listaGPS.get(i));
+                        Log.d("My App", obj + "");
+                        subirClienteGPS.sendPostClienteGPS(obj);
+
+                    }
+                }
+
+
+
+                break;
+
+
             case R.id.btn_subir_clienteVisitados:
 
                 Realm realmClienteVisitados = Realm.getDefaultInstance();
@@ -672,6 +709,32 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
 
                     sale sale_actualizada = realm3.where(sale.class).equalTo("id", factura).findFirst();
                     sale_actualizada.setSubida(0);
+                    realm3.insertOrUpdate(sale_actualizada);
+
+                }
+
+            });
+
+        } catch (Exception e) {
+            Log.e("error", "error", e);
+            Toast.makeText(MenuPrincipal.this,"errorACTVEN", Toast.LENGTH_SHORT).show();
+
+        }
+        realm3.close();
+    }
+
+    protected void actualizarClienteGPS(final String factura) {
+
+        // TRANSACCION PARA ACTUALIZAR CAMPOS DE LA TABLA VENTAS
+        final Realm realm3 = Realm.getDefaultInstance();
+
+        try {
+            realm3.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm3) {
+
+                    customer_location sale_actualizada = realm3.where(customer_location.class).equalTo("id_location", factura).findFirst();
+                    sale_actualizada.setSubidaEdit(0);
                     realm3.insertOrUpdate(sale_actualizada);
 
                 }
@@ -953,6 +1016,34 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
         }
         return cod;
     }
+
+    public int codigoDeRespuestaClienteGPS(String codS, String messageS, String resultS, int cod){
+        Realm realmPedidos = Realm.getDefaultInstance();
+        RealmQuery<customer_location> queryPedidos = realmPedidos.where(customer_location.class).equalTo("subidaEdit", 1);
+        final RealmResults<customer_location> invoicePedidos = queryPedidos.findAll();
+        Log.d("SubFacturaInvP", invoicePedidos.toString());
+        List<customer_location> listaFacturasPedidos = realmPedidos.copyFromRealm(invoicePedidos);
+        Log.d("SubFacturaListaP", listaFacturasPedidos + "");
+        realmPedidos.close();
+
+        if(listaFacturasPedidos.size()== 0){
+            Toast.makeText(MenuPrincipal.this,"No hay más facturas para subir", Toast.LENGTH_LONG).show();
+        }else {
+
+            for (int i = 0; i < listaFacturasPedidos.size(); i++) {
+                facturaId = String.valueOf(listaFacturasPedidos.get(i).getId_location());
+                if (codS.equals("1") && resultS.equals("true")) {
+                    actualizarClienteGPS(facturaId);
+                    Toast.makeText(MenuPrincipal.this, messageS, Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(MenuPrincipal.this, messageS, Toast.LENGTH_LONG).show();
+                }
+            }
+        }
+        return cod;
+    }
+
+
 
     public int codigoDeRespuestaDistr(String codS, String messageS, String resultS, int cod){
         Realm realmPedidos = Realm.getDefaultInstance();

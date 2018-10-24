@@ -19,8 +19,10 @@ import com.friendlypos.preventas.modelo.visit;
 import com.friendlypos.preventas.modelo.EnviarClienteVisitado;
 import com.friendlypos.preventas.modelo.NumeracionResponse;
 import com.friendlypos.principal.modelo.ClientesResponse;
+import com.friendlypos.principal.modelo.EnviarClienteGPS;
 import com.friendlypos.principal.modelo.ProductosResponse;
 import com.friendlypos.principal.modelo.SysconfResponse;
+import com.friendlypos.principal.modelo.customer_location;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -92,5 +94,9 @@ public interface RequestInterface {
     // TODO DEFINIR CUAL ES EL KEY PARA ENVIAR (KEY, VALUE)
     @POST("/api/upload-visit")
     Call<visit> savePostClienteVisitado(@Body EnviarClienteVisitado clienteVisitado, @Header("Authorization") String token);
+
+    // TODO DEFINIR CUAL ES EL KEY PARA ENVIAR (KEY, VALUE)
+    @POST("/api/upload-location-customer")
+    Call<customer_location> savePostClienteGPS(@Body EnviarClienteGPS clienteVisitado, @Header("Authorization") String token);
 
 }

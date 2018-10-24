@@ -25,13 +25,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.friendlypos.R;
+import com.friendlypos.application.util.Functions;
 import com.friendlypos.distribucion.modelo.Inventario;
 import com.friendlypos.distribucion.modelo.Pivot;
 import com.friendlypos.distribucion.modelo.invoice;
 import com.friendlypos.distribucion.modelo.sale;
 import com.friendlypos.distribucion.util.GPSTracker;
 import com.friendlypos.distribucion.util.TotalizeHelper;
+import com.friendlypos.preventas.modelo.Numeracion;
+import com.friendlypos.preventas.modelo.visit;
+import com.friendlypos.principal.activity.MenuPrincipal;
 import com.friendlypos.principal.modelo.Clientes;
+import com.friendlypos.principal.modelo.customer_location;
+import com.friendlypos.ventadirecta.activity.VentaDirectaActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +59,9 @@ public class ClientesAdapter extends RecyclerView.Adapter<ClientesAdapter.Charac
     GPSTracker gps;
     double latitude;
     double longitude;
-
+    int nextId;
+   String idCliente;
+    int obtenida = 0;
     public ClientesAdapter(Context context,List<Clientes> contentList) {
         this.contentList = contentList;
         this.QuickContext = context;
@@ -113,7 +121,10 @@ public class ClientesAdapter extends RecyclerView.Adapter<ClientesAdapter.Charac
                 selected_position = position;
                 notifyItemChanged(selected_position);
 
-                content.getId();
+                idCliente = content.getId();
+
+             //   Toast.makeText(QuickContext, "idCliente "+ idCliente, Toast.LENGTH_LONG).show();
+
                longitud = content.getLongitud();
                 latitud = content.getLatitud();
 
@@ -168,7 +179,7 @@ public class ClientesAdapter extends RecyclerView.Adapter<ClientesAdapter.Charac
                     editarCliente();
                     }
                 else{
-                    Toast.makeText(QuickContext, "Selecciona una factura primero", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(QuickContext, "Selecciona una cliente primero", Toast.LENGTH_SHORT).show();
 
                 }
             }
@@ -192,8 +203,7 @@ public class ClientesAdapter extends RecyclerView.Adapter<ClientesAdapter.Charac
         public CardView cardView;
         private TextView txt_cliente_card,txt_cliente_fantasyname,txt_cliente_companyname, txt_cliente_address,txt_cliente_creditlimit,
                 txt_cliente_fixeddescount, txt_cliente_due,txt_cliente_credittime, txt_cliente_telefono;
-        private ImageButton btnUbicacionCliente;
-        Button btnEditarCliente;
+        private ImageButton btnUbicacionCliente, btnEditarCliente;
         public CharacterViewHolder(View view) {
             super(view);
             txt_cliente_card = (TextView)view.findViewById(R.id.txt_cliente_card);
@@ -206,7 +216,7 @@ public class ClientesAdapter extends RecyclerView.Adapter<ClientesAdapter.Charac
             txt_cliente_due = (TextView)view.findViewById(R.id.txt_cliente_due);
             txt_cliente_credittime = (TextView)view.findViewById(R.id.txt_cliente_credittime);
             btnUbicacionCliente = (ImageButton)view.findViewById(R.id.btnUbicacionCliente);
-            btnEditarCliente = (Button)view.findViewById(R.id.btnEditarCliente);
+            btnEditarCliente = (ImageButton)view.findViewById(R.id.btnEditarCliente);
             cardView = (CardView) view.findViewById(R.id.cardViewClientes);
 
         }
@@ -235,6 +245,8 @@ public class ClientesAdapter extends RecyclerView.Adapter<ClientesAdapter.Charac
 
             @Override
             public void onClick(View v) {
+
+                obtenida = 1;
                 obtenerLocalizacion();
                 txtEditarLongitud.setText("Longitud: " + longitude);
                 txtEditarLatitud.setText("Latitud: " + latitude);
@@ -248,14 +260,65 @@ public class ClientesAdapter extends RecyclerView.Adapter<ClientesAdapter.Charac
         alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 
             public void onClick(DialogInterface dialog, int id) {
-                try {
 
 
-                }
-                catch (Exception e) {
-                    e.printStackTrace();
+                if(obtenida == 1) {
+
+                    try {
+
+                        AlertDialog dialogReturnSale = new AlertDialog.Builder(QuickContext)
+                                .setTitle("Guardar")
+                                .setMessage("¿Desea cambiar la ubicación del cliente?")
+                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+
+                                        final Realm realm5 = Realm.getDefaultInstance();
+
+                                        realm5.beginTransaction();
+                                        Number currentIdNum = realm5.where(customer_location.class).max("id_location");
+
+                                        if (currentIdNum == null) {
+                                            nextId = 1;
+                                        } else {
+                                            nextId = currentIdNum.intValue() + 1;
+                                        }
+
+
+                                        customer_location ubicacion = new customer_location();
+
+                                        ubicacion.setId_location(nextId);
+                                        ubicacion.setLatitud(latitude);
+                                        ubicacion.setLongitud(longitude);
+                                        ubicacion.setId_cliente(idCliente);
+                                        ubicacion.setSubidaEdit(1);
+
+                                        realm5.copyToRealmOrUpdate(ubicacion);
+                                        realm5.commitTransaction();
+                                        Log.d("UbicacionNueva", ubicacion + "");
+                                        realm5.close();
+
+
+                                    }
+                                }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+
+                                        dialog.cancel();
+                                    }
+                                }).create();
+                        dialogReturnSale.show();
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
                        /* Functions.createSnackBar(QuickContext, coordinatorLayout, "Sucedio un error Revise que el producto y sus dependientes tengan existencias", 2, Snackbar.LENGTH_LONG);
                         Functions.CreateMessage(QuickContext, "Error", e.getMessage());*/
+                    }
+                }
+                else{
+                    Toast.makeText(QuickContext, "Obtenga la nueva dirección primero", Toast.LENGTH_SHORT).show();
                 }
             }
         });

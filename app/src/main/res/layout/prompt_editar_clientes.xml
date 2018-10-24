@@ -41,7 +41,7 @@
         android:textSize="18sp"
         android:textStyle="bold"
         android:layout_marginTop="22dp"
-
+android:layout_marginBottom="15dp"
         android:text="longitud"
         android:id="@+id/txtEditarLongitud"
         android:layout_below="@+id/txtEditarLatitud"
