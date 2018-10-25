@@ -12,6 +12,7 @@ public class customer_location extends RealmObject {
 
     double longitud;
     double latitud;
+    @PrimaryKey
     String id;
 
     int subidaEdit = 0;
