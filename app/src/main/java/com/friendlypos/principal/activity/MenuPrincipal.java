@@ -132,7 +132,8 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
 
     String facturaCostumer;
     int facturaIdCV;
-    String facturaIdRecibos;
+
+    String facturaIdRecibos, facturaIdGPS;
     private Properties properties;
     private int descargaDatosEmpresa;
     private int cambioDatosEmpresa = 0;
@@ -585,17 +586,14 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                     for (int i = 0; i < listaGPS.size(); i++) {
                         Toast.makeText(MenuPrincipal.this, "Subiendo información...", Toast.LENGTH_SHORT).show();
 
-                        facturaIdCV = listaGPS.get(i).getId_location();
-                        Log.d("facturaIdCV", facturaIdCV + "");
+                        facturaIdGPS =listaGPS.get(i).getId();
+                        Log.d("facturaIdCV", facturaIdGPS + "");
                         EnviarClienteGPS obj = new EnviarClienteGPS(listaGPS.get(i));
                         Log.d("My App", obj + "");
                         subirClienteGPS.sendPostClienteGPS(obj);
-
+                        actualizarClienteGPS(facturaIdGPS);
                     }
                 }
-
-
-
                 break;
 
 
@@ -733,7 +731,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                 @Override
                 public void execute(Realm realm3) {
 
-                    customer_location sale_actualizada = realm3.where(customer_location.class).equalTo("id_location", factura).findFirst();
+                    customer_location sale_actualizada = realm3.where(customer_location.class).equalTo("id", factura).findFirst();
                     sale_actualizada.setSubidaEdit(0);
                     realm3.insertOrUpdate(sale_actualizada);
 
@@ -1031,7 +1029,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
         }else {
 
             for (int i = 0; i < listaFacturasPedidos.size(); i++) {
-                facturaId = String.valueOf(listaFacturasPedidos.get(i).getId_location());
+                facturaId = String.valueOf(listaFacturasPedidos.get(i).getId());
                 if (codS.equals("1") && resultS.equals("true")) {
                     actualizarClienteGPS(facturaId);
                     Toast.makeText(MenuPrincipal.this, messageS, Toast.LENGTH_LONG).show();

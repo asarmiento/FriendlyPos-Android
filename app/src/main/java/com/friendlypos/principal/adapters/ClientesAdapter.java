@@ -176,6 +176,7 @@ public class ClientesAdapter extends RecyclerView.Adapter<ClientesAdapter.Charac
             @Override
             public void onClick(View v) {
                 if(activa == 1){
+
                     editarCliente();
                     }
                 else{
@@ -236,6 +237,7 @@ public class ClientesAdapter extends RecyclerView.Adapter<ClientesAdapter.Charac
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(QuickContext);
         alertDialogBuilder.setView(promptView);
 
+
         final TextView label = (TextView) promptView.findViewById(R.id.promtClabel);
         final Button btnObtenerGPS = (Button) promptView.findViewById(R.id.btnObtenerGPS);
         final TextView txtEditarLongitud = (TextView) promptView.findViewById(R.id.txtEditarLongitud);
@@ -277,21 +279,21 @@ public class ClientesAdapter extends RecyclerView.Adapter<ClientesAdapter.Charac
                                         final Realm realm5 = Realm.getDefaultInstance();
 
                                         realm5.beginTransaction();
-                                        Number currentIdNum = realm5.where(customer_location.class).max("id_location");
+                                       /* Number currentIdNum = realm5.where(customer_location.class).max("id_location");
 
                                         if (currentIdNum == null) {
                                             nextId = 1;
                                         } else {
                                             nextId = currentIdNum.intValue() + 1;
                                         }
-
+*/
 
                                         customer_location ubicacion = new customer_location();
 
-                                        ubicacion.setId_location(nextId);
+                                      //  ubicacion.setId_location(nextId);
                                         ubicacion.setLatitud(latitude);
                                         ubicacion.setLongitud(longitude);
-                                        ubicacion.setId_cliente(idCliente);
+                                        ubicacion.setId(idCliente);
                                         ubicacion.setSubidaEdit(1);
 
                                         realm5.copyToRealmOrUpdate(ubicacion);
@@ -331,7 +333,7 @@ public class ClientesAdapter extends RecyclerView.Adapter<ClientesAdapter.Charac
                 });
 
         AlertDialog alertD = alertDialogBuilder.create();
-        alertD.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        alertD.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         alertD.show();
     }
 

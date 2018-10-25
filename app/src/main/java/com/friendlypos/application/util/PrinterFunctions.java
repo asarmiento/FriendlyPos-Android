@@ -1851,7 +1851,7 @@ public class PrinterFunctions {
         String currentDateandTime = sdf.format(new Date());
 
         Realm realm = Realm.getDefaultInstance();
-        RealmResults<invoice> result = realm.where(invoice.class).equalTo("date", currentDateandTime).equalTo("payment_method_id", "1").findAll();
+        RealmResults<invoice> result = realm.where(invoice.class).equalTo("date", currentDateandTime).equalTo("payment_method_id", "1").equalTo("facturaDePreventa", "VentaDirecta").or().equalTo("facturaDePreventa", "Distribucion").findAll();
 
         if (result.isEmpty()) {
             send = "No hay facturas emitidas";
@@ -1859,7 +1859,7 @@ public class PrinterFunctions {
             printLiqContadoTotal= 0.0;
             for (int i = 0; i < result.size(); i++) {
 
-                List<invoice> salesList1 = realm.where(invoice.class).equalTo("date", currentDateandTime).equalTo("payment_method_id", "1").findAll();
+                List<invoice> salesList1 = realm.where(invoice.class).equalTo("date", currentDateandTime).equalTo("payment_method_id", "1").equalTo("facturaDePreventa", "VentaDirecta").or().equalTo("facturaDePreventa", "Distribucion").findAll();
 
                 String factNum = salesList1.get(i).getNumeration();
                 String factFecha = salesList1.get(i).getDate();
@@ -1882,7 +1882,7 @@ public class PrinterFunctions {
         String currentDateandTime = sdf.format(new Date());
 
         Realm realm = Realm.getDefaultInstance();
-        RealmResults<invoice> result = realm.where(invoice.class).equalTo("date", currentDateandTime).equalTo("payment_method_id", "2").findAll();
+        RealmResults<invoice> result = realm.where(invoice.class).equalTo("date", currentDateandTime).equalTo("payment_method_id", "2").equalTo("facturaDePreventa", "VentaDirecta").or().equalTo("facturaDePreventa", "Distribucion").findAll();
 
         if (result.isEmpty()) {
             send = "No hay facturas emitidas";
@@ -1890,7 +1890,7 @@ public class PrinterFunctions {
             printLiqCreditoTotal= 0.0;
             for (int i = 0; i < result.size(); i++) {
 
-                List<invoice> salesList1 = realm.where(invoice.class).equalTo("date", currentDateandTime).equalTo("payment_method_id", "2").findAll();
+                List<invoice> salesList1 = realm.where(invoice.class).equalTo("date", currentDateandTime).equalTo("payment_method_id", "2").equalTo("facturaDePreventa", "VentaDirecta").or().equalTo("facturaDePreventa", "Distribucion").findAll();
 
                 String factNum = salesList1.get(i).getNumeration();
                 String factFecha = salesList1.get(i).getDate();
@@ -1951,7 +1951,7 @@ public class PrinterFunctions {
         String currentDateandTime = sdf.format(new Date());
 
         Realm realm = Realm.getDefaultInstance();
-        RealmResults<invoice> result = realm.where(invoice.class).equalTo("date", currentDateandTime).equalTo("facturaDePreventa", "Distribucion").findAll();
+        RealmResults<invoice> result = realm.where(invoice.class).equalTo("date", currentDateandTime).equalTo("facturaDePreventa", "Preventa").or().equalTo("facturaDePreventa", "Proforma").findAll();
 
         if (result.isEmpty()) {
             send = "No hay facturas emitidas";
@@ -1959,7 +1959,7 @@ public class PrinterFunctions {
             printSalesCashTotal= 0.0;
             for (int i = 0; i < result.size(); i++) {
 
-                List<invoice> salesList1 = realm.where(invoice.class).equalTo("date", currentDateandTime).equalTo("facturaDePreventa", "Distribucion").findAll();
+                List<invoice> salesList1 = realm.where(invoice.class).equalTo("date", currentDateandTime).equalTo("facturaDePreventa", "Preventa").or().equalTo("facturaDePreventa", "Proforma").findAll();
                 String idFactura = salesList1.get(i).getId();
 
                 RealmResults<Pivot> resultPivot = realm.where(Pivot.class).equalTo("invoice_id", idFactura).findAll();

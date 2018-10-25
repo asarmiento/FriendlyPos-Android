@@ -1,17 +1,11 @@
 package com.friendlypos.principal.modelo;
 
-import com.friendlypos.preventas.modelo.visit;
-
-/**
- * Created by DelvoM on 24/10/2018.
- */
-
 public class EnviarClienteGPS {
 
-    private customer_location visit;
+    private customer_location customer_location;
 
-    public EnviarClienteGPS(customer_location visit) {
-        this.visit = visit;
+    public EnviarClienteGPS(customer_location customer_location) {
+        this.customer_location = customer_location;
     }
 
 }

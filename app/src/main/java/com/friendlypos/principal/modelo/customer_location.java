@@ -8,24 +8,18 @@ import io.realm.annotations.PrimaryKey;
  */
 
 public class customer_location extends RealmObject {
-    @PrimaryKey
-    private int id_location;
-    private double longitud;
-    private double latitud;
-    private String id;
-    private int subidaEdit = 0;
+
+
+    double longitud;
+    double latitud;
+    String id;
+
+    int subidaEdit = 0;
 
     private boolean result;
     private String code;
     private String messages;
 
-    public int getId_location() {
-        return id_location;
-    }
-
-    public void setId_location(int id_location) {
-        this.id_location = id_location;
-    }
 
     public double getLongitud() {
         return longitud;
@@ -86,10 +80,9 @@ public class customer_location extends RealmObject {
     @Override
     public String toString() {
         return "customer_location{" +
-                "id_location=" + id_location +
-                ", longitud=" + longitud +
+                "longitud=" + longitud +
                 ", latitud=" + latitud +
-                ", id=" + id +
+                ", id='" + id + '\'' +
                 ", subidaEdit=" + subidaEdit +
                 '}';
     }

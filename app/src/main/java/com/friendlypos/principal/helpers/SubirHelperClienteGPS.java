@@ -66,6 +66,7 @@ public class SubirHelperClienteGPS {
                             activity.codigoDeRespuestaClienteGPS(codigoS, mensajeS, resultS, codigo);
                         }
                         else{
+                            Toast.makeText(mContext, "ERRRRROOOORRRR", Toast.LENGTH_SHORT).show();
                         }
                 }
 
