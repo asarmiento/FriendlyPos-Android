@@ -139,8 +139,9 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".principal.activity.MenuPrincipal" />
-
-            ></activity>
+            >
+        </activity>
+        <activity android:name=".crearCliente.activity.crearCliente"></activity>
     </application>
 
 </manifest>

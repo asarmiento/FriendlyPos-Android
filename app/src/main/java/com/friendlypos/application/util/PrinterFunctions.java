@@ -1951,7 +1951,7 @@ public class PrinterFunctions {
         String currentDateandTime = sdf.format(new Date());
 
         Realm realm = Realm.getDefaultInstance();
-        RealmResults<invoice> result = realm.where(invoice.class).equalTo("date", currentDateandTime).equalTo("facturaDePreventa", "Preventa").or().equalTo("facturaDePreventa", "Proforma").findAll();
+        RealmResults<invoice> result = realm.where(invoice.class).equalTo("date", currentDateandTime).equalTo("facturaDePreventa", "Preventa").findAll();
 
         if (result.isEmpty()) {
             send = "No hay facturas emitidas";
@@ -1959,7 +1959,7 @@ public class PrinterFunctions {
             printSalesCashTotal= 0.0;
             for (int i = 0; i < result.size(); i++) {
 
-                List<invoice> salesList1 = realm.where(invoice.class).equalTo("date", currentDateandTime).equalTo("facturaDePreventa", "Preventa").or().equalTo("facturaDePreventa", "Proforma").findAll();
+                List<invoice> salesList1 = realm.where(invoice.class).equalTo("date", currentDateandTime).equalTo("facturaDePreventa", "Preventa").findAll();
                 String idFactura = salesList1.get(i).getId();
 
                 RealmResults<Pivot> resultPivot = realm.where(Pivot.class).equalTo("invoice_id", idFactura).findAll();

@@ -55,6 +55,11 @@
 
     </style>
 
+    <style name="Register_EditText2" parent="Normal_EditText">
+        <item name="android:background">@color/background</item>
+
+    </style>
+
     <style name="Normal_EditText">
         <item name="android:layout_width">match_parent</item>
         <item name="android:minHeight">35dp</item>
@@ -69,6 +74,7 @@
 
     <style name="TextAppearence.App.TextInputLayout.Dark1" parent="TextAppearence.App.TextInputLayout">
         <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">16sp</item>
     </style>
 
     <style name="MainButton">

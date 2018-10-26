@@ -34,6 +34,7 @@ import com.friendlypos.app.broadcastreceiver.NetworkStateChangeReceiver;
 import com.friendlypos.application.bluetooth.PrinterService;
 import com.friendlypos.application.util.Functions;
 import com.friendlypos.application.util.PrinterFunctions;
+import com.friendlypos.crearCliente.activity.crearCliente;
 import com.friendlypos.distribucion.activity.DistribucionActivity;
 import com.friendlypos.distribucion.modelo.EnviarFactura;
 import com.friendlypos.distribucion.modelo.invoice;
@@ -194,7 +195,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
             @Override
             public void onClick(View v) {
                 if (!properties.getBlockedApp()) {
-                    Intent intent = new Intent(getApplication(), DistribucionActivity.class);
+                    Intent intent = new Intent(getApplication(), crearCliente.class);
                     startActivity(intent);
                 }
             }
@@ -591,7 +592,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                         EnviarClienteGPS obj = new EnviarClienteGPS(listaGPS.get(i));
                         Log.d("My App", obj + "");
                         subirClienteGPS.sendPostClienteGPS(obj);
-                        actualizarClienteGPS(facturaIdGPS);
+                       // actualizarClienteGPS(facturaIdGPS);
                     }
                 }
                 break;
