@@ -53,6 +53,7 @@
     <style name="Register_EditText1" parent="Normal_EditText">
         <item name="android:background">@color/colorPrimary</item>
 
+
     </style>
 
     <style name="Register_EditText2" parent="Normal_EditText">
@@ -74,7 +75,7 @@
 
     <style name="TextAppearence.App.TextInputLayout.Dark1" parent="TextAppearence.App.TextInputLayout">
         <item name="android:textColor">@android:color/white</item>
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">18sp</item>
     </style>
 
     <style name="MainButton">
@@ -130,4 +131,21 @@
         <item name="android:background">#FFFFFF</item>
         <item name="android:textColorHint">@color/colorPrimary</item>
     </style>
+
+
+    <style name="ClienteNuevo1" parent="Normal_EditText">
+        <item name="android:background">@color/colorPrimary</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="ClienteNuevo2" parent="Normal_EditText">
+        <item name="android:background">@color/background</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="TextAppearence.App.TextInputLayout.ClienteNuevo" parent="TextAppearence.App.TextInputLayout">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
 </resources>

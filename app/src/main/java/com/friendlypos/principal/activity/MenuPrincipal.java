@@ -195,7 +195,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
             @Override
             public void onClick(View v) {
                 if (!properties.getBlockedApp()) {
-                    Intent intent = new Intent(getApplication(), crearCliente.class);
+                    Intent intent = new Intent(getApplication(), DistribucionActivity.class);
                     startActivity(intent);
                 }
             }

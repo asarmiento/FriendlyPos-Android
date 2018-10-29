@@ -141,7 +141,15 @@
                 android:value=".principal.activity.MenuPrincipal" />
             >
         </activity>
-        <activity android:name=".crearCliente.activity.crearCliente"></activity>
+        <activity android:name=".crearCliente.activity.crearCliente"
+            android:label="@string/crear"
+            android:parentActivityName=".principal.activity.MenuPrincipal"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".principal.activity.MenuPrincipal" />
+            >
+        </activity>
     </application>
 
 </manifest>
