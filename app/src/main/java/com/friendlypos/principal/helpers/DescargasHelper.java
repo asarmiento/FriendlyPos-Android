@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.friendlypos.Recibos.modelo.recibos;
 import com.friendlypos.Recibos.modelo.RecibosResponse;
@@ -87,13 +88,13 @@ public class DescargasHelper {
                 @Override
                 public void onResponse(Call<ClientesResponse> call, Response<ClientesResponse> response) {
                     mContentsArray.clear();
-
+                    realm = Realm.getDefaultInstance();
 
                     if (response.isSuccessful()) {
                         mContentsArray.addAll(response.body().getContents());
 
                         try {
-                            realm = Realm.getDefaultInstance();
+
 
                             // Work with Realm
                             realm.beginTransaction();
@@ -108,9 +109,16 @@ public class DescargasHelper {
                         //  Toast.makeText(DescargarInventario.this, getString(R.string.success), Toast.LENGTH_SHORT).show();
                     }
                     else {
-                        //  Toast.makeText(DescargarInventario.this, getString(R.string.error) + " CODE: " +response.code(), Toast.LENGTH_LONG).show();
+
                         RealmResults<Clientes> results = realm.where(Clientes.class).findAll();
-                        mContentsArray.addAll(results);
+
+                        if (results.isEmpty()){
+                            Toast.makeText(mContext, "No hay datos", Toast.LENGTH_SHORT).show();
+                        }else{
+                            mContentsArray.addAll(results);
+                        }
+
+
                     }
                 }
 
@@ -126,13 +134,13 @@ public class DescargasHelper {
                 @Override
                 public void onResponse(Call<BonusesResponse> callBonuses, Response<BonusesResponse> response) {
                     mContentsArrayBonuses.clear();
-
+                    realmBonuses = Realm.getDefaultInstance();
 
                     if (response.isSuccessful()) {
                         mContentsArrayBonuses.addAll(response.body().getBonuses());
 
                         try {
-                            realmBonuses = Realm.getDefaultInstance();
+
 
                             // Work with Realm
                             realmBonuses.beginTransaction();
@@ -149,7 +157,13 @@ public class DescargasHelper {
                     else {
                         //  Toast.makeText(DescargarInventario.this, getString(R.string.error) + " CODE: " +response.code(), Toast.LENGTH_LONG).show();
                         RealmResults<Bonuses> results = realmBonuses.where(Bonuses.class).findAll();
-                        mContentsArrayBonuses.addAll(results);
+
+                        if (results.isEmpty()){
+                            Toast.makeText(mContext, "No hay datos", Toast.LENGTH_SHORT).show();
+                        }else{
+                            mContentsArrayBonuses.addAll(results);
+                        }
+
                     }
                 }
 
@@ -165,13 +179,13 @@ public class DescargasHelper {
                 @Override
                 public void onResponse(Call<MarcasResponse> callMarcas, Response<MarcasResponse> response) {
                     mContentsArrayMarcas.clear();
+                    realmMarcas = Realm.getDefaultInstance();
 
 
                     if (response.isSuccessful()) {
                         mContentsArrayMarcas.addAll(response.body().getMarca());
 
                         try {
-                            realmMarcas = Realm.getDefaultInstance();
 
                             // Work with Realm
                             realmMarcas.beginTransaction();
@@ -188,7 +202,13 @@ public class DescargasHelper {
                     else {
                         //  Toast.makeText(DescargarInventario.this, getString(R.string.error) + " CODE: " +response.code(), Toast.LENGTH_LONG).show();
                         RealmResults<Marcas> results = realmMarcas.where(Marcas.class).findAll();
-                        mContentsArrayMarcas.addAll(results);
+
+                        if (results.isEmpty()){
+                            Toast.makeText(mContext, "No hay datos", Toast.LENGTH_SHORT).show();
+                        }else{
+                            mContentsArrayMarcas.addAll(results);
+                        }
+
                     }
                 }
 
@@ -205,13 +225,13 @@ public class DescargasHelper {
                 @Override
                 public void onResponse(Call<NumeracionResponse> callNumeracion, Response<NumeracionResponse> response) {
                     mContentsArrayNumeracion.clear();
-
+                    realmNumeracion = Realm.getDefaultInstance();
 
                     if (response.isSuccessful()) {
                         mContentsArrayNumeracion.addAll(response.body().getNumeracion());
 
                         try {
-                            realmNumeracion = Realm.getDefaultInstance();
+
 
                             // Work with Realm
                             realmNumeracion.beginTransaction();
@@ -228,7 +248,14 @@ public class DescargasHelper {
                     else {
                         //  Toast.makeText(DescargarInventario.this, getString(R.string.error) + " CODE: " +response.code(), Toast.LENGTH_LONG).show();
                         RealmResults<Numeracion> results = realmNumeracion.where(Numeracion.class).findAll();
-                        mContentsArrayNumeracion.addAll(results);
+
+                        if (results.isEmpty()){
+                            Toast.makeText(mContext, "No hay datos", Toast.LENGTH_SHORT).show();
+                        }else{
+                            mContentsArrayNumeracion.addAll(results);
+                        }
+
+
                     }
                 }
 
@@ -247,13 +274,13 @@ public class DescargasHelper {
                 @Override
                 public void onResponse(Call<MetodoPagoResponse> callMetodoPago, Response<MetodoPagoResponse> response) {
                     mContentsArrayMetodoPago.clear();
-
+                    realmMetodoPago = Realm.getDefaultInstance();
 
                     if (response.isSuccessful()) {
                         mContentsArrayMetodoPago.addAll(response.body().getMetodoPago());
 
                         try {
-                            realmMetodoPago = Realm.getDefaultInstance();
+
 
                             // Work with Realm
                             realmMetodoPago.beginTransaction();
@@ -270,7 +297,13 @@ public class DescargasHelper {
                     else {
                         //  Toast.makeText(DescargarInventario.this, getString(R.string.error) + " CODE: " +response.code(), Toast.LENGTH_LONG).show();
                         RealmResults<MetodoPago> results = realmMetodoPago.where(MetodoPago.class).findAll();
-                        mContentsArrayMetodoPago.addAll(results);
+
+                        if (results.isEmpty()){
+                            Toast.makeText(mContext, "No hay datos", Toast.LENGTH_SHORT).show();
+                        }else{
+                            mContentsArrayMetodoPago.addAll(results);
+                        }
+
                     }
                 }
 
@@ -289,13 +322,13 @@ public class DescargasHelper {
                 @Override
                 public void onResponse(Call<TipoProductoResponse> callMarcas, Response<TipoProductoResponse> response) {
                     mContentsArrayTipoProducto.clear();
-
+                    realmTipoProducto = Realm.getDefaultInstance();
 
                     if (response.isSuccessful()) {
                         mContentsArrayTipoProducto.addAll(response.body().getTipoProducto());
 
                         try {
-                            realmTipoProducto = Realm.getDefaultInstance();
+
 
                             // Work with Realm
                             realmTipoProducto.beginTransaction();
@@ -312,7 +345,13 @@ public class DescargasHelper {
                     else {
                         //  Toast.makeText(DescargarInventario.this, getString(R.string.error) + " CODE: " +response.code(), Toast.LENGTH_LONG).show();
                         RealmResults<TipoProducto> results = realmTipoProducto.where(TipoProducto.class).findAll();
-                        mContentsArrayTipoProducto.addAll(results);
+
+                        if (results.isEmpty()){
+                            Toast.makeText(mContext, "No hay datos", Toast.LENGTH_SHORT).show();
+                        }else{
+                            mContentsArrayTipoProducto.addAll(results);
+                        }
+
                     }
                 }
 
@@ -329,14 +368,14 @@ public class DescargasHelper {
                 @Override
                 public void onResponse(Call<ProductosResponse> call2, Response<ProductosResponse> response2) {
                     mContentsArray2.clear();
-
+                    realm2 = Realm.getDefaultInstance();
                     if (response2.isSuccessful()) {
 
                         mContentsArray2.addAll(response2.body().getProductos());
 
                         try {
 
-                            realm2 = Realm.getDefaultInstance();
+
 
                             realm2.beginTransaction();
                             //TODO verificar cada cuanto se va a actualizar el inventario.
@@ -355,7 +394,13 @@ public class DescargasHelper {
                     else {
                         // Toast.makeText(ProductosActivity.this, getString(R.string.error) + " CODE: " +response.code(), Toast.LENGTH_LONG).show();
                         RealmResults<Productos> results2 = realm2.where(Productos.class).findAll();
-                        mContentsArray2.addAll(results2);
+                        if (results2.isEmpty()){
+                            Toast.makeText(mContext, "No hay datos", Toast.LENGTH_SHORT).show();
+                        }else{
+                            mContentsArray2.addAll(results2);
+                        }
+
+
                     }
                     dialog.dismiss();
 
@@ -398,13 +443,13 @@ public class DescargasHelper {
                 @Override
                 public void onResponse(Call<InventarioResponse> call, Response<InventarioResponse> response) {
                     mContentsArray.clear();
-
+                    realm = Realm.getDefaultInstance();
 
                     if (response.isSuccessful()) {
                         mContentsArray.addAll(response.body().getInventarios());
 
                         try {
-                            realm = Realm.getDefaultInstance();
+
 
                             // Work with Realm
                             realm.beginTransaction();
@@ -421,7 +466,13 @@ public class DescargasHelper {
                     else {
                         //  Toast.makeText(DescargarInventario.this, getString(R.string.error) + " CODE: " +response.code(), Toast.LENGTH_LONG).show();
                         RealmResults<Inventario> results = realm.where(Inventario.class).findAll();
-                        mContentsArray.addAll(results);
+                        if (results.isEmpty()){
+                            Toast.makeText(mContext, "No hay datos", Toast.LENGTH_SHORT).show();
+                        }else{
+                            mContentsArray.addAll(results);
+                        }
+
+
                     }
                 }
 
@@ -439,7 +490,7 @@ public class DescargasHelper {
                 @Override
                 public void onResponse(Call<FacturasResponse> call2, Response<FacturasResponse> response2) {
                     mContentsArray2.clear();
-
+                    realm2 = Realm.getDefaultInstance();
                     if (response2.isSuccessful()) {
 
 
@@ -450,7 +501,7 @@ public class DescargasHelper {
                         mContentsArray2.addAll(response2.body().getFacturas());
 
                         try {
-                            realm2 = Realm.getDefaultInstance();
+
                             realm2.beginTransaction();
                             //TODO verificar cada cuanto se va a actualizar el inventario.
                             //realm.copyToRealm(mContentsArray2);
@@ -468,7 +519,13 @@ public class DescargasHelper {
                     else {
                         // Toast.makeText(ProductosActivity.this, getString(R.string.error) + " CODE: " +response.code(), Toast.LENGTH_LONG).show();
                         RealmResults<invoice> results2 = realm2.where(invoice.class).findAll();
-                        mContentsArray2.addAll(results2);
+                        if (results2.isEmpty()){
+                            Toast.makeText(mContext, "No hay datos", Toast.LENGTH_SHORT).show();
+                        }else{
+                            mContentsArray2.addAll(results2);
+                        }
+
+
                     }
                     dialog.dismiss();
 
@@ -510,7 +567,7 @@ public class DescargasHelper {
                 @Override
                 public void onResponse(Call<SysconfResponse> call2, Response<SysconfResponse> response2) {
                     mContentsArraySys.clear();
-
+                    realmSysconfig = Realm.getDefaultInstance();
                     if (response2.isSuccessful()) {
 
 
@@ -521,7 +578,7 @@ public class DescargasHelper {
                         mContentsArraySys.addAll(response2.body().getSysconf());
 
                         try {
-                            realmSysconfig = Realm.getDefaultInstance();
+
                             realmSysconfig.beginTransaction();
                             //TODO verificar cada cuanto se va a actualizar el inventario.
                             //realm.copyToRealm(mContentsArray2);
@@ -539,7 +596,14 @@ public class DescargasHelper {
                     else {
                         // Toast.makeText(ProductosActivity.this, getString(R.string.error) + " CODE: " +response.code(), Toast.LENGTH_LONG).show();
                         RealmResults<Sysconf> results2 = realmSysconfig.where(Sysconf.class).findAll();
-                        mContentsArraySys.addAll(results2);
+
+                        if (results2.isEmpty()){
+                            Toast.makeText(mContext, "No hay datos", Toast.LENGTH_SHORT).show();
+                        }else{
+                            mContentsArraySys.addAll(results2);
+                        }
+
+
                     }
                     dialog.dismiss();
 
@@ -573,13 +637,13 @@ public class DescargasHelper {
                 @Override
                 public void onResponse(Call<UsuariosResponse> callusuarios, Response<UsuariosResponse> response) {
                     mContentsArrayUsuarios.clear();
-
+                    realmUsuarios = Realm.getDefaultInstance();
 
                     if (response.isSuccessful()) {
                         mContentsArrayUsuarios.addAll(response.body().getUsuarios());
 
                         try {
-                            realmUsuarios = Realm.getDefaultInstance();
+
 
                             // Work with Realm
                             realmUsuarios.beginTransaction();
@@ -596,7 +660,13 @@ public class DescargasHelper {
                     else {
                         //  Toast.makeText(DescargarInventario.this, getString(R.string.error) + " CODE: " +response.code(), Toast.LENGTH_LONG).show();
                         RealmResults<Usuarios> results = realmUsuarios.where(Usuarios.class).findAll();
-                        mContentsArrayUsuarios.addAll(results);
+
+                        if (results.isEmpty()){
+                            Toast.makeText(mContext, "No hay datos", Toast.LENGTH_SHORT).show();
+                        }else{
+                            mContentsArrayUsuarios.addAll(results);
+                        }
+
                     }
                 }
 
@@ -626,7 +696,7 @@ public class DescargasHelper {
                 @Override
                 public void onResponse(Call<RecibosResponse> call2, Response<RecibosResponse> response2) {
                     mContentsArrayRecibos.clear();
-
+                    realmRecibos = Realm.getDefaultInstance();
                     if (response2.isSuccessful()) {
 
 
@@ -637,7 +707,7 @@ public class DescargasHelper {
                         mContentsArrayRecibos.addAll(response2.body().getRecibos());
 
                         try {
-                            realmRecibos = Realm.getDefaultInstance();
+
                             realmRecibos.beginTransaction();
                             //TODO verificar cada cuanto se va a actualizar el inventario.
                             //realm.copyToRealm(mContentsArray2);
@@ -655,7 +725,14 @@ public class DescargasHelper {
                     else {
                         // Toast.makeText(ProductosActivity.this, getString(R.string.error) + " CODE: " +response.code(), Toast.LENGTH_LONG).show();
                         RealmResults<recibos> results2 = realmRecibos.where(recibos.class).findAll();
-                        mContentsArrayRecibos.addAll(results2);
+
+                        if (results2.isEmpty()){
+                            Toast.makeText(mContext, "No hay datos", Toast.LENGTH_SHORT).show();
+                        }else{
+                            mContentsArrayRecibos.addAll(results2);
+                        }
+
+
                     }
                     dialog.dismiss();
 

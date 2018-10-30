@@ -16,8 +16,10 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.friendlypos.R;
+import com.friendlypos.crearCliente.modelo.ClienteNuevo;
 import com.friendlypos.login.activity.LoginActivity;
 import com.friendlypos.login.util.SessionPrefes;
+import com.friendlypos.preventas.modelo.Numeracion;
 import com.friendlypos.principal.activity.BluetoothActivity;
 import com.friendlypos.principal.activity.ClientesActivity;
 import com.friendlypos.principal.activity.MenuPrincipal;
@@ -27,6 +29,7 @@ import java.util.regex.Pattern;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import io.realm.Realm;
 
 public class crearCliente extends BluetoothActivity {
 
@@ -187,29 +190,69 @@ public class crearCliente extends BluetoothActivity {
                 longitud = cliente_longitud_nuevo.getText().toString();
                 latitud = cliente_latitud_nuevo.getText().toString();
 
-/*
-                if (isValidEmail(correo) && isValidMobile(telefono)
-                        && isValidName(nombre) && isValidID(cedula)) {
+
+                if (
+
+
+                        isValidEmail(email) && isValidMobile(phone)
+                        && isValidName(name)) {
                     enviarInfo();
-                } else if (!isValidName(nombre)) {
-                    txt_nombre.setError("Nombre Invalido");
-                    txt_nombre.requestFocus();
-                } else if (!isValidID(cedula)) {
-                    txt_cedula.setError("Cedula Invalida");
-                    txt_cedula.requestFocus();
-                } else if (!isValidEmail(correo)) {
-                    txt_Correo.setError("Correo Invalido");
-                    txt_Correo.requestFocus();
-                } else if (!isValidMobile(telefono)) {
-                    txt_telefono.setError("Telefono Invalido");
-                    txt_telefono.requestFocus();
+                } else if (!isValidName(name)) {
+                    cliente_name_nuevo.setError("Nombre Invalido");
+                    cliente_name_nuevo.requestFocus();
+                } else if (!isValidEmail(email)) {
+                    cliente_email_nuevo.setError("Correo Invalido");
+                    cliente_email_nuevo.requestFocus();
+                } else if (!isValidMobile(phone)) {
+                    cliente_phone_nuevo.setError("Telefono Invalido");
+                    cliente_phone_nuevo.requestFocus();
                 }
-                break;*/
 
                 break;
 
         }
 
+
+    }
+
+    public void enviarInfo(){
+
+        final Realm realm5 = Realm.getDefaultInstance();
+        realm5.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm5) {
+                ClienteNuevo clienteNuevo = new ClienteNuevo(); // unmanaged
+
+                clienteNuevo.setIdtype(idtype);
+                clienteNuevo.setCard(card);
+                clienteNuevo.setFe(fe);
+
+                clienteNuevo.setLongitud(Double.parseDouble(longitud));
+                clienteNuevo.setLatitud(Double.parseDouble(latitud));
+                clienteNuevo.setPlaca(placa);
+
+                clienteNuevo.setModel(model);
+                clienteNuevo.setDoors(doors);
+                clienteNuevo.setName(name);
+
+                clienteNuevo.setEmail(email);
+                clienteNuevo.setFantasy_name(fantasyname);
+                clienteNuevo.setCompany_name(companyname);
+
+                clienteNuevo.setPhone(phone);
+                clienteNuevo.setCredit_limit(creditlimit);
+                clienteNuevo.setAddress(address);
+
+                clienteNuevo.setCredit_time(credittime);
+
+                realm5.insertOrUpdate(clienteNuevo);
+                Log.d("idinvNUEVOCREADO", clienteNuevo + "");
+
+
+            }
+
+        });
+        realm5.close();
 
     }
 
