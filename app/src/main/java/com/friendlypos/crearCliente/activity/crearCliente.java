@@ -93,8 +93,8 @@ public class crearCliente extends BluetoothActivity {
     String idtype, card, fe, placa, model, doors, name, email, fantasyname, companyname, phone, creditlimit, address, credittime;
     double longitud, latitud;
     GPSTracker gps;
-    double latitude;
-    double longitude;
+    double latitude = 0.0;
+    double longitude = 0.0;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -196,11 +196,17 @@ public class crearCliente extends BluetoothActivity {
 
 
                 if (
-
-
                         isValidEmail(email) && isValidMobile(phone)
-                        && isValidName(name)) {
-                    enviarInfo();
+                        && isValidName(name))
+                {
+
+                    if(latitude == 0.0){
+                        if(longitude == 0.0){
+                        enviarInfo();
+                    }
+                        Toast.makeText(crearCliente.this, "Obtenga la ubicación del cliente", Toast.LENGTH_LONG).show();
+                    }
+
                 } else if (!isValidName(name)) {
                     cliente_name_nuevo.setError("Nombre Invalido");
                     cliente_name_nuevo.requestFocus();
