@@ -14,9 +14,12 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.friendlypos.R;
 import com.friendlypos.crearCliente.modelo.ClienteNuevo;
+import com.friendlypos.distribucion.util.GPSTracker;
 import com.friendlypos.login.activity.LoginActivity;
 import com.friendlypos.login.util.SessionPrefes;
 import com.friendlypos.preventas.modelo.Numeracion;
@@ -46,10 +49,10 @@ public class crearCliente extends BluetoothActivity {
     EditText cliente_fe_nuevo;
 
     @Bind(R.id.cliente_longitud_nuevo)
-    EditText cliente_longitud_nuevo;
+    TextView cliente_longitud_nuevo;
 
     @Bind(R.id.cliente_latitud_nuevo)
-    EditText cliente_latitud_nuevo;
+    TextView cliente_latitud_nuevo;
 
     @Bind(R.id.cliente_placa_nuevo)
     EditText cliente_placa_nuevo;
@@ -87,8 +90,11 @@ public class crearCliente extends BluetoothActivity {
     @Bind(R.id.btnCrearCliente)
     Button btnCrearCliente;
 
-    String idtype, card, fe,longitud, latitud, placa, model, doors, name, email, fantasyname, companyname, phone, creditlimit, address, credittime;
-
+    String idtype, card, fe, placa, model, doors, name, email, fantasyname, companyname, phone, creditlimit, address, credittime;
+    double longitud, latitud;
+    GPSTracker gps;
+    double latitude;
+    double longitude;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -187,8 +193,6 @@ public class crearCliente extends BluetoothActivity {
 
                 address = cliente_address_nuevo.getText().toString();
                 credittime = cliente_credittime_nuevo.getText().toString();
-                longitud = cliente_longitud_nuevo.getText().toString();
-                latitud = cliente_latitud_nuevo.getText().toString();
 
 
                 if (
@@ -209,6 +213,11 @@ public class crearCliente extends BluetoothActivity {
                 }
 
                 break;
+            case R.id.btnUbicacionCliente:
+                obtenerLocalización();
+                cliente_longitud_nuevo.setText("Longitud: " +longitude );
+                cliente_latitud_nuevo.setText("Latitud: " +latitude);
+                break;
 
         }
 
@@ -227,8 +236,8 @@ public class crearCliente extends BluetoothActivity {
                 clienteNuevo.setCard(card);
                 clienteNuevo.setFe(fe);
 
-                clienteNuevo.setLongitud(Double.parseDouble(longitud));
-                clienteNuevo.setLatitud(Double.parseDouble(latitud));
+                clienteNuevo.setLongitud(longitude);
+                clienteNuevo.setLatitud(latitude);
                 clienteNuevo.setPlaca(placa);
 
                 clienteNuevo.setModel(model);
@@ -253,6 +262,24 @@ public class crearCliente extends BluetoothActivity {
 
         });
         realm5.close();
+        Toast.makeText(crearCliente.this, "El cliente se creo correctamente", Toast.LENGTH_LONG).show();
+    }
+
+    public void obtenerLocalización() {
+
+        gps = new GPSTracker(crearCliente.this);
+
+        if (gps.canGetLocation()) {
+
+            latitude = gps.getLatitude();
+            longitude = gps.getLongitude();
+
+        }
+        else {
+            gps.showSettingsAlert();
+
+
+        }
 
     }
 
