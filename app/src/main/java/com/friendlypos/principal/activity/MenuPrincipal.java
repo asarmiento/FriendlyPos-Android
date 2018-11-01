@@ -393,6 +393,14 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
 
             case R.id.btn_descargar_catalogo:
                 //  cambioDatosEmpresa = getDescargaDatosEmpresa();
+                Realm realm12 = Realm.getDefaultInstance();
+
+                RealmQuery<invoice> query12 = realm12.where(invoice.class).equalTo("subida", 1);
+                final RealmResults<invoice> invoice12 = query12.findAll();
+                Log.d("qweqweq", invoice12.toString());
+
+                if(invoice12.size()== 0){
+
                 cambioDatosEmpresa = session.getPrefDescargaDatos();
 
                     if (cambioDatosEmpresa == 1) {
@@ -401,6 +409,10 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                     } else {
                         Toast.makeText(MenuPrincipal.this, "Descargar datos de la empresa primero", Toast.LENGTH_LONG).show();
                     }
+                }else {
+                    Toast.makeText(MenuPrincipal.this,"Existen facturas pendientes de subir", Toast.LENGTH_LONG).show();
+                }
+                realm12.close();
                 break;
 
             case R.id.btn_descargar_inventario:
