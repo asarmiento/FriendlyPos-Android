@@ -1001,7 +1001,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
         return cod;
     }
 
-    public int codigoDeRespuestaVD(String codS, String messageS, String resultS, int cod){
+    public int codigoDeRespuestaVD(String codS, String messageS, String resultS, int cod, String idFacturaSubida){
         Realm realmPedidos = Realm.getDefaultInstance();
         RealmQuery<invoice> queryPedidos = realmPedidos.where(invoice.class).equalTo("subida", 1).equalTo("facturaDePreventa", "VentaDirecta");
         final RealmResults<invoice> invoicePedidos = queryPedidos.findAll();
@@ -1015,8 +1015,9 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
         }else {
 
             for (int i = 0; i < listaFacturasPedidos.size(); i++) {
-                facturaId = String.valueOf(listaFacturasPedidos.get(i).getId());
+
                 if (codS.equals("1") && resultS.equals("true")) {
+                    facturaId = String.valueOf(listaFacturasPedidos.get(i).getId());
                     actualizarVenta(facturaId);
                     actualizarFactura(facturaId);
                     Toast.makeText(MenuPrincipal.this, messageS, Toast.LENGTH_LONG).show();

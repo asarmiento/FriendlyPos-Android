@@ -19,6 +19,7 @@ public class Inventario extends RealmObject {
     String amount;
     String amount_dist;
     String distributor;
+
     String nombre_producto;
 
 

@@ -110,11 +110,11 @@ public class VentaDirSelecProductoFragment extends BaseFragment implements Searc
         RealmQuery<Inventario> query = realm.where(Inventario.class).notEqualTo("amount", "0").notEqualTo("amount", "0.0").notEqualTo("amount", "0.000");
         RealmResults<Inventario> result1 = query.findAll();
 
-        if (result1.isEmpty()) {
+      if (result1.isEmpty()) {
 
             Toast.makeText(getApplicationContext(),"Favor descargar datos primero",Toast.LENGTH_LONG).show();}
 
-        else{
+    /*    else{
             for (int i = 0; i < result1.size(); i++) {
 
                 List<Inventario> salesList1 = realm.where(Inventario.class).notEqualTo("amount", "0").notEqualTo("amount", "0.0").notEqualTo("amount", "0.000").findAll();
@@ -129,7 +129,7 @@ public class VentaDirSelecProductoFragment extends BaseFragment implements Searc
 
                     final Realm realm3 = Realm.getDefaultInstance();
 
-                    realm3.executeTransactionAsync(new Realm.Transaction() {
+                    realm3.executeTransaction(new Realm.Transaction() {
                         @Override
                         public void execute(Realm bgRealm) {
                             Inventario inv_actualizado = realm3.where(Inventario.class).equalTo("product_id", facturaId2).findFirst();
@@ -137,10 +137,10 @@ public class VentaDirSelecProductoFragment extends BaseFragment implements Searc
                             inv_actualizado.setNombre_producto(desc);
                             realm3.insertOrUpdate(inv_actualizado); // using insert API
                         }
-                    }, new Realm.Transaction.OnSuccess() {
+                 /*   }, new Realm.Transaction.OnSuccess() {
                         @Override
                         public void onSuccess() {
-                            realm3.close();
+                           // realm3.close();
                         }
                     }, new Realm.Transaction.OnError() {
                         @Override
@@ -153,7 +153,7 @@ public class VentaDirSelecProductoFragment extends BaseFragment implements Searc
             }
 
         }
-
+*/
         return result1;
 
     }
