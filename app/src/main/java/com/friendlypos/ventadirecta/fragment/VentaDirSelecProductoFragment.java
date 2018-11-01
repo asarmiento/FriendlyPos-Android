@@ -129,21 +129,29 @@ public class VentaDirSelecProductoFragment extends BaseFragment implements Searc
 
                     final Realm realm3 = Realm.getDefaultInstance();
 
-                    realm3.executeTransaction(new Realm.Transaction() {
-
+                    realm3.executeTransactionAsync(new Realm.Transaction() {
                         @Override
-                        public void execute(Realm realm3) {
-
+                        public void execute(Realm bgRealm) {
                             Inventario inv_actualizado = realm3.where(Inventario.class).equalTo("product_id", facturaId2).findFirst();
                             //  inv_actualizado.setProducto(new RealmList<Productos>(salesList2.toArray(new Productos[salesList2.size()])));
                             inv_actualizado.setNombre_producto(desc);
                             realm3.insertOrUpdate(inv_actualizado); // using insert API
                         }
+                    }, new Realm.Transaction.OnSuccess() {
+                        @Override
+                        public void onSuccess() {
+                            realm3.close();
+                        }
+                    }, new Realm.Transaction.OnError() {
+                        @Override
+                        public void onError(Throwable error) {
+                            realm3.close();
+                        }
                     });
                 }
 
             }
-            //realm2.close();
+
         }
 
         return result1;

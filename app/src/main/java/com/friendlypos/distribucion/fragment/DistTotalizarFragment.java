@@ -24,6 +24,7 @@ import com.friendlypos.login.modelo.Usuarios;
 import com.friendlypos.login.util.SessionPrefes;
 
 import io.realm.Realm;
+import io.realm.RealmList;
 import io.realm.RealmResults;
 
 import static io.realm.internal.SyncObjectServerFacade.getApplicationContext;
@@ -310,14 +311,23 @@ public class DistTotalizarFragment extends BaseFragment  {
                 factura_actualizada.setSubida(1);
                 factura_actualizada.setFacturaDePreventa("Distribucion");
 
+
                 realm2.insertOrUpdate(factura_actualizada);
                 realm2.close();
 
 
-                Log.d("CREAR DISTRIBUCION", factura_actualizada + "");
+
                 Realm realm5 = Realm.getDefaultInstance();
                 RealmResults<Pivot> result = realm.where(Pivot.class).equalTo("invoice_id", facturaId)/*.equalTo("devuelvo", 0)*/.findAll();
                 Log.d("FACTURANUEVA", result + "");
+
+
+                RealmList <Pivot> results = new RealmList<Pivot>();
+
+                results.addAll(result.subList(0, result.size()));
+                factura_actualizada.setProductofactura(results);
+
+                Log.d("CREAR DISTRIBUCION", factura_actualizada + "");
               //  Pivot pivot  = realm5.where(Pivot.class).equalTo("invoice_id", facturaId).findAll();
             }
         });
