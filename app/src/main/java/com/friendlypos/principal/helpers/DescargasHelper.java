@@ -106,14 +106,13 @@ public class DescargasHelper {
                             realm.close();
                         }
                         Log.d(DescargasHelper.class.getName()+ "CLIENTES", mContentsArray.toString());
-                        //  Toast.makeText(DescargarInventario.this, getString(R.string.success), Toast.LENGTH_SHORT).show();
                     }
                     else {
 
                         RealmResults<Clientes> results = realm.where(Clientes.class).findAll();
 
                         if (results.isEmpty()){
-                            Toast.makeText(mContext, "No hay datos", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(mContext, "Error de descarga, contacte al administrador", Toast.LENGTH_SHORT).show();
                         }else{
                             mContentsArray.addAll(results);
                         }
@@ -124,7 +123,6 @@ public class DescargasHelper {
 
                 @Override
                 public void onFailure(Call<ClientesResponse> call, Throwable t) {
-                    // Toast.makeText(context, getString(R.string.error), Toast.LENGTH_LONG).show();
                 }
             });
             // TODO descarga Bonuses
@@ -152,14 +150,12 @@ public class DescargasHelper {
                             realmBonuses.close();
                         }
                         Log.d(DescargasHelper.class.getName()+"Bonuses", mContentsArrayBonuses.toString());
-                        //  Toast.makeText(DescargarInventario.this, getString(R.string.success), Toast.LENGTH_SHORT).show();
                     }
                     else {
-                        //  Toast.makeText(DescargarInventario.this, getString(R.string.error) + " CODE: " +response.code(), Toast.LENGTH_LONG).show();
                         RealmResults<Bonuses> results = realmBonuses.where(Bonuses.class).findAll();
 
                         if (results.isEmpty()){
-                            Toast.makeText(mContext, "No hay datos", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(mContext, "Error de descarga, contacte al administrador", Toast.LENGTH_SHORT).show();
                         }else{
                             mContentsArrayBonuses.addAll(results);
                         }
@@ -169,7 +165,7 @@ public class DescargasHelper {
 
                 @Override
                 public void onFailure(Call<BonusesResponse> callBonuses, Throwable t) {
-                    // Toast.makeText(context, getString(R.string.error), Toast.LENGTH_LONG).show();
+
                 }
             });
             // TODO descarga Marcas
@@ -197,14 +193,12 @@ public class DescargasHelper {
                             realmMarcas.close();
                         }
                         Log.d(DescargasHelper.class.getName()+"MARCAS", mContentsArrayMarcas.toString());
-                        //  Toast.makeText(DescargarInventario.this, getString(R.string.success), Toast.LENGTH_SHORT).show();
                     }
                     else {
-                        //  Toast.makeText(DescargarInventario.this, getString(R.string.error) + " CODE: " +response.code(), Toast.LENGTH_LONG).show();
                         RealmResults<Marcas> results = realmMarcas.where(Marcas.class).findAll();
 
                         if (results.isEmpty()){
-                            Toast.makeText(mContext, "No hay datos", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(mContext, "Error de descarga, contacte al administrador", Toast.LENGTH_SHORT).show();
                         }else{
                             mContentsArrayMarcas.addAll(results);
                         }
@@ -214,7 +208,7 @@ public class DescargasHelper {
 
                 @Override
                 public void onFailure(Call<MarcasResponse> callMarcas, Throwable t) {
-                    // Toast.makeText(context, getString(R.string.error), Toast.LENGTH_LONG).show();
+
                 }
             });
 
@@ -243,14 +237,14 @@ public class DescargasHelper {
                             realmNumeracion.close();
                         }
                         Log.d(DescargasHelper.class.getName()+"Numeracion", mContentsArrayNumeracion.toString());
-                        //  Toast.makeText(DescargarInventario.this, getString(R.string.success), Toast.LENGTH_SHORT).show();
+
                     }
                     else {
-                        //  Toast.makeText(DescargarInventario.this, getString(R.string.error) + " CODE: " +response.code(), Toast.LENGTH_LONG).show();
+
                         RealmResults<Numeracion> results = realmNumeracion.where(Numeracion.class).findAll();
 
                         if (results.isEmpty()){
-                            Toast.makeText(mContext, "No hay datos", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(mContext, "Error de descarga, contacte al administrador", Toast.LENGTH_SHORT).show();
                         }else{
                             mContentsArrayNumeracion.addAll(results);
                         }
@@ -261,7 +255,7 @@ public class DescargasHelper {
 
                 @Override
                 public void onFailure(Call<NumeracionResponse> callNumeracion, Throwable t) {
-                    // Toast.makeText(context, getString(R.string.error), Toast.LENGTH_LONG).show();
+
                 }
             });
 
@@ -292,14 +286,12 @@ public class DescargasHelper {
                             realmMetodoPago.close();
                         }
                         Log.d(DescargasHelper.class.getName()+"USUARIOSRE", mContentsArrayMetodoPago.toString());
-                        //  Toast.makeText(DescargarInventario.this, getString(R.string.success), Toast.LENGTH_SHORT).show();
                     }
                     else {
-                        //  Toast.makeText(DescargarInventario.this, getString(R.string.error) + " CODE: " +response.code(), Toast.LENGTH_LONG).show();
                         RealmResults<MetodoPago> results = realmMetodoPago.where(MetodoPago.class).findAll();
 
                         if (results.isEmpty()){
-                            Toast.makeText(mContext, "No hay datos", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(mContext, "Error de descarga, contacte al administrador", Toast.LENGTH_SHORT).show();
                         }else{
                             mContentsArrayMetodoPago.addAll(results);
                         }
@@ -309,7 +301,7 @@ public class DescargasHelper {
 
                 @Override
                 public void onFailure(Call<MetodoPagoResponse> callMarcas, Throwable t) {
-                    // Toast.makeText(context, getString(R.string.error), Toast.LENGTH_LONG).show();
+
                 }
             });
 
@@ -340,14 +332,14 @@ public class DescargasHelper {
                             realmTipoProducto.close();
                         }
                         Log.d(DescargasHelper.class.getName()+"TIPOPROD", mContentsArrayTipoProducto.toString());
-                        //  Toast.makeText(DescargarInventario.this, getString(R.string.success), Toast.LENGTH_SHORT).show();
+
                     }
                     else {
-                        //  Toast.makeText(DescargarInventario.this, getString(R.string.error) + " CODE: " +response.code(), Toast.LENGTH_LONG).show();
+
                         RealmResults<TipoProducto> results = realmTipoProducto.where(TipoProducto.class).findAll();
 
                         if (results.isEmpty()){
-                            Toast.makeText(mContext, "No hay datos", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(mContext, "Error de descarga, contacte al administrador", Toast.LENGTH_SHORT).show();
                         }else{
                             mContentsArrayTipoProducto.addAll(results);
                         }
@@ -357,7 +349,7 @@ public class DescargasHelper {
 
                 @Override
                 public void onFailure(Call<TipoProductoResponse> callMarcas, Throwable t) {
-                    // Toast.makeText(context, getString(R.string.error), Toast.LENGTH_LONG).show();
+
                 }
             });
             // TODO descarga Productos
@@ -389,13 +381,12 @@ public class DescargasHelper {
 
                         Log.d(DescargasHelper.class.getName()+"PRODUCTOS", mContentsArray2.toString());
 
-                        //Toast.makeText(ProductosActivity.this, getString(R.string.success), Toast.LENGTH_SHORT).show();
                     }
                     else {
-                        // Toast.makeText(ProductosActivity.this, getString(R.string.error) + " CODE: " +response.code(), Toast.LENGTH_LONG).show();
+
                         RealmResults<Productos> results2 = realm2.where(Productos.class).findAll();
                         if (results2.isEmpty()){
-                            Toast.makeText(mContext, "No hay datos", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(mContext, "Error de descarga, contacte al administrador", Toast.LENGTH_SHORT).show();
                         }else{
                             mContentsArray2.addAll(results2);
                         }
@@ -410,13 +401,12 @@ public class DescargasHelper {
                 public void onFailure(Call<ProductosResponse> call2, Throwable t) {
                     dialog.dismiss();
 
-                    //  Toast.makeText(ProductosActivity.this, getString(R.string.failed), Toast.LENGTH_LONG).show();
 
                 }
             });
         }
         else {
-            //     Toast.makeText(context, getString(R.string.failed), Toast.LENGTH_LONG).show();
+
         }
     }
 
@@ -461,13 +451,13 @@ public class DescargasHelper {
                             realm.close();
                         }
                         Log.d(DescargasHelper.class.getName(), mContentsArray.toString());
-                        //  Toast.makeText(DescargarInventario.this, getString(R.string.success), Toast.LENGTH_SHORT).show();
+
                     }
                     else {
-                        //  Toast.makeText(DescargarInventario.this, getString(R.string.error) + " CODE: " +response.code(), Toast.LENGTH_LONG).show();
+
                         RealmResults<Inventario> results = realm.where(Inventario.class).findAll();
                         if (results.isEmpty()){
-                            Toast.makeText(mContext, "No hay datos", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(mContext, "Error de descarga, contacte al administrador", Toast.LENGTH_SHORT).show();
                         }else{
                             mContentsArray.addAll(results);
                         }
@@ -478,7 +468,7 @@ public class DescargasHelper {
 
                 @Override
                 public void onFailure(Call<InventarioResponse> call, Throwable t) {
-                    // Toast.makeText(context, getString(R.string.error), Toast.LENGTH_LONG).show();
+
                 }
             });
 
@@ -514,13 +504,11 @@ public class DescargasHelper {
 
                        Log.d("finish", mContentsArray2 + " ");
 
-                        //Toast.makeText(ProductosActivity.this, getString(R.string.success), Toast.LENGTH_SHORT).show();
                     }
                     else {
-                        // Toast.makeText(ProductosActivity.this, getString(R.string.error) + " CODE: " +response.code(), Toast.LENGTH_LONG).show();
                         RealmResults<invoice> results2 = realm2.where(invoice.class).findAll();
                         if (results2.isEmpty()){
-                            Toast.makeText(mContext, "No hay datos", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(mContext, "Error de descarga, contacte al administrador", Toast.LENGTH_SHORT).show();
                         }else{
                             mContentsArray2.addAll(results2);
                         }
@@ -534,15 +522,12 @@ public class DescargasHelper {
                 @Override
                 public void onFailure(Call<FacturasResponse> call2, Throwable t) {
                     dialog.dismiss();
-
-                    //  Toast.makeText(ProductosActivity.this, getString(R.string.failed), Toast.LENGTH_LONG).show();
                     RealmResults<invoice> results2 = realm2.where(invoice.class).findAll();
                     mContentsArray2.addAll(results2);
                 }
             });
         }
         else {
-            //     Toast.makeText(context, getString(R.string.failed), Toast.LENGTH_LONG).show();
         }
 
     }
@@ -591,14 +576,12 @@ public class DescargasHelper {
 
                         Log.d("finishSysconf", mContentsArraySys + " ");
 
-                        //Toast.makeText(ProductosActivity.this, getString(R.string.success), Toast.LENGTH_SHORT).show();
                     }
                     else {
-                        // Toast.makeText(ProductosActivity.this, getString(R.string.error) + " CODE: " +response.code(), Toast.LENGTH_LONG).show();
                         RealmResults<Sysconf> results2 = realmSysconfig.where(Sysconf.class).findAll();
 
                         if (results2.isEmpty()){
-                            Toast.makeText(mContext, "No hay datos", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(mContext, "Error de descarga, contacte al administrador", Toast.LENGTH_SHORT).show();
                         }else{
                             mContentsArraySys.addAll(results2);
                         }
@@ -617,7 +600,7 @@ public class DescargasHelper {
             });
         }
         else {
-            //     Toast.makeText(context, getString(R.string.failed), Toast.LENGTH_LONG).show();
+
         }
 
     }
@@ -655,14 +638,13 @@ public class DescargasHelper {
                             realmUsuarios.close();
                         }
                         Log.d("USUARIOSRE", mContentsArrayUsuarios.toString());
-                        //  Toast.makeText(DescargarInventario.this, getString(R.string.success), Toast.LENGTH_SHORT).show();
                     }
                     else {
-                        //  Toast.makeText(DescargarInventario.this, getString(R.string.error) + " CODE: " +response.code(), Toast.LENGTH_LONG).show();
+
                         RealmResults<Usuarios> results = realmUsuarios.where(Usuarios.class).findAll();
 
                         if (results.isEmpty()){
-                            Toast.makeText(mContext, "No hay datos", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(mContext, "Error de descarga, contacte al administrador", Toast.LENGTH_SHORT).show();
                         }else{
                             mContentsArrayUsuarios.addAll(results);
                         }
@@ -672,7 +654,6 @@ public class DescargasHelper {
 
                 @Override
                 public void onFailure(Call<UsuariosResponse> callusuarios, Throwable t) {
-                    // Toast.makeText(context, getString(R.string.error), Toast.LENGTH_LONG).show();
                 }
             });
         }
@@ -720,14 +701,14 @@ public class DescargasHelper {
 
                         Log.d("descargaRecibos", mContentsArrayRecibos + " ");
 
-                        //Toast.makeText(ProductosActivity.this, getString(R.string.success), Toast.LENGTH_SHORT).show();
+
                     }
                     else {
-                        // Toast.makeText(ProductosActivity.this, getString(R.string.error) + " CODE: " +response.code(), Toast.LENGTH_LONG).show();
+
                         RealmResults<recibos> results2 = realmRecibos.where(recibos.class).findAll();
 
                         if (results2.isEmpty()){
-                            Toast.makeText(mContext, "No hay datos", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(mContext, "Error de descarga, contacte al administrador", Toast.LENGTH_SHORT).show();
                         }else{
                             mContentsArrayRecibos.addAll(results2);
                         }
@@ -746,7 +727,7 @@ public class DescargasHelper {
             });
         }
         else {
-            //     Toast.makeText(context, getString(R.string.failed), Toast.LENGTH_LONG).show();
+
         }
 
     }
