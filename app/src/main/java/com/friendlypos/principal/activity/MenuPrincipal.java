@@ -516,9 +516,9 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                         Toast.makeText(MenuPrincipal.this, "Subiendo información...", Toast.LENGTH_SHORT).show();
 
                         facturaId = String.valueOf(listaFacturasVentaDirecta.get(i).getId());
-                        Log.d("facturaId", facturaId + "");
+                        Log.d("facturaIdSub", facturaId + "");
                         EnviarFactura obj = new EnviarFactura(listaFacturasVentaDirecta.get(i));
-                        Log.d("My App", obj + "");
+                        Log.d("MyAppSub", obj + "");
                         subirVentaDirecta.sendPostVentaDirecta(obj);
                     }
                 }
