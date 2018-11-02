@@ -41,7 +41,7 @@ public class SubirHelperProforma {
         mAPIService = BaseManager.getApi();
     }
 
-    public void sendPostProforma(EnviarFactura facturaQuery) {
+    public void sendPostProforma(EnviarFactura facturaQuery, final String cantidadFactura) {
         String token = "Bearer " + SessionPrefes.get(mContext).getToken();
         Log.d("tokenCliente", token + " ");
         if (isOnline()) {
@@ -59,7 +59,7 @@ public class SubirHelperProforma {
                     codigoS = response.body().getCode();
                     mensajeS = response.body().getMessage();
                     resultS= String.valueOf(response.body().isResult());
-                    activity.codigoDeRespuestaProforma(codigoS, mensajeS, resultS, codigo);
+                    activity.codigoDeRespuestaProforma(codigoS, mensajeS, resultS, codigo, cantidadFactura);
 
                 }
                 else{

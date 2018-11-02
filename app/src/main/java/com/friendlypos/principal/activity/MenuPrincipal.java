@@ -490,7 +490,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                         EnviarFactura obj = new EnviarFactura(listaFacturasPedidos.get(i));
                         Log.d("My App", obj + "");
 
-                        subirPreventa.sendPostPreventa(obj);
+                        subirPreventa.sendPostPreventa(obj, facturaId);
 
                     }
                 }
@@ -519,7 +519,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                         Log.d("facturaIdSub", facturaId + "");
                         EnviarFactura obj = new EnviarFactura(listaFacturasVentaDirecta.get(i));
                         Log.d("MyAppSub", obj + "");
-                        subirVentaDirecta.sendPostVentaDirecta(obj);
+                        subirVentaDirecta.sendPostVentaDirecta(obj, facturaId);
                     }
                 }
 
@@ -547,7 +547,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                         Log.d("facturaId", facturaId + "");
                         EnviarFactura obj = new EnviarFactura(listaFacturasProforma.get(i));
                         Log.d("My App", obj + "");
-                        subirProforma.sendPostProforma(obj);
+                        subirProforma.sendPostProforma(obj, facturaId);
                     }
                 }
 
@@ -974,8 +974,22 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
         return networkStateChangeReceiver.isNetworkAvailable(this);
     }
 
-    public int codigoDeRespuesta(String codS, String messageS, String resultS, int cod){
+    public int codigoDeRespuestaPreventa(String codS, String messageS, String resultS, int cod, String idFacturaSubida){
+
+
         Realm realmPedidos = Realm.getDefaultInstance();
+        invoice queryPedidos = realmPedidos.where(invoice.class).equalTo("id", idFacturaSubida).equalTo("subida", 1).equalTo("facturaDePreventa", "Preventa").findFirst();
+
+        if (codS.equals("1") && resultS.equals("true")) {
+            facturaId = String.valueOf(queryPedidos.getId());
+            actualizarVenta(facturaId);
+            actualizarFactura(facturaId);
+            Toast.makeText(MenuPrincipal.this, messageS, Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(MenuPrincipal.this, messageS, Toast.LENGTH_LONG).show();
+        }
+
+      /*  Realm realmPedidos = Realm.getDefaultInstance();
         RealmQuery<invoice> queryPedidos = realmPedidos.where(invoice.class).equalTo("subida", 1).equalTo("facturaDePreventa", "Preventa");
         final RealmResults<invoice> invoicePedidos = queryPedidos.findAll();
         Log.d("SubFacturaInvP", invoicePedidos.toString());
@@ -997,11 +1011,49 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                     Toast.makeText(MenuPrincipal.this, messageS, Toast.LENGTH_LONG).show();
                 }
             }
-        }
+        }*/
         return cod;
     }
 
     public int codigoDeRespuestaVD(String codS, String messageS, String resultS, int cod, String idFacturaSubida){
+        Realm realmPedidos = Realm.getDefaultInstance();
+        invoice queryPedidos = realmPedidos.where(invoice.class).equalTo("id", idFacturaSubida).equalTo("subida", 1).equalTo("facturaDePreventa", "VentaDirecta").findFirst();
+
+
+        if (codS.equals("1") && resultS.equals("true")) {
+            facturaId = String.valueOf(queryPedidos.getId());
+            actualizarVenta(facturaId);
+            actualizarFactura(facturaId);
+            Toast.makeText(MenuPrincipal.this, messageS, Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(MenuPrincipal.this, messageS, Toast.LENGTH_LONG).show();
+        }
+
+
+    /* final RealmResults<invoice> invoicePedidos = queryPedidos.findAll();
+        Log.d("SubFacturaInvP", invoicePedidos.toString());
+        List<invoice> listaFacturasPedidos = realmPedidos.copyFromRealm(invoicePedidos);
+        Log.d("SubFacturaListaP", listaFacturasPedidos + "");
+        realmPedidos.close();
+
+        if(listaFacturasPedidos.size()== 0){
+            Toast.makeText(MenuPrincipal.this,"No hay más facturas para subir", Toast.LENGTH_LONG).show();
+        }else {
+
+            for (int i = 0; i < listaFacturasPedidos.size(); i++) {
+
+                if (codS.equals("1") && resultS.equals("true")) {
+                    facturaId = String.valueOf(listaFacturasPedidos.get(i).getId());
+                    actualizarVenta(facturaId);
+                    actualizarFactura(facturaId);
+                    Toast.makeText(MenuPrincipal.this, messageS, Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(MenuPrincipal.this, messageS, Toast.LENGTH_LONG).show();
+                }
+            }
+        }*/
+
+/*
         Realm realmPedidos = Realm.getDefaultInstance();
         RealmQuery<invoice> queryPedidos = realmPedidos.where(invoice.class).equalTo("subida", 1).equalTo("facturaDePreventa", "VentaDirecta");
         final RealmResults<invoice> invoicePedidos = queryPedidos.findAll();
@@ -1026,6 +1078,8 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                 }
             }
         }
+        */
+
         return cod;
     }
 
@@ -1084,7 +1138,24 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
         return cod;
     }
 
-    public int codigoDeRespuestaProforma(String codS, String messageS, String resultS, int cod){
+    public int codigoDeRespuestaProforma(String codS, String messageS, String resultS, int cod, String idFacturaSubida){
+
+
+        Realm realmPedidos = Realm.getDefaultInstance();
+        invoice queryPedidos = realmPedidos.where(invoice.class).equalTo("id", idFacturaSubida).equalTo("subida", 1).equalTo("facturaDePreventa", "Proforma").findFirst();
+
+
+        if (codS.equals("1") && resultS.equals("true")) {
+            facturaId = String.valueOf(queryPedidos.getId());
+            actualizarVenta(facturaId);
+            actualizarFactura(facturaId);
+            Toast.makeText(MenuPrincipal.this, messageS, Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(MenuPrincipal.this, messageS, Toast.LENGTH_LONG).show();
+        }
+
+        /*
+
         Realm realmPedidos = Realm.getDefaultInstance();
         RealmQuery<invoice> queryPedidos = realmPedidos.where(invoice.class).equalTo("subida", 1).equalTo("facturaDePreventa", "Proforma");
         final RealmResults<invoice> invoicePedidos = queryPedidos.findAll();
@@ -1107,7 +1178,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                     Toast.makeText(MenuPrincipal.this, messageS, Toast.LENGTH_LONG).show();
                 }
             }
-        }
+        }*/
         return cod;
     }
 

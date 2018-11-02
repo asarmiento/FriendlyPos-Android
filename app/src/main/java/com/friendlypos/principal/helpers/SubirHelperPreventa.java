@@ -48,7 +48,7 @@ public class SubirHelperPreventa {
         mAPIService = BaseManager.getApi();
     }
 
-    public void sendPostPreventa(EnviarFactura facturaQuery) {
+    public void sendPostPreventa(EnviarFactura facturaQuery, final String cantidadFactura) {
         String token = "Bearer " + SessionPrefes.get(mContext).getToken();
         Log.d("tokenCliente", token + " ");
         if (isOnline()) {
@@ -67,7 +67,7 @@ public class SubirHelperPreventa {
                     mensajeS = response.body().getMessage();
                     resultS= String.valueOf(response.body().isResult());
 
-                    activity.codigoDeRespuesta(codigoS, mensajeS, resultS, codigo);
+                    activity.codigoDeRespuestaPreventa(codigoS, mensajeS, resultS, codigo, cantidadFactura);
                 }
                 else{
                 }

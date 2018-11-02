@@ -44,7 +44,7 @@ public class SubirHelperVentaDirecta {
         mAPIService = BaseManager.getApi();
     }
 
-    public void sendPostVentaDirecta(EnviarFactura facturaQuery) {
+    public void sendPostVentaDirecta(EnviarFactura facturaQuery, final String cantidadFactura) {
         String token = "Bearer " + SessionPrefes.get(mContext).getToken();
         Log.d("tokenCliente", token + " ");
         if (isOnline()) {
@@ -56,22 +56,21 @@ public class SubirHelperVentaDirecta {
             @Override
             public void onResponse(Call<invoice> call, Response<invoice> response) {
 
+                    if (response.isSuccessful()) {
+                        idFacturaSubida = response.body().getId();
+                        // showResponse(response.body().toString());
+                        Log.d("respVentaDirecta", response.body().toString());
+                        codigo = response.code();
+                        codigoS = response.body().getCode();
+                        mensajeS = response.body().getMessage();
+                        resultS = String.valueOf(response.body().isResult());
 
+                        activity.codigoDeRespuestaVD(codigoS, mensajeS, resultS, codigo, cantidadFactura);
 
-                if(response.isSuccessful()) {
-                    idFacturaSubida = response.body().getId();
-                   // showResponse(response.body().toString());
-                    Log.d("respVentaDirecta",response.body().toString());
-                    codigo = response.code();
-                    codigoS = response.body().getCode();
-                    mensajeS = response.body().getMessage();
-                    resultS= String.valueOf(response.body().isResult());
-
-                    activity.codigoDeRespuestaVD(codigoS, mensajeS, resultS, codigo, idFacturaSubida);
+                        Log.d("respVentaDirecta", response.body().toString());
+                    } else {
+                    }
                 }
-                else{
-                }
-            }
 
             @Override
             public void onFailure(Call<invoice> call, Throwable t) {
