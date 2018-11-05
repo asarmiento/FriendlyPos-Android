@@ -269,11 +269,11 @@ public class VentaDirSelecProductoFragment extends BaseFragment implements Searc
 
         for (Inventario model : models) {
 
-            if(model.getNombre_producto() == null){
+            if(model.getDescription() == null){
 
             }else{
 
-            String text = model.getNombre_producto().toLowerCase();
+            String text = model.getDescription().toLowerCase();
                 Log.d("FiltroVentaDirecta", text);
                 if (text.contains(query)) {
                 filteredModelList.add(model);

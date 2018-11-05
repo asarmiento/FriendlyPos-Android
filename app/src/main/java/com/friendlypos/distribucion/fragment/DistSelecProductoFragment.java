@@ -115,7 +115,7 @@ public class DistSelecProductoFragment extends BaseFragment implements SearchVie
 
             Toast.makeText(getApplicationContext(),"Favor descargar datos primero",Toast.LENGTH_LONG).show();}
 
-        else{
+      /*  else{
             for (int i = 0; i < result2.size(); i++) {
 
                 List<Inventario> salesList1 = realm.where(Inventario.class).notEqualTo("amount", "0").notEqualTo("amount", "0.0").notEqualTo("amount", "0.000").findAll();
@@ -154,7 +154,7 @@ public class DistSelecProductoFragment extends BaseFragment implements SearchVie
                 }
             }
 
-        }
+        }*/
 
         return result2;
 
@@ -264,11 +264,11 @@ public class DistSelecProductoFragment extends BaseFragment implements SearchVie
         final List<Inventario> filteredModelList = new ArrayList<>();
         for (Inventario model : models) {
 
-                if(model.getNombre_producto() == null){
+                if(model.getDescription() == null){
 
                 }else{
 
-            final String text = model.getNombre_producto().toLowerCase();
+            final String text = model.getDescription().toLowerCase();
             Log.d("dasdad", text);
             if (text.contains(query)) {
                 filteredModelList.add(model);

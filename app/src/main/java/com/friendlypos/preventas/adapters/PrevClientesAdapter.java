@@ -462,7 +462,7 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
             });
 
             activity.initCurrentInvoice(String.valueOf(nextId), "3", numFactura, 0.0, 0.0, Functions.getDate(), Functions.get24Time(),
-                    Functions.getDate(), Functions.get24Time(), Functions.getDate(), "3", metodoPagoId, "", "", "", "", "", "", "", "", "", "", "", "", fecha,
+                    Functions.getDate(), Functions.get24Time(), Functions.getDate(), "2", metodoPagoId, "", "", "", "", "", "", "", "", "", "", "", "", fecha,
                     "", "");
 
             activity.initCurrentVenta(String.valueOf(nextId), String.valueOf(nextId), idCliente, nombreCliente, "6", "3", "0", "0", fecha, fecha, "0", 1, 1, "Preventa");

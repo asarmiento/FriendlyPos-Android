@@ -114,7 +114,7 @@ public class VentaDirSeleccionarProductoAdapter  extends RecyclerView.Adapter<Ve
 
         realm.close();
         // TRANSACCION PARA ACTUALIZAR CAMPOS DE LA TABLA VENTAS
-        final Realm realm3 = Realm.getDefaultInstance();
+     /*   final Realm realm3 = Realm.getDefaultInstance();
 
             try {
                 realm3.executeTransaction(new Realm.Transaction() {
@@ -135,7 +135,7 @@ public class VentaDirSeleccionarProductoAdapter  extends RecyclerView.Adapter<Ve
                 Toast.makeText(context, "error", Toast.LENGTH_SHORT).show();
 
 
-        }
+        }*/
 
         if (status.equals("Activo")) {
             holder.txt_producto_factura_nombre.setText(description);
@@ -165,6 +165,10 @@ public class VentaDirSeleccionarProductoAdapter  extends RecyclerView.Adapter<Ve
         else{
             holder.cardView.setVisibility(View.GONE);
             holder.cardView.getLayoutParams().height = 0;
+            ViewGroup.MarginLayoutParams layoutParams =
+                    (ViewGroup.MarginLayoutParams) holder.cardView.getLayoutParams();
+            layoutParams.setMargins(0, 0,0, 0);
+            holder.cardView.requestLayout();
             Log.d("inactivo", "inactivo");
         }
         }

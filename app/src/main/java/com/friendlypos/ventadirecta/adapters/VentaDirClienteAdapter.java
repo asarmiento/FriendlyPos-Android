@@ -372,33 +372,33 @@ public class VentaDirClienteAdapter extends RecyclerView.Adapter<VentaDirCliente
                 int length = String.valueOf(valor).length();
 
                 if(length == 1){
-                    numFactura = idUsuario + "02-" + "000000" + nextId;
+                    numFactura = idUsuario + "01-" + "000000" + nextId;
                 }
                 else if(length == 2){
-                    numFactura = idUsuario + "02-" + "00000" + nextId;
+                    numFactura = idUsuario + "01-" + "00000" + nextId;
                 }
                 else if(length == 3){
-                    numFactura = idUsuario + "02-" + "0000" + nextId;
+                    numFactura = idUsuario + "01-" + "0000" + nextId;
                 }
                 else if(length == 4){
-                    numFactura = idUsuario + "02-" + "000" + nextId;
+                    numFactura = idUsuario + "01-" + "000" + nextId;
                 }
                 else if(length == 5){
-                    numFactura = idUsuario + "02-" + "00" + nextId;
+                    numFactura = idUsuario + "01-" + "00" + nextId;
                 }
                 else if(length == 6){
-                    numFactura = idUsuario + "02-" + "0" + nextId;
+                    numFactura = idUsuario + "01-" + "0" + nextId;
                 }
                 else if(length == 7){
-                    numFactura = idUsuario + "02-" + nextId;
+                    numFactura = idUsuario + "01-" + nextId;
                 }
 
             }
         });
 
         //TODO MODIFICAR CON EL IDS CONSECUTIVOS (FACTURA Y NUMERACION)
-        activity.initCurrentInvoice(String.valueOf(nextId), "3", idUsuario + "01-"+ "000000"+nextId, 0.0, 0.0, Functions.getDate(), Functions.get24Time(),
-                Functions.getDate(), Functions.get24Time(), Functions.getDate(), "2", metodoPagoId, "", "", "", "", "", "", "", "", "", "", "", "", fecha,
+        activity.initCurrentInvoice(String.valueOf(nextId), "3", numFactura, 0.0, 0.0, Functions.getDate(), Functions.get24Time(),
+                Functions.getDate(), Functions.get24Time(), Functions.getDate(), "1", metodoPagoId, "", "", "", "", "", "", "", "", "", "", "", "", fecha,
                 "", "", 1, 0);
 
         activity.initCurrentVenta(String.valueOf(nextId), String.valueOf(nextId), idCliente, nombreCliente, "6", "2", "0", "0", fecha, fecha, "0", 1, 1, "VentaDirecta");
