@@ -417,7 +417,7 @@ public class VentaDirTotalizarFragment extends BaseFragment  {
 
                 String nombreEscrito = client_name.getText().toString();
 
-                if (nombreEscrito.matches("")) {
+                if (nombreEscrito.matches(" ")) {
                     Log.d("nombreCam",  "Nombre no cambio");
                 }else{
                     Log.d("nombreCam",  "Nombre cambio");

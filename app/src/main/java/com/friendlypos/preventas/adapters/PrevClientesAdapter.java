@@ -465,7 +465,7 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
                     Functions.getDate(), Functions.get24Time(), Functions.getDate(), "2", metodoPagoId, "", "", "", "", "", "", "", "", "", "", "", "", fecha,
                     "", "");
 
-            activity.initCurrentVenta(String.valueOf(nextId), String.valueOf(nextId), idCliente, nombreCliente, "6", "3", "0", "0", fecha, fecha, "0", 1, 1, "Preventa");
+            activity.initCurrentVenta(String.valueOf(nextId), String.valueOf(nextId), idCliente, " ", "6", "3", "0", "0", fecha, fecha, "0", 1, 1, "Preventa");
 
             final Realm realm5 = Realm.getDefaultInstance();
             realm5.executeTransaction(new Realm.Transaction() {
@@ -534,7 +534,7 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
                     Functions.getDate(), Functions.get24Time(), Functions.getDate(), "3", metodoPagoId, "", "", "", "", "", "", "", "", "", "", "", "", fecha,
                     "", "");
 
-            activity.initCurrentVenta(String.valueOf(nextId), String.valueOf(nextId), idCliente, nombreCliente, "6", "3", "0", "0", fecha, fecha, "0", 1, 1, "Proforma");
+            activity.initCurrentVenta(String.valueOf(nextId), String.valueOf(nextId), idCliente, " ", "6", "3", "0", "0", fecha, fecha, "0", 1, 1, "Proforma");
 
             final Realm realm5 = Realm.getDefaultInstance();
             realm5.executeTransaction(new Realm.Transaction() {

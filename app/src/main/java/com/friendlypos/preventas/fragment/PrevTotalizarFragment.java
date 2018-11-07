@@ -428,7 +428,7 @@ public class PrevTotalizarFragment extends BaseFragment {
                 Log.d("ENVIADOSALE", sale_actualizada + "");
                 String nombreEscrito = client_name.getText().toString();
 
-                if (nombreEscrito.matches("")) {
+                if (nombreEscrito.matches(" ")) {
                     Log.d("NombrenoCambio", "Nombre no cambio");
                 }
                 else {
