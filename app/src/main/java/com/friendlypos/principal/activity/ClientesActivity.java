@@ -134,8 +134,8 @@ public class ClientesActivity extends BluetoothActivity implements SearchView.On
         switch (item.getItemId()) {
             case R.id.menu_crearNuevo:
 
-                Intent intent = new Intent(getApplication(), crearCliente.class);
-                startActivity(intent);
+            /*    Intent intent = new Intent(getApplication(), crearCliente.class);
+                startActivity(intent);*/
                 break;
         }
         return false;
