@@ -1851,7 +1851,7 @@ public class PrinterFunctions {
         String currentDateandTime = sdf.format(new Date());
 
         Realm realm = Realm.getDefaultInstance();
-        RealmResults<invoice> result = realm.where(invoice.class).equalTo("date", currentDateandTime).equalTo("payment_method_id", "1").equalTo("facturaDePreventa", "VentaDirecta").or().equalTo("facturaDePreventa", "Distribucion").findAll();
+        RealmResults<invoice> result = realm.where(invoice.class).equalTo("payment_method_id", "1").equalTo("date", currentDateandTime).equalTo("facturaDePreventa", "VentaDirecta").or().equalTo("facturaDePreventa", "Distribucion").findAll();
 
         if (result.isEmpty()) {
             send = "No hay facturas emitidas";
@@ -1859,17 +1859,22 @@ public class PrinterFunctions {
             printLiqContadoTotal= 0.0;
             for (int i = 0; i < result.size(); i++) {
 
-                List<invoice> salesList1 = realm.where(invoice.class).equalTo("date", currentDateandTime).equalTo("payment_method_id", "1").equalTo("facturaDePreventa", "VentaDirecta").or().equalTo("facturaDePreventa", "Distribucion").findAll();
-
+                List<invoice> salesList1 = realm.where(invoice.class).equalTo("payment_method_id", "1").equalTo("date", currentDateandTime).equalTo("facturaDePreventa", "VentaDirecta").or().equalTo("facturaDePreventa", "Distribucion").findAll();
+                String pago = salesList1.get(i).getPayment_method_id();
                 String factNum = salesList1.get(i).getNumeration();
                 String factFecha = salesList1.get(i).getDate();
 
+
                 double factTotal = Double.parseDouble(salesList1.get(i).getTotal());
 
+                if(pago.equals("1")){
                 send += String.format("%-5s      %.20s      %-6s", factNum, factFecha, Functions.doubleToString1(factTotal)) + "\r\n";
                 printLiqContadoTotal = printLiqContadoTotal + factTotal;
 
-                Log.d("LiqContado", send + "");
+                Log.d("LiqContado", send + "");}
+                else{
+
+                }
             }
         }
         return send;
@@ -1882,7 +1887,7 @@ public class PrinterFunctions {
         String currentDateandTime = sdf.format(new Date());
 
         Realm realm = Realm.getDefaultInstance();
-        RealmResults<invoice> result = realm.where(invoice.class).equalTo("date", currentDateandTime).equalTo("payment_method_id", "2").equalTo("facturaDePreventa", "VentaDirecta").or().equalTo("facturaDePreventa", "Distribucion").findAll();
+        RealmResults<invoice> result = realm.where(invoice.class).equalTo("payment_method_id", "2").equalTo("date", currentDateandTime).equalTo("facturaDePreventa", "VentaDirecta").or().equalTo("facturaDePreventa", "Distribucion").findAll();
 
         if (result.isEmpty()) {
             send = "No hay facturas emitidas";
@@ -1890,17 +1895,23 @@ public class PrinterFunctions {
             printLiqCreditoTotal= 0.0;
             for (int i = 0; i < result.size(); i++) {
 
-                List<invoice> salesList1 = realm.where(invoice.class).equalTo("date", currentDateandTime).equalTo("payment_method_id", "2").equalTo("facturaDePreventa", "VentaDirecta").or().equalTo("facturaDePreventa", "Distribucion").findAll();
+                List<invoice> salesList1 = realm.where(invoice.class).equalTo("payment_method_id", "2").equalTo("date", currentDateandTime).equalTo("facturaDePreventa", "VentaDirecta").or().equalTo("facturaDePreventa", "Distribucion").findAll();
 
+                String pago = salesList1.get(i).getPayment_method_id();
                 String factNum = salesList1.get(i).getNumeration();
                 String factFecha = salesList1.get(i).getDate();
 
                 double factTotal = Double.parseDouble(salesList1.get(i).getTotal());
 
+                if(pago.equals("2")){
+
                 send += String.format("%-5s      %.20s      %-6s", factNum, factFecha, Functions.doubleToString1(factTotal)) + "\r\n";
                 printLiqCreditoTotal = printLiqCreditoTotal + factTotal;
 
-                Log.d("LiqCredito", send + "");
+                Log.d("LiqCredito", send + "");}
+                else{
+
+                }
             }
         }
         return send;
