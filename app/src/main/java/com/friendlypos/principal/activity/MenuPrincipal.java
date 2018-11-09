@@ -953,6 +953,13 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                 finish();
                 break;
 
+            case R.id.clickGrafico:
+                Intent graf;
+                graf = new Intent(MenuPrincipal.this, GraficoActivity.class);
+                startActivity(graf);
+                finish();
+                break;
+
         }
     }
 
