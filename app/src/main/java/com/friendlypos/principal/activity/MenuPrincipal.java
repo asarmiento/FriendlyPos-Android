@@ -458,11 +458,13 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
 
                     for (int i = 0; i < listaFacturas.size(); i++) {
                         Toast.makeText(MenuPrincipal.this, "Subiendo información...", Toast.LENGTH_SHORT).show();
+
                         facturaId = String.valueOf(listaFacturas.get(i).getId());
                         Log.d("facturaId", facturaId + "");
                         EnviarFactura obj = new EnviarFactura(listaFacturas.get(i));
                         Log.d("My App", obj + "");
-                        subir1.sendPost(obj);
+
+                        subir1.sendPost(obj, facturaId);
                         }
                 }
                 break;
@@ -1118,7 +1120,22 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
 
 
 
-    public int codigoDeRespuestaDistr(String codS, String messageS, String resultS, int cod){
+    public int codigoDeRespuestaDistr(String codS, String messageS, String resultS, int cod, String idFacturaSubida){
+
+        Realm realmPedidos = Realm.getDefaultInstance();
+        invoice queryPedidos = realmPedidos.where(invoice.class).equalTo("id", idFacturaSubida).equalTo("subida", 1).equalTo("facturaDePreventa", "Distribucion").findFirst();
+
+        if (codS.equals("1") && resultS.equals("true")) {
+            facturaId = String.valueOf(queryPedidos.getId());
+            actualizarVenta(facturaId);
+            actualizarFactura(facturaId);
+            Toast.makeText(MenuPrincipal.this, messageS, Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(MenuPrincipal.this, messageS, Toast.LENGTH_LONG).show();
+        }
+
+
+        /*
         Realm realmPedidos = Realm.getDefaultInstance();
         RealmQuery<invoice> queryPedidos = realmPedidos.where(invoice.class).equalTo("subida", 1).equalTo("facturaDePreventa", "Distribucion");
         final RealmResults<invoice> invoicePedidos = queryPedidos.findAll();
@@ -1141,7 +1158,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                     Toast.makeText(MenuPrincipal.this, messageS, Toast.LENGTH_LONG).show();
                 }
             }
-        }
+        }*/
         return cod;
     }
 
