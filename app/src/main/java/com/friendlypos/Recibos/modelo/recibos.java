@@ -35,6 +35,8 @@ public class recibos extends RealmObject {
     int abonado = 0;
     double montoCancelado= 0.0;
 
+    private boolean isSelected;
+
     public double getMontoCancelado() {
         return montoCancelado;
     }
@@ -113,6 +115,14 @@ public class recibos extends RealmObject {
 
     public void setObservaciones(String observaciones) {
         this.observation = observaciones;
+    }
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
     }
 
     @Override

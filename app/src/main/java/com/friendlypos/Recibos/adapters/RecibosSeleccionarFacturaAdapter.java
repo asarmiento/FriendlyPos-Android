@@ -11,6 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -88,6 +90,19 @@ public class RecibosSeleccionarFacturaAdapter extends RecyclerView.Adapter<Recib
         holder.txt_producto_factura_TotalRecibos.setText("Total: " + String.format("%,.2f", total));
         holder.txt_producto_factura_PagoRecibos.setText("Pagado: " + String.format("%,.2f", pago));
         holder.fillData(inventario);
+
+        holder.checkbox.setOnCheckedChangeListener(null);
+
+        //if true, your checkbox will be selected, else unselected
+        holder.checkbox.setChecked(productosList.get(position).isSelected());
+
+        holder.checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                productosList.get(holder.getAdapterPosition()).setSelected(isChecked);
+                Toast.makeText(context,  productosList.get(position).isSelected() + "" , Toast.LENGTH_LONG).show();
+            }
+        });
 
 
         if(selected_position==position){
@@ -211,7 +226,7 @@ public class RecibosSeleccionarFacturaAdapter extends RecyclerView.Adapter<Recib
 
         private TextView txt_producto_factura_numeracionRecibos, txt_producto_factura_FaltanteRecibos, txt_producto_factura_TotalRecibos, txt_producto_factura_PagoRecibos;
         protected CardView cardView;
-
+        private CheckBox checkbox;
         public CharacterViewHolder(View view) {
             super(view);
             cardView = (CardView) view.findViewById(R.id.cardViewSelecFacRecibos);
@@ -219,7 +234,7 @@ public class RecibosSeleccionarFacturaAdapter extends RecyclerView.Adapter<Recib
             txt_producto_factura_FaltanteRecibos = (TextView) view.findViewById(R.id.txt_producto_factura_FaltanteRecibos);
             txt_producto_factura_TotalRecibos = (TextView) view.findViewById(R.id.txt_producto_factura_TotalRecibos);
             txt_producto_factura_PagoRecibos = (TextView) view.findViewById(R.id.txt_producto_factura_PagoRecibos);
-
+            checkbox = (CheckBox) view.findViewById(R.id.checkbox);
 
 
         }
