@@ -21,8 +21,10 @@ import com.friendlypos.R;
 import com.friendlypos.Recibos.activity.RecibosActivity;
 import com.friendlypos.Recibos.fragments.RecibosSeleccionarFacturaFragment;
 import com.friendlypos.Recibos.modelo.recibos;
+import com.friendlypos.Recibos.util.ItemClickListener;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
@@ -35,6 +37,7 @@ public class RecibosSeleccionarFacturaAdapter extends RecyclerView.Adapter<Recib
 
     private Context context;
     public List<recibos> productosList;
+    public ArrayList<recibos> checked = new ArrayList<>();
     private RecibosActivity activity;
     private RecibosSeleccionarFacturaFragment fragment;
     private static double producto_amount_dist_add = 0;
@@ -89,9 +92,24 @@ public class RecibosSeleccionarFacturaAdapter extends RecyclerView.Adapter<Recib
         holder.txt_producto_factura_FaltanteRecibos.setText("Restante: " + String.format("%,.2f", debePagar));
         holder.txt_producto_factura_TotalRecibos.setText("Total: " + String.format("%,.2f", total));
         holder.txt_producto_factura_PagoRecibos.setText("Pagado: " + String.format("%,.2f", pago));
+
+        holder.setItemClickListener(new ItemClickListener() {
+            @Override
+            public void onItemClick(View v, int pos) {
+                CheckBox check = (CheckBox) v;
+
+                if(check.isChecked()){
+                    checked.add(productosList.get(pos));
+                }else if(!check.isChecked()){
+                    checked.remove(productosList.get(pos));
+
+                }
+            }
+        });
+
         holder.fillData(inventario);
 
-        holder.checkbox.setOnCheckedChangeListener(null);
+      /*  holder.checkbox.setOnCheckedChangeListener(null);
 
         //if true, your checkbox will be selected, else unselected
         holder.checkbox.setChecked(productosList.get(position).isSelected());
@@ -102,7 +120,7 @@ public class RecibosSeleccionarFacturaAdapter extends RecyclerView.Adapter<Recib
                 productosList.get(holder.getAdapterPosition()).setSelected(isChecked);
                 Toast.makeText(context,  productosList.get(position).isSelected() + "" , Toast.LENGTH_LONG).show();
             }
-        });
+        });*/
 
 
         if(selected_position==position){
@@ -222,11 +240,13 @@ public class RecibosSeleccionarFacturaAdapter extends RecyclerView.Adapter<Recib
         return 0;
     }
 
-    public class CharacterViewHolder extends RecyclerView.ViewHolder {
+    public class CharacterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView txt_producto_factura_numeracionRecibos, txt_producto_factura_FaltanteRecibos, txt_producto_factura_TotalRecibos, txt_producto_factura_PagoRecibos;
         protected CardView cardView;
         private CheckBox checkbox;
+
+        ItemClickListener itemClickListener;
         public CharacterViewHolder(View view) {
             super(view);
             cardView = (CardView) view.findViewById(R.id.cardViewSelecFacRecibos);
@@ -236,10 +256,22 @@ public class RecibosSeleccionarFacturaAdapter extends RecyclerView.Adapter<Recib
             txt_producto_factura_PagoRecibos = (TextView) view.findViewById(R.id.txt_producto_factura_PagoRecibos);
             checkbox = (CheckBox) view.findViewById(R.id.checkbox);
 
+            checkbox.setOnClickListener(this);
 
         }
 
-       void fillData(final recibos producto) {
+        public void setItemClickListener(ItemClickListener ic){
+            this.itemClickListener=ic;
+
+        }
+
+        @Override
+        public void onClick(View v) {
+            this.itemClickListener.onItemClick(v, getLayoutPosition());
+
+        }
+
+      void fillData(final recibos producto) {
             cardView.setOnClickListener(new View.OnClickListener() {
 
                 @Override
@@ -280,6 +312,8 @@ public class RecibosSeleccionarFacturaAdapter extends RecyclerView.Adapter<Recib
         });
 
         }
+
+
     }
 
     @Override

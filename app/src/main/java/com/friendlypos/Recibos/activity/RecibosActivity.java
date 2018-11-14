@@ -59,6 +59,7 @@ public class RecibosActivity extends BluetoothActivity {
     private double totalizarFinal;
     private double totalizarPagado;
     private double montoPagar;
+    private double totalizarTotalCheck;
 
     private double montoAgregadoRestante;
 
@@ -152,6 +153,15 @@ public class RecibosActivity extends BluetoothActivity {
 
     public void setClienteIdRecibos(String clienteIdRecibos) {
         this.clienteIdRecibos = clienteIdRecibos;
+    }
+
+
+    public double getTotalizarTotalCheck() {
+        return totalizarTotalCheck;
+    }
+
+    public void setTotalizarTotalCheck(double totalizarTotalCheck) {
+        this.totalizarTotalCheck = this.totalizarTotalCheck + totalizarTotalCheck;
     }
 
     @Override
@@ -296,7 +306,10 @@ public class RecibosActivity extends BluetoothActivity {
         totalizarTotal = 0.0;
         totalizarCancelado = 0.0;
     }
+    public void cleanTotalizeCkeck() {
 
+        totalizarTotalCheck = 0.0;
+    }
 
     public receiptsDetalle getCurrentRecibos() {
         return preSellRecibosDelegate.getCurrentRecibos();

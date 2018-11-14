@@ -38,7 +38,8 @@ public class RecibosSeleccionarFacturaFragment extends BaseFragment {
     int slecTAB;
     RecibosActivity activity;
     TextView txtPagoTotal, txtPagoCancelado;
-
+    double debePagar = 0.0;
+StringBuffer sb= null;
     double cantidadPagar;
 
     public static RecibosSeleccionarFacturaFragment getInstance() {
@@ -102,6 +103,29 @@ public class RecibosSeleccionarFacturaFragment extends BaseFragment {
 
                     @Override
                     public void onClick(View v) {
+
+
+                        sb= new StringBuffer();
+
+                        for(recibos r : adapter.checked){
+
+                            sb.append(r.getNumeration());
+
+                            double total = r.getTotal();
+                            double pago = r.getPaid();
+                            debePagar = total - pago;
+                         activity.setTotalizarTotalCheck(debePagar);
+
+                        }
+
+                        if(adapter.checked.size()>0){
+                            final double totalCheck = activity.getTotalizarTotalCheck();
+
+                            Toast.makeText(activity ,totalCheck + "", Toast.LENGTH_LONG).show();
+                        }
+                        else{
+                            Toast.makeText(activity ,"no hay", Toast.LENGTH_LONG).show();
+                        }
 
                         //double totalT = activity.getTotalizarTotal();
                         final double totalP = activity.getTotalizarCancelado();
@@ -279,8 +303,6 @@ public class RecibosSeleccionarFacturaFragment extends BaseFragment {
                                     input.requestFocus();
                                 }
 
-
-
                             }
                         });
                         alertDialogBuilder.setNegativeButton("Cancel",
@@ -288,6 +310,7 @@ public class RecibosSeleccionarFacturaFragment extends BaseFragment {
 
                                     public void onClick(DialogInterface dialog, int id) {
                                         dialog.cancel();
+                                        activity.cleanTotalizeCkeck();
                                     }
                                 });
 
