@@ -74,6 +74,7 @@ public class PrinterFunctions {
         String payment = "";
         String messageC = "";
         String billptype = "";
+        String metodoPagoNombre = "";
         String preview = "";
 
         Realm realm = Realm.getDefaultInstance();
@@ -146,6 +147,14 @@ public class PrinterFunctions {
         } else if (type == 3) {
             stype = "Archivo";
         }
+
+        if (metodoPago.equals("1")) {
+            metodoPagoNombre = "Contado";
+        } else if (metodoPago.equals("2")) {
+            metodoPagoNombre = "Credito";
+        }
+
+
         if (prefList.equals("1")){
             String bill = "! U1 JOURNAl\r\n" +
                     "! U1 SETLP 0 0 0\r\n" +
@@ -157,7 +166,7 @@ public class PrinterFunctions {
                     "! U1 SETLP 7 0 14\r\n" + "\r\n" +
                     "N# Factura: " + numeracionFactura + "\r\n" +
                     "! U1 LMARGIN 120\r\n" +
-                    "Factura de: ! U1 LMARGIN 350 " + payment + "\r\n" +
+                    "Factura de: ! U1 LMARGIN 350 " + metodoPagoNombre + "\r\n" +
                     ((metodoPago == "2") ? "! U1 LMARGIN 120\r\n" +
                             "Fecha Limite: ! U1 LMARGIN 350 " + messageC + "\r\n" : "\r\n") +
                     "! U1 LMARGIN 0\r\n" +
@@ -259,7 +268,7 @@ public class PrinterFunctions {
                     preview += Html.fromHtml("<h1>") +  "Cedula: " + cardCliente + Html.fromHtml("</h1><br/>");
                     preview += Html.fromHtml("<h1>") + "Razon Social: " + companyCliente + Html.fromHtml("</h1><br/>");
                     preview += Html.fromHtml("<h1>") +  "Nombre fantasia: " + fantasyCliente + Html.fromHtml("</h1><br/>");
-                    preview += Html.fromHtml("<h1>") +  "# Telefono: " + telefonoCliente + Html.fromHtml("</h1></center><br/><br/>");
+                    preview += Html.fromHtml("<h1>") +  "# Telefono: " + telefonoCliente + Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>") +  "Descripcion           Codigo" + Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>") +   "Cantidad      Precio       P.Sug       Total" + Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>") +   "Tipo " + Html.fromHtml("</h1></center><br/>");
@@ -650,7 +659,8 @@ public class PrinterFunctions {
         String stype = "";
         String billptype = "";
         String preview = "";
-
+        String metodoPagoNombre = "";
+        String payment = "";
 
         Realm realm = Realm.getDefaultInstance();
         Sysconf sysconf = realm.where(Sysconf.class).findFirst();
@@ -708,15 +718,27 @@ public class PrinterFunctions {
         } else if (type == 3) {
             stype = "Archivo";
         }
+
+
+        if (metodoPago.equals("1")) {
+            metodoPagoNombre = "Contado";
+        } else if (metodoPago.equals("2")) {
+            metodoPagoNombre = "Credito";
+        }
+
         if (prefList.equals("1")){
+
             String bill = "! U1 JOURNAl\r\n" +
                     "! U1 SETLP 0 0 0\r\n" +
                     "\r\n" +
                     "! U1 SETLP 5 3 70\r\n" +
+                    "! U1 LMARGIN 185\r\n" +
                     String.format("%s", billptype) + "\r\n" +
                     "! U1 LMARGIN 150\r\n" +
-                    "! U1 SETLP 7 0 26\r\n" + "\r\n" +
+                    "! U1 SETLP 7 0 14\r\n" + "\r\n" +
                     "N# Factura: " + numeracionFactura + "\r\n" +
+                    "! U1 LMARGIN 120\r\n" +
+                    "Factura de: ! U1 LMARGIN 350 " + metodoPagoNombre + "\r\n" +
                     "! U1 LMARGIN 0\r\n" +
                     "! U1 SETLP 5 0 24\r\n" +
                     sysNombreNegocio + "\r\n" +
@@ -812,8 +834,10 @@ public class PrinterFunctions {
             switch (metodoPago) {
                 case "1":
 
+                 payment = "Contado";
                     preview += Html.fromHtml("<h1>") + String.format("%s", billptype) + Html.fromHtml("</h1><br/><br/><br/>");
                     preview += Html.fromHtml("<h1>") + "N# Factura: " + numeracionFactura + Html.fromHtml("</h1><br/>");
+                    preview += Html.fromHtml("<h1>") + "Factura de: " + payment + Html.fromHtml("</h1><br/>");
                     preview += Html.fromHtml("<h1>") + sysNombreNegocio + Html.fromHtml("</h1><br/>");
                     preview += Html.fromHtml("<h1>") +  "Fecha y hora: " + fechayhora + Html.fromHtml("</h1><br/>");
                     preview += Html.fromHtml("<h1>") +  "Vendedor:  " + nombreUsuario + Html.fromHtml("</h1></center><br/>");
@@ -851,9 +875,10 @@ public class PrinterFunctions {
                     preview += Html.fromHtml("<h1>")   + "del 7 de octubre de 2016." +  Html.fromHtml("</h1></center><br/>");
                     break;
                 case "2":
-
+                    payment = "Credito";
                     preview += Html.fromHtml("<h1>") + String.format("%s", billptype) + Html.fromHtml("</h1><br/><br/><br/>");
                     preview += Html.fromHtml("<h1>") + "N# Factura: " + numeracionFactura + Html.fromHtml("</h1><br/>");
+                    preview += Html.fromHtml("<h1>") + "Factura de: " + payment + Html.fromHtml("</h1><br/>");
                     preview += Html.fromHtml("<h1>") + sysNombreNegocio + Html.fromHtml("</h1><br/>");
                     preview += Html.fromHtml("<h1>") +  "Fecha y hora: " + fechayhora + Html.fromHtml("</h1><br/>");
                     preview += Html.fromHtml("<h1>") +  "Vendedor:  " + nombreUsuario + Html.fromHtml("</h1></center><br/>");

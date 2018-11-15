@@ -1,9 +1,7 @@
 package com.friendlypos.crearCliente.activity;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -18,13 +16,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.friendlypos.R;
-import com.friendlypos.crearCliente.modelo.ClienteNuevo;
+import com.friendlypos.crearCliente.modelo.customer_new;
 import com.friendlypos.distribucion.util.GPSTracker;
 import com.friendlypos.login.activity.LoginActivity;
 import com.friendlypos.login.util.SessionPrefes;
-import com.friendlypos.preventas.modelo.Numeracion;
 import com.friendlypos.principal.activity.BluetoothActivity;
-import com.friendlypos.principal.activity.ClientesActivity;
 import com.friendlypos.principal.activity.MenuPrincipal;
 
 import java.util.regex.Matcher;
@@ -236,7 +232,7 @@ public class crearCliente extends BluetoothActivity {
         realm5.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm5) {
-                ClienteNuevo clienteNuevo = new ClienteNuevo(); // unmanaged
+                customer_new clienteNuevo = new customer_new(); // unmanaged
 
                 clienteNuevo.setIdtype(idtype);
                 clienteNuevo.setCard(card);
@@ -259,7 +255,7 @@ public class crearCliente extends BluetoothActivity {
                 clienteNuevo.setAddress(address);
 
                 clienteNuevo.setCredit_time(credittime);
-
+                clienteNuevo.setSubidaNuevo(1);
                 realm5.insertOrUpdate(clienteNuevo);
                 Log.d("idinvNUEVOCREADO", clienteNuevo + "");
 

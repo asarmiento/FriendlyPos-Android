@@ -33,6 +33,7 @@ import com.friendlypos.preventas.modelo.Numeracion;
 import com.friendlypos.preventas.modelo.visit;
 import com.friendlypos.preventas.modelo.invoiceDetallePreventa;
 import com.friendlypos.principal.activity.MenuPrincipal;
+import com.friendlypos.principal.modelo.datosTotales;
 import com.friendlypos.ventadirecta.activity.VentaDirectaActivity;
 import com.friendlypos.ventadirecta.modelo.invoiceDetalleVentaDirecta;
 
@@ -86,6 +87,11 @@ public class VentaDirTotalizarFragment extends BaseFragment  {
     BluetoothStateChangeReceiver bluetoothStateChangeReceiver;
 
     String seleccion;
+
+
+    datosTotales datos_actualizados;
+    double totalDatosTotal = 0.0;
+    double totalDatosTotal2 = 0.0;
 
     @Override
     public void onAttach(Activity activity){
@@ -390,7 +396,7 @@ public class VentaDirTotalizarFragment extends BaseFragment  {
             @Override
             public void onSuccess() {
                 actualizarVenta();
-
+                actualizarDatosTotales();
             }
         }, new Realm.Transaction.OnError() {
 
@@ -437,6 +443,31 @@ public class VentaDirTotalizarFragment extends BaseFragment  {
         });
 
     }
+
+    protected void actualizarDatosTotales() {
+
+        final Realm realm3 = Realm.getDefaultInstance();
+        realm3.executeTransaction(new Realm.Transaction() {
+
+            @Override
+            public void execute(Realm realm3) {
+                datos_actualizados = realm3.where(datosTotales.class).equalTo("nombreTotal", "VentaDirecta").findFirst();
+
+                totalDatosTotal = datos_actualizados.getTotalDistribucion();
+
+                totalDatosTotal2 = totalDatosTotal + totalTotal;
+
+                datos_actualizados.setTotalVentaDirecta(totalDatosTotal2);
+
+                realm3.insertOrUpdate(datos_actualizados);
+                realm3.close();
+
+                Log.d("TotalDatos", datos_actualizados + "" );
+            }
+        });
+
+    }
+
 
     protected void aplicarFactura() {
         paid.setEnabled(false);

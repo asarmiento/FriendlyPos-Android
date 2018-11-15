@@ -60,6 +60,7 @@ public class DistribucionActivity extends BluetoothActivity {
     private double totalizarDescuento;
     private double totalizarImpuestoIVA;
     private double totalizarTotal;
+
     private double totalizarTotalDouble;
     private int selecClienteTab;
     String idCliente;
@@ -154,6 +155,7 @@ public class DistribucionActivity extends BluetoothActivity {
     public void setTotalizarTotal(double totalizarTotal) {
         this.totalizarTotal = this.totalizarTotal + totalizarTotal;
     }
+
 
     public int getSelecClienteTab() {
         return selecClienteTab;

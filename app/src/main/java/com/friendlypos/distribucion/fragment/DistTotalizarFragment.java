@@ -22,6 +22,7 @@ import com.friendlypos.distribucion.modelo.sale;
 import com.friendlypos.distribucion.util.GPSTracker;
 import com.friendlypos.login.modelo.Usuarios;
 import com.friendlypos.login.util.SessionPrefes;
+import com.friendlypos.principal.modelo.datosTotales;
 
 import io.realm.Realm;
 import io.realm.RealmList;
@@ -51,6 +52,8 @@ public class DistTotalizarFragment extends BaseFragment  {
     double totalDescuento = 0.0;
     double totalImpuesto = 0.0;
     double totalTotal = 0.0;
+    double totalDatosTotal = 0.0;
+    double totalDatosTotal2 = 0.0;
     String totalVuelvo = "0";
     String totalPagoCon = "0";
     static double pagoCon = 0.0;
@@ -67,7 +70,7 @@ public class DistTotalizarFragment extends BaseFragment  {
     private static int apply_done = 0;
     int slecTAB;
     sale sale_actualizada;
-
+    datosTotales datos_actualizados;
     GPSTracker gps;
     BluetoothStateChangeReceiver bluetoothStateChangeReceiver;
     @Override
@@ -370,11 +373,38 @@ public class DistTotalizarFragment extends BaseFragment  {
 
     }
 
+    protected void actualizarDatosTotales() {
+
+        final Realm realm3 = Realm.getDefaultInstance();
+        realm3.executeTransaction(new Realm.Transaction() {
+
+            @Override
+            public void execute(Realm realm3) {
+                datos_actualizados = realm3.where(datosTotales.class).equalTo("nombreTotal", "Distribucion").findFirst();
+
+                totalDatosTotal = datos_actualizados.getTotalDistribucion();
+
+                totalDatosTotal2 = totalDatosTotal + totalTotal;
+
+                datos_actualizados.setTotalDistribucion(totalDatosTotal2);
+
+                realm3.insertOrUpdate(datos_actualizados);
+                realm3.close();
+
+                Log.d("TotalDatos", datos_actualizados + "" );
+            }
+        });
+
+    }
+
+
+
     protected void aplicarFactura() {
         paid.setEnabled(false);
 
         actualizarFactura();
         actualizarVenta();
+        actualizarDatosTotales();
 
         Toast.makeText(getActivity(), "Venta realizada correctamente", Toast.LENGTH_LONG).show();
 

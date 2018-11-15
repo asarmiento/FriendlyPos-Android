@@ -38,6 +38,11 @@
         android:title="Subir Nueva GPS, Clientes"/>
 
     <item
+        android:id="@+id/btn_subir_cliente_nuevo"
+        android:icon="@mipmap/ic_config"
+        android:title="Subir Clientes Nuevos"/>
+
+    <item
         android:id="@+id/btn_devolver_inventario"
         android:icon="@mipmap/ic_config"
         android:title="Devolver Inventario" />

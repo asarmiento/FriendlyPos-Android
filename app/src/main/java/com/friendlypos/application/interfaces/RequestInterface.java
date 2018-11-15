@@ -4,6 +4,7 @@ package com.friendlypos.application.interfaces;
 import com.friendlypos.Recibos.modelo.EnviarRecibos;
 import com.friendlypos.Recibos.modelo.RecibosResponse;
 import com.friendlypos.Recibos.modelo.receipts;
+import com.friendlypos.crearCliente.modelo.customer_new;
 import com.friendlypos.distribucion.modelo.EnviarFactura;
 import com.friendlypos.distribucion.modelo.invoice;
 import com.friendlypos.distribucion.modelo.FacturasResponse;
@@ -20,6 +21,7 @@ import com.friendlypos.preventas.modelo.EnviarClienteVisitado;
 import com.friendlypos.preventas.modelo.NumeracionResponse;
 import com.friendlypos.principal.modelo.ClientesResponse;
 import com.friendlypos.principal.modelo.EnviarClienteGPS;
+import com.friendlypos.principal.modelo.EnviarClienteNuevo;
 import com.friendlypos.principal.modelo.ProductosResponse;
 import com.friendlypos.principal.modelo.SysconfResponse;
 import com.friendlypos.principal.modelo.customer_location;
@@ -98,5 +100,9 @@ public interface RequestInterface {
     // TODO DEFINIR CUAL ES EL KEY PARA ENVIAR (KEY, VALUE)
     @POST("/api/upload-location-customer")
     Call<customer_location> savePostClienteGPS(@Body EnviarClienteGPS clienteVisitado, @Header("Authorization") String token);
+
+    // TODO DEFINIR CUAL ES EL KEY PARA ENVIAR (KEY, VALUE)
+    @POST("api/upload-customer")
+    Call<customer_new> savePostClienteNuevo(@Body EnviarClienteNuevo clienteNuevo, @Header("Authorization") String token);
 
 }

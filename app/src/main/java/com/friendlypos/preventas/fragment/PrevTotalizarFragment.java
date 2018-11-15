@@ -29,6 +29,7 @@ import com.friendlypos.preventas.activity.PreventaActivity;
 import com.friendlypos.preventas.modelo.Numeracion;
 import com.friendlypos.preventas.modelo.visit;
 import com.friendlypos.preventas.modelo.invoiceDetallePreventa;
+import com.friendlypos.principal.modelo.datosTotales;
 import com.friendlypos.ventadirecta.activity.VentaDirectaActivity;
 
 import io.realm.Realm;
@@ -74,7 +75,9 @@ public class PrevTotalizarFragment extends BaseFragment {
     GPSTracker gps;
     BluetoothStateChangeReceiver bluetoothStateChangeReceiver;
     String tipoFacturacion,tipoFacturacionImpr;
-
+    datosTotales datos_actualizados;
+    double totalDatosTotal = 0.0;
+    double totalDatosTotal2 = 0.0;
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -400,7 +403,7 @@ public class PrevTotalizarFragment extends BaseFragment {
             @Override
             public void onSuccess() {
                 actualizarVenta();
-
+                actualizarDatosTotales();
             }
         }, new Realm.Transaction.OnError() {
 
@@ -462,7 +465,50 @@ public class PrevTotalizarFragment extends BaseFragment {
 
 
     }
+    protected void actualizarDatosTotales() {
+        if(tipoFacturacion.equals("Preventa")) {
+            final Realm realm3 = Realm.getDefaultInstance();
+            realm3.executeTransaction(new Realm.Transaction() {
 
+                @Override
+                public void execute(Realm realm3) {
+                    datos_actualizados = realm3.where(datosTotales.class).equalTo("nombreTotal", "Preventa").findFirst();
+
+                    totalDatosTotal = datos_actualizados.getTotalDistribucion();
+
+                    totalDatosTotal2 = totalDatosTotal + totalTotal;
+
+                    datos_actualizados.setTotalPreventa(totalDatosTotal2);
+
+                    realm3.insertOrUpdate(datos_actualizados);
+                    realm3.close();
+
+                    Log.d("TotalDatos", datos_actualizados + "");
+                }
+            });
+        }
+        else if(tipoFacturacion.equals("Proforma")){
+            final Realm realm3 = Realm.getDefaultInstance();
+            realm3.executeTransaction(new Realm.Transaction() {
+
+                @Override
+                public void execute(Realm realm3) {
+                    datos_actualizados = realm3.where(datosTotales.class).equalTo("nombreTotal", "Proforma").findFirst();
+
+                    totalDatosTotal = datos_actualizados.getTotalDistribucion();
+
+                    totalDatosTotal2 = totalDatosTotal + totalTotal;
+
+                    datos_actualizados.setTotalProforma(totalDatosTotal2);
+
+                    realm3.insertOrUpdate(datos_actualizados);
+                    realm3.close();
+
+                    Log.d("TotalDatos", datos_actualizados + "");
+                }
+            });
+        }
+    }
 
     public static void clearAll() {
         if (apply_done == 1) {

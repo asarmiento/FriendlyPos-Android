@@ -36,6 +36,8 @@ import com.friendlypos.principal.modelo.Productos;
 import com.friendlypos.principal.modelo.ProductosResponse;
 import com.friendlypos.principal.modelo.Sysconf;
 import com.friendlypos.principal.modelo.SysconfResponse;
+import com.friendlypos.principal.modelo.customer_location;
+import com.friendlypos.principal.modelo.datosTotales;
 
 import java.util.ArrayList;
 
@@ -54,7 +56,8 @@ public class DescargasHelper {
     private Activity activity;
     private Context mContext;
     private Realm realm, realm2, realmSysconfig, realmRecibos, realmMarcas, realmNumeracion, realmBonuses,  realmTipoProducto,realmUsuarios, realmMetodoPago;
-
+    int nextId;
+    String nombre;
     public DescargasHelper(Activity activity) {
         this.activity = activity;
         this.mContext = activity;
@@ -602,6 +605,47 @@ public class DescargasHelper {
         else {
 
         }
+
+
+        final Realm realm5 = Realm.getDefaultInstance();
+        for (int i = 0; i < 5; i++) {
+
+            if(i == 0){
+                nombre = "Distribucion";
+            }
+            else if(i == 1){
+                nombre = "VentaDirecta";
+            }
+            else if(i == 2){
+                nombre = "Preventa";
+            }
+            else if(i == 3){
+                nombre = "Proforma";
+            }
+            else if(i == 4){
+                nombre = "Recibo";
+            }
+
+        realm5.beginTransaction();
+
+                                        Number currentIdNum = realm5.where(datosTotales.class).max("id");
+
+                                        if (currentIdNum == null) {
+                                            nextId = 1;
+                                        } else {
+                                            nextId = currentIdNum.intValue() + 1;
+                                        }
+
+            datosTotales datos= new datosTotales();
+
+        datos.setId(nextId);
+        datos.setNombreTotal(nombre);
+
+        realm5.insertOrUpdate(datos);
+        realm5.commitTransaction();
+        Log.d("datosTotales", datos + "");
+        }
+        realm5.close();
 
     }
 

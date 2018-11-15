@@ -34,7 +34,7 @@ import com.friendlypos.app.broadcastreceiver.NetworkStateChangeReceiver;
 import com.friendlypos.application.bluetooth.PrinterService;
 import com.friendlypos.application.util.Functions;
 import com.friendlypos.application.util.PrinterFunctions;
-import com.friendlypos.crearCliente.activity.crearCliente;
+import com.friendlypos.crearCliente.modelo.customer_new;
 import com.friendlypos.distribucion.activity.DistribucionActivity;
 import com.friendlypos.distribucion.modelo.EnviarFactura;
 import com.friendlypos.distribucion.modelo.invoice;
@@ -50,13 +50,16 @@ import com.friendlypos.principal.fragment.ConfiguracionFragment;
 import com.friendlypos.principal.helpers.DescargasHelper;
 import com.friendlypos.principal.helpers.SubirHelper;
 import com.friendlypos.principal.helpers.SubirHelperClienteGPS;
+import com.friendlypos.principal.helpers.SubirHelperClienteNuevo;
 import com.friendlypos.principal.helpers.SubirHelperClienteVisitado;
 import com.friendlypos.principal.helpers.SubirHelperPreventa;
 import com.friendlypos.principal.helpers.SubirHelperProforma;
 import com.friendlypos.principal.helpers.SubirHelperRecibos;
 import com.friendlypos.principal.helpers.SubirHelperVentaDirecta;
 import com.friendlypos.principal.modelo.EnviarClienteGPS;
+import com.friendlypos.principal.modelo.EnviarClienteNuevo;
 import com.friendlypos.principal.modelo.customer_location;
+import com.friendlypos.principal.modelo.datosTotales;
 import com.friendlypos.reimpresion.activity.ReimprimirActivity;
 import com.friendlypos.reimpresion_pedidos.activity.ReimprimirPedidosActivity;
 import com.friendlypos.ventadirecta.activity.VentaDirectaActivity;
@@ -125,6 +128,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
     SubirHelperProforma subirProforma;
     SubirHelperClienteVisitado subirClienteVisitado;
     SubirHelperClienteGPS subirClienteGPS;
+    SubirHelperClienteNuevo subirClienteNuevo;
     SubirHelperRecibos subirHelperRecibos;
     String usuer;
     String idUsuario;
@@ -159,6 +163,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
         subirProforma = new SubirHelperProforma(MenuPrincipal.this);
         subirClienteVisitado = new SubirHelperClienteVisitado(MenuPrincipal.this);
         subirClienteGPS  = new SubirHelperClienteGPS(MenuPrincipal.this);
+        subirClienteNuevo  = new SubirHelperClienteNuevo(MenuPrincipal.this);
         subirHelperRecibos = new SubirHelperRecibos(MenuPrincipal.this);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
             this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -395,7 +400,11 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                 //  cambioDatosEmpresa = getDescargaDatosEmpresa();
                 Realm realm12 = Realm.getDefaultInstance();
 
-                RealmQuery<invoice> query12 = realm12.where(invoice.class).equalTo("subida", 1);
+            /*   RealmQuery<datosTotales> query12 = realm12.where(datosTotales.class);
+                final RealmResults<datosTotales> invoice12 = query12.findAll();
+                Log.d("qweqweq", invoice12.toString());*/
+
+               RealmQuery<invoice> query12 = realm12.where(invoice.class).equalTo("subida", 1);
                 final RealmResults<invoice> invoice12 = query12.findAll();
                 Log.d("qweqweq", invoice12.toString());
 
@@ -403,7 +412,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
 
                 cambioDatosEmpresa = session.getPrefDescargaDatos();
 
-                    if (cambioDatosEmpresa == 1) {
+                      if (cambioDatosEmpresa == 1) {
                         download1.descargarCatalogo(MenuPrincipal.this);
 
                     } else {
@@ -606,7 +615,33 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                         EnviarClienteGPS obj = new EnviarClienteGPS(listaGPS.get(i));
                         Log.d("My App", obj + "");
                         subirClienteGPS.sendPostClienteGPS(obj);
-                       // actualizarClienteGPS(facturaIdGPS);
+                    }
+                }
+                break;
+
+            case R.id.btn_subir_cliente_nuevo:
+
+                Realm realmClienteNuevo = Realm.getDefaultInstance();
+
+                RealmQuery<customer_new> queryClienteNuevo = realmClienteNuevo.where(customer_new.class).equalTo("subidaEdit", 1);
+                final RealmResults<customer_new> invoiceNuevo = queryClienteNuevo.findAll();
+                Log.d("qweqweq", invoiceNuevo.toString());
+                List<customer_new> listaNuevo = realmClienteNuevo.copyFromRealm(invoiceNuevo);
+                Log.d("qweqweq1", listaNuevo + "");
+                realmClienteNuevo.close();
+
+                if(listaNuevo.size()== 0){
+                    Toast.makeText(MenuPrincipal.this,"No hay clientes para subir", Toast.LENGTH_LONG).show();
+                }else {
+
+                    for (int i = 0; i < listaNuevo.size(); i++) {
+                        Toast.makeText(MenuPrincipal.this, "Subiendo información...", Toast.LENGTH_SHORT).show();
+
+                        facturaIdGPS =listaNuevo.get(i).getId();
+                        Log.d("facturaIdCV", facturaIdGPS + "");
+                        EnviarClienteNuevo obj = new EnviarClienteNuevo(listaNuevo.get(i));
+                        Log.d("My App", obj + "");
+                        subirClienteNuevo.sendPostClienteNuevo(obj);
                     }
                 }
                 break;
@@ -762,6 +797,31 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
         realm3.close();
     }
 
+    protected void actualizarClienteNuevo(final String factura) {
+
+        // TRANSACCION PARA ACTUALIZAR CAMPOS DE LA TABLA VENTAS
+        final Realm realm3 = Realm.getDefaultInstance();
+
+        try {
+            realm3.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm3) {
+
+                    customer_new sale_actualizada = realm3.where(customer_new.class).equalTo("id", factura).findFirst();
+                    sale_actualizada.setSubidaNuevo(0);
+                    realm3.insertOrUpdate(sale_actualizada);
+
+                }
+
+            });
+
+        } catch (Exception e) {
+            Log.e("error", "error", e);
+            Toast.makeText(MenuPrincipal.this,"errorACTVEN", Toast.LENGTH_SHORT).show();
+
+        }
+        realm3.close();
+    }
 
     protected void actualizarVentaDist(final String factura) {
 
@@ -1118,6 +1178,31 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
         return cod;
     }
 
+    public int codigoDeRespuestaClienteNuevo(String codS, String messageS, String resultS, int cod){
+        Realm realmPedidos = Realm.getDefaultInstance();
+        RealmQuery<customer_new> queryPedidos = realmPedidos.where(customer_new.class).equalTo("subidaNuevo", 1);
+        final RealmResults<customer_new> invoicePedidos = queryPedidos.findAll();
+        Log.d("SubFacturaInvP", invoicePedidos.toString());
+        List<customer_new> listaFacturasPedidos = realmPedidos.copyFromRealm(invoicePedidos);
+        Log.d("SubFacturaListaP", listaFacturasPedidos + "");
+        realmPedidos.close();
+
+        if(listaFacturasPedidos.size()== 0){
+            Toast.makeText(MenuPrincipal.this,"No hay más facturas para subir", Toast.LENGTH_LONG).show();
+        }else {
+
+            for (int i = 0; i < listaFacturasPedidos.size(); i++) {
+                facturaId = String.valueOf(listaFacturasPedidos.get(i).getId());
+                if (codS.equals("1") && resultS.equals("true")) {
+                    actualizarClienteNuevo(facturaId);
+                    Toast.makeText(MenuPrincipal.this, messageS, Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(MenuPrincipal.this, messageS, Toast.LENGTH_LONG).show();
+                }
+            }
+        }
+        return cod;
+    }
 
 
     public int codigoDeRespuestaDistr(String codS, String messageS, String resultS, int cod, String idFacturaSubida){

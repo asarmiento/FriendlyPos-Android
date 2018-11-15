@@ -7,7 +7,7 @@ import io.realm.annotations.PrimaryKey;
  * Created by DelvoM on 30/10/2018.
  */
 
-public class ClienteNuevo extends RealmObject {
+public class customer_new extends RealmObject {
 
     @PrimaryKey
     private String id;
@@ -28,6 +28,11 @@ public class ClienteNuevo extends RealmObject {
     private String credit_limit;
     private String address;
     private String credit_time;
+    int subidaNuevo = 0;
+    private boolean result;
+    private String code;
+    private String messages;
+
 
     public String getId() {
         return id;
@@ -165,9 +170,41 @@ public class ClienteNuevo extends RealmObject {
         this.credit_time = credit_time;
     }
 
+    public boolean isResult() {
+        return result;
+    }
+
+    public void setResult(boolean result) {
+        this.result = result;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getMessages() {
+        return messages;
+    }
+
+    public void setMessages(String messages) {
+        this.messages = messages;
+    }
+
+    public int getSubidaNuevo() {
+        return subidaNuevo;
+    }
+
+    public void setSubidaNuevo(int subidaNuevo) {
+        this.subidaNuevo = subidaNuevo;
+    }
+
     @Override
     public String toString() {
-        return "ClienteNuevo{" +
+        return "customer_new{" +
                 "id='" + id + '\'' +
                 ", idtype='" + idtype + '\'' +
                 ", card='" + card + '\'' +
@@ -185,6 +222,10 @@ public class ClienteNuevo extends RealmObject {
                 ", credit_limit='" + credit_limit + '\'' +
                 ", address='" + address + '\'' +
                 ", credit_time='" + credit_time + '\'' +
+                ", subidaNuevo=" + subidaNuevo +
+                ", result=" + result +
+                ", code='" + code + '\'' +
+                ", messages='" + messages + '\'' +
                 '}';
     }
 }
