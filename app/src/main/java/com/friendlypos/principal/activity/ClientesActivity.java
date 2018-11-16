@@ -41,8 +41,6 @@ public class ClientesActivity extends BluetoothActivity implements SearchView.On
     @Bind(R.id.toolbar)
     Toolbar toolbar;
 
-
-
     @Bind(R.id.recyclerView)
     RecyclerView recyclerView;
 

@@ -400,7 +400,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                 //  cambioDatosEmpresa = getDescargaDatosEmpresa();
                 Realm realm12 = Realm.getDefaultInstance();
 
-            /*   RealmQuery<datosTotales> query12 = realm12.where(datosTotales.class);
+            /*  RealmQuery<datosTotales> query12 = realm12.where(datosTotales.class);
                 final RealmResults<datosTotales> invoice12 = query12.findAll();
                 Log.d("qweqweq", invoice12.toString());*/
 

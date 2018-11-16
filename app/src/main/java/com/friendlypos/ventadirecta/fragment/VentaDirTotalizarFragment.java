@@ -453,7 +453,7 @@ public class VentaDirTotalizarFragment extends BaseFragment  {
             public void execute(Realm realm3) {
                 datos_actualizados = realm3.where(datosTotales.class).equalTo("nombreTotal", "VentaDirecta").findFirst();
 
-                totalDatosTotal = datos_actualizados.getTotalDistribucion();
+                totalDatosTotal = datos_actualizados.getTotalVentaDirecta();
 
                 totalDatosTotal2 = totalDatosTotal + totalTotal;
 

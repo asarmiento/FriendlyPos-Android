@@ -444,7 +444,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:text="Grafico"
+                            android:text="Gráfico"
                             android:textColor="@color/icons"
                             android:layout_centerVertical="true"
                             android:layout_toRightOf="@+id/imageView14"

@@ -474,7 +474,7 @@ public class PrevTotalizarFragment extends BaseFragment {
                 public void execute(Realm realm3) {
                     datos_actualizados = realm3.where(datosTotales.class).equalTo("nombreTotal", "Preventa").findFirst();
 
-                    totalDatosTotal = datos_actualizados.getTotalDistribucion();
+                    totalDatosTotal = datos_actualizados.getTotalPreventa();
 
                     totalDatosTotal2 = totalDatosTotal + totalTotal;
 
@@ -495,7 +495,7 @@ public class PrevTotalizarFragment extends BaseFragment {
                 public void execute(Realm realm3) {
                     datos_actualizados = realm3.where(datosTotales.class).equalTo("nombreTotal", "Proforma").findFirst();
 
-                    totalDatosTotal = datos_actualizados.getTotalDistribucion();
+                    totalDatosTotal = datos_actualizados.getTotalProforma();
 
                     totalDatosTotal2 = totalDatosTotal + totalTotal;
 
