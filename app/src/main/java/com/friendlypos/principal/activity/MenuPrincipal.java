@@ -37,6 +37,7 @@ import com.friendlypos.application.util.PrinterFunctions;
 import com.friendlypos.crearCliente.modelo.customer_new;
 import com.friendlypos.distribucion.activity.DistribucionActivity;
 import com.friendlypos.distribucion.modelo.EnviarFactura;
+import com.friendlypos.distribucion.modelo.Pivot;
 import com.friendlypos.distribucion.modelo.invoice;
 import com.friendlypos.distribucion.modelo.sale;
 import com.friendlypos.login.activity.LoginActivity;
@@ -53,11 +54,13 @@ import com.friendlypos.principal.helpers.SubirHelperClienteGPS;
 import com.friendlypos.principal.helpers.SubirHelperClienteNuevo;
 import com.friendlypos.principal.helpers.SubirHelperClienteVisitado;
 import com.friendlypos.principal.helpers.SubirHelperPreventa;
+import com.friendlypos.principal.helpers.SubirHelperProductoDevuelto;
 import com.friendlypos.principal.helpers.SubirHelperProforma;
 import com.friendlypos.principal.helpers.SubirHelperRecibos;
 import com.friendlypos.principal.helpers.SubirHelperVentaDirecta;
 import com.friendlypos.principal.modelo.EnviarClienteGPS;
 import com.friendlypos.principal.modelo.EnviarClienteNuevo;
+import com.friendlypos.principal.modelo.EnviarProductoDevuelto;
 import com.friendlypos.principal.modelo.customer_location;
 import com.friendlypos.principal.modelo.datosTotales;
 import com.friendlypos.reimpresion.activity.ReimprimirActivity;
@@ -127,6 +130,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
     SubirHelperVentaDirecta subirVentaDirecta;
     SubirHelperProforma subirProforma;
     SubirHelperClienteVisitado subirClienteVisitado;
+    SubirHelperProductoDevuelto subirProductoDevuelto ;
     SubirHelperClienteGPS subirClienteGPS;
     SubirHelperClienteNuevo subirClienteNuevo;
     SubirHelperRecibos subirHelperRecibos;
@@ -165,6 +169,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
         subirClienteGPS  = new SubirHelperClienteGPS(MenuPrincipal.this);
         subirClienteNuevo  = new SubirHelperClienteNuevo(MenuPrincipal.this);
         subirHelperRecibos = new SubirHelperRecibos(MenuPrincipal.this);
+        subirProductoDevuelto = new SubirHelperProductoDevuelto(MenuPrincipal.this);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
             this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -680,7 +685,33 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
 
 
             case R.id.btn_devolver_inventario:
-                Toast.makeText(MenuPrincipal.this, "devolver_inventario", Toast.LENGTH_SHORT).show();
+                Realm realmDevolver = Realm.getDefaultInstance();
+
+                RealmQuery<Pivot> queryDevolver = realmDevolver.where(Pivot.class).equalTo("devuelvo", 1);
+                final RealmResults<Pivot> invoiceDevolver = queryDevolver.findAll();
+                Log.d("qweqweq", invoiceDevolver.toString());
+                List<Pivot> listaDevolver = realmDevolver.copyFromRealm(invoiceDevolver);
+                Log.d("qweqweq1", listaDevolver + "");
+                realmDevolver.close();
+
+                if(listaDevolver.size()== 0){
+                    Toast.makeText(MenuPrincipal.this,"No hay productos para devolver", Toast.LENGTH_LONG).show();
+                }else {
+
+                    for (int i = 0; i < listaDevolver.size(); i++) {
+                        Toast.makeText(MenuPrincipal.this, "Subiendo información...", Toast.LENGTH_SHORT).show();
+
+                        facturaIdCV = listaDevolver.get(i).getId();
+                        Log.d("facturaIdCV", facturaIdCV + "");
+
+                        EnviarProductoDevuelto obj = new EnviarProductoDevuelto(listaDevolver.get(i));
+                        Log.d("My App", obj + "");
+                        subirProductoDevuelto.sendPostClienteProductoDevuelto(obj);
+                       // actualizarClienteVisitado();
+                    }
+                }
+
+                Toast.makeText(MenuPrincipal.this, "Se subio con éxito", Toast.LENGTH_SHORT).show();
                 break;
 
             case R.id.btn_imprimir_liquidacion:
