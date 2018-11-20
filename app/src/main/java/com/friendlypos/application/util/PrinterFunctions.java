@@ -1893,10 +1893,12 @@ public class PrinterFunctions {
                 double factTotal = Double.parseDouble(salesList1.get(i).getTotal());
 
                 if(pago.equals("1")){
+
+                    if(factFecha.equals(currentDateandTime)){
                 send += String.format("%-5s      %.20s      %-6s", factNum, factFecha, Functions.doubleToString1(factTotal)) + "\r\n";
                 printLiqContadoTotal = printLiqContadoTotal + factTotal;
 
-                Log.d("LiqContado", send + "");}
+                Log.d("LiqContado", send + "");}}
                 else{
 
                 }
@@ -1929,11 +1931,13 @@ public class PrinterFunctions {
                 double factTotal = Double.parseDouble(salesList1.get(i).getTotal());
 
                 if(pago.equals("2")){
+                    if(factFecha.equals(currentDateandTime)){
 
                 send += String.format("%-5s      %.20s      %-6s", factNum, factFecha, Functions.doubleToString1(factTotal)) + "\r\n";
                 printLiqCreditoTotal = printLiqCreditoTotal + factTotal;
 
                 Log.d("LiqCredito", send + "");}
+                }
                 else{
 
                 }

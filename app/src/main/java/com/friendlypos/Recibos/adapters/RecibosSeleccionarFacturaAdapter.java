@@ -93,35 +93,7 @@ public class RecibosSeleccionarFacturaAdapter extends RecyclerView.Adapter<Recib
         holder.txt_producto_factura_TotalRecibos.setText("Total: " + String.format("%,.2f", total));
         holder.txt_producto_factura_PagoRecibos.setText("Pagado: " + String.format("%,.2f", pago));
 
-        holder.setItemClickListener(new ItemClickListener() {
-            @Override
-            public void onItemClick(View v, int pos) {
-                CheckBox check = (CheckBox) v;
-
-                if(check.isChecked()){
-                    checked.add(productosList.get(pos));
-                }else if(!check.isChecked()){
-                    checked.remove(productosList.get(pos));
-
-                }
-            }
-        });
-
         holder.fillData(inventario);
-
-      /*  holder.checkbox.setOnCheckedChangeListener(null);
-
-        //if true, your checkbox will be selected, else unselected
-        holder.checkbox.setChecked(productosList.get(position).isSelected());
-
-        holder.checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                productosList.get(holder.getAdapterPosition()).setSelected(isChecked);
-                Toast.makeText(context,  productosList.get(position).isSelected() + "" , Toast.LENGTH_LONG).show();
-            }
-        });*/
-
 
         if(selected_position==position){
             holder.cardView.setBackgroundColor(Color.parseColor("#607d8b"));
@@ -142,12 +114,28 @@ public class RecibosSeleccionarFacturaAdapter extends RecyclerView.Adapter<Recib
 
         final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
         alertDialogBuilder.setView(promptView);
-
+        final CheckBox checkbox = (CheckBox) promptView.findViewById(R.id.checkbox);
 
         final TextView label = (TextView) promptView.findViewById(R.id.promtClabelRecibos);
         label.setText("Escriba un pago maximo de " + debePagar + " minima de 1");
 
         final EditText input = (EditText) promptView.findViewById(R.id.promtCtextRecibos);
+
+        checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                if(isChecked)
+                {
+                    input.setEnabled(false);
+                }
+                else
+                {
+                    input.setEnabled(true);
+                }
+
+            }
+        });
 
         alertDialogBuilder.setCancelable(false);
         alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -155,11 +143,28 @@ public class RecibosSeleccionarFacturaAdapter extends RecyclerView.Adapter<Recib
             public void onClick(DialogInterface dialog, int id) {
 
                 try {
-                    montoPagar = Double.parseDouble(((input.getText().toString().isEmpty()) ? "0" : input.getText().toString()));
+
+
+                    if( checkbox.isChecked() ) {
+                        montoPagar = debePagar;
+
+                    }else{
+
+                        montoPagar = Double.parseDouble(((input.getText().toString().isEmpty()) ? "0" : input.getText().toString()));
+                    }
 
                     final String facturaId = activity.getInvoiceIdRecibos();
 
+                    if(montoPagar > debePagar){
+                        montoPagar = debePagar;
+                        Toast.makeText(context, "Ajusto " + montoPagar + " " + debePagar + " ", Toast.LENGTH_LONG).show();
+                    }
+                    else{
+                        Toast.makeText(context, "no ajusto " + montoPagar + " " + debePagar + " ", Toast.LENGTH_LONG).show();
+                    }
+
                     if (montoPagar <= debePagar) {
+
                         Toast.makeText(context, "Pago " + montoPagar + " " + debePagar + " ", Toast.LENGTH_LONG).show();
                         montoFaltante = totalPagado + montoPagar;
 
@@ -224,6 +229,7 @@ public class RecibosSeleccionarFacturaAdapter extends RecyclerView.Adapter<Recib
         alertD.show();
     }
 
+
     @Override
     public long getItemId(int position) {
         return 0;
@@ -240,11 +246,11 @@ public class RecibosSeleccionarFacturaAdapter extends RecyclerView.Adapter<Recib
         return 0;
     }
 
-    public class CharacterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class CharacterViewHolder extends RecyclerView.ViewHolder {
 
         private TextView txt_producto_factura_numeracionRecibos, txt_producto_factura_FaltanteRecibos, txt_producto_factura_TotalRecibos, txt_producto_factura_PagoRecibos;
         protected CardView cardView;
-        private CheckBox checkbox;
+
 
         ItemClickListener itemClickListener;
         public CharacterViewHolder(View view) {
@@ -254,20 +260,8 @@ public class RecibosSeleccionarFacturaAdapter extends RecyclerView.Adapter<Recib
             txt_producto_factura_FaltanteRecibos = (TextView) view.findViewById(R.id.txt_producto_factura_FaltanteRecibos);
             txt_producto_factura_TotalRecibos = (TextView) view.findViewById(R.id.txt_producto_factura_TotalRecibos);
             txt_producto_factura_PagoRecibos = (TextView) view.findViewById(R.id.txt_producto_factura_PagoRecibos);
-            checkbox = (CheckBox) view.findViewById(R.id.checkbox);
 
-            checkbox.setOnClickListener(this);
 
-        }
-
-        public void setItemClickListener(ItemClickListener ic){
-            this.itemClickListener=ic;
-
-        }
-
-        @Override
-        public void onClick(View v) {
-            this.itemClickListener.onItemClick(v, getLayoutPosition());
 
         }
 
