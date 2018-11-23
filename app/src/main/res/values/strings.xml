@@ -179,5 +179,30 @@
 
     <string name="title_activity_reimprimirpedido">Reimprimir Pedido</string>
 
+    <string-array name="array_spinnerCreditTime1">
 
+        <item>Seleccione el Credit Time</item>
+
+        <item>8: 8 Dias</item>
+        <item>15: 15 Dias</item>
+        <item>30: 30 Dias</item>
+        <item>45: 45 Dias</item>
+
+
+    </string-array>
+
+
+    <string-array name="array_spinnerIdType1">
+
+        <item>Seleccione el id Type</item>
+
+        <item>01: Cédula Fisica</item>
+        <item>02: Cédula Juridica</item>
+        <item>03: Dimex</item>
+        <item>04: NITE</item>
+
+
+    </string-array>
+    <string name="array_spinnerCT">Credit Time</string>
+    <string name="array_spinnerIT">id Type</string>
 </resources>

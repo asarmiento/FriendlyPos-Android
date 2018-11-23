@@ -10,8 +10,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,6 +23,7 @@ import com.friendlypos.crearCliente.modelo.customer_new;
 import com.friendlypos.distribucion.util.GPSTracker;
 import com.friendlypos.login.activity.LoginActivity;
 import com.friendlypos.login.util.SessionPrefes;
+import com.friendlypos.preventas.modelo.visit;
 import com.friendlypos.principal.activity.BluetoothActivity;
 import com.friendlypos.principal.activity.MenuPrincipal;
 
@@ -34,9 +38,6 @@ public class crearCliente extends BluetoothActivity {
 
     @Bind(R.id.toolbarCrearCliente)
     Toolbar toolbarCrearCliente;
-
-    @Bind(R.id.cliente_idtype_nuevo)
-    EditText cliente_idtype_nuevo;
 
     @Bind(R.id.cliente_card_nuevo)
     EditText cliente_card_nuevo;
@@ -80,23 +81,105 @@ public class crearCliente extends BluetoothActivity {
     @Bind(R.id.cliente_address_nuevo)
     EditText cliente_address_nuevo;
 
-    @Bind(R.id.cliente_credittime_nuevo)
-    EditText cliente_credittime_nuevo;
-
     @Bind(R.id.btnCrearCliente)
     Button btnCrearCliente;
 
-    String idtype, card, fe, placa, model, doors, name, email, fantasyname, companyname, phone, creditlimit, address, credittime;
+    @Bind(R.id.cliente_credittime_nuevo)
+    Spinner spinnerCreditTime;
+
+    @Bind(R.id.cliente_idtype_nuevo)
+    Spinner spinnerIdType;
+
+    String idtype1, idtype, card, fe, placa, model, doors, name, email, fantasyname, companyname, phone, creditlimit, address, credittime1, credittime;
     double longitud, latitud;
     GPSTracker gps;
     double latitude = 0.0;
     double longitude = 0.0;
+    int nextId;
+
+
+    String array_spinnerIdType[] = { "Seleccione el id Type", "01: Cédula Fisica",
+            "02: Cédula Juridica", "03: Dimex", "04: NITE"
+          };
+
+    String array_spinnerCreditTime[] = { "Seleccione el Credit Time", "8: 8 Dias",
+            "15: 15 Dias", "30: 30 Dias", "45: 45 Dias"
+    };
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.activity_crear_cliente);
         ButterKnife.bind(this);
+
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
+                this, R.array.array_spinnerIdType1,
+                android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerIdType.setAdapter(adapter);
+        spinnerIdType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view,
+                                       int position, long id) {
+                idtype1 = array_spinnerIdType[position];
+
+                if(idtype1.equals("01: Cédula Fisica")){
+                    idtype = "01";
+                }
+                else if(idtype1.equals("02: Cédula Juridica")){
+                    idtype = "02";
+                }
+                else if(idtype1.equals("03: Dimex")){
+                    idtype = "03";
+                }
+                else if(idtype1.equals("04: NITE")){
+                    idtype = "04";
+                }
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                idtype = array_spinnerIdType[0];
+            }
+        });
+
+        ArrayAdapter<CharSequence> adapter1 = ArrayAdapter.createFromResource(
+                this, R.array.array_spinnerCreditTime1,
+                android.R.layout.simple_spinner_item);
+        adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerCreditTime.setAdapter(adapter1);
+        spinnerCreditTime.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view,
+                                       int position, long id) {
+
+                credittime1 = array_spinnerCreditTime[position];
+
+                if(credittime1.equals("8: 8 Dias")){
+                    credittime = "8";
+                }
+                else if(credittime1.equals("15: 15 Dias")){
+                    credittime = "15";
+                }
+                else if(credittime1.equals("30: 30 Dias")){
+                    credittime = "30";
+                }
+                else if(credittime1.equals("45: 45 Dias")){
+                    credittime = "45";
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                credittime = array_spinnerCreditTime[0];
+            }
+        });
+
 
         // Redirección al Login
         if (!SessionPrefes.get(this).isLoggedIn()) {
@@ -172,7 +255,6 @@ public class crearCliente extends BluetoothActivity {
         switch (component.getId()) {
             case R.id.btnCrearCliente:
 
-                idtype = cliente_idtype_nuevo.getText().toString();
                 card = cliente_card_nuevo.getText().toString();
                 fe = cliente_fe_nuevo.getText().toString();
                 placa = cliente_placa_nuevo.getText().toString();
@@ -188,7 +270,6 @@ public class crearCliente extends BluetoothActivity {
                 creditlimit = cliente_creditlimit_nuevo.getText().toString();
 
                 address = cliente_address_nuevo.getText().toString();
-                credittime = cliente_credittime_nuevo.getText().toString();
 
 
                 if (
@@ -196,11 +277,13 @@ public class crearCliente extends BluetoothActivity {
                         && isValidName(name))
                 {
 
-                    if(latitude == 0.0){
-                        if(longitude == 0.0){
-                        enviarInfo();
-                    }
-                        Toast.makeText(crearCliente.this, "Obtenga la ubicación del cliente", Toast.LENGTH_LONG).show();
+                    if(latitude != 0.0){
+                        if(longitude != 0.0){
+                            enviarInfo();
+
+                    }else {
+                            Toast.makeText(crearCliente.this, "Obtenga la ubicación del cliente", Toast.LENGTH_LONG).show();
+                        }
                     }
 
                 } else if (!isValidName(name)) {
@@ -232,7 +315,20 @@ public class crearCliente extends BluetoothActivity {
         realm5.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm5) {
+
+                Number currentIdNum = realm5.where(customer_new.class).max("id");
+
+                if (currentIdNum == null) {
+                    nextId = 1;
+                }
+                else {
+                    nextId = currentIdNum.intValue() + 1;
+                }
+
+
                 customer_new clienteNuevo = new customer_new(); // unmanaged
+
+                clienteNuevo.setId(nextId);
 
                 clienteNuevo.setIdtype(idtype);
                 clienteNuevo.setCard(card);
@@ -256,6 +352,7 @@ public class crearCliente extends BluetoothActivity {
 
                 clienteNuevo.setCredit_time(credittime);
                 clienteNuevo.setSubidaNuevo(1);
+               // clienteNuevo.setStatus("true");
                 realm5.insertOrUpdate(clienteNuevo);
                 Log.d("idinvNUEVOCREADO", clienteNuevo + "");
 

@@ -10,7 +10,7 @@ import io.realm.annotations.PrimaryKey;
 public class customer_new extends RealmObject {
 
     @PrimaryKey
-    private String id;
+    private int id;
 
     private String idtype;
     private String card;
@@ -28,17 +28,18 @@ public class customer_new extends RealmObject {
     private String credit_limit;
     private String address;
     private String credit_time;
+   // private String status;
     int subidaNuevo = 0;
     private boolean result;
     private String code;
     private String messages;
 
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -202,6 +203,14 @@ public class customer_new extends RealmObject {
         this.subidaNuevo = subidaNuevo;
     }
 
+   /* public String isStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }*/
+
     @Override
     public String toString() {
         return "customer_new{" +
@@ -223,6 +232,7 @@ public class customer_new extends RealmObject {
                 ", address='" + address + '\'' +
                 ", credit_time='" + credit_time + '\'' +
                 ", subidaNuevo=" + subidaNuevo +
+                //", status=" + status +
                 ", result=" + result +
                 ", code='" + code + '\'' +
                 ", messages='" + messages + '\'' +

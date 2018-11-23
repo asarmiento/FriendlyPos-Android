@@ -70,6 +70,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/your_email_hint"
+                        android:text="franaraya06@gmail.com"
                         android:inputType="text"
                         android:maxLines="1"
 
@@ -90,6 +91,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/your_password_hint"
+                        android:text="Fw2045zz85"
                         android:imeActionId="@+id/login"
                         android:imeActionLabel="@string/action_sign_in_short"
                         android:imeOptions="actionUnspecified"

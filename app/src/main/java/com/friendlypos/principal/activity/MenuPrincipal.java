@@ -140,7 +140,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
     String facturaIdA;
 
     String facturaCostumer;
-    int facturaIdCV;
+    int facturaIdCV, facturaIdNuevoCliente;
 
     String facturaIdRecibos, facturaIdGPS;
     private Properties properties;
@@ -628,7 +628,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
 
                 Realm realmClienteNuevo = Realm.getDefaultInstance();
 
-                RealmQuery<customer_new> queryClienteNuevo = realmClienteNuevo.where(customer_new.class).equalTo("subidaEdit", 1);
+                RealmQuery<customer_new> queryClienteNuevo = realmClienteNuevo.where(customer_new.class).equalTo("subidaNuevo", 1);
                 final RealmResults<customer_new> invoiceNuevo = queryClienteNuevo.findAll();
                 Log.d("qweqweq", invoiceNuevo.toString());
                 List<customer_new> listaNuevo = realmClienteNuevo.copyFromRealm(invoiceNuevo);
@@ -642,8 +642,8 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                     for (int i = 0; i < listaNuevo.size(); i++) {
                         Toast.makeText(MenuPrincipal.this, "Subiendo información...", Toast.LENGTH_SHORT).show();
 
-                        facturaIdGPS =listaNuevo.get(i).getId();
-                        Log.d("facturaIdCV", facturaIdGPS + "");
+                        facturaIdNuevoCliente =listaNuevo.get(i).getId();
+                        Log.d("facturaIdCV", facturaIdNuevoCliente + "");
                         EnviarClienteNuevo obj = new EnviarClienteNuevo(listaNuevo.get(i));
                         Log.d("My App", obj + "");
                         subirClienteNuevo.sendPostClienteNuevo(obj);

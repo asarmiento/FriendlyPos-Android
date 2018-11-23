@@ -458,6 +458,7 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
                                     Inventario inv_actualizado = realm2.where(Inventario.class).equalTo("id", idInvetarioSelec).findFirst();
                                     inv_actualizado.setAmount(String.valueOf(nuevoAmountDevuelto));
                                     realm2.insertOrUpdate(inv_actualizado);
+                                    Log.d("DevolucionTotal", inv_actualizado+"");
                                     realm2.close();
                                 }
                             });
