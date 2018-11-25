@@ -149,11 +149,28 @@ StringBuffer sb= null;
 
                                 double numIngresado = Double.parseDouble(input.getText().toString());
 
+                          /*      if(numIngresado > debePagar){
+                                    montoPagar = debePagar;
+                                    Toast.makeText(context, "Ajusto " + montoPagar + " " + debePagar + " ", Toast.LENGTH_LONG).show();
+                                }
+                                else{
+                                    Toast.makeText(context, "no ajusto " + montoPagar + " " + debePagar + " ", Toast.LENGTH_LONG).show();
+                                }*/
 
 
                                 if(!input.getText().toString().isEmpty()){
 
-                                    if(numIngresado >= totalP){
+
+                                    if(numIngresado > totalP){
+                                        numIngresado = totalP;
+                                        Toast.makeText(getActivity(), "Ajusto " + cantidadPagar + " " + debePagar + " ", Toast.LENGTH_LONG).show();
+                                    }
+                                    else{
+                                        Toast.makeText(getActivity(), "no ajusto " + cantidadPagar + " " + debePagar + " ", Toast.LENGTH_LONG).show();
+                                    }
+
+
+                                    if(numIngresado > totalP){
                                         Toast.makeText(getActivity(), "Ingrese una cantidad menor al total", Toast.LENGTH_LONG).show();
                                     }else{
                                     cantidadPagar = numIngresado;

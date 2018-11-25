@@ -22,6 +22,12 @@ public class Inventario extends RealmObject {
     String descripcion;
     String barcode;
 
+    int devuelvo= 0;
+
+    private boolean result;
+    private String code;
+    private String messages;
+
 
     public int getId() {
         return id;
@@ -87,6 +93,38 @@ public class Inventario extends RealmObject {
         this.barcode = barcode;
     }
 
+    public int getDevuelvo() {
+        return devuelvo;
+    }
+
+    public void setDevuelvo(int devuelvo) {
+        this.devuelvo = devuelvo;
+    }
+
+    public boolean isResult() {
+        return result;
+    }
+
+    public void setResult(boolean result) {
+        this.result = result;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getMessages() {
+        return messages;
+    }
+
+    public void setMessages(String messages) {
+        this.messages = messages;
+    }
+
     @Override
     public String toString() {
         return "Inventario{" +
@@ -98,6 +136,10 @@ public class Inventario extends RealmObject {
                 ", distributor='" + distributor + '\'' +
                 ", descripcion='" + descripcion + '\'' +
                 ", barcode='" + barcode + '\'' +
+                ", devuelvo=" + devuelvo +
+                ", result=" + result +
+                ", code='" + code + '\'' +
+                ", messages='" + messages + '\'' +
                 '}';
     }
 }

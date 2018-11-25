@@ -51,6 +51,7 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
     RealmResults<Pivot> facturaid1;
     int idInvetarioSelec;
     Double amount_inventario = 0.0;
+    Double amount_dist_inventario = 0.0;
     String facturaID, clienteID;
     int nextId;
     int tabCliente;
@@ -378,6 +379,7 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
                         Log.d("PRODUCTOSFACTURA1", facturaid1 + "");
 
                         for (int i = 0; i < facturaid1.size(); i++) {
+
                             final Pivot eventRealm = facturaid1.get(i);
                             final double cantidadDevolver = Double.parseDouble(eventRealm.getAmount());
 
@@ -397,6 +399,7 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
                                         if (inventario != null) {
                                             idInvetarioSelec = inventario.getId();
                                             amount_inventario = Double.valueOf(inventario.getAmount());
+                                            amount_dist_inventario = Double.valueOf(inventario.getAmount_dist());
                                             Log.d("idinventario", idInvetarioSelec+"");
 
                                         } else {
@@ -450,6 +453,8 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
                             final Double nuevoAmountDevuelto =  cantidadDevolver + amount_inventario;
                             Log.d("nuevoAmount",nuevoAmountDevuelto+"");
 
+                            final Double nuevoAmountDistDevuelto = amount_dist_inventario - cantidadDevolver;
+                            Log.d("nuevoAmountDist",nuevoAmountDistDevuelto+"");
                           // TRANSACCIÓN PARA ACTUALIZAR EL CAMPO AMOUNT_DIST EN EL INVENTARIO
                             final Realm realm2 = Realm.getDefaultInstance();
                             realm2.executeTransaction(new Realm.Transaction() {
@@ -457,6 +462,8 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
                                 public void execute(Realm realm2) {
                                     Inventario inv_actualizado = realm2.where(Inventario.class).equalTo("id", idInvetarioSelec).findFirst();
                                     inv_actualizado.setAmount(String.valueOf(nuevoAmountDevuelto));
+                                    inv_actualizado.setAmount_dist(String.valueOf(nuevoAmountDistDevuelto));
+                                    inv_actualizado.setDevuelvo(1);
                                     realm2.insertOrUpdate(inv_actualizado);
                                     Log.d("DevolucionTotal", inv_actualizado+"");
                                     realm2.close();

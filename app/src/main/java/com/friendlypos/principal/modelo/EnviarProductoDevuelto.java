@@ -1,5 +1,6 @@
 package com.friendlypos.principal.modelo;
 
+import com.friendlypos.distribucion.modelo.Inventario;
 import com.friendlypos.distribucion.modelo.Pivot;
 import com.friendlypos.preventas.modelo.visit;
 
@@ -9,9 +10,9 @@ import com.friendlypos.preventas.modelo.visit;
 
 public class EnviarProductoDevuelto {
 
-   private Pivot pivot;
+   private Inventario pivot;
 
-    public EnviarProductoDevuelto(Pivot pivot) {
+    public EnviarProductoDevuelto(Inventario pivot) {
         this.pivot = pivot;
     }
 }

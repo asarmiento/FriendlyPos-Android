@@ -16,7 +16,6 @@ import com.friendlypos.application.util.Functions;
 import com.friendlypos.distribucion.activity.DistribucionActivity;
 import com.friendlypos.distribucion.fragment.DistResumenFragment;
 import com.friendlypos.distribucion.modelo.Inventario;
-import com.friendlypos.distribucion.modelo.InventarioDevuelto;
 import com.friendlypos.distribucion.modelo.Pivot;
 import com.friendlypos.principal.modelo.Productos;
 

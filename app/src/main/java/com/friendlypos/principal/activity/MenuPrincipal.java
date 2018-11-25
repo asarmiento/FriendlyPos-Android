@@ -37,6 +37,7 @@ import com.friendlypos.application.util.PrinterFunctions;
 import com.friendlypos.crearCliente.modelo.customer_new;
 import com.friendlypos.distribucion.activity.DistribucionActivity;
 import com.friendlypos.distribucion.modelo.EnviarFactura;
+import com.friendlypos.distribucion.modelo.Inventario;
 import com.friendlypos.distribucion.modelo.Pivot;
 import com.friendlypos.distribucion.modelo.invoice;
 import com.friendlypos.distribucion.modelo.sale;
@@ -139,8 +140,9 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
     String facturaId;
     String facturaIdA;
 
+
     String facturaCostumer;
-    int facturaIdCV, facturaIdNuevoCliente;
+    int facturaIdCV, facturaIdNuevoCliente,facturaIdDevuelto ;
 
     String facturaIdRecibos, facturaIdGPS;
     private Properties properties;
@@ -569,6 +571,33 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
 
                 break;
 
+            case R.id.btn_devolver_inventario:
+                Realm realmDevolver = Realm.getDefaultInstance();
+
+                RealmQuery<Inventario> queryDevolver = realmDevolver.where(Inventario.class).equalTo("devuelvo", 1);
+                final RealmResults<Inventario> invoiceDevolver = queryDevolver.findAll();
+                Log.d("qweqweq", invoiceDevolver.toString());
+                List<Inventario> listaDevolver = realmDevolver.copyFromRealm(invoiceDevolver);
+                Log.d("qweqweq1", listaDevolver + "");
+                realmDevolver.close();
+
+                if(listaDevolver.size()== 0){
+                    Toast.makeText(MenuPrincipal.this,"No hay productos para devolver", Toast.LENGTH_LONG).show();
+                }else {
+
+                    for (int i = 0; i < listaDevolver.size(); i++) {
+                        Toast.makeText(MenuPrincipal.this, "Subiendo información...", Toast.LENGTH_SHORT).show();
+
+                        facturaIdDevuelto = listaDevolver.get(i).getId();
+                        Log.d("facturaIdCV", facturaIdDevuelto + "");
+
+                        EnviarProductoDevuelto obj = new EnviarProductoDevuelto(listaDevolver.get(i));
+                        Log.d("My App", obj + "");
+                        subirProductoDevuelto.sendPostClienteProductoDevuelto(obj, facturaIdDevuelto);
+                    }
+                }
+                break;
+
             case R.id.btn_subir_recibos:
 
                 Realm realmRecibos = Realm.getDefaultInstance();
@@ -684,35 +713,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                 break;
 
 
-            case R.id.btn_devolver_inventario:
-                Realm realmDevolver = Realm.getDefaultInstance();
 
-                RealmQuery<Pivot> queryDevolver = realmDevolver.where(Pivot.class).equalTo("devuelvo", 1);
-                final RealmResults<Pivot> invoiceDevolver = queryDevolver.findAll();
-                Log.d("qweqweq", invoiceDevolver.toString());
-                List<Pivot> listaDevolver = realmDevolver.copyFromRealm(invoiceDevolver);
-                Log.d("qweqweq1", listaDevolver + "");
-                realmDevolver.close();
-
-                if(listaDevolver.size()== 0){
-                    Toast.makeText(MenuPrincipal.this,"No hay productos para devolver", Toast.LENGTH_LONG).show();
-                }else {
-
-                    for (int i = 0; i < listaDevolver.size(); i++) {
-                        Toast.makeText(MenuPrincipal.this, "Subiendo información...", Toast.LENGTH_SHORT).show();
-
-                        facturaIdCV = listaDevolver.get(i).getId();
-                        Log.d("facturaIdCV", facturaIdCV + "");
-
-                        EnviarProductoDevuelto obj = new EnviarProductoDevuelto(listaDevolver.get(i));
-                        Log.d("My App", obj + "");
-                        subirProductoDevuelto.sendPostClienteProductoDevuelto(obj);
-                       // actualizarClienteVisitado();
-                    }
-                }
-
-                Toast.makeText(MenuPrincipal.this, "Se subio con éxito", Toast.LENGTH_SHORT).show();
-                break;
 
             case R.id.btn_imprimir_liquidacion:
                /* if(bluetoothStateChangeReceiver.isBluetoothAvailable()== true) {*/
@@ -957,6 +958,33 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
         }
         realm3.close();
     }
+
+    protected void actualizarInventarioDevuelto(final String factura) {
+
+        // TRANSACCION PARA ACTUALIZAR CAMPOS DE LA TABLA VENTAS
+        final Realm realm3 = Realm.getDefaultInstance();
+
+        try {
+            realm3.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm3) {
+
+                    Inventario sale_actualizada = realm3.where(Inventario.class).equalTo("id", factura).findFirst();
+                    sale_actualizada.setDevuelvo(0);
+                    realm3.insertOrUpdate(sale_actualizada);
+
+                }
+
+            });
+
+        } catch (Exception e) {
+            Log.e("error", "error", e);
+            Toast.makeText(MenuPrincipal.this,"errorACTVEN", Toast.LENGTH_SHORT).show();
+
+        }
+        realm3.close();
+    }
+
 
 
     public void ClickNavigation(View view) {
@@ -1361,5 +1389,23 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
         }
         return cod;
     }
+
+    public int codigoDeRespuestaProductoDevuelto(String codS, String messageS, String resultS, int cod, int idFacturaSubida){
+
+
+        Realm realmPedidos = Realm.getDefaultInstance();
+        Inventario queryPedidos = realmPedidos.where(Inventario.class).equalTo("id", idFacturaSubida).equalTo("devuelvo", 1).findFirst();
+
+        if (codS.equals("1") && resultS.equals("true")) {
+            facturaId = String.valueOf(queryPedidos.getId());
+            actualizarInventarioDevuelto(facturaId);
+
+            Toast.makeText(MenuPrincipal.this, messageS, Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(MenuPrincipal.this, messageS, Toast.LENGTH_LONG).show();
+        }
+        return cod;
+    }
+
 
 }

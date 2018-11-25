@@ -6,6 +6,7 @@ import com.friendlypos.Recibos.modelo.RecibosResponse;
 import com.friendlypos.Recibos.modelo.receipts;
 import com.friendlypos.crearCliente.modelo.customer_new;
 import com.friendlypos.distribucion.modelo.EnviarFactura;
+import com.friendlypos.distribucion.modelo.Inventario;
 import com.friendlypos.distribucion.modelo.Pivot;
 import com.friendlypos.distribucion.modelo.invoice;
 import com.friendlypos.distribucion.modelo.FacturasResponse;
@@ -109,7 +110,7 @@ public interface RequestInterface {
 
     // TODO DEFINIR CUAL ES EL KEY PARA ENVIAR (KEY, VALUE)
     @POST("api/upload-inventory-products")
-    Call<Pivot> savePostProductoDevuelto(@Body EnviarProductoDevuelto clienteNuevo, @Header("Authorization") String token);
+    Call<Inventario> savePostProductoDevuelto(@Body EnviarProductoDevuelto clienteNuevo, @Header("Authorization") String token);
 
 
 }
