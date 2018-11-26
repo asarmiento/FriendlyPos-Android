@@ -60,9 +60,6 @@ public class crearCliente extends BluetoothActivity {
     @Bind(R.id.cliente_doors_nuevo)
     EditText cliente_doors_nuevo;
 
-    @Bind(R.id.cliente_name_nuevo)
-    EditText cliente_name_nuevo;
-
     @Bind(R.id.cliente_email_nuevo)
     EditText cliente_email_nuevo;
 
@@ -93,7 +90,7 @@ public class crearCliente extends BluetoothActivity {
     @Bind(R.id.cliente_fe_nuevo)
     Spinner spinnerFe;
 
-    String idtype1, idtype, card, fe, fe1, placa, model, doors, name, email, fantasyname, companyname, phone, creditlimit, address, credittime1, credittime;
+    String idtype1, idtype, card, fe, fe1, placa, model, doors, email, fantasyname, companyname, phone, creditlimit, address, credittime1, credittime;
     double longitud, latitud;
     GPSTracker gps;
     double latitude = 0.0;
@@ -325,7 +322,6 @@ public class crearCliente extends BluetoothActivity {
 
                 model = cliente_model_nuevo.getText().toString();
                 doors = cliente_doors_nuevo.getText().toString();
-                name = cliente_name_nuevo.getText().toString();
                 email = cliente_email_nuevo.getText().toString();
 
                 fantasyname = cliente_fantasyname_nuevo.getText().toString();
@@ -337,7 +333,7 @@ public class crearCliente extends BluetoothActivity {
 
                 if (
                         isValidEmail(email) && isValidMobile(phone)
-                        && isValidName(name))
+                        && isValidName(fantasyname)&& isValidName(companyname))
                 {
 
                     if(latitude != 0.0){
@@ -399,10 +395,14 @@ public class crearCliente extends BluetoothActivity {
                         }
                     }
 
-                } else if (!isValidName(name)) {
-                    cliente_name_nuevo.setError("Nombre Invalido");
-                    cliente_name_nuevo.requestFocus();
-                } else if (!isValidEmail(email)) {
+                } else if (!isValidName(fantasyname)) {
+                    cliente_fantasyname_nuevo.setError("Fantasy Name Invalido");
+                    cliente_fantasyname_nuevo.requestFocus();
+                }
+                else if (!isValidName(companyname)) {
+                    cliente_companyname_nuevo.setError("Company Name Invalido");
+                    cliente_companyname_nuevo.requestFocus();
+                }else if (!isValidEmail(email)) {
                     cliente_email_nuevo.setError("Correo Invalido");
                     cliente_email_nuevo.requestFocus();
                 } else if (!isValidMobile(phone)) {
@@ -416,10 +416,7 @@ public class crearCliente extends BluetoothActivity {
                 cliente_longitud_nuevo.setText("Longitud: " +longitude );
                 cliente_latitud_nuevo.setText("Latitud: " +latitude);
                 break;
-
         }
-
-
     }
 
     public void enviarInfo(){
@@ -453,7 +450,7 @@ public class crearCliente extends BluetoothActivity {
 
                 clienteNuevo.setModel(model);
                 clienteNuevo.setDoors(doors);
-                clienteNuevo.setName(name);
+                clienteNuevo.setName(companyname);
 
                 clienteNuevo.setEmail(email);
                 clienteNuevo.setFantasy_name(fantasyname);
@@ -465,10 +462,9 @@ public class crearCliente extends BluetoothActivity {
 
                 clienteNuevo.setCredit_time(credittime);
                 clienteNuevo.setSubidaNuevo(1);
-               // clienteNuevo.setStatus("true");
+
                 realm5.insertOrUpdate(clienteNuevo);
                 Log.d("idinvNUEVOCREADO", clienteNuevo + "");
-
 
             }
 

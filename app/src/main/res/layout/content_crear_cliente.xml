@@ -263,26 +263,28 @@
             android:background="@color/background"
             android:paddingLeft="5dp"
             android:orientation="vertical"
-            android:id="@+id/rlNameCliente"
+            android:id="@+id/rlAddressCliente"
             android:layout_below="@+id/rlDoorsCliente"
             >
 
             <android.support.design.widget.TextInputLayout
-                android:id="@+id/NuevoNameCliente"
+                android:id="@+id/NuevoAddressCliente"
                 style="@style/TextInputLayout"
                 android:layout_alignParentBottom="true"
                 app:hintTextAppearance="@style/TextAppearence.App.TextInputLayout.ClienteNuevo">
 
                 <EditText
-                    android:id="@+id/cliente_name_nuevo"
+                    android:id="@+id/cliente_address_nuevo"
                     style="@style/ClienteNuevo2"
-                    android:hint="Name"
+                    android:hint="Address"
                     android:singleLine="true"
                     android:imeOptions="actionNext"/>
 
             </android.support.design.widget.TextInputLayout>
 
         </RelativeLayout>
+
+
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -293,7 +295,7 @@
             android:paddingLeft="5dp"
             android:orientation="vertical"
             android:id="@+id/rlEmailCliente"
-            android:layout_below="@+id/rlNameCliente"
+            android:layout_below="@+id/rlAddressCliente"
             >
 
             <android.support.design.widget.TextInputLayout
@@ -444,6 +446,7 @@
         </RelativeLayout>
 
 
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="60dp"
@@ -452,38 +455,8 @@
             android:background="@color/background"
             android:paddingLeft="5dp"
             android:orientation="vertical"
-            android:id="@+id/rlAddressCliente"
-            android:layout_below="@+id/rlCreditLimitCliente"
-            >
-
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/NuevoAddressCliente"
-                style="@style/TextInputLayout"
-                android:layout_alignParentBottom="true"
-                app:hintTextAppearance="@style/TextAppearence.App.TextInputLayout.ClienteNuevo">
-
-                <EditText
-                    android:id="@+id/cliente_address_nuevo"
-                    style="@style/ClienteNuevo2"
-                    android:hint="Address"
-                    android:singleLine="true"
-                    android:imeOptions="actionNext"/>
-
-            </android.support.design.widget.TextInputLayout>
-
-        </RelativeLayout>
-
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_margin="1dp"
-            android:layout_marginBottom="10dp"
-            android:background="@color/colorPrimary"
-            android:paddingLeft="5dp"
-            android:orientation="vertical"
             android:id="@+id/rlCreditTimeCliente"
-            android:layout_below="@+id/rlAddressCliente"
+            android:layout_below="@+id/rlCreditLimitCliente"
             >
             <Spinner
                 android:id="@+id/cliente_credittime_nuevo"
