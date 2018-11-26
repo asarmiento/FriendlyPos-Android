@@ -68,6 +68,8 @@
 
         </RelativeLayout>
 
+
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="60dp"
@@ -76,44 +78,14 @@
             android:background="@color/background"
             android:paddingLeft="5dp"
             android:orientation="vertical"
-            android:id="@+id/rlFeCliente"
-            android:layout_below="@+id/rlCardCliente"
-            >
-
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/NuevoFeCliente"
-                style="@style/TextInputLayout"
-                android:layout_alignParentBottom="true"
-                app:hintTextAppearance="@style/TextAppearence.App.TextInputLayout.ClienteNuevo">
-
-                <EditText
-                    android:id="@+id/cliente_fe_nuevo"
-                    style="@style/ClienteNuevo2"
-                    android:hint="Fe"
-                    android:singleLine="true"
-                    android:imeOptions="actionNext"
-                    />
-
-            </android.support.design.widget.TextInputLayout>
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_margin="1dp"
-            android:layout_marginBottom="10dp"
-            android:background="@color/colorPrimary"
-            android:paddingLeft="5dp"
-            android:orientation="vertical"
             android:id="@+id/rlLongitudCliente"
-            android:layout_below="@+id/rlFeCliente"
+            android:layout_below="@+id/rlCardCliente"
             >
 
 
                 <TextView
                     android:id="@+id/cliente_longitud_nuevo"
-                    style="@style/ClienteNuevo1"
+                    style="@style/ClienteNuevo2"
                     android:hint="Longitud"
                     android:singleLine="true"
                     android:gravity="center_vertical|"
@@ -141,7 +113,7 @@
             android:layout_height="60dp"
             android:layout_margin="1dp"
             android:layout_marginBottom="10dp"
-            android:background="@color/background"
+            android:background="@color/colorPrimary"
             android:paddingLeft="5dp"
             android:orientation="vertical"
             android:id="@+id/rlLatitudCliente"
@@ -150,7 +122,7 @@
 
             <TextView
                 android:id="@+id/cliente_latitud_nuevo"
-                style="@style/ClienteNuevo2"
+                style="@style/ClienteNuevo1"
                 android:hint="Latitud"
                 android:singleLine="true"
                 android:gravity="center_vertical|"
@@ -159,6 +131,29 @@
                 android:layout_height="match_parent"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentStart="true" />
+
+        </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_margin="1dp"
+        android:layout_marginBottom="10dp"
+        android:background="@color/background"
+        android:paddingLeft="5dp"
+        android:id="@+id/rlFeCliente"
+        android:layout_below="@+id/rlLatitudCliente"
+        >
+        <Spinner
+            android:id="@+id/cliente_fe_nuevo"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:prompt="@string/array_spinnerFE"
+            android:textSize="16sp"
+            android:imeOptions="actionNext"
+   />
+
 
         </RelativeLayout>
 
@@ -172,7 +167,7 @@
             android:paddingLeft="5dp"
             android:orientation="vertical"
             android:id="@+id/rlPlacaCliente"
-            android:layout_below="@+id/rlLatitudCliente"
+            android:layout_below="@+id/rlFeCliente"
             >
 
             <android.support.design.widget.TextInputLayout
@@ -408,6 +403,7 @@
                     android:imeOptions="actionNext"
                     android:inputType="phone"
                     android:digits="0123456789"
+                    android:maxLength="8"
                     android:singleLine="true" />
 
             </android.support.design.widget.TextInputLayout>

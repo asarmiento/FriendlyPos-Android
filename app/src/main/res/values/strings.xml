@@ -183,13 +183,22 @@
 
         <item>Seleccione el Credit Time</item>
 
-        <item>8: 8 Dias</item>
-        <item>15: 15 Dias</item>
-        <item>30: 30 Dias</item>
-        <item>45: 45 Dias</item>
+        <item>8 Dias</item>
+        <item>15 Dias</item>
+        <item>30 Dias</item>
+        <item>45 Dias</item>
 
 
     </string-array>
+
+    <string-array name="array_spinnerFe1">
+
+        <item>Seleccione Fe</item>
+        <item>Tiquete Electrónico</item>
+        <item>Factura Electrónica</item>
+
+    </string-array>
+
 
 
     <string-array name="array_spinnerIdType1">
@@ -205,4 +214,5 @@
     </string-array>
     <string name="array_spinnerCT">Credit Time</string>
     <string name="array_spinnerIT">id Type</string>
+    <string name="array_spinnerFE">FE</string>
 </resources>

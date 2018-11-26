@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.InputFilter;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
@@ -42,8 +43,7 @@ public class crearCliente extends BluetoothActivity {
     @Bind(R.id.cliente_card_nuevo)
     EditText cliente_card_nuevo;
 
-    @Bind(R.id.cliente_fe_nuevo)
-    EditText cliente_fe_nuevo;
+
 
     @Bind(R.id.cliente_longitud_nuevo)
     TextView cliente_longitud_nuevo;
@@ -90,7 +90,10 @@ public class crearCliente extends BluetoothActivity {
     @Bind(R.id.cliente_idtype_nuevo)
     Spinner spinnerIdType;
 
-    String idtype1, idtype, card, fe, placa, model, doors, name, email, fantasyname, companyname, phone, creditlimit, address, credittime1, credittime;
+    @Bind(R.id.cliente_fe_nuevo)
+    Spinner spinnerFe;
+
+    String idtype1, idtype, card, fe, fe1, placa, model, doors, name, email, fantasyname, companyname, phone, creditlimit, address, credittime1, credittime;
     double longitud, latitud;
     GPSTracker gps;
     double latitude = 0.0;
@@ -102,8 +105,12 @@ public class crearCliente extends BluetoothActivity {
             "02: Cédula Juridica", "03: Dimex", "04: NITE"
           };
 
-    String array_spinnerCreditTime[] = { "Seleccione el Credit Time", "8: 8 Dias",
-            "15: 15 Dias", "30: 30 Dias", "45: 45 Dias"
+    String array_spinnerCreditTime[] = { "Seleccione el Credit Time", "8 Dias",
+            "15 Dias", "30 Dias", "45 Dias"
+    };
+
+    String array_spinnerFe[] = { "Seleccione Fe", "Tiquete Electrónico",
+            "Factura Electrónica"
     };
 
 
@@ -148,8 +155,7 @@ public class crearCliente extends BluetoothActivity {
         });
 
         ArrayAdapter<CharSequence> adapter1 = ArrayAdapter.createFromResource(
-                this, R.array.array_spinnerCreditTime1,
-                android.R.layout.simple_spinner_item);
+                this, R.array.array_spinnerCreditTime1, android.R.layout.simple_spinner_item);
         adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerCreditTime.setAdapter(adapter1);
         spinnerCreditTime.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -160,16 +166,16 @@ public class crearCliente extends BluetoothActivity {
 
                 credittime1 = array_spinnerCreditTime[position];
 
-                if(credittime1.equals("8: 8 Dias")){
+                if(credittime1.equals("8 Dias")){
                     credittime = "8";
                 }
-                else if(credittime1.equals("15: 15 Dias")){
+                else if(credittime1.equals("15 Dias")){
                     credittime = "15";
                 }
-                else if(credittime1.equals("30: 30 Dias")){
+                else if(credittime1.equals("30 Dias")){
                     credittime = "30";
                 }
-                else if(credittime1.equals("45: 45 Dias")){
+                else if(credittime1.equals("45 Dias")){
                     credittime = "45";
                 }
             }
@@ -180,6 +186,32 @@ public class crearCliente extends BluetoothActivity {
             }
         });
 
+
+        ArrayAdapter<CharSequence> adapterFE = ArrayAdapter.createFromResource(
+                this, R.array.array_spinnerFe1, android.R.layout.simple_spinner_item);
+        adapterFE.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerFe.setAdapter(adapterFE);
+        spinnerFe.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view,
+                                       int position, long id) {
+                fe1 = array_spinnerFe[position];
+
+                if(fe1.equals("Tiquete Electrónico")){
+                    fe = "false";
+                }
+                else if(fe1.equals("Factura Electrónica")){
+                    fe = "true";
+                }
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                fe = array_spinnerFe[0];
+            }
+        });
 
         // Redirección al Login
         if (!SessionPrefes.get(this).isLoggedIn()) {
@@ -240,11 +272,43 @@ public class crearCliente extends BluetoothActivity {
 
     private boolean isValidMobile(String phone2) {
         boolean check = false;
-        if (phone2.length() >= 8 && phone2.length() <= 11) {
+        if (phone2.length() == 8) {
             check = true;
         }
         return check;
     }
+
+    private boolean isValidCard01(String phone2) {
+        boolean check = false;
+        if (phone2.length() == 9) {
+            check = true;
+        }
+        return check;
+    }
+
+    private boolean isValidCard02(String phone2) {
+        boolean check = false;
+        if (phone2.length() == 10) {
+            check = true;
+        }
+        return check;
+    }
+
+    private boolean isValidCard03(String phone2) {
+        boolean check = false;
+        if (phone2.length() == 12) {
+            check = true;
+        }
+        return check;
+    }
+    private boolean isValidCard04(String phone2) {
+        boolean check = false;
+        if (phone2.length() > 9 && phone2.length() < 12) {
+            check = true;
+        }
+        return check;
+    }
+
 
     public void onClickGo(View component) {
 
@@ -257,15 +321,6 @@ public class crearCliente extends BluetoothActivity {
 
 
 
-                if(idtype.equals("01")){
-                    card = "000" + cliente_card_nuevo.getText().toString();
-
-                }else if(idtype.equals("02")){
-                    card = "00" +cliente_card_nuevo.getText().toString();
-                }
-
-
-                fe = cliente_fe_nuevo.getText().toString();
                 placa = cliente_placa_nuevo.getText().toString();
 
                 model = cliente_model_nuevo.getText().toString();
@@ -280,7 +335,6 @@ public class crearCliente extends BluetoothActivity {
 
                 address = cliente_address_nuevo.getText().toString();
 
-
                 if (
                         isValidEmail(email) && isValidMobile(phone)
                         && isValidName(name))
@@ -288,8 +342,58 @@ public class crearCliente extends BluetoothActivity {
 
                     if(latitude != 0.0){
                         if(longitude != 0.0){
-                            enviarInfo();
 
+
+                            if(idtype.equals("01")){
+
+                                card = cliente_card_nuevo.getText().toString();
+                                if (isValidCard01(card)){
+                                    Toast.makeText(crearCliente.this, "Bien", Toast.LENGTH_LONG).show();
+                                    enviarInfo();
+                                }
+                                else {
+                                    cliente_card_nuevo.setError("La cédula física debe ser de 9 dígitos");
+                                    cliente_card_nuevo.requestFocus();
+                                    Toast.makeText(crearCliente.this, "La cédula física debe ser de 9 dígitos", Toast.LENGTH_LONG).show();
+                                }
+
+                            }
+                            else if(idtype.equals("02")){
+                                card = cliente_card_nuevo.getText().toString();
+                                if (isValidCard02(card)){
+                                    Toast.makeText(crearCliente.this, "Bien", Toast.LENGTH_LONG).show();
+                                    enviarInfo();
+                                }
+                                else {
+                                    cliente_card_nuevo.setError("La cédula jurídica debe ser de 10 dígitos");
+                                    cliente_card_nuevo.requestFocus();
+                                    Toast.makeText(crearCliente.this, "La cédula jurídica debe ser de 10 dígitos", Toast.LENGTH_LONG).show();
+                                }
+                            }
+                            else if(idtype.equals("03")){
+                                card = cliente_card_nuevo.getText().toString();
+                                if (isValidCard03(card)){
+                                    Toast.makeText(crearCliente.this, "Bien", Toast.LENGTH_LONG).show();
+                                    enviarInfo();
+                                }
+                                else {
+                                    cliente_card_nuevo.setError("El DIMEX debe ser de 12 dígitos");
+                                    cliente_card_nuevo.requestFocus();
+                                    Toast.makeText(crearCliente.this, "El DIMEX debe ser de 12 dígitos", Toast.LENGTH_LONG).show();
+                                }
+                            }
+                            else if(idtype.equals("04")){
+                                card = cliente_card_nuevo.getText().toString();
+                                if (isValidCard04(card)){
+                                    Toast.makeText(crearCliente.this, "Bien", Toast.LENGTH_LONG).show();
+                                    enviarInfo();
+                                }
+                                else {
+                                    cliente_card_nuevo.setError("El NITE debe ser entre 10 u 11 dígitos");
+                                    cliente_card_nuevo.requestFocus();
+                                    Toast.makeText(crearCliente.this, "El NITE debe ser entre 10 u 11 dígitos", Toast.LENGTH_LONG).show();
+                                }
+                            }
                     }else {
                             Toast.makeText(crearCliente.this, "Obtenga la ubicación del cliente", Toast.LENGTH_LONG).show();
                         }
