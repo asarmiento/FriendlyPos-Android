@@ -36,6 +36,7 @@ public class DistrResumenAdapter extends RecyclerView.Adapter<DistrResumenAdapte
     private int selected_position1 = -1;
     Double amount_inventario = 0.0;
     int idInvetarioSelec;
+    Double amount_dist_inventario = 0.0;
     int nextId;
     private DistResumenFragment fragment;
 
@@ -146,6 +147,7 @@ public class DistrResumenAdapter extends RecyclerView.Adapter<DistrResumenAdapte
                             Inventario inventario = realm3.where(Inventario.class).equalTo("product_id", clickedDataItem.getProduct_id()).findFirst();
                             idInvetarioSelec = inventario.getId();
                             amount_inventario = Double.valueOf(inventario.getAmount());
+                            amount_dist_inventario = Double.valueOf(inventario.getAmount_dist());
                             realm3.close();
                             Log.d("idinventario", idInvetarioSelec + "");
                         }
@@ -155,6 +157,9 @@ public class DistrResumenAdapter extends RecyclerView.Adapter<DistrResumenAdapte
                     final Double nuevoAmountDevuelto = cantidadProducto + amount_inventario;
                     Log.d("nuevoAmount", nuevoAmountDevuelto + "");
 
+                    final Double nuevoAmountDistDevuelto = amount_dist_inventario - cantidadProducto;
+                    Log.d("nuevoAmountDist",nuevoAmountDistDevuelto+"");
+
                     // TRANSACCIÓN PARA ACTUALIZAR EL CAMPO AMOUNT EN EL INVENTARIO
                     final Realm realm2 = Realm.getDefaultInstance();
                     realm2.executeTransaction(new Realm.Transaction() {
@@ -163,8 +168,10 @@ public class DistrResumenAdapter extends RecyclerView.Adapter<DistrResumenAdapte
                         public void execute(Realm realm2) {
                             Inventario inv_actualizado = realm2.where(Inventario.class).equalTo("id", idInvetarioSelec).findFirst();
                             inv_actualizado.setAmount(String.valueOf(nuevoAmountDevuelto));
+                            inv_actualizado.setAmount_dist(String.valueOf(nuevoAmountDistDevuelto));
+                            inv_actualizado.setDevuelvo(1);
                             realm2.insertOrUpdate(inv_actualizado);
-
+                            Log.d("DevolucionTotal", inv_actualizado+"");
                             realm2.close();
                         }
                     });

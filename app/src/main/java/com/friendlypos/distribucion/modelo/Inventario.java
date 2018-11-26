@@ -14,15 +14,15 @@ public class Inventario extends RealmObject {
 
     @PrimaryKey
     int id;
-    String product_id;
-    String initial;
-    String amount;
-    String amount_dist;
-    String distributor;
-    String descripcion;
-    String barcode;
+    private String product_id;
+    private String initial;
+    private String amount;
+    private String amount_dist;
+    private String distributor;
+    private String descripcion;
+    private String barcode;
 
-    int devuelvo= 0;
+    private int devuelvo= 0;
 
     private boolean result;
     private String code;

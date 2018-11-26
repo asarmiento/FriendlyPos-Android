@@ -255,7 +255,16 @@ public class crearCliente extends BluetoothActivity {
         switch (component.getId()) {
             case R.id.btnCrearCliente:
 
-                card = cliente_card_nuevo.getText().toString();
+
+
+                if(idtype.equals("01")){
+                    card = "000" + cliente_card_nuevo.getText().toString();
+
+                }else if(idtype.equals("02")){
+                    card = "00" +cliente_card_nuevo.getText().toString();
+                }
+
+
                 fe = cliente_fe_nuevo.getText().toString();
                 placa = cliente_placa_nuevo.getText().toString();
 

@@ -59,9 +59,10 @@
                     android:id="@+id/cliente_card_nuevo"
                     style="@style/ClienteNuevo1"
                     android:hint="Card"
-                    android:singleLine="true"
+                    android:inputType="phone"
+                    android:digits="0123456789"
                     android:imeOptions="actionNext"
-                    />
+                    android:singleLine="true" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -186,6 +187,8 @@
                     android:id="@+id/cliente_placa_nuevo"
                     style="@style/ClienteNuevo1"
                     android:hint="Placa"
+                    android:inputType="phone"
+                    android:digits="0123456789"
                     android:singleLine="true"
                     android:imeOptions="actionNext"/>
 
@@ -249,6 +252,8 @@
                     style="@style/ClienteNuevo1"
                     android:hint="Doors"
                     android:singleLine="true"
+                    android:inputType="phone"
+                    android:digits="0123456789"
                     android:imeOptions="actionNext"/>
 
             </android.support.design.widget.TextInputLayout>
@@ -400,9 +405,10 @@
                     android:id="@+id/cliente_phone_nuevo"
                     style="@style/ClienteNuevo2"
                     android:hint="Phone"
-                    android:singleLine="true"
+                    android:imeOptions="actionNext"
                     android:inputType="phone"
-                    android:imeOptions="actionNext"/>
+                    android:digits="0123456789"
+                    android:singleLine="true" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -432,6 +438,8 @@
                     android:id="@+id/cliente_creditlimit_nuevo"
                     style="@style/ClienteNuevo1"
                     android:hint="Credit Limit"
+                    android:inputType="phone"
+                    android:digits="0123456789"
                     android:singleLine="true"
                     android:imeOptions="actionNext"/>
 

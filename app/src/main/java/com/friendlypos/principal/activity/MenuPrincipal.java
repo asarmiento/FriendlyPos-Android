@@ -142,7 +142,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
 
 
     String facturaCostumer;
-    int facturaIdCV, facturaIdNuevoCliente,facturaIdDevuelto ;
+    int facturaIdCV, facturaIdNuevoCliente,facturaIdDevuelto, facturaIdCC ;
 
     String facturaIdRecibos, facturaIdGPS;
     private Properties properties;
@@ -829,7 +829,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
         realm3.close();
     }
 
-    protected void actualizarClienteNuevo(final String factura) {
+    protected void actualizarClienteNuevo(final int factura) {
 
         // TRANSACCION PARA ACTUALIZAR CAMPOS DE LA TABLA VENTAS
         final Realm realm3 = Realm.getDefaultInstance();
@@ -1251,9 +1251,9 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
         }else {
 
             for (int i = 0; i < listaFacturasPedidos.size(); i++) {
-                facturaId = String.valueOf(listaFacturasPedidos.get(i).getId());
+                facturaIdCC = listaFacturasPedidos.get(i).getId();
                 if (codS.equals("1") && resultS.equals("true")) {
-                    actualizarClienteNuevo(facturaId);
+                    actualizarClienteNuevo(facturaIdCC);
                     Toast.makeText(MenuPrincipal.this, messageS, Toast.LENGTH_LONG).show();
                 } else {
                     Toast.makeText(MenuPrincipal.this, messageS, Toast.LENGTH_LONG).show();
