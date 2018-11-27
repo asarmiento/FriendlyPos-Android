@@ -88,7 +88,7 @@ public class DistSelecClienteFragment extends BaseFragment  implements SearchVie
     private List<sale> getListClientes(){
 
         realm = Realm.getDefaultInstance();
-        final RealmQuery<sale> query = realm.where(sale.class).equalTo("aplicada", 0);
+        final RealmQuery<sale> query = realm.where(sale.class).equalTo("aplicada", 0).equalTo("devolucion", 0);
         final RealmResults<sale> result1 = query.findAll();
 
 

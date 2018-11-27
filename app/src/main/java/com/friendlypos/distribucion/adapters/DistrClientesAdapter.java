@@ -476,9 +476,11 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
                         realm4.executeTransaction(new Realm.Transaction() {
                             @Override
                             public void execute(Realm realm4) {
-                                RealmResults<sale> result = realm4.where(sale.class).equalTo("invoice_id", facturaID).findAll();
-                                result.deleteAllFromRealm();
-                               // Log.d("RealmResultsVenta", result + "");
+
+                                sale inv_actualizado = realm4.where(sale.class).equalTo("invoice_id", facturaID).findFirst();
+                                inv_actualizado.setDevolucion(1);
+                                realm4.insertOrUpdate(inv_actualizado);
+                                Log.d("DevolucionSaleTotal", inv_actualizado+"");
                                 realm4.close();
                             }
 
