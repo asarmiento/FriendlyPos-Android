@@ -437,7 +437,7 @@
                     style="@style/ClienteNuevo1"
                     android:hint="Credit Limit"
                     android:inputType="phone"
-                    android:digits="0123456789"
+                    android:digits="0123456789."
                     android:singleLine="true"
                     android:imeOptions="actionNext"/>
 

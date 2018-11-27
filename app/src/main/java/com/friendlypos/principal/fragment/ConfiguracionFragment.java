@@ -79,11 +79,6 @@ public class ConfiguracionFragment extends PreferenceFragment implements OnShare
         prefSelecImpresora = findPreference("pref_selec_impresora");
         prefSelecImpresora.setOnPreferenceClickListener(this);
 
-
-        prefSelecImpresora = findPreference("pref_Grafico");
-        prefSelecImpresora.setOnPreferenceClickListener(this);
-
-
         prefConectarBluetooth = findPreference("pref_conectar_bluetooth");
         prefConectarBluetooth.setOnPreferenceClickListener(this);
 

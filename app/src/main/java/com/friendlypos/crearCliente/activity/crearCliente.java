@@ -306,6 +306,14 @@ public class crearCliente extends BluetoothActivity {
         return check;
     }
 
+    private boolean isValidNumeros(String phone2) {
+        boolean check = false;
+        if (phone2.length() >= 1 && phone2.length() < 11) {
+            check = true;
+        }
+        return check;
+    }
+
 
     public void onClickGo(View component) {
 
@@ -316,10 +324,7 @@ public class crearCliente extends BluetoothActivity {
         switch (component.getId()) {
             case R.id.btnCrearCliente:
 
-
-
                 placa = cliente_placa_nuevo.getText().toString();
-
                 model = cliente_model_nuevo.getText().toString();
                 doors = cliente_doors_nuevo.getText().toString();
                 email = cliente_email_nuevo.getText().toString();
@@ -331,9 +336,9 @@ public class crearCliente extends BluetoothActivity {
 
                 address = cliente_address_nuevo.getText().toString();
 
-                if (
-                        isValidEmail(email) && isValidMobile(phone)
-                        && isValidName(fantasyname)&& isValidName(companyname))
+                if ( isValidNumeros(placa) &&  isValidName(model) &&  isValidNumeros(doors) &&  isValidName(address) &&
+                        isValidEmail(email)
+                        && isValidName(fantasyname)&& isValidName(companyname)&& isValidMobile(phone) )
                 {
 
                     if(latitude != 0.0){
@@ -395,18 +400,36 @@ public class crearCliente extends BluetoothActivity {
                         }
                     }
 
+                else if (!isValidNumeros(placa)) {
+                    cliente_placa_nuevo.setError("Placa inválido");
+                    cliente_placa_nuevo.requestFocus();
+                }
+                else if (!isValidName(model)) {
+                    cliente_model_nuevo.setError("Model inválido");
+                    cliente_model_nuevo.requestFocus();
+                }
+                else if (!isValidNumeros(doors)) {
+                    cliente_doors_nuevo.setError("Doors inválido");
+                    cliente_doors_nuevo.requestFocus();
+                }
+                else if (!isValidName(address)) {
+                    cliente_address_nuevo.setError("Address inválido");
+                    cliente_address_nuevo.requestFocus();
+                }
+                else if (!isValidEmail(email)) {
+                    cliente_email_nuevo.setError("Email inválido");
+                    cliente_email_nuevo.requestFocus();
+                }
+
                 } else if (!isValidName(fantasyname)) {
-                    cliente_fantasyname_nuevo.setError("Fantasy Name Invalido");
+                    cliente_fantasyname_nuevo.setError("Fantasy Name inválido");
                     cliente_fantasyname_nuevo.requestFocus();
                 }
                 else if (!isValidName(companyname)) {
-                    cliente_companyname_nuevo.setError("Company Name Invalido");
+                    cliente_companyname_nuevo.setError("Company Name inválido");
                     cliente_companyname_nuevo.requestFocus();
-                }else if (!isValidEmail(email)) {
-                    cliente_email_nuevo.setError("Correo Invalido");
-                    cliente_email_nuevo.requestFocus();
-                } else if (!isValidMobile(phone)) {
-                    cliente_phone_nuevo.setError("Telefono Invalido");
+                }else if (!isValidMobile(phone)) {
+                    cliente_phone_nuevo.setError("Phone inválido");
                     cliente_phone_nuevo.requestFocus();
                 }
 
@@ -471,6 +494,7 @@ public class crearCliente extends BluetoothActivity {
         });
         realm5.close();
         Toast.makeText(crearCliente.this, "El cliente se creo correctamente", Toast.LENGTH_LONG).show();
+        limpiarCampos();
     }
 
     public void obtenerLocalización() {
@@ -489,6 +513,24 @@ public class crearCliente extends BluetoothActivity {
 
         }
 
+    }
+
+    public void limpiarCampos() {
+
+        spinnerCreditTime.setSelection(0);
+        spinnerFe.setSelection(0);
+        spinnerIdType.setSelection(0);
+        cliente_card_nuevo.setText("");
+        cliente_placa_nuevo.setText("");
+        cliente_model_nuevo.setText("");
+        cliente_doors_nuevo.setText("");
+        cliente_email_nuevo.setText("");
+        cliente_fantasyname_nuevo.setText("");
+        cliente_companyname_nuevo.setText("");
+        cliente_phone_nuevo.setText("");
+        cliente_creditlimit_nuevo.setText("");
+        cliente_longitud_nuevo.setText("");
+        cliente_latitud_nuevo.setText("");
     }
 
 }

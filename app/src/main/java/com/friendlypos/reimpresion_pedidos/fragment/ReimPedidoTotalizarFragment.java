@@ -17,6 +17,7 @@ import com.friendlypos.app.broadcastreceiver.BluetoothStateChangeReceiver;
 import com.friendlypos.application.util.Functions;
 import com.friendlypos.application.util.PrinterFunctions;
 import com.friendlypos.distribucion.fragment.BaseFragment;
+import com.friendlypos.distribucion.modelo.Pivot;
 import com.friendlypos.distribucion.modelo.invoice;
 import com.friendlypos.distribucion.modelo.sale;
 import com.friendlypos.distribucion.util.GPSTracker;
@@ -26,6 +27,8 @@ import com.friendlypos.preventas.activity.PreventaActivity;
 import com.friendlypos.reimpresion_pedidos.activity.ReimprimirPedidosActivity;
 
 import io.realm.Realm;
+import io.realm.RealmList;
+import io.realm.RealmResults;
 
 import static io.realm.internal.SyncObjectServerFacade.getApplicationContext;
 
@@ -338,7 +341,18 @@ public class ReimPedidoTotalizarFragment extends BaseFragment {
                 factura_actualizada.setCanceled("1");
                 factura_actualizada.setAplicada(1);
                 factura_actualizada.setSubida(1);
-                factura_actualizada.setFacturaDePreventa("Preventa");
+
+                RealmResults<Pivot> result = realm.where(Pivot.class).equalTo("invoice_id", facturaId)/*.equalTo("devuelvo", 0)*/.findAll();
+                Log.d("FACTURANUEVA", result + "");
+
+
+                RealmList<Pivot> results = new RealmList<Pivot>();
+
+                results.addAll(result.subList(0, result.size()));
+                factura_actualizada.setProductofactura(results);
+
+                Log.d("CREAR DISTRIBUCION", factura_actualizada + "");
+
 
                 realm2.insertOrUpdate(factura_actualizada);
                 realm2.close();

@@ -7,6 +7,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.friendlypos.R;
 import com.friendlypos.crearCliente.modelo.customer_new;
@@ -27,6 +28,8 @@ import butterknife.Bind;
 import io.realm.Realm;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
+
+import static io.realm.internal.SyncObjectServerFacade.getApplicationContext;
 
 public class GraficoActivity extends AppCompatActivity {
     Toolbar toolbar;
@@ -59,48 +62,54 @@ public class GraficoActivity extends AppCompatActivity {
         final RealmResults<datosTotales> invoice12 = query12.findAll();
         Log.d("qweqweq", invoice12.toString());
 
-        List<datosTotales> listaNuevo = realm12.copyFromRealm(invoice12);
-        distr = listaNuevo.get(0).getTotalDistribucion();
-        vent =listaNuevo.get(1).getTotalVentaDirecta();
-        prev = listaNuevo.get(2).getTotalPreventa();
-        prof =listaNuevo.get(3).getTotalProforma();
-        rec =listaNuevo.get(4).getTotalRecibos();
+        if (invoice12.isEmpty()) {
 
-        Log.d("qweqweq1", listaNuevo + "");
+            Toast.makeText(getApplicationContext(),"Favor descargar datos primero",Toast.LENGTH_LONG).show();
+        }
+        else {
 
-        realm12.close();
+            List<datosTotales> listaNuevo = realm12.copyFromRealm(invoice12);
+            distr = listaNuevo.get(0).getTotalDistribucion();
+            vent = listaNuevo.get(1).getTotalVentaDirecta();
+            prev = listaNuevo.get(2).getTotalPreventa();
+            prof = listaNuevo.get(3).getTotalProforma();
+            rec = listaNuevo.get(4).getTotalRecibos();
 
-        BARENTRY = new ArrayList<>();
+            Log.d("qweqweq1", listaNuevo + "");
 
-        BarEntryLabels = new ArrayList<String>();
+            realm12.close();
 
-        AddValuesToBARENTRY();
+            BARENTRY = new ArrayList<>();
 
-        AddValuesToBarEntryLabels();
+            BarEntryLabels = new ArrayList<String>();
 
-        Bardataset = new BarDataSet(BARENTRY, "Categoria");
+            AddValuesToBARENTRY();
 
-        BARDATA = new BarData(BarEntryLabels, Bardataset);
-        BARDATA.setValueTextSize(12f);
-        Bardataset.setColors(ColorTemplate.COLORFUL_COLORS);
+            AddValuesToBarEntryLabels();
 
-        chart.setData(BARDATA);
-        chart.setDescription("");
-        chart.animateY(3000);
-        chart.setMaxVisibleValueCount(60);
-        chart.setPinchZoom(false);
+            Bardataset = new BarDataSet(BARENTRY, "Categoria");
 
-        chart.getAxisRight().setEnabled(false);
-        chart.getLegend().setEnabled(false);
+            BARDATA = new BarData(BarEntryLabels, Bardataset);
+            BARDATA.setValueTextSize(12f);
+            Bardataset.setColors(ColorTemplate.COLORFUL_COLORS);
 
+            chart.setData(BARDATA);
+            chart.setDescription("");
+            chart.animateY(3000);
+            chart.setMaxVisibleValueCount(60);
+            chart.setPinchZoom(false);
 
-        XAxis xAxis = chart.getXAxis();
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        //xAxis.setTypeface(mTf);
-        xAxis.setDrawGridLines(true);
-        xAxis.setSpaceBetweenLabels(1);
+            chart.getAxisRight().setEnabled(false);
+            chart.getLegend().setEnabled(false);
 
 
+            XAxis xAxis = chart.getXAxis();
+            xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+            //xAxis.setTypeface(mTf);
+            xAxis.setDrawGridLines(true);
+            xAxis.setSpaceBetweenLabels(1);
+
+        }
     }
 
 

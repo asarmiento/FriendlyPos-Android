@@ -315,12 +315,7 @@ public class DistTotalizarFragment extends BaseFragment  {
                 factura_actualizada.setFacturaDePreventa("Distribucion");
 
 
-                realm2.insertOrUpdate(factura_actualizada);
-                realm2.close();
 
-
-
-                Realm realm5 = Realm.getDefaultInstance();
                 RealmResults<Pivot> result = realm.where(Pivot.class).equalTo("invoice_id", facturaId)/*.equalTo("devuelvo", 0)*/.findAll();
                 Log.d("FACTURANUEVA", result + "");
 
@@ -331,6 +326,9 @@ public class DistTotalizarFragment extends BaseFragment  {
                 factura_actualizada.setProductofactura(results);
 
                 Log.d("CREAR DISTRIBUCION", factura_actualizada + "");
+
+                realm2.insertOrUpdate(factura_actualizada);
+                realm2.close();
               //  Pivot pivot  = realm5.where(Pivot.class).equalTo("invoice_id", facturaId).findAll();
             }
         });

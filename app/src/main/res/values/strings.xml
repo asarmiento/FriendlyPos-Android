@@ -128,7 +128,7 @@
     <string name="success">Se han cargado los datos correctamente.</string>
 
     <!-- LOGIN -->
-    <string name="your_email_hint">Usuario</string>
+    <string name="your_email_hint">Correo Electrónico</string>
     <string name="email_hint">Usuario</string>
     <string name="your_password_hint">Contraseña</string>
     <string name="password_hint">Contraseña</string>
