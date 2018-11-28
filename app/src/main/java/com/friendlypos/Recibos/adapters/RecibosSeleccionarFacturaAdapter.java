@@ -177,6 +177,7 @@ public class RecibosSeleccionarFacturaAdapter extends RecyclerView.Adapter<Recib
 
                                 recibo_actualizado.setPaid(montoFaltante);
                                 recibo_actualizado.setAbonado(1);
+                                recibo_actualizado.setMontoCanceladoPorFactura(montoPagar);
                                 double cant = recibo_actualizado.getMontoCancelado();
                                 if(cant == 0.0){
                                     recibo_actualizado.setMontoCancelado(montoPagar);

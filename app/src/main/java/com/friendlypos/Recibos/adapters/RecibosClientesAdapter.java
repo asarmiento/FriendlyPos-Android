@@ -131,72 +131,6 @@ public class RecibosClientesAdapter extends RecyclerView.Adapter<RecibosClientes
             holder.cardView.setBackgroundColor(Color.parseColor("#009688"));
         }
 
-       /* holder.btnUbicacionFacturaCliente.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                if(activa == 1) {
-
-                    if (longitud != 0.0 && latitud != 0.0) {
-
-                        try {
-                            // Launch Waze to look for Hawaii:
-                            //   String url = "https://waze.com/ul?ll=9.9261253,-84.0889091&navigate=yes";
-
-                            String url = "https://waze.com/ul?ll="+ latitud + "," + longitud + "&navigate=yes";
-                            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                            QuickContext.startActivity(intent);
-                        } catch (ActivityNotFoundException ex) {
-
-                            Uri gmmIntentUri = Uri.parse("geo:"+latitud + "," + longitud);
-                            // Uri gmmIntentUri = Uri.parse("geo:9.9261253,-84.0889091");
-                            Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-                            mapIntent.setPackage("com.google.android.apps.maps");
-                            QuickContext.startActivity(mapIntent);
-
-
-                        }
-                    } else {
-                        Toast.makeText(QuickContext, "El cliente no cuenta con dirección GPS", Toast.LENGTH_SHORT).show();
-
-                    }
-                }
-                else{
-                    Toast.makeText(QuickContext, "Selecciona una factura primero", Toast.LENGTH_SHORT).show();
-
-                }
-            }
-        });
-
-        holder.btnDevolverFacturaCliente.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                if(activa == 1){
-                    devolverFactura();}
-                else{
-                    Toast.makeText(QuickContext, "Selecciona una factura primero", Toast.LENGTH_SHORT).show();
-
-                }
-            }
-        });
-
-        holder.btnImprimirFacturaCliente.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                if(activa == 1){
-                    try {
-                        PrinterFunctions.imprimirProductosDistrSelecCliente(sale, QuickContext);
-                    }
-                    catch (Exception e) {
-                        Functions.CreateMessage(QuickContext, "Error", e.getMessage() + "\n" + e.getStackTrace().toString());
-                    }}
-                else{
-                    Toast.makeText(QuickContext, "Selecciona una factura primero", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });*/
     }
 
     @Override
@@ -276,19 +210,6 @@ public class RecibosClientesAdapter extends RecyclerView.Adapter<RecibosClientes
                 }
             });
 
-/*
-        String receipts_id;
-        String customer_id;
-        String reference;
-        String date;
-        String sum;
-        double balance;
-        String notes;
-        private RealmList<recibos> listaRecibos;
-        */
-
-
-       // activity.initCurrentRecibos(String.valueOf(nextId), clienteID, numFactura, Functions.getDate(), "", 0.0, "");
 
                final Realm realmRecibo = Realm.getDefaultInstance();
                 realmRecibo.executeTransaction(new Realm.Transaction() {

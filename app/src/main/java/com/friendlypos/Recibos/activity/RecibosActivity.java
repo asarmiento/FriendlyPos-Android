@@ -56,11 +56,11 @@ public class RecibosActivity extends BluetoothActivity {
     private double totalFacturaSelec;
     private double totalizarTotal;
     private double totalizarCancelado;
-    private double totalizarFinal;
+    private double canceladoPorFactura;
     private double totalizarPagado;
     private double montoPagar;
     private double totalizarTotalCheck;
-
+    private double totalizarFinal;
     private double montoAgregadoRestante;
 
 
@@ -97,6 +97,14 @@ public class RecibosActivity extends BluetoothActivity {
 
     public void setTotalizarCancelado(double totalizarCancelado) {
         this.totalizarCancelado = this.totalizarCancelado + totalizarCancelado;
+    }
+
+    public double getCanceladoPorFactura() {
+        return canceladoPorFactura;
+    }
+
+    public void setCanceladoPorFactura(double canceladoPorFactura) {
+        this.canceladoPorFactura = this.canceladoPorFactura + canceladoPorFactura;
     }
 
     public double getTotalizarFinal() {

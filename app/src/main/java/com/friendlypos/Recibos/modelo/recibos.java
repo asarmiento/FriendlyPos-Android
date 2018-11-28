@@ -34,7 +34,7 @@ public class recibos extends RealmObject {
 
     int abonado = 0;
     double montoCancelado= 0.0;
-
+    double montoCanceladoPorFactura= 0.0;
     private boolean isSelected;
 
     public double getMontoCancelado() {
@@ -43,6 +43,14 @@ public class recibos extends RealmObject {
 
     public void setMontoCancelado(double montoCancelado) {
         this.montoCancelado = montoCancelado;
+    }
+
+    public double getMontoCanceladoPorFactura() {
+        return montoCanceladoPorFactura;
+    }
+
+    public void setMontoCanceladoPorFactura(double montoCanceladoPorFactura) {
+        this.montoCanceladoPorFactura = montoCanceladoPorFactura;
     }
 
     public String getInvoice_id() {
@@ -128,16 +136,17 @@ public class recibos extends RealmObject {
     @Override
     public String toString() {
         return "recibos{" +
-                "invoice_id=" + invoice_id +
+                "invoice_id='" + invoice_id + '\'' +
                 ", numeration='" + numeration + '\'' +
                 ", date='" + date + '\'' +
                 ", paid_up='" + paid_up + '\'' +
                 ", customer_id='" + customer_id + '\'' +
-                ", total='" + total + '\'' +
-                ", paid='" + paid + '\'' +
+                ", total=" + total +
+                ", paid=" + paid +
                 ", observation='" + observation + '\'' +
-                ", abonado='" + abonado + '\'' +
-
+                ", abonado=" + abonado +
+                ", montoCancelado=" + montoCancelado +
+                ", montoCanceladoPorFactura=" + montoCanceladoPorFactura +
                 '}';
     }
 }

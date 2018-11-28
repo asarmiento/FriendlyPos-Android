@@ -1692,8 +1692,15 @@ public class PrinterFunctions {
             preview += Html.fromHtml("<h1>") +   ventaCredito + Html.fromHtml("</h1></center><br/>");
             preview += Html.fromHtml("<h1>") +  "#     Total " + Functions.doubleToString1(printLiqCreditoTotal) + Html.fromHtml("</h1><br/><br/><br/>");
 
+            preview += Html.fromHtml("<h1>") + "Recibos" + Html.fromHtml("</h1><br/><br/>");
 
-            preview += Html.fromHtml("<h1>") +  "#     Total " + Functions.doubleToString1(printLiqContadoTotal /*+ printSalesCreditTotal + printReceiptsTotal*/) + Html.fromHtml("</h1><br/><br/><br/>");
+            preview += Html.fromHtml("<h1>") +   "#     Recibo           Fecha         Monto" + Html.fromHtml("</h1></center><br/>");
+            preview += Html.fromHtml("<h1>") +  "------------------------------------------------" + Html.fromHtml("</h1></center><br/>");
+            preview += Html.fromHtml("<h1>") +   ventaRecibos + Html.fromHtml("</h1></center><br/>");
+            preview += Html.fromHtml("<h1>") +  "#     Total " + Functions.doubleToString1(printLiqRecibosTotal) + Html.fromHtml("</h1><br/><br/><br/>");
+
+
+            preview += Html.fromHtml("<h1>") +  "#     Total " +  Functions.doubleToString1(printLiqContadoTotal + printLiqRecibosTotal /*+ printReceiptsTotal*/) + Html.fromHtml("</h1><br/><br/><br/>");
 
             Intent intent2 = new Intent(PrinterService.BROADCAST_CLASS);
             intent2.putExtra(PrinterService.BROADCAST_CLASS + "TO_PRINT", "true");

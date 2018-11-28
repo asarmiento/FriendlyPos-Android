@@ -32,6 +32,7 @@ import com.friendlypos.login.modelo.Usuarios;
 import com.friendlypos.login.util.SessionPrefes;
 import com.friendlypos.preventas.modelo.invoiceDetallePreventa;
 import com.friendlypos.principal.modelo.Clientes;
+import com.friendlypos.principal.modelo.datosTotales;
 
 import org.sufficientlysecure.htmltextview.HtmlTextView;
 
@@ -54,6 +55,7 @@ public class RecibosAplicarFragment extends BaseFragment {
     RecibosActivity activity;
     private static int apply_done = 0;
     double pagado= 0.0;
+    double montoCancelado= 0.0;
     static String pagadoMostrarS;
     GPSTracker gps;
     BluetoothStateChangeReceiver bluetoothStateChangeReceiver;
@@ -70,6 +72,10 @@ public class RecibosAplicarFragment extends BaseFragment {
     String observ;
     String fecha;
     double totalP;
+    double totalDatosTotal = 0.0;
+    double totalDatosTotal2 = 0.0;
+    double totalTotal = 0.0;
+    datosTotales datos_actualizados;
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -338,8 +344,6 @@ public class RecibosAplicarFragment extends BaseFragment {
 
     public void actualizarReceiptsDetalles() {
 
-
-
         final Realm realm2 = Realm.getDefaultInstance();
         realm2.executeTransaction(new Realm.Transaction() {
 
@@ -359,6 +363,12 @@ public class RecibosAplicarFragment extends BaseFragment {
 
                         pagado = salesList1.get(i).getPaid();
                         activity.setTotalizarFinal(pagado);
+
+
+                        montoCancelado = salesList1.get(i).getMontoCanceladoPorFactura();
+                        activity.setCanceladoPorFactura(montoCancelado);
+
+
                         receipts recibo_actua = realm2.where(receipts.class).equalTo("customer_id", clienteId).findFirst();
 
                         recibo_actua.setListaRecibos(new RealmList<recibos>(salesList1.toArray(new recibos[salesList1.size()])));
@@ -379,6 +389,30 @@ public class RecibosAplicarFragment extends BaseFragment {
         });
     }
 
+    public void actualizarDatosTotales() {
+
+        final Realm realm3 = Realm.getDefaultInstance();
+        realm3.executeTransaction(new Realm.Transaction() {
+
+            @Override
+            public void execute(Realm realm3) {
+                datos_actualizados = realm3.where(datosTotales.class).equalTo("nombreTotal", "Recibo").findFirst();
+
+                totalDatosTotal = datos_actualizados.getTotalRecibos();
+
+                totalDatosTotal2 = totalDatosTotal +  activity.getCanceladoPorFactura();
+
+                datos_actualizados.setTotalRecibos(totalDatosTotal2);
+
+                realm3.insertOrUpdate(datos_actualizados);
+                realm3.close();
+
+                Log.d("TotalDatos", datos_actualizados + "" );
+            }
+        });
+
+    }
+
     protected void aplicarFactura() {
 
         fecha = txtFecha.getText().toString();
@@ -389,6 +423,7 @@ public class RecibosAplicarFragment extends BaseFragment {
             actualizarFacturaDetalles();
           //  actualizarRecibosDetalles();
             actualizarReceiptsDetalles();
+            actualizarDatosTotales();
             Toast.makeText(getActivity(), "Venta realizada correctamente", Toast.LENGTH_LONG).show();
 
             applyBill.setVisibility(View.GONE);
@@ -417,6 +452,10 @@ public class RecibosAplicarFragment extends BaseFragment {
 
 
     }
+
+
+
+
 
     public static  class DatePickerFragment extends DialogFragment {
 
