@@ -428,6 +428,7 @@ public class PrinterFunctions {
         String nombreCliente = clientes.getFantasyName();
         totalNotasRecibos = sale.getObservaciones();
         String fecha = sale.getDate();
+        Double porPagar = sale.getPorPagar();
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(QuickContext);
         String prefList = sharedPreferences.getString("pref_selec_impresora","Impresora Zebra");
 
@@ -477,6 +478,7 @@ public class PrinterFunctions {
 
                     getPrintRecibosTotal(sale.getCustomer_id()) +
                     "\r\n" +
+                    "\r\n\n" + "Saldo pendiente: " + porPagar + "\r\n" +
                     "\r\n\n" + "Notas: " + totalNotasRecibos + "\r\n" +
                     "\r\n\n" + "Muchas Gracias por preferirnos, un placer atenderlo\r\n" +
                     "Mantenga el documento para reclamos ." + "\r\n" + "\r\n" +
@@ -503,7 +505,8 @@ public class PrinterFunctions {
                     preview += Html.fromHtml("<h1>") +  "Numeracion     Monto Total     Monto Pagado" + Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>") +  "------------------------------------------------" + Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>") +   getPrintRecibosTotal(sale.getCustomer_id()) + Html.fromHtml("</h1></center><br/>");
-                    preview += Html.fromHtml("<h1>") +  "Notas: " + totalNotasRecibos + Html.fromHtml("</h1></center><br/><br/><br/>");
+                    preview += Html.fromHtml("<h1>") +  "Saldo pendiente: " + porPagar + Html.fromHtml("</h1></center><br/><br/><br/>");
+            preview += Html.fromHtml("<h1>") +  "Notas: " + totalNotasRecibos + Html.fromHtml("</h1></center><br/><br/><br/>");
                     preview += Html.fromHtml("<h1>")   + "Muchas gracias por preferirnos un placer atenderlo" +  Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>")   + "Mantenga el documento para reclamos." +  Html.fromHtml("</h1></center><br/><br/>");
             }

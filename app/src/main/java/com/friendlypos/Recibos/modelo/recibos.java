@@ -37,6 +37,8 @@ public class recibos extends RealmObject {
     double montoCanceladoPorFactura= 0.0;
     private boolean isSelected;
 
+    double porPagar = 0.0;
+
     public double getMontoCancelado() {
         return montoCancelado;
     }
@@ -133,6 +135,14 @@ public class recibos extends RealmObject {
         isSelected = selected;
     }
 
+    public double getPorPagar() {
+        return porPagar;
+    }
+
+    public void setPorPagar(double porPagar) {
+        this.porPagar = this.porPagar + porPagar;
+    }
+
     @Override
     public String toString() {
         return "recibos{" +
@@ -147,6 +157,7 @@ public class recibos extends RealmObject {
                 ", abonado=" + abonado +
                 ", montoCancelado=" + montoCancelado +
                 ", montoCanceladoPorFactura=" + montoCanceladoPorFactura +
+                ", porPagar=" + porPagar +
                 '}';
     }
 }

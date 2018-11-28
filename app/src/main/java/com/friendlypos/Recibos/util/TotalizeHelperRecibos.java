@@ -8,6 +8,8 @@ import com.friendlypos.login.util.SessionPrefes;
 
 import java.util.List;
 
+import io.realm.Realm;
+
 import static io.realm.internal.SyncObjectServerFacade.getApplicationContext;
 
 public class TotalizeHelperRecibos {
@@ -52,6 +54,29 @@ public class TotalizeHelperRecibos {
 
         activity.setTotalizarTotal(total);
         activity.setTotalizarCancelado(totalPagar);
+
+        final String facturaId = currentPivot.getInvoice_id();
+
+        final Realm realm2 = Realm.getDefaultInstance();
+        final Double finalTotalPagar = totalPagar;
+
+        realm2.executeTransaction(new Realm.Transaction() {
+
+            @Override
+            public void execute(Realm realm2) {
+                recibos recibo_actualizado = realm2.where(recibos.class).equalTo("invoice_id", facturaId).findFirst();
+
+
+                recibo_actualizado.setPorPagar(finalTotalPagar);
+
+                realm2.insertOrUpdate(recibo_actualizado);
+                realm2.close();
+
+                Log.d("ACTRECIBOPAGAR", recibo_actualizado + "");
+
+            }
+        });
+
 
 
     }
