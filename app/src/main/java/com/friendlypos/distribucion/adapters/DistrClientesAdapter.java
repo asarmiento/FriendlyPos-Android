@@ -485,6 +485,22 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
                             }
 
                         });
+
+                        final Realm realmInvoice = Realm.getDefaultInstance();
+                        realmInvoice.executeTransaction(new Realm.Transaction() {
+                            @Override
+                            public void execute(Realm realmInvoice) {
+
+                                invoice inv_actualizado = realmInvoice.where(invoice.class).equalTo("id", facturaID).findFirst();
+                                inv_actualizado.setDevolucionInvoice(1);
+                                realmInvoice.insertOrUpdate(inv_actualizado);
+                                Log.d("DevolucionInvoiceTotal", inv_actualizado+"");
+                                realmInvoice.close();
+                            }
+
+                        });
+
+
                         notifyDataSetChanged();
 
                     }

@@ -461,7 +461,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
 
                 Realm realm = Realm.getDefaultInstance();
 
-                RealmQuery<invoice> query = realm.where(invoice.class).equalTo("subida", 1).equalTo("facturaDePreventa", "Distribucion");
+                RealmQuery<invoice> query = realm.where(invoice.class).equalTo("facturaDePreventa", "Distribucion").equalTo("subida", 1).or().equalTo("devolucionInvoice", 1);
                 final RealmResults<invoice> invoice1 = query.findAll();
                 Log.d("qweqweq", invoice1.toString());
                 List<invoice> listaFacturas = realm.copyFromRealm(invoice1);
@@ -1267,7 +1267,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
     public int codigoDeRespuestaDistr(String codS, String messageS, String resultS, int cod, String idFacturaSubida){
 
         Realm realmPedidos = Realm.getDefaultInstance();
-        invoice queryPedidos = realmPedidos.where(invoice.class).equalTo("id", idFacturaSubida).equalTo("subida", 1).equalTo("facturaDePreventa", "Distribucion").findFirst();
+        invoice queryPedidos = realmPedidos.where(invoice.class).equalTo("id", idFacturaSubida).equalTo("facturaDePreventa", "Distribucion").equalTo("subida", 1).or().equalTo("devolucionInvoice", 1).findFirst();
 
         if (codS.equals("1") && resultS.equals("true")) {
             facturaId = String.valueOf(queryPedidos.getId());

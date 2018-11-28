@@ -76,6 +76,8 @@ public class invoice extends RealmObject {
     @SerializedName("product_invoice")
     private RealmList<Pivot> productofacturas;
 
+    int devolucionInvoice = 0;
+
     private int aplicada = 0;
     private int subida = 0;
     private String facturaDePreventa;
@@ -360,6 +362,14 @@ public class invoice extends RealmObject {
         this.facturaDePreventa = facturaDePreventa;
     }
 
+    public int getDevolucionInvoice() {
+        return devolucionInvoice;
+    }
+
+    public void setDevolucionInvoice(int devolucionInvoice) {
+        this.devolucionInvoice = devolucionInvoice;
+    }
+
     public String toString() {
         return "invoice{" +
                 "id='" + id + '\'' +
@@ -397,6 +407,7 @@ public class invoice extends RealmObject {
                 ", aplicada='" + aplicada + '\'' +
                 ", subida='" + subida + '\'' +
                 ", facturaDePreventa='" + facturaDePreventa + '\'' +
+                ", devolucionInvoice='" + devolucionInvoice + '\'' +
                 '}';
     }
 }
