@@ -413,6 +413,11 @@ public class PrinterFunctions {
         Clientes clientes = realm.where(Clientes.class).equalTo("id", sale.getCustomer_id()).findFirst();
         Sysconf sysconf = realm.where(Sysconf.class).findFirst();
 
+        receipts receipts = realm.where(receipts.class).equalTo("customer_id", sale.getCustomer_id()).findFirst();
+
+
+       String referencia =  receipts.getReference();
+
         String sysNombre = sysconf.getName();
         String sysNombreNegocio = sysconf.getBusiness_name();
         String sysDireccion = sysconf.getDirection();
@@ -449,6 +454,8 @@ public class PrinterFunctions {
 
                     "! U1 LMARGIN 0\r\n" +
                     "! U1 SETLP 5 0 24\r\n" +
+                    "# " + referencia + "\r\n" +
+                    "! U1 SETLP 5 0 24\r\n" +
                     sysNombre + "\r\n" +
                     "! U1 SETLP 5 1 35\r\n" +
                     sysNombreNegocio + "\r\n" +
@@ -463,8 +470,8 @@ public class PrinterFunctions {
                     "! U1 LMARGIN 0\r\n" +
                     "! U1 SETSP 0\r\n" +
                     "\r\n" +
-                    "Numeracion            Monto Total\r\n" +
-                    "Monto Pagado          Monto Restante\r\n" +
+                    "Numeracion     Monto Total     Monto Pagado\r\n" +
+                    "          \r\n" +
                     "------------------------------------------------\r\n" +
                     "! U1 SETLP 7 0 10\r\n" +
 
@@ -484,7 +491,7 @@ public class PrinterFunctions {
         }
         else if(prefList.equals("2")){
                     preview += Html.fromHtml("<h1>") + String.format("%s", billptype) + Html.fromHtml("</h1><br/><br/><br/>");
-
+                    preview += Html.fromHtml("<h1>") + "# " + referencia + Html.fromHtml("</h1><br/><br/>");
                     preview += Html.fromHtml("<h1>") + sysNombre + Html.fromHtml("</h1><br/>");
                     preview += Html.fromHtml("<h1>") + sysNombreNegocio + Html.fromHtml("</h1><br/>");
                     preview += Html.fromHtml("<h1>") + sysDireccion + Html.fromHtml("</h1><br/>");
@@ -493,8 +500,7 @@ public class PrinterFunctions {
 
                     preview += Html.fromHtml("<h1>") + "Cliente: " + nombreCliente + Html.fromHtml("</h1><br/>");
                     preview += Html.fromHtml("<h1>") + "Fecha: " + fecha + Html.fromHtml("</h1><br/>");
-                    preview += Html.fromHtml("<h1>") +  "Numeracion             Monto Total" + Html.fromHtml("</h1></center><br/>");
-                    preview += Html.fromHtml("<h1>") +   "Monto Pagado          Monto Restante" + Html.fromHtml("</h1></center><br/>");
+                    preview += Html.fromHtml("<h1>") +  "Numeracion     Monto Total     Monto Pagado" + Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>") +  "------------------------------------------------" + Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>") +   getPrintRecibosTotal(sale.getCustomer_id()) + Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>") +  "Notas: " + totalNotasRecibos + Html.fromHtml("</h1></center><br/><br/><br/>");
@@ -529,13 +535,12 @@ public class PrinterFunctions {
                 double total = salesList1.get(i).getTotal();
                 //String totalS = String.format("%,.2f", total);
 
-                double pagado = salesList1.get(i).getPaid();
+                double pagado = salesList1.get(i).getMontoCanceladoPorFactura();
                // String pagadoS = String.format("%,.2f", pagado);
                 double restante = salesList1.get(i).getMontoCancelado();
                // String restanteS = String.format("%,.2f", restante);
 
-                send += String.format("%-15s  %15s", numeracion, Functions.doubleToString1(total) ) + "\r\n" +
-                        String.format("%-15s  %15s", Functions.doubleToString1(pagado) ,Functions.doubleToString1(restante)) + "\r\n";
+                send += String.format("%-15s  %15s  %15s", numeracion, Functions.doubleToString1(total), Functions.doubleToString1(pagado) ) + "\r\n";
                 send += "------------------------------------------------\r\n";
 
                 Log.d("FACTPRODTODFAC", send + "");
