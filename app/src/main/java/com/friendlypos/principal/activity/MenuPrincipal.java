@@ -762,6 +762,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
 
                     invoice factura_actualizada = realm2.where(invoice.class).equalTo("id", factura).findFirst();
                     factura_actualizada.setSubida(0);
+                    factura_actualizada.setDevolucionInvoice(0);
                     realm2.insertOrUpdate(factura_actualizada);
 
                 }
@@ -787,8 +788,9 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                 @Override
                 public void execute(Realm realm3) {
 
-                    sale sale_actualizada = realm3.where(sale.class).equalTo("id", factura).findFirst();
+                    sale sale_actualizada = realm3.where(sale.class).equalTo("invoice_id", factura).findFirst();
                     sale_actualizada.setSubida(0);
+                    sale_actualizada.setDevolucion(0);
                     realm3.insertOrUpdate(sale_actualizada);
 
                 }
@@ -1279,30 +1281,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
         }
 
 
-        /*
-        Realm realmPedidos = Realm.getDefaultInstance();
-        RealmQuery<invoice> queryPedidos = realmPedidos.where(invoice.class).equalTo("subida", 1).equalTo("facturaDePreventa", "Distribucion");
-        final RealmResults<invoice> invoicePedidos = queryPedidos.findAll();
-        Log.d("SubFacturaInvP", invoicePedidos.toString());
-        List<invoice> listaFacturasPedidos = realmPedidos.copyFromRealm(invoicePedidos);
-        Log.d("SubFacturaListaP", listaFacturasPedidos + "");
-        realmPedidos.close();
 
-        if(listaFacturasPedidos.size()== 0){
-            Toast.makeText(MenuPrincipal.this,"No hay más facturas para subir", Toast.LENGTH_LONG).show();
-        }else {
-
-            for (int i = 0; i < listaFacturasPedidos.size(); i++) {
-                facturaId = String.valueOf(listaFacturasPedidos.get(i).getId());
-                if (codS.equals("1") && resultS.equals("true")) {
-                    actualizarVentaDist(facturaId);
-                    actualizarFactura(facturaId);
-                    Toast.makeText(MenuPrincipal.this, messageS, Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(MenuPrincipal.this, messageS, Toast.LENGTH_LONG).show();
-                }
-            }
-        }*/
         return cod;
     }
 
@@ -1322,31 +1301,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
             Toast.makeText(MenuPrincipal.this, messageS, Toast.LENGTH_LONG).show();
         }
 
-        /*
 
-        Realm realmPedidos = Realm.getDefaultInstance();
-        RealmQuery<invoice> queryPedidos = realmPedidos.where(invoice.class).equalTo("subida", 1).equalTo("facturaDePreventa", "Proforma");
-        final RealmResults<invoice> invoicePedidos = queryPedidos.findAll();
-        Log.d("SubFacturaInvP", invoicePedidos.toString());
-        List<invoice> listaFacturasPedidos = realmPedidos.copyFromRealm(invoicePedidos);
-        Log.d("SubFacturaListaP", listaFacturasPedidos + "");
-        realmPedidos.close();
-
-        if(listaFacturasPedidos.size()== 0){
-            Toast.makeText(MenuPrincipal.this,"No hay más facturas para subir", Toast.LENGTH_LONG).show();
-        }else {
-
-            for (int i = 0; i < listaFacturasPedidos.size(); i++) {
-                facturaId = String.valueOf(listaFacturasPedidos.get(i).getId());
-                if (codS.equals("1") && resultS.equals("true")) {
-                    actualizarVenta(facturaId);
-                    actualizarFactura(facturaId);
-                    Toast.makeText(MenuPrincipal.this, messageS, Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(MenuPrincipal.this, messageS, Toast.LENGTH_LONG).show();
-                }
-            }
-        }*/
         return cod;
     }
 
