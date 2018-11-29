@@ -123,7 +123,7 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
         holder.txt_producto_factura_tipo.setText("Tipo: " + tipoProducto);
         holder.txt_producto_factura_precio.setText(precio);
         holder.fillData(producto);
-
+        Log.d("prodListActivoPrev", "" + productosList);
         if(pivots.size() == 0){
             Log.d("jd", "se limpia x 0");
             holder.cardView.setBackgroundColor(Color.parseColor("#009688"));

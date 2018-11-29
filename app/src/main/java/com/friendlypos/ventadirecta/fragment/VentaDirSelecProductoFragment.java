@@ -113,47 +113,6 @@ public class VentaDirSelecProductoFragment extends BaseFragment implements Searc
       if (result1.isEmpty()) {
 
             Toast.makeText(getApplicationContext(),"Favor descargar datos primero",Toast.LENGTH_LONG).show();}
-
-    /*    else{
-            for (int i = 0; i < result1.size(); i++) {
-
-                List<Inventario> salesList1 = realm.where(Inventario.class).notEqualTo("amount", "0").notEqualTo("amount", "0.0").notEqualTo("amount", "0.000").findAll();
-                String nombre = salesList1.get(i).getNombre_producto();
-                if (nombre == null){
-                    String facturaId1 = salesList1.get(i).getProduct_id();
-
-                    Productos salesList2 = realm.where(Productos.class).equalTo("id", facturaId1).findFirst();
-
-                    final String facturaId2 = salesList2.getId();
-                    final String desc = salesList2.getDescription();
-
-                    final Realm realm3 = Realm.getDefaultInstance();
-
-                    realm3.executeTransaction(new Realm.Transaction() {
-                        @Override
-                        public void execute(Realm bgRealm) {
-                            Inventario inv_actualizado = realm3.where(Inventario.class).equalTo("product_id", facturaId2).findFirst();
-                            //  inv_actualizado.setProducto(new RealmList<Productos>(salesList2.toArray(new Productos[salesList2.size()])));
-                            inv_actualizado.setNombre_producto(desc);
-                            realm3.insertOrUpdate(inv_actualizado); // using insert API
-                        }
-                 /*   }, new Realm.Transaction.OnSuccess() {
-                        @Override
-                        public void onSuccess() {
-                           // realm3.close();
-                        }
-                    }, new Realm.Transaction.OnError() {
-                        @Override
-                        public void onError(Throwable error) {
-                            realm3.close();
-                        }
-                    });
-                }
-
-            }
-
-        }
-*/
         return result1;
 
     }
@@ -208,14 +167,14 @@ public class VentaDirSelecProductoFragment extends BaseFragment implements Searc
     @Override
     public void updateData() {
 
-       if(datosEnFiltro == 1){
+   /*    if(datosEnFiltro == 1){
             Log.d("OSCARUpdate", "No actualiza xq esta en " + datosEnFiltro);
         }
         else{
             datosEnFiltro = 0;
             adapter.updateData(getListProductos());
             Log.d("OSCARUpdate1", "Actualiza xq esta en " + datosEnFiltro);
-        }
+        }*/
 
         if (slecTAB == 1) {
             creditoLimiteCliente = Double.parseDouble(((VentaDirectaActivity) getActivity()).getCreditoLimiteClienteVentaDirecta());
@@ -252,7 +211,7 @@ public class VentaDirSelecProductoFragment extends BaseFragment implements Searc
 
     private List<Inventario> filter(List<Inventario> models, String query) {
 
-
+/*
         if(query.isEmpty()){
             Log.d("OSCARVAC", "esta vacio la consulta");
             datosEnFiltro = 0;
@@ -263,22 +222,18 @@ public class VentaDirSelecProductoFragment extends BaseFragment implements Searc
 
             Log.d("OSCARLLE", "esta llena la consulta");
         }
-
+*/
         query = query.toLowerCase();
+
         final List<Inventario> filteredModelList = new ArrayList<>();
 
         for (Inventario model : models) {
-
-            if(model.getDescription() == null){
-
-            }else{
 
             String text = model.getDescription().toLowerCase();
                 Log.d("FiltroVentaDirecta", text);
                 if (text.contains(query)) {
                 filteredModelList.add(model);
             }
-        }
         }
         return filteredModelList;
     }

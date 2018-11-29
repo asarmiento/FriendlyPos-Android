@@ -112,54 +112,33 @@ public class VentaDirSeleccionarProductoAdapter  extends RecyclerView.Adapter<Ve
         String marca2 = realm.where(Marcas.class).equalTo("id", marca).findFirst().getName();
         String tipoProducto = realm.where(TipoProducto.class).equalTo("id", tipo).findFirst().getName();
 
-        realm.close();
-        // TRANSACCION PARA ACTUALIZAR CAMPOS DE LA TABLA VENTAS
-     /*   final Realm realm3 = Realm.getDefaultInstance();
-
-            try {
-                realm3.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm3) {
-
-                        inventario.setNombre_producto(description);
-                        realm3.insertOrUpdate(inventario);
-
-                        Log.d("invProdNombre", inventario.getNombre_producto());
-                    }
+        holder.fillData(producto);
+        holder.txt_producto_factura_nombre.setText(description);
+        holder.txt_producto_factura_marca.setText("Marca: " + marca2);
+        holder.txt_producto_factura_tipo.setText("Tipo: " + tipoProducto);
+        holder.txt_producto_factura_precio.setText(precio);
+        holder.txt_producto_factura_disponible.setText("Disp: " + inventario.getAmount());
 
 
-                });
 
-            } catch (Exception e) {
-                Log.e("error", "error", e);
-                Toast.makeText(context, "error", Toast.LENGTH_SHORT).show();
+        Log.d("productosListActivo", "" + productosList);
 
+        if (pivots.size() == 0) {
+            holder.cardView.setBackgroundColor(Color.parseColor("#009688"));
+        } else {
 
-        }*/
-
-        if (status.equals("Activo")) {
-            holder.txt_producto_factura_nombre.setText(description);
-            holder.txt_producto_factura_marca.setText("Marca: " + marca2);
-            holder.txt_producto_factura_tipo.setText("Tipo: " + tipoProducto);
-            holder.txt_producto_factura_precio.setText(precio);
-            holder.txt_producto_factura_disponible.setText("Disp: " + inventario.getAmount());
-            holder.fillData(producto);
-            Log.d("productosList", "" + productosList);
-
-            if (pivots.size() == 0) {
-                holder.cardView.setBackgroundColor(Color.parseColor("#009688"));
-            } else {
-
-                for (Pivot pivot : pivots) {
-                    if (producto.getId().equals(pivot.getProduct_id())) {
-                        holder.cardView.setBackgroundColor(Color.parseColor("#607d8b"));
-                        return;
-                    } else {
-                        holder.cardView.setBackgroundColor(Color.parseColor("#009688"));
-                    }
+            for (Pivot pivot : pivots) {
+                if (producto.getId().equals(pivot.getProduct_id())) {
+                    holder.cardView.setBackgroundColor(Color.parseColor("#607d8b"));
+                    return;
+                } else {
+                    holder.cardView.setBackgroundColor(Color.parseColor("#009688"));
                 }
-
             }
+
+        }
+
+           if (status.equals("Activo")) { holder.cardView.setVisibility(View.VISIBLE);
         }
 
         else{
@@ -171,6 +150,10 @@ public class VentaDirSeleccionarProductoAdapter  extends RecyclerView.Adapter<Ve
             holder.cardView.requestLayout();
             Log.d("inactivo", "inactivo");
         }
+
+
+
+        realm.close();
         }
 
     public void addProduct(final int inventario_id, final String producto_id, final
