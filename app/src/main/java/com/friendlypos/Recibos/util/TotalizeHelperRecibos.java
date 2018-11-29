@@ -19,7 +19,7 @@ public class TotalizeHelperRecibos {
     RecibosActivity activity;
     private static double productosDelBonus = 0;
     SessionPrefes session;
-
+    String facturaId;
 
     public TotalizeHelperRecibos(RecibosActivity activity) {
         this.activity = activity;
@@ -35,6 +35,26 @@ public class TotalizeHelperRecibos {
         for (recibos p : pivotList) {
             totalize(p);
         }
+
+        final Realm realm2 = Realm.getDefaultInstance();
+        final Double finalTotalPagar = activity.getTotalizarCancelado();
+
+        realm2.executeTransaction(new Realm.Transaction() {
+
+            @Override
+            public void execute(Realm realm2) {
+                recibos recibo_actualizado = realm2.where(recibos.class).equalTo("invoice_id", facturaId).findFirst();
+
+
+                recibo_actualizado.setPorPagar(finalTotalPagar);
+
+                realm2.insertOrUpdate(recibo_actualizado);
+                realm2.close();
+
+                Log.d("ACTRECIBOPAGAR", recibo_actualizado + "");
+
+            }
+        });
     }
 
     private void totalize(final recibos currentPivot) {
@@ -55,27 +75,9 @@ public class TotalizeHelperRecibos {
         activity.setTotalizarTotal(total);
         activity.setTotalizarCancelado(totalPagar);
 
-        final String facturaId = currentPivot.getInvoice_id();
-
-        final Realm realm2 = Realm.getDefaultInstance();
-        final Double finalTotalPagar = totalPagar;
-
-        realm2.executeTransaction(new Realm.Transaction() {
-
-            @Override
-            public void execute(Realm realm2) {
-                recibos recibo_actualizado = realm2.where(recibos.class).equalTo("invoice_id", facturaId).findFirst();
+        facturaId = currentPivot.getInvoice_id();
 
 
-                recibo_actualizado.setPorPagar(finalTotalPagar);
-
-                realm2.insertOrUpdate(recibo_actualizado);
-                realm2.close();
-
-                Log.d("ACTRECIBOPAGAR", recibo_actualizado + "");
-
-            }
-        });
 
 
 

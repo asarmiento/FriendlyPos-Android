@@ -34,7 +34,7 @@ public class receipts extends RealmObject {
     double balance;
     String notes;
     private RealmList<recibos> listaRecibos;
-
+    double porPagar = 0.0;
     int aplicado = 0;
 
     public int getAplicado() {

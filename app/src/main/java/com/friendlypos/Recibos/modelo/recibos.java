@@ -140,7 +140,7 @@ public class recibos extends RealmObject {
     }
 
     public void setPorPagar(double porPagar) {
-        this.porPagar = this.porPagar + porPagar;
+        this.porPagar = porPagar;
     }
 
     @Override
