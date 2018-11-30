@@ -97,7 +97,7 @@ public class DistSelecClienteFragment extends BaseFragment  implements SearchVie
             Toast.makeText(getApplicationContext(),"Favor descargar datos primero",Toast.LENGTH_LONG).show();
         }
 
-   /*     else {
+     /*   else {
             for (int i = 0; i < result1.size(); i++) {
 
                 List<sale> salesList1 = realm.where(sale.class).equalTo("aplicada", 0).findAll();
@@ -185,11 +185,11 @@ public class DistSelecClienteFragment extends BaseFragment  implements SearchVie
 
         for (sale model : models) {
 
-            if(model.getNombreCliente() == null){
+            if(model.getFantasy() == null){
 
             }else{
 
-            final String text = model.getNombreCliente().toLowerCase();
+            final String text = model.getFantasy().toLowerCase();
             Log.d("FiltroPreventa", text);
             if (text.contains(query)) {
                 filteredModelList.add(model);

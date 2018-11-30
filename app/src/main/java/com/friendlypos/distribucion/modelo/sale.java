@@ -39,7 +39,8 @@ public class sale extends RealmObject {
     String reserved;
     public Clientes clientes;
     public invoice invoice;
-    String nombreCliente;
+    String fantasy;
+    String company;
 
     int devolucion = 0;
 
@@ -155,12 +156,20 @@ public class sale extends RealmObject {
         return facturaDePreventa;
     }
 
-    public String getNombreCliente() {
-        return nombreCliente;
+    public String getFantasy() {
+        return fantasy;
     }
 
-    public void setNombreCliente(String nombreCliente) {
-        this.nombreCliente = nombreCliente;
+    public void setFantasy(String fantasy) {
+        this.fantasy = fantasy;
+    }
+
+    public String getCompany() {
+        return company;
+    }
+
+    public void setCompany(String company) {
+        this.company = company;
     }
 
     public void setFacturaDePreventa(String facturaDePreventa) {
@@ -194,7 +203,8 @@ public class sale extends RealmObject {
                 ", subida=" + subida +
                 ", devolucion=" + devolucion +
                 ", facturaDePreventa=" + facturaDePreventa +
-                ", nombreCliente=" + nombreCliente +
+                ", fantasy=" + fantasy +
+                ", company=" + company +
                 '}';
     }
 }

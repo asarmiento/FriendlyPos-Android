@@ -281,8 +281,6 @@ public class RecibosAplicarFragment extends BaseFragment {
                 double pagado = salesList1.get(i).getPaid();
                 String pagadoS = String.format("%,.2f", pagado);
 
-
-
                 double restante = total - pagado;
                 String restanteS = String.format("%,.2f", restante);
 

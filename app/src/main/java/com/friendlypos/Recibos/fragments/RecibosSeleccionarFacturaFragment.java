@@ -367,7 +367,6 @@ StringBuffer sb= null;
             List<recibos> list = getListProductos();
 
             adapter.updateData(list);
-           // adapter2.notifyDataSetChanged();
             totalizeHelper.totalizeRecibos(list);
 
             double totalT = activity.getTotalizarTotal();
