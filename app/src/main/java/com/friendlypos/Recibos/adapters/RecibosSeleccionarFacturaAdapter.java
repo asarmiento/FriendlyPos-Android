@@ -103,6 +103,15 @@ public class RecibosSeleccionarFacturaAdapter extends RecyclerView.Adapter<Recib
             holder.cardView.setBackgroundColor(Color.parseColor("#009688"));
         }
 
+        if(debePagar == 0.0){
+            holder.cardView.setVisibility(View.GONE);
+            holder.cardView.getLayoutParams().height = 0;
+            ViewGroup.MarginLayoutParams layoutParams =
+                    (ViewGroup.MarginLayoutParams) holder.cardView.getLayoutParams();
+            layoutParams.setMargins(0, 0,0, 0);
+            holder.cardView.requestLayout();
+            Log.d("inactivo", "inactivo");
+        }
 
 
     }

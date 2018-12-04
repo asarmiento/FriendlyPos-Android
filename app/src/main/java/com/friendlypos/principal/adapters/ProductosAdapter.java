@@ -51,7 +51,7 @@ public class ProductosAdapter extends RecyclerView.Adapter<ProductosAdapter.Char
         Realm realm = Realm.getDefaultInstance();
         String marca = realm.where(Marcas.class).equalTo("id", producto.getBrand_id()).findFirst().getName();
         String tipoProducto = realm.where(TipoProducto.class).equalTo("id", producto.getProduct_type_id()).findFirst().getName();
-
+        Inventario inventario = realm.where(Inventario.class).equalTo("product_id", producto.getId()).findFirst();
         precio = Double.parseDouble(producto.getSale_price());
 
         realm.close();
@@ -61,7 +61,15 @@ public class ProductosAdapter extends RecyclerView.Adapter<ProductosAdapter.Char
         holder.txt_producto_marca.setText(marca);
         holder.txt_producto_tipo.setText(tipoProducto);
         holder.txt_producto_stock.setText(producto.getStock_max());
-        holder.txt_producto_inventario.setText(tipoProducto);
+
+        if(inventario == null){
+            holder.txt_producto_inventario.setText("0.0");
+        }
+        else{
+            holder.txt_producto_inventario.setText(inventario.getAmount());
+        }
+
+
         holder.txt_producto_precio.setText(String.format("%,.2f", precio));
 
     }

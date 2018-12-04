@@ -21,6 +21,7 @@ import com.friendlypos.distribucion.modelo.sale;
 import com.friendlypos.login.modelo.Usuarios;
 import com.friendlypos.login.util.SessionPrefes;
 import com.friendlypos.preventas.activity.PreventaActivity;
+import com.friendlypos.preventas.modelo.Numeracion;
 import com.friendlypos.principal.activity.MenuPrincipal;
 import com.friendlypos.principal.modelo.Clientes;
 import com.friendlypos.principal.modelo.Productos;
@@ -365,29 +366,26 @@ public class PrinterFunctions {
 
     public static void imprimirFacturaDistrTotal (final sale saleB, final Context QuickContext, final int ptype){
 
-        CharSequence colors[] = new CharSequence[]{"Copia Cliente", "Copia Contabilidad", "Copia Archivo"};
-        AlertDialog.Builder builder = new AlertDialog.Builder(QuickContext);
-        builder.setTitle("Seleccione la copia a imprimir?");
-        builder.setItems(colors, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // the user clicked on colors[which]
-                switch (which) {
-                    case 0:
+        AlertDialog dialogReturnSale = new AlertDialog.Builder(QuickContext)
+                .setTitle("Impresión")
+                .setMessage("¿Desea realizar la impresión?")
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
                         imprimirTotalizar(1, saleB, QuickContext, ptype);
-                        break;
-                    case 1:
-                        imprimirTotalizar(2, saleB, QuickContext, ptype);
-                        break;
-                    case 2:
-                        imprimirTotalizar(3, saleB, QuickContext, ptype);
-                        break;
-                }
-            }
-        });
-        builder.show();
-        //}
-        }
+                    }
+                }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        dialog.cancel();
+                    }
+                }).create();
+        dialogReturnSale.show();
+
+    }
 
     private static void imprimirTotalizar(int type, sale invoices, Context QuickContext, int ptype) {
         try {
@@ -543,7 +541,7 @@ public class PrinterFunctions {
                 double restante = salesList1.get(i).getMontoCancelado();
                // String restanteS = String.format("%,.2f", restante);
 
-                send += String.format("%-15s  %15s  %15s", numeracion, Functions.doubleToString1(total), Functions.doubleToString1(pagado) ) + "\r\n";
+                send += String.format("%-9s  %9s  %9s", numeracion, Functions.doubleToString1(total), Functions.doubleToString1(pagado) ) + "\r\n";
                 send += "------------------------------------------------\r\n";
 
                 Log.d("FACTPRODTODFAC", send + "");
@@ -557,28 +555,25 @@ public class PrinterFunctions {
 
     public static void imprimirFacturaRecibosTotal(final recibos recibo, final Context QuickContext, final int ptype){
 
-        CharSequence colors[] = new CharSequence[]{"Copia Cliente", "Copia Contabilidad", "Copia Archivo"};
-        AlertDialog.Builder builder = new AlertDialog.Builder(QuickContext);
-        builder.setTitle("Seleccione la copia a imprimir?");
-        builder.setItems(colors, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // the user clicked on colors[which]
-                switch (which) {
-                    case 0:
+        AlertDialog dialogReturnSale = new AlertDialog.Builder(QuickContext)
+                .setTitle("Impresión")
+                .setMessage("¿Desea realizar la impresión?")
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
                         imprimirRecibosTotalizar(1, recibo, QuickContext, ptype);
-                        break;
-                    case 1:
-                        imprimirRecibosTotalizar(2, recibo, QuickContext, ptype);
-                        break;
-                    case 2:
-                        imprimirRecibosTotalizar(3, recibo, QuickContext, ptype);
-                        break;
-                }
-            }
-        });
-        builder.show();
-        //}
+                    }
+                }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        dialog.cancel();
+                    }
+                }).create();
+        dialogReturnSale.show();
+
     }
 
     private static void imprimirRecibosTotalizar(int type, recibos recibo, Context QuickContext, int ptype) {
@@ -1190,52 +1185,49 @@ public class PrinterFunctions {
 
     public static void imprimirFacturaPrevTotal (final sale saleB, final Context QuickContext, final int ptype){
 
-        CharSequence colors[] = new CharSequence[]{"Copia Cliente", "Copia Contabilidad", "Copia Archivo"};
-        AlertDialog.Builder builder = new AlertDialog.Builder(QuickContext);
-        builder.setTitle("Seleccione la copia a imprimir?");
-        builder.setItems(colors, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                switch (which) {
-                    case 0:
+        AlertDialog dialogReturnSale = new AlertDialog.Builder(QuickContext)
+                .setTitle("Impresión")
+                .setMessage("¿Desea realizar la impresión?")
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
                         imprimirTotalizarPrev(1, saleB, QuickContext, ptype);
-                        break;
-                    case 1:
-                        imprimirTotalizarPrev(2, saleB, QuickContext, ptype);
-                        break;
-                    case 2:
-                        imprimirTotalizarPrev(3, saleB, QuickContext, ptype);
-                        break;
-                }
-            }
-        });
-        builder.show();
+                    }
+                }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        dialog.cancel();
+                    }
+                }).create();
+        dialogReturnSale.show();
+
     }
 
 
     public static void imprimirFacturaProformaTotal (final sale saleB, final Context QuickContext, final int ptype){
 
-        CharSequence colors[] = new CharSequence[]{"Copia Cliente", "Copia Contabilidad", "Copia Archivo"};
-        AlertDialog.Builder builder = new AlertDialog.Builder(QuickContext);
-        builder.setTitle("Seleccione la copia a imprimir?");
-        builder.setItems(colors, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // the user clicked on colors[which]
-                switch (which) {
-                    case 0:
+        AlertDialog dialogReturnSale = new AlertDialog.Builder(QuickContext)
+                .setTitle("Impresión")
+                .setMessage("¿Desea realizar la impresión?")
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
                         imprimirTotalizarProform(1, saleB, QuickContext, ptype);
-                        break;
-                    case 1:
-                        imprimirTotalizarProform(2, saleB, QuickContext, ptype);
-                        break;
-                    case 2:
-                        imprimirTotalizarProform(3, saleB, QuickContext, ptype);
-                        break;
-                }
-            }
-        });
-        builder.show();
+                    }
+                }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        dialog.cancel();
+                    }
+                }).create();
+        dialogReturnSale.show();
+
 
     }
 

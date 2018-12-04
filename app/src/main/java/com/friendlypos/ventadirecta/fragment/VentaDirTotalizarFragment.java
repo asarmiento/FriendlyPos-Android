@@ -458,6 +458,7 @@ public class VentaDirTotalizarFragment extends BaseFragment  {
                 totalDatosTotal2 = totalDatosTotal + totalTotal;
 
                 datos_actualizados.setTotalVentaDirecta(totalDatosTotal2);
+                datos_actualizados.setDate(Functions.getDate());
 
                 realm3.insertOrUpdate(datos_actualizados);
                 realm3.close();

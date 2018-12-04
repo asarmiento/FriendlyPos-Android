@@ -21,7 +21,9 @@ import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.Bind;
@@ -56,7 +58,12 @@ public class GraficoActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String currentDateandTime = sdf.format(new Date());
+
         Realm realm12 = Realm.getDefaultInstance();
+
+
 
         RealmQuery<datosTotales> query12 = realm12.where(datosTotales.class);
         final RealmResults<datosTotales> invoice12 = query12.findAll();

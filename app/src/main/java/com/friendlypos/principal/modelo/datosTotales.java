@@ -17,6 +17,7 @@ public class datosTotales extends RealmObject {
     double totalPreventa;
     double totalProforma;
     double totalRecibos;
+    String date;
 
     public int getId() {
         return id;
@@ -74,6 +75,14 @@ public class datosTotales extends RealmObject {
         this.totalRecibos = totalRecibos;
     }
 
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
     @Override
     public String toString() {
         return "datosTotales{" +
@@ -84,6 +93,7 @@ public class datosTotales extends RealmObject {
                 ", totalPreventa=" + totalPreventa +
                 ", totalProforma=" + totalProforma +
                 ", totalRecibos=" + totalRecibos +
+                ", date=" + date +
                 '}';
     }
 }

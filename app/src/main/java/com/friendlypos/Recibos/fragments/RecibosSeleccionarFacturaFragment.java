@@ -149,15 +149,6 @@ StringBuffer sb= null;
 
                                 double numIngresado = Double.parseDouble(input.getText().toString());
 
-                          /*      if(numIngresado > debePagar){
-                                    montoPagar = debePagar;
-                                    Toast.makeText(context, "Ajusto " + montoPagar + " " + debePagar + " ", Toast.LENGTH_LONG).show();
-                                }
-                                else{
-                                    Toast.makeText(context, "no ajusto " + montoPagar + " " + debePagar + " ", Toast.LENGTH_LONG).show();
-                                }*/
-
-
                                 if(!input.getText().toString().isEmpty()){
 
 
@@ -231,6 +222,7 @@ StringBuffer sb= null;
 
                                                                                 recibo_actualizado.setPaid(irPagando);
                                                                                 recibo_actualizado.setAbonado(1);
+                                                                                recibo_actualizado.setMontoCanceladoPorFactura(irPagando);
                                                                                 double cant = recibo_actualizado.getMontoCancelado();
                                                                                 if (cant == 0.0) {
                                                                                     recibo_actualizado.setMontoCancelado(irPagando);
@@ -267,6 +259,7 @@ StringBuffer sb= null;
 
                                                                                 recibo_actualizado.setPaid(irPagando);
                                                                                 recibo_actualizado.setAbonado(1);
+                                                                                recibo_actualizado.setMontoCanceladoPorFactura(irPagando);
                                                                                 double cant = recibo_actualizado.getMontoCancelado();
                                                                                 if (cant == 0.0) {
                                                                                     recibo_actualizado.setMontoCancelado(irPagando);

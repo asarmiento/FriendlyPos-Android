@@ -401,6 +401,7 @@ public class RecibosAplicarFragment extends BaseFragment {
                 totalDatosTotal2 = totalDatosTotal +  activity.getCanceladoPorFactura();
 
                 datos_actualizados.setTotalRecibos(totalDatosTotal2);
+                datos_actualizados.setDate(Functions.getDate());
 
                 realm3.insertOrUpdate(datos_actualizados);
                 realm3.close();
