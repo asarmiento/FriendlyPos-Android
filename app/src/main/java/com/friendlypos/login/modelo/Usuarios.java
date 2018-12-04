@@ -13,6 +13,8 @@ public class Usuarios extends RealmObject {
 
     private String employee_id;
     private String username;
+    private String status;
+    private String terminal;
     private String password;
     private String tmp_password;
     private String code;
@@ -40,6 +42,22 @@ public class Usuarios extends RealmObject {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getTerminal() {
+        return terminal;
+    }
+
+    public void setTerminal(String terminal) {
+        this.terminal = terminal;
     }
 
     public String getPassword() {
@@ -80,6 +98,8 @@ public class Usuarios extends RealmObject {
                 "id='" + id + '\'' +
                 ", employee_id='" + employee_id + '\'' +
                 ", username='" + username + '\'' +
+                ", status='" + status + '\'' +
+                ", terminal='" + terminal + '\'' +
                 ", password='" + password + '\'' +
                 ", tmp_password='" + tmp_password + '\'' +
                 ", code='" + code + '\'' +

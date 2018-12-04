@@ -120,6 +120,13 @@ public class Functions {
         return dateFormat.format(cal.getTime());
     }
 
+
+    public static String getDateConsecutivo() {
+        DateFormat dateFormat = new SimpleDateFormat("ddMMyy");
+        Calendar cal = Calendar.getInstance();
+        return dateFormat.format(cal.getTime());
+    }
+
     public static String getDateBonif() {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Calendar cal = Calendar.getInstance();

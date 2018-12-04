@@ -22,6 +22,7 @@ import com.friendlypos.preventas.modelo.visit;
 import com.friendlypos.preventas.modelo.EnviarClienteVisitado;
 import com.friendlypos.preventas.modelo.NumeracionResponse;
 import com.friendlypos.principal.modelo.ClientesResponse;
+import com.friendlypos.principal.modelo.ConsecutivosNumberFeResponse;
 import com.friendlypos.principal.modelo.EnviarClienteGPS;
 import com.friendlypos.principal.modelo.EnviarClienteNuevo;
 import com.friendlypos.principal.modelo.EnviarProductoDevuelto;
@@ -45,6 +46,9 @@ public interface RequestInterface {
 
     @GET("api/donwload-info-business")
     Call<SysconfResponse> getSysconf(@Header("Authorization") String token);
+
+    @GET("api/donwload-info-business")
+    Call<ConsecutivosNumberFeResponse> getConsecutivosNumber(@Header("Authorization") String token);
 
     @GET("api/donwload-info-business")
     Call<ProductosResponse> getProducts(@Header("Authorization") String token);

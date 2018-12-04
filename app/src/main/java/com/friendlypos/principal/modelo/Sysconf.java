@@ -31,9 +31,18 @@ public class Sysconf extends RealmObject {
     private String id;
 
     private String identification;
+    private String fe;
+    private String data_base;
+    private String type_of_cedula;
+    private String id_number_atv;
     private String name;
+    private String short_name;
+    private String code;
+    private String ftp;
     private String business_name;
     private String logo;
+    private String subdomin;
+    private String sucursal;
     private String direction;
     private String phone;
     private String email;
@@ -183,14 +192,95 @@ public class Sysconf extends RealmObject {
         this.type = type;
     }
 
+    public String getFe() {
+        return fe;
+    }
+
+    public void setFe(String fe) {
+        this.fe = fe;
+    }
+
+    public String getData_base() {
+        return data_base;
+    }
+
+    public void setData_base(String data_base) {
+        this.data_base = data_base;
+    }
+
+    public String getType_of_cedula() {
+        return type_of_cedula;
+    }
+
+    public void setType_of_cedula(String type_of_cedula) {
+        this.type_of_cedula = type_of_cedula;
+    }
+
+    public String getId_number_atv() {
+        return id_number_atv;
+    }
+
+    public void setId_number_atv(String id_number_atv) {
+        this.id_number_atv = id_number_atv;
+    }
+
+    public String getShort_name() {
+        return short_name;
+    }
+
+    public void setShort_name(String short_name) {
+        this.short_name = short_name;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getFtp() {
+        return ftp;
+    }
+
+    public void setFtp(String ftp) {
+        this.ftp = ftp;
+    }
+
+    public String getSubdomin() {
+        return subdomin;
+    }
+
+    public void setSubdomin(String subdomin) {
+        this.subdomin = subdomin;
+    }
+
+    public String getSucursal() {
+        return sucursal;
+    }
+
+    public void setSucursal(String sucursal) {
+        this.sucursal = sucursal;
+    }
+
     @Override
     public String toString() {
         return "Sysconf{" +
                 "id='" + id + '\'' +
                 ", identification='" + identification + '\'' +
+                ", fe='" + fe + '\'' +
+                ", data_base='" + data_base + '\'' +
+                ", type_of_cedula='" + type_of_cedula + '\'' +
+                ", id_number_atv='" + id_number_atv + '\'' +
                 ", name='" + name + '\'' +
+                ", short_name='" + short_name + '\'' +
+                ", code='" + code + '\'' +
+                ", ftp='" + ftp + '\'' +
                 ", business_name='" + business_name + '\'' +
                 ", logo='" + logo + '\'' +
+                ", subdomin='" + subdomin + '\'' +
+                ", sucursal='" + sucursal + '\'' +
                 ", direction='" + direction + '\'' +
                 ", phone='" + phone + '\'' +
                 ", email='" + email + '\'' +

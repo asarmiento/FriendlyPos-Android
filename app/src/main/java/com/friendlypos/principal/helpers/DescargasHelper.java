@@ -32,6 +32,8 @@ import com.friendlypos.preventas.modelo.Numeracion;
 import com.friendlypos.preventas.modelo.NumeracionResponse;
 import com.friendlypos.principal.modelo.Clientes;
 import com.friendlypos.principal.modelo.ClientesResponse;
+import com.friendlypos.principal.modelo.ConsecutivosNumberFe;
+import com.friendlypos.principal.modelo.ConsecutivosNumberFeResponse;
 import com.friendlypos.principal.modelo.Productos;
 import com.friendlypos.principal.modelo.ProductosResponse;
 import com.friendlypos.principal.modelo.Sysconf;
@@ -55,7 +57,7 @@ public class DescargasHelper {
     private NetworkStateChangeReceiver networkStateChangeReceiver;
     private Activity activity;
     private Context mContext;
-    private Realm realm, realm2, realmSysconfig, realmRecibos, realmMarcas, realmNumeracion, realmBonuses,  realmTipoProducto,realmUsuarios, realmMetodoPago;
+    private Realm realm, realm2, realmSysconfig, realmConsecutivo, realmRecibos, realmMarcas, realmNumeracion, realmBonuses,  realmTipoProducto,realmUsuarios, realmMetodoPago;
     int nextId;
     String nombre;
     public DescargasHelper(Activity activity) {
@@ -541,6 +543,7 @@ public class DescargasHelper {
 
         final RequestInterface api = BaseManager.getApi();
         final ArrayList<Sysconf> mContentsArraySys = new ArrayList<>();
+        final ArrayList<ConsecutivosNumberFe> mContentsArrayConsecutivo = new ArrayList<>();
         final ProgressDialog dialog = new ProgressDialog(context);
         dialog.setMessage("Cargando datos de Empresa");
 
@@ -591,17 +594,75 @@ public class DescargasHelper {
 
 
                     }
-                    dialog.dismiss();
 
                 }
 
                 @Override
                 public void onFailure(Call<SysconfResponse> call2, Throwable t) {
+
+                }
+            });
+
+
+            Call<ConsecutivosNumberFeResponse> callCons = api.getConsecutivosNumber(token);
+
+            callCons.enqueue(new Callback<ConsecutivosNumberFeResponse>() {
+
+                @Override
+                public void onResponse(Call<ConsecutivosNumberFeResponse> callCons, Response<ConsecutivosNumberFeResponse> response2) {
+                    mContentsArrayConsecutivo.clear();
+                    realmConsecutivo = Realm.getDefaultInstance();
+                    if (response2.isSuccessful()) {
+
+
+                       /* int id =response.body().getId();
+                        String userName = response.body().getUsername();
+                        String level = response.body().getLevel();
+*/
+                        mContentsArrayConsecutivo.addAll(response2.body().getConsecutivosNumberFe());
+
+                        try {
+
+                            realmConsecutivo.beginTransaction();
+                            //TODO verificar cada cuanto se va a actualizar el inventario.
+                            //realm.copyToRealm(mContentsArray2);
+                            realmConsecutivo.copyToRealmOrUpdate(mContentsArrayConsecutivo);
+                            realmConsecutivo.commitTransaction();
+                        }
+                        finally {
+                            realmConsecutivo.close();
+                        }
+
+                        Log.d("finishSysconf", mContentsArrayConsecutivo + " ");
+
+                    }
+                    else {
+                        RealmResults<ConsecutivosNumberFe> results2 = realmConsecutivo.where(ConsecutivosNumberFe.class).findAll();
+
+                        if (results2.isEmpty()){
+                            Toast.makeText(mContext, "Error de descarga, contacte al administrador", Toast.LENGTH_SHORT).show();
+                        }else{
+                            mContentsArrayConsecutivo.addAll(results2);
+                        }
+
+
+                    }
+                    dialog.dismiss();
+
+                }
+
+                @Override
+                public void onFailure(Call<ConsecutivosNumberFeResponse> call2, Throwable t) {
                     dialog.dismiss();
 
                 }
             });
         }
+
+
+
+
+
         else {
 
         }

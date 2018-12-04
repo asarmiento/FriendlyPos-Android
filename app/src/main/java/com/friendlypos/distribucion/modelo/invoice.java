@@ -18,11 +18,16 @@ public class invoice extends RealmObject {
     private boolean result;
     private String code;
     private String messages;
-
+    @SerializedName("type")
+    private String type;
     @SerializedName("branch_office_id")
     private String branch_office_id;
     @SerializedName("numeration")
     private String numeration;
+    @SerializedName("key")
+    private String key;
+    @SerializedName("consecutive_number")
+    private String consecutive_number;
     @SerializedName("longitud")
     private double longitud;
     @SerializedName("latitud")
@@ -81,6 +86,14 @@ public class invoice extends RealmObject {
     private int aplicada = 0;
     private int subida = 0;
     private String facturaDePreventa;
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 
     public boolean isResult() {
         return result;
@@ -306,6 +319,22 @@ public class invoice extends RealmObject {
         this.user_id_applied = user_id_applied;
     }
 
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    public String getConsecutive_number() {
+        return consecutive_number;
+    }
+
+    public void setConsecutive_number(String consecutive_number) {
+        this.consecutive_number = consecutive_number;
+    }
+
     public String getInvoice_type_id() {
         return invoice_type_id;
     }
@@ -370,13 +399,20 @@ public class invoice extends RealmObject {
         this.devolucionInvoice = devolucionInvoice;
     }
 
+    @Override
     public String toString() {
         return "invoice{" +
                 "id='" + id + '\'' +
+                ", result=" + result +
+                ", code='" + code + '\'' +
+                ", messages='" + messages + '\'' +
+                ", type='" + type + '\'' +
                 ", branch_office_id='" + branch_office_id + '\'' +
                 ", numeration='" + numeration + '\'' +
-                ", longitud='" + longitud + '\'' +
-                ", latitud='" + latitud + '\'' +
+                ", key='" + key + '\'' +
+                ", consecutive_number='" + consecutive_number + '\'' +
+                ", longitud=" + longitud +
+                ", latitud=" + latitud +
                 ", date='" + date + '\'' +
                 ", times='" + times + '\'' +
                 ", date_presale='" + date_presale + '\'' +
@@ -401,13 +437,10 @@ public class invoice extends RealmObject {
                 ", payment_method_id='" + payment_method_id + '\'' +
                 ", sale=" + sale +
                 ", productofacturas=" + productofacturas +
-                ", result='" + result + '\'' +
-                ", code='" + code + '\'' +
-                ", message='" + messages + '\'' +
-                ", aplicada='" + aplicada + '\'' +
-                ", subida='" + subida + '\'' +
+                ", devolucionInvoice=" + devolucionInvoice +
+                ", aplicada=" + aplicada +
+                ", subida=" + subida +
                 ", facturaDePreventa='" + facturaDePreventa + '\'' +
-                ", devolucionInvoice='" + devolucionInvoice + '\'' +
                 '}';
     }
 }
