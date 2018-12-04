@@ -8,17 +8,17 @@
 
     <Button
         android:id="@+id/btnPorMes"
-        android:layout_width="300dp"
-        android:layout_height="60dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:background="@drawable/fondo_botones"
-        android:text="     Gráfico por mes     "
+        android:text="Gráfico por mes"
         android:textColor="@color/cardview_light_background" />
 
 
     <com.github.mikephil.charting.charts.BarChart
         android:layout_width="match_parent"
-        android:layout_marginTop="90dp"
+        android:layout_marginTop="62dp"
         android:layout_height="450dp"
         android:id="@+id/BarGrafico">
 
@@ -28,12 +28,12 @@
 
     <Button
         android:id="@+id/btnPorDia"
-        android:layout_width="300dp"
-        android:layout_height="60dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_gravity="top|right"
         android:layout_margin="10dp"
         android:background="@drawable/fondo_botones"
-        android:text="     Gráfico por día     "
+        android:text="Gráfico por día"
         android:textColor="@color/cardview_light_background" />
 
 

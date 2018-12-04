@@ -479,7 +479,7 @@ public class PrevTotalizarFragment extends BaseFragment {
                     totalDatosTotal2 = totalDatosTotal + totalTotal;
 
                     datos_actualizados.setTotalPreventa(totalDatosTotal2);
-                    datos_actualizados.setDate(Functions.getDate());
+                    datos_actualizados.setDate("2018-12-03");
 
                     realm3.insertOrUpdate(datos_actualizados);
                     realm3.close();
