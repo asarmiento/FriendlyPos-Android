@@ -58,7 +58,7 @@
                 <EditText
                     android:id="@+id/cliente_card_nuevo"
                     style="@style/ClienteNuevo1"
-                    android:hint="Card"
+                    android:hint="Cédula"
                     android:inputType="phone"
                     android:digits="0123456789"
                     android:imeOptions="actionNext"
@@ -213,7 +213,7 @@
                 <EditText
                     android:id="@+id/cliente_model_nuevo"
                     style="@style/ClienteNuevo2"
-                    android:hint="Model"
+                    android:hint="Modelo"
                     android:singleLine="true"
                     android:imeOptions="actionNext"/>
 
@@ -276,7 +276,7 @@
                 <EditText
                     android:id="@+id/cliente_address_nuevo"
                     style="@style/ClienteNuevo2"
-                    android:hint="Address"
+                    android:hint="Dirección"
                     android:singleLine="true"
                     android:imeOptions="actionNext"/>
 
@@ -309,7 +309,7 @@
                 <EditText
                     android:id="@+id/cliente_email_nuevo"
                     style="@style/ClienteNuevo1"
-                    android:hint="Email"
+                    android:hint="Correo Electrónico"
                     android:inputType="textEmailAddress"
                     android:singleLine="true"
                     android:imeOptions="actionNext"/>
@@ -340,7 +340,7 @@
                 <EditText
                     android:id="@+id/cliente_fantasyname_nuevo"
                     style="@style/ClienteNuevo2"
-                    android:hint="Fantasy Name"
+                    android:hint="Nombre de Fantasía"
                     android:singleLine="true"
                     android:imeOptions="actionNext"/>
 
@@ -371,7 +371,7 @@
                 <EditText
                     android:id="@+id/cliente_companyname_nuevo"
                     style="@style/ClienteNuevo1"
-                    android:hint="Company Name"
+                    android:hint="Nombre de compañía"
                     android:singleLine="true"
                     android:imeOptions="actionNext"/>
 
@@ -401,7 +401,7 @@
                 <EditText
                     android:id="@+id/cliente_phone_nuevo"
                     style="@style/ClienteNuevo2"
-                    android:hint="Phone"
+                    android:hint="Teléfono"
                     android:imeOptions="actionNext"
                     android:inputType="phone"
                     android:digits="0123456789"
@@ -435,7 +435,7 @@
                 <EditText
                     android:id="@+id/cliente_creditlimit_nuevo"
                     style="@style/ClienteNuevo1"
-                    android:hint="Credit Limit"
+                    android:hint="Límite de crédito"
                     android:inputType="phone"
                     android:digits="0123456789."
                     android:singleLine="true"
