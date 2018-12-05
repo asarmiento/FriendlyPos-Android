@@ -414,14 +414,15 @@ public class VentaDirectaActivity extends BluetoothActivity {
         preSellInvoiceDelegate.borrarProductoVentaDirecta(pivot);
     }
 
-    public void initCurrentInvoice(String id, String branch_office_id, String numeration, double latitude, double longitude,
+    public void initCurrentInvoice(String id, String type, String branch_office_id, String numeration,String key,
+                                   String consecutive_number, double latitude, double longitude,
                                    String date, String times, String date_presale, String times_presale, String due_data,
                                    String invoice_type_id, String payment_method_id, String totalSubtotal, String totalGrabado,
                                    String totalExento, String totalDescuento, String percent_discount, String totalImpuesto,
                                    String totalTotal, String changing, String notes, String canceled,
                                    String paid_up, String paid, String created_at, String idUsuario,
                                    String idUsuarioAplicado, int creada, int aplicada) {
-        preSellInvoiceDelegate.initInvoiceDetalleVentaDirecta(id, branch_office_id, numeration, latitude, longitude,
+        preSellInvoiceDelegate.initInvoiceDetalleVentaDirecta(id, type, branch_office_id, numeration,key, consecutive_number, latitude, longitude,
                 date, times, date_presale, times_presale, due_data,
                 invoice_type_id, payment_method_id, totalSubtotal, totalGrabado,
                 totalExento, totalDescuento, percent_discount, totalImpuesto,

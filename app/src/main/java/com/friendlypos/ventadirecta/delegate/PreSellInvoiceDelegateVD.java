@@ -28,7 +28,8 @@ public class PreSellInvoiceDelegateVD {
         productofacturas = new ArrayList<>();
     }
 
-    public void initInvoiceDetalleVentaDirecta(String id, String branch_office_id, String numeration, double latitude, double longitude,
+    public void initInvoiceDetalleVentaDirecta(String id, String type, String branch_office_id, String numeration,String key,
+            String consecutive_number, double latitude, double longitude,
                                            String date, String times, String date_presale, String times_presale, String due_data,
                                            String invoice_type_id, String payment_method_id, String totalSubtotal, String totalGrabado,
                                            String totalExento, String totalDescuento, String percent_discount, String totalImpuesto,
@@ -39,8 +40,11 @@ public class PreSellInvoiceDelegateVD {
         newInvoice = new invoiceDetalleVentaDirecta();
 
         newInvoice.setP_id(Integer.parseInt(id));
+        newInvoice.setP_type(type);
         newInvoice.setP_branch_office_id(branch_office_id);
         newInvoice.setP_numeration(numeration);
+        newInvoice.setP_key(key);
+        newInvoice.setP_consecutive_number(consecutive_number);
         newInvoice.setP_latitud(latitude);
         newInvoice.setP_longitud(longitude);
         newInvoice.setP_date(date);
@@ -199,8 +203,11 @@ public class PreSellInvoiceDelegateVD {
         invoice invoice = new invoice();
 
         invoice.setId(String.valueOf(newInvoice.getP_id()));
+        invoice.setType(newInvoice.getP_type());
         invoice.setBranch_office_id(newInvoice.getP_branch_office_id());
         invoice.setNumeration(newInvoice.getP_numeration());
+        invoice.setKey(newInvoice.getP_key());
+        invoice.setConsecutive_number(newInvoice.getP_consecutive_number());
         invoice.setLatitud(newInvoice.getP_latitud());
         invoice.setLongitud(newInvoice.getP_longitud());
         invoice.setDate(newInvoice.getP_date());

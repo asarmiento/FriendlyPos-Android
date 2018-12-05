@@ -10,6 +10,7 @@ public class Clientes extends RealmObject {
     private String id;
 
     private String card;
+    private String fe;
     private String placa;
     private String doors;
     private String name;
@@ -57,6 +58,14 @@ public class Clientes extends RealmObject {
 
     public void setDoors(String doors) {
         this.doors = doors;
+    }
+
+    public String getFe() {
+        return fe;
+    }
+
+    public void setFe(String fe) {
+        this.fe = fe;
     }
 
     public String getName() {
@@ -168,6 +177,7 @@ public class Clientes extends RealmObject {
         return "Clientes{" +
                 "id='" + id + '\'' +
                 ", card='" + card + '\'' +
+                ", fe='" + fe + '\'' +
                 ", placa='" + placa + '\'' +
                 ", doors='" + doors + '\'' +
                 ", name='" + name + '\'' +

@@ -46,7 +46,7 @@ public class VentaDirClienteAdapter extends RecyclerView.Adapter<VentaDirCliente
     private int selected_position = -1;
     private static Context QuickContext = null;
     int tabCliente, nextId;
-    String metodoPagoId, idCliente, nombreCliente, fecha, usuer;
+    String metodoPagoId, idCliente, nombreCliente, fecha, usuer, feCliente, idTypeInvoice;
     SessionPrefes session;
     RadioButton rbcomprado, rbvisitado;
     private static EditText txtObservaciones;
@@ -114,6 +114,8 @@ public class VentaDirClienteAdapter extends RecyclerView.Adapter<VentaDirCliente
                 Clientes clickedDataItem = contentList.get(pos);
 
                 idCliente = clickedDataItem.getId();
+                feCliente = clickedDataItem.getFe();
+
                 nombreCliente = clickedDataItem.getName();
                 final int creditoTime = Integer.parseInt(clickedDataItem.getCreditTime());
                 final String creditoLimiteClienteP = clickedDataItem.getCreditLimit();
@@ -342,6 +344,14 @@ public class VentaDirClienteAdapter extends RecyclerView.Adapter<VentaDirCliente
         usuer = session.getUsuarioPrefs();
         Usuarios usuarios = realm.where(Usuarios.class).equalTo("email", usuer).findFirst();
         idUsuario = usuarios.getId();
+
+
+        if(feCliente.equals("0")){
+            idTypeInvoice = "04";
+        }else if(feCliente.equals("1")){
+            idTypeInvoice = "01";
+        }
+
         realm.close();
 
         final Realm realm2 = Realm.getDefaultInstance();
@@ -397,7 +407,7 @@ public class VentaDirClienteAdapter extends RecyclerView.Adapter<VentaDirCliente
         });
 
         //TODO MODIFICAR CON EL IDS CONSECUTIVOS (FACTURA Y NUMERACION)
-        activity.initCurrentInvoice(String.valueOf(nextId), "3", numFactura, 0.0, 0.0, Functions.getDate(), Functions.get24Time(),
+        activity.initCurrentInvoice(String.valueOf(nextId), idTypeInvoice, "3", numFactura, "", "", 0.0, 0.0, Functions.getDate(), Functions.get24Time(),
                 Functions.getDate(), Functions.get24Time(), Functions.getDate(), "1", metodoPagoId, "", "", "", "", "", "", "", "", "", "", "", "", fecha,
                 "", "", 1, 0);
 

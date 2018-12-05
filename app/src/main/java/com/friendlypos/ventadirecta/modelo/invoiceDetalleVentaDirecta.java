@@ -2,6 +2,7 @@ package com.friendlypos.ventadirecta.modelo;
 
 import com.friendlypos.distribucion.modelo.Pivot;
 import com.friendlypos.distribucion.modelo.sale;
+import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
@@ -12,8 +13,13 @@ import java.util.List;
 public class invoiceDetalleVentaDirecta {
 
     private int p_id;
+    private String p_type;
     private String p_branch_office_id;
     private String p_numeration;
+
+
+    private String p_key;
+    private String p_consecutive_number;
 
     private double p_longitud;
 
@@ -77,12 +83,36 @@ public class invoiceDetalleVentaDirecta {
         this.p_id = p_id;
     }
 
+    public String getP_type() {
+        return p_type;
+    }
+
+    public void setP_type(String p_type) {
+        this.p_type = p_type;
+    }
+
     public String getP_branch_office_id() {
         return p_branch_office_id;
     }
 
     public void setP_branch_office_id(String p_branch_office_id) {
         this.p_branch_office_id = p_branch_office_id;
+    }
+
+    public String getP_key() {
+        return p_key;
+    }
+
+    public void setP_key(String p_key) {
+        this.p_key = p_key;
+    }
+
+    public String getP_consecutive_number() {
+        return p_consecutive_number;
+    }
+
+    public void setP_consecutive_number(String p_consecutive_number) {
+        this.p_consecutive_number = p_consecutive_number;
     }
 
     public String getP_numeration() {
@@ -329,6 +359,7 @@ public class invoiceDetalleVentaDirecta {
     public String toString() {
         return "InvoiceDetalleVentaDir{" +
             "p_id=" + p_id +
+            ", p_type='" + p_type + '\'' +
             ", p_branch_office_id='" + p_branch_office_id + '\'' +
             ", p_numeration='" + p_numeration + '\'' +
             ", p_longitud=" + p_longitud +

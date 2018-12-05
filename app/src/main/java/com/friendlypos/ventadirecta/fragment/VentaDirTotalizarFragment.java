@@ -33,9 +33,13 @@ import com.friendlypos.preventas.modelo.Numeracion;
 import com.friendlypos.preventas.modelo.visit;
 import com.friendlypos.preventas.modelo.invoiceDetallePreventa;
 import com.friendlypos.principal.activity.MenuPrincipal;
+import com.friendlypos.principal.modelo.ConsecutivosNumberFe;
+import com.friendlypos.principal.modelo.Sysconf;
 import com.friendlypos.principal.modelo.datosTotales;
 import com.friendlypos.ventadirecta.activity.VentaDirectaActivity;
 import com.friendlypos.ventadirecta.modelo.invoiceDetalleVentaDirecta;
+
+import java.util.Random;
 
 import io.realm.Realm;
 
@@ -72,7 +76,7 @@ public class VentaDirTotalizarFragment extends BaseFragment  {
     SessionPrefes session;
     double latitude;
     double longitude;
-    String metodoPagoCliente;
+    String metodoPagoCliente, consConsecutivo, consConsecutivoATV, numeroConsecutivo, keyElectronica;
     private static Button applyBill;
     private static Button printBill;
 
@@ -348,6 +352,10 @@ public class VentaDirTotalizarFragment extends BaseFragment  {
         realm.close();
 
         final invoiceDetalleVentaDirecta invoiceDetallePreventa1 = activity.getCurrentInvoice();
+
+        invoiceDetallePreventa1.setP_key(keyElectronica);
+        invoiceDetallePreventa1.setP_consecutive_number(numeroConsecutivo);
+
         invoiceDetallePreventa1.setP_longitud(longitude);
         invoiceDetallePreventa1.setP_latitud(latitude);
 
@@ -472,7 +480,7 @@ public class VentaDirTotalizarFragment extends BaseFragment  {
 
     protected void aplicarFactura() {
         paid.setEnabled(false);
-
+        crearFacturaElectronica();
         actualizarFacturaDetalles();
 
         Toast.makeText(getActivity(), "Venta realizada correctamente", Toast.LENGTH_LONG).show();
@@ -482,6 +490,173 @@ public class VentaDirTotalizarFragment extends BaseFragment  {
         apply_done = 1;
 
 
+    }
+
+
+    public void crearFacturaElectronica(){
+
+        Realm realm = Realm.getDefaultInstance();
+
+        Sysconf sysconf = realm.where(Sysconf.class).findFirst();
+
+        String sysSucursal = sysconf.getSucursal();
+
+        usuer = session.getUsuarioPrefs();
+        Usuarios usuarios = realm.where(Usuarios.class).equalTo("email", usuer).findFirst();
+        String userTerminal = usuarios.getTerminal();
+        String userId = usuarios.getId();
+
+        final invoiceDetalleVentaDirecta invoiceDetallePreventa1 = activity.getCurrentInvoice();
+
+
+     //   invoice factura_actualizada = realm.where(invoice.class).equalTo("id", facturaId).findFirst();
+        String invType = invoiceDetallePreventa1.getP_type();
+
+       // ConsecutivosNumberFe consecutivosNumberFe = realm.where(ConsecutivosNumberFe.class).equalTo("user_id", "1").findFirst();
+        //   String consConsecutivo = consecutivosNumberFe.getNumber_consecutive();
+        Log.d("sysSucursal", sysSucursal);
+        Log.d("userTerminal", userTerminal);
+        Log.d("invType", invType);
+
+        final Realm realm2 = Realm.getDefaultInstance();
+
+        realm2.executeTransaction(new Realm.Transaction() {
+
+            @Override
+            public void execute(Realm realm) {
+
+                Number numero = realm.where(ConsecutivosNumberFe.class).equalTo("user_id", "1").max("number_consecutive");
+
+                if (numero == null) {
+                    nextId = 1;
+                }
+                else {
+                    nextId = numero.intValue() + 1;
+                }
+                int valor = numero.intValue();
+
+                int length = String.valueOf(valor).length();
+
+                if(length == 1){
+                    consConsecutivo = "000000000" + nextId;
+                }
+                else if(length == 2){
+                    consConsecutivo = "00000000" + nextId;
+                }
+                else if(length == 3){
+                    consConsecutivo = "0000000" + nextId;
+                }
+                else if(length == 4){
+                    consConsecutivo = "000000" + nextId;
+                }
+                else if(length == 5){
+                    consConsecutivo = "00000" + nextId;
+                }
+                else if(length == 6){
+                    consConsecutivo = "0000" + nextId;
+                }
+                else if(length == 7){
+                    consConsecutivo = "000" + nextId;
+                }
+                else if(length == 8){
+                    consConsecutivo = "00" + nextId;
+                }
+                else if(length == 9){
+                    consConsecutivo = "0" + nextId;
+                }
+                else if(length == 10){
+                    consConsecutivo = "" + nextId;
+                }
+
+            }
+        });
+
+
+
+
+        Log.d("consConsecutivo", consConsecutivo);
+
+        numeroConsecutivo = sysSucursal + userTerminal + invType + consConsecutivo;
+
+        Log.d("numeroConsecutivo", numeroConsecutivo);
+
+
+
+        final Realm realm5 = Realm.getDefaultInstance();
+        realm5.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm5) {
+                ConsecutivosNumberFe numNuevo = realm5.where(ConsecutivosNumberFe.class).equalTo("user_id", "1").findFirst();
+
+                numNuevo.setNumber_consecutive(nextId);
+
+                realm5.insertOrUpdate(numNuevo);
+                Log.d("ActConsecutivo", numNuevo + "");
+                realm5.close();
+
+            }
+
+        });
+        realm5.close();
+
+
+        String sysIdNumberAtv = sysconf.getId_number_atv();
+
+        int lengthAtv = String.valueOf(sysIdNumberAtv).length();
+
+        if(lengthAtv == 1){
+            consConsecutivoATV = "00000000000" + sysIdNumberAtv;
+        }
+        else if(lengthAtv == 2){
+            consConsecutivoATV = "0000000000" + sysIdNumberAtv;
+        }
+        else if(lengthAtv == 3){
+            consConsecutivoATV = "000000000" + sysIdNumberAtv;
+        }
+        else if(lengthAtv == 4){
+            consConsecutivoATV = "00000000" + sysIdNumberAtv;
+        }
+        else if(lengthAtv == 5){
+            consConsecutivoATV = "0000000" + sysIdNumberAtv;
+        }
+        else if(lengthAtv == 6){
+            consConsecutivoATV = "000000" + sysIdNumberAtv;
+        }
+        else if(lengthAtv == 7){
+            consConsecutivoATV = "00000" + sysIdNumberAtv;
+        }
+        else if(lengthAtv == 8){
+            consConsecutivoATV = "0000" + sysIdNumberAtv;
+        }
+        else if(lengthAtv == 9){
+            consConsecutivoATV = "000" + sysIdNumberAtv;
+        }
+        else if(lengthAtv == 10){
+            consConsecutivoATV = "00" + sysIdNumberAtv;
+        }
+        else if(lengthAtv == 11){
+            consConsecutivoATV = "0" + sysIdNumberAtv;
+        }
+        else if(lengthAtv == 12){
+            consConsecutivoATV = "" + sysIdNumberAtv;
+        }
+
+        int min = 10000001;
+        int max = 99999999;
+        int codSeguridad = new Random().nextInt((max - min)+ 1) + min;
+
+
+        Log.d("consConsecutivoATV", consConsecutivoATV);
+        Log.d("userTerminal", userTerminal);
+        Log.d("invType", invType);
+        Log.d("codSeguridad", codSeguridad + "");
+
+        keyElectronica = "506" + Functions.getDateConsecutivo() + consConsecutivoATV + numeroConsecutivo + "3" + codSeguridad;
+        Log.d("keyElectronica", keyElectronica + "");
+
+
+
+        realm.close();
     }
 
 
@@ -499,4 +674,6 @@ public class VentaDirTotalizarFragment extends BaseFragment  {
 
 
     }
+
+
 }
