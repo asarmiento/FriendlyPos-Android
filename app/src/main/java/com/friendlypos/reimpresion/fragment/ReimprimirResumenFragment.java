@@ -90,10 +90,10 @@ public class ReimprimirResumenFragment extends BaseFragment {
                     tipoFacturacion = sale_actualizada.getFacturaDePreventa();
 
                     if (tipoFacturacion.equals("Distribucion")) {
-                        PrinterFunctions.imprimirFacturaDistrTotal(sale_actualizada, getActivity(), Integer.parseInt(a));
+                        PrinterFunctions.imprimirFacturaDistrTotal(sale_actualizada, getActivity(), 1);
                         Toast.makeText(getActivity(), "imprimir Totalizar Dist", Toast.LENGTH_SHORT).show();
                     } else if (tipoFacturacion.equals("VentaDirecta")) {
-                        PrinterFunctions.imprimirFacturaPrevTotal(sale_actualizada, getActivity(), 3);
+                        PrinterFunctions.imprimirFacturaVentaDirectaTotal(sale_actualizada, getActivity(), 3);
                         Toast.makeText(getActivity(), "imprimir Totalizar VentaD", Toast.LENGTH_SHORT).show();
                     }
                 }

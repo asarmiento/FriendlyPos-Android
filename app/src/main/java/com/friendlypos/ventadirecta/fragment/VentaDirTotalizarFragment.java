@@ -248,7 +248,7 @@ public class VentaDirTotalizarFragment extends BaseFragment  {
                         try {
 
                             if(bluetoothStateChangeReceiver.isBluetoothAvailable()== true) {
-                                PrinterFunctions.imprimirFacturaPrevTotal(sale_actualizada, getActivity(), 3);
+                                PrinterFunctions.imprimirFacturaVentaDirectaTotal(sale_actualizada, getActivity(), 3);
                                 clearAll();
                                 Log.d("applydoneImp", apply_done +"");
                             }

@@ -73,7 +73,7 @@ public class GraficoActivity extends AppCompatActivity {
         graficoPorMes();
         btnPorMes.setVisibility(View.INVISIBLE);
 
-        btnPorDia.setOnClickListener(
+       /* btnPorDia.setOnClickListener(
                 new View.OnClickListener() {
 
                     @Override
@@ -112,7 +112,7 @@ public class GraficoActivity extends AppCompatActivity {
                     }
                 }
 
-        );
+        );*/
 
 
 
