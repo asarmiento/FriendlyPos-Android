@@ -689,7 +689,7 @@ public class DescargasHelper {
 
         realm5.beginTransaction();
 
-                                        Number currentIdNum = realm5.where(datosTotales.class).max("id");
+                                        Number currentIdNum = realm5.where(datosTotales.class).max("idTotal");
 
                                         if (currentIdNum == null) {
                                             nextId = 1;
@@ -699,7 +699,7 @@ public class DescargasHelper {
 
             datosTotales datos= new datosTotales();
 
-        datos.setId(nextId);
+        datos.setIdTotal(nextId);
         datos.setNombreTotal(nombre);
 
         realm5.insertOrUpdate(datos);

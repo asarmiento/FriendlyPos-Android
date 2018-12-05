@@ -11,6 +11,7 @@ public class datosTotales extends RealmObject {
 
     @PrimaryKey
     int id;
+    int idTotal;
     String nombreTotal;
     double totalDistribucion;
     double totalVentaDirecta;
@@ -25,6 +26,14 @@ public class datosTotales extends RealmObject {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getIdTotal() {
+        return idTotal;
+    }
+
+    public void setIdTotal(int idTotal) {
+        this.idTotal = idTotal;
     }
 
     public String getNombreTotal() {
@@ -87,6 +96,7 @@ public class datosTotales extends RealmObject {
     public String toString() {
         return "datosTotales{" +
                 "id=" + id +
+                ", idTotal=" + idTotal +
                 ", nombreTotal='" + nombreTotal + '\'' +
                 ", totalDistribucion=" + totalDistribucion +
                 ", totalVentaDirecta=" + totalVentaDirecta +

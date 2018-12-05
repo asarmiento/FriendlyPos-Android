@@ -15,6 +15,7 @@ import com.friendlypos.R;
 import com.friendlypos.application.util.Functions;
 import com.friendlypos.application.util.PrinterFunctions;
 import com.friendlypos.crearCliente.modelo.customer_new;
+import com.friendlypos.distribucion.modelo.Pivot;
 import com.friendlypos.distribucion.modelo.invoice;
 import com.friendlypos.principal.modelo.datosTotales;
 import com.friendlypos.ventadirecta.activity.VentaDirectaActivity;
@@ -53,6 +54,62 @@ public class GraficoActivity extends AppCompatActivity {
     double prof = 0.0;
     double rec = 0.0;
 
+
+    double distr1 = 0.0;
+    double vent1 = 0.0;
+    double prev1 = 0.0;
+    double prof1 = 0.0;
+    double rec1 = 0.0;
+
+    private double totalizarDistGraf;
+    private double totalizarVentGraf;
+    private double totalizarProfGraf;
+    private double totalizarPrevGraf;
+    private double totalizarRecGraf;
+
+
+    public double getTotalizarDistGraf() {
+        return totalizarDistGraf;
+    }
+
+    public void setTotalizarDistGraf(double totalizarDistGraf) {
+        this.totalizarDistGraf = this.totalizarDistGraf + totalizarDistGraf;
+    }
+
+    public double getTotalizarVentGraf() {
+        return totalizarVentGraf;
+    }
+
+    public void setTotalizarVentGraf(double totalizarVentGraf) {
+        this.totalizarVentGraf = this.totalizarVentGraf + totalizarVentGraf;
+    }
+
+    public double getTotalizarProfGraf() {
+        return totalizarProfGraf;
+    }
+
+    public void setTotalizarProfGraf(double totalizarProfGraf) {
+        this.totalizarProfGraf = this.totalizarProfGraf + totalizarProfGraf;
+    }
+
+    public double getTotalizarPrevGraf() {
+        return totalizarPrevGraf;
+    }
+
+    public void setTotalizarPrevGraf(double totalizarPrevGraf) {
+        this.totalizarPrevGraf = this.totalizarPrevGraf + totalizarPrevGraf;
+    }
+
+    public double getTotalizarRecGraf() {
+        return totalizarRecGraf;
+    }
+
+    public void setTotalizarRecGraf(double totalizarRecGraf) {
+        this.totalizarRecGraf = this.totalizarRecGraf + totalizarRecGraf;
+    }
+
+
+
     private static Button btnPorMes;
     private static Button btnPorDia;
     @Override
@@ -73,7 +130,7 @@ public class GraficoActivity extends AppCompatActivity {
         graficoPorMes();
         btnPorMes.setVisibility(View.INVISIBLE);
 
-       /* btnPorDia.setOnClickListener(
+        btnPorDia.setOnClickListener(
                 new View.OnClickListener() {
 
                     @Override
@@ -112,7 +169,7 @@ public class GraficoActivity extends AppCompatActivity {
                     }
                 }
 
-        );*/
+        );
 
 
 
@@ -131,9 +188,18 @@ public class GraficoActivity extends AppCompatActivity {
         prev = 0.0;
         prof = 0.0;
         rec = 0.0;
+        distr1 = 0.0;
+        vent1 = 0.0;
+        prev1 = 0.0;
+        prof1 = 0.0;
+        rec1 = 0.0;
+        totalizarDistGraf = 0.0;
+        totalizarVentGraf = 0.0;
+        totalizarProfGraf = 0.0;
+        totalizarPrevGraf = 0.0;
+        totalizarRecGraf = 0.0;
 
-        RealmQuery<datosTotales> query12 = realm12.where(datosTotales.class);
-        final RealmResults<datosTotales> invoice12 = query12.findAll();
+        RealmResults<datosTotales> invoice12 = realm12.where(datosTotales.class).findAll();
         Log.d("qweqweq", invoice12.toString());
 
         if (invoice12.isEmpty()) {
@@ -141,15 +207,39 @@ public class GraficoActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(),"Favor descargar datos primero",Toast.LENGTH_LONG).show();
         }
         else {
+            // printSalesCashTotal= 0.0;
+            for (int i = 0; i < invoice12.size(); i++) {
 
-            List<datosTotales> listaNuevo = realm12.copyFromRealm(invoice12);
-            distr = listaNuevo.get(0).getTotalDistribucion();
-            vent = listaNuevo.get(1).getTotalVentaDirecta();
-            prev = listaNuevo.get(2).getTotalPreventa();
-            prof = listaNuevo.get(3).getTotalProforma();
-            rec = listaNuevo.get(4).getTotalRecibos();
+                List<datosTotales> salesList1 = realm12.where(datosTotales.class).findAll();
+                distr1 = salesList1.get(i).getTotalDistribucion();
+                vent1 = salesList1.get(i).getTotalVentaDirecta();
+                prev1 = salesList1.get(i).getTotalPreventa();
+                prof1 = salesList1.get(i).getTotalProforma();
+                rec1 = salesList1.get(i).getTotalRecibos();
 
-            Log.d("qweqweq1", listaNuevo + "");
+                if(distr1 != 0.0){
+                    setTotalizarDistGraf(distr1);
+                    distr = getTotalizarDistGraf();
+                }
+               else if(vent1 != 0.0){
+                    setTotalizarVentGraf(vent1);
+                    vent = getTotalizarVentGraf();
+                }
+                else if(prev1 != 0.0){
+                    setTotalizarPrevGraf(prev1);
+                    prev = getTotalizarPrevGraf();
+                }
+                else if(prof1 != 0.0){
+                    setTotalizarProfGraf(prof1);
+                    prof = getTotalizarProfGraf();
+                }
+                else if(rec1 != 0.0){
+                    setTotalizarRecGraf(rec1);
+                    rec = getTotalizarRecGraf();
+                }
+
+
+            }
 
             realm12.close();
 
@@ -197,57 +287,60 @@ public class GraficoActivity extends AppCompatActivity {
         prev = 0.0;
         prof = 0.0;
         rec = 0.0;
+        distr1 = 0.0;
+        vent1 = 0.0;
+        prev1 = 0.0;
+        prof1 = 0.0;
+        rec1 = 0.0;
+        totalizarDistGraf = 0.0;
+        totalizarVentGraf = 0.0;
+        totalizarProfGraf = 0.0;
+        totalizarPrevGraf = 0.0;
+        totalizarRecGraf = 0.0;
 
         Realm realm19 = Realm.getDefaultInstance();
 
-        RealmQuery<datosTotales> query19 = realm19.where(datosTotales.class).equalTo("date", currentDateandTime);
-        final RealmResults<datosTotales> invoice19 = query19.findAll();
+        RealmResults<datosTotales> invoice12 = realm19.where(datosTotales.class).equalTo("date", currentDateandTime).findAll();
+        Log.d("qweqweq", invoice12.toString());
 
-        Log.d("qweqweq", invoice19.toString());
-
-
-        if (invoice19.isEmpty()) {
+        if (invoice12.isEmpty()) {
 
             Toast.makeText(getApplicationContext(),"Favor descargar datos primero",Toast.LENGTH_LONG).show();
         }
         else {
+            // printSalesCashTotal= 0.0;
+            for (int i = 0; i < invoice12.size(); i++) {
 
-                for (int i = 0; i < invoice19.size(); i++) {
+                List<datosTotales> salesList1 = realm19.where(datosTotales.class).equalTo("date", currentDateandTime).findAll();
+                distr1 = salesList1.get(i).getTotalDistribucion();
+                vent1 = salesList1.get(i).getTotalVentaDirecta();
+                prev1 = salesList1.get(i).getTotalPreventa();
+                prof1 = salesList1.get(i).getTotalProforma();
+                rec1 = salesList1.get(i).getTotalRecibos();
 
-                    List<datosTotales> salesList1 = realm19.where(datosTotales.class).equalTo("date", currentDateandTime).findAll();
-                    int id = salesList1.get(i).getId();
-                    String date = salesList1.get(i).getDate();
-
-
-                    if (date.equals(currentDateandTime)) {
-
-                        if (id == 1) {
-                            distr = salesList1.get(i).getTotalDistribucion();
-                        } else {
-                        }
-
-                        if (id == 2) {
-                            vent = salesList1.get(i).getTotalVentaDirecta();
-                        } else {
-                        }
-                        if (id == 3) {
-                            prev = salesList1.get(i).getTotalPreventa();
-                        } else {
-                        }
-                        if (id == 4) {
-                            prof = salesList1.get(i).getTotalProforma();
-                        } else {
-                        }
-                        if (id == 5) {
-                            rec = salesList1.get(i).getTotalRecibos();
-                        } else {
-                        }
-
-                        Log.d("qweqweq1", invoice19 + "");
-
-                    }
-
+                if(distr1 != 0.0){
+                    setTotalizarDistGraf(distr1);
+                    distr = getTotalizarDistGraf();
                 }
+                else if(vent1 != 0.0){
+                    setTotalizarVentGraf(vent1);
+                    vent = getTotalizarVentGraf();
+                }
+                else if(prev1 != 0.0){
+                    setTotalizarPrevGraf(prev1);
+                    prev = getTotalizarPrevGraf();
+                }
+                else if(prof1 != 0.0){
+                    setTotalizarProfGraf(prof1);
+                    prof = getTotalizarProfGraf();
+                }
+                else if(rec1 != 0.0){
+                    setTotalizarRecGraf(rec1);
+                    rec = getTotalizarRecGraf();
+                }
+
+
+            }
 
                     realm19.close();
 

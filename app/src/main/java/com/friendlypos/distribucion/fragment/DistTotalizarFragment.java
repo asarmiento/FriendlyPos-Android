@@ -23,6 +23,7 @@ import com.friendlypos.distribucion.util.GPSTracker;
 import com.friendlypos.login.modelo.Usuarios;
 import com.friendlypos.login.util.SessionPrefes;
 import com.friendlypos.preventas.modelo.Numeracion;
+import com.friendlypos.preventas.modelo.visit;
 import com.friendlypos.principal.modelo.ConsecutivosNumberFe;
 import com.friendlypos.principal.modelo.Sysconf;
 import com.friendlypos.principal.modelo.datosTotales;
@@ -543,6 +544,35 @@ public class DistTotalizarFragment extends BaseFragment  {
 
     protected void actualizarDatosTotales() {
 
+
+        final Realm realm5 = Realm.getDefaultInstance();
+
+        realm5.beginTransaction();
+        Number currentIdNum = realm5.where(datosTotales.class).max("id");
+
+        if (currentIdNum == null) {
+            nextId = 1;
+        }
+        else {
+            nextId = currentIdNum.intValue() + 1;
+        }
+
+
+        datosTotales datos_actualizados = new datosTotales();
+
+        datos_actualizados.setId(nextId);
+        datos_actualizados.setIdTotal(1);
+        datos_actualizados.setNombreTotal("Distribucion");
+        datos_actualizados.setTotalDistribucion(totalTotal);
+        datos_actualizados.setDate(Functions.getDate());
+
+        realm5.copyToRealmOrUpdate(datos_actualizados);
+        realm5.commitTransaction();
+        Log.d("datosTotalesDist", datos_actualizados + "");
+        realm5.close();
+
+
+        /*
         final Realm realm3 = Realm.getDefaultInstance();
         realm3.executeTransaction(new Realm.Transaction() {
 
@@ -562,7 +592,7 @@ public class DistTotalizarFragment extends BaseFragment  {
 
                 Log.d("TotalDatos", datos_actualizados + "" );
             }
-        });
+        });*/
 
     }
 

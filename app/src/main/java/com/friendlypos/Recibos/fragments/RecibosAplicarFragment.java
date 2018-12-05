@@ -62,7 +62,7 @@ public class RecibosAplicarFragment extends BaseFragment {
     SessionPrefes session;
     double latitude;
     double longitude;
-    int slecTAB;
+    int slecTAB, nextId;
     EditText txtFecha;
     String facturaId;
     String clienteId;
@@ -387,7 +387,36 @@ public class RecibosAplicarFragment extends BaseFragment {
         });
     }
 
-    public void actualizarDatosTotales() {
+    protected void actualizarDatosTotales() {
+
+        final Realm realm5 = Realm.getDefaultInstance();
+
+        realm5.beginTransaction();
+        Number currentIdNum = realm5.where(datosTotales.class).max("id");
+
+        if (currentIdNum == null) {
+            nextId = 1;
+        }
+        else {
+            nextId = currentIdNum.intValue() + 1;
+        }
+
+
+        datosTotales datos_actualizados = new datosTotales();
+
+        datos_actualizados.setId(nextId);
+        datos_actualizados.setIdTotal(5);
+        datos_actualizados.setNombreTotal("Recibo");
+        datos_actualizados.setTotalRecibos(activity.getCanceladoPorFactura());
+        datos_actualizados.setDate(Functions.getDate());
+
+        realm5.copyToRealmOrUpdate(datos_actualizados);
+        realm5.commitTransaction();
+        Log.d("datosTotalesRec", datos_actualizados + "");
+        realm5.close();
+    }
+
+   /* public void actualizarDatosTotales() {
 
         final Realm realm3 = Realm.getDefaultInstance();
         realm3.executeTransaction(new Realm.Transaction() {
@@ -410,7 +439,7 @@ public class RecibosAplicarFragment extends BaseFragment {
             }
         });
 
-    }
+    }*/
 
     protected void aplicarFactura() {
 

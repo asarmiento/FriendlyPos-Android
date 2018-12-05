@@ -465,6 +465,66 @@ public class PrevTotalizarFragment extends BaseFragment {
 
 
     }
+
+    protected void actualizarDatosTotales() {
+        if(tipoFacturacion.equals("Preventa")) {
+            final Realm realm5 = Realm.getDefaultInstance();
+
+            realm5.beginTransaction();
+            Number currentIdNum = realm5.where(datosTotales.class).max("id");
+
+            if (currentIdNum == null) {
+                nextId = 1;
+            } else {
+                nextId = currentIdNum.intValue() + 1;
+            }
+
+
+            datosTotales datos_actualizados = new datosTotales();
+
+            datos_actualizados.setId(nextId);
+            datos_actualizados.setIdTotal(3);
+            datos_actualizados.setNombreTotal("Preventa");
+            datos_actualizados.setTotalPreventa(totalTotal);
+            datos_actualizados.setDate(Functions.getDate());
+           // datos_actualizados.setDate("2018-12-04");
+            realm5.copyToRealmOrUpdate(datos_actualizados);
+            realm5.commitTransaction();
+            Log.d("datosTotalesPrev", datos_actualizados + "");
+            realm5.close();
+        }
+
+        else if(tipoFacturacion.equals("Proforma")){
+            final Realm realm5 = Realm.getDefaultInstance();
+
+            realm5.beginTransaction();
+            Number currentIdNum = realm5.where(datosTotales.class).max("id");
+
+            if (currentIdNum == null) {
+                nextId = 1;
+            } else {
+                nextId = currentIdNum.intValue() + 1;
+            }
+
+
+            datosTotales datos_actualizados = new datosTotales();
+
+            datos_actualizados.setId(nextId);
+            datos_actualizados.setIdTotal(4);
+            datos_actualizados.setNombreTotal("Proforma");
+            datos_actualizados.setTotalProforma(totalTotal);
+            datos_actualizados.setDate(Functions.getDate());
+          //  datos_actualizados.setDate("2018-12-04");
+            realm5.copyToRealmOrUpdate(datos_actualizados);
+            realm5.commitTransaction();
+            Log.d("datosTotalesPrf", datos_actualizados + "");
+            realm5.close();
+        }
+
+    }
+
+/*
+
     protected void actualizarDatosTotales() {
         if(tipoFacturacion.equals("Preventa")) {
             final Realm realm3 = Realm.getDefaultInstance();
@@ -510,7 +570,7 @@ public class PrevTotalizarFragment extends BaseFragment {
                 }
             });
         }
-    }
+    }*/
 
     public static void clearAll() {
         if (apply_done == 1) {

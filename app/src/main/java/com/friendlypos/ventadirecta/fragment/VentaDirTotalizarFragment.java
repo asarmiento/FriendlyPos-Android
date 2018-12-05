@@ -454,6 +454,38 @@ public class VentaDirTotalizarFragment extends BaseFragment  {
 
     protected void actualizarDatosTotales() {
 
+
+        final Realm realm5 = Realm.getDefaultInstance();
+
+        realm5.beginTransaction();
+        Number currentIdNum = realm5.where(datosTotales.class).max("id");
+
+        if (currentIdNum == null) {
+            nextId = 1;
+        }
+        else {
+            nextId = currentIdNum.intValue() + 1;
+        }
+
+
+        datosTotales datos_actualizados = new datosTotales();
+
+        datos_actualizados.setId(nextId);
+        datos_actualizados.setIdTotal(2);
+        datos_actualizados.setNombreTotal("VentaDirecta");
+        datos_actualizados.setTotalVentaDirecta(totalTotal);
+        datos_actualizados.setDate(Functions.getDate());
+    //    datos_actualizados.setDate("2018-12-04");
+        realm5.copyToRealmOrUpdate(datos_actualizados);
+        realm5.commitTransaction();
+        Log.d("datosTotalesVD", datos_actualizados + "");
+        realm5.close();
+    }
+
+/*
+
+    protected void actualizarDatosTotales() {
+
         final Realm realm3 = Realm.getDefaultInstance();
         realm3.executeTransaction(new Realm.Transaction() {
 
@@ -475,7 +507,7 @@ public class VentaDirTotalizarFragment extends BaseFragment  {
             }
         });
 
-    }
+    }*/
 
 
     protected void aplicarFactura() {

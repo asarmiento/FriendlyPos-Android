@@ -35,7 +35,7 @@
     <string name="reprintr">Reimpresion Recibos</string>
     <string name="reports">Reportes</string>
     <string name="crear">Crear Cliente</string>
-    <string name="graficos">Gráfico</string>
+    <string name="graficos">Gráfico por Mes</string>
     <string-array name="listentries">
         <item>Impresora Zebra</item>
         <item>Otra Impresora</item>
