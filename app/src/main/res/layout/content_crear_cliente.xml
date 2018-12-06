@@ -245,7 +245,7 @@
                 <EditText
                     android:id="@+id/cliente_doors_nuevo"
                     style="@style/ClienteNuevo1"
-                    android:hint="Doors"
+                    android:hint="Puertas"
                     android:singleLine="true"
                     android:inputType="phone"
                     android:digits="0123456789"

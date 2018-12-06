@@ -98,11 +98,11 @@ public class crearCliente extends BluetoothActivity {
     int nextId;
 
 
-    String array_spinnerIdType[] = { "Seleccione el id Type", "01: Cédula Fisica",
+    String array_spinnerIdType[] = { "Seleccione el tipo de cédula", "01: Cédula Fisica",
             "02: Cédula Juridica", "03: Dimex", "04: NITE"
           };
 
-    String array_spinnerCreditTime[] = { "Seleccione el Credit Time", "8 Dias",
+    String array_spinnerCreditTime[] = { "Seleccione los días de crédito", "8 Dias",
             "15 Dias", "30 Dias", "45 Dias"
     };
 
