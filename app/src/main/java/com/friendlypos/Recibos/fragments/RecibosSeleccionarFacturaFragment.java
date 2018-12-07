@@ -202,7 +202,11 @@ StringBuffer sb= null;
                                                                     Log.d("restante", "" + String.format("%,.2f", restante));
 
                                                                     double cantidadPagarRestante = 0.0;
-                                                                    if (cantidadPagar > restante) {
+
+                                                                    Log.d("restante", "" + cantidadPagar);
+                                                                    final double irPagando32 = cantidadPagar;
+
+                                                                    if (cantidadPagar >= restante) {
 
                                                                         cantidadPagarRestante = cantidadPagar - restante;
                                                                         cantidadPagar = cantidadPagarRestante;
@@ -247,8 +251,14 @@ StringBuffer sb= null;
                                                                             Log.d("nohay","no hay");
                                                                         }
                                                                         else{
+
+                                                                            double cantidadPagarRestante1 = 0.0;
+                                                                            cantidadPagarRestante1 = cantidadPagar - restante;
+                                                                            cantidadPagar = cantidadPagarRestante1;
+
+
                                                                         //  double cantidadPagarRestanteS = activity.getMontoAgregadoRestante();
-                                                                        final double irPagando = cantidadPagar + totalPagado;
+                                                                        final double irPagando = restante + totalPagado;
 
                                                                         final Realm realm2 = Realm.getDefaultInstance();
                                                                         realm2.executeTransaction(new Realm.Transaction() {
@@ -274,9 +284,22 @@ StringBuffer sb= null;
 
                                                                             }
                                                                         });
-                                                                        cantidadPagarRestante = cantidadPagar - restante;
-                                                                        cantidadPagar = cantidadPagarRestante;
-                                                                        updateData();
+                                                                         /*   double cantidadPagarRestante1 = 0.0;
+                                                                            final double irPagando332 = cantidadPagar;
+                                                                            cantidadPagarRestante1 = cantidadPagar-  restante;
+                                                                            cantidadPagar = 0.0;
+                                                                            cantidadPagar = cantidadPagarRestante1;
+
+
+
+                                                                            double resultado = cantidadPagar;
+                                                                            double resultado1 = restante;
+
+                                                                            double resultado3 = resultado - restante;
+
+                                                                            Log.d("resultado3", "" + String.format("%,.2f", resultado3));*/
+
+                                                                            updateData();
 
                                                                         Log.d("irPagando", "" + String.format("%,.2f", irPagando));
 

@@ -76,13 +76,11 @@ public class RecibosSeleccionarFacturaAdapter extends RecyclerView.Adapter<Recib
     public void onBindViewHolder(final RecibosSeleccionarFacturaAdapter.CharacterViewHolder holder, final int position) {
         final recibos inventario = productosList.get(position);
 
-        final String id = inventario.getInvoice_id();
         String numeracion = inventario.getNumeration();
         double total = inventario.getTotal();
         double pago = inventario.getPaid();
 
-        double totalT = activity.getTotalizarTotal();
-        double totalP = activity.getTotalizarCancelado();
+
 
         holder.txt_producto_factura_numeracionRecibos.setText( "# de factura: " + numeracion);
 
