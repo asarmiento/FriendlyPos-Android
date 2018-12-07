@@ -263,6 +263,7 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
 
                             if(producto_amount_dist_add >= productosParaObtenerBonus ){
 
+                                if (producto_amount_dist_add > 0) {
                                 if(hoy <= fechaexp){
                                     Log.d("PRODOBTE", productosParaObtenerBonus + "");
                                     Log.d("PRODDELBO", productosDelBonus + "");
@@ -297,6 +298,11 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
 
                         else{
                             agregar();
+                        }
+
+                        }
+                        else {
+                            Toast.makeText(context, "El producto no se agrego, verifique la cantidad que esta ingresando", Toast.LENGTH_LONG).show();
                         }
 
                 }
