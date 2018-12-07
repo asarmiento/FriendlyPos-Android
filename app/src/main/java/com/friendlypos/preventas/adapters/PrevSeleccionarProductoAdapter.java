@@ -293,18 +293,14 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
                                 Toast.makeText(context, "No alcanza la cantidad deseada para el bonus", Toast.LENGTH_LONG).show();
                                 agregar();
                             }
-
                         }
-
                         else{
                             agregar();
                         }
-
                         }
                         else {
                             Toast.makeText(context, "El producto no se agrego, verifique la cantidad que esta ingresando", Toast.LENGTH_LONG).show();
                         }
-
                 }
                     else {
                     Toast.makeText(context, "El producto no se agrego, El descuento debe ser >0 <11", Toast.LENGTH_LONG).show();
