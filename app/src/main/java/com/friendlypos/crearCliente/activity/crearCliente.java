@@ -220,6 +220,8 @@ public class crearCliente extends BluetoothActivity {
         setSupportActionBar(toolbarCrearCliente);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        Log.d("entro_a_crear", "entro_a_crear");
     }
 
     @Override
@@ -261,7 +263,7 @@ public class crearCliente extends BluetoothActivity {
 
     private boolean isValidName(String name) {
         boolean check = false;
-        if (name.matches("^[\\p{L} .'-]+$") && name.length() > 2) {
+        if (name.matches("^[\\p{L} .'-]+$") && name.length() >= 1) {
             check = true;
         }
         return check;
@@ -323,7 +325,7 @@ public class crearCliente extends BluetoothActivity {
                 InputMethodManager.HIDE_NOT_ALWAYS);
         switch (component.getId()) {
             case R.id.btnCrearCliente:
-
+                Log.d("entro_a_boton_crear", "entro_a_boton_crear");
                 placa = cliente_placa_nuevo.getText().toString();
                 model = cliente_model_nuevo.getText().toString();
                 doors = cliente_doors_nuevo.getText().toString();
@@ -336,102 +338,74 @@ public class crearCliente extends BluetoothActivity {
 
                 address = cliente_address_nuevo.getText().toString();
 
-                if ( isValidNumeros(placa) &&  isValidName(model) &&  isValidNumeros(doors) &&  isValidName(address) &&
-                        isValidEmail(email)
-                        && isValidName(fantasyname)&& isValidName(companyname)&& isValidMobile(phone) )
-                {
+                if (isValidEmail(email) && isValidName(companyname) ) {
+                    if (latitude != 0.0) {
+                        if (longitude != 0.0) {
 
-                    if(latitude != 0.0){
-                        if(longitude != 0.0){
+                            if(idtype1.equals("Seleccione el tipo de cédula")){
+                                Toast.makeText(crearCliente.this, "Seleccione un dato en tipo de cédula", Toast.LENGTH_LONG).show();
+                            }else{
+                                if(fe1.equals("Seleccione Fe")){
+                                    Toast.makeText(crearCliente.this, "Seleccione un dato en Fe", Toast.LENGTH_LONG).show();
+                                }else{
 
-
-                            if(idtype.equals("01")){
+                            if (idtype.equals("01")) {
 
                                 card = cliente_card_nuevo.getText().toString();
-                                if (isValidCard01(card)){
-                                    Toast.makeText(crearCliente.this, "Bien", Toast.LENGTH_LONG).show();
+                                if (isValidCard01(card)) {
                                     enviarInfo();
-                                }
-                                else {
+                                } else {
                                     cliente_card_nuevo.setError("La cédula física debe ser de 9 dígitos");
                                     cliente_card_nuevo.requestFocus();
                                     Toast.makeText(crearCliente.this, "La cédula física debe ser de 9 dígitos", Toast.LENGTH_LONG).show();
                                 }
 
-                            }
-                            else if(idtype.equals("02")){
+                            } else if (idtype.equals("02")) {
                                 card = cliente_card_nuevo.getText().toString();
-                                if (isValidCard02(card)){
-                                    Toast.makeText(crearCliente.this, "Bien", Toast.LENGTH_LONG).show();
+                                if (isValidCard02(card)) {
+                                    //  Toast.makeText(crearCliente.this, "Bien", Toast.LENGTH_LONG).show();
                                     enviarInfo();
-                                }
-                                else {
+                                } else {
                                     cliente_card_nuevo.setError("La cédula jurídica debe ser de 10 dígitos");
                                     cliente_card_nuevo.requestFocus();
                                     Toast.makeText(crearCliente.this, "La cédula jurídica debe ser de 10 dígitos", Toast.LENGTH_LONG).show();
                                 }
-                            }
-                            else if(idtype.equals("03")){
+                            } else if (idtype.equals("03")) {
                                 card = cliente_card_nuevo.getText().toString();
-                                if (isValidCard03(card)){
-                                    Toast.makeText(crearCliente.this, "Bien", Toast.LENGTH_LONG).show();
+                                if (isValidCard03(card)) {
+                                    //   Toast.makeText(crearCliente.this, "Bien", Toast.LENGTH_LONG).show();
                                     enviarInfo();
-                                }
-                                else {
+                                } else {
                                     cliente_card_nuevo.setError("El DIMEX debe ser de 12 dígitos");
                                     cliente_card_nuevo.requestFocus();
                                     Toast.makeText(crearCliente.this, "El DIMEX debe ser de 12 dígitos", Toast.LENGTH_LONG).show();
                                 }
-                            }
-                            else if(idtype.equals("04")){
+                            } else if (idtype.equals("04")) {
                                 card = cliente_card_nuevo.getText().toString();
-                                if (isValidCard04(card)){
+                                if (isValidCard04(card)) {
                                     Toast.makeText(crearCliente.this, "Bien", Toast.LENGTH_LONG).show();
                                     enviarInfo();
-                                }
-                                else {
+                                } else {
                                     cliente_card_nuevo.setError("El NITE debe ser entre 10 u 11 dígitos");
                                     cliente_card_nuevo.requestFocus();
                                     Toast.makeText(crearCliente.this, "El NITE debe ser entre 10 u 11 dígitos", Toast.LENGTH_LONG).show();
                                 }
                             }
-                    }else {
-                            Toast.makeText(crearCliente.this, "Obtenga la ubicación del cliente", Toast.LENGTH_LONG).show();
+                        }}
                         }
+                    }else {
+                        Toast.makeText(crearCliente.this, "Obtenga la ubicación del cliente", Toast.LENGTH_LONG).show();
                     }
-
-                else if (!isValidNumeros(placa)) {
-                    cliente_placa_nuevo.setError("Placa inválido");
-                    cliente_placa_nuevo.requestFocus();
-                }
-                else if (!isValidName(model)) {
-                    cliente_model_nuevo.setError("Model inválido");
-                    cliente_model_nuevo.requestFocus();
-                }
-                else if (!isValidNumeros(doors)) {
-                    cliente_doors_nuevo.setError("Doors inválido");
-                    cliente_doors_nuevo.requestFocus();
-                }
-                else if (!isValidName(address)) {
-                    cliente_address_nuevo.setError("Address inválido");
-                    cliente_address_nuevo.requestFocus();
                 }
                 else if (!isValidEmail(email)) {
                     cliente_email_nuevo.setError("Email inválido");
                     cliente_email_nuevo.requestFocus();
                 }
-
-                } else if (!isValidName(fantasyname)) {
-                    cliente_fantasyname_nuevo.setError("Fantasy Name inválido");
-                    cliente_fantasyname_nuevo.requestFocus();
-                }
                 else if (!isValidName(companyname)) {
                     cliente_companyname_nuevo.setError("Company Name inválido");
                     cliente_companyname_nuevo.requestFocus();
-                }else if (!isValidMobile(phone)) {
-                    cliente_phone_nuevo.setError("Phone inválido");
-                    cliente_phone_nuevo.requestFocus();
                 }
+
 
                 break;
             case R.id.btnUbicacionCliente:
@@ -443,7 +417,7 @@ public class crearCliente extends BluetoothActivity {
     }
 
     public void enviarInfo(){
-
+        Log.d("entro_a_enviar", "entro_a_enviar");
         final Realm realm5 = Realm.getDefaultInstance();
         realm5.executeTransaction(new Realm.Transaction() {
             @Override
@@ -487,7 +461,7 @@ public class crearCliente extends BluetoothActivity {
                 clienteNuevo.setSubidaNuevo(1);
 
                 realm5.insertOrUpdate(clienteNuevo);
-                Log.d("idinvNUEVOCREADO", clienteNuevo + "");
+                Log.d("entro_a_creado", clienteNuevo + "");
 
             }
 
