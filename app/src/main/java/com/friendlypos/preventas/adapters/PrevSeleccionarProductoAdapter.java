@@ -250,6 +250,8 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
 
                 if (producto_descuento_add >= 0 && producto_descuento_add <= 10) {
 
+                    if (producto_amount_dist_add > 0) {
+
                         if (bonusProducto.equals("1")){
                             Log.d("idProductoBONIF", producto_id + "");
 
@@ -263,7 +265,6 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
 
                             if(producto_amount_dist_add >= productosParaObtenerBonus ){
 
-                                if (producto_amount_dist_add > 0) {
                                 if(hoy <= fechaexp){
                                     Log.d("PRODOBTE", productosParaObtenerBonus + "");
                                     Log.d("PRODDELBO", productosDelBonus + "");
