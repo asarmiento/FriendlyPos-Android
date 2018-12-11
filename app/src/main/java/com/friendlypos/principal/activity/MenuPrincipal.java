@@ -59,6 +59,7 @@ import com.friendlypos.principal.helpers.SubirHelperProductoDevuelto;
 import com.friendlypos.principal.helpers.SubirHelperProforma;
 import com.friendlypos.principal.helpers.SubirHelperRecibos;
 import com.friendlypos.principal.helpers.SubirHelperVentaDirecta;
+import com.friendlypos.principal.modelo.ConsecutivosNumberFe;
 import com.friendlypos.principal.modelo.EnviarClienteGPS;
 import com.friendlypos.principal.modelo.EnviarClienteNuevo;
 import com.friendlypos.principal.modelo.EnviarProductoDevuelto;
@@ -81,6 +82,7 @@ import io.realm.RealmResults;
 
 import static com.friendlypos.R.id.btn_descargar_datosempresa;
 import static com.friendlypos.R.id.btn_descargar_recibos;
+import static com.friendlypos.R.id.clickVentaDirecta;
 
 public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenuItemClickListener
        /* implements NavigationView.OnNavigationItemSelectedListener*/ {
@@ -141,7 +143,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
     String facturaIdA;
 
 
-    String facturaCostumer;
+    String facturaCostumer, apiConsecutivo;
     int facturaIdCV, facturaIdNuevoCliente,facturaIdDevuelto, facturaIdCC ;
 
     String facturaIdRecibos, facturaIdGPS;
@@ -187,29 +189,29 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
             usuer = session.getUsuarioPrefs();
             Log.d("userasd", usuer);
 
+            consecutivoApi1();
 
-           Realm realm = Realm.getDefaultInstance();
-            Usuarios usuarios = realm.where(Usuarios.class).equalTo("email", usuer).findFirst();
-            if(usuarios == null){
-                txtNombreUsuario.setText(usuer);
-            }else{
-            String nombreUsuario = usuarios.getUsername();
-            idUsuario = usuarios.getId();
-            Log.d("userasd", nombreUsuario);
-            txtNombreUsuario.setText(nombreUsuario);
-            }
-            realm.close();
         }
+
 
         but1 = (FloatingActionButton) findViewById(R.id.nav_distribucion);
 
         but1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!properties.getBlockedApp()) {
-                    Intent intent = new Intent(getApplication(), DistribucionActivity.class);
-                    startActivity(intent);
+                consecutivoApi(idUsuario);
+                if(apiConsecutivo.equals("0")){
+                    if (!properties.getBlockedApp()) {
+                        Toast.makeText(MenuPrincipal.this, "Botón no disponible", Toast.LENGTH_LONG).show();
+                    }
                 }
+                else{
+                    if (!properties.getBlockedApp()) {
+                        Intent intent = new Intent(getApplication(), DistribucionActivity.class);
+                        startActivity(intent);
+                    }
+                }
+
             }
         });
 
@@ -218,10 +220,16 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
         but2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                consecutivoApi(idUsuario);
+                if(apiConsecutivo.equals("0")){
+                    if (!properties.getBlockedApp()) {
+                        Toast.makeText(MenuPrincipal.this, "Botón no disponible", Toast.LENGTH_LONG).show();
+                    }
+                }else{
                 if (!properties.getBlockedApp()) {
                     Intent intent = new Intent(getApplication(), VentaDirectaActivity.class);
                     startActivity(intent);
-                }
+                }}
             }
         });
 
@@ -249,8 +257,76 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                 }
             }
         });
+/*
+if (apiConsecutivo == null){}
+        else if(apiConsecutivo.equals("0"))
+        {
+            but1.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (!properties.getBlockedApp()) {
+                        Toast.makeText(MenuPrincipal.this, "Botón no disponible", Toast.LENGTH_LONG).show();
+                    }
+                }
+            });
+            but2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (!properties.getBlockedApp()) {
+                        Toast.makeText(MenuPrincipal.this, "Botón no disponible", Toast.LENGTH_LONG).show();
+                    }
+                }
+            });
 
+            clickDistribucion.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (!properties.getBlockedApp()) {
+                        Toast.makeText(MenuPrincipal.this, "Botón no disponible", Toast.LENGTH_LONG).show();
+                    }
+                }
+            });
+            clickVentaDirecta.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (!properties.getBlockedApp()) {
+                        Toast.makeText(MenuPrincipal.this, "Botón no disponible", Toast.LENGTH_LONG).show();
+                    }
+                }
+            });
+
+           /* clickDistribucion.setEnabled(false);
+            clickVentaDirecta.setEnabled(false);
+
+        }
+*/
     }
+
+    public void consecutivoApi1(){
+        Realm realm = Realm.getDefaultInstance();
+        Usuarios usuarios = realm.where(Usuarios.class).equalTo("email", usuer).findFirst();
+        if(usuarios == null){
+            txtNombreUsuario.setText(usuer);
+        }else{
+            String nombreUsuario = usuarios.getUsername();
+            idUsuario = usuarios.getId();
+            Log.d("userasd", nombreUsuario);
+            txtNombreUsuario.setText(nombreUsuario);
+        }
+        realm.close();
+
+        }
+
+    public void consecutivoApi(String idUsuario){
+        if (idUsuario == null){}else{
+            Realm realm5 = Realm.getDefaultInstance();
+            ConsecutivosNumberFe numNuevo = realm5.where(ConsecutivosNumberFe.class).equalTo("user_id", idUsuario).findFirst();
+
+            apiConsecutivo = numNuevo.getApi();
+            Log.d("apiConsecutivo", apiConsecutivo);
+            realm5.close();
+
+        }}
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -385,6 +461,9 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                     download1.descargarUsuarios(MenuPrincipal.this);
                     cambioDatosEmpresa = 1;
                     session.setPrefDescargaDatos(cambioDatosEmpresa);
+                 /*   Intent intent = getIntent();
+                    finish();
+                    startActivity(intent);*/
                 }else{
                     Toast.makeText(MenuPrincipal.this, "Ya los datos están descargados", Toast.LENGTH_LONG).show();
                 }
@@ -1015,8 +1094,19 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
     }
 
     public void onClickGo(View component) {
-
+        consecutivoApi1();
+            consecutivoApi(idUsuario);
+        if(apiConsecutivo.equals("0")){
         switch (component.getId()) {
+
+            case R.id.clickDistribucion:
+                Toast.makeText(MenuPrincipal.this, "Botón no disponible", Toast.LENGTH_LONG).show();
+
+                break;
+
+            case R.id.clickVentaDirecta:
+                Toast.makeText(MenuPrincipal.this, "Botón no disponible", Toast.LENGTH_LONG).show();
+                break;
 
             case R.id.clickClientes:
                 Intent clientes;
@@ -1032,21 +1122,6 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                 finish();
                 break;
 
-            case R.id.clickDistribucion:
-                Intent dist;
-                dist = new Intent(MenuPrincipal.this, DistribucionActivity.class);
-                startActivity(dist);
-                finish();
-
-                break;
-
-            case R.id.clickVentaDirecta:
-                Intent vd;
-                vd = new Intent(MenuPrincipal.this, VentaDirectaActivity.class);
-                startActivity(vd);
-                finish();
-                break;
-
             case R.id.clickPreventa:
                 Intent preventa;
                 preventa = new Intent(MenuPrincipal.this, PreventaActivity.class);
@@ -1055,11 +1130,11 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                 break;
 
             case R.id.clickRecibos:
-            Intent recibos;
+                Intent recibos;
                 recibos = new Intent(MenuPrincipal.this, RecibosActivity.class);
                 startActivity(recibos);
                 finish();
-              //  Toast.makeText(MenuPrincipal.this, "Botón no disponible", Toast.LENGTH_LONG).show();
+                //  Toast.makeText(MenuPrincipal.this, "Botón no disponible", Toast.LENGTH_LONG).show();
                 break;
 
             case R.id.clickReimprimirVentas:
@@ -1082,7 +1157,79 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                 startActivity(graf);
                 finish();
                 break;
+        }
+    }
+    else{
+            switch (component.getId()) {
 
+                case R.id.clickClientes:
+                    Intent clientes;
+                    clientes = new Intent(MenuPrincipal.this, ClientesActivity.class);
+                    startActivity(clientes);
+                    finish();
+
+                    break;
+                case R.id.clickProductos:
+                    Intent productos;
+                    productos = new Intent(MenuPrincipal.this, ProductosActivity.class);
+                    startActivity(productos);
+                    finish();
+                    break;
+
+
+
+                case R.id.clickDistribucion:
+                    Intent dist;
+                    dist = new Intent(MenuPrincipal.this, DistribucionActivity.class);
+                    startActivity(dist);
+                    finish();
+
+                    break;
+
+                case R.id.clickVentaDirecta:
+                    Intent vd;
+                    vd = new Intent(MenuPrincipal.this, VentaDirectaActivity.class);
+                    startActivity(vd);
+                    finish();
+                    break;
+
+                case R.id.clickPreventa:
+                    Intent preventa;
+                    preventa = new Intent(MenuPrincipal.this, PreventaActivity.class);
+                    startActivity(preventa);
+                    finish();
+                    break;
+
+                case R.id.clickRecibos:
+                    Intent recibos;
+                    recibos = new Intent(MenuPrincipal.this, RecibosActivity.class);
+                    startActivity(recibos);
+                    finish();
+                    //  Toast.makeText(MenuPrincipal.this, "Botón no disponible", Toast.LENGTH_LONG).show();
+                    break;
+
+                case R.id.clickReimprimirVentas:
+                    Intent reimprimir;
+                    reimprimir = new Intent(MenuPrincipal.this, ReimprimirActivity.class);
+                    startActivity(reimprimir);
+                    finish();
+                    break;
+
+                case R.id.clickReimprimirPedidos:
+                    Intent reimprimirpedidos;
+                    reimprimirpedidos = new Intent(MenuPrincipal.this, ReimprimirPedidosActivity.class);
+                    startActivity(reimprimirpedidos);
+                    finish();
+                    break;
+
+                case R.id.clickGrafico:
+                    Intent graf;
+                    graf = new Intent(MenuPrincipal.this, GraficoActivity.class);
+                    startActivity(graf);
+                    finish();
+                    break;
+
+            }
         }
     }
 

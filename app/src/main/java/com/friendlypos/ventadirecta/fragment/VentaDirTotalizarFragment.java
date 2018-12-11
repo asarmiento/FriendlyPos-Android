@@ -536,7 +536,7 @@ public class VentaDirTotalizarFragment extends BaseFragment  {
         usuer = session.getUsuarioPrefs();
         Usuarios usuarios = realm.where(Usuarios.class).equalTo("email", usuer).findFirst();
         String userTerminal = usuarios.getTerminal();
-        String userId = usuarios.getId();
+        final String userId = usuarios.getId();
 
         final invoiceDetalleVentaDirecta invoiceDetallePreventa1 = activity.getCurrentInvoice();
 
@@ -557,7 +557,7 @@ public class VentaDirTotalizarFragment extends BaseFragment  {
             @Override
             public void execute(Realm realm) {
 
-                Number numero = realm.where(ConsecutivosNumberFe.class).equalTo("user_id", "1").max("number_consecutive");
+                Number numero = realm.where(ConsecutivosNumberFe.class).equalTo("user_id", userId).max("number_consecutive");
 
                 if (numero == null) {
                     nextId = 1;
@@ -618,7 +618,7 @@ public class VentaDirTotalizarFragment extends BaseFragment  {
         realm5.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm5) {
-                ConsecutivosNumberFe numNuevo = realm5.where(ConsecutivosNumberFe.class).equalTo("user_id", "1").findFirst();
+                ConsecutivosNumberFe numNuevo = realm5.where(ConsecutivosNumberFe.class).equalTo("user_id", userId).findFirst();
 
                 numNuevo.setNumber_consecutive(nextId);
 
