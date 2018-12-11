@@ -193,7 +193,6 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
 
         }
 
-
         but1 = (FloatingActionButton) findViewById(R.id.nav_distribucion);
 
         but1.setOnClickListener(new View.OnClickListener() {
@@ -257,49 +256,6 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                 }
             }
         });
-/*
-if (apiConsecutivo == null){}
-        else if(apiConsecutivo.equals("0"))
-        {
-            but1.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (!properties.getBlockedApp()) {
-                        Toast.makeText(MenuPrincipal.this, "Botón no disponible", Toast.LENGTH_LONG).show();
-                    }
-                }
-            });
-            but2.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (!properties.getBlockedApp()) {
-                        Toast.makeText(MenuPrincipal.this, "Botón no disponible", Toast.LENGTH_LONG).show();
-                    }
-                }
-            });
-
-            clickDistribucion.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (!properties.getBlockedApp()) {
-                        Toast.makeText(MenuPrincipal.this, "Botón no disponible", Toast.LENGTH_LONG).show();
-                    }
-                }
-            });
-            clickVentaDirecta.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (!properties.getBlockedApp()) {
-                        Toast.makeText(MenuPrincipal.this, "Botón no disponible", Toast.LENGTH_LONG).show();
-                    }
-                }
-            });
-
-           /* clickDistribucion.setEnabled(false);
-            clickVentaDirecta.setEnabled(false);
-
-        }
-*/
     }
 
     public void consecutivoApi1(){
@@ -461,9 +417,7 @@ if (apiConsecutivo == null){}
                     download1.descargarUsuarios(MenuPrincipal.this);
                     cambioDatosEmpresa = 1;
                     session.setPrefDescargaDatos(cambioDatosEmpresa);
-                 /*   Intent intent = getIntent();
-                    finish();
-                    startActivity(intent);*/
+
                 }else{
                     Toast.makeText(MenuPrincipal.this, "Ya los datos están descargados", Toast.LENGTH_LONG).show();
                 }
