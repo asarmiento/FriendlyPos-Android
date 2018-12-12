@@ -35,8 +35,6 @@ public class BaseManager {
     public BaseManager(Activity activity) {
         this.activity = activity;
         this.mContext = activity;
-
-
     }
 
     public static RequestInterface getApi() {
