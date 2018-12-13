@@ -83,6 +83,7 @@ import io.realm.RealmResults;
 import static com.friendlypos.R.id.btn_descargar_datosempresa;
 import static com.friendlypos.R.id.btn_descargar_recibos;
 import static com.friendlypos.R.id.clickVentaDirecta;
+import static io.realm.internal.SyncObjectServerFacade.getApplicationContext;
 
 public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenuItemClickListener
        /* implements NavigationView.OnNavigationItemSelectedListener*/ {
@@ -199,7 +200,10 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
             @Override
             public void onClick(View v) {
                 consecutivoApi(idUsuario);
-                if(apiConsecutivo.equals("0")){
+                if (apiConsecutivo == null){
+                    Toast.makeText(getApplicationContext(),"Favor descargar info de empresa",Toast.LENGTH_LONG).show();
+                }
+                else if(apiConsecutivo.equals("0")){
                     if (!properties.getBlockedApp()) {
                         Toast.makeText(MenuPrincipal.this, "Botón no disponible", Toast.LENGTH_LONG).show();
                     }
@@ -220,7 +224,10 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
             @Override
             public void onClick(View v) {
                 consecutivoApi(idUsuario);
-                if(apiConsecutivo.equals("0")){
+                if (apiConsecutivo == null){
+                    Toast.makeText(getApplicationContext(),"Favor descargar info de empresa",Toast.LENGTH_LONG).show();
+                }
+                else if(apiConsecutivo.equals("0")){
                     if (!properties.getBlockedApp()) {
                         Toast.makeText(MenuPrincipal.this, "Botón no disponible", Toast.LENGTH_LONG).show();
                     }
@@ -278,8 +285,13 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
             Realm realm5 = Realm.getDefaultInstance();
             ConsecutivosNumberFe numNuevo = realm5.where(ConsecutivosNumberFe.class).equalTo("user_id", idUsuario).findFirst();
 
+            if(numNuevo == null){
+                Log.d("conse", "conse");
+            }else{
+
             apiConsecutivo = numNuevo.getApi();
             Log.d("apiConsecutivo", apiConsecutivo);
+            }
             realm5.close();
 
         }}
@@ -1050,7 +1062,11 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
     public void onClickGo(View component) {
         consecutivoApi1();
             consecutivoApi(idUsuario);
-        if(apiConsecutivo.equals("0")){
+
+        if (apiConsecutivo == null){
+            Toast.makeText(getApplicationContext(),"Favor descargar info de empresa",Toast.LENGTH_LONG).show();
+        }
+        else if(apiConsecutivo.equals("0")){
         switch (component.getId()) {
 
             case R.id.clickDistribucion:
@@ -1129,8 +1145,6 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                     startActivity(productos);
                     finish();
                     break;
-
-
 
                 case R.id.clickDistribucion:
                     Intent dist;
