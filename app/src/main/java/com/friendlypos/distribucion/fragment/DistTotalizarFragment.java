@@ -280,12 +280,11 @@ public class DistTotalizarFragment extends BaseFragment  {
         usuer = session.getUsuarioPrefs();
         Usuarios usuarios = realm.where(Usuarios.class).equalTo("email", usuer).findFirst();
         String userTerminal = usuarios.getTerminal();
-        String userId = usuarios.getId();
+        final String userId = usuarios.getId();
 
         invoice factura_actualizada = realm.where(invoice.class).equalTo("id", facturaId).findFirst();
-        String invType = factura_actualizada.getType();
+        final String invType = factura_actualizada.getType();
 
-        ConsecutivosNumberFe consecutivosNumberFe = realm.where(ConsecutivosNumberFe.class).equalTo("user_id", "1").findFirst();
      //   String consConsecutivo = consecutivosNumberFe.getNumber_consecutive();
         Log.d("sysSucursal", sysSucursal);
         Log.d("userTerminal", userTerminal);
@@ -298,7 +297,7 @@ public class DistTotalizarFragment extends BaseFragment  {
             @Override
             public void execute(Realm realm) {
 
-                Number numero = realm.where(ConsecutivosNumberFe.class).equalTo("user_id", "1").max("number_consecutive");
+                Number numero = realm.where(ConsecutivosNumberFe.class).equalTo("user_id", userId).equalTo("type_doc", invType).max("number_consecutive");
 
                 if (numero == null) {
                     nextId = 1;
@@ -359,7 +358,7 @@ public class DistTotalizarFragment extends BaseFragment  {
         realm5.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm5) {
-                ConsecutivosNumberFe numNuevo = realm5.where(ConsecutivosNumberFe.class).equalTo("user_id", "1").findFirst();
+                ConsecutivosNumberFe numNuevo = realm5.where(ConsecutivosNumberFe.class).equalTo("user_id", userId).equalTo("type_doc", invType).findFirst();
 
                 numNuevo.setNumber_consecutive(nextId);
 
