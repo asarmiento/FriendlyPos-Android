@@ -567,7 +567,7 @@ public class VentaDirTotalizarFragment extends BaseFragment  {
                 }
                 int valor = numero.intValue();
 
-                int length = String.valueOf(valor).length();
+                int length = String.valueOf(nextId).length();
 
                 if(length == 1){
                     consConsecutivo = "000000000" + nextId;

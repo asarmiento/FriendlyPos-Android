@@ -206,36 +206,32 @@ public class PrinterFunctions {
                     String.format("%20s %-20s", "Descuento", totalDescuento) + "\r\n" +
                     String.format("%20s %-20s", "IVA", totalImpuesto) + "\r\n" +
                     "! U1 SETLP 5 3 70\r\n" +
-                    String.format("%20s %-20s", "Total a pagar", totalTotal) + "\r\n" +
-                    "! U1 SETLP 7 0 10\r\n" +
 
+
+
+                    String.format("%20s %-20s", "Total a pagar", totalTotal_) +
+                    "! U1 SETLP 7 0 10\r\n" + "\r\n" +
                     ((metodoPago == "1") ?
                             String.format("%20s %-20s", "Cancelado con", totalCancelado) + "\r\n" +
-                                    String.format("%20s %-20s", "Cambio", totalVuelto) + "\r\n" : "\r\n"
-                    ) + "\r\n" +
-
-                    "\r\n\n" + "Notas: " + totalNotas + "\r\n" +
-                    ((descuentoCliente > 0) ? "Se le aplico un " + descuentoCliente + "%  de descuento" + "\r\n" : "" + "\r\n") +
+                                    String.format("%20s %-20s", "Cambio", totalVuelto) : "\r\n"
+                    ) +
+                    "Notas: " + totalNotas_ + "\r\n" + "\r\n" +
+                    ((descuentoCliente > 0) ? "Se le aplico un " + descuentoCliente + "%  de descuento" : "" + "\r\n") +
                     "! U1 SETLP 5 0 14\r\n" +
-                    "\r\n\n" +
                     "Firma cliente ____________________________" + "\r\n" + "\r\n" + "\r\n" +
-                    "Cedula                  ____________________________" + "\r\n" +
-                    "\r\n\n" +
+                    "Cedula ____________________________" + "\r\n" +
                     ((metodoPago == "2") ?
-                           "! U1 SETLP 0 0 6\r\n" + "\r\n\n" + condition + "\r\n" : "\r\n"
-
+                            "! U1 SETLP 0 0 6\r\n" + "\r\n" + condition: "\r\n"
                     ) + "\r\n" +
-                    "\r\n\n" +
                     ((ptype == 1) ?
-                            "\r\n\n" + "Este comprobante no puede ser utilizado para fines\r\n" +
-                                    "tributarios, por lo cual no se permitirá" + "\r\n" +
+                            "\r\n" + "Este comprobante no puede ser utilizado para fines\r\n" +
+                                    "tributarios, por lo cual no se permitira" + "\r\n" +
                                     "su uso para respaldo de creditos o gastos" + "\r\n" + "\r\n"
                             : "\r\n"
                     ) + "\r\n" +
-
                     "! U1 SETLP 5 0 14\r\n" +
 
-                    " Autorizada mediante resolucion Nº DGT-R-48-2016\r\n" +
+                    " Autorizada mediante resolucion N DGT-R-48-2016\r\n" +
                     "del 7 de octubre de 2016.\r\n" + "\r\n" +
 
                     "\r\n\n" + "Muchas Gracias por preferirnos, un placer atenderlo\r\n" +
@@ -1409,26 +1405,23 @@ public class PrinterFunctions {
                     String.format("%20s %-20s", "Descuento", totalDescuento_) + "\r\n" +
                     String.format("%20s %-20s", "IVA", totalImpuesto_) + "\r\n" +
                     "! U1 SETLP 5 3 70\r\n" +
-                    String.format("%20s %-20s", "Total a pagar", totalTotal_) + "\r\n" +
-                    "! U1 SETLP 7 0 10\r\n" +
+                    String.format("%20s %-20s", "Total a pagar", totalTotal_) +
+                    "! U1 SETLP 7 0 10\r\n" + "\r\n" +
                     ((metodoPago == "1") ?
                             String.format("%20s %-20s", "Cancelado con", totalCancelado) + "\r\n" +
-                                    String.format("%20s %-20s", "Cambio", totalVuelto) + "\r\n" : "\r\n"
-                    ) + "\r\n" +
-                    "\r\n\n" + "Notas: " + totalNotas_ + "\r\n" +
-                    ((descuentoCliente > 0) ? "Se le aplico un " + descuentoCliente + "%  de descuento" + "\r\n" : "" + "\r\n") +
+                                    String.format("%20s %-20s", "Cambio", totalVuelto) : "\r\n"
+                    ) +
+                    "Notas: " + totalNotas_ + "\r\n" + "\r\n" +
+                    ((descuentoCliente > 0) ? "Se le aplico un " + descuentoCliente + "%  de descuento" : "" + "\r\n") +
                     "! U1 SETLP 5 0 14\r\n" +
-                    "\r\n\n" +
                     "Firma cliente ____________________________" + "\r\n" + "\r\n" + "\r\n" +
-                    "Cedula                  ____________________________" + "\r\n" +
-                    "\r\n\n" +
+                    "Cedula ____________________________" + "\r\n" +
                     ((metodoPago == "2") ?
-                    "! U1 SETLP 0 0 6\r\n" + "\r\n\n" + condition + "\r\n" : "\r\n"
+                    "! U1 SETLP 0 0 6\r\n" + "\r\n" + condition: "\r\n"
                     ) + "\r\n" +
-                    "\r\n\n" +
                     ((ptype == 3) ?
-                            "\r\n\n" + "Este comprobante no puede ser utilizado para fines\r\n" +
-                                    "tributarios, por lo cual no se permitirá" + "\r\n" +
+                            "\r\n" + "Este comprobante no puede ser utilizado para fines\r\n" +
+                                    "tributarios, por lo cual no se permitira" + "\r\n" +
                                     "su uso para respaldo de creditos o gastos" + "\r\n" + "\r\n"
                             : "\r\n"
                     ) + "\r\n" +
