@@ -19,6 +19,7 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.friendlypos.R;
 import com.friendlypos.application.util.Functions;
@@ -411,7 +412,10 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
         Realm realm = Realm.getDefaultInstance();
         usuer = session.getUsuarioPrefs();
         Usuarios usuarios = realm.where(Usuarios.class).equalTo("email", usuer).findFirst();
-     idUsuario = usuarios.getId();
+        if(usuarios == null){
+            Toast.makeText(activity, "Usuario no disponible", Toast.LENGTH_LONG).show();
+        }else {
+        idUsuario = usuarios.getId();
         realm.close();
 
         if(tipoFacturacion.equals("Preventa")) {
@@ -553,7 +557,7 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
             });
             realm5.close();
         }
-
+        }
     }
     public void obtenerLocalización() {
 

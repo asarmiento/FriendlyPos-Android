@@ -157,13 +157,15 @@ public class PrinterFunctions {
                     "! U1 SETLP 0 0 0\r\n" +
                     "\r\n" +
                     "! U1 SETLP 5 3 70\r\n" +
-                    "! U1 LMARGIN 185\r\n" +
+                    "! U1 LMARGIN 0\r\n" +
                     String.format("%s", billptype) + "\r\n" +
-                    "------------------------------------------------\r\n" + "\r\n" +
+                    "! U1 SETLP 7 0 14\r\n" +
+                    "------------------------------------------------\r\n" + "\r\n" + "\r\n" +
                     "! U1 SETLP 5 1 35\r\n" +
                     sysNombreNegocio + "\r\n" +
+                    "! U1 SETLP 7 0 14\r\n" +
                     "------------------------------------------------\r\n" + "\r\n" +
-                    "! U1 SETLP 5 1 35\r\n" +
+                    "! U1 SETLP 7 0 14\r\n" +
                     sysNombre + "\r\n" +
                     "Cedula Juridica: " + sysIdentificacion + "\r\n" +
                     sysDireccion + "\r\n" +
@@ -175,7 +177,7 @@ public class PrinterFunctions {
                     "Consec DGT: #" + numConsecutivo + "\r\n" +
                     "Clave DGT: #" + key + "\r\n" +
                     "------------------------------------------------\r\n" + "\r\n" +
-                    "! U1 LMARGIN 120\r\n" +
+                    "! U1 LMARGIN 0\r\n" +
                     ((metodoPago == "2") ? "! U1 LMARGIN 120\r\n" +
                             "Fecha Limite: ! U1 LMARGIN 350 " + messageC + "\r\n" : "\r\n") +
                     "! U1 LMARGIN 0\r\n" +
@@ -354,7 +356,7 @@ public class PrinterFunctions {
                     preview += Html.fromHtml("<h1>")   + "tributarios, por lo cual no se permitira" +  Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>")   + "su uso para respaldo de creditos o gastos." +  Html.fromHtml("</h1></center><br/><br/>");
 
-                    preview += Html.fromHtml("<h1>")   + "Autorizada mediante resolucion Nº DGT-R-48-2016" +  Html.fromHtml("</h1></center><br/>");
+                    preview += Html.fromHtml("<h1>")   + "Autorizada mediante resolucion N DGT-R-48-2016" +  Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>")   + "del 7 de octubre de 2016." +  Html.fromHtml("</h1></center><br/><br/>");
 
                     preview += Html.fromHtml("<h1>")   + "Muchas gracias por preferirnos un placer atenderlo" +  Html.fromHtml("</h1></center><br/>");
@@ -749,12 +751,12 @@ public class PrinterFunctions {
                     "! U1 SETLP 0 0 0\r\n" +
                     "\r\n" +
                     "! U1 SETLP 5 3 70\r\n" +
-                    "! U1 LMARGIN 185\r\n" +
+                    "! U1 LMARGIN 0\r\n" +
                     String.format("%s", billptype) + "\r\n" +
-                    "! U1 LMARGIN 150\r\n" +
+                    "! U1 LMARGIN 0\r\n" +
                     "! U1 SETLP 7 0 14\r\n" + "\r\n" +
                     "N# Factura: " + numeracionFactura + "\r\n" +
-                    "! U1 LMARGIN 120\r\n" +
+                    "! U1 LMARGIN 0\r\n" +
                     "Factura de: ! U1 LMARGIN 350 " + metodoPagoNombre + "\r\n" +
                     "! U1 LMARGIN 0\r\n" +
                     "! U1 SETLP 5 0 24\r\n" +
@@ -812,7 +814,7 @@ public class PrinterFunctions {
                     "\r\n\n" + "Muchas Gracias por preferirnos, un placer atenderlo\r\n" +
                     "Mantenga el documento para reclamos ." + "\r\n" + "\r\n" +
 
-                    " Autorizada mediante resolución Nº DGT-R-48-2016\r\n" +
+                    " Autorizada mediante resolución N DGT-R-48-2016\r\n" +
                     "del 7 de octubre de 2016.\r\n" +
                     " \n\n" +
                     " \n\n" +
@@ -1360,13 +1362,15 @@ public class PrinterFunctions {
                     "! U1 SETLP 0 0 0\r\n" +
                     "\r\n" +
                     "! U1 SETLP 5 3 70\r\n" +
-                    "! U1 LMARGIN 185\r\n" +
+                    "! U1 LMARGIN 0\r\n" +
                     String.format("%s", billptype) + "\r\n" +
-                    "------------------------------------------------\r\n" + "\r\n" +
+                    "! U1 SETLP 7 0 14\r\n" +
+                    "------------------------------------------------\r\n" + "\r\n" + "\r\n" +
                     "! U1 SETLP 5 1 35\r\n" +
                     sysNombreNegocio + "\r\n" +
+                    "! U1 SETLP 7 0 14\r\n" +
                     "------------------------------------------------\r\n" + "\r\n" +
-                    "! U1 SETLP 5 1 35\r\n" +
+                    "! U1 SETLP 7 0 14\r\n" +
                     sysNombre + "\r\n" +
                     "Cedula Juridica: " + sysIdentificacion + "\r\n" +
                     sysDireccion + "\r\n" +
@@ -1430,7 +1434,7 @@ public class PrinterFunctions {
                     ) + "\r\n" +
 
                     "! U1 SETLP 5 0 14\r\n" +
-                    " Autorizada mediante resolucion Nº DGT-R-48-2016\r\n" +
+                    " Autorizada mediante resolucion N DGT-R-48-2016\r\n" +
                     "del 7 de octubre de 2016.\r\n" +"\r\n" +
 
                     "\r\n\n" + "Muchas Gracias por preferirnos, un placer atenderlo\r\n" +
