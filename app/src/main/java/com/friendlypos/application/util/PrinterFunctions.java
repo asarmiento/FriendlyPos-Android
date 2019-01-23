@@ -209,7 +209,7 @@ public class PrinterFunctions {
 
 
 
-                    String.format("%20s %-20s", "Total a pagar", totalTotal_) +
+                    String.format("%20s %-20s", "Total a pagar", totalTotal) +
                     "! U1 SETLP 7 0 10\r\n" + "\r\n" +
                     ((metodoPago == "1") ?
                             String.format("%20s %-20s", "Cancelado con", totalCancelado) + "\r\n" +
