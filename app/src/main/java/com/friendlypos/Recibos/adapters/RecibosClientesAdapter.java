@@ -66,23 +66,38 @@ public class RecibosClientesAdapter extends RecyclerView.Adapter<RecibosClientes
 
         Realm realm = Realm.getDefaultInstance();
 
+
+
         Clientes clientes = realm.where(Clientes.class).equalTo("id", recibo.getCustomer_id()).findFirst();
        // final invoice invoice = realm.where(invoice.class).equalTo("id", recibo.getInvoice_id()).findFirst();
 
         final String cardCliente = clientes.getCard();
         String companyCliente = clientes.getCompanyName();
         String fantasyCliente = clientes.getFantasyName();
-      //  String numeracionFactura = recibo.getNumeration();
+        String numeracionFactura = recibo.getNumeration();
+        int abonado = recibo.getAbonado();
+        //double porPagar = recibo.getPorPagar();
+        double total = recibo.getTotal();
+        double pago = recibo.getPaid();
 
+        double totalPagado = total - pago;
 
-        holder.txt_cliente_factura_card.setText(cardCliente);
-      /*  if (fantasyCliente.equals("Cliente Generico")){
-            holder.txt_cliente_factura_fantasyname.setText(nombreVenta);
-        }else{*/
+        if(abonado == 1 && totalPagado == 0.0){
+            holder.cardView.setVisibility(View.GONE);
+            holder.cardView.getLayoutParams().height = 0;
+            ViewGroup.MarginLayoutParams layoutParams =
+                    (ViewGroup.MarginLayoutParams) holder.cardView.getLayoutParams();
+            layoutParams.setMargins(0, 0,0, 0);
+            holder.cardView.requestLayout();
+            Log.d("inactivo", "inactivo");
+
+        }
+        else{
+            holder.txt_cliente_factura_card.setText(cardCliente);
             holder.txt_cliente_factura_fantasyname.setText(fantasyCliente);
-       /* }*/
-        holder.txt_cliente_factura_companyname.setText(companyCliente);
-      //  holder.txt_cliente_factura_numeracion.setText("Factura: " + numeracionFactura);
+            holder.txt_cliente_factura_companyname.setText(companyCliente);
+        }
+
 
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -223,7 +238,7 @@ public class RecibosClientesAdapter extends RecyclerView.Adapter<RecibosClientes
                         receipt.setDate(Functions.getDate());
 
                         realmRecibo.insertOrUpdate(receipt);
-                        Log.d("idinvNUEVOCREADO", receipt + "");
+                        Log.d("ReciboNuevo", receipt + "");
 
 
                     }
@@ -240,7 +255,7 @@ public class RecibosClientesAdapter extends RecyclerView.Adapter<RecibosClientes
                     numNuevo.setSale_type("4");
                     numNuevo.setNumeracion_numero(nextId);
                     realm5.insertOrUpdate(numNuevo);
-                    Log.d("idinvNUEVOCREADO", numNuevo + "");
+                    Log.d("NumRecibosNueva", numNuevo + "");
 
 
                 }

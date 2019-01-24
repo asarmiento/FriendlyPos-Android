@@ -24,6 +24,7 @@ import com.friendlypos.Recibos.modelo.recibos;
 import com.friendlypos.app.broadcastreceiver.BluetoothStateChangeReceiver;
 import com.friendlypos.application.util.Functions;
 import com.friendlypos.application.util.PrinterFunctions;
+import com.friendlypos.distribucion.activity.DistribucionActivity;
 import com.friendlypos.distribucion.fragment.BaseFragment;
 import com.friendlypos.distribucion.modelo.invoice;
 import com.friendlypos.distribucion.modelo.sale;
@@ -134,6 +135,8 @@ public class RecibosAplicarFragment extends BaseFragment {
                     @Override
                     public void onClick(View v) {
                         try {
+                            int tabCliente = 0;
+                            ((RecibosActivity) getActivity()).setSelecClienteTabRecibos(tabCliente);
                             aplicarFactura() ;
                           //  actualizarRecibo();
                         }

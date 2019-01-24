@@ -192,6 +192,8 @@ public class DistTotalizarFragment extends BaseFragment  {
                             }
                            else if (metodoPagoCliente.equals("2")) {
                                     Toast.makeText(getActivity(), "Crédito", Toast.LENGTH_LONG).show();
+                                int tabCliente = 0;
+                                ((DistribucionActivity) getActivity()).setSelecClienteTab(tabCliente);
                                 obtenerLocalización();
                                 aplicarFactura();
                             }
@@ -217,7 +219,7 @@ public class DistTotalizarFragment extends BaseFragment  {
 
                             if(bluetoothStateChangeReceiver.isBluetoothAvailable()== true) {
                                 PrinterFunctions.imprimirFacturaDistrTotal(sale_actualizada, getActivity(), 1);
-                                Toast.makeText(getActivity(), "imprimir liquidacion", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getActivity(), "Imprimiendo", Toast.LENGTH_SHORT).show();
                                 clearAll();
                                 Log.d("applydoneImp", apply_done +"");
                             }

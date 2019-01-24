@@ -80,11 +80,17 @@ public class RecibosClientesFragment extends BaseFragment {
     private List<recibos> getListClientes(){
         realm = Realm.getDefaultInstance();
         RealmQuery<recibos> query = realm.where(recibos.class);
+
         RealmResults<recibos> result1 = query.distinct("customer_id");
+
         if(result1.size() == 0){
             Toast.makeText(getApplicationContext(),"Favor descargar datos primero",Toast.LENGTH_LONG).show();
         }
+
+        Log.d("Resultado", String.valueOf(result1));
         return result1;
+
+
     }
 
 
