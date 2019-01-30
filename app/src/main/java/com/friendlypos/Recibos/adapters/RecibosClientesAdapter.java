@@ -25,6 +25,8 @@ import com.friendlypos.principal.modelo.Clientes;
 import java.util.List;
 
 import io.realm.Realm;
+import io.realm.RealmResults;
+import io.realm.Sort;
 
 /**
  * Created by DelvoM on 04/09/2018.
@@ -61,11 +63,12 @@ public class RecibosClientesAdapter extends RecyclerView.Adapter<RecibosClientes
 
 
     @Override
-    public void onBindViewHolder(RecibosClientesAdapter.CharacterViewHolder holder, final int position) {
+    public void onBindViewHolder(final RecibosClientesAdapter.CharacterViewHolder holder, final int position) {
         final recibos recibo = contentList.get(position);
 
         Realm realm = Realm.getDefaultInstance();
 
+        String clienteId = activity.getClienteIdRecibos();
 
 
         Clientes clientes = realm.where(Clientes.class).equalTo("id", recibo.getCustomer_id()).findFirst();
@@ -80,7 +83,20 @@ public class RecibosClientesAdapter extends RecyclerView.Adapter<RecibosClientes
         double total = recibo.getTotal();
         double pago = recibo.getPaid();
 
-        double totalPagado = total - pago;
+
+
+      /*  Log.d("PAGOSFOR1", tot + "");
+        if(tot == 0.0){
+            holder.cardView.setVisibility(View.GONE);
+            holder.cardView.getLayoutParams().height = 0;
+            ViewGroup.MarginLayoutParams layoutParams =
+                    (ViewGroup.MarginLayoutParams) holder.cardView.getLayoutParams();
+            layoutParams.setMargins(0, 0,0, 0);
+            holder.cardView.requestLayout();
+            Log.d("inactivo", "inactivo");
+        }*/
+
+     /*   double totalPagado = total - pago;
 
         if(abonado == 1 && totalPagado == 0.0){
             holder.cardView.setVisibility(View.GONE);
@@ -91,19 +107,19 @@ public class RecibosClientesAdapter extends RecyclerView.Adapter<RecibosClientes
             holder.cardView.requestLayout();
             Log.d("inactivo", "inactivo");
 
-        }
-        else{
+        }*/
+      /*  else{*/
             holder.txt_cliente_factura_card.setText(cardCliente);
             holder.txt_cliente_factura_fantasyname.setText(fantasyCliente);
             holder.txt_cliente_factura_companyname.setText(companyCliente);
-        }
-
+      /*  }
+*/
 
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
              //   activa = 1;
-
+                activity.cleanTotalizeFinal();
                 final ProgressDialog progresRing = ProgressDialog.show(QuickContext, "Cargando", "Seleccionando Cliente", true);
                 progresRing.setCancelable(true);
                 new Thread(new Runnable() {
@@ -124,11 +140,48 @@ public class RecibosClientesAdapter extends RecyclerView.Adapter<RecibosClientes
                 notifyItemChanged(selected_position);
                 selected_position = position;
                 notifyItemChanged(selected_position);
-
+                Realm realm = Realm.getDefaultInstance();
                 recibos clickedDataItem = contentList.get(pos);
+                RealmResults<recibos> result1 = realm.where(recibos.class).equalTo("customer_id", clickedDataItem.getCustomer_id()).findAllSorted("date", Sort.DESCENDING);
+
+                int cant = result1.size();
+                double totalPagado1 = 0.0;
+                double tot = 0.0;
+
+                Log.d("RECIBOSCLIENTE", cant+ "");
+                Log.d("RECIBOSCLIENTE2", result1+ "");
+
+                for(int i=0; i<cant;i++){
+
+                    double totalFor = result1.get(i).getTotal();
+                    double pagoFor = result1.get(i).getPaid();
+                    totalPagado1 = totalFor - pagoFor;
+                    Log.d("PAGOSFOR", totalPagado1 + "");
+                    activity.setTotalizarFinalCliente(totalPagado1);
+
+                 //   tot = activity.getTotalizarFinalCliente();
+
+                }
+                tot = activity.getTotalizarFinalCliente();
+                Log.d("PAGOSFOR2", tot + "");
+                if(tot == 0.0){
+                    holder.cardView.setEnabled(false);
+                  /*  holder.cardView.getLayoutParams().height = 0;
+                    ViewGroup.MarginLayoutParams layoutParams =
+                            (ViewGroup.MarginLayoutParams) holder.cardView.getLayoutParams();
+                    layoutParams.setMargins(0, 0,0, 0);
+                    holder.cardView.requestLayout();*/
+                    Log.d("inactivo", "inactivo");
+
+                }
+
+
 
                 facturaID = clickedDataItem.getInvoice_id();
                 clienteID = clickedDataItem.getCustomer_id();
+                double totalP = clickedDataItem.getPorPagar();
+
+                Log.d("totalP", totalP + "");
 
                 Toast.makeText(activity, facturaID + " " + clienteID + " ", Toast.LENGTH_LONG).show();
 

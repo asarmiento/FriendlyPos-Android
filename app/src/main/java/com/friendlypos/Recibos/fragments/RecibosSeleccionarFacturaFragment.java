@@ -363,7 +363,7 @@ StringBuffer sb= null;
         Realm realm = Realm.getDefaultInstance();
         RealmResults<recibos> result1 = realm.where(recibos.class).equalTo("customer_id", clienteId).findAllSorted("date", Sort.DESCENDING);
         realm.close();
-
+        Log.d("RECIBOSCLIENTE", result1+ "");
         return result1;
 
     }

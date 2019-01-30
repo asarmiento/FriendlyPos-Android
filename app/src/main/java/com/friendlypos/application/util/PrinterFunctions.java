@@ -64,7 +64,7 @@ public class PrinterFunctions {
     static  String totalVuelto_= "";
     static  String totalNotas_= "";
     static  String totalNotasRecibos= "";
-
+   static double precio=0.0;
 
     //TODO imprimir TOTALIZAR DISTRIBUCION
 
@@ -450,7 +450,7 @@ public class PrinterFunctions {
                 String nombreTipo = null;
 
                 double cant = Double.parseDouble(salesList1.get(i).getAmount());
-                double precio = Double.parseDouble(salesList1.get(i).getPrice());
+
 
                 //   String total = Functions.doubleToString1(cant * precio);
                 //     double totalD = Double.parseDouble(total);
@@ -459,15 +459,17 @@ public class PrinterFunctions {
 
                 // gravado Sugerido =( (preciode venta/1.13)*(suggested /100) )+ (preciode venta* 0.13)+(preciode venta/1.13);
                 // en caso de exento Sugerido =( (preciode venta)*(suggested /100)) + (preciode venta);
-                sugerido = (precio)*(precioSugerido /100) + (precio);
 
                 if (typeId.equals("1")){
                     nombreTipo = "Gravado";
+                    precio = Double.parseDouble(salesList1.get(i).getPrice()) / 1.13;
                 }
                 else if (typeId.equals("2")){
                     nombreTipo = "Exento";
+                    precio = Double.parseDouble(salesList1.get(i).getPrice());
 
                 }
+                sugerido = (precio)*(precioSugerido /100) + (precio);
 
                 send += String.format("%s  %.24s ", description1, barcode) + "\r\n" +
                         String.format("%-12s %-10s %-12s %.10s", cant, Functions.doubleToString1(precio), Functions.doubleToString1(sugerido),Functions.doubleToString1(cant * precio)) + "\r\n" +
@@ -1692,20 +1694,22 @@ public class PrinterFunctions {
                 String nombreTipo = null;
 
                 double cant = Double.parseDouble(salesList1.get(i).getAmount());
-                double precio = Double.parseDouble(salesList1.get(i).getPrice());
+
 
                 double sugerido=0.0;
 
                 // gravado Sugerido =( (preciode venta/1.13)*(suggested /100) )+ (preciode venta* 0.13)+(preciode venta/1.13);
                 // en caso de exento Sugerido =( (preciode venta)*(suggested /100)) + (preciode venta);
-                sugerido = (precio)*(precioSugerido /100) + (precio);
+
                 if (typeId.equals("1")){
                     nombreTipo = "Gravado";
+                    precio = Double.parseDouble(salesList1.get(i).getPrice()) / 1.13;
                 }
                 else if (typeId.equals("2")){
                     nombreTipo = "Exento";
+                    precio = Double.parseDouble(salesList1.get(i).getPrice());
                 }
-
+                sugerido = (precio)*(precioSugerido /100) + (precio);
 
                 if(esBonus == 1) {
 

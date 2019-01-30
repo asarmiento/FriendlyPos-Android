@@ -60,7 +60,7 @@ public class RecibosResumenAdapter extends RecyclerView.Adapter<RecibosResumenAd
 
         final recibos recibo = productosList.get(position);
         String numeracion = recibo.getNumeration();
-        double montoPagado = recibo.getPaid();
+        double montoPagado = recibo.getMontoCanceladoPorFactura();
 
         holder.txt_resumen_numeracionRecibos.setText("# de factura: " + numeracion);
         holder.txt_resumen_abonoRecibos.setText("Cantidad pagada: " + String.format("%,.2f", montoPagado) );

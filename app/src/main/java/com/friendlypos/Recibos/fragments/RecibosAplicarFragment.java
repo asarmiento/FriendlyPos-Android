@@ -228,8 +228,9 @@ public class RecibosAplicarFragment extends BaseFragment {
                 preview += "<h5>" + "recibos" + "</h5>";
 
                 preview += "<a><b>A nombre de:</b> " + nombreCliente + "</a><br><br>";
-                preview += "<a><b>" + padRight("# Factura", 10) + "\t\t" + padRight("Monto total", 10) + "</b></a><br>";
+                preview += "<a><b>" + padRight("# Factura", 10) + padRight("Monto total", 10)+ "</b></a><br>";
                 preview += "<a><b>" + padRight("Monto Pagado", 10) + padRight("Monto restante", 10) + "</b></a><br>";
+
                 preview += "<a>------------------------------------------------<a><br>";
 
                 preview += getPrintDistTotal(recibo_actualizado.getCustomer_id());
@@ -281,10 +282,10 @@ public class RecibosAplicarFragment extends BaseFragment {
                 double total = salesList1.get(i).getTotal();
                 String totalS = String.format("%,.2f", total);
 
-                double pagado = salesList1.get(i).getPaid();
+                double pagado = salesList1.get(i).getMontoCanceladoPorFactura();
                 String pagadoS = String.format("%,.2f", pagado);
 
-                double restante = total - pagado;
+                double restante = salesList1.get(i).getPorPagar();
                 String restanteS = String.format("%,.2f", restante);
 
 

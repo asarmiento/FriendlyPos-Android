@@ -248,10 +248,14 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
                 String metodoPago = invoice.getPayment_method_id();
                 String creditoLimiteCliente = clientes.getCreditLimit();
                 String dueCliente = clientes.getDue();
+                String feCliente = clientes.getFe();
+                String tipoDoc = invoice.getType();
                 realm.close();
 
                 Log.d("PRODUCTOSFACTURATO", facturaid1 + "");
                 Log.d("metodoPago", metodoPago + "");
+                Log.d("feCliente", feCliente + "");
+                Log.d("tipoDoc", tipoDoc + "");
                 tabCliente = 1;
                 activity.setSelecClienteTab(tabCliente);
                 activity.setInvoiceId(facturaID);
