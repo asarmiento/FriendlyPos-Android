@@ -65,7 +65,7 @@ public class RecibosClientesAdapter extends RecyclerView.Adapter<RecibosClientes
     @Override
     public void onBindViewHolder(final RecibosClientesAdapter.CharacterViewHolder holder, final int position) {
         final recibos recibo = contentList.get(position);
-
+        activity.cleanTotalizeFinal();
         Realm realm = Realm.getDefaultInstance();
 
         String clienteId = activity.getClienteIdRecibos();
@@ -78,14 +78,34 @@ public class RecibosClientesAdapter extends RecyclerView.Adapter<RecibosClientes
         String companyCliente = clientes.getCompanyName();
         String fantasyCliente = clientes.getFantasyName();
         String numeracionFactura = recibo.getNumeration();
-        int abonado = recibo.getAbonado();
-        //double porPagar = recibo.getPorPagar();
-        double total = recibo.getTotal();
-        double pago = recibo.getPaid();
+        double tot = 0.0;
+        RealmResults<recibos> result1 = realm.where(recibos.class).equalTo("customer_id", recibo.getCustomer_id()).findAllSorted("date", Sort.DESCENDING);
 
+        int cant = result1.size();
+        Log.d("RECIBOSCLIENTE", cant+ "");
 
+        for(int i = 0; i<cant; i++)
+        {
+            int abonado1 =  result1.get(i).getAbonado();
+            double total1 =  result1.get(i).getTotal();
+            double pago1 =  result1.get(i).getPaid();
+            double totalPagado1 = total1 - pago1;
 
-      /*  Log.d("PAGOSFOR1", tot + "");
+            Log.d("PAGOSFOR2", totalPagado1 + "   " + abonado1 + "");
+            activity.setTotalizarFinalCliente(totalPagado1);
+
+           // double porPagar = recibo.getPorPagar();
+            int abonado = recibo.getAbonado();
+            double total = recibo.getTotal();
+            double pago = recibo.getPaid();
+            double totalPagado = total - pago;
+            Log.d("PAGOSFOR1", totalPagado + "   " + abonado + "");
+
+        }
+
+        tot = activity.getTotalizarFinalCliente();
+        Log.d("PAGOSFORTOT", tot + "");
+
         if(tot == 0.0){
             holder.cardView.setVisibility(View.GONE);
             holder.cardView.getLayoutParams().height = 0;
@@ -94,26 +114,15 @@ public class RecibosClientesAdapter extends RecyclerView.Adapter<RecibosClientes
             layoutParams.setMargins(0, 0,0, 0);
             holder.cardView.requestLayout();
             Log.d("inactivo", "inactivo");
-        }*/
 
-     /*   double totalPagado = total - pago;
-
-        if(abonado == 1 && totalPagado == 0.0){
-            holder.cardView.setVisibility(View.GONE);
-            holder.cardView.getLayoutParams().height = 0;
-            ViewGroup.MarginLayoutParams layoutParams =
-                    (ViewGroup.MarginLayoutParams) holder.cardView.getLayoutParams();
-            layoutParams.setMargins(0, 0,0, 0);
-            holder.cardView.requestLayout();
-            Log.d("inactivo", "inactivo");
-
-        }*/
-      /*  else{*/
+        }
+        else{
             holder.txt_cliente_factura_card.setText(cardCliente);
             holder.txt_cliente_factura_fantasyname.setText(fantasyCliente);
             holder.txt_cliente_factura_companyname.setText(companyCliente);
-      /*  }
-*/
+        }
+
+
 
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
