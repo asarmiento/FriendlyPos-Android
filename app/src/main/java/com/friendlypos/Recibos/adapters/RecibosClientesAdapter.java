@@ -149,42 +149,7 @@ public class RecibosClientesAdapter extends RecyclerView.Adapter<RecibosClientes
                 notifyItemChanged(selected_position);
                 selected_position = position;
                 notifyItemChanged(selected_position);
-                Realm realm = Realm.getDefaultInstance();
                 recibos clickedDataItem = contentList.get(pos);
-                RealmResults<recibos> result1 = realm.where(recibos.class).equalTo("customer_id", clickedDataItem.getCustomer_id()).findAllSorted("date", Sort.DESCENDING);
-
-                int cant = result1.size();
-                double totalPagado1 = 0.0;
-                double tot = 0.0;
-
-                Log.d("RECIBOSCLIENTE", cant+ "");
-                Log.d("RECIBOSCLIENTE2", result1+ "");
-
-                for(int i=0; i<cant;i++){
-
-                    double totalFor = result1.get(i).getTotal();
-                    double pagoFor = result1.get(i).getPaid();
-                    totalPagado1 = totalFor - pagoFor;
-                    Log.d("PAGOSFOR", totalPagado1 + "");
-                    activity.setTotalizarFinalCliente(totalPagado1);
-
-                 //   tot = activity.getTotalizarFinalCliente();
-
-                }
-                tot = activity.getTotalizarFinalCliente();
-                Log.d("PAGOSFOR2", tot + "");
-                if(tot == 0.0){
-                    holder.cardView.setEnabled(false);
-                  /*  holder.cardView.getLayoutParams().height = 0;
-                    ViewGroup.MarginLayoutParams layoutParams =
-                            (ViewGroup.MarginLayoutParams) holder.cardView.getLayoutParams();
-                    layoutParams.setMargins(0, 0,0, 0);
-                    holder.cardView.requestLayout();*/
-                    Log.d("inactivo", "inactivo");
-
-                }
-
-
 
                 facturaID = clickedDataItem.getInvoice_id();
                 clienteID = clickedDataItem.getCustomer_id();
@@ -192,7 +157,7 @@ public class RecibosClientesAdapter extends RecyclerView.Adapter<RecibosClientes
 
                 Log.d("totalP", totalP + "");
 
-                Toast.makeText(activity, facturaID + " " + clienteID + " ", Toast.LENGTH_LONG).show();
+              //  Toast.makeText(activity, facturaID + " " + clienteID + " ", Toast.LENGTH_LONG).show();
 
                 tabCliente = 1;
                 activity.setSelecClienteTabRecibos(tabCliente);

@@ -267,7 +267,7 @@ public class RecibosAplicarFragment extends BaseFragment {
         String send = "";
 
         Realm realm1 = Realm.getDefaultInstance();
-        RealmResults<recibos> result = realm1.where(recibos.class).equalTo("customer_id", idVenta).equalTo("abonado", 1).findAll();
+        RealmResults<recibos> result = realm1.where(recibos.class).equalTo("customer_id", idVenta).equalTo("abonado", 1).equalTo("mostrar",1).findAll();
 
         if (result.isEmpty()) {
             send = "No hay recibos emitidos";
@@ -275,7 +275,7 @@ public class RecibosAplicarFragment extends BaseFragment {
         else {
             for (int i = 0; i < result.size(); i++) {
 
-                List<recibos> salesList1 = realm1.where(recibos.class).equalTo("customer_id", idVenta).equalTo("abonado", 1).findAll();
+                List<recibos> salesList1 = realm1.where(recibos.class).equalTo("customer_id", idVenta).equalTo("abonado", 1).equalTo("mostrar",1).findAll();
 
 
                 String numeracion = salesList1.get(i).getNumeration();
@@ -328,7 +328,7 @@ public class RecibosAplicarFragment extends BaseFragment {
                     String facturaId1 = salesList1.get(i).getInvoice_id();
 
                     recibos recibo_actualizado = realm2.where(recibos.class).equalTo("invoice_id", facturaId1).findFirst();
-
+                    recibo_actualizado.setMostrar(0);
                     recibo_actualizado.setDate(fecha);
                     recibo_actualizado.setObservaciones(observ);
 
