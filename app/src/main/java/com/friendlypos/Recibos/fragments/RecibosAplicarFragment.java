@@ -328,7 +328,7 @@ public class RecibosAplicarFragment extends BaseFragment {
                     String facturaId1 = salesList1.get(i).getInvoice_id();
 
                     recibos recibo_actualizado = realm2.where(recibos.class).equalTo("invoice_id", facturaId1).findFirst();
-                    recibo_actualizado.setMostrar(0);
+                 //   recibo_actualizado.setMostrar(0);
                     recibo_actualizado.setDate(fecha);
                     recibo_actualizado.setObservaciones(observ);
 
