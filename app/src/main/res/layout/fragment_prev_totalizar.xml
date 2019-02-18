@@ -269,7 +269,7 @@
             android:text="@string/save"
             android:textColor="@color/cardview_light_background" />
 
-        <Button
+   <!--     <Button
             android:id="@+id/printInvoice"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -277,7 +277,7 @@
             android:background="@drawable/fondo_botones"
             android:text="@string/print"
             android:textColor="@color/cardview_light_background"
-            android:visibility="visible" />
+            android:visibility="visible" />-->
 
         <EditText
             android:id="@+id/txtNotes"

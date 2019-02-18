@@ -285,7 +285,7 @@
             android:textSize="20sp"
             android:textColor="@color/cardview_light_background" />
 
-        <Button
+      <!--  <Button
             android:id="@+id/printInvoice"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -295,7 +295,7 @@
             android:textSize="20sp"
             android:textColor="@color/cardview_light_background"
             android:visibility="visible" />
-
+-->
         <EditText
             android:id="@+id/txtNotes"
             android:layout_width="fill_parent"

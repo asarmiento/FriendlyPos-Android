@@ -2,7 +2,9 @@ package com.friendlypos.preventas.fragment;
 
 import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -29,6 +31,7 @@ import com.friendlypos.preventas.activity.PreventaActivity;
 import com.friendlypos.preventas.modelo.Numeracion;
 import com.friendlypos.preventas.modelo.visit;
 import com.friendlypos.preventas.modelo.invoiceDetallePreventa;
+import com.friendlypos.principal.activity.MenuPrincipal;
 import com.friendlypos.principal.modelo.datosTotales;
 import com.friendlypos.ventadirecta.activity.VentaDirectaActivity;
 
@@ -38,7 +41,8 @@ import static io.realm.internal.SyncObjectServerFacade.getApplicationContext;
 
 
 public class PrevTotalizarFragment extends BaseFragment {
-
+    static Handler handler;
+    static Runnable runnable;
     private static TextView subGra;
     private static TextView subExe;
     private static TextView subT;
@@ -164,15 +168,15 @@ public class PrevTotalizarFragment extends BaseFragment {
         notes = (EditText) rootView.findViewById(R.id.txtNotes);
 
         applyBill = (Button) rootView.findViewById(R.id.applyInvoice);
-        printBill = (Button) rootView.findViewById(R.id.printInvoice);
+      //  printBill = (Button) rootView.findViewById(R.id.printInvoice);
 
         if (apply_done == 1) {
-            applyBill.setVisibility(View.GONE);
-            printBill.setVisibility(View.VISIBLE);
+            applyBill.setVisibility(View.VISIBLE);
+           // printBill.setVisibility(View.VISIBLE);
         }
         else {
             applyBill.setVisibility(View.VISIBLE);
-            printBill.setVisibility(View.GONE);
+           // printBill.setVisibility(View.GONE);
         }
 
         applyBill.setOnClickListener(
@@ -209,11 +213,22 @@ public class PrevTotalizarFragment extends BaseFragment {
                         e.printStackTrace();
 
                     }
+                    handler = new Handler();
+                    runnable = new Runnable() {
+                        public void run() {
+                            Intent intent = new Intent(getActivity(), MenuPrincipal.class);
+                            getActivity().startActivity(intent);
+                        }
+                    };
+
+
+            handler.removeCallbacks(runnable);
+            handler.postDelayed(runnable, 4000);
                 }
 
             });
 
-
+/*
         printBill.setOnClickListener(
             new View.OnClickListener() {
 
@@ -251,7 +266,7 @@ public class PrevTotalizarFragment extends BaseFragment {
                 }
             }
 
-        );
+        );*/
 
 
         return rootView;
@@ -459,8 +474,8 @@ public class PrevTotalizarFragment extends BaseFragment {
 
         Toast.makeText(getActivity(), "Venta realizada correctamente", Toast.LENGTH_LONG).show();
 
-        applyBill.setVisibility(View.GONE);
-        printBill.setVisibility(View.VISIBLE);
+        applyBill.setVisibility(View.VISIBLE);
+      //  printBill.setVisibility(View.VISIBLE);
         apply_done = 1;
 
 

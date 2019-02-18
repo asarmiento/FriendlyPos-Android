@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.os.Handler;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -65,8 +66,6 @@ public class PreventaActivity extends BluetoothActivity {
     private double totalizarImpuestoIVA;
     private double totalizarTotal;
     private double totalizarTotalDouble;
-
-
 
     private PreSellInvoiceDelegate preSellInvoiceDelegate;
 
@@ -186,6 +185,10 @@ public class PreventaActivity extends BluetoothActivity {
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
 
+
+
+
+
         actionBar.setDisplayHomeAsUpEnabled(true);
         preSellInvoiceDelegate = new PreSellInvoiceDelegate(this);
         connectToPrinter();
@@ -203,11 +206,13 @@ public class PreventaActivity extends BluetoothActivity {
         tabLayout = (TabLayout) findViewById(R.id.tabsPreventa);
         tabLayout.setupWithViewPager(viewPager);
 
+
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
 
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
+
                 int tabCliente = getSelecClienteTabPreventa();
                 if (tabCliente == 0 && tab.getPosition() != 0) {
 
