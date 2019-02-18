@@ -120,12 +120,14 @@ public class TotalizeHelperVentaDirecta {
 
 
             subGrabm = subGrabm + ((precio) * (cantidad) - ((descuento / 100) * (precio) * (cantidad)));
+            discountBill += ((descuento / 100) * subGrab);
+            Log.d("discountBillGr", discountBill + "");
         }
         else {
             subExen = subExen + ((precio) * (cantidad));
-
+            discountBill += ((descuento / 100) * subExen);
+            Log.d("discountBillEx", discountBill + "");
         }
-        discountBill += ((descuento / 100) * (precio) * (cantidad));
 
         discountBill += ((subExen * (clienteFixedDescuento / 100.00)) + (subGrabm * (clienteFixedDescuento / 100.00)));
 

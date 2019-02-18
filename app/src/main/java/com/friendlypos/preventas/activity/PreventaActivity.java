@@ -677,7 +677,6 @@ public class PreventaActivity extends BluetoothActivity {
                 startActivity(intent);
                 finish();}
 
-
         }
         return super.onKeyDown(keyCode, event);
     }
