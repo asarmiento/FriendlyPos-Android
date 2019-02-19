@@ -191,7 +191,7 @@ public class PrevTotalizarFragment extends BaseFragment {
                                 int tabCliente = 0;
                                 ((PreventaActivity) getActivity()).setSelecClienteTabPreventa(tabCliente);
 
-                                Toast.makeText(getActivity(), "Contado", Toast.LENGTH_LONG).show();
+                           //     Toast.makeText(getActivity(), "Contado", Toast.LENGTH_LONG).show();
                                 obtenerLocalización();
                                 aplicarFactura();
                             }
@@ -200,7 +200,7 @@ public class PrevTotalizarFragment extends BaseFragment {
 
                             int tabCliente = 0;
                             ((PreventaActivity) getActivity()).setSelecClienteTabPreventa(tabCliente);
-                            Toast.makeText(getActivity(), "Crédito", Toast.LENGTH_LONG).show();
+                          //  Toast.makeText(getActivity(), "Crédito", Toast.LENGTH_LONG).show();
                             obtenerLocalización();
                             aplicarFactura();
 
@@ -474,7 +474,7 @@ public class PrevTotalizarFragment extends BaseFragment {
 
         Toast.makeText(getActivity(), "Venta realizada correctamente", Toast.LENGTH_LONG).show();
 
-        applyBill.setVisibility(View.VISIBLE);
+        applyBill.setVisibility(View.INVISIBLE);
       //  printBill.setVisibility(View.VISIBLE);
         apply_done = 1;
 
