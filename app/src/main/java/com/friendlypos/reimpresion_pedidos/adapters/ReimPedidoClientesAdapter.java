@@ -312,7 +312,7 @@ public class ReimPedidoClientesAdapter extends RecyclerView.Adapter<ReimPedidoCl
             }
         });
 
-        holder.btnDevolverFacturaCliente.setOnClickListener(new View.OnClickListener() {
+     /*   holder.btnDevolverFacturaCliente.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -324,7 +324,7 @@ public class ReimPedidoClientesAdapter extends RecyclerView.Adapter<ReimPedidoCl
                 }
             }
         });
-
+*/
         holder.btnImprimirFacturaCliente.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -352,7 +352,7 @@ public class ReimPedidoClientesAdapter extends RecyclerView.Adapter<ReimPedidoCl
 
         private TextView txt_cliente_factura_card, txt_cliente_factura_fantasyname, txt_cliente_factura_companyname, txt_cliente_factura_numeracion, txtSubida;
         public CardView cardView;
-        Button btnDevolverFacturaCliente;
+       // Button btnDevolverFacturaCliente;
         ImageButton btnImprimirFacturaCliente, btnUbicacionFacturaCliente;
 
         public CharacterViewHolder(View view) {
@@ -363,13 +363,13 @@ public class ReimPedidoClientesAdapter extends RecyclerView.Adapter<ReimPedidoCl
             txt_cliente_factura_companyname = (TextView) view.findViewById(R.id.txt_cliente_factura_companyname);
             txt_cliente_factura_numeracion = (TextView) view.findViewById(R.id.txt_cliente_factura_numeracion);
             txtSubida = (TextView) view.findViewById(R.id.txtSubidaReimpPedidos);
-            btnDevolverFacturaCliente = (Button) view.findViewById(R.id.btnDevolverFacturaCliente);
+          //  btnDevolverFacturaCliente = (Button) view.findViewById(R.id.btnDevolverFacturaCliente);
             btnImprimirFacturaCliente = (ImageButton) view.findViewById(R.id.btnImprimirFacturaCliente);
             btnUbicacionFacturaCliente = (ImageButton) view.findViewById(R.id.btnUbicacionFacturaCliente);
 
         }
     }
-
+/*
     public void devolverFactura() {
         AlertDialog dialogReturnSale = new AlertDialog.Builder(QuickContext)
                 .setTitle("Devolución")
@@ -494,7 +494,7 @@ public class ReimPedidoClientesAdapter extends RecyclerView.Adapter<ReimPedidoCl
                 }).create();
         dialogReturnSale.show();
     }
-
+*/
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);

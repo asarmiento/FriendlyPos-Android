@@ -3,10 +3,12 @@ package com.friendlypos.Recibos.fragments;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -161,6 +163,28 @@ public class RecibosAplicarFragment extends BaseFragment {
                             if(bluetoothStateChangeReceiver.isBluetoothAvailable()== true) {
                                 PrinterFunctions.imprimirFacturaRecibosTotal(recibo_actualizado, getActivity(), 1);
                                 Toast.makeText(getActivity(), "imprimir liquidacion", Toast.LENGTH_SHORT).show();
+
+                                AlertDialog dialogReturnSale = new AlertDialog.Builder(getActivity())
+                                        .setTitle("Impresión")
+                                        .setMessage("¿Desea realizar la impresión?")
+                                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                PrinterFunctions.imprimirFacturaRecibosTotal(recibo_actualizado, getActivity(), 1);
+                                                Toast.makeText(getActivity(), "imprimir liquidacion", Toast.LENGTH_SHORT).show();
+                                            }
+                                        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+
+                                                dialog.cancel();
+                                            }
+                                        }).create();
+                                dialogReturnSale.show();
+
+
                             }
                             else if(bluetoothStateChangeReceiver.isBluetoothAvailable() == false){
                                 Functions.CreateMessage(getActivity(), "Error", "La conexión del bluetooth ha fallado, favor revisar o conectar el dispositivo");
@@ -169,7 +193,41 @@ public class RecibosAplicarFragment extends BaseFragment {
                         } catch (Exception e) {
                             Functions.CreateMessage(getActivity(), "Error", e.getMessage() + "\n" + e.getStackTrace().toString());
                         }
+
+                        final Realm realm2 = Realm.getDefaultInstance();
+                        realm2.executeTransaction(new Realm.Transaction() {
+
+                            @Override
+                            public void execute(Realm realm2) {
+
+                                RealmResults<recibos> result = realm2.where(recibos.class).equalTo("customer_id",  recibo_actualizado.getCustomer_id()).equalTo("abonado", 1).findAll();
+
+                                if (result.isEmpty()) {
+
+                                    Toast.makeText(getActivity(), "No hay recibos emitidos", Toast.LENGTH_LONG).show();}
+
+                                else{
+                                    for (int i = 0; i < result.size(); i++) {
+
+                                        List<recibos> salesList1 = realm2.where(recibos.class).equalTo("customer_id", recibo_actualizado.getCustomer_id()).equalTo("abonado", 1).findAll();
+
+                                        String facturaId1 = salesList1.get(i).getInvoice_id();
+
+                                        recibos recibo_actualizado = realm2.where(recibos.class).equalTo("invoice_id", facturaId1).findFirst();
+                                        recibo_actualizado.setMostrar(0);
+
+                                        realm2.insertOrUpdate(recibo_actualizado);
+
+                                        Log.d("ACTMOSTRAR", recibo_actualizado + "");
+                                    }
+                                    realm2.close();
+                                }
+
+                            }
+                        });
+
                     }
+
                 }
 
         );

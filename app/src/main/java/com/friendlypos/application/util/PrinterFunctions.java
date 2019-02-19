@@ -594,40 +594,6 @@ public class PrinterFunctions {
             QuickContext.sendBroadcast(intent2);
             Log.d("imprimeProf", preview);
 
-
-        final Realm realm2 = Realm.getDefaultInstance();
-        realm2.executeTransaction(new Realm.Transaction() {
-
-            @Override
-            public void execute(Realm realm2) {
-
-                RealmResults<recibos> result = realm2.where(recibos.class).equalTo("customer_id",  sale.getCustomer_id()).equalTo("abonado", 1).findAll();
-
-                if (result.isEmpty()) {
-
-                    Toast.makeText(QuickContext, "No hay recibos emitidos", Toast.LENGTH_LONG).show();}
-
-                else{
-                    for (int i = 0; i < result.size(); i++) {
-
-                        List<recibos> salesList1 = realm2.where(recibos.class).equalTo("customer_id", sale.getCustomer_id()).equalTo("abonado", 1).findAll();
-
-                        String facturaId1 = salesList1.get(i).getInvoice_id();
-
-                        recibos recibo_actualizado = realm2.where(recibos.class).equalTo("invoice_id", facturaId1).findFirst();
-                        recibo_actualizado.setMostrar(0);
-
-                        realm2.insertOrUpdate(recibo_actualizado);
-
-                        Log.d("ACTMOSTRAR", recibo_actualizado + "");
-                    }
-                    realm2.close();
-                }
-
-            }
-        });
-
-
         }
 
     private static String getPrintRecibosTotal(String idVenta) {
