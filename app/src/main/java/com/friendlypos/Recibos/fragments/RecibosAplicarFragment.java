@@ -13,9 +13,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.friendlypos.R;
@@ -161,10 +165,46 @@ public class RecibosAplicarFragment extends BaseFragment {
                         try {
 
                             if(bluetoothStateChangeReceiver.isBluetoothAvailable()== true) {
-                                PrinterFunctions.imprimirFacturaRecibosTotal(recibo_actualizado, getActivity(), 1);
-                                Toast.makeText(getActivity(), "imprimir liquidacion", Toast.LENGTH_SHORT).show();
 
-                                AlertDialog dialogReturnSale = new AlertDialog.Builder(getActivity())
+                                LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
+                                View promptView = layoutInflater.inflate(R.layout.prompt_imprimir_recibos, null);
+
+                                final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+                                alertDialogBuilder.setView(promptView);
+                                final CheckBox checkbox = (CheckBox) promptView.findViewById(R.id.checkbox);
+
+                                final TextView label = (TextView) promptView.findViewById(R.id.promtClabelRecibosImp);
+                                label.setText("Escriba el número de impresiones requeridas");
+
+                                final EditText input = (EditText) promptView.findViewById(R.id.promtCtextRecibosImp);
+
+                                alertDialogBuilder.setCancelable(false);
+                                alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+                                    public void onClick(DialogInterface dialog, int id) {
+
+                                       String cantidadImpresiones = input.getText().toString();
+
+                                        PrinterFunctions.imprimirFacturaRecibosTotal(recibo_actualizado, getActivity(), 1, cantidadImpresiones);
+                                        Toast.makeText(getActivity(), "imprimir liquidacion", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                                alertDialogBuilder.setNegativeButton("Cancel",
+                                        new DialogInterface.OnClickListener() {
+
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                dialog.cancel();
+                                            }
+                                        });
+
+                                AlertDialog alertD = alertDialogBuilder.create();
+                                alertD.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+                                alertD.show();
+
+
+
+
+                              /*  AlertDialog dialogReturnSale = new AlertDialog.Builder(getActivity())
                                         .setTitle("Impresión")
                                         .setMessage("¿Desea realizar la impresión?")
                                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -182,7 +222,7 @@ public class RecibosAplicarFragment extends BaseFragment {
                                                 dialog.cancel();
                                             }
                                         }).create();
-                                dialogReturnSale.show();
+                                dialogReturnSale.show();*/
 
 
                             }
@@ -194,37 +234,6 @@ public class RecibosAplicarFragment extends BaseFragment {
                             Functions.CreateMessage(getActivity(), "Error", e.getMessage() + "\n" + e.getStackTrace().toString());
                         }
 
-                        final Realm realm2 = Realm.getDefaultInstance();
-                        realm2.executeTransaction(new Realm.Transaction() {
-
-                            @Override
-                            public void execute(Realm realm2) {
-
-                                RealmResults<recibos> result = realm2.where(recibos.class).equalTo("customer_id",  recibo_actualizado.getCustomer_id()).equalTo("abonado", 1).findAll();
-
-                                if (result.isEmpty()) {
-
-                                    Toast.makeText(getActivity(), "No hay recibos emitidos", Toast.LENGTH_LONG).show();}
-
-                                else{
-                                    for (int i = 0; i < result.size(); i++) {
-
-                                        List<recibos> salesList1 = realm2.where(recibos.class).equalTo("customer_id", recibo_actualizado.getCustomer_id()).equalTo("abonado", 1).findAll();
-
-                                        String facturaId1 = salesList1.get(i).getInvoice_id();
-
-                                        recibos recibo_actualizado = realm2.where(recibos.class).equalTo("invoice_id", facturaId1).findFirst();
-                                        recibo_actualizado.setMostrar(0);
-
-                                        realm2.insertOrUpdate(recibo_actualizado);
-
-                                        Log.d("ACTMOSTRAR", recibo_actualizado + "");
-                                    }
-                                    realm2.close();
-                                }
-
-                            }
-                        });
 
                     }
 

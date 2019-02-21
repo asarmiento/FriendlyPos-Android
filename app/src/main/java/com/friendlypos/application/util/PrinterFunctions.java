@@ -482,7 +482,16 @@ public class PrinterFunctions {
     }
     // TODO IMPRIMIR RECIBOS
 
-    public static void datosImprimirRecibosTotal(int type, final recibos sale, final Context QuickContext, int ptype) {
+    public static void datosImprimirRecibosTotal(int type, final recibos sale, final Context QuickContext, int ptype, String cantidadImpresiones) {
+
+        int impresiones1 = Integer.parseInt(cantidadImpresiones);
+
+        for(int i =1; i<=impresiones1; i++){
+
+            Log.d("impresiones", "cantidadImpresion" + impresiones1);
+
+
+
         String stype = "";
         String billptype = "";
         String preview = "";
@@ -596,6 +605,41 @@ public class PrinterFunctions {
 
         }
 
+        final Realm realm2 = Realm.getDefaultInstance();
+        realm2.executeTransaction(new Realm.Transaction() {
+
+            @Override
+            public void execute(Realm realm2) {
+
+                RealmResults<recibos> result = realm2.where(recibos.class).equalTo("customer_id",  sale.getCustomer_id()).equalTo("abonado", 1).findAll();
+
+                if (result.isEmpty()) {
+
+                    Toast.makeText(QuickContext, "No hay recibos emitidos", Toast.LENGTH_LONG).show();}
+
+                else{
+                    for (int i = 0; i < result.size(); i++) {
+
+                        List<recibos> salesList1 = realm2.where(recibos.class).equalTo("customer_id", sale.getCustomer_id()).equalTo("abonado", 1).findAll();
+
+                        String facturaId1 = salesList1.get(i).getInvoice_id();
+
+                        recibos recibo_actualizado = realm2.where(recibos.class).equalTo("invoice_id", facturaId1).findFirst();
+                        recibo_actualizado.setMostrar(0);
+
+                        realm2.insertOrUpdate(recibo_actualizado);
+
+                        Log.d("ACTMOSTRAR", recibo_actualizado + "");
+                    }
+                    realm2.close();
+                }
+
+            }
+        });
+
+
+        }
+
     private static String getPrintRecibosTotal(String idVenta) {
         String send;
 
@@ -634,7 +678,7 @@ public class PrinterFunctions {
 
     }
 
-    public static void imprimirFacturaRecibosTotal(final recibos recibo, final Context QuickContext, final int ptype){
+    public static void imprimirFacturaRecibosTotal(final recibos recibo, final Context QuickContext, final int ptype, final String cantidadImpresiones){
 
         AlertDialog dialogReturnSale = new AlertDialog.Builder(QuickContext)
                 .setTitle("Impresión")
@@ -643,7 +687,7 @@ public class PrinterFunctions {
 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        imprimirRecibosTotalizar(1, recibo, QuickContext, ptype);
+                        imprimirRecibosTotalizar(1, recibo, QuickContext, ptype, cantidadImpresiones);
                     }
                 }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
 
@@ -657,10 +701,10 @@ public class PrinterFunctions {
 
     }
 
-    private static void imprimirRecibosTotalizar(int type, recibos recibo, Context QuickContext, int ptype) {
+    private static void imprimirRecibosTotalizar(int type, recibos recibo, Context QuickContext, int ptype, String cantidadImpresiones) {
         try {
             if (recibo != null) {
-                PrinterFunctions.datosImprimirRecibosTotal(type, recibo, QuickContext, ptype);
+                PrinterFunctions.datosImprimirRecibosTotal(type, recibo, QuickContext, ptype, cantidadImpresiones);
             } else {
                 Toast.makeText(QuickContext, "Aun le falta terminar de hacer la factura" , Toast.LENGTH_SHORT).show();
             }
