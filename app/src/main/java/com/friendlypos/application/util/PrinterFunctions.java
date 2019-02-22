@@ -2423,7 +2423,7 @@ public class PrinterFunctions {
                 double factTotal = salesList1.get(i).getBalance();
                 double factTotal1 = salesList1.get(i).getListaRecibos().get(0).getMontoCanceladoPorFactura();
                 Log.d("factTotal1", factTotal1 + "");
-                if(factTotal == 0.0){
+                if(factTotal1 == 0.0){
                     Log.d("es0", "es 0");
                 }
                 else {
