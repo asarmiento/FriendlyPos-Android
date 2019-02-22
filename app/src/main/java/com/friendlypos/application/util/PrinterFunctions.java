@@ -490,8 +490,6 @@ public class PrinterFunctions {
 
             Log.d("impresiones", "cantidadImpresion" + impresiones1);
 
-
-
         String stype = "";
         String billptype = "";
         String preview = "";
