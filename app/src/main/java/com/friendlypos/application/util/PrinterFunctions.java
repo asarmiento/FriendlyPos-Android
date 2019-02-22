@@ -2421,14 +2421,15 @@ public class PrinterFunctions {
                 String factFecha = salesList1.get(i).getDate();
 
                 double factTotal = salesList1.get(i).getBalance();
-
+                double factTotal1 = salesList1.get(i).getListaRecibos().get(0).getMontoCanceladoPorFactura();
+                Log.d("factTotal1", factTotal1 + "");
                 if(factTotal == 0.0){
                     Log.d("es0", "es 0");
                 }
                 else {
 
-                    send += String.format("%-5s      %.20s      %-6s", factNum, factFecha, Functions.doubleToString1(factTotal)) + "\r\n";
-                    printLiqRecibosTotal = printLiqRecibosTotal + factTotal;
+                    send += String.format("%-5s      %.20s      %-6s", factNum, factFecha, Functions.doubleToString1(factTotal1)) + "\r\n";
+                    printLiqRecibosTotal = printLiqRecibosTotal + factTotal1;
                     Log.d("LiqRecibos", send + "");
                 }
 
