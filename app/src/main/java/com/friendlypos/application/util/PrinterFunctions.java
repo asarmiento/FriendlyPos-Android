@@ -886,7 +886,7 @@ public class PrinterFunctions {
             }
 
             handler.removeCallbacks(runnable);
-            handler.postDelayed(runnable, 4000);
+            handler.postDelayed(runnable, 2000);
 
 
         }
@@ -1005,7 +1005,7 @@ public class PrinterFunctions {
             }
 
             handler.removeCallbacks(runnable);
-            handler.postDelayed(runnable, 4000);
+            handler.postDelayed(runnable, 2000);
 
 
         }
@@ -1154,7 +1154,7 @@ public class PrinterFunctions {
 
             }
             handler.removeCallbacks(runnable);
-            handler.postDelayed(runnable, 4000);
+            handler.postDelayed(runnable, 2000);
         }
         else if(prefList.equals("2")){
             switch (metodoPago) {
@@ -1227,7 +1227,7 @@ public class PrinterFunctions {
 
             }
             handler.removeCallbacks(runnable);
-            handler.postDelayed(runnable, 4000);
+            handler.postDelayed(runnable, 2000);
         }
         totalGrabado_= "";
         totalExento_= "";
@@ -1506,7 +1506,7 @@ public class PrinterFunctions {
             }
 
             handler.removeCallbacks(runnable);
-            handler.postDelayed(runnable, 4000);
+            handler.postDelayed(runnable, 2000);
 
 
         }
@@ -1649,7 +1649,7 @@ public class PrinterFunctions {
             }
 
             handler.removeCallbacks(runnable);
-            handler.postDelayed(runnable, 4000);
+            handler.postDelayed(runnable, 2000);
 
 
         }
@@ -2416,12 +2416,16 @@ public class PrinterFunctions {
             for (int i = 0; i < result.size(); i++) {
 
                 List<receipts> salesList1 = realm.where(receipts.class).equalTo("date", currentDateandTime).findAll();
-
-                String factNum = salesList1.get(i).getReference();
+Log.d("salesList1", salesList1 + "");
+String factNum = salesList1.get(i).getReference();
                 String factFecha = salesList1.get(i).getDate();
 
                 double factTotal = salesList1.get(i).getBalance();
+                Log.d("factTotal", factTotal + "");
+
                 double factTotal1 = salesList1.get(i).getListaRecibos().get(0).getMontoCanceladoPorFactura();
+                Log.d("salesList11", salesList1.get(i).getListaRecibos() + "");
+
                 Log.d("factTotal1", factTotal1 + "");
                 if(factTotal1 == 0.0){
                     Log.d("es0", "es 0");

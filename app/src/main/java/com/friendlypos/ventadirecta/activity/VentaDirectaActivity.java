@@ -549,13 +549,6 @@ public class VentaDirectaActivity extends BluetoothActivity {
     }
 
 
-    public void borrarCreadas(){
-
-
-
-
-    }
-
 
     private List<Numeracion> getList(){
         Realm realm = Realm.getDefaultInstance();
