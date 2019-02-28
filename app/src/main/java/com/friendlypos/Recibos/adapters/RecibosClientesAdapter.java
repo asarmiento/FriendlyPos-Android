@@ -266,6 +266,7 @@ public class RecibosClientesAdapter extends RecyclerView.Adapter<RecibosClientes
 
                         realmRecibo.insertOrUpdate(receipt);
                         Log.d("ReciboNuevo", receipt + "");
+                        activity.setReceipts_id_num(String.valueOf(nextId));
 
 
                     }

@@ -20,13 +20,10 @@ import com.friendlypos.distribucion.modelo.Pivot;
 import com.friendlypos.distribucion.modelo.sale;
 import com.friendlypos.login.modelo.Usuarios;
 import com.friendlypos.login.util.SessionPrefes;
-import com.friendlypos.preventas.activity.PreventaActivity;
-import com.friendlypos.preventas.modelo.Numeracion;
 import com.friendlypos.principal.activity.MenuPrincipal;
 import com.friendlypos.principal.modelo.Clientes;
 import com.friendlypos.principal.modelo.Productos;
 import com.friendlypos.principal.modelo.Sysconf;
-import com.friendlypos.ventadirecta.activity.VentaDirectaActivity;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
@@ -35,6 +32,7 @@ import java.util.Date;
 import java.util.List;
 
 import io.realm.Realm;
+import io.realm.RealmList;
 import io.realm.RealmResults;
 
 public class PrinterFunctions {
@@ -886,7 +884,7 @@ public class PrinterFunctions {
             }
 
             handler.removeCallbacks(runnable);
-            handler.postDelayed(runnable, 2000);
+            handler.postDelayed(runnable, 500);
 
 
         }
@@ -1005,7 +1003,7 @@ public class PrinterFunctions {
             }
 
             handler.removeCallbacks(runnable);
-            handler.postDelayed(runnable, 2000);
+            handler.postDelayed(runnable, 500);
 
 
         }
@@ -1154,7 +1152,7 @@ public class PrinterFunctions {
 
             }
             handler.removeCallbacks(runnable);
-            handler.postDelayed(runnable, 2000);
+            handler.postDelayed(runnable, 500);
         }
         else if(prefList.equals("2")){
             switch (metodoPago) {
@@ -1227,7 +1225,7 @@ public class PrinterFunctions {
 
             }
             handler.removeCallbacks(runnable);
-            handler.postDelayed(runnable, 2000);
+            handler.postDelayed(runnable, 500);
         }
         totalGrabado_= "";
         totalExento_= "";
@@ -1506,7 +1504,7 @@ public class PrinterFunctions {
             }
 
             handler.removeCallbacks(runnable);
-            handler.postDelayed(runnable, 2000);
+            handler.postDelayed(runnable, 500);
 
 
         }
@@ -1649,7 +1647,7 @@ public class PrinterFunctions {
             }
 
             handler.removeCallbacks(runnable);
-            handler.postDelayed(runnable, 2000);
+            handler.postDelayed(runnable, 500);
 
 
         }
@@ -2414,26 +2412,49 @@ public class PrinterFunctions {
         } else {
             printLiqRecibosTotal= 0.0;
             for (int i = 0; i < result.size(); i++) {
-
                 List<receipts> salesList1 = realm.where(receipts.class).equalTo("date", currentDateandTime).findAll();
-Log.d("salesList1", salesList1 + "");
-String factNum = salesList1.get(i).getReference();
-                String factFecha = salesList1.get(i).getDate();
+                Log.d("salesList1", salesList1 + "");
 
-                double factTotal = salesList1.get(i).getBalance();
-                Log.d("factTotal", factTotal + "");
+                String factNum = salesList1.get(i).getReference();
+                String factFecha = salesList1.get(i).getDate();
+                String customerID = salesList1.get(i).getCustomer_id();
+                double montoPagado = salesList1.get(i).getMontoPagado();
+
+
+/*
+                RealmList<recibos> factTotal1 = salesList1.get(i).getListaRecibos();
+                Log.d("FACTURANUEVA", factNum + factFecha + customerID + montoPagado + " ");
+                Log.d("FACTURANUEVA", factTotal1 + "");
+                double factTotal11 = 0;
+                if (factTotal1.isEmpty()) {
+                    Log.d("rep", "rep");
+                } else {
+
+
+                    factTotal11 = factTotal1.get(0).getMontoCanceladoPorFactura();
+                    Log.d("FACTURANUEVA", factTotal11 + "");
+                }
+
+
+
+               RealmResults<recibos> result2 = realm.where(recibos.class).equalTo("customer_id", customerID).findAll();
+                Log.d("FACTURANUEVA", result2 + "");
+
+
+                double factTotal1 = result2.get(i).getMontoCanceladoPorFactura();
+                Log.d("factTotal12", factTotal1 + "");
+
 
                 double factTotal1 = salesList1.get(i).getListaRecibos().get(0).getMontoCanceladoPorFactura();
                 Log.d("salesList11", salesList1.get(i).getListaRecibos() + "");
 
-                Log.d("factTotal1", factTotal1 + "");
-                if(factTotal1 == 0.0){
+                Log.d("factTotal1", factTotal1 + "");*/
+                if (montoPagado == 0.0) {
                     Log.d("es0", "es 0");
-                }
-                else {
+                } else {
 
-                    send += String.format("%-5s      %.20s      %-6s", factNum, factFecha, Functions.doubleToString1(factTotal1)) + "\r\n";
-                    printLiqRecibosTotal = printLiqRecibosTotal + factTotal1;
+                    send += String.format("%-5s      %.20s      %-6s", factNum, factFecha, Functions.doubleToString1(montoPagado)) + "\r\n";
+                    printLiqRecibosTotal = printLiqRecibosTotal + montoPagado;
                     Log.d("LiqRecibos", send + "");
                 }
 

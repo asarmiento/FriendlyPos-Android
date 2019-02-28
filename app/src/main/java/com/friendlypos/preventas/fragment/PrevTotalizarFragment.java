@@ -223,7 +223,7 @@ public class PrevTotalizarFragment extends BaseFragment {
 
 
             handler.removeCallbacks(runnable);
-            handler.postDelayed(runnable, 2000);
+            handler.postDelayed(runnable, 500);
                 }
 
             });

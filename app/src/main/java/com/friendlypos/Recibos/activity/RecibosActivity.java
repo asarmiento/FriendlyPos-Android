@@ -63,6 +63,7 @@ public class RecibosActivity extends BluetoothActivity {
     private double totalizarFinal;
     private double montoAgregadoRestante;
     private double totalizarFinalCliente;
+    private String receipts_id_num;
 
     private PreSellRecibosDelegate preSellRecibosDelegate;
 
@@ -179,6 +180,14 @@ public class RecibosActivity extends BluetoothActivity {
 
     public void setTotalizarFinalCliente(double totalizarFinalCliente) {
         this.totalizarFinalCliente = this.totalizarFinalCliente + totalizarFinalCliente;
+    }
+
+    public String getReceipts_id_num() {
+        return receipts_id_num;
+    }
+
+    public void setReceipts_id_num(String receipts_id_num) {
+        this.receipts_id_num = receipts_id_num;
     }
 
     @Override

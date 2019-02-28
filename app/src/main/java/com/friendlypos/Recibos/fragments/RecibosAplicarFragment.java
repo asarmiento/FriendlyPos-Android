@@ -433,18 +433,19 @@ public class RecibosAplicarFragment extends BaseFragment {
                         pagado = salesList1.get(i).getPaid();
                         activity.setTotalizarFinal(pagado);
 
-
+                       String receipts_id = activity.getReceipts_id_num();
                         montoCancelado = salesList1.get(i).getMontoCanceladoPorFactura();
                         activity.setCanceladoPorFactura(montoCancelado);
 
 
-                        receipts recibo_actua = realm2.where(receipts.class).equalTo("customer_id", clienteId).findFirst();
+                        receipts recibo_actua = realm2.where(receipts.class).equalTo("receipts_id", receipts_id).equalTo("customer_id", clienteId).findFirst();
 
                         recibo_actua.setListaRecibos(new RealmList<recibos>(salesList1.toArray(new recibos[salesList1.size()])));
                         recibo_actua.setBalance(activity.getTotalizarFinal());
                         recibo_actua.setAplicado(1);
                         recibo_actua.setSum(observ);
                         recibo_actua.setNotes(observ);
+                        recibo_actua.setMontoPagado(montoCancelado);
                         realm2.insertOrUpdate(recibo_actua);
 
                         Log.d("ACTRECIBO", recibo_actua + "");

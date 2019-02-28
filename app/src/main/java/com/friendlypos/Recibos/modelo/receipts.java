@@ -36,6 +36,7 @@ public class receipts extends RealmObject {
     private RealmList<recibos> listaRecibos;
     double porPagar = 0.0;
     int aplicado = 0;
+    double montoPagado = 0.0;
 
     public int getAplicado() {
         return aplicado;
@@ -133,6 +134,14 @@ public class receipts extends RealmObject {
         this.messages = message;
     }
 
+    public double getMontoPagado() {
+        return montoPagado;
+    }
+
+    public void setMontoPagado(double montoPagado) {
+        this.montoPagado = montoPagado;
+    }
+
     @Override
     public String toString() {
         return "receipts{" +
@@ -144,6 +153,8 @@ public class receipts extends RealmObject {
                 ", balance=" + balance +
                 ", notes='" + notes + '\'' +
                 ", listaRecibos=" + listaRecibos +
+                ", montoPagado=" + montoPagado +
+
                 '}';
     }
 }
