@@ -22,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.friendlypos.R;
+import com.friendlypos.app.broadcastreceiver.BluetoothStateChangeReceiver;
 import com.friendlypos.application.util.Functions;
 import com.friendlypos.application.util.PrinterFunctions;
 import com.friendlypos.distribucion.modelo.Inventario;
@@ -51,12 +52,19 @@ public class ReimPedidoClientesAdapter extends RecyclerView.Adapter<ReimPedidoCl
     int nextId;
     int tabCliente;
     int activa = 0;
+    int activaSoloImprimir = 0;
     String nombreMetodoPago;
-
+    int subida;
+    BluetoothStateChangeReceiver bluetoothStateChangeReceiver;
+    sale sale_actualizada;
+    String tipoFacturacionImpr;
     public ReimPedidoClientesAdapter(Context context, ReimprimirPedidosActivity activity, List<sale> contentList) {
         this.contentList = contentList;
         this.activity = activity;
         this.QuickContext = context;
+
+        bluetoothStateChangeReceiver = new BluetoothStateChangeReceiver();
+        bluetoothStateChangeReceiver.setBluetoothStateChangeReceiver(QuickContext);
     }
 
     @Override
@@ -81,7 +89,7 @@ public class ReimPedidoClientesAdapter extends RecyclerView.Adapter<ReimPedidoCl
         String fantasyCliente = clientes.getFantasyName();
         String numeracionFactura = invoice.getNumeration();
         String nombreVenta = sale.getCustomer_name();
-        int subida = invoice.getSubida();
+        subida = invoice.getSubida();
         final double longitud = invoice.getLongitud();
         final double latitud = invoice.getLatitud();
 
@@ -109,6 +117,8 @@ public class ReimPedidoClientesAdapter extends RecyclerView.Adapter<ReimPedidoCl
 
                 int pos = position;
                 sale clickedDataItem = contentList.get(pos);
+                int subida1 = clickedDataItem.getSubida();
+                if(subida1 == 1){
 
                 Realm realm6 = Realm.getDefaultInstance();
                 invoice invoice1 = realm6.where(invoice.class).equalTo("id", clickedDataItem.getInvoice_id()).findFirst();
@@ -118,13 +128,11 @@ public class ReimPedidoClientesAdapter extends RecyclerView.Adapter<ReimPedidoCl
                 String metodoPago = invoice1.getPayment_method_id();
                 String numeracionFactura1 = invoice1.getNumeration();
                 final int creditoTime = Integer.parseInt(clientes.getCreditTime());
-                if (metodoPago.equals("1")){
+                if (metodoPago.equals("1")) {
                     nombreMetodoPago = "Contado";
-                }
-                else if(metodoPago.equals("2")){
+                } else if (metodoPago.equals("2")) {
                     nombreMetodoPago = "Crédito";
                 }
-
 
 
                 LayoutInflater layoutInflater = LayoutInflater.from(QuickContext);
@@ -140,9 +148,9 @@ public class ReimPedidoClientesAdapter extends RecyclerView.Adapter<ReimPedidoCl
 
                 txtTipoFacturaEs.setText("La factura #" + numeracionFactura1 + " es de: " + nombreMetodoPago);
 
-                if (nombreMetodoPago.equals("Contado")){
+                if (nombreMetodoPago.equals("Contado")) {
                     rgTipo.check(R.id.contadoBill);
-                }else if (nombreMetodoPago.equals("Crédito")){
+                } else if (nombreMetodoPago.equals("Crédito")) {
                     rgTipo.check(R.id.creditBill);
                 }
 
@@ -151,14 +159,12 @@ public class ReimPedidoClientesAdapter extends RecyclerView.Adapter<ReimPedidoCl
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
 
-                                if(rbcredito.isChecked()) {
+                                if (rbcredito.isChecked()) {
                                     if (creditoTime == 0) {
                                         Functions.CreateMessage(QuickContext, " ", "Este cliente no cuenta con crédito");
-                                    }
-                                    else if (nombreMetodoPago.equals("Crédito")) {
+                                    } else if (nombreMetodoPago.equals("Crédito")) {
                                         Functions.CreateMessage(QuickContext, " ", "Esta factura ya es de crédito");
-                                    }
-                                    else {
+                                    } else {
                                         // TRANSACCIÓN PARA ACTUALIZAR EL CAMPO METODO DE PAGO CREDITO DE LA FACTURA
                                         final Realm realm2 = Realm.getDefaultInstance();
                                         realm2.executeTransaction(new Realm.Transaction() {
@@ -176,10 +182,9 @@ public class ReimPedidoClientesAdapter extends RecyclerView.Adapter<ReimPedidoCl
                                     }
                                 }
 
-                                 if(nombreMetodoPago.equals("Contado") && rbcontado.isChecked() ){
-                                     Functions.CreateMessage(QuickContext, " ", "Esta factura ya es de contado");
-                                }
-                                 else if(rbcontado.isChecked()){
+                                if (nombreMetodoPago.equals("Contado") && rbcontado.isChecked()) {
+                                    Functions.CreateMessage(QuickContext, " ", "Esta factura ya es de contado");
+                                } else if (rbcontado.isChecked()) {
                                     // TRANSACCIÓN PARA ACTUALIZAR EL CAMPO METODO DE PAGO CONTADO DE LA FACTURA
                                     final Realm realm2 = Realm.getDefaultInstance();
                                     realm2.executeTransaction(new Realm.Transaction() {
@@ -193,8 +198,8 @@ public class ReimPedidoClientesAdapter extends RecyclerView.Adapter<ReimPedidoCl
                                         }
                                     });
 
-                                     Functions.CreateMessage(QuickContext, " ", "Se cambio la factura a contado");
-                                     notifyDataSetChanged();
+                                    Functions.CreateMessage(QuickContext, " ", "Se cambio la factura a contado");
+                                    notifyDataSetChanged();
                                 }
 
                             }
@@ -208,14 +213,32 @@ public class ReimPedidoClientesAdapter extends RecyclerView.Adapter<ReimPedidoCl
 
                 AlertDialog alertD = alertDialogBuilder.create();
                 alertD.show();
+                }
                 return true;
             }
+
         });
+
+
+
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                activa = 1;
 
+                int pos = position;
+                if (pos == RecyclerView.NO_POSITION) return;
+
+                // Updating old as well as new positions
+                notifyItemChanged(selected_position);
+                selected_position = position;
+                notifyItemChanged(selected_position);
+
+                sale clickedDataItem = contentList.get(pos);
+                int subida1 = clickedDataItem.getSubida();
+                if(subida1 == 1){
+
+                activa = 1;
+                    activaSoloImprimir = 0;
                 final ProgressDialog progresRing = ProgressDialog.show(QuickContext, "Cargando", "Seleccionando Cliente", true);
                 progresRing.setCancelable(true);
                 new Thread(new Runnable() {
@@ -230,15 +253,7 @@ public class ReimPedidoClientesAdapter extends RecyclerView.Adapter<ReimPedidoCl
                     }
                 }).start();
 
-                int pos = position;
-                if (pos == RecyclerView.NO_POSITION) return;
 
-                // Updating old as well as new positions
-                notifyItemChanged(selected_position);
-                selected_position = position;
-                notifyItemChanged(selected_position);
-
-                sale clickedDataItem = contentList.get(pos);
 
 
                 facturaID = clickedDataItem.getInvoice_id();
@@ -263,6 +278,29 @@ public class ReimPedidoClientesAdapter extends RecyclerView.Adapter<ReimPedidoCl
                 activity.setMetodoPagoCliente(metodoPago);
                 activity.setCreditoLimiteCliente(creditoLimiteCliente);
                 activity.setDueCliente(dueCliente);
+            }else if(subida1 == 0){
+
+                    activa = 1;
+                    activaSoloImprimir = 1;
+                    final ProgressDialog progresRing = ProgressDialog.show(QuickContext, "Cargando", "Seleccionando Cliente Impresion", true);
+                    progresRing.setCancelable(true);
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                Thread.sleep(5000);
+                            } catch (Exception e) {
+
+                            }
+                            progresRing.dismiss();
+                        }
+                    }).start();
+
+                    facturaID = clickedDataItem.getInvoice_id();
+                    clienteID = clickedDataItem.getCustomer_id();
+                    tabCliente = 0;
+                    activity.setSelecClienteTab(tabCliente);
+                }
             }
         });
         if(selected_position==position){
@@ -282,23 +320,16 @@ public class ReimPedidoClientesAdapter extends RecyclerView.Adapter<ReimPedidoCl
                     if (longitud != 0.0 && latitud != 0.0) {
 
                         try {
-                            // Launch Waze to look for Hawaii:
-                         //   String url = "https://waze.com/ul?ll=9.9261253,-84.0889091&navigate=yes";
-
                             String url = "https://waze.com/ul?ll="+ latitud + "," + longitud + "&navigate=yes";
                             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                             QuickContext.startActivity(intent);
                         } catch (ActivityNotFoundException ex) {
 
                             Uri gmmIntentUri = Uri.parse("geo:"+latitud + "," + longitud);
-                           // Uri gmmIntentUri = Uri.parse("geo:9.9261253,-84.0889091");
                             Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
                             mapIntent.setPackage("com.google.android.apps.maps");
                             QuickContext.startActivity(mapIntent);
 
-                /*    // If Waze is not installed, open it in Google Play:
-                    Intent intent = new Intent( Intent.ACTION_VIEW, Uri.parse( "market://details?id=com.waze" ) );
-                    startActivity(intent);*/
                         }
                     } else {
                         Toast.makeText(QuickContext, "El cliente no cuenta con dirección GPS", Toast.LENGTH_SHORT).show();
@@ -312,30 +343,60 @@ public class ReimPedidoClientesAdapter extends RecyclerView.Adapter<ReimPedidoCl
             }
         });
 
-     /*   holder.btnDevolverFacturaCliente.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                if(activa == 1){
-                devolverFactura();}
-                else{
-                    Toast.makeText(QuickContext, "Selecciona una factura primero", Toast.LENGTH_SHORT).show();
-
-                }
-            }
-        });
-*/
         holder.btnImprimirFacturaCliente.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                if(activa == 1){
+                if(activa == 1 && activaSoloImprimir == 0){
                 try {
                     PrinterFunctions.imprimirProductosDistrSelecCliente(sale, QuickContext);
                 }
                 catch (Exception e) {
                     Functions.CreateMessage(QuickContext, "Error", e.getMessage() + "\n" + e.getStackTrace().toString());
                 }}
+                if(activa == 1 && activaSoloImprimir == 1){
+                    try {
+
+                        if (bluetoothStateChangeReceiver.isBluetoothAvailable() == true) {
+
+                            final Realm realm3 = Realm.getDefaultInstance();
+                            realm3.executeTransaction(new Realm.Transaction() {
+
+                                @Override
+                                public void execute(Realm realm3) {
+                                    sale_actualizada = realm3.where(sale.class).equalTo("invoice_id", facturaID).findFirst();
+
+                                    Log.d("ENVIADOSALE", sale_actualizada + "" );
+                                }
+                            });
+
+                            tipoFacturacionImpr = sale_actualizada.getFacturaDePreventa();
+
+                            if(tipoFacturacionImpr.equals("Preventa")){
+                                PrinterFunctions.imprimirFacturaPrevTotal(sale_actualizada, QuickContext, 1);
+                                Toast.makeText(QuickContext, "imprimir Totalizar Preventa", Toast.LENGTH_SHORT).show();
+                            }
+                            else if(tipoFacturacionImpr.equals("Proforma")){
+                                PrinterFunctions.imprimirFacturaProformaTotal(sale_actualizada, QuickContext, 1);
+                                Toast.makeText(QuickContext, "imprimir Totalizar Preventa", Toast.LENGTH_SHORT).show();
+                            }
+
+
+                        }
+                        else if (bluetoothStateChangeReceiver.isBluetoothAvailable() == false) {
+                            Functions.CreateMessage(QuickContext, "Error", "La conexión del bluetooth ha fallado, favor revisar o conectar el dispositivo");
+                        }
+
+
+                    }
+                    catch (Exception e) {
+                        Functions.CreateMessage(QuickContext, "Error", e.getMessage() + "\n" + e.getStackTrace().toString());
+                    }
+
+
+                }
+
+
                 else{
                     Toast.makeText(QuickContext, "Selecciona una factura primero", Toast.LENGTH_SHORT).show();
                 }
@@ -369,132 +430,6 @@ public class ReimPedidoClientesAdapter extends RecyclerView.Adapter<ReimPedidoCl
 
         }
     }
-/*
-    public void devolverFactura() {
-        AlertDialog dialogReturnSale = new AlertDialog.Builder(QuickContext)
-                .setTitle("Devolución")
-                .setMessage("¿Desea proceder con la devolución de la factura?")
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        tabCliente = 0;
-                        activity.setSelecClienteTab(tabCliente);
-
-                        Log.d("PRODUCTOSFACTURA1", facturaid1 + "");
-
-                        for (int i = 0; i < facturaid1.size(); i++) {
-                            final Pivot eventRealm = facturaid1.get(i);
-                            final double cantidadDevolver = Double.parseDouble(eventRealm.getAmount());
-
-                            Log.d("PRODUCTOSFACTURASEPA1", eventRealm + "");
-                            Log.d("PRODUCTOSFACTURASEPA", cantidadDevolver + "");
-
-                            final int resumenProductoId = eventRealm.getId();
-
-                            // TRANSACCIÓN BD PARA SELECCIONAR LOS DATOS DEL INVENTARIO
-                            Realm realm3 = Realm.getDefaultInstance();
-                            realm3.executeTransaction(new Realm.Transaction() {
-                                @Override
-                                public void execute(Realm realm3) {
-
-                                    Inventario inventario = realm3.where(Inventario.class).equalTo("product_id", eventRealm.getProduct_id()).findFirst();
-
-                                        if (inventario != null) {
-                                            idInvetarioSelec = inventario.getId();
-                                            amount_inventario = Double.valueOf(inventario.getAmount());
-                                            Log.d("idinventario", idInvetarioSelec+"");
-
-                                        } else {
-                                            amount_inventario = 0.0;
-                                            // increment index
-                                            Number currentIdNum = realm3.where(Inventario.class).max("id");
-
-                                            if (currentIdNum == null) {
-                                                nextId = 1;
-                                            } else {
-                                                nextId = currentIdNum.intValue() + 1;
-                                            }
-
-                                            Inventario invnuevo= new Inventario(); // unmanaged
-                                            invnuevo.setId(nextId);
-                                            invnuevo.setProduct_id(eventRealm.getProduct_id());
-                                            invnuevo.setInitial(String.valueOf("0"));
-                                            invnuevo.setAmount(String.valueOf(cantidadDevolver));
-                                            invnuevo.setAmount_dist(String.valueOf("0"));
-                                            invnuevo.setDistributor(String.valueOf("0"));
-
-                                            realm3.insertOrUpdate(invnuevo);
-                                            Log.d("idinvNUEVOCREADO", invnuevo +"");
-                                        }
-
-                                    realm3.close();
-                                }
-                            });
-
-                            final Realm realm5 = Realm.getDefaultInstance();
-                            realm5.executeTransaction(new Realm.Transaction() {
-                                @Override
-                                public void execute(Realm realm5) {
-                                    Pivot inv_actualizado = realm5.where(Pivot.class).equalTo("id", resumenProductoId).findFirst();
-                                    int dev = inv_actualizado.getDevuelvo();
-                                    if(dev == 0){
-                                        inv_actualizado.setDevuelvo(1);
-                                        realm5.insertOrUpdate(inv_actualizado);
-                                    }
-                                    else{
-                                        Toast.makeText(QuickContext, "ya sta 1", Toast.LENGTH_LONG).show();
-                                    }
-
-
-                                    realm5.close();
-                                }
-                            });
-
-
-                            // OBTENER NUEVO AMOUNT_DIST
-                            final Double nuevoAmountDevuelto =  cantidadDevolver + amount_inventario;
-                            Log.d("nuevoAmount",nuevoAmountDevuelto+"");
-
-                          // TRANSACCIÓN PARA ACTUALIZAR EL CAMPO AMOUNT_DIST EN EL INVENTARIO
-                            final Realm realm2 = Realm.getDefaultInstance();
-                            realm2.executeTransaction(new Realm.Transaction() {
-                                @Override
-                                public void execute(Realm realm2) {
-                                    Inventario inv_actualizado = realm2.where(Inventario.class).equalTo("id", idInvetarioSelec).findFirst();
-                                    inv_actualizado.setAmount(String.valueOf(nuevoAmountDevuelto));
-                                    realm2.insertOrUpdate(inv_actualizado);
-                                    realm2.close();
-                                }
-                            });
-
-                        }
-                        // TRANSACCIÓN BD PARA BORRAR LA FACTURA
-                        final Realm realm4 = Realm.getDefaultInstance();
-                        realm4.executeTransaction(new Realm.Transaction() {
-                            @Override
-                            public void execute(Realm realm4) {
-                                RealmResults<sale> result = realm4.where(sale.class).equalTo("invoice_id", facturaID).findAll();
-                                result.deleteAllFromRealm();
-                               // Log.d("RealmResultsVenta", result + "");
-                                realm4.close();
-                            }
-
-                        });
-                        notifyDataSetChanged();
-
-                    }
-                }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                }).create();
-        dialogReturnSale.show();
-    }
-*/
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);

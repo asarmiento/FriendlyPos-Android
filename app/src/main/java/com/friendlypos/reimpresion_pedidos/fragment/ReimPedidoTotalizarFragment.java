@@ -218,6 +218,17 @@ public class ReimPedidoTotalizarFragment extends BaseFragment {
 
                             if (bluetoothStateChangeReceiver.isBluetoothAvailable() == true) {
 
+                                final Realm realm3 = Realm.getDefaultInstance();
+                                realm3.executeTransaction(new Realm.Transaction() {
+
+                                    @Override
+                                    public void execute(Realm realm3) {
+                                        sale_actualizada = realm3.where(sale.class).equalTo("invoice_id", facturaId).findFirst();
+
+                                        Log.d("ENVIADOSALE", sale_actualizada + "" );
+                                    }
+                                });
+
                                 tipoFacturacionImpr = sale_actualizada.getFacturaDePreventa();
 
                                 if(tipoFacturacionImpr.equals("Preventa")){
