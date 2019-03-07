@@ -66,7 +66,14 @@ public class PrinterFunctions {
 
     //TODO imprimir TOTALIZAR DISTRIBUCION
 
-    public static void datosImprimirDistrTotal(int type, sale sale, Context QuickContext, int ptype) {
+    public static void datosImprimirDistrTotal(int type, sale sale,final Context QuickContext, int ptype, String cantidadImpresiones) {
+
+        int impresiones1 = Integer.parseInt(cantidadImpresiones);
+
+        for(int i =1; i<=impresiones1; i++){
+
+            Log.d("impresiones", "cantidadImpresion" + impresiones1);
+
         String stype = "";
         String payment = "";
         String messageC = "";
@@ -365,6 +372,30 @@ public class PrinterFunctions {
             intent2.putExtra("bill_to_print", preview);
             QuickContext.sendBroadcast(intent2);
         }
+    }
+
+        if (ptype == 1) {
+            handler = new Handler();
+            runnable = new Runnable() {
+                public void run() {
+                    Intent intent = new Intent(QuickContext, MenuPrincipal.class);
+                    QuickContext.startActivity(intent);
+                }
+            };
+        } else if (ptype == 3) {
+            handler = new Handler();
+            runnable = new Runnable() {
+                public void run() {
+                    Intent intent = new Intent(QuickContext, MenuPrincipal.class);
+                    QuickContext.startActivity(intent);
+                }
+            };
+        }
+
+        handler.removeCallbacks(runnable);
+        handler.postDelayed(runnable, 500);
+
+
         totalGrabado= "";
         totalExento= "";
         totalSubtotal= "";
@@ -376,7 +407,7 @@ public class PrinterFunctions {
         totalNotas= "";
     }
 
-    public static void imprimirFacturaDistrTotal (final sale saleB, final Context QuickContext, final int ptype){
+    public static void imprimirFacturaDistrTotal (final sale saleB, final Context QuickContext, final int ptype, final String cantidadImpresiones) {
 
         AlertDialog dialogReturnSale = new AlertDialog.Builder(QuickContext)
                 .setTitle("Impresión")
@@ -385,7 +416,7 @@ public class PrinterFunctions {
 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        imprimirTotalizar(1, saleB, QuickContext, ptype);
+                        imprimirTotalizar(1, saleB, QuickContext, ptype, cantidadImpresiones);
                     }
                 }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
 
@@ -399,10 +430,10 @@ public class PrinterFunctions {
 
     }
 
-    private static void imprimirTotalizar(int type, sale invoices, Context QuickContext, int ptype) {
+    private static void imprimirTotalizar(int type, sale invoices, Context QuickContext, int ptype, String cantidadImpresiones) {
         try {
             if (invoices != null) {
-                PrinterFunctions.datosImprimirDistrTotal(type, invoices, QuickContext, ptype);
+                PrinterFunctions.datosImprimirDistrTotal(type, invoices, QuickContext, ptype, cantidadImpresiones);
             } else {
                 Toast.makeText(QuickContext, "Aun le falta terminar de hacer la factura" , Toast.LENGTH_SHORT).show();
             }
@@ -1316,174 +1347,304 @@ public class PrinterFunctions {
 
     //TODO imprimir TOTALIZAR VENTA DIRECTA
 
-    public static void datosImprimirVentaDirectaTotal(int type, sale sale, final Context QuickContext, int ptype) {
-        String stype = "";
-        String billptype = "";
-        String preview = "";
-        String metodoPagoNombre = "";
-        String payment = "";
+    public static void datosImprimirVentaDirectaTotal(int type, sale sale, final Context QuickContext, int ptype, String cantidadImpresiones) {
 
-        Realm realm = Realm.getDefaultInstance();
-        Sysconf sysconf = realm.where(Sysconf.class).findFirst();
-        Clientes clientes = realm.where(Clientes.class).equalTo("id", sale.getCustomer_id()).findFirst();
-        invoice invoice = realm.where(com.friendlypos.distribucion.modelo.invoice.class).equalTo("id", sale.getInvoice_id()).findFirst();
-        RealmResults<Pivot> result = realm.where(Pivot.class).equalTo("invoice_id", sale.getInvoice_id()).findAll();
-        Log.d("FACTPRODTOD", result + "");
-        String fechayhora = sale.getUpdated_at();
-        String nombreCliente = sale.getCustomer_name();
-        double descuentoCliente = Double.parseDouble(clientes.getFixedDiscount());
+        int impresiones1 = Integer.parseInt(cantidadImpresiones);
 
-        String companyCliente = clientes.getCompanyName();
-        String fantasyCliente = clientes.getFantasyName();
-        String cardCliente = clientes.getCard();
-        String telefonoCliente = clientes.getPhone();
+        for(int i =1; i<=impresiones1; i++) {
+
+            Log.d("impresiones", "cantidadImpresion" + impresiones1);
+
+            String stype = "";
+            String billptype = "";
+            String preview = "";
+            String metodoPagoNombre = "";
+            String payment = "";
+
+            Realm realm = Realm.getDefaultInstance();
+            Sysconf sysconf = realm.where(Sysconf.class).findFirst();
+            Clientes clientes = realm.where(Clientes.class).equalTo("id", sale.getCustomer_id()).findFirst();
+            invoice invoice = realm.where(com.friendlypos.distribucion.modelo.invoice.class).equalTo("id", sale.getInvoice_id()).findFirst();
+            RealmResults<Pivot> result = realm.where(Pivot.class).equalTo("invoice_id", sale.getInvoice_id()).findAll();
+            Log.d("FACTPRODTOD", result + "");
+            String fechayhora = sale.getUpdated_at();
+            String nombreCliente = sale.getCustomer_name();
+            double descuentoCliente = Double.parseDouble(clientes.getFixedDiscount());
+
+            String companyCliente = clientes.getCompanyName();
+            String fantasyCliente = clientes.getFantasyName();
+            String cardCliente = clientes.getCard();
+            String telefonoCliente = clientes.getPhone();
 
 
-        String key = invoice.getKey();
-        String numConsecutivo = invoice.getConsecutive_number();
-        String tipoFactura = invoice.getType();
-        String numeracionFactura = invoice.getNumeration();
-        String metodoPago = invoice.getPayment_method_id();
-        totalGrabado_= Functions.doubleToString1(Double.parseDouble(invoice.getSubtotal_taxed()));
-        totalExento_= Functions.doubleToString1(Double.parseDouble(invoice.getSubtotal_exempt()));
-        totalSubtotal_= Functions.doubleToString1(Double.parseDouble(invoice.getSubtotal()));
-        totalDescuento_= Functions.doubleToString1(Double.parseDouble(invoice.getDiscount()));
-        totalImpuesto_= Functions.doubleToString1(Double.parseDouble(invoice.getTax()));
-        totalTotal_= Functions.doubleToString1(Double.parseDouble(invoice.getTotal()));
-        totalCancelado_= Functions.doubleToString1(Double.parseDouble(invoice.getPaid()));
-        totalVuelto_= Functions.doubleToString1(Double.parseDouble(invoice.getChanging()));
-        totalNotas_= invoice.getNote();
-        String idUsuario = invoice.getUser_id();
+            String key = invoice.getKey();
+            String numConsecutivo = invoice.getConsecutive_number();
+            String tipoFactura = invoice.getType();
+            String numeracionFactura = invoice.getNumeration();
+            String metodoPago = invoice.getPayment_method_id();
+            totalGrabado_ = Functions.doubleToString1(Double.parseDouble(invoice.getSubtotal_taxed()));
+            totalExento_ = Functions.doubleToString1(Double.parseDouble(invoice.getSubtotal_exempt()));
+            totalSubtotal_ = Functions.doubleToString1(Double.parseDouble(invoice.getSubtotal()));
+            totalDescuento_ = Functions.doubleToString1(Double.parseDouble(invoice.getDiscount()));
+            totalImpuesto_ = Functions.doubleToString1(Double.parseDouble(invoice.getTax()));
+            totalTotal_ = Functions.doubleToString1(Double.parseDouble(invoice.getTotal()));
+            totalCancelado_ = Functions.doubleToString1(Double.parseDouble(invoice.getPaid()));
+            totalVuelto_ = Functions.doubleToString1(Double.parseDouble(invoice.getChanging()));
+            totalNotas_ = invoice.getNote();
+            String idUsuario = invoice.getUser_id();
 
-        Usuarios usuarios = realm.where(Usuarios.class).equalTo("id", idUsuario).findFirst();
-        String nombreUsuario = usuarios.getUsername();
+            Usuarios usuarios = realm.where(Usuarios.class).equalTo("id", idUsuario).findFirst();
+            String nombreUsuario = usuarios.getUsername();
 
-        // VARIABLES SYSCONF
-        String sysNombre = sysconf.getName();
-        String sysNombreNegocio = sysconf.getBusiness_name();
-        String sysDireccion = sysconf.getDirection();
-        String sysIdentificacion = sysconf.getIdentification();
-        String sysTelefono = sysconf.getPhone();
-        String sysCorreo = sysconf.getEmail();
+            // VARIABLES SYSCONF
+            String sysNombre = sysconf.getName();
+            String sysNombreNegocio = sysconf.getBusiness_name();
+            String sysDireccion = sysconf.getDirection();
+            String sysIdentificacion = sysconf.getIdentification();
+            String sysTelefono = sysconf.getPhone();
+            String sysCorreo = sysconf.getEmail();
 
-        realm.close();
+            realm.close();
 
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(QuickContext);
-        String prefList = sharedPreferences.getString("pref_selec_impresora","Impresora Zebra");
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(QuickContext);
+            String prefList = sharedPreferences.getString("pref_selec_impresora", "Impresora Zebra");
 
-        String condition = "Esta factura constituye titulo ejecutivo al tenor del articulo 460 del codigo de comercio. "
-                + "El deudor renuncia a los requerimientos de pago, domicilio y tramites del juicio ejecutivo. "
-                + "El suscrito da fe, bajo la gravedad de juramento que se encuentra facultado y autorizado para firmar esta factura, "
-                + "por su representada, conforme al articulo supracitado. Si realiza pago mediante transferencia electronica de "
-                + "fondos o cualquier otro medio que no sea efectivo, la validez del pago queda sujeto a su acreditacion en las cuentas "
-                + "bancarias de " + ", Por lo cual la factura original le sera entregada una vez confirme dicha acreditacion ";
+            String condition = "Esta factura constituye titulo ejecutivo al tenor del articulo 460 del codigo de comercio. "
+                    + "El deudor renuncia a los requerimientos de pago, domicilio y tramites del juicio ejecutivo. "
+                    + "El suscrito da fe, bajo la gravedad de juramento que se encuentra facultado y autorizado para firmar esta factura, "
+                    + "por su representada, conforme al articulo supracitado. Si realiza pago mediante transferencia electronica de "
+                    + "fondos o cualquier otro medio que no sea efectivo, la validez del pago queda sujeto a su acreditacion en las cuentas "
+                    + "bancarias de " + ", Por lo cual la factura original le sera entregada una vez confirme dicha acreditacion ";
 
-        if (tipoFactura.equals("01")) {
-            billptype = "Factura Electronica";
-        }else if(tipoFactura.equals("04")){
-            billptype = "Tiquete Electronico";
+            if (tipoFactura.equals("01")) {
+                billptype = "Factura Electronica";
+            } else if (tipoFactura.equals("04")) {
+                billptype = "Tiquete Electronico";
+            }
+
+            if (type == 1) {
+                stype = "Original";
+            }
+
+
+            if (metodoPago.equals("1")) {
+                metodoPagoNombre = "Contado";
+            } else if (metodoPago.equals("2")) {
+                metodoPagoNombre = "Credito";
+            }
+
+            if (prefList.equals("1")) {
+
+                String bill = "! U1 JOURNAl\r\n" +
+                        "! U1 SETLP 0 0 0\r\n" +
+                        "\r\n" +
+                        "! U1 SETLP 5 3 70\r\n" +
+                        "! U1 LMARGIN 0\r\n" +
+                        String.format("%s", billptype) + "\r\n" +
+                        "! U1 SETLP 7 0 14\r\n" +
+                        "------------------------------------------------\r\n" + "\r\n" + "\r\n" +
+                        "! U1 SETLP 5 1 35\r\n" +
+                        sysNombreNegocio + "\r\n" +
+                        "! U1 SETLP 7 0 14\r\n" +
+                        "------------------------------------------------\r\n" + "\r\n" +
+                        "! U1 SETLP 7 0 14\r\n" +
+                        sysNombre + "\r\n" +
+                        "Cedula Juridica: " + sysIdentificacion + "\r\n" +
+                        sysDireccion + "\r\n" +
+                        "Tel. " + sysTelefono + "\r\n" +
+                        "Correo Electronico: " + sysCorreo + "\r\n" +
+                        "------------------------------------------------\r\n" + "\r\n" +
+                        "! U1 SETLP 7 0 14\r\n" + "\r\n" +
+                        "# Factura: " + numeracionFactura + "  " + metodoPagoNombre + "  " + stype + "\r\n" +
+                        "Consec DGT: #" + numConsecutivo + "\r\n" +
+                        "Clave DGT: #" + key + "\r\n" +
+                        "------------------------------------------------\r\n" + "\r\n" +
+                        "! U1 LMARGIN 0\r\n" +
+                        "! U1 SETLP 7 0 14\r\n" +
+                        "Fecha y hora: " + fechayhora + "\r\n" +
+                        "Vendedor:  " + nombreUsuario + "\r\n" +
+                        "Razon Social: " + companyCliente + "\r\n" +
+                        "Nombre fantasia: " + fantasyCliente + "\r\n" +
+                        "Cedula: " + cardCliente + " \r\n" +
+                        "# Telefono: " + telefonoCliente + "\r\n" +
+                        "------------------------------------------------\r\n" + "\r\n" +
+                        "! U1 LMARGIN 0\r\n" +
+                        "! U1 SETSP 0\r\n" +
+                        "\r\n" +
+                        "Descripcion           Codigo\r\n" +
+                        "Cantidad      Precio       P.Sug       Total\r\n" +
+                        "Tipo     \r\n" +
+                        "- - - - - - - - - - - - - - - - - - - - - - - -\r\n" +
+                        "! U1 SETLP 7 0 10\r\n" +
+
+                        getPrintPrevTotal(sale.getInvoice_id()) +
+                        "\r\n" +
+
+                        String.format("%20s %-20s", "Subtotal Gravado", totalGrabado_) + "\r\n" +
+                        String.format("%20s %-20s", "Subtotal Exento", totalExento_) + "\r\n" +
+                        String.format("%20s %-20s", "Subtotal", totalSubtotal_) + "\r\n" +
+                        String.format("%20s %-20s", "Descuento", totalDescuento_) + "\r\n" +
+                        String.format("%20s %-20s", "IVA", totalImpuesto_) + "\r\n" +
+                        "! U1 SETLP 5 3 70\r\n" +
+                        String.format("%20s %-20s", "Total a pagar", totalTotal_) +
+                        "! U1 SETLP 7 0 10\r\n" + "\r\n" +
+                        ((metodoPago == "1") ?
+                                String.format("%20s %-20s", "Cancelado con", totalCancelado) + "\r\n" +
+                                        String.format("%20s %-20s", "Cambio", totalVuelto) : "\r\n"
+                        ) +
+                        "Notas: " + totalNotas_ + "\r\n" + "\r\n" +
+                        ((descuentoCliente > 0) ? "Se le aplico un " + descuentoCliente + "%  de descuento" : "" + "\r\n") +
+                        "! U1 SETLP 5 0 14\r\n" +
+                        "Firma cliente ____________________________" + "\r\n" + "\r\n" + "\r\n" +
+                        "Cedula ____________________________" + "\r\n" +
+                        ((metodoPago == "2") ?
+                                "! U1 SETLP 0 0 6\r\n" + "\r\n" + condition : "\r\n"
+                        ) + "\r\n" +
+                        ((ptype == 3) ?
+                                "\r\n" + "Este comprobante no puede ser utilizado para fines\r\n" +
+                                        "tributarios, por lo cual no se permitira" + "\r\n" +
+                                        "su uso para respaldo de creditos o gastos" + "\r\n" + "\r\n"
+                                : "\r\n"
+                        ) + "\r\n" +
+
+                        "! U1 SETLP 5 0 14\r\n" +
+                        " Autorizada mediante resolucion N DGT-R-48-2016\r\n" +
+                        "del 7 de octubre de 2016.\r\n" + "\r\n" +
+
+                        "\r\n\n" + "Muchas Gracias por preferirnos, un placer atenderlo\r\n" +
+                        "Mantenga el documento para reclamos ." + "\r\n" +
+                        " \n\n" +
+                        " \n\n" +
+                        " \n ";
+                Intent intent2 = new Intent(PrinterService.BROADCAST_CLASS);
+                intent2.putExtra(PrinterService.BROADCAST_CLASS + "TO_PRINT", "true");
+                intent2.putExtra("bill_to_print", bill);
+                QuickContext.sendBroadcast(intent2);
+                Log.d("imprimeZebra", bill);
+
+            } else if (prefList.equals("2")) {
+                switch (metodoPago) {
+                    case "1":
+
+                        payment = "Contado";
+                        preview += Html.fromHtml("<h1>") + String.format("%s", billptype) + Html.fromHtml("</h1><br/>");
+                        preview += Html.fromHtml("<h1>") + "------------------------------------------------" + Html.fromHtml("</h1></center><br/><br/>");
+                        preview += Html.fromHtml("<h1>") + sysNombreNegocio + Html.fromHtml("</h1><br/>");
+                        preview += Html.fromHtml("<h1>") + "------------------------------------------------" + Html.fromHtml("</h1></center><br/><br/>");
+                        preview += Html.fromHtml("<h1>") + sysNombre + Html.fromHtml("</h1><br/>");
+                        preview += Html.fromHtml("<h1>") + "Cedula Juridica: " + sysIdentificacion + Html.fromHtml("</h1></center><br/>");
+                        preview += Html.fromHtml("<h1>") + sysDireccion + Html.fromHtml("</h1><br/>");
+                        preview += Html.fromHtml("<h1>") + "Tel. " + sysTelefono + Html.fromHtml("</h1></center><br/>");
+                        preview += Html.fromHtml("<h1>") + "Correo Electronico: " + sysCorreo + Html.fromHtml("</h1><br/>");
+                        preview += Html.fromHtml("<h1>") + "------------------------------------------------" + Html.fromHtml("</h1></center><br/><br/>");
+                        preview += Html.fromHtml("<h1>") + "# Factura: " + numeracionFactura + "  " + payment + "  " + stype + Html.fromHtml("</h1></center><br/>");
+                        preview += Html.fromHtml("<h1>") + "Consec DGT: #" + numConsecutivo + Html.fromHtml("</h1><br/>");
+                        preview += Html.fromHtml("<h1>") + "Clave DGT: #" + key + Html.fromHtml("</h1><br/>");
+                        preview += Html.fromHtml("<h1>") + "------------------------------------------------" + Html.fromHtml("</h1></center><br/><br/>");
+
+                        preview += Html.fromHtml("<h1>") + "Fecha y hora: " + fechayhora + Html.fromHtml("</h1><br/>");
+                        preview += Html.fromHtml("<h1>") + "Vendedor:  " + nombreUsuario + Html.fromHtml("</h1></center><br/>");
+                        preview += Html.fromHtml("<h1>") + "Razon Social: " + companyCliente + Html.fromHtml("</h1><br/>");
+                        preview += Html.fromHtml("<h1>") + "Nombre fantasia: " + fantasyCliente + Html.fromHtml("</h1><br/>");
+                        preview += Html.fromHtml("<h1>") + "Cedula: " + cardCliente + Html.fromHtml("</h1><br/>");
+                        preview += Html.fromHtml("<h1>") + "# Telefono: " + telefonoCliente + Html.fromHtml("</h1></center><br/>");
+                        preview += Html.fromHtml("<h1>") + "------------------------------------------------" + Html.fromHtml("</h1></center><br/><br/>");
+
+                        preview += Html.fromHtml("<h1>") + "Descripcion           Codigo" + Html.fromHtml("</h1></center><br/>");
+                        preview += Html.fromHtml("<h1>") + "Cantidad      Precio       P.Sug       Total" + Html.fromHtml("</h1></center><br/>");
+                        preview += Html.fromHtml("<h1>") + "Tipo " + Html.fromHtml("</h1></center><br/>");
+                        preview += Html.fromHtml("<h1>") + "- - - - - - - - - - - - - - - - - - - - - - - -" + Html.fromHtml("</h1></center><br/>");
+                        preview += Html.fromHtml("<h1>") + getPrintPrevTotal(sale.getInvoice_id()) + Html.fromHtml("</h1></center><br/>");
+                        preview += Html.fromHtml("<h1>") + String.format("%20s %-20s", "Subtotal Gravado", totalGrabado_) + Html.fromHtml("</h1></center><br/>");
+                        preview += Html.fromHtml("<h1>") + String.format("%20s %-20s", "Subtotal Exento", totalExento_) + Html.fromHtml("</h1></center><br/>");
+                        preview += Html.fromHtml("<h1>") + String.format("%20s %-20s", "Subtotal", totalSubtotal_) + Html.fromHtml("</h1></center><br/>");
+                        preview += Html.fromHtml("<h1>") + String.format("%20s %-20s", "Descuento", totalDescuento_) + Html.fromHtml("</h1></center><br/>");
+                        preview += Html.fromHtml("<h1>") + String.format("%20s %-20s", "IVA", totalImpuesto_) + Html.fromHtml("</h1></center><br/><br/><br/>");
+                        preview += Html.fromHtml("<h1>") + String.format("%20s %-20s", "Total a pagar", totalTotal_) + Html.fromHtml("</h1></center><br/><br/>");
+                        preview += Html.fromHtml("<h1>") + String.format("%20s %-20s", "Cancelado con", totalCancelado_) + Html.fromHtml("</h1></center><br/>");
+                        preview += Html.fromHtml("<h1>") + String.format("%20s %-20s", "Cambio", totalVuelto_) + Html.fromHtml("</h1></center><br/><br/>");
+                        preview += Html.fromHtml("<h1>") + "Notas: " + totalNotas_ + Html.fromHtml("</h1></center><br/><br/>");
+                        preview += Html.fromHtml("<h1>") + "Firma cliente ____________________________" + Html.fromHtml("</h1></center><br/><br/>");
+                        preview += Html.fromHtml("<h1>") + "Cedula ____________________________" + Html.fromHtml("</h1></center><br/><br/>");
+
+                        if (ptype == 3) {
+
+                            preview += Html.fromHtml("<h1>") + "Este comprobante no puede ser utilizado para fines" + Html.fromHtml("</h1></center><br/>");
+                            preview += Html.fromHtml("<h1>") + "tributarios, por lo cual no se permitira" + Html.fromHtml("</h1></center><br/>");
+                            preview += Html.fromHtml("<h1>") + "su uso para respaldo de creditos o gastos." + Html.fromHtml("</h1></center><br/><br/>");
+                        }
+
+                        preview += Html.fromHtml("<h1>") + "Autorizada mediante resolucion Nº DGT-R-48-2016" + Html.fromHtml("</h1></center><br/>");
+                        preview += Html.fromHtml("<h1>") + "del 7 de octubre de 2016." + Html.fromHtml("</h1></center><br/><br/>");
+
+                        preview += Html.fromHtml("<h1>") + "Muchas gracias por preferirnos un placer atenderlo" + Html.fromHtml("</h1></center><br/>");
+                        preview += Html.fromHtml("<h1>") + "Mantenga el documento para reclamos." + Html.fromHtml("</h1></center><br/>");
+                        break;
+                    case "2":
+                        payment = "Credito";
+
+                        preview += Html.fromHtml("<h1>") + String.format("%s", billptype) + Html.fromHtml("</h1><br/>");
+                        preview += Html.fromHtml("<h1>") + "------------------------------------------------" + Html.fromHtml("</h1></center><br/><br/>");
+                        preview += Html.fromHtml("<h1>") + sysNombreNegocio + Html.fromHtml("</h1><br/>");
+                        preview += Html.fromHtml("<h1>") + "------------------------------------------------" + Html.fromHtml("</h1></center><br/><br/>");
+                        preview += Html.fromHtml("<h1>") + sysNombre + Html.fromHtml("</h1><br/>");
+                        preview += Html.fromHtml("<h1>") + "Cedula Juridica: " + sysIdentificacion + Html.fromHtml("</h1></center><br/>");
+                        preview += Html.fromHtml("<h1>") + sysDireccion + Html.fromHtml("</h1><br/>");
+                        preview += Html.fromHtml("<h1>") + "Tel. " + sysTelefono + Html.fromHtml("</h1></center><br/>");
+                        preview += Html.fromHtml("<h1>") + "Correo Electronico: " + sysCorreo + Html.fromHtml("</h1><br/>");
+                        preview += Html.fromHtml("<h1>") + "------------------------------------------------" + Html.fromHtml("</h1></center><br/><br/>");
+                        preview += Html.fromHtml("<h1>") + "# Factura: " + numeracionFactura + "  " + payment + "  " + stype + Html.fromHtml("</h1></center><br/>");
+                        preview += Html.fromHtml("<h1>") + "Consec DGT: #" + numConsecutivo + Html.fromHtml("</h1><br/>");
+                        preview += Html.fromHtml("<h1>") + "Clave DGT: #" + key + Html.fromHtml("</h1><br/>");
+                        preview += Html.fromHtml("<h1>") + "------------------------------------------------" + Html.fromHtml("</h1></center><br/><br/>");
+
+                        preview += Html.fromHtml("<h1>") + "Fecha y hora: " + fechayhora + Html.fromHtml("</h1><br/>");
+                        preview += Html.fromHtml("<h1>") + "Vendedor:  " + nombreUsuario + Html.fromHtml("</h1></center><br/>");
+                        preview += Html.fromHtml("<h1>") + "Razon Social: " + companyCliente + Html.fromHtml("</h1><br/>");
+                        preview += Html.fromHtml("<h1>") + "Nombre fantasia: " + fantasyCliente + Html.fromHtml("</h1><br/>");
+                        preview += Html.fromHtml("<h1>") + "Cedula: " + cardCliente + Html.fromHtml("</h1><br/>");
+                        preview += Html.fromHtml("<h1>") + "# Telefono: " + telefonoCliente + Html.fromHtml("</h1></center><br/>");
+                        preview += Html.fromHtml("<h1>") + "------------------------------------------------" + Html.fromHtml("</h1></center><br/><br/>");
+
+                        preview += Html.fromHtml("<h1>") + "Descripcion           Codigo" + Html.fromHtml("</h1></center><br/>");
+                        preview += Html.fromHtml("<h1>") + "Cantidad      Precio       P.Sug       Total" + Html.fromHtml("</h1></center><br/>");
+                        preview += Html.fromHtml("<h1>") + "Tipo " + Html.fromHtml("</h1></center><br/>");
+                        preview += Html.fromHtml("<h1>") + "- - - - - - - - - - - - - - - - - - - - - - - -" + Html.fromHtml("</h1></center><br/>");
+                        preview += Html.fromHtml("<h1>") + getPrintPrevTotal(sale.getInvoice_id()) + Html.fromHtml("</h1></center><br/>");
+                        preview += Html.fromHtml("<h1>") + String.format("%20s %-20s", "Subtotal Gravado", totalGrabado_) + Html.fromHtml("</h1></center><br/>");
+                        preview += Html.fromHtml("<h1>") + String.format("%20s %-20s", "Subtotal Exento", totalExento_) + Html.fromHtml("</h1></center><br/>");
+                        preview += Html.fromHtml("<h1>") + String.format("%20s %-20s", "Subtotal", totalSubtotal_) + Html.fromHtml("</h1></center><br/>");
+                        preview += Html.fromHtml("<h1>") + String.format("%20s %-20s", "Descuento", totalDescuento_) + Html.fromHtml("</h1></center><br/>");
+                        preview += Html.fromHtml("<h1>") + String.format("%20s %-20s", "IVA", totalImpuesto_) + Html.fromHtml("</h1></center><br/><br/><br/>");
+                        preview += Html.fromHtml("<h1>") + String.format("%20s %-20s", "Total a pagar", totalTotal_) + Html.fromHtml("</h1></center><br/><br/>");
+
+                        preview += Html.fromHtml("<h1>") + "Notas: " + totalNotas_ + Html.fromHtml("</h1></center><br/><br/>");
+                        preview += Html.fromHtml("<h1>") + "Firma cliente ____________________________" + Html.fromHtml("</h1></center><br/><br/>");
+                        preview += Html.fromHtml("<h1>") + "Cedula ____________________________" + Html.fromHtml("</h1></center><br/><br/>");
+
+                        preview += Html.fromHtml("<h1>") + condition + Html.fromHtml("</h1></center><br/>");
+
+                        if (ptype == 3) {
+
+                            preview += Html.fromHtml("<h1>") + "Este comprobante no puede ser utilizado para fines" + Html.fromHtml("</h1></center><br/>");
+                            preview += Html.fromHtml("<h1>") + "tributarios, por lo cual no se permitira" + Html.fromHtml("</h1></center><br/>");
+                            preview += Html.fromHtml("<h1>") + "su uso para respaldo de creditos o gastos." + Html.fromHtml("</h1></center><br/><br/>");
+                        }
+                        preview += Html.fromHtml("<h1>") + "Autorizada mediante resolucion Nº DGT-R-48-2016" + Html.fromHtml("</h1></center><br/>");
+                        preview += Html.fromHtml("<h1>") + "del 7 de octubre de 2016." + Html.fromHtml("</h1></center><br/><br/>");
+                        preview += Html.fromHtml("<h1>") + "Muchas gracias por preferirnos un placer atenderlo" + Html.fromHtml("</h1></center><br/>");
+                        preview += Html.fromHtml("<h1>") + "Mantenga el documento para reclamos." + Html.fromHtml("</h1></center><br/>");
+                        break;
+                }
+                Intent intent2 = new Intent(PrinterService.BROADCAST_CLASS);
+                intent2.putExtra(PrinterService.BROADCAST_CLASS + "TO_PRINT", "true");
+                intent2.putExtra("bill_to_print", preview);
+                QuickContext.sendBroadcast(intent2);
+                Log.d("imprime", preview);
+
+
+            }
         }
-
-        if (type == 1) {
-            stype = "Original";
-        }
-
-
-        if (metodoPago.equals("1")) {
-            metodoPagoNombre = "Contado";
-        } else if (metodoPago.equals("2")) {
-            metodoPagoNombre = "Credito";
-        }
-
-        if (prefList.equals("1")){
-
-            String bill = "! U1 JOURNAl\r\n" +
-                    "! U1 SETLP 0 0 0\r\n" +
-                    "\r\n" +
-                    "! U1 SETLP 5 3 70\r\n" +
-                    "! U1 LMARGIN 0\r\n" +
-                    String.format("%s", billptype) + "\r\n" +
-                    "! U1 SETLP 7 0 14\r\n" +
-                    "------------------------------------------------\r\n" + "\r\n" + "\r\n" +
-                    "! U1 SETLP 5 1 35\r\n" +
-                    sysNombreNegocio + "\r\n" +
-                    "! U1 SETLP 7 0 14\r\n" +
-                    "------------------------------------------------\r\n" + "\r\n" +
-                    "! U1 SETLP 7 0 14\r\n" +
-                    sysNombre + "\r\n" +
-                    "Cedula Juridica: " + sysIdentificacion + "\r\n" +
-                    sysDireccion + "\r\n" +
-                    "Tel. " + sysTelefono + "\r\n" +
-                    "Correo Electronico: " + sysCorreo + "\r\n" +
-                    "------------------------------------------------\r\n" + "\r\n" +
-                    "! U1 SETLP 7 0 14\r\n" + "\r\n" +
-                    "# Factura: " + numeracionFactura + "  " + metodoPagoNombre + "  " + stype + "\r\n" +
-                    "Consec DGT: #" + numConsecutivo + "\r\n" +
-                    "Clave DGT: #" + key + "\r\n" +
-                    "------------------------------------------------\r\n" + "\r\n" +
-                    "! U1 LMARGIN 0\r\n" +
-                    "! U1 SETLP 7 0 14\r\n" +
-                    "Fecha y hora: " + fechayhora + "\r\n" +
-                    "Vendedor:  " + nombreUsuario + "\r\n" +
-                    "Razon Social: " + companyCliente + "\r\n" +
-                    "Nombre fantasia: " + fantasyCliente + "\r\n" +
-                    "Cedula: " + cardCliente + " \r\n" +
-                    "# Telefono: " + telefonoCliente + "\r\n" +
-                    "------------------------------------------------\r\n" + "\r\n" +
-                    "! U1 LMARGIN 0\r\n" +
-                    "! U1 SETSP 0\r\n" +
-                    "\r\n" +
-                    "Descripcion           Codigo\r\n" +
-                    "Cantidad      Precio       P.Sug       Total\r\n" +
-                    "Tipo     \r\n" +
-                    "- - - - - - - - - - - - - - - - - - - - - - - -\r\n" +
-                    "! U1 SETLP 7 0 10\r\n" +
-
-                    getPrintPrevTotal(sale.getInvoice_id()) +
-                    "\r\n" +
-
-                    String.format("%20s %-20s", "Subtotal Gravado", totalGrabado_) + "\r\n" +
-                    String.format("%20s %-20s", "Subtotal Exento", totalExento_) + "\r\n" +
-                    String.format("%20s %-20s", "Subtotal", totalSubtotal_) + "\r\n" +
-                    String.format("%20s %-20s", "Descuento", totalDescuento_) + "\r\n" +
-                    String.format("%20s %-20s", "IVA", totalImpuesto_) + "\r\n" +
-                    "! U1 SETLP 5 3 70\r\n" +
-                    String.format("%20s %-20s", "Total a pagar", totalTotal_) +
-                    "! U1 SETLP 7 0 10\r\n" + "\r\n" +
-                    ((metodoPago == "1") ?
-                            String.format("%20s %-20s", "Cancelado con", totalCancelado) + "\r\n" +
-                                    String.format("%20s %-20s", "Cambio", totalVuelto) : "\r\n"
-                    ) +
-                    "Notas: " + totalNotas_ + "\r\n" + "\r\n" +
-                    ((descuentoCliente > 0) ? "Se le aplico un " + descuentoCliente + "%  de descuento" : "" + "\r\n") +
-                    "! U1 SETLP 5 0 14\r\n" +
-                    "Firma cliente ____________________________" + "\r\n" + "\r\n" + "\r\n" +
-                    "Cedula ____________________________" + "\r\n" +
-                    ((metodoPago == "2") ?
-                    "! U1 SETLP 0 0 6\r\n" + "\r\n" + condition: "\r\n"
-                    ) + "\r\n" +
-                    ((ptype == 3) ?
-                            "\r\n" + "Este comprobante no puede ser utilizado para fines\r\n" +
-                                    "tributarios, por lo cual no se permitira" + "\r\n" +
-                                    "su uso para respaldo de creditos o gastos" + "\r\n" + "\r\n"
-                            : "\r\n"
-                    ) + "\r\n" +
-
-                    "! U1 SETLP 5 0 14\r\n" +
-                    " Autorizada mediante resolucion N DGT-R-48-2016\r\n" +
-                    "del 7 de octubre de 2016.\r\n" +"\r\n" +
-
-                    "\r\n\n" + "Muchas Gracias por preferirnos, un placer atenderlo\r\n" +
-                    "Mantenga el documento para reclamos ." + "\r\n" +
-                    " \n\n" +
-                    " \n\n" +
-                    " \n ";
-            Intent intent2 = new Intent(PrinterService.BROADCAST_CLASS);
-            intent2.putExtra(PrinterService.BROADCAST_CLASS + "TO_PRINT", "true");
-            intent2.putExtra("bill_to_print", bill);
-            QuickContext.sendBroadcast(intent2);
-            Log.d("imprimeZebra", bill);
-
 
             if (ptype == 1) {
                 handler = new Handler();
@@ -1507,150 +1668,7 @@ public class PrinterFunctions {
             handler.postDelayed(runnable, 500);
 
 
-        }
-        else if(prefList.equals("2")){
-            switch (metodoPago) {
-                case "1":
 
-                    payment = "Contado";
-                    preview += Html.fromHtml("<h1>") + String.format("%s", billptype) + Html.fromHtml("</h1><br/>");
-                    preview += Html.fromHtml("<h1>") +  "------------------------------------------------" + Html.fromHtml("</h1></center><br/><br/>");
-                    preview += Html.fromHtml("<h1>") + sysNombreNegocio + Html.fromHtml("</h1><br/>");
-                    preview += Html.fromHtml("<h1>") +  "------------------------------------------------" + Html.fromHtml("</h1></center><br/><br/>");
-                    preview += Html.fromHtml("<h1>") + sysNombre + Html.fromHtml("</h1><br/>");
-                    preview += Html.fromHtml("<h1>") + "Cedula Juridica: " + sysIdentificacion + Html.fromHtml("</h1></center><br/>");
-                    preview += Html.fromHtml("<h1>") + sysDireccion + Html.fromHtml("</h1><br/>");
-                    preview += Html.fromHtml("<h1>") + "Tel. " + sysTelefono + Html.fromHtml("</h1></center><br/>");
-                    preview += Html.fromHtml("<h1>") +  "Correo Electronico: " + sysCorreo + Html.fromHtml("</h1><br/>");
-                    preview += Html.fromHtml("<h1>") +  "------------------------------------------------" + Html.fromHtml("</h1></center><br/><br/>");
-                    preview += Html.fromHtml("<h1>") + "# Factura: " + numeracionFactura + "  " + payment + "  " + stype+ Html.fromHtml("</h1></center><br/>");
-                    preview += Html.fromHtml("<h1>") +  "Consec DGT: #" + numConsecutivo + Html.fromHtml("</h1><br/>");
-                    preview += Html.fromHtml("<h1>") +  "Clave DGT: #" + key + Html.fromHtml("</h1><br/>");
-                    preview += Html.fromHtml("<h1>") +  "------------------------------------------------" + Html.fromHtml("</h1></center><br/><br/>");
-
-                    preview += Html.fromHtml("<h1>") +  "Fecha y hora: " + fechayhora + Html.fromHtml("</h1><br/>");
-                    preview += Html.fromHtml("<h1>") +  "Vendedor:  " + nombreUsuario + Html.fromHtml("</h1></center><br/>");
-                    preview += Html.fromHtml("<h1>") + "Razon Social: " + companyCliente + Html.fromHtml("</h1><br/>");
-                    preview += Html.fromHtml("<h1>") +  "Nombre fantasia: " + fantasyCliente + Html.fromHtml("</h1><br/>");
-                    preview += Html.fromHtml("<h1>") +  "Cedula: " + cardCliente + Html.fromHtml("</h1><br/>");
-                    preview += Html.fromHtml("<h1>") +  "# Telefono: " + telefonoCliente + Html.fromHtml("</h1></center><br/>");
-                    preview += Html.fromHtml("<h1>") +  "------------------------------------------------" + Html.fromHtml("</h1></center><br/><br/>");
-
-                    preview += Html.fromHtml("<h1>") +  "Descripcion           Codigo" + Html.fromHtml("</h1></center><br/>");
-                    preview += Html.fromHtml("<h1>") +   "Cantidad      Precio       P.Sug       Total" + Html.fromHtml("</h1></center><br/>");
-                    preview += Html.fromHtml("<h1>") +   "Tipo " + Html.fromHtml("</h1></center><br/>");
-                    preview += Html.fromHtml("<h1>") +  "- - - - - - - - - - - - - - - - - - - - - - - -" + Html.fromHtml("</h1></center><br/>");
-                    preview += Html.fromHtml("<h1>") +    getPrintPrevTotal(sale.getInvoice_id()) + Html.fromHtml("</h1></center><br/>");
-                    preview += Html.fromHtml("<h1>") +  String.format("%20s %-20s", "Subtotal Gravado", totalGrabado_) + Html.fromHtml("</h1></center><br/>");
-                    preview += Html.fromHtml("<h1>") +  String.format("%20s %-20s", "Subtotal Exento", totalExento_) + Html.fromHtml("</h1></center><br/>");
-                    preview += Html.fromHtml("<h1>") +  String.format("%20s %-20s", "Subtotal", totalSubtotal_) + Html.fromHtml("</h1></center><br/>");
-                    preview += Html.fromHtml("<h1>") +  String.format("%20s %-20s", "Descuento", totalDescuento_) + Html.fromHtml("</h1></center><br/>");
-                    preview += Html.fromHtml("<h1>") +  String.format("%20s %-20s", "IVA", totalImpuesto_) + Html.fromHtml("</h1></center><br/><br/><br/>");
-                    preview += Html.fromHtml("<h1>") +   String.format("%20s %-20s", "Total a pagar", totalTotal_) + Html.fromHtml("</h1></center><br/><br/>");
-                    preview += Html.fromHtml("<h1>") +  String.format("%20s %-20s", "Cancelado con", totalCancelado_) + Html.fromHtml("</h1></center><br/>");
-                    preview += Html.fromHtml("<h1>") +   String.format("%20s %-20s", "Cambio", totalVuelto_) + Html.fromHtml("</h1></center><br/><br/>");
-                    preview += Html.fromHtml("<h1>") +  "Notas: " + totalNotas_ + Html.fromHtml("</h1></center><br/><br/>");
-                    preview += Html.fromHtml("<h1>") +  "Firma cliente ____________________________" + Html.fromHtml("</h1></center><br/><br/>");
-                    preview += Html.fromHtml("<h1>") +  "Cedula ____________________________" +  Html.fromHtml("</h1></center><br/><br/>");
-
-                    if(ptype == 3){
-
-                        preview += Html.fromHtml("<h1>")   + "Este comprobante no puede ser utilizado para fines" +  Html.fromHtml("</h1></center><br/>");
-                        preview += Html.fromHtml("<h1>")   + "tributarios, por lo cual no se permitira" +  Html.fromHtml("</h1></center><br/>");
-                        preview += Html.fromHtml("<h1>")   + "su uso para respaldo de creditos o gastos." +  Html.fromHtml("</h1></center><br/><br/>");
-                    }
-
-                    preview += Html.fromHtml("<h1>")   + "Autorizada mediante resolucion Nº DGT-R-48-2016" +  Html.fromHtml("</h1></center><br/>");
-                    preview += Html.fromHtml("<h1>")   + "del 7 de octubre de 2016." +  Html.fromHtml("</h1></center><br/><br/>");
-
-                    preview += Html.fromHtml("<h1>")   + "Muchas gracias por preferirnos un placer atenderlo" +  Html.fromHtml("</h1></center><br/>");
-                    preview += Html.fromHtml("<h1>")   + "Mantenga el documento para reclamos." +  Html.fromHtml("</h1></center><br/>");
-                    break;
-                case "2":
-                    payment = "Credito";
-
-                    preview += Html.fromHtml("<h1>") + String.format("%s", billptype) + Html.fromHtml("</h1><br/>");
-                    preview += Html.fromHtml("<h1>") +  "------------------------------------------------" + Html.fromHtml("</h1></center><br/><br/>");
-                    preview += Html.fromHtml("<h1>") + sysNombreNegocio + Html.fromHtml("</h1><br/>");
-                    preview += Html.fromHtml("<h1>") +  "------------------------------------------------" + Html.fromHtml("</h1></center><br/><br/>");
-                    preview += Html.fromHtml("<h1>") + sysNombre + Html.fromHtml("</h1><br/>");
-                    preview += Html.fromHtml("<h1>") + "Cedula Juridica: " + sysIdentificacion + Html.fromHtml("</h1></center><br/>");
-                    preview += Html.fromHtml("<h1>") + sysDireccion + Html.fromHtml("</h1><br/>");
-                    preview += Html.fromHtml("<h1>") + "Tel. " + sysTelefono + Html.fromHtml("</h1></center><br/>");
-                    preview += Html.fromHtml("<h1>") +  "Correo Electronico: " + sysCorreo + Html.fromHtml("</h1><br/>");
-                    preview += Html.fromHtml("<h1>") +  "------------------------------------------------" + Html.fromHtml("</h1></center><br/><br/>");
-                    preview += Html.fromHtml("<h1>") + "# Factura: " + numeracionFactura + "  " + payment + "  " + stype+ Html.fromHtml("</h1></center><br/>");
-                    preview += Html.fromHtml("<h1>") +  "Consec DGT: #" + numConsecutivo + Html.fromHtml("</h1><br/>");
-                    preview += Html.fromHtml("<h1>") +  "Clave DGT: #" + key + Html.fromHtml("</h1><br/>");
-                    preview += Html.fromHtml("<h1>") +  "------------------------------------------------" + Html.fromHtml("</h1></center><br/><br/>");
-
-                    preview += Html.fromHtml("<h1>") +  "Fecha y hora: " + fechayhora + Html.fromHtml("</h1><br/>");
-                    preview += Html.fromHtml("<h1>") +  "Vendedor:  " + nombreUsuario + Html.fromHtml("</h1></center><br/>");
-                    preview += Html.fromHtml("<h1>") + "Razon Social: " + companyCliente + Html.fromHtml("</h1><br/>");
-                    preview += Html.fromHtml("<h1>") +  "Nombre fantasia: " + fantasyCliente + Html.fromHtml("</h1><br/>");
-                    preview += Html.fromHtml("<h1>") +  "Cedula: " + cardCliente + Html.fromHtml("</h1><br/>");
-                    preview += Html.fromHtml("<h1>") +  "# Telefono: " + telefonoCliente + Html.fromHtml("</h1></center><br/>");
-                    preview += Html.fromHtml("<h1>") +  "------------------------------------------------" + Html.fromHtml("</h1></center><br/><br/>");
-
-                    preview += Html.fromHtml("<h1>") +  "Descripcion           Codigo" + Html.fromHtml("</h1></center><br/>");
-                    preview += Html.fromHtml("<h1>") +   "Cantidad      Precio       P.Sug       Total" + Html.fromHtml("</h1></center><br/>");
-                    preview += Html.fromHtml("<h1>") +   "Tipo " + Html.fromHtml("</h1></center><br/>");
-                    preview += Html.fromHtml("<h1>") +  "- - - - - - - - - - - - - - - - - - - - - - - -" + Html.fromHtml("</h1></center><br/>");
-                    preview += Html.fromHtml("<h1>") +    getPrintPrevTotal(sale.getInvoice_id()) + Html.fromHtml("</h1></center><br/>");
-                    preview += Html.fromHtml("<h1>") +  String.format("%20s %-20s", "Subtotal Gravado", totalGrabado_) + Html.fromHtml("</h1></center><br/>");
-                    preview += Html.fromHtml("<h1>") +  String.format("%20s %-20s", "Subtotal Exento", totalExento_) + Html.fromHtml("</h1></center><br/>");
-                    preview += Html.fromHtml("<h1>") +  String.format("%20s %-20s", "Subtotal", totalSubtotal_) + Html.fromHtml("</h1></center><br/>");
-                    preview += Html.fromHtml("<h1>") +  String.format("%20s %-20s", "Descuento", totalDescuento_) + Html.fromHtml("</h1></center><br/>");
-                    preview += Html.fromHtml("<h1>") +  String.format("%20s %-20s", "IVA", totalImpuesto_) + Html.fromHtml("</h1></center><br/><br/><br/>");
-                    preview += Html.fromHtml("<h1>") +   String.format("%20s %-20s", "Total a pagar", totalTotal_) + Html.fromHtml("</h1></center><br/><br/>");
-
-                    preview += Html.fromHtml("<h1>") +  "Notas: " + totalNotas_ + Html.fromHtml("</h1></center><br/><br/>");
-                    preview += Html.fromHtml("<h1>") +  "Firma cliente ____________________________" + Html.fromHtml("</h1></center><br/><br/>");
-                    preview += Html.fromHtml("<h1>") +  "Cedula ____________________________" +  Html.fromHtml("</h1></center><br/><br/>");
-
-                    preview += Html.fromHtml("<h1>") +  condition +  Html.fromHtml("</h1></center><br/>");
-
-                    if(ptype == 3){
-
-                        preview += Html.fromHtml("<h1>")   + "Este comprobante no puede ser utilizado para fines" +  Html.fromHtml("</h1></center><br/>");
-                        preview += Html.fromHtml("<h1>")   + "tributarios, por lo cual no se permitira" +  Html.fromHtml("</h1></center><br/>");
-                        preview += Html.fromHtml("<h1>")   + "su uso para respaldo de creditos o gastos." +  Html.fromHtml("</h1></center><br/><br/>");
-                    }
-                    preview += Html.fromHtml("<h1>")   + "Autorizada mediante resolucion Nº DGT-R-48-2016" +  Html.fromHtml("</h1></center><br/>");
-                    preview += Html.fromHtml("<h1>")   + "del 7 de octubre de 2016." +  Html.fromHtml("</h1></center><br/><br/>");
-                    preview += Html.fromHtml("<h1>")   + "Muchas gracias por preferirnos un placer atenderlo" +  Html.fromHtml("</h1></center><br/>");
-                    preview += Html.fromHtml("<h1>")   + "Mantenga el documento para reclamos." +  Html.fromHtml("</h1></center><br/>");
-                    break;
-            }
-            Intent intent2 = new Intent(PrinterService.BROADCAST_CLASS);
-            intent2.putExtra(PrinterService.BROADCAST_CLASS + "TO_PRINT", "true");
-            intent2.putExtra("bill_to_print", preview);
-            QuickContext.sendBroadcast(intent2);
-            Log.d("imprime", preview);
-
-            if (ptype == 1) {
-                handler = new Handler();
-                runnable = new Runnable() {
-                    public void run() {
-                        Intent intent = new Intent(QuickContext, MenuPrincipal.class);
-                        QuickContext.startActivity(intent);
-                    }
-                };
-            } else if (ptype == 3) {
-                handler = new Handler();
-                runnable = new Runnable() {
-                    public void run() {
-                        Intent intent = new Intent(QuickContext, MenuPrincipal.class);
-                        QuickContext.startActivity(intent);
-                    }
-                };
-            }
-
-            handler.removeCallbacks(runnable);
-            handler.postDelayed(runnable, 500);
-
-
-        }
         totalGrabado_= "";
         totalExento_= "";
         totalSubtotal_= "";
@@ -1662,10 +1680,10 @@ public class PrinterFunctions {
         totalNotas_ = "";
     }
 
-    private static void imprimirTotalizarVentaDirect(int type, sale invoices, Context QuickContext, int ptype) {
+    private static void imprimirTotalizarVentaDirect(int type, sale invoices, Context QuickContext, int ptype, String cantidadImpresiones) {
         try {
             if (invoices != null) {
-                PrinterFunctions.datosImprimirVentaDirectaTotal(type, invoices, QuickContext, ptype);
+                PrinterFunctions.datosImprimirVentaDirectaTotal(type, invoices, QuickContext, ptype, cantidadImpresiones);
             } else {
                 Toast.makeText(QuickContext, "Aun le falta terminar de hacer la factura" , Toast.LENGTH_SHORT).show();
             }
@@ -1675,7 +1693,7 @@ public class PrinterFunctions {
         }
     }
 
-    public static void imprimirFacturaVentaDirectaTotal (final sale saleB, final Context QuickContext, final int ptype){
+    public static void imprimirFacturaVentaDirectaTotal (final sale saleB, final Context QuickContext, final int ptype, final String cantidadImpresiones){
 
         AlertDialog dialogReturnSale = new AlertDialog.Builder(QuickContext)
                 .setTitle("Impresión")
@@ -1684,7 +1702,7 @@ public class PrinterFunctions {
 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        imprimirTotalizarVentaDirect(1, saleB, QuickContext, ptype);
+                        imprimirTotalizarVentaDirect(1, saleB, QuickContext, ptype,cantidadImpresiones);
                     }
                 }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
 

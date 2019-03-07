@@ -1,13 +1,19 @@
 package com.friendlypos.reimpresion.fragment;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.friendlypos.R;
@@ -90,11 +96,83 @@ public class ReimprimirResumenFragment extends BaseFragment {
                     tipoFacturacion = sale_actualizada.getFacturaDePreventa();
 
                     if (tipoFacturacion.equals("Distribucion")) {
-                        PrinterFunctions.imprimirFacturaDistrTotal(sale_actualizada, getActivity(), 1);
+
+                        LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
+                        View promptView = layoutInflater.inflate(R.layout.prompt_imprimir_recibos, null);
+
+                        final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+                        alertDialogBuilder.setView(promptView);
+                        final CheckBox checkbox = (CheckBox) promptView.findViewById(R.id.checkbox);
+
+                        final TextView label = (TextView) promptView.findViewById(R.id.promtClabelRecibosImp);
+                        label.setText("Escriba el número de impresiones requeridas");
+
+                        final EditText input = (EditText) promptView.findViewById(R.id.promtCtextRecibosImp);
+
+                        alertDialogBuilder.setCancelable(false);
+                        alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+                            public void onClick(DialogInterface dialog, int id) {
+
+                                String cantidadImpresiones = input.getText().toString();
+
+                        PrinterFunctions.imprimirFacturaDistrTotal(sale_actualizada, getActivity(), 1, cantidadImpresiones);
                         Toast.makeText(getActivity(), "imprimir Totalizar Dist", Toast.LENGTH_SHORT).show();
+
+                            }
+                        });
+                        alertDialogBuilder.setNegativeButton("Cancel",
+                                new DialogInterface.OnClickListener() {
+
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        dialog.cancel();
+                                    }
+                                });
+
+                        AlertDialog alertD = alertDialogBuilder.create();
+                        alertD.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+                        alertD.show();
+
+
                     } else if (tipoFacturacion.equals("VentaDirecta")) {
-                        PrinterFunctions.imprimirFacturaVentaDirectaTotal(sale_actualizada, getActivity(), 3);
+
+                        LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
+                        View promptView = layoutInflater.inflate(R.layout.prompt_imprimir_recibos, null);
+
+                        final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+                        alertDialogBuilder.setView(promptView);
+                        final CheckBox checkbox = (CheckBox) promptView.findViewById(R.id.checkbox);
+
+                        final TextView label = (TextView) promptView.findViewById(R.id.promtClabelRecibosImp);
+                        label.setText("Escriba el número de impresiones requeridas");
+
+                        final EditText input = (EditText) promptView.findViewById(R.id.promtCtextRecibosImp);
+
+                        alertDialogBuilder.setCancelable(false);
+                        alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+                            public void onClick(DialogInterface dialog, int id) {
+
+                                String cantidadImpresiones = input.getText().toString();
+
+
+                        PrinterFunctions.imprimirFacturaVentaDirectaTotal(sale_actualizada, getActivity(), 3, cantidadImpresiones);
                         Toast.makeText(getActivity(), "imprimir Totalizar VentaD", Toast.LENGTH_SHORT).show();
+
+                            }
+                        });
+                        alertDialogBuilder.setNegativeButton("Cancel",
+                                new DialogInterface.OnClickListener() {
+
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        dialog.cancel();
+                                    }
+                                });
+
+                        AlertDialog alertD = alertDialogBuilder.create();
+                        alertD.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+                        alertD.show();
+
                     }
                 }
 

@@ -201,30 +201,6 @@ public class RecibosAplicarFragment extends BaseFragment {
                                 alertD.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
                                 alertD.show();
 
-
-
-
-                              /*  AlertDialog dialogReturnSale = new AlertDialog.Builder(getActivity())
-                                        .setTitle("Impresión")
-                                        .setMessage("¿Desea realizar la impresión?")
-                                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                PrinterFunctions.imprimirFacturaRecibosTotal(recibo_actualizado, getActivity(), 1);
-                                                Toast.makeText(getActivity(), "imprimir liquidacion", Toast.LENGTH_SHORT).show();
-                                            }
-                                        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-
-                                                dialog.cancel();
-                                            }
-                                        }).create();
-                                dialogReturnSale.show();*/
-
-
                             }
                             else if(bluetoothStateChangeReceiver.isBluetoothAvailable() == false){
                                 Functions.CreateMessage(getActivity(), "Error", "La conexión del bluetooth ha fallado, favor revisar o conectar el dispositivo");

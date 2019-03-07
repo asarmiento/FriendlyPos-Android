@@ -11,7 +11,9 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.TextView;
@@ -249,9 +251,47 @@ public class VentaDirTotalizarFragment extends BaseFragment  {
                         try {
 
                             if(bluetoothStateChangeReceiver.isBluetoothAvailable()== true) {
-                                PrinterFunctions.imprimirFacturaVentaDirectaTotal(sale_actualizada, getActivity(), 3);
+
+
+                                LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
+                                View promptView = layoutInflater.inflate(R.layout.prompt_imprimir_recibos, null);
+
+                                final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+                                alertDialogBuilder.setView(promptView);
+                                final CheckBox checkbox = (CheckBox) promptView.findViewById(R.id.checkbox);
+
+                                final TextView label = (TextView) promptView.findViewById(R.id.promtClabelRecibosImp);
+                                label.setText("Escriba el número de impresiones requeridas");
+
+                                final EditText input = (EditText) promptView.findViewById(R.id.promtCtextRecibosImp);
+
+                                alertDialogBuilder.setCancelable(false);
+                                alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+                                    public void onClick(DialogInterface dialog, int id) {
+
+                                        String cantidadImpresiones = input.getText().toString();
+
+                                PrinterFunctions.imprimirFacturaVentaDirectaTotal(sale_actualizada, getActivity(), 3, cantidadImpresiones);
                                 clearAll();
                                 Log.d("applydoneImp", apply_done +"");
+
+                                    }
+                                });
+                                alertDialogBuilder.setNegativeButton("Cancel",
+                                        new DialogInterface.OnClickListener() {
+
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                dialog.cancel();
+                                            }
+                                        });
+
+                                AlertDialog alertD = alertDialogBuilder.create();
+                                alertD.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+                                alertD.show();
+
+
+
                             }
                             else if(bluetoothStateChangeReceiver.isBluetoothAvailable() == false){
                                 Functions.CreateMessage(getActivity(), "Error", "La conexión del bluetooth ha fallado, favor revisar o conectar el dispositivo");
