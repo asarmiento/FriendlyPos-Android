@@ -112,7 +112,7 @@ public class TotalizeHelperPreventa {
 
         Double precio = Double.valueOf(currentPivot.getPrice());
         Double descuento = Double.valueOf(currentPivot.getDiscount());
-
+        Double subGrabDesc = 0.0;
 
         if (tipo.equals("1")) {
             subGrabConImp = subGrab + (precio) * (cantidad);
@@ -122,6 +122,10 @@ public class TotalizeHelperPreventa {
             subGrabm = subGrabm + ((precio) * (cantidad) - ((descuento / 100) * (precio) * (cantidad)));
             discountBill += ((descuento / 100) * subGrab);
             Log.d("discountBillGr", discountBill + "");
+
+            subGrabDesc = subGrab - discountBill;
+            Log.d("subGrabDesc", subGrabDesc + "");
+
         }
         else {
             subExen = subExen + ((precio) * (cantidad));
@@ -134,7 +138,11 @@ public class TotalizeHelperPreventa {
 
         if (subGrab > 0) {
           //  IvaT = (subGrabm - (subGrabm * (clienteFixedDescuento / 100.00))) * (IVA / 100);
-            IvaT = subGrabConImp - subGrab;
+         //   IvaT = subGrabConImp - subGrab;
+
+            IvaT = subGrabDesc * 0.13;
+            Log.d("IvaT", IvaT + "");
+
         }
         else {
             IvaT = 0.0;
