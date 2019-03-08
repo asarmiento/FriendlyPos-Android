@@ -126,7 +126,7 @@ public class RecibosAplicarFragment extends BaseFragment {
         applyBill = (Button) rootView.findViewById(R.id.aplicarRecibo);
         printBill = (Button) rootView.findViewById(R.id.imprimirRecibo);
         text = (HtmlTextView) rootView.findViewById(R.id.html_textRecibos);
-        txtFecha = (EditText) rootView.findViewById(R.id.txtFecha);
+      /*  txtFecha = (EditText) rootView.findViewById(R.id.txtFecha);
         txtFecha.setText(getCurrentDate());
         txtFecha.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v)
@@ -134,7 +134,7 @@ public class RecibosAplicarFragment extends BaseFragment {
                 showDatePickerDialog();
             }
         });
-
+*/
         applyBill.setOnClickListener(
                 new View.OnClickListener() {
 
@@ -372,7 +372,7 @@ public class RecibosAplicarFragment extends BaseFragment {
 
                     recibos recibo_actualizado = realm2.where(recibos.class).equalTo("invoice_id", facturaId1).findFirst();
                  //   recibo_actualizado.setMostrar(0);
-                    recibo_actualizado.setDate(fecha);
+                    recibo_actualizado.setDate(Functions.getDate());
                     recibo_actualizado.setObservaciones(observ);
 
                     realm2.insertOrUpdate(recibo_actualizado);
@@ -491,7 +491,7 @@ public class RecibosAplicarFragment extends BaseFragment {
 
     protected void aplicarFactura() {
 
-        fecha = txtFecha.getText().toString();
+      //  fecha = txtFecha.getText().toString();
         observaciones.getText().toString();
 
         if(!observaciones.getText().toString().isEmpty()){
@@ -531,7 +531,7 @@ public class RecibosAplicarFragment extends BaseFragment {
 
 
 
-
+/*
 
     public static  class DatePickerFragment extends DialogFragment {
 
@@ -583,7 +583,7 @@ public class RecibosAplicarFragment extends BaseFragment {
             }
         });
         newFragment.show(getFragmentManager(), "datePicker");
-    }
+    }*/
 /*
     public void actualizarRecibosDetalles() {
 
