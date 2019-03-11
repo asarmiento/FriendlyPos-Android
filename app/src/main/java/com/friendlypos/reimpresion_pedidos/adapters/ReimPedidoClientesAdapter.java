@@ -63,15 +63,15 @@ public class ReimPedidoClientesAdapter extends RecyclerView.Adapter<ReimPedidoCl
         this.activity = activity;
         this.QuickContext = context;
 
-        bluetoothStateChangeReceiver = new BluetoothStateChangeReceiver();
-        bluetoothStateChangeReceiver.setBluetoothStateChangeReceiver(QuickContext);
+
     }
 
     @Override
     public CharacterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
             .inflate(R.layout.lista_reimpedido_clientes, parent, false);
-
+        bluetoothStateChangeReceiver = new BluetoothStateChangeReceiver();
+        bluetoothStateChangeReceiver.setBluetoothStateChangeReceiver(QuickContext);
         return new CharacterViewHolder(view);
     }
 

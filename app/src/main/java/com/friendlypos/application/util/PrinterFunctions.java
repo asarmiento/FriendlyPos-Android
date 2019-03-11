@@ -43,6 +43,8 @@ public class PrinterFunctions {
     private static double printLiqContadoTotal = 0.0;
     private static double printLiqCreditoTotal = 0.0;
     private static double printLiqRecibosTotal = 0.0;
+    private static double printRecibosTotal = 0.0;
+
     static String totalGrabado= "";
     static String totalExento= "";
     static String totalSubtotal= "";
@@ -513,6 +515,9 @@ public class PrinterFunctions {
 
     public static void datosImprimirRecibosTotal(int type, final recibos sale, final Context QuickContext, int ptype, String cantidadImpresiones) {
 
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String currentDateandTime = sdf.format(new Date());
+
         int impresiones1 = Integer.parseInt(cantidadImpresiones);
 
         for(int i =1; i<=impresiones1; i++){
@@ -541,7 +546,7 @@ public class PrinterFunctions {
 
         String nombreCliente = clientes.getFantasyName();
         totalNotasRecibos = sale.getObservaciones();
-        final String fecha = sale.getDate();
+        final String fecha = /*sale.getDate()*/currentDateandTime;
         Double porPagar = sale.getPorPagar();
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(QuickContext);
         String prefList = sharedPreferences.getString("pref_selec_impresora","Impresora Zebra");
@@ -592,6 +597,7 @@ public class PrinterFunctions {
 
                     getPrintRecibosTotal(sale.getCustomer_id()) +
                     "\r\n" +
+                    "\r\n\n" + "Total: " +  Functions.doubleToString1(printRecibosTotal) + "\r\n" +
                     "\r\n\n" + "Saldo pendiente: " + porPagar + "\r\n" +
                     "\r\n\n" + "Notas: " + totalNotasRecibos + "\r\n" +
                     "\r\n\n" + "Muchas Gracias por preferirnos, un placer atenderlo\r\n" +
@@ -619,6 +625,9 @@ public class PrinterFunctions {
                     preview += Html.fromHtml("<h1>") +  "Numeracion     Monto Total     Monto Pagado" + Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>") +  "------------------------------------------------" + Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>") +   getPrintRecibosTotal(sale.getCustomer_id()) + Html.fromHtml("</h1></center><br/>");
+
+                    preview += Html.fromHtml("<h1>") +  "Total: " +  Functions.doubleToString1(printRecibosTotal) + Html.fromHtml("</h1></center><br/><br/><br/>");
+
                     preview += Html.fromHtml("<h1>") +  "Saldo pendiente: " + porPagar + Html.fromHtml("</h1></center><br/><br/><br/>");
             preview += Html.fromHtml("<h1>") +  "Notas: " + totalNotasRecibos + Html.fromHtml("</h1></center><br/><br/><br/>");
                     preview += Html.fromHtml("<h1>")   + "Muchas gracias por preferirnos un placer atenderlo" +  Html.fromHtml("</h1></center><br/>");
@@ -671,7 +680,7 @@ public class PrinterFunctions {
         String send;
 
         send = " ";
-
+        printRecibosTotal= 0.0;
         Realm realm1 = Realm.getDefaultInstance();
         RealmResults<recibos> result = realm1.where(recibos.class).equalTo("customer_id", idVenta).equalTo("abonado", 1).equalTo("mostrar",1).findAll();
 
@@ -694,6 +703,7 @@ public class PrinterFunctions {
                // String restanteS = String.format("%,.2f", restante);
 
                 send += String.format("%-9s  %9s  %9s", numeracion, Functions.doubleToString1(total), Functions.doubleToString1(pagado) ) + "\r\n";
+                printRecibosTotal = printRecibosTotal + pagado;
                 send += "------------------------------------------------\r\n";
 
                 Log.d("FACTPRODTODFAC", send + "");
@@ -2133,6 +2143,7 @@ public class PrinterFunctions {
             intent2.putExtra(PrinterService.BROADCAST_CLASS + "TO_PRINT", "true");
             intent2.putExtra("bill_to_print", bill);
             QuickContext.sendBroadcast(intent2);
+            Log.d("imprimeLiquidacion", bill);
         }
 
         else if(prefList.equals("2")){
@@ -2415,7 +2426,7 @@ public class PrinterFunctions {
         return send;
     }
 
-
+/*
     private static String getPrintProductRecibosLiq() {
         String send = "";
 
@@ -2466,7 +2477,10 @@ public class PrinterFunctions {
                 double factTotal1 = salesList1.get(i).getListaRecibos().get(0).getMontoCanceladoPorFactura();
                 Log.d("salesList11", salesList1.get(i).getListaRecibos() + "");
 
-                Log.d("factTotal1", factTotal1 + "");*/
+                Log.d("factTotal1", factTotal1 + "");
+
+                // FIN COMENT
+
                 if (montoPagado == 0.0) {
                     Log.d("es0", "es 0");
                 } else {
@@ -2478,6 +2492,43 @@ public class PrinterFunctions {
 
             }
         }
+        return send;
+    }*/
+
+    private static String getPrintProductRecibosLiq() {
+        String send = "";
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String currentDateandTime = sdf.format(new Date());
+
+        Realm realm = Realm.getDefaultInstance();
+        RealmResults<recibos> result = realm.where(recibos.class).equalTo("date", currentDateandTime).findAll();
+
+        if (result.isEmpty()) {
+            send = "No hay facturas emitidas";
+        } else {
+            printLiqRecibosTotal= 0.0;
+            for (int i = 0; i < result.size(); i++) {
+                List<recibos> salesList1 = realm.where(recibos.class).equalTo("date", currentDateandTime).findAll();
+                Log.d("salesList1", salesList1 + "");
+
+                String numeracion = salesList1.get(i).getNumeration();
+                String fecha = salesList1.get(i).getDate();
+                //String totalS = String.format("%,.2f", total);
+
+                double pagado = salesList1.get(i).getMontoCanceladoPorFactura();
+                // String pagadoS = String.format("%,.2f", pagado);
+                double restante = salesList1.get(i).getMontoCancelado();
+                // String restanteS = String.format("%,.2f", restante);
+
+                send += String.format("%-9s  %9s  %9s", numeracion, fecha, Functions.doubleToString1(pagado) ) + "\r\n";
+                printLiqRecibosTotal = printLiqRecibosTotal + pagado;
+                send += "------------------------------------------------\r\n";
+                Log.d("LiqRecibos", send + "");
+                }
+
+            }
+
         return send;
     }
 
