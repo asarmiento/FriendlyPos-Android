@@ -1,20 +1,35 @@
 package com.friendlypos.reenvio_email.adapters;
 
+import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.friendlypos.R;
+import com.friendlypos.app.broadcastreceiver.NetworkStateChangeReceiver;
+import com.friendlypos.distribucion.modelo.Pivot;
+import com.friendlypos.login.util.SessionPrefes;
 import com.friendlypos.reenvio_email.activity.EmailActivity;
 import com.friendlypos.reenvio_email.fragment.EmailSelecFacturaFragment;
+import com.friendlypos.reenvio_email.modelo.EmailResponse;
+import com.friendlypos.reenvio_email.modelo.email_Id;
 import com.friendlypos.reenvio_email.modelo.invoices;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static android.content.ContentValues.TAG;
 
 public class EmailFacturasAdapter extends RecyclerView.Adapter<EmailFacturasAdapter.CharacterViewHolder> {
 
@@ -25,12 +40,14 @@ public class EmailFacturasAdapter extends RecyclerView.Adapter<EmailFacturasAdap
     Double amount_inventario = 0.0;
     int idInvetarioSelec;
     int nextId;
+    String token;
     private EmailSelecFacturaFragment fragment;
-
+    private NetworkStateChangeReceiver networkStateChangeReceiver;
     public EmailFacturasAdapter(EmailActivity activity, EmailSelecFacturaFragment fragment, List<invoices> productosList) {
         this.productosList = productosList;
         this.activity = activity;
         this.fragment = fragment;
+        networkStateChangeReceiver = new NetworkStateChangeReceiver();
     }
 
     public EmailFacturasAdapter() {
@@ -96,6 +113,99 @@ public class EmailFacturasAdapter extends RecyclerView.Adapter<EmailFacturasAdap
                 public void onClick(View view) {
 
 
+
+                    AlertDialog dialogReturnSale = new AlertDialog.Builder(activity)
+                            .setTitle("Reenviar Email")
+                            .setMessage("¿Desea reenviar un email?")
+                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    int pos = getAdapterPosition();
+                                    // Updating old as well as new positions
+                                    notifyItemChanged(selected_position1);
+                                    selected_position1 = getAdapterPosition();
+                                    notifyItemChanged(selected_position1);
+
+                                    final invoices clickedDataItem = productosList.get(pos);
+                                    final String facturaId = clickedDataItem.getId();
+                                    Toast.makeText(activity, "You clicked " + facturaId, Toast.LENGTH_SHORT).show();
+
+                                    token = "Bearer " + SessionPrefes.get(activity).getToken();
+                                    Log.d("tokenC", token + " ");
+
+              /*      if (isOnline()) {
+                        Log.d("factura1", idCliente + " ");
+
+                        email_Id obj = new email_Id(idCliente);
+                        Log.d("obj", obj + " ");
+                        mAPIService.savePostEmail(obj, token).enqueue(new Callback<EmailResponse>() {
+
+                            public void onResponse(Call<EmailResponse> call, Response<EmailResponse> response) {
+                                mContentsArray.clear();
+
+
+                                if(response.isSuccessful()) {
+
+                                    mContentsArray.addAll(response.body().getFacturas());
+
+                                    try {
+
+
+                                        // Work with Realm
+                                        realm.beginTransaction();
+                                        realm.copyToRealmOrUpdate(mContentsArray);
+                                        realm.commitTransaction();
+                                        //realm.close();
+                                    }
+                                    finally {
+                                        realm.close();
+                                    }
+                                    Log.d("GuardarFacturas", mContentsArray.toString());
+
+                              /*  Log.d("respuestaFactura",response.body().toString());
+                                codigo = response.code();
+                                codigoS = response.body().getCustomer();
+                                mensajeS = response.body().getFacturas();
+                                    //  resultS= String.valueOf(response.body().isResult());
+
+                                }
+                                else{
+
+                                }
+                                progresRing.dismiss();
+                            }
+
+
+                            @Override
+                            public void onFailure(Call<EmailResponse> call, Throwable t) {
+                                progresRing.dismiss();
+                                Log.e(TAG, "Unable to submit post to API.");
+                            }
+                        });}
+                    else{
+                        Toast.makeText(activity, "Error, por favor revisar conexión de Internet", Toast.LENGTH_SHORT).show();
+                    }
+
+                    */
+
+                                }
+                            }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                    dialog.cancel();
+                                }
+                            }).create();
+                    dialogReturnSale.show();
+
+
+
+
+
+
+
                 }
             });
         }
@@ -107,5 +217,7 @@ public class EmailFacturasAdapter extends RecyclerView.Adapter<EmailFacturasAdap
         super.onAttachedToRecyclerView(recyclerView);
     }
 
-
+    private boolean isOnline() {
+        return networkStateChangeReceiver.isNetworkAvailable(activity);
+    }
 }
