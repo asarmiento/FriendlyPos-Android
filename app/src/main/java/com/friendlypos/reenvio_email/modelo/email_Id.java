@@ -3,18 +3,18 @@ package com.friendlypos.reenvio_email.modelo;
 
 public class email_Id {
 
-    private String costumer;
+    private String customer;
 
-    public email_Id(String costumer) {
-        this.costumer = costumer;
+    public email_Id(String customer) {
+        this.customer = customer;
     }
 
     public String getCostumer() {
-        return costumer;
+        return customer;
     }
 
-    public void setCostumer(String costumer) {
-        this.costumer = costumer;
+    public void setCostumer(String customer) {
+        this.customer = customer;
     }
 
 
@@ -22,7 +22,7 @@ public class email_Id {
     @Override
     public String toString() {
         return "email_Id{" +
-                "costumer='" + costumer + '\'' +
+                "customer='" + customer + '\'' +
                 '}';
     }
 }

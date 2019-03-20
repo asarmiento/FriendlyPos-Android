@@ -14,25 +14,33 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.friendlypos.R;
+import com.friendlypos.app.broadcastreceiver.NetworkStateChangeReceiver;
 import com.friendlypos.application.datamanager.BaseManager;
 import com.friendlypos.application.interfaces.RequestInterface;
-import com.friendlypos.distribucion.util.GPSTracker;
-import com.friendlypos.login.modelo.User;
+import com.friendlypos.distribucion.modelo.EnviarFactura;
+import com.friendlypos.distribucion.modelo.Inventario;
+import com.friendlypos.distribucion.modelo.invoice;
 import com.friendlypos.login.modelo.UserError;
-import com.friendlypos.login.modelo.UserResponse;
 import com.friendlypos.login.util.SessionPrefes;
+import com.friendlypos.principal.helpers.DescargasHelper;
 import com.friendlypos.principal.modelo.Clientes;
 import com.friendlypos.reenvio_email.activity.EmailActivity;
 import com.friendlypos.reenvio_email.modelo.EmailResponse;
+import com.friendlypos.reenvio_email.modelo.customer;
 import com.friendlypos.reenvio_email.modelo.email_Id;
+import com.friendlypos.reenvio_email.modelo.invoices;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.realm.Realm;
+import io.realm.RealmResults;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static android.content.ContentValues.TAG;
 
 public class EmailClientesAdapter extends RecyclerView.Adapter<EmailClientesAdapter.CharacterViewHolder> {
     private EmailActivity activity;
@@ -41,13 +49,28 @@ public class EmailClientesAdapter extends RecyclerView.Adapter<EmailClientesAdap
     private int selected_position = -1;
     private static Context QuickContext = null;
     String idCliente;
-    private RequestInterface api;
+    private RequestInterface mAPIService;
     String token;
+    private NetworkStateChangeReceiver networkStateChangeReceiver;
+    int codigo;
+    public String respuestaServer;
+    customer codigoS;
+    List<invoices> mensajeS;
+    String resultS;
+    int codigoServer;
+    ArrayList<invoices> mContentsArray;
+    ArrayList<customer> mContentsArray2;
+    private Realm realm;
+    int tabCliente;
 
     public EmailClientesAdapter(Context context, EmailActivity activity, List<Clientes> contentList) {
         this.contentList = contentList;
         this.activity = activity;
         this.QuickContext = context;
+        networkStateChangeReceiver = new NetworkStateChangeReceiver();
+        mAPIService = BaseManager.getApi();
+        mContentsArray = new ArrayList<>();
+        mContentsArray2 = new ArrayList<>();
     }
 
     @Override
@@ -76,6 +99,15 @@ public class EmailClientesAdapter extends RecyclerView.Adapter<EmailClientesAdap
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                realm = Realm.getDefaultInstance();
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        RealmResults<invoices> result = realm.where(invoices.class).findAll();
+                        result.deleteAllFromRealm();
+                    }
+                });
+
                 token = "Bearer " + SessionPrefes.get(QuickContext).getToken();
                 Log.d("tokenC", token + " ");
 
@@ -111,9 +143,73 @@ public class EmailClientesAdapter extends RecyclerView.Adapter<EmailClientesAdap
 
                 Toast.makeText(QuickContext, "idCliente "+ idCliente, Toast.LENGTH_LONG).show();
 
-                api = BaseManager.getApi();
-                Call<EmailResponse> call = api.savePostEmail(idCliente, token);
+                tabCliente = 1;
+                activity.setSelecClienteTabEmail(tabCliente);
 
+                if (isOnline()) {
+                    Log.d("factura1", idCliente + " ");
+
+                    email_Id obj = new email_Id(idCliente);
+                    Log.d("obj", obj + " ");
+                    mAPIService.savePostEmail(obj, token).enqueue(new Callback<EmailResponse>() {
+
+                        public void onResponse(Call<EmailResponse> call, Response<EmailResponse> response) {
+                            mContentsArray.clear();
+
+
+                            if(response.isSuccessful()) {
+
+                                mContentsArray.addAll(response.body().getFacturas());
+
+                                try {
+
+
+                                    // Work with Realm
+                                    realm.beginTransaction();
+                                    realm.copyToRealmOrUpdate(mContentsArray);
+                                    realm.commitTransaction();
+                                    //realm.close();
+                                }
+                                finally {
+                                    realm.close();
+                                }
+                                Log.d("GuardarFacturas", mContentsArray.toString());
+
+                              /*  Log.d("respuestaFactura",response.body().toString());
+                                codigo = response.code();
+                                codigoS = response.body().getCustomer();
+                                mensajeS = response.body().getFacturas();*/
+                              //  resultS= String.valueOf(response.body().isResult());
+
+                            }
+                            else{
+                           /*     RealmResults<invoices> results = realm.where(invoices.class).findAll();
+                                if (results.isEmpty()){
+                                    Toast.makeText(QuickContext, "Error de descarga, contacte al administrador", Toast.LENGTH_SHORT).show();
+                                }else{
+                                    mContentsArray.addAll(results);
+                                }*/
+                            }
+                            progresRing.dismiss();
+                        }
+
+
+                        @Override
+                        public void onFailure(Call<EmailResponse> call, Throwable t) {
+                            progresRing.dismiss();
+                            Log.e(TAG, "Unable to submit post to API.");
+                        }
+                    });}
+                else{
+                    Toast.makeText(activity, "Error, por favor revisar conexión de Internet", Toast.LENGTH_SHORT).show();
+                }
+
+
+/*
+                 email_Id obj = new email_Id(idCliente);
+                    Log.d("obj", obj + " ");
+
+                Call<EmailResponse> call = mAPIService.savePostEmail(obj, token);
 
                 call.enqueue(new Callback<EmailResponse>() {
 
@@ -149,10 +245,10 @@ public class EmailClientesAdapter extends RecyclerView.Adapter<EmailClientesAdap
                             Log.d("EnviarEmail", response.message() + "");
                             Log.d("EnviarEmail", response.code() + "");
                         }
-                    /*    session.guardarDatosUsuarioas(userId, password);
+                        session.guardarDatosUsuarioas(userId, password);
                         download1.descargarUsuarios(context);
                         entrarMenuPrincipal();
-*/
+
                         //showAppointmentsScreen();
                     }
 
@@ -162,7 +258,7 @@ public class EmailClientesAdapter extends RecyclerView.Adapter<EmailClientesAdap
                         showLoginError(t.getMessage());
                     }
                 });
-
+*/
 
 
             }
@@ -189,7 +285,9 @@ public class EmailClientesAdapter extends RecyclerView.Adapter<EmailClientesAdap
         contentList.addAll(countryModels);
         notifyDataSetChanged();
     }
-
+    private boolean isOnline() {
+        return networkStateChangeReceiver.isNetworkAvailable(QuickContext);
+    }
 
     public static class CharacterViewHolder extends RecyclerView.ViewHolder {
         public CardView cardView;

@@ -45,7 +45,7 @@ public interface RequestInterface {
     Call<UserResponse> loginUser(@Body User user);
 
     @POST("api/lista-facturas-lectronicas")
-    Call<EmailResponse> savePostEmail(String customer, @Header("Authorization") String token);
+    Call<EmailResponse> savePostEmail(@Body email_Id customer, @Header("Authorization") String token);
 
     @GET("api/donwload-info-business")
     Call<ClientesResponse> getJSON(@Header("Authorization") String token);

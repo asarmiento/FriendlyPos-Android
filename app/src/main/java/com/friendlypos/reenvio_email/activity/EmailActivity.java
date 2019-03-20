@@ -13,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
+import android.view.WindowManager;
 
 import com.friendlypos.R;
 import com.friendlypos.application.bluetooth.PrinterService;
@@ -27,6 +28,7 @@ import com.friendlypos.distribucion.util.Adapter;
 import com.friendlypos.principal.activity.BluetoothActivity;
 import com.friendlypos.principal.activity.MenuPrincipal;
 import com.friendlypos.reenvio_email.fragment.EmailSelecClienteFragment;
+import com.friendlypos.reenvio_email.fragment.EmailSelecFacturaFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,9 +40,19 @@ public class EmailActivity extends BluetoothActivity {
     private Toolbar toolbar;
     private TabLayout tabLayout;
     private Realm realm;
+    private int selecClienteTabEmail;
+
+    public int getSelecClienteTabEmail() {
+        return selecClienteTabEmail;
+    }
+
+    public void setSelecClienteTabEmail(int selecClienteTabEmail) {
+        this.selecClienteTabEmail = selecClienteTabEmail;
+    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.activity_email);
         ButterKnife.bind(this);
 
@@ -64,7 +76,7 @@ public class EmailActivity extends BluetoothActivity {
 
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-            /*    int tabCliente = getSelecClienteTab();
+                int tabCliente = getSelecClienteTabEmail();
                 if (tabCliente == 0 && tab.getPosition() != 0) {
 
                     Functions.CreateMessage(EmailActivity.this, "Email", "Seleccione una factura.");
@@ -79,7 +91,7 @@ public class EmailActivity extends BluetoothActivity {
                             }, 100);
                 }
                 else {
-                }*/
+                }
             }
 
             @Override
@@ -113,12 +125,12 @@ public class EmailActivity extends BluetoothActivity {
         Adapter adapter = new Adapter(getSupportFragmentManager());
         final List<BaseFragment> list = new ArrayList<>();
         list.add(new EmailSelecClienteFragment());
-       /* list.add(new DistResumenFragment());
-        list.add(new DistSelecProductoFragment());
+       list.add(new EmailSelecFacturaFragment());
+      /*   list.add(new DistSelecProductoFragment());
         list.add(new DistTotalizarFragment());*/
         adapter.addFragment(list.get(0), "Seleccionar Cliente");
-     /*   adapter.addFragment(list.get(1), "Resumen");
-        adapter.addFragment(list.get(2), "Seleccionar productos");
+        adapter.addFragment(list.get(1), "Facturas");
+     /*      adapter.addFragment(list.get(2), "Seleccionar productos");
         adapter.addFragment(list.get(3), "Totalizar");*/
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {

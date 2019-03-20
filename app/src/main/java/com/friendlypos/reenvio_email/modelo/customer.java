@@ -1,8 +1,9 @@
 package com.friendlypos.reenvio_email.modelo;
 
+import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
-public class customer {
+public class customer extends RealmObject {
 
     /*  "id": 8,
               "card": "",
