@@ -26,6 +26,7 @@
     <string name="products">Productos</string>
     <string name="clients">Clientes</string>
     <string name="recibos">Recibos</string>
+    <string name="email">Reenviar Email</string>
     <string name="directsale">Venta Directa</string>
     <string name="distributor">Distribución</string>
     <string name="presale">Preventa</string>
@@ -198,7 +199,6 @@
         <item>Factura Electrónica</item>
 
     </string-array>
-
 
 
     <string-array name="array_spinnerIdType1">

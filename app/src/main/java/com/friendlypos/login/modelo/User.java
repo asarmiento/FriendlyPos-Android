@@ -84,4 +84,17 @@ public class User{
         this.password = password;
     }{
 }
+
+    @Override
+    public String toString() {
+        return "UserEntrar{" +
+                "id='" + id + '\'' +
+                ", employee_id='" + employee_id + '\'' +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", tmp_password='" + tmp_password + '\'' +
+                ", code='" + code + '\'' +
+                ", email='" + email + '\'' +
+                '}';
+    }
 }

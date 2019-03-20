@@ -249,7 +249,9 @@ public class LoginActivity extends AppCompatActivity {
 
                     // Guardar afiliado en preferencias
                     session.guardarDatosUsuario(response.body());
+                    Log.d("UserEntrar", response.body().getToken_type()+"");
                     session.guardarDatosUsuarioas(userId, password);
+                    Log.d("UserEntrar1", userId + " " + password+"");
                     download1.descargarUsuarios(context);
                     entrarMenuPrincipal();
 

@@ -65,6 +65,7 @@ import com.friendlypos.principal.modelo.EnviarClienteNuevo;
 import com.friendlypos.principal.modelo.EnviarProductoDevuelto;
 import com.friendlypos.principal.modelo.customer_location;
 import com.friendlypos.principal.modelo.datosTotales;
+import com.friendlypos.reenvio_email.activity.EmailActivity;
 import com.friendlypos.reimpresion.activity.ReimprimirActivity;
 import com.friendlypos.reimpresion_pedidos.activity.ReimprimirPedidosActivity;
 import com.friendlypos.ventadirecta.activity.VentaDirectaActivity;
@@ -95,6 +96,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
     private FloatingActionButton but2 = null;
     private FloatingActionButton but3 = null;
     private FloatingActionButton but4 = null;
+    private FloatingActionButton but5 = null;
     @Bind(R.id.clickClientes)
     LinearLayout clickClientes;
 
@@ -260,6 +262,19 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                    Intent intent = new Intent(getApplication(), RecibosActivity.class);
                     startActivity(intent);
                   // Toast.makeText(MenuPrincipal.this, "Botón no disponible", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        but5 = (FloatingActionButton) findViewById(R.id.nav_email);
+
+        but5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!properties.getBlockedApp()) {
+                    Intent intent = new Intent(getApplication(), EmailActivity.class);
+                    startActivity(intent);
+                    // Toast.makeText(MenuPrincipal.this, "Botón no disponible", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -1127,6 +1142,12 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                 startActivity(graf);
                 finish();
                 break;
+            case R.id.clickEmail:
+                Intent email;
+                email = new Intent(MenuPrincipal.this, EmailActivity.class);
+                startActivity(email);
+                finish();
+                break;
         }
     }
     else{
@@ -1197,6 +1218,12 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                     finish();
                     break;
 
+                case R.id.clickEmail:
+                    Intent email;
+                    email = new Intent(MenuPrincipal.this, EmailActivity.class);
+                    startActivity(email);
+                    finish();
+                    break;
             }
         }
     }

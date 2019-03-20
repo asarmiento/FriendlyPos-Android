@@ -16,7 +16,6 @@ public class Marcas extends RealmObject {
 
     @PrimaryKey
     String id;
-
      String name;
 
     public String getId() {

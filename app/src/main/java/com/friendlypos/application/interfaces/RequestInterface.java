@@ -29,9 +29,12 @@ import com.friendlypos.principal.modelo.EnviarProductoDevuelto;
 import com.friendlypos.principal.modelo.ProductosResponse;
 import com.friendlypos.principal.modelo.SysconfResponse;
 import com.friendlypos.principal.modelo.customer_location;
+import com.friendlypos.reenvio_email.modelo.EmailResponse;
+import com.friendlypos.reenvio_email.modelo.email_Id;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.Field;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
@@ -40,6 +43,9 @@ public interface RequestInterface {
 
     @POST("api/login")
     Call<UserResponse> loginUser(@Body User user);
+
+    @POST("api/lista-facturas-lectronicas")
+    Call<EmailResponse> savePostEmail(String customer, @Header("Authorization") String token);
 
     @GET("api/donwload-info-business")
     Call<ClientesResponse> getJSON(@Header("Authorization") String token);
@@ -115,6 +121,7 @@ public interface RequestInterface {
     // TODO DEFINIR CUAL ES EL KEY PARA ENVIAR (KEY, VALUE)
     @POST("api/upload-inventory-products")
     Call<Inventario> savePostProductoDevuelto(@Body EnviarProductoDevuelto clienteNuevo, @Header("Authorization") String token);
+
 
 
 }

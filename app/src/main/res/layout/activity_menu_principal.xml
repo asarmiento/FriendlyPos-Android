@@ -455,6 +455,48 @@
 
                 </LinearLayout>
 
+
+
+                <LinearLayout
+                    android:id="@+id/clickEmail"
+                    android:onClick="onClickGo"
+                    android:background="@color/divider"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="75dp"
+                        android:background="@color/background"
+                        >
+
+                        <ImageView
+                            android:tint="@color/icons"
+                            android:padding="10dp"
+                            android:src="@mipmap/ic_print"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:text="Home"
+                            android:id="@+id/imageView17" />
+
+                        <TextView
+                            android:id="@+id/textView17"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="Reenviar Email"
+                            android:textColor="@color/icons"
+                            android:layout_centerVertical="true"
+                            android:layout_toRightOf="@+id/imageView17"
+                            android:layout_toEndOf="@+id/imageView17"
+                            android:layout_marginLeft="17dp"
+                            android:layout_marginStart="17dp" />
+                    </RelativeLayout>
+
+                </LinearLayout>
+
                 <LinearLayout
                     android:id="@+id/clickConfig"
                     android:onClick="ClickNavigation"
