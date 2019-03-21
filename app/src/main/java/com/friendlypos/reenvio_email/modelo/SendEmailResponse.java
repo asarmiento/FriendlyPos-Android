@@ -4,7 +4,7 @@ public class SendEmailResponse {
 
     private boolean result;
     private String code;
-    private String message;
+    private String messages;
 
     public boolean isResult() {
         return result;
@@ -23,10 +23,10 @@ public class SendEmailResponse {
     }
 
     public String getMessage() {
-        return message;
+        return messages;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setMessage(String messages) {
+        this.messages = messages;
     }
 }

@@ -14,13 +14,18 @@ import android.widget.Toast;
 
 import com.friendlypos.R;
 import com.friendlypos.app.broadcastreceiver.NetworkStateChangeReceiver;
+import com.friendlypos.application.datamanager.BaseManager;
+import com.friendlypos.application.interfaces.RequestInterface;
 import com.friendlypos.distribucion.modelo.Pivot;
 import com.friendlypos.login.util.SessionPrefes;
+import com.friendlypos.principal.activity.MenuPrincipal;
 import com.friendlypos.reenvio_email.activity.EmailActivity;
 import com.friendlypos.reenvio_email.fragment.EmailSelecFacturaFragment;
 import com.friendlypos.reenvio_email.modelo.EmailResponse;
+import com.friendlypos.reenvio_email.modelo.SendEmailResponse;
 import com.friendlypos.reenvio_email.modelo.email_Id;
 import com.friendlypos.reenvio_email.modelo.invoices;
+import com.friendlypos.reenvio_email.modelo.send_email_id;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,11 +48,17 @@ public class EmailFacturasAdapter extends RecyclerView.Adapter<EmailFacturasAdap
     String token;
     private EmailSelecFacturaFragment fragment;
     private NetworkStateChangeReceiver networkStateChangeReceiver;
+    private RequestInterface mAPIService;
+    String codigoS;
+    String mensajeS;
+    String resultS;
+    int codigo;
     public EmailFacturasAdapter(EmailActivity activity, EmailSelecFacturaFragment fragment, List<invoices> productosList) {
         this.productosList = productosList;
         this.activity = activity;
         this.fragment = fragment;
         networkStateChangeReceiver = new NetworkStateChangeReceiver();
+        mAPIService = BaseManager.getApi();
     }
 
     public EmailFacturasAdapter() {
@@ -134,52 +145,38 @@ public class EmailFacturasAdapter extends RecyclerView.Adapter<EmailFacturasAdap
                                     token = "Bearer " + SessionPrefes.get(activity).getToken();
                                     Log.d("tokenC", token + " ");
 
-              /*      if (isOnline()) {
-                        Log.d("factura1", idCliente + " ");
 
-                        email_Id obj = new email_Id(idCliente);
+                       if (isOnline()) {
+                        Log.d("factura1", facturaId + " ");
+
+                        send_email_id obj = new send_email_id(facturaId);
                         Log.d("obj", obj + " ");
-                        mAPIService.savePostEmail(obj, token).enqueue(new Callback<EmailResponse>() {
+                        mAPIService.savePostSendEmail(obj, token).enqueue(new Callback<SendEmailResponse>() {
 
-                            public void onResponse(Call<EmailResponse> call, Response<EmailResponse> response) {
-                                mContentsArray.clear();
-
+                            public void onResponse(Call<SendEmailResponse> call, Response<SendEmailResponse> response) {
 
                                 if(response.isSuccessful()) {
 
-                                    mContentsArray.addAll(response.body().getFacturas());
-
-                                    try {
-
-
-                                        // Work with Realm
-                                        realm.beginTransaction();
-                                        realm.copyToRealmOrUpdate(mContentsArray);
-                                        realm.commitTransaction();
-                                        //realm.close();
-                                    }
-                                    finally {
-                                        realm.close();
-                                    }
-                                    Log.d("GuardarFacturas", mContentsArray.toString());
-
-                              /*  Log.d("respuestaFactura",response.body().toString());
-                                codigo = response.code();
-                                codigoS = response.body().getCustomer();
-                                mensajeS = response.body().getFacturas();
-                                    //  resultS= String.valueOf(response.body().isResult());
+                                    Log.d("respuestaFactura",response.body().toString());
+                                    codigo = response.code();
+                                    Log.d("codigo",codigo+"");
+                                    codigoS = response.body().getCode();
+                                    Log.d("codigoS",codigoS+"");
+                                    mensajeS = response.body().getMessage();
+                                    Log.d("mensajeS",mensajeS+"");
+                                    resultS= String.valueOf(response.body().isResult());
+                                    Log.d("resultS",resultS+"");
+                                    Toast.makeText(activity, mensajeS, Toast.LENGTH_LONG).show();
 
                                 }
                                 else{
 
                                 }
-                                progresRing.dismiss();
                             }
 
 
                             @Override
-                            public void onFailure(Call<EmailResponse> call, Throwable t) {
-                                progresRing.dismiss();
+                            public void onFailure(Call<SendEmailResponse> call, Throwable t) {
                                 Log.e(TAG, "Unable to submit post to API.");
                             }
                         });}
@@ -187,7 +184,6 @@ public class EmailFacturasAdapter extends RecyclerView.Adapter<EmailFacturasAdap
                         Toast.makeText(activity, "Error, por favor revisar conexión de Internet", Toast.LENGTH_SHORT).show();
                     }
 
-                    */
 
                                 }
                             }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

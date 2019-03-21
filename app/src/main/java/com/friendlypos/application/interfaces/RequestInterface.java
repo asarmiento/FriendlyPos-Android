@@ -30,7 +30,9 @@ import com.friendlypos.principal.modelo.ProductosResponse;
 import com.friendlypos.principal.modelo.SysconfResponse;
 import com.friendlypos.principal.modelo.customer_location;
 import com.friendlypos.reenvio_email.modelo.EmailResponse;
+import com.friendlypos.reenvio_email.modelo.SendEmailResponse;
 import com.friendlypos.reenvio_email.modelo.email_Id;
+import com.friendlypos.reenvio_email.modelo.send_email_id;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -46,6 +48,9 @@ public interface RequestInterface {
 
     @POST("api/lista-facturas-lectronicas")
     Call<EmailResponse> savePostEmail(@Body email_Id customer, @Header("Authorization") String token);
+
+    @POST("api/invoice-reenvio-email-fe")
+    Call<SendEmailResponse> savePostSendEmail(@Body send_email_id invoice, @Header("Authorization") String token);
 
     @GET("api/donwload-info-business")
     Call<ClientesResponse> getJSON(@Header("Authorization") String token);
