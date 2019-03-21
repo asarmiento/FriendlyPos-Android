@@ -140,7 +140,7 @@ public class EmailFacturasAdapter extends RecyclerView.Adapter<EmailFacturasAdap
 
                                     final invoices clickedDataItem = productosList.get(pos);
                                     final String facturaId = clickedDataItem.getId();
-                                    Toast.makeText(activity, "You clicked " + facturaId, Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(activity, "Factura #" + facturaId, Toast.LENGTH_SHORT).show();
 
                                     token = "Bearer " + SessionPrefes.get(activity).getToken();
                                     Log.d("tokenC", token + " ");

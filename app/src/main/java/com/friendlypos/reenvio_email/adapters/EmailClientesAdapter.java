@@ -17,6 +17,7 @@ import com.friendlypos.R;
 import com.friendlypos.app.broadcastreceiver.NetworkStateChangeReceiver;
 import com.friendlypos.application.datamanager.BaseManager;
 import com.friendlypos.application.interfaces.RequestInterface;
+import com.friendlypos.application.util.Functions;
 import com.friendlypos.distribucion.modelo.EnviarFactura;
 import com.friendlypos.distribucion.modelo.Inventario;
 import com.friendlypos.distribucion.modelo.invoice;
@@ -143,12 +144,12 @@ public class EmailClientesAdapter extends RecyclerView.Adapter<EmailClientesAdap
 
                 Toast.makeText(QuickContext, "idCliente "+ idCliente, Toast.LENGTH_LONG).show();
 
-                tabCliente = 1;
-                activity.setSelecClienteTabEmail(tabCliente);
+
 
                 if (isOnline()) {
                     Log.d("factura1", idCliente + " ");
-
+                    tabCliente = 1;
+                    activity.setSelecClienteTabEmail(tabCliente);
                     email_Id obj = new email_Id(idCliente);
                     Log.d("obj", obj + " ");
                     mAPIService.savePostEmail(obj, token).enqueue(new Callback<EmailResponse>() {
@@ -201,7 +202,11 @@ public class EmailClientesAdapter extends RecyclerView.Adapter<EmailClientesAdap
                         }
                     });}
                 else{
-                    Toast.makeText(activity, "Error, por favor revisar conexión de Internet", Toast.LENGTH_SHORT).show();
+                    tabCliente = 0;
+                    activity.setSelecClienteTabEmail(tabCliente);
+                    Functions.CreateMessage(activity, "Email", "Por favor revisar conexión de Internet antes de continuar");
+                   // Toast.makeText(activity, "Error, por favor revisar conexión de Internet", Toast.LENGTH_SHORT).show();
+                    progresRing.dismiss();
                 }
 
 

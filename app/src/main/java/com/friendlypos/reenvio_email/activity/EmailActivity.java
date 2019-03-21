@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.WindowManager;
 
 import com.friendlypos.R;
+import com.friendlypos.app.broadcastreceiver.NetworkStateChangeReceiver;
 import com.friendlypos.application.bluetooth.PrinterService;
 import com.friendlypos.application.util.Functions;
 import com.friendlypos.distribucion.activity.DistribucionActivity;
@@ -41,7 +42,7 @@ public class EmailActivity extends BluetoothActivity {
     private TabLayout tabLayout;
     private Realm realm;
     private int selecClienteTabEmail;
-
+    private NetworkStateChangeReceiver networkStateChangeReceiver;
     public int getSelecClienteTabEmail() {
         return selecClienteTabEmail;
     }
@@ -55,13 +56,18 @@ public class EmailActivity extends BluetoothActivity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.activity_email);
         ButterKnife.bind(this);
-
+        networkStateChangeReceiver = new NetworkStateChangeReceiver();
         toolbar = (Toolbar) findViewById(R.id.toolbarEmail);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
 
         actionBar.setDisplayHomeAsUpEnabled(true);
         connectToPrinter();
+
+        if (!isOnline()) {
+            Functions.CreateMessage(EmailActivity.this, "Email", "Por favor revisar conexión de Internet antes de continuar");
+        }
+
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.viewpagerEmail);
         if (viewPager != null) {
@@ -191,5 +197,10 @@ public class EmailActivity extends BluetoothActivity {
         }
         return super.onKeyDown(keyCode, event);
     }
+
+    private boolean isOnline() {
+        return networkStateChangeReceiver.isNetworkAvailable(EmailActivity.this);
+    }
+
 }
 
