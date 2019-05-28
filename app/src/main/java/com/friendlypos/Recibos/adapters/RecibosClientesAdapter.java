@@ -261,6 +261,7 @@ public class RecibosClientesAdapter extends RecyclerView.Adapter<RecibosClientes
 
                         receipt.setReceipts_id(String.valueOf(nextId));
                         receipt.setCustomer_id(clienteID);
+                        receipt.setCustomer_id(clienteID);
                         receipt.setReference(numFactura);
                         receipt.setDate(Functions.getDate());
 

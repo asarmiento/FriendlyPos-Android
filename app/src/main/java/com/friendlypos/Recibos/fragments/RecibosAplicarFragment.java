@@ -63,6 +63,7 @@ public class RecibosAplicarFragment extends BaseFragment {
     private static int apply_done = 0;
     double pagado= 0.0;
     double montoCancelado= 0.0;
+    String numeracion;
     static String pagadoMostrarS;
     GPSTracker gps;
     BluetoothStateChangeReceiver bluetoothStateChangeReceiver;
@@ -405,7 +406,7 @@ public class RecibosAplicarFragment extends BaseFragment {
                     for (int i = 0; i < result.size(); i++) {
 
                         List<recibos> salesList1 = realm2.where(recibos.class).equalTo("customer_id", clienteId).equalTo("abonado", 1).findAll();
-
+                        numeracion = salesList1.get(i).getNumeration();
                         pagado = salesList1.get(i).getPaid();
                         activity.setTotalizarFinal(pagado);
 
@@ -422,12 +423,14 @@ public class RecibosAplicarFragment extends BaseFragment {
                         recibo_actua.setSum(observ);
                         recibo_actua.setNotes(observ);
                         recibo_actua.setMontoPagado(montoCancelado);
+                        recibo_actua.setNumeration(numeracion);
+                        recibo_actua.setMontoCanceladoPorFactura(montoCancelado);
                         realm2.insertOrUpdate(recibo_actua);
 
                         Log.d("ACTRECIBO", recibo_actua + "");
                         Log.d("ACTRECIBO3",salesList1 + "");
                     }
-                    realm2.close();
+                   realm2.close();
                     pagado= 0.0;
                 }
 

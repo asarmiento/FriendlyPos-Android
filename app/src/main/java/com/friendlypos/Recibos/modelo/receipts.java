@@ -33,6 +33,9 @@ public class receipts extends RealmObject {
     String sum;
     double balance;
     String notes;
+    double montoCanceladoPorFactura= 0.0;
+    String numeration;
+
     private RealmList<recibos> listaRecibos;
     double porPagar = 0.0;
     int aplicado = 0;
@@ -142,6 +145,22 @@ public class receipts extends RealmObject {
         this.montoPagado = montoPagado;
     }
 
+    public double getMontoCanceladoPorFactura() {
+        return montoCanceladoPorFactura;
+    }
+
+    public void setMontoCanceladoPorFactura(double montoCanceladoPorFactura) {
+        this.montoCanceladoPorFactura = montoCanceladoPorFactura;
+    }
+
+    public String getNumeration() {
+        return numeration;
+    }
+
+    public void setNumeration(String numeration) {
+        this.numeration = numeration;
+    }
+
     @Override
     public String toString() {
         return "receipts{" +
@@ -154,7 +173,8 @@ public class receipts extends RealmObject {
                 ", notes='" + notes + '\'' +
                 ", listaRecibos=" + listaRecibos +
                 ", montoPagado=" + montoPagado +
-
+                ", numeration=" + numeration +
+                ", montoCanceladoPorFactura=" + montoCanceladoPorFactura +
                 '}';
     }
 }

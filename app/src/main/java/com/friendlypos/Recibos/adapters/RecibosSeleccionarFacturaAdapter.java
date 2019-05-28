@@ -22,6 +22,8 @@ import com.friendlypos.Recibos.activity.RecibosActivity;
 import com.friendlypos.Recibos.fragments.RecibosSeleccionarFacturaFragment;
 import com.friendlypos.Recibos.modelo.recibos;
 import com.friendlypos.Recibos.util.ItemClickListener;
+import com.friendlypos.preventas.modelo.Numeracion;
+import com.friendlypos.principal.modelo.datosTotales;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -51,7 +53,7 @@ public class RecibosSeleccionarFacturaAdapter extends RecyclerView.Adapter<Recib
     double montoFaltante = 0.0;
     String facturaID, clienteID;
     int tabFactura;
-
+    int nextId;
     public RecibosSeleccionarFacturaAdapter(RecibosActivity activity, RecibosSeleccionarFacturaFragment fragment, List<recibos> productosList) {
         this.activity = activity;
         this.fragment = fragment;
@@ -180,8 +182,8 @@ public class RecibosSeleccionarFacturaAdapter extends RecyclerView.Adapter<Recib
 
                             @Override
                             public void execute(Realm realm2) {
-                                recibos recibo_actualizado = realm2.where(recibos.class).equalTo("invoice_id", facturaId).findFirst();
 
+                                recibos recibo_actualizado = realm2.where(recibos.class).equalTo("invoice_id", facturaId).findFirst();
                                 recibo_actualizado.setPaid(montoFaltante);
                                 recibo_actualizado.setAbonado(1);
                                 recibo_actualizado.setMostrar(1);

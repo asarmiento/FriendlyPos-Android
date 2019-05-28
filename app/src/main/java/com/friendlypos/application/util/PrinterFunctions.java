@@ -2462,14 +2462,16 @@ public class PrinterFunctions {
         String currentDateandTime = sdf.format(new Date());
 
        Realm realm = Realm.getDefaultInstance();
-        RealmResults<recibos> result = realm.where(recibos.class).equalTo("date", currentDateandTime).findAll();
+        RealmResults<receipts> result = realm.where(receipts.class).equalTo("date", currentDateandTime).findAll();
 
         if (result.isEmpty()) {
             send = "No hay facturas emitidas";
         } else {
             printLiqRecibosTotal= 0.0;
             for (int i = 0; i < result.size(); i++) {
-                List<recibos> salesList1 = realm.where(recibos.class).equalTo("date", currentDateandTime).findAll();
+
+                Log.d("tamaño", result.size()+"");
+                List<receipts> salesList1 = realm.where(receipts.class).equalTo("date", currentDateandTime).findAll();
                 Log.d("salesList1", salesList1 + "");
 
                 String numeracion = salesList1.get(i).getNumeration();
@@ -2478,11 +2480,12 @@ public class PrinterFunctions {
 
                 double pagado = salesList1.get(i).getMontoCanceladoPorFactura();
                 // String pagadoS = String.format("%,.2f", pagado);
-                double restante = salesList1.get(i).getMontoCancelado();
+              //  double restante = salesList1.get(i).getMontoCancelado();
                 // String restanteS = String.format("%,.2f", restante);
 
                 send += String.format("%-9s  %9s  %9s", numeracion, fecha, Functions.doubleToString1(pagado) ) + "\r\n";
                 printLiqRecibosTotal = printLiqRecibosTotal + pagado;
+                Log.d("LiqRecibosTotal", printLiqRecibosTotal + "");
                 send += "------------------------------------------------\r\n";
                 Log.d("LiqRecibos", send + "");
                 }
