@@ -76,7 +76,6 @@ public class PrinterFunctions {
 
             Log.d("impresiones", "cantidadImpresion" + impresiones1);
 
-        String stype = "";
         String payment = "";
         String messageC = "";
         String billptype = "";
@@ -148,9 +147,6 @@ public class PrinterFunctions {
             billptype = "Tiquete Electronico";
         }
 
-        if (type == 1) {
-            stype = "Original";
-        }
 
         if (metodoPago.equals("1")) {
             metodoPagoNombre = "Contado";
@@ -180,7 +176,7 @@ public class PrinterFunctions {
                     "Correo Electronico: " + sysCorreo + "\r\n" +
                     "------------------------------------------------\r\n" + "\r\n" +
                     "! U1 SETLP 7 0 14\r\n" + "\r\n" +
-                    "# Factura: " + numeracionFactura + "  " + metodoPagoNombre + "  " + stype + "\r\n" +
+                    "# Factura: " + numeracionFactura + "  " + metodoPagoNombre + "  " + "\r\n" +
                     "Consec DGT: #" + numConsecutivo + "\r\n" +
                     "Clave DGT: #" + key + "\r\n" +
                     "------------------------------------------------\r\n" + "\r\n" +
@@ -268,7 +264,7 @@ public class PrinterFunctions {
                     preview += Html.fromHtml("<h1>") + "Tel. " + sysTelefono + Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>") +  "Correo Electronico: " + sysCorreo + Html.fromHtml("</h1><br/>");
                     preview += Html.fromHtml("<h1>") +  "------------------------------------------------" + Html.fromHtml("</h1></center><br/><br/>");
-                    preview += Html.fromHtml("<h1>") + "# Factura: " + numeracionFactura + "  " + payment + "  " + stype+ Html.fromHtml("</h1></center><br/>");
+                    preview += Html.fromHtml("<h1>") + "# Factura: " + numeracionFactura + "  " + payment + "  " + Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>") +  "Consec DGT: #" + numConsecutivo + Html.fromHtml("</h1><br/>");
                     preview += Html.fromHtml("<h1>") +  "Clave DGT: #" + key + Html.fromHtml("</h1><br/>");
                     preview += Html.fromHtml("<h1>") +  "------------------------------------------------" + Html.fromHtml("</h1></center><br/><br/>");
@@ -325,7 +321,7 @@ public class PrinterFunctions {
                     preview += Html.fromHtml("<h1>") + "Tel. " + sysTelefono + Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>") +  "Correo Electronico: " + sysCorreo + Html.fromHtml("</h1><br/>");
                     preview += Html.fromHtml("<h1>") +  "------------------------------------------------" + Html.fromHtml("</h1></center><br/><br/>");
-                    preview += Html.fromHtml("<h1>") + "# Factura: " + numeracionFactura + "  " + payment + "  " + stype+ Html.fromHtml("</h1></center><br/>");
+                    preview += Html.fromHtml("<h1>") + "# Factura: " + numeracionFactura + "  " + payment + "  " + Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>") +  "Consec DGT: #" + numConsecutivo + Html.fromHtml("</h1><br/>");
                     preview += Html.fromHtml("<h1>") +  "Clave DGT: #" + key + Html.fromHtml("</h1><br/>");
                     preview += Html.fromHtml("<h1>") +  "------------------------------------------------" + Html.fromHtml("</h1></center><br/><br/>");
@@ -469,7 +465,6 @@ public class PrinterFunctions {
                 double precioSugerido = Double.parseDouble(producto.getSuggested());
                 String description = producto.getDescription();
                 byte[] byteText = description.getBytes(Charset.forName("UTF-8"));
-//To get original string from byte.
                 String description1 = null;
                 try {
                     description1 = new String(byteText, "UTF-8");
@@ -524,7 +519,6 @@ public class PrinterFunctions {
 
             Log.d("impresiones", "cantidadImpresion" + impresiones1);
 
-        String stype = "";
         String billptype = "";
         String preview = "";
 
@@ -556,13 +550,6 @@ public class PrinterFunctions {
             billptype = "R e c i b o s";
         }
 
-        if (type == 1) {
-            stype = "Original";
-        } else if (type == 2) {
-            stype = "Contabilidad";
-        } else if (type == 3) {
-            stype = "Archivo";
-        }
         if (prefList.equals("1")){
 
             String bill = "! U1 JOURNAl\r\n" +
@@ -755,7 +742,6 @@ public class PrinterFunctions {
     //TODO imprimir TOTALIZAR PREVENTA
 
     public static void datosImprimirPrevTotal(int type, sale sale, final Context QuickContext, int ptype) {
-        String stype = "";
         String billptype = "";
         String preview = "";
         String metodoPagoNombre = "";
@@ -809,15 +795,6 @@ public class PrinterFunctions {
         } else if (ptype == 3) {
             billptype = "Comprobante Provisional";
         }
-
-        if (type == 1) {
-            stype = "Original";
-        } else if (type == 2) {
-            stype = "Contabilidad";
-        } else if (type == 3) {
-            stype = "Archivo";
-        }
-
 
         if (metodoPago.equals("1")) {
             metodoPagoNombre = "Contado";
@@ -889,8 +866,7 @@ public class PrinterFunctions {
                                    : "\r\n"
                     ) + "\r\n" +
 
-                    "! U1 SETLP 5 0 14\r\n" +
-                    "\r\n" + String.format("Factura %s", stype) + "\r\n\n" +
+                    "! U1 SETLP 5 0 14\r\n\n" +
                     "\r\n\n" + "Muchas Gracias por preferirnos, un placer atenderlo\r\n" +
                     "Mantenga el documento para reclamos ." + "\r\n" + "\r\n" +
 
@@ -967,7 +943,6 @@ public class PrinterFunctions {
                     preview += Html.fromHtml("<h1>")   + "su uso para respaldo de créditos o gastos." +  Html.fromHtml("</h1></center><br/><br/>");
                     }
 
-                    preview += Html.fromHtml("<h1>")   + String.format("Factura %s", stype) +  Html.fromHtml("</h1></center><br/><br/>");
                     preview += Html.fromHtml("<h1>")   + "Muchas gracias por preferirnos un placer atenderlo" +  Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>")   + "Mantenga el documento para reclamos." +  Html.fromHtml("</h1></center><br/><br/>");
                     preview += Html.fromHtml("<h1>")   + "Autorizada mediante resolución Nº DGT-R-48-2016" +  Html.fromHtml("</h1></center><br/>");
@@ -1012,7 +987,6 @@ public class PrinterFunctions {
                         preview += Html.fromHtml("<h1>")   + "su uso para respaldo de créditos o gastos." +  Html.fromHtml("</h1></center><br/><br/>");
                     }
 
-                    preview += Html.fromHtml("<h1>")   + String.format("Factura %s", stype) +  Html.fromHtml("</h1></center><br/><br/>");
                     preview += Html.fromHtml("<h1>")   + "Muchas gracias por preferirnos un placer atenderlo" +  Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>")   + "Mantenga el documento para reclamos." +  Html.fromHtml("</h1></center><br/><br/>");
                     preview += Html.fromHtml("<h1>")   + "Autorizada mediante resolución Nº DGT-R-48-2016" +  Html.fromHtml("</h1></center><br/>");
@@ -1060,7 +1034,6 @@ public class PrinterFunctions {
     }
 
     public static void datosImprimirProformaTotal(int type, sale sale, final Context QuickContext, int ptype) {
-        String stype = "";
         String billptype = "";
         String preview = "";
 
@@ -1115,13 +1088,7 @@ public class PrinterFunctions {
             billptype = "F a c t u r a";
         }
 
-        if (type == 1) {
-            stype = "Original";
-        } else if (type == 2) {
-            stype = "Contabilidad";
-        } else if (type == 3) {
-            stype = "Archivo";
-        }
+
         if (prefList.equals("1")){
 
             String bill = "! U1 JOURNAl\r\n" +
@@ -1168,8 +1135,7 @@ public class PrinterFunctions {
                             "Firma y Cedula __________________________" + "\r\n"
                                     + "! U1 SETLP 0 0 6\r\n" + "\r\n\n" + condition + "\r\n" : "\r\n"
                     ) + "\r\n" +
-                    "! U1 SETLP 5 0 14\r\n" +
-                    "\r\n" + String.format("Factura %s", stype) + "\r\n\n" +
+                    "! U1 SETLP 5 0 14\r\n\n" +
                     "\r\n\n" + "Muchas Gracias por preferirnos, un placer atenderlo\r\n" +
                     "Mantenga el documento para reclamos ." + "\r\n" + "\r\n" +
                     " \n\n" +
@@ -1219,7 +1185,6 @@ public class PrinterFunctions {
                     preview += Html.fromHtml("<h1>") +  "Notas: " + totalNotas_ + Html.fromHtml("</h1></center><br/><br/><br/>");
                     preview += Html.fromHtml("<h1>") +  "Recibo conforme ____________________________" + Html.fromHtml("</h1></center><br/><br/>");
                     preview += Html.fromHtml("<h1>") +  "Cedula ____________________________" +  Html.fromHtml("</h1></center><br/><br/>");
-                    preview += Html.fromHtml("<h1>")   + String.format("Factura %s", stype) +  Html.fromHtml("</h1></center><br/><br/><br/>");
                     preview += Html.fromHtml("<h1>")   + "Muchas gracias por preferirnos un placer atenderlo" +  Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>")   + "Mantenga el documento para reclamos." +  Html.fromHtml("</h1></center><br/><br/>");
                     break;
@@ -1243,7 +1208,6 @@ public class PrinterFunctions {
                     preview += Html.fromHtml("<h1>") +  "Cedula ____________________________" +  Html.fromHtml("</h1></center><br/><br/>");
                     preview += Html.fromHtml("<h1>") +  "Firma y Cedula __________________________" +  Html.fromHtml("</h1></center><br/><br/>");
                     preview += Html.fromHtml("<h1>") +  condition +  Html.fromHtml("</h1></center><br/><br/>");
-                    preview += Html.fromHtml("<h1>")   + String.format("Factura %s", stype) +  Html.fromHtml("</h1></center><br/><br/><br/>");
                     preview += Html.fromHtml("<h1>")   + "Muchas gracias por preferirnos un placer atenderlo" +  Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>")   + "Mantenga el documento para reclamos." +  Html.fromHtml("</h1></center><br/><br/>");
                     break;
@@ -1365,7 +1329,6 @@ public class PrinterFunctions {
 
             Log.d("impresiones", "cantidadImpresion" + impresiones1);
 
-            String stype = "";
             String billptype = "";
             String preview = "";
             String metodoPagoNombre = "";
@@ -1432,9 +1395,6 @@ public class PrinterFunctions {
                 billptype = "Tiquete Electronico";
             }
 
-            if (type == 1) {
-                stype = "Original";
-            }
 
 
             if (metodoPago.equals("1")) {
@@ -1465,7 +1425,7 @@ public class PrinterFunctions {
                         "Correo Electronico: " + sysCorreo + "\r\n" +
                         "------------------------------------------------\r\n" + "\r\n" +
                         "! U1 SETLP 7 0 14\r\n" + "\r\n" +
-                        "# Factura: " + numeracionFactura + "  " + metodoPagoNombre + "  " + stype + "\r\n" +
+                        "# Factura: " + numeracionFactura + "  " + metodoPagoNombre + "\r\n" +
                         "Consec DGT: #" + numConsecutivo + "\r\n" +
                         "Clave DGT: #" + key + "\r\n" +
                         "------------------------------------------------\r\n" + "\r\n" +
@@ -1547,7 +1507,7 @@ public class PrinterFunctions {
                         preview += Html.fromHtml("<h1>") + "Tel. " + sysTelefono + Html.fromHtml("</h1></center><br/>");
                         preview += Html.fromHtml("<h1>") + "Correo Electronico: " + sysCorreo + Html.fromHtml("</h1><br/>");
                         preview += Html.fromHtml("<h1>") + "------------------------------------------------" + Html.fromHtml("</h1></center><br/><br/>");
-                        preview += Html.fromHtml("<h1>") + "# Factura: " + numeracionFactura + "  " + payment + "  " + stype + Html.fromHtml("</h1></center><br/>");
+                        preview += Html.fromHtml("<h1>") + "# Factura: " + numeracionFactura + "  " + payment + "  " + Html.fromHtml("</h1></center><br/>");
                         preview += Html.fromHtml("<h1>") + "Consec DGT: #" + numConsecutivo + Html.fromHtml("</h1><br/>");
                         preview += Html.fromHtml("<h1>") + "Clave DGT: #" + key + Html.fromHtml("</h1><br/>");
                         preview += Html.fromHtml("<h1>") + "------------------------------------------------" + Html.fromHtml("</h1></center><br/><br/>");
@@ -1603,7 +1563,7 @@ public class PrinterFunctions {
                         preview += Html.fromHtml("<h1>") + "Tel. " + sysTelefono + Html.fromHtml("</h1></center><br/>");
                         preview += Html.fromHtml("<h1>") + "Correo Electronico: " + sysCorreo + Html.fromHtml("</h1><br/>");
                         preview += Html.fromHtml("<h1>") + "------------------------------------------------" + Html.fromHtml("</h1></center><br/><br/>");
-                        preview += Html.fromHtml("<h1>") + "# Factura: " + numeracionFactura + "  " + payment + "  " + stype + Html.fromHtml("</h1></center><br/>");
+                        preview += Html.fromHtml("<h1>") + "# Factura: " + numeracionFactura + "  " + payment + "  " + Html.fromHtml("</h1></center><br/>");
                         preview += Html.fromHtml("<h1>") + "Consec DGT: #" + numConsecutivo + Html.fromHtml("</h1><br/>");
                         preview += Html.fromHtml("<h1>") + "Clave DGT: #" + key + Html.fromHtml("</h1><br/>");
                         preview += Html.fromHtml("<h1>") + "------------------------------------------------" + Html.fromHtml("</h1></center><br/><br/>");
@@ -2501,7 +2461,7 @@ public class PrinterFunctions {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String currentDateandTime = sdf.format(new Date());
 
-        Realm realm = Realm.getDefaultInstance();
+       Realm realm = Realm.getDefaultInstance();
         RealmResults<recibos> result = realm.where(recibos.class).equalTo("date", currentDateandTime).findAll();
 
         if (result.isEmpty()) {
