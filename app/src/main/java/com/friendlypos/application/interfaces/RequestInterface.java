@@ -126,7 +126,4 @@ public interface RequestInterface {
     // TODO DEFINIR CUAL ES EL KEY PARA ENVIAR (KEY, VALUE)
     @POST("api/upload-inventory-products")
     Call<Inventario> savePostProductoDevuelto(@Body EnviarProductoDevuelto clienteNuevo, @Header("Authorization") String token);
-
-
-
 }

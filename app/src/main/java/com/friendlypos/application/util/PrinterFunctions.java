@@ -810,14 +810,15 @@ public class PrinterFunctions {
                     "! U1 SETLP 5 3 70\r\n" +
                     "! U1 LMARGIN 0\r\n" +
                     String.format("%s", billptype) + "\r\n" +
-                    "! U1 LMARGIN 0\r\n" +
-                    "! U1 SETLP 7 0 14\r\n" + "\r\n" +
+
+                    "! U1 SETLP 5 0 24\r\n" + "\r\n" +
                     "N# Factura: " + numeracionFactura + "\r\n" +
-                    "! U1 LMARGIN 0\r\n" +
-                    "Factura de: ! U1 LMARGIN 350 " + metodoPagoNombre + "\r\n" +
-                    "! U1 LMARGIN 0\r\n" +
-                    "! U1 SETLP 5 0 24\r\n" +
+                    "Factura de: " + metodoPagoNombre + "\r\n" +
+
+                    "! U1 SETLP 5 0 24\r\n\n" +
+                    "\r\n" +
                     sysNombreNegocio + "\r\n" +
+
                     "Fecha y hora: " + fechayhora + "\r\n" +
                     "Vendedor:  " + nombreUsuario + "\r\n" +
                     "Razon Social: " + companyCliente + "\r\n" +
@@ -829,7 +830,7 @@ public class PrinterFunctions {
                     "Descripcion           Codigo\r\n" +
                     "Cantidad      Precio       P.Sug       Total\r\n" +
                     "Tipo     \r\n" +
-                    "------------------------------------------------\r\n" +
+                    "- - - - - - - - - - - - - - - - - - - - - - - -\r\n"+
                     "! U1 SETLP 7 0 10\r\n" +
 
                     getPrintPrevTotal(sale.getInvoice_id()) +
@@ -922,7 +923,7 @@ public class PrinterFunctions {
                     preview += Html.fromHtml("<h1>") +  "Descripcion           Codigo" + Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>") +   "Cantidad      Precio       P.Sug       Total" + Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>") +   "Tipo " + Html.fromHtml("</h1></center><br/>");
-                    preview += Html.fromHtml("<h1>") +  "------------------------------------------------" + Html.fromHtml("</h1></center><br/>");
+                    preview += Html.fromHtml("<h1>") +  "- - - - - - - - - - - - - - - - - - - - - - - -" + Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>") +    getPrintPrevTotal(sale.getInvoice_id()) + Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>") +  String.format("%20s %-20s", "Subtotal Gravado", totalGrabado_) + Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>") +  String.format("%20s %-20s", "Subtotal Exento", totalExento_) + Html.fromHtml("</h1></center><br/>");
@@ -960,10 +961,10 @@ public class PrinterFunctions {
                     preview += Html.fromHtml("<h1>") + "A nombre de: " + nombreCliente + Html.fromHtml("</h1><br/>");
                     preview += Html.fromHtml("<h1>") +  "Nombre fantasia: " + fantasyCliente + Html.fromHtml("</h1><br/><br/>");
 
-
-                    preview += Html.fromHtml("<h1>") +  "#  Descripcion      Codigo" + Html.fromHtml("</h1></center><br/>");
-                    preview += Html.fromHtml("<h1>") +  "Cant     Precio       P.Sug        Total      I" + Html.fromHtml("</h1></center><br/>");
-                    preview += Html.fromHtml("<h1>") +  "------------------------------------------------" + Html.fromHtml("</h1></center><br/>");
+                    preview += Html.fromHtml("<h1>") +  "Descripcion           Codigo" + Html.fromHtml("</h1></center><br/>");
+                    preview += Html.fromHtml("<h1>") +   "Cantidad      Precio       P.Sug       Total" + Html.fromHtml("</h1></center><br/>");
+                    preview += Html.fromHtml("<h1>") +   "Tipo " + Html.fromHtml("</h1></center><br/>");
+                    preview += Html.fromHtml("<h1>") +  "- - - - - - - - - - - - - - - - - - - - - - - -" + Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>") +    getPrintPrevTotal(sale.getInvoice_id()) + Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>") +  String.format("%20s %-20s", "Subtotal Gravado", totalGrabado_) + Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>") +  String.format("%20s %-20s", "Subtotal Exento", totalExento_) + Html.fromHtml("</h1></center><br/>");
@@ -1094,7 +1095,7 @@ public class PrinterFunctions {
             String bill = "! U1 JOURNAl\r\n" +
                     "! U1 SETLP 0 0 0\r\n" +
                     "\r\n" +
-                    "! U1 SETLP 5 3 24\r\n" +
+                    "! U1 SETLP 5 0 24\r\n" + "\r\n" +
                     "Cliente: " + nombreCliente + "\r\n" +
                     "Razon Social: " + companyCliente + "\r\n" +
                     ((!nombreCliente.isEmpty()) ? "A nombre de: " + nombreCliente + "\r\n" : "") +
@@ -1106,24 +1107,24 @@ public class PrinterFunctions {
                     "Descripcion           Codigo\r\n" +
                     "Cantidad      Precio       P.Sug       Total\r\n" +
                     "Tipo     \r\n" +
-                    "------------------------------------------------\r\n" +
+                    "- - - - - - - - - - - - - - - - - - - - - - - -\r\n"+
                     "! U1 SETLP 7 0 10\r\n" +
 
                     getPrintPrevTotal(sale.getInvoice_id()) +
                     "\r\n" +
 
-                    String.format("%20s %-20s", "Subtotal Gravado", totalGrabado_) + "\r\n" +
+                   /* String.format("%20s %-20s", "Subtotal Gravado", totalGrabado_) + "\r\n" +
                     String.format("%20s %-20s", "Subtotal Exento", totalExento_) + "\r\n" +
                     String.format("%20s %-20s", "Subtotal", totalSubtotal_) + "\r\n" +
                     String.format("%20s %-20s", "Descuento", totalDescuento_) + "\r\n" +
-                    String.format("%20s %-20s", "IVA", totalImpuesto_) + "\r\n" +
+                    String.format("%20s %-20s", "IVA", totalImpuesto_) + "\r\n" +*/
                     "! U1 SETLP 5 3 70\r\n" +
                     String.format("%20s %-20s", "Total", totalTotal_) + "\r\n" +
-                    "! U1 SETLP 7 0 10\r\n" +
+                   /* "! U1 SETLP 7 0 10\r\n" +
                     ((metodoPago == "1") ?
                             String.format("%20s %-20s", "Cancelado con", totalCancelado) + "\r\n" +
                                     String.format("%20s %-20s", "Cambio", totalVuelto) + "\r\n" : "\r\n"
-                    ) + "\r\n" +
+                    ) + "\r\n" +*/
                     "\r\n\n" + "Notas: " + totalNotas_ + "\r\n" +
                     ((descuentoCliente > 0) ? "Se le aplico un " + descuentoCliente + "%  de descuento" + "\r\n" : "" + "\r\n") +
                     "! U1 SETLP 5 0 14\r\n" +
@@ -1172,16 +1173,16 @@ public class PrinterFunctions {
                     preview += Html.fromHtml("<h1>") +  "Descripcion           Codigo" + Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>") +   "Cantidad      Precio       P.Sug       Total" + Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>") +   "Tipo " + Html.fromHtml("</h1></center><br/>");
-                    preview += Html.fromHtml("<h1>") +  "------------------------------------------------" + Html.fromHtml("</h1></center><br/>");
+                    preview += Html.fromHtml("<h1>") +  "- - - - - - - - - - - - - - - - - - - - - - - -" + Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>") +    getPrintPrevTotal(sale.getInvoice_id()) + Html.fromHtml("</h1></center><br/>");
-                    preview += Html.fromHtml("<h1>") +  String.format("%20s %-20s", "Subtotal Gravado", totalGrabado_) + Html.fromHtml("</h1></center><br/>");
+                   /* preview += Html.fromHtml("<h1>") +  String.format("%20s %-20s", "Subtotal Gravado", totalGrabado_) + Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>") +  String.format("%20s %-20s", "Subtotal Exento", totalExento_) + Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>") +  String.format("%20s %-20s", "Subtotal", totalSubtotal_) + Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>") +  String.format("%20s %-20s", "Descuento", totalDescuento_) + Html.fromHtml("</h1></center><br/>");
-                    preview += Html.fromHtml("<h1>") +  String.format("%20s %-20s", "IVA", totalImpuesto_) + Html.fromHtml("</h1></center><br/><br/><br/>");
+                    preview += Html.fromHtml("<h1>") +  String.format("%20s %-20s", "IVA", totalImpuesto_) + Html.fromHtml("</h1></center><br/><br/><br/>");*/
                     preview += Html.fromHtml("<h1>") +   String.format("%20s %-20s", "Total", totalTotal_) + Html.fromHtml("</h1></center><br/><br/>");
-                    preview += Html.fromHtml("<h1>") +  String.format("%20s %-20s", "Cancelado con", totalCancelado_) + Html.fromHtml("</h1></center><br/>");
-                    preview += Html.fromHtml("<h1>") +   String.format("%20s %-20s", "Cambio", totalVuelto_) + Html.fromHtml("</h1></center><br/><br/>");
+                  /* preview += Html.fromHtml("<h1>") +  String.format("%20s %-20s", "Cancelado con", totalCancelado_) + Html.fromHtml("</h1></center><br/>");
+                    preview += Html.fromHtml("<h1>") +   String.format("%20s %-20s", "Cambio", totalVuelto_) + Html.fromHtml("</h1></center><br/><br/>");*/
                     preview += Html.fromHtml("<h1>") +  "Notas: " + totalNotas_ + Html.fromHtml("</h1></center><br/><br/><br/>");
                     preview += Html.fromHtml("<h1>") +  "Recibo conforme ____________________________" + Html.fromHtml("</h1></center><br/><br/>");
                     preview += Html.fromHtml("<h1>") +  "Cedula ____________________________" +  Html.fromHtml("</h1></center><br/><br/>");
@@ -1193,15 +1194,16 @@ public class PrinterFunctions {
                     preview += Html.fromHtml("<h1>") + "A nombre de: " + nombreCliente + Html.fromHtml("</h1><br/>");
                     preview += Html.fromHtml("<h1>") +  "Nombre fantasia: " + fantasyCliente + Html.fromHtml("</h1><br/><br/>");
 
-                    preview += Html.fromHtml("<h1>") +  "#  Descripcion      Codigo" + Html.fromHtml("</h1></center><br/>");
-                    preview += Html.fromHtml("<h1>") +  "Cant     Precio       P.Sug        Total      I" + Html.fromHtml("</h1></center><br/>");
-                    preview += Html.fromHtml("<h1>") +  "------------------------------------------------" + Html.fromHtml("</h1></center><br/>");
+                    preview += Html.fromHtml("<h1>") +  "Descripcion           Codigo" + Html.fromHtml("</h1></center><br/>");
+                    preview += Html.fromHtml("<h1>") +   "Cantidad      Precio       P.Sug       Total" + Html.fromHtml("</h1></center><br/>");
+                    preview += Html.fromHtml("<h1>") +   "Tipo " + Html.fromHtml("</h1></center><br/>");
+                    preview += Html.fromHtml("<h1>") +  "- - - - - - - - - - - - - - - - - - - - - - - -" + Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>") +    getPrintPrevTotal(sale.getInvoice_id()) + Html.fromHtml("</h1></center><br/>");
-                    preview += Html.fromHtml("<h1>") +  String.format("%20s %-20s", "Subtotal Gravado", totalGrabado_) + Html.fromHtml("</h1></center><br/>");
+                /*    preview += Html.fromHtml("<h1>") +  String.format("%20s %-20s", "Subtotal Gravado", totalGrabado_) + Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>") +  String.format("%20s %-20s", "Subtotal Exento", totalExento_) + Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>") +  String.format("%20s %-20s", "Subtotal", totalSubtotal_) + Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>") +  String.format("%20s %-20s", "Descuento", totalDescuento_) + Html.fromHtml("</h1></center><br/>");
-                    preview += Html.fromHtml("<h1>") +  String.format("%20s %-20s", "IVA", totalImpuesto_) + Html.fromHtml("</h1></center><br/><br/><br/>");
+                    preview += Html.fromHtml("<h1>") +  String.format("%20s %-20s", "IVA", totalImpuesto_) + Html.fromHtml("</h1></center><br/><br/><br/>");*/
                     preview += Html.fromHtml("<h1>") +   String.format("%20s %-20s", "Total", totalTotal_) + Html.fromHtml("</h1></center><br/><br/>");
                     preview += Html.fromHtml("<h1>") +  "Notas: " + totalNotas_ + Html.fromHtml("</h1></center><br/><br/><br/>");
                     preview += Html.fromHtml("<h1>") +  "Recibo conforme ____________________________" + Html.fromHtml("</h1></center><br/><br/>");
