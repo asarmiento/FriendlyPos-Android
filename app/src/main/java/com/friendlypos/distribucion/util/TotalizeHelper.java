@@ -33,6 +33,13 @@ public class TotalizeHelper {
         return tipo;
     }
 
+    private Double getProductIVAByPivotId(String id) {
+        Realm realm = Realm.getDefaultInstance();
+        Double iva = realm.where(Productos.class).equalTo("id", id).findFirst().getIva();
+        realm.close();
+        return iva;
+    }
+
     private Double getClienteFixedDescuentoByPivotId(String id) {
         Realm realm = Realm.getDefaultInstance();
 
@@ -51,7 +58,8 @@ public class TotalizeHelper {
 
     private void totalize(Pivot currentPivot) {
         Double clienteFixedDescuento = getClienteFixedDescuentoByPivotId(currentPivot.getInvoice_id());
-        String tipo = getProductTypeByPivotId(currentPivot.getProduct_id());
+        Double iva = getProductIVAByPivotId(currentPivot.getProduct_id());
+
 
         Double subGrab = 0.0;
         Double subGrabConImp = 0.0;
@@ -66,7 +74,7 @@ public class TotalizeHelper {
         Double descuento = Double.valueOf(currentPivot.getDiscount());
         Double subGrabDesc = 0.0;
 
-        if (tipo.equals("1")) {
+        if (iva > 0.0) {
             subGrabConImp = subGrab + (precio) * (cantidad);
             subGrab = (subGrab + (precio) * (cantidad))/1.13;
 
@@ -90,8 +98,9 @@ public class TotalizeHelper {
 
         if (subGrab > 0) {
             //  IvaT = (subGrabm - (subGrabm * (clienteFixedDescuento / 100.00))) * (IVA / 100);
-           // IvaT = subGrabConImp - subGrab;
-            IvaT = subGrabDesc * 0.13;
+            // IvaT = subGrabConImp - subGrab;
+            Double impuesto = iva / 100;
+            IvaT = subGrabDesc * impuesto;
             Log.d("IvaT", IvaT + "");
         }
         else {

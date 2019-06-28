@@ -7,10 +7,6 @@ import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-/**
- * Created by juandiegoGL on 4/6/17.
- */
-
 public class NetworkStateChangeReceiver extends BroadcastReceiver {
 
     public interface InternetStateHasChange {

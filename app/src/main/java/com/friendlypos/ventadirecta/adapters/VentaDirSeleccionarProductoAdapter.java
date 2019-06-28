@@ -110,7 +110,16 @@ public class VentaDirSeleccionarProductoAdapter  extends RecyclerView.Adapter<Ve
         String status = producto.getStatus();
         String precio = producto.getSale_price();
         String marca2 = realm.where(Marcas.class).equalTo("id", marca).findFirst().getName();
-        String tipoProducto = realm.where(TipoProducto.class).equalTo("id", tipo).findFirst().getName();
+        String tipoProducto;
+        Double impuesto = producto.getIva();
+
+        if(impuesto == 0.0){
+
+            tipoProducto = "Exento";
+        }else{
+            tipoProducto = "Gravado";
+        }
+        // String tipoProducto = realm.where(TipoProducto.class).equalTo("id", tipo).findFirst().getName();
 
         holder.fillData(producto);
         holder.txt_producto_factura_nombre.setText(description);
@@ -138,7 +147,7 @@ public class VentaDirSeleccionarProductoAdapter  extends RecyclerView.Adapter<Ve
 
         }
 
-           if (status.equals("Activo")) { holder.cardView.setVisibility(View.VISIBLE);
+        if (status.equals("Activo")) { holder.cardView.setVisibility(View.VISIBLE);
         }
 
         else{
@@ -154,7 +163,7 @@ public class VentaDirSeleccionarProductoAdapter  extends RecyclerView.Adapter<Ve
 
 
         realm.close();
-        }
+    }
 
     public void addProduct(final int inventario_id, final String producto_id, final
     Double cantidadDisponible, final String description, String Precio1, String Precio2,
@@ -264,19 +273,19 @@ public class VentaDirSeleccionarProductoAdapter  extends RecyclerView.Adapter<Ve
                                 if (producto_amount_dist_add >= productosParaObtenerBonus) {
                                     if (hoy <= fechaexp) {
 
-                        // TODO PRODUCTO QUE SE AGREGO
+                                        // TODO PRODUCTO QUE SE AGREGO
                                         Log.d("PROD_AGREGO", producto_amount_dist_add + "");
 
-                        //  TODO PARA TENER BONIFICACION OCUPA
+                                        //  TODO PARA TENER BONIFICACION OCUPA
                                         Log.d("PROD_OCUPA", productosParaObtenerBonus + "");
 
-                        //  TODO DIVIDIR AGREGADO Y PROD DEL BONUS
+                                        //  TODO DIVIDIR AGREGADO Y PROD DEL BONUS
                                         double productos = producto_amount_dist_add / productosParaObtenerBonus;
 
                                         String prod = String.format("%.0f", productos);
                                         double productoBonusTotal = Double.parseDouble(prod) * productosDelBonus;
 
-                        //  TODO PRODUCTOS QUE SE BONIFICAN GRATIS
+                                        //  TODO PRODUCTOS QUE SE BONIFICAN GRATIS
                                         Log.d("PROD_GRATIS", productoBonusTotal + "");
 
 
@@ -310,7 +319,7 @@ public class VentaDirSeleccionarProductoAdapter  extends RecyclerView.Adapter<Ve
                 catch (Exception e) {
                     e.printStackTrace();
 
-                    }
+                }
             }
         });
         alertDialogBuilder.setNegativeButton("Cancel",
@@ -441,7 +450,7 @@ public class VentaDirSeleccionarProductoAdapter  extends RecyclerView.Adapter<Ve
         else {
             Toast.makeText(context, "Has excedido el monto del crédito", Toast.LENGTH_SHORT).show();
         }
-   }
+    }
 
     public void agregarBonificacion(){
 
@@ -566,7 +575,7 @@ public class VentaDirSeleccionarProductoAdapter  extends RecyclerView.Adapter<Ve
         productosList = new ArrayList<>();
         productosList.addAll(countryModels);
         notifyDataSetChanged();
-            Log.d("country", countryModels + "");
+        Log.d("country", countryModels + "");
     }
 
     public class CharacterViewHolder extends RecyclerView.ViewHolder {

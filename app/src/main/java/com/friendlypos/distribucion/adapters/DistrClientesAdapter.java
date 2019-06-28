@@ -243,7 +243,6 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
                 Realm realm = Realm.getDefaultInstance();
                 invoice invoice = realm.where(invoice.class).equalTo("id", facturaID).findFirst();
                 Clientes clientes = realm.where(Clientes.class).equalTo("id", clienteID).findFirst();
-                //String facturaid = String.valueOf(realm.where(ProductoFactura.class).equalTo("id", facturaID).findFirst().getId());
                 facturaid1 = realm.where(Pivot.class).equalTo("invoice_id", facturaID).findAll();
                 String metodoPago = invoice.getPayment_method_id();
                 String creditoLimiteCliente = clientes.getCreditLimit();
@@ -281,8 +280,7 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
                     if (longitud != 0.0 && latitud != 0.0) {
 
                         try {
-                            // Launch Waze to look for Hawaii:
-                         //   String url = "https://waze.com/ul?ll=9.9261253,-84.0889091&navigate=yes";
+
 
                             String url = "https://waze.com/ul?ll="+ latitud + "," + longitud + "&navigate=yes";
                             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
@@ -290,14 +288,11 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
                         } catch (ActivityNotFoundException ex) {
 
                             Uri gmmIntentUri = Uri.parse("geo:"+latitud + "," + longitud);
-                           // Uri gmmIntentUri = Uri.parse("geo:9.9261253,-84.0889091");
+
                             Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
                             mapIntent.setPackage("com.google.android.apps.maps");
                             QuickContext.startActivity(mapIntent);
 
-                /*    // If Waze is not installed, open it in Google Play:
-                    Intent intent = new Intent( Intent.ACTION_VIEW, Uri.parse( "market://details?id=com.waze" ) );
-                    startActivity(intent);*/
                         }
                     } else {
                         Toast.makeText(QuickContext, "El cliente no cuenta con dirección GPS", Toast.LENGTH_SHORT).show();

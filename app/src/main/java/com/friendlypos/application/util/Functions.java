@@ -120,15 +120,8 @@ public class Functions {
         return dateFormat.format(cal.getTime());
     }
 
-
     public static String getDateConsecutivo() {
         DateFormat dateFormat = new SimpleDateFormat("ddMMyy");
-        Calendar cal = Calendar.getInstance();
-        return dateFormat.format(cal.getTime());
-    }
-
-    public static String getDateBonif() {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Calendar cal = Calendar.getInstance();
         return dateFormat.format(cal.getTime());
     }
@@ -139,26 +132,11 @@ public class Functions {
         return (dateFormat.format(cal.getTime())); //16:00:22
     }
 
-    public static String doubleToString(double number) {
-        return String.format(Locale.getDefault(), "%,.2f", number);
-    }
+
 
     public static String doubleToString1(double number) {
         return String.format(Locale.US, "%1$,.2f", number);
     }
 
-    public static double sGetDecimalStringAnyLocaleAsDouble(String value) {
-
-        Locale theLocale = Locale.getDefault();
-        NumberFormat numberFormat = DecimalFormat.getInstance(theLocale);
-        Number theNumber;
-        try {
-            theNumber = numberFormat.parse(value);
-            return theNumber.doubleValue();
-        } catch (ParseException e) {
-            String valueWithDot = value.replaceAll(",", ".");
-            return Double.valueOf(valueWithDot);
-        }
-    }
 
 }

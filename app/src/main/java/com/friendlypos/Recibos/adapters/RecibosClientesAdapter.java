@@ -2,7 +2,10 @@ package com.friendlypos.Recibos.adapters;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -20,6 +23,7 @@ import com.friendlypos.application.util.Functions;
 import com.friendlypos.login.modelo.Usuarios;
 import com.friendlypos.login.util.SessionPrefes;
 import com.friendlypos.preventas.modelo.Numeracion;
+import com.friendlypos.principal.activity.MenuPrincipal;
 import com.friendlypos.principal.modelo.Clientes;
 
 import java.util.List;
@@ -72,7 +76,7 @@ public class RecibosClientesAdapter extends RecyclerView.Adapter<RecibosClientes
 
 
         Clientes clientes = realm.where(Clientes.class).equalTo("id", recibo.getCustomer_id()).findFirst();
-       // final invoice invoice = realm.where(invoice.class).equalTo("id", recibo.getInvoice_id()).findFirst();
+        // final invoice invoice = realm.where(invoice.class).equalTo("id", recibo.getInvoice_id()).findFirst();
 
         final String cardCliente = clientes.getCard();
         String companyCliente = clientes.getCompanyName();
@@ -94,7 +98,7 @@ public class RecibosClientesAdapter extends RecyclerView.Adapter<RecibosClientes
             Log.d("PAGOSFOR2", totalPagado1 + "   " + abonado1 + "");
             activity.setTotalizarFinalCliente(totalPagado1);
 
-           // double porPagar = recibo.getPorPagar();
+            // double porPagar = recibo.getPorPagar();
             int abonado = recibo.getAbonado();
             double total = recibo.getTotal();
             double pago = recibo.getPaid();
@@ -127,42 +131,152 @@ public class RecibosClientesAdapter extends RecyclerView.Adapter<RecibosClientes
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-             //   activa = 1;
-                activity.cleanTotalizeFinal();
-                final ProgressDialog progresRing = ProgressDialog.show(QuickContext, "Cargando", "Seleccionando Cliente", true);
-                progresRing.setCancelable(true);
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            Thread.sleep(5000);
-                        } catch (Exception e) {
 
+
+                int tabCliente1 = activity.getSelecClienteTabRecibos();
+                if (tabCliente1 == 1) {
+
+                    AlertDialog dialogReturnSale = new AlertDialog.Builder(activity)
+                            .setTitle("Salir")
+                            .setMessage("¿Desea cancelar la factura en proceso y empezar otra?")
+                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                    final Realm realm2 = Realm.getDefaultInstance();
+
+                                    realm2.executeTransaction(new Realm.Transaction() {
+
+                                        @Override
+                                        public void execute(Realm realm) {
+
+                                            Number numero = realm.where(Numeracion.class).equalTo("sale_type", "4").max("number");
+
+                                            if (numero == null) {
+                                                nextId = 1;
+                                            } else {
+                                                nextId = numero.intValue() - 1;
+                                            }
+
+                                        }
+                                    });
+                                    final Realm realm5 = Realm.getDefaultInstance();
+                                    realm5.executeTransaction(new Realm.Transaction() {
+                                        @Override
+                                        public void execute(Realm realm5) {
+                                            Numeracion numNuevo = new Numeracion(); // unmanaged
+                                            numNuevo.setSale_type("4");
+                                            numNuevo.setNumeracion_numero(nextId);
+
+                                            realm5.insertOrUpdate(numNuevo);
+                                            Log.d("RecNumNuevaAtras", numNuevo + "");
+
+
+                                        }
+
+                                    });
+
+                                    int id = nextId + 1;
+                                    final String idRecipiente = String.valueOf(id);
+                                    final Realm realm6 = Realm.getDefaultInstance();
+                                    realm6.executeTransaction(new Realm.Transaction() {
+                                        @Override
+                                        public void execute(Realm realm5) {
+
+                                            RealmResults<receipts> result = realm6.where(receipts.class).equalTo("receipts_id",idRecipiente).findAll();
+                                            result.deleteAllFromRealm();
+                                            Log.d("ReciboBorrado", result + "");
+                                        }
+
+                                    });
+                                    realm5.close();
+                                    realm6.close();
+
+                                    //   activa = 1;
+                                    activity.cleanTotalizeFinal();
+                                    final ProgressDialog progresRing = ProgressDialog.show(QuickContext, "Cargando", "Seleccionando Cliente", true);
+                                    progresRing.setCancelable(true);
+                                    new Thread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            try {
+                                                Thread.sleep(5000);
+                                            } catch (Exception e) {
+
+                                            }
+                                            progresRing.dismiss();
+                                        }
+                                    }).start();
+
+                                    int pos = position;
+                                    if (pos == RecyclerView.NO_POSITION) return;
+
+                                    notifyItemChanged(selected_position);
+                                    selected_position = position;
+                                    notifyItemChanged(selected_position);
+                                    recibos clickedDataItem = contentList.get(pos);
+
+                                    facturaID = clickedDataItem.getInvoice_id();
+                                    clienteID = clickedDataItem.getCustomer_id();
+                                    double totalP = clickedDataItem.getPorPagar();
+
+                                    Log.d("totalP", totalP + "");
+
+                                    //  Toast.makeText(activity, facturaID + " " + clienteID + " ", Toast.LENGTH_LONG).show();
+
+                                    tabCliente = 1;
+                                    activity.setSelecClienteTabRecibos(tabCliente);
+                                    activity.setClienteIdRecibos(clienteID);
+                                    crearRecibo();
+                                }
+                            }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.cancel();
+                                }
+                            }).create();
+                    dialogReturnSale.show();
+
+                }else{
+                    //   activa = 1;
+                    activity.cleanTotalizeFinal();
+                    final ProgressDialog progresRing = ProgressDialog.show(QuickContext, "Cargando", "Seleccionando Cliente", true);
+                    progresRing.setCancelable(true);
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                Thread.sleep(5000);
+                            } catch (Exception e) {
+
+                            }
+                            progresRing.dismiss();
                         }
-                        progresRing.dismiss();
-                    }
-                }).start();
+                    }).start();
 
-                int pos = position;
-                if (pos == RecyclerView.NO_POSITION) return;
+                    int pos = position;
+                    if (pos == RecyclerView.NO_POSITION) return;
 
-                notifyItemChanged(selected_position);
-                selected_position = position;
-                notifyItemChanged(selected_position);
-                recibos clickedDataItem = contentList.get(pos);
+                    notifyItemChanged(selected_position);
+                    selected_position = position;
+                    notifyItemChanged(selected_position);
+                    recibos clickedDataItem = contentList.get(pos);
 
-                facturaID = clickedDataItem.getInvoice_id();
-                clienteID = clickedDataItem.getCustomer_id();
-                double totalP = clickedDataItem.getPorPagar();
+                    facturaID = clickedDataItem.getInvoice_id();
+                    clienteID = clickedDataItem.getCustomer_id();
+                    double totalP = clickedDataItem.getPorPagar();
 
-                Log.d("totalP", totalP + "");
+                    Log.d("totalP", totalP + "");
 
-              //  Toast.makeText(activity, facturaID + " " + clienteID + " ", Toast.LENGTH_LONG).show();
+                    //  Toast.makeText(activity, facturaID + " " + clienteID + " ", Toast.LENGTH_LONG).show();
 
-                tabCliente = 1;
-                activity.setSelecClienteTabRecibos(tabCliente);
-                activity.setClienteIdRecibos(clienteID);
-                crearRecibo();
+                    tabCliente = 1;
+                    activity.setSelecClienteTabRecibos(tabCliente);
+                    activity.setClienteIdRecibos(clienteID);
+                    crearRecibo();
+                }
             }
         });
         if(selected_position==position){
@@ -209,88 +323,88 @@ public class RecibosClientesAdapter extends RecyclerView.Adapter<RecibosClientes
         idUsuario = usuarios.getId();
         realm.close();
 
-            final Realm realm2 = Realm.getDefaultInstance();
+        final Realm realm2 = Realm.getDefaultInstance();
 
-            realm2.executeTransaction(new Realm.Transaction() {
+        realm2.executeTransaction(new Realm.Transaction() {
 
-                @Override
-                public void execute(Realm realm) {
-                    // TODO NUMERACION = VENTA DIRECTA :01, PREVENTA:02, DISTRIBUCION:03 Y PROFORMA: 04
+            @Override
+            public void execute(Realm realm) {
+                // TODO NUMERACION = VENTA DIRECTA :01, PREVENTA:02, DISTRIBUCION:03 Y PROFORMA: 04
 
-                    Number numero = realm.where(Numeracion.class).equalTo("sale_type", "4").max("number");
+                Number numero = realm.where(Numeracion.class).equalTo("sale_type", "4").max("number");
 
-                    if (numero == null) {
-                        nextId = 1;
-                    } else {
-                        nextId = numero.intValue() + 1;
-                    }
-                    int valor = numero.intValue();
-
-                    int length = String.valueOf(valor).length();
-
-                    if(length == 1){
-                        numFactura = idUsuario + "04-" +  "000000" + nextId;
-                    }
-                    else if(length == 2){
-                        numFactura = idUsuario + "04-" +  "00000" + nextId;
-                    }
-                    else if(length == 3){
-                        numFactura = idUsuario + "04-" +  "0000" + nextId;
-                    }
-                    else if(length == 4){
-                        numFactura = idUsuario + "04-" +  "000" + nextId;
-                    }
-                    else if(length == 5){
-                        numFactura = idUsuario + "04-" +  "00" + nextId;
-                    }
-                    else if(length == 6){
-                        numFactura = idUsuario + "04-" +  "0" + nextId;
-                    }
-                    else if(length == 7){
-                        numFactura = idUsuario + "04-" +  nextId;
-                    }
+                if (numero == null) {
+                    nextId = 1;
+                } else {
+                    nextId = numero.intValue() + 1;
                 }
-            });
+                int valor = numero.intValue();
 
+                int length = String.valueOf(valor).length();
 
-               final Realm realmRecibo = Realm.getDefaultInstance();
-                realmRecibo.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realmRecibo) {
-                        receipts receipt = new receipts(); // unmanaged
-
-                        receipt.setReceipts_id(String.valueOf(nextId));
-                        receipt.setCustomer_id(clienteID);
-                        receipt.setCustomer_id(clienteID);
-                        receipt.setReference(numFactura);
-                        receipt.setDate(Functions.getDate());
-
-                        realmRecibo.insertOrUpdate(receipt);
-                        Log.d("ReciboNuevo", receipt + "");
-                        activity.setReceipts_id_num(String.valueOf(nextId));
-
-
-                    }
-
-                });
-                realmRecibo.close();
-
-
-            final Realm realm5 = Realm.getDefaultInstance();
-            realm5.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm5) {
-                    Numeracion numNuevo = new Numeracion(); // unmanaged
-                    numNuevo.setSale_type("4");
-                    numNuevo.setNumeracion_numero(nextId);
-                    realm5.insertOrUpdate(numNuevo);
-                    Log.d("NumRecibosNueva", numNuevo + "");
-
-
+                if(length == 1){
+                    numFactura = idUsuario + "04-" +  "000000" + nextId;
                 }
+                else if(length == 2){
+                    numFactura = idUsuario + "04-" +  "00000" + nextId;
+                }
+                else if(length == 3){
+                    numFactura = idUsuario + "04-" +  "0000" + nextId;
+                }
+                else if(length == 4){
+                    numFactura = idUsuario + "04-" +  "000" + nextId;
+                }
+                else if(length == 5){
+                    numFactura = idUsuario + "04-" +  "00" + nextId;
+                }
+                else if(length == 6){
+                    numFactura = idUsuario + "04-" +  "0" + nextId;
+                }
+                else if(length == 7){
+                    numFactura = idUsuario + "04-" +  nextId;
+                }
+            }
+        });
 
-            });
-            realm5.close();
+
+        final Realm realmRecibo = Realm.getDefaultInstance();
+        realmRecibo.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realmRecibo) {
+                receipts receipt = new receipts(); // unmanaged
+
+                receipt.setReceipts_id(String.valueOf(nextId));
+                receipt.setCustomer_id(clienteID);
+                receipt.setCustomer_id(clienteID);
+                receipt.setReference(numFactura);
+                receipt.setDate(Functions.getDate());
+
+                realmRecibo.insertOrUpdate(receipt);
+                Log.d("ReciboNuevo", receipt + "");
+                activity.setReceipts_id_num(String.valueOf(nextId));
+
+
+            }
+
+        });
+        realmRecibo.close();
+
+
+        final Realm realm5 = Realm.getDefaultInstance();
+        realm5.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm5) {
+                Numeracion numNuevo = new Numeracion(); // unmanaged
+                numNuevo.setSale_type("4");
+                numNuevo.setNumeracion_numero(nextId);
+                realm5.insertOrUpdate(numNuevo);
+                Log.d("NumRecibosNueva", numNuevo + "");
+
+
+            }
+
+        });
+        realm5.close();
 
 
     }

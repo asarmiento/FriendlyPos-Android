@@ -48,7 +48,12 @@ public class TotalizeHelperPreventa {
         realm.close();
         return bonus;
     }
-
+    private Double getProductIVAByPivotId(String id) {
+        Realm realm = Realm.getDefaultInstance();
+        Double iva = realm.where(Productos.class).equalTo("id", id).findFirst().getIva();
+        realm.close();
+        return iva;
+    }
     private Double getClienteFixedDescuentoByPivotId(String id) {
 
         sale ventaDetallePreventa = activity.getCurrentVenta();
@@ -73,8 +78,8 @@ public class TotalizeHelperPreventa {
         Double cantidad;
 
         Double clienteFixedDescuento = getClienteFixedDescuentoByPivotId(currentPivot.getInvoice_id());
-        String tipo = getProductTypeByPivotId(currentPivot.getProduct_id());
         double agrego = currentPivot.getAmountSinBonus();
+        Double iva = getProductIVAByPivotId(currentPivot.getProduct_id());
         String bonus = getProductBonusByPivotId(currentPivot.getProduct_id());
 
         // TODO limpiar esBonus y cambiar en resumen el total
@@ -114,7 +119,7 @@ public class TotalizeHelperPreventa {
         Double descuento = Double.valueOf(currentPivot.getDiscount());
         Double subGrabDesc = 0.0;
 
-        if (tipo.equals("1")) {
+        if (iva > 0.0) {
             subGrabConImp = subGrab + (precio) * (cantidad);
             subGrab = (subGrab + (precio) * (cantidad))/1.13;
 
@@ -137,10 +142,12 @@ public class TotalizeHelperPreventa {
         Log.d("discountBill1", discountBill + "");
 
         if (subGrab > 0) {
-          //  IvaT = (subGrabm - (subGrabm * (clienteFixedDescuento / 100.00))) * (IVA / 100);
-         //   IvaT = subGrabConImp - subGrab;
+            //  IvaT = (subGrabm - (subGrabm * (clienteFixedDescuento / 100.00))) * (IVA / 100);
+            //   IvaT = subGrabConImp - subGrab;
 
-            IvaT = subGrabDesc * 0.13;
+            Double impuesto = iva / 100;
+            Log.d("IvaT", IvaT + "");
+            IvaT = subGrabDesc * impuesto;
             Log.d("IvaT", IvaT + "");
 
         }

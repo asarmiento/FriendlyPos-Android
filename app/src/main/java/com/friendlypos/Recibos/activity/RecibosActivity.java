@@ -2,11 +2,13 @@ package com.friendlypos.Recibos.activity;
 
 import android.app.ActivityManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Handler;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -14,6 +16,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import com.friendlypos.R;
 import com.friendlypos.Recibos.delegate.PreSellRecibosDelegate;
@@ -32,19 +35,25 @@ import com.friendlypos.distribucion.fragment.DistResumenFragment;
 import com.friendlypos.distribucion.fragment.DistSelecClienteFragment;
 import com.friendlypos.distribucion.fragment.DistSelecProductoFragment;
 import com.friendlypos.distribucion.fragment.DistTotalizarFragment;
+import com.friendlypos.distribucion.modelo.Inventario;
 import com.friendlypos.distribucion.modelo.Pivot;
 import com.friendlypos.distribucion.modelo.invoice;
 import com.friendlypos.distribucion.util.Adapter;
 import com.friendlypos.preventas.delegate.PreSellInvoiceDelegate;
+import com.friendlypos.preventas.modelo.Numeracion;
 import com.friendlypos.preventas.modelo.invoiceDetallePreventa;
 import com.friendlypos.principal.activity.BluetoothActivity;
 import com.friendlypos.principal.activity.MenuPrincipal;
+import com.friendlypos.ventadirecta.activity.VentaDirectaActivity;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
+import io.realm.Realm;
 import io.realm.RealmList;
+import io.realm.RealmQuery;
+import io.realm.RealmResults;
 
 public class RecibosActivity extends BluetoothActivity {
     private Toolbar toolbar;
@@ -64,7 +73,7 @@ public class RecibosActivity extends BluetoothActivity {
     private double montoAgregadoRestante;
     private double totalizarFinalCliente;
     private String receipts_id_num;
-
+    int nextId;
     private PreSellRecibosDelegate preSellRecibosDelegate;
 
 
@@ -272,12 +281,12 @@ public class RecibosActivity extends BluetoothActivity {
         Adapter adapter = new Adapter(getSupportFragmentManager());
         final List<BaseFragment> list = new ArrayList<>();
         list.add(new RecibosClientesFragment());
-       list.add(new RecibosSeleccionarFacturaFragment());
-         list.add(new RecibosResumenFragment());
-       list.add(new RecibosAplicarFragment());
+        list.add(new RecibosSeleccionarFacturaFragment());
+        list.add(new RecibosResumenFragment());
+        list.add(new RecibosAplicarFragment());
         adapter.addFragment(list.get(0), "Seleccionar Cliente");
-      adapter.addFragment(list.get(1), "Selecionar Factura");
-          adapter.addFragment(list.get(2), "Resumen");
+        adapter.addFragment(list.get(1), "Selecionar Factura");
+        adapter.addFragment(list.get(2), "Resumen");
         adapter.addFragment(list.get(3), "Aplicar");
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -304,10 +313,97 @@ public class RecibosActivity extends BluetoothActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
 
-                Intent intent = new Intent(RecibosActivity.this, MenuPrincipal.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-                finish();
+                int tabCliente = getSelecClienteTabRecibos();
+                if (tabCliente == 1) {
+
+                    AlertDialog dialogReturnSale = new AlertDialog.Builder(RecibosActivity.this)
+                            .setTitle("Salir")
+                            .setMessage("¿Desea cancelar la factura en proceso?")
+                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                    final Realm realm2 = Realm.getDefaultInstance();
+
+                                    realm2.executeTransaction(new Realm.Transaction() {
+
+                                        @Override
+                                        public void execute(Realm realm) {
+
+                                            // increment index
+                                  /*  Numeracion numeracion = realm.where(Numeracion.class).equalTo("id", "3").findFirst();
+
+                                    if(numeracion.getId()){}
+*/
+
+                                            // TODO NUMERACION = VENTA DIRECTA :01, PREVENTA:02, DISTRIBUCION:03 Y PROFORMA: 04
+
+                                            Number numero = realm.where(Numeracion.class).equalTo("sale_type", "4").max("number");
+
+                                            if (numero == null) {
+                                                nextId = 1;
+                                            } else {
+                                                nextId = numero.intValue() - 1;
+                                            }
+
+                                        }
+                                    });
+                                    final Realm realm5 = Realm.getDefaultInstance();
+                                    realm5.executeTransaction(new Realm.Transaction() {
+                                        @Override
+                                        public void execute(Realm realm5) {
+                                            Numeracion numNuevo = new Numeracion(); // unmanaged
+                                            numNuevo.setSale_type("4");
+                                            numNuevo.setNumeracion_numero(nextId);
+
+                                            realm5.insertOrUpdate(numNuevo);
+                                            Log.d("RecNumNuevaAtras", numNuevo + "");
+
+
+                                        }
+
+                                    });
+
+                                    int id = nextId + 1;
+                                    final String idRecipiente = String.valueOf(id);
+                                    final Realm realm6 = Realm.getDefaultInstance();
+                                    realm6.executeTransaction(new Realm.Transaction() {
+                                        @Override
+                                        public void execute(Realm realm5) {
+
+                                            RealmResults<receipts> result = realm6.where(receipts.class).equalTo("receipts_id",idRecipiente).findAll();
+                                            result.deleteAllFromRealm();
+                                            Log.d("ReciboBorrado", result + "");
+                                        }
+
+                                    });
+                                    realm5.close();
+                                    realm6.close();
+                                    Intent intent = new Intent(RecibosActivity.this, MenuPrincipal.class);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    startActivity(intent);
+                                    finish();
+
+                                }
+                            }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                    dialog.cancel();
+                                }
+                            }).create();
+                    dialogReturnSale.show();
+
+                }else{
+                    Intent intent = new Intent(RecibosActivity.this, MenuPrincipal.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                    finish();
+                }
+
+
                 return true;
 
             default:
@@ -374,12 +470,97 @@ public class RecibosActivity extends BluetoothActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if ((keyCode == KeyEvent.KEYCODE_BACK)) {
-            Intent intent = new Intent(RecibosActivity.this, MenuPrincipal.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-            finish();
-            Log.d("ATRAS", "Atras");
+            int tabCliente = getSelecClienteTabRecibos();
+            if (tabCliente == 1) {
+
+                AlertDialog dialogReturnSale = new AlertDialog.Builder(RecibosActivity.this)
+                        .setTitle("Salir")
+                        .setMessage("¿Desea cancelar la factura en proceso?")
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                final Realm realm2 = Realm.getDefaultInstance();
+
+                                realm2.executeTransaction(new Realm.Transaction() {
+
+                                    @Override
+                                    public void execute(Realm realm) {
+
+                                        // increment index
+                                  /*  Numeracion numeracion = realm.where(Numeracion.class).equalTo("id", "3").findFirst();
+
+                                    if(numeracion.getId()){}
+*/
+
+                                        // TODO NUMERACION = VENTA DIRECTA :01, PREVENTA:02, DISTRIBUCION:03 Y PROFORMA: 04
+
+                                        Number numero = realm.where(Numeracion.class).equalTo("sale_type", "4").max("number");
+
+                                        if (numero == null) {
+                                            nextId = 1;
+                                        } else {
+                                            nextId = numero.intValue() - 1;
+                                        }
+
+                                    }
+                                });
+                                final Realm realm5 = Realm.getDefaultInstance();
+                                realm5.executeTransaction(new Realm.Transaction() {
+                                    @Override
+                                    public void execute(Realm realm5) {
+                                        Numeracion numNuevo = new Numeracion(); // unmanaged
+                                        numNuevo.setSale_type("4");
+                                        numNuevo.setNumeracion_numero(nextId);
+
+                                        realm5.insertOrUpdate(numNuevo);
+                                        Log.d("RecNumNuevaAtras", numNuevo + "");
+
+
+                                    }
+
+                                });
+
+                                int id = nextId + 1;
+                                final String idRecipiente = String.valueOf(id);
+                                final Realm realm6 = Realm.getDefaultInstance();
+                                realm6.executeTransaction(new Realm.Transaction() {
+                                    @Override
+                                    public void execute(Realm realm5) {
+
+                                        RealmResults<receipts> result = realm6.where(receipts.class).equalTo("receipts_id",idRecipiente).findAll();
+                                        result.deleteAllFromRealm();
+                                        Log.d("ReciboBorrado", result + "");
+                                    }
+
+                                });
+                                realm5.close();
+                                realm6.close();
+                                Intent intent = new Intent(RecibosActivity.this, MenuPrincipal.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+                                finish();
+
+                            }
+                        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                dialog.cancel();
+                            }
+                        }).create();
+                dialogReturnSale.show();
+
+            }else{
+                Intent intent = new Intent(RecibosActivity.this, MenuPrincipal.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                finish();
+            }
         }
         return super.onKeyDown(keyCode, event);
     }
+
 }

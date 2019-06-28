@@ -74,7 +74,7 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
     @Override
     public CharacterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-            .inflate(R.layout.lista_distribucion_productos, parent, false);
+                .inflate(R.layout.lista_distribucion_productos, parent, false);
         context = parent.getContext();
         return new CharacterViewHolder(view);
     }
@@ -97,14 +97,23 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
         String status = producto.getStatus();
 
         String marca2 = realm.where(Marcas.class).equalTo("id", marca).findFirst().getName();
-        String tipoProducto = realm.where(TipoProducto.class).equalTo("id", tipo).findFirst().getName();
+        // String tipoProducto = realm.where(TipoProducto.class).equalTo("id", tipo).findFirst().getName();
+        String tipoProducto;
+        Double impuesto = producto.getIva();
+
+        if(impuesto == 0.0){
+
+            tipoProducto = "Exento";
+        }else{
+            tipoProducto = "Gravado";
+        }
 
         realm.close();
 
-          if (status.equals("Activo")) {
+        if (status.equals("Activo")) {
 
             holder.txt_producto_factura_nombre.setText(description);
-             holder.txt_producto_factura_marca.setText("Marca: " + marca2);
+            holder.txt_producto_factura_marca.setText("Marca: " + marca2);
 
             holder.txt_producto_factura_tipo.setText("Tipo: " + tipoProducto);
             holder.txt_producto_factura_precio.setText(precio);
@@ -123,13 +132,13 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
             }
         }
         else{
-        holder.cardView.setVisibility(View.GONE);
-              holder.cardView.getLayoutParams().height = 0;
-              ViewGroup.MarginLayoutParams layoutParams =
-                      (ViewGroup.MarginLayoutParams) holder.cardView.getLayoutParams();
-              layoutParams.setMargins(0, 0,0, 0);
-              holder.cardView.requestLayout();
-           Log.d("inactivo", "inactivo");
+            holder.cardView.setVisibility(View.GONE);
+            holder.cardView.getLayoutParams().height = 0;
+            ViewGroup.MarginLayoutParams layoutParams =
+                    (ViewGroup.MarginLayoutParams) holder.cardView.getLayoutParams();
+            layoutParams.setMargins(0, 0,0, 0);
+            holder.cardView.requestLayout();
+            Log.d("inactivo", "inactivo");
         }
     }
 
@@ -254,9 +263,9 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
 
                                         realm2.insertOrUpdate(pivotnuevo); // using insert API
 
-                                    /*Pivot pivotnuevo = realm2.createObject(Pivot.class, nextId);
+                                        /*Pivot pivotnuevo = realm2.createObject(Pivot.class, nextId);
 
-                                    */
+                                         */
 
                                     }
                                 });
@@ -326,7 +335,7 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
                         Toast.makeText(context, "El producto no se agrego, El descuento debe ser >0 <11", Toast.LENGTH_LONG).show();
                     }
 
-              //      notifyDataSetChanged();
+                    //      notifyDataSetChanged();
 
                 }
                 catch (Exception e) {
@@ -337,12 +346,12 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
             }
         });
         alertDialogBuilder.setNegativeButton("Cancel",
-            new DialogInterface.OnClickListener() {
+                new DialogInterface.OnClickListener() {
 
-                public void onClick(DialogInterface dialog, int id) {
-                    dialog.cancel();
-                }
-            });
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
 
         AlertDialog alertD = alertDialogBuilder.create();
         alertD.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);

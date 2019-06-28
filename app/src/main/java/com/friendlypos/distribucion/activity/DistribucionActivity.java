@@ -47,7 +47,6 @@ public class DistribucionActivity extends BluetoothActivity {
 
     private Toolbar toolbar;
     private TabLayout tabLayout;
-    private Realm realm;
 
     private String invoiceId;
     private String metodoPagoCliente;
@@ -63,9 +62,7 @@ public class DistribucionActivity extends BluetoothActivity {
 
     private double totalizarTotalDouble;
     private int selecClienteTab;
-    String idCliente;
-    String fantasyCliente;
-    int i;
+
     public void cleanTotalize() {
         totalizarSubGrabado = 0.0;
         totalizarSubExento = 0.0;
@@ -178,11 +175,6 @@ public class DistribucionActivity extends BluetoothActivity {
 
         actionBar.setDisplayHomeAsUpEnabled(true);
         connectToPrinter();
-        /*toolbar = (Toolbar) findViewById(R.id.toolbarDistribucion);
-
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);*/
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
         if (viewPager != null) {
@@ -229,15 +221,10 @@ public class DistribucionActivity extends BluetoothActivity {
     }
 
     private void connectToPrinter() {
-        //if(bluetoothStateChangeReceiver.isBluetoothAvailable()) {
         getPreferences();
         if (printer_enabled) {
             if (printer == null || printer.equals("")) {
-//                AlertDialog d = new AlertDialog.Builder(context)
-//                        .setTitle(getResources().getString(R.string.printer_alert))
-//                        .setMessage(getResources().getString(R.string.message_printer_not_found))
-//                        .setNegativeButton(getString(android.R.string.ok), null)
-//                        .show();
+
             }
             else {
                 if (!isServiceRunning(PrinterService.CLASS_NAME)) {

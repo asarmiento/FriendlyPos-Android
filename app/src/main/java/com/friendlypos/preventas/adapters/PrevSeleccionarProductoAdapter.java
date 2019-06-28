@@ -107,7 +107,7 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
         final Productos producto = productosList.get(position);
 
         Realm realm = Realm.getDefaultInstance();
-       // Productos producto = realm.where(Productos.class).equalTo("id", inventario.getProduct_id()).findFirst();
+        // Productos producto = realm.where(Productos.class).equalTo("id", inventario.getProduct_id()).findFirst();
 
         final String description = producto.getDescription();
         String marca = producto.getBrand_id();
@@ -115,8 +115,16 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
         String precio = producto.getSale_price();
 
         String marca2 = realm.where(Marcas.class).equalTo("id", marca).findFirst().getName();
-        String tipoProducto = realm.where(TipoProducto.class).equalTo("id", tipo).findFirst().getName();
+        //String tipoProducto = realm.where(TipoProducto.class).equalTo("id", tipo).findFirst().getName();
+        String tipoProducto;
+        Double impuesto = producto.getIva();
 
+        if(impuesto == 0.0){
+
+            tipoProducto = "Exento";
+        }else{
+            tipoProducto = "Gravado";
+        }
 
         holder.txt_producto_factura_nombre.setText(description);
         holder.txt_producto_factura_marca.setText("Marca: " + marca2);
@@ -130,17 +138,17 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
         }
         else{
 
-        for (Pivot pivot: pivots){
-       /*  for (int i = 0; i <= pivots.size(); i++){*/
-            if(producto.getId().equals(pivot.getProduct_id())){
-                Log.d("jd", "seteando color x lista");
-                holder.cardView.setBackgroundColor(Color.parseColor("#607d8b"));
-                return;
-            }else{
-                Log.d("jd", "se limpia");
-                holder.cardView.setBackgroundColor(Color.parseColor("#009688"));
+            for (Pivot pivot: pivots){
+                /*  for (int i = 0; i <= pivots.size(); i++){*/
+                if(producto.getId().equals(pivot.getProduct_id())){
+                    Log.d("jd", "seteando color x lista");
+                    holder.cardView.setBackgroundColor(Color.parseColor("#607d8b"));
+                    return;
+                }else{
+                    Log.d("jd", "se limpia");
+                    holder.cardView.setBackgroundColor(Color.parseColor("#009688"));
+                }
             }
-        }
         }
         realm.close();
     }
@@ -172,7 +180,7 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
         txtNombreProducto.setText(description);
 
         final TextView label = (TextView) promptView.findViewById(R.id.promtClabel);
-       // label.setText("Escriba una cantidad maxima de " + cantidadDisponible + " minima de 1");
+        // label.setText("Escriba una cantidad maxima de " + cantidadDisponible + " minima de 1");
         label.setText("Escriba la cantidad requerida del producto");
 
         final TextView txtBonificacion = (TextView) promptView.findViewById(R.id.txtBonificacion);
@@ -242,78 +250,78 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
                 try {
 
                     // TODO obtiene la cantidad del producto
-                producto_amount_dist_add = Double.parseDouble(((input.getText().toString().isEmpty()) ? "0" : input.getText().toString()));
+                    producto_amount_dist_add = Double.parseDouble(((input.getText().toString().isEmpty()) ? "0" : input.getText().toString()));
 
                     // TODO obtiene el descuento del producto
-                producto_descuento_add = Double.parseDouble(((desc.getText().toString().isEmpty()) ? "0" : desc.getText().toString()));
+                    producto_descuento_add = Double.parseDouble(((desc.getText().toString().isEmpty()) ? "0" : desc.getText().toString()));
 
 
-                if (producto_descuento_add >= 0 && producto_descuento_add <= 10) {
+                    if (producto_descuento_add >= 0 && producto_descuento_add <= 10) {
 
-                    if (producto_amount_dist_add > 0) {
+                        if (producto_amount_dist_add > 0) {
 
-                        if (bonusProducto.equals("1")){
-                            Log.d("idProductoBONIF", producto_id + "");
+                            if (bonusProducto.equals("1")){
+                                Log.d("idProductoBONIF", producto_id + "");
 
-                            long fechaexp = fechaExpiracionBonus.getTime();
-                            Log.d("fechaExpBONIF", fechaexp + "");
+                                long fechaexp = fechaExpiracionBonus.getTime();
+                                Log.d("fechaExpBONIF", fechaexp + "");
 
-                            Calendar cal = Calendar.getInstance();
-                            long hoy = cal.getTimeInMillis();
-                            Log.d("fechaBONIF", hoy + "");
-
-
-                            if(producto_amount_dist_add >= productosParaObtenerBonus ){
-
-                                if(hoy <= fechaexp){
-                                    Log.d("PRODOBTE", productosParaObtenerBonus + "");
-                                    Log.d("PRODDELBO", productosDelBonus + "");
-                                    Log.d("PRODADD", producto_amount_dist_add + "");
-
-                                    double productos = producto_amount_dist_add / productosParaObtenerBonus;
-
-                                    String prod = String.format("%.0f", productos);
-                                    double productoBonusTotal = Double.parseDouble(prod) * productosDelBonus;
+                                Calendar cal = Calendar.getInstance();
+                                long hoy = cal.getTimeInMillis();
+                                Log.d("fechaBONIF", hoy + "");
 
 
-                                    Log.d("PROD DIV", productos + "");
-                                    Log.d("PROD TOTAL", productoBonusTotal + "");
+                                if(producto_amount_dist_add >= productosParaObtenerBonus ){
 
-                                    producto_bonus_add =  producto_amount_dist_add + productoBonusTotal;
-                                    Log.d("PRODUCTODELBONUS", producto_bonus_add + "");
-                                    agregarBonificacion();
-                                    Toast.makeText(context, "Se realizó una bonificación de " + productoBonusTotal + " productos", Toast.LENGTH_LONG).show();
+                                    if(hoy <= fechaexp){
+                                        Log.d("PRODOBTE", productosParaObtenerBonus + "");
+                                        Log.d("PRODDELBO", productosDelBonus + "");
+                                        Log.d("PRODADD", producto_amount_dist_add + "");
 
-                            }
+                                        double productos = producto_amount_dist_add / productosParaObtenerBonus;
+
+                                        String prod = String.format("%.0f", productos);
+                                        double productoBonusTotal = Double.parseDouble(prod) * productosDelBonus;
+
+
+                                        Log.d("PROD DIV", productos + "");
+                                        Log.d("PROD TOTAL", productoBonusTotal + "");
+
+                                        producto_bonus_add =  producto_amount_dist_add + productoBonusTotal;
+                                        Log.d("PRODUCTODELBONUS", producto_bonus_add + "");
+                                        agregarBonificacion();
+                                        Toast.makeText(context, "Se realizó una bonificación de " + productoBonusTotal + " productos", Toast.LENGTH_LONG).show();
+
+                                    }
+                                    else{
+                                        Toast.makeText(context, "Fecha expirada para el bonus", Toast.LENGTH_LONG).show();
+                                        agregar();
+                                    }
+                                }
                                 else{
-                                    Toast.makeText(context, "Fecha expirada para el bonus", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(context, "No alcanza la cantidad deseada para el bonus", Toast.LENGTH_LONG).show();
                                     agregar();
                                 }
                             }
                             else{
-                                Toast.makeText(context, "No alcanza la cantidad deseada para el bonus", Toast.LENGTH_LONG).show();
                                 agregar();
                             }
-                        }
-                        else{
-                            agregar();
-                        }
                         }
                         else {
                             Toast.makeText(context, "El producto no se agrego, verifique la cantidad que esta ingresando", Toast.LENGTH_LONG).show();
                         }
-                }
+                    }
                     else {
-                    Toast.makeText(context, "El producto no se agrego, El descuento debe ser >0 <11", Toast.LENGTH_LONG).show();
-                }
-                notifyDataSetChanged();
+                        Toast.makeText(context, "El producto no se agrego, El descuento debe ser >0 <11", Toast.LENGTH_LONG).show();
+                    }
+                    notifyDataSetChanged();
                 }
                 catch (Exception e) {
                     e.printStackTrace();
 
                 }
 
-                }
+            }
         });
         alertDialogBuilder.setNegativeButton("Cancel",
                 new DialogInterface.OnClickListener() {
@@ -591,7 +599,7 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
             txt_producto_factura_marca = (TextView) view.findViewById(R.id.txt_prev_producto_factura_marca);
             txt_producto_factura_tipo = (TextView) view.findViewById(R.id.txt_prev_producto_factura_tipo);
             txt_producto_factura_precio = (TextView) view.findViewById(R.id.txt_prev_producto_factura_precio);
-           /* txt_producto_factura_disponible = (TextView) view.findViewById(R.id.txt_prev_producto_factura_disponible);*/
+            /* txt_producto_factura_disponible = (TextView) view.findViewById(R.id.txt_prev_producto_factura_disponible);*/
             txt_producto_factura_seleccionado = (TextView) view.findViewById(R.id.txt_prev_producto_factura_seleccionado);
         }
 
@@ -612,7 +620,7 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
 
                     Productos clickedDataItem = productosList.get(pos);
                     String ProductoID = clickedDataItem.getId();
-                   // int InventarioID = clickedDataItem.getId();
+                    // int InventarioID = clickedDataItem.getId();
 
                     String precio = producto.getSale_price();
                     String precio2 = producto.getSale_price2();
@@ -621,7 +629,7 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
                     String precio5 = producto.getSale_price5();
                     String bonusProducto = producto.getBonus();
 
-                  /*  Double ProductoAmount = Double.valueOf(clickedDataItem.getAmount());*/
+                    /*  Double ProductoAmount = Double.valueOf(clickedDataItem.getAmount());*/
 
                     Realm realm1 = Realm.getDefaultInstance();
                     Productos producto = realm1.where(Productos.class).equalTo("id", ProductoID).findFirst();
@@ -630,7 +638,7 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
 
                     realm1.close();
 
-                   addProduct(ProductoID, description, precio, precio2, precio3, precio4, precio5, bonusProducto);
+                    addProduct(ProductoID, description, precio, precio2, precio3, precio4, precio5, bonusProducto);
                 }
             });
         }

@@ -43,8 +43,6 @@ public class crearCliente extends BluetoothActivity {
     @Bind(R.id.cliente_card_nuevo)
     EditText cliente_card_nuevo;
 
-
-
     @Bind(R.id.cliente_longitud_nuevo)
     TextView cliente_longitud_nuevo;
 
@@ -210,7 +208,6 @@ public class crearCliente extends BluetoothActivity {
             }
         });
 
-        // Redirección al Login
         if (!SessionPrefes.get(this).isLoggedIn()) {
             startActivity(new Intent(this, LoginActivity.class));
             finish();
@@ -303,14 +300,6 @@ public class crearCliente extends BluetoothActivity {
     private boolean isValidCard04(String phone2) {
         boolean check = false;
         if (phone2.length() > 9 && phone2.length() < 12) {
-            check = true;
-        }
-        return check;
-    }
-
-    private boolean isValidNumeros(String phone2) {
-        boolean check = false;
-        if (phone2.length() >= 1 && phone2.length() < 11) {
             check = true;
         }
         return check;
@@ -431,7 +420,6 @@ public class crearCliente extends BluetoothActivity {
                 else {
                     nextId = currentIdNum.intValue() + 1;
                 }
-
 
                 customer_new clienteNuevo = new customer_new(); // unmanaged
 

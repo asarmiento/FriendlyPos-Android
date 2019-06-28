@@ -29,6 +29,7 @@ public class Productos extends RealmObject {
     String utility;
     String percentage_of_utility;
     String sale_price;
+    double iva;
     String sale_price2;
     String sale_price3;
     String sale_price4;
@@ -163,6 +164,14 @@ public class Productos extends RealmObject {
         this.sale_price = sale_price;
     }
 
+    public double getIva() {
+        return iva;
+    }
+
+    public void setIva(double iva) {
+        this.iva = iva;
+    }
+
     public String getSale_price2() {
         return sale_price2;
     }
@@ -277,6 +286,7 @@ public class Productos extends RealmObject {
                 ", utility='" + utility + '\'' +
                 ", percentage_of_utility='" + percentage_of_utility + '\'' +
                 ", sale_price='" + sale_price + '\'' +
+                ", iva='" + iva + '\'' +
                 ", sale_price2='" + sale_price2 + '\'' +
                 ", sale_price3='" + sale_price3 + '\'' +
                 ", sale_price4='" + sale_price4 + '\'' +
