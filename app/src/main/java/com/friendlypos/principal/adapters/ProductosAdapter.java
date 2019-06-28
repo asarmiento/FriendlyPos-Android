@@ -40,8 +40,8 @@ public class ProductosAdapter extends RecyclerView.Adapter<ProductosAdapter.Char
     public CharacterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.lista_productos, parent, false);
 
-      //  CharacterViewHolder placeViewHolder = new CharacterViewHolder(view);
-       // placeViewHolder.cardView.setOnClickListener(new ProductosAdapter(placeViewHolder, parent));
+        //  CharacterViewHolder placeViewHolder = new CharacterViewHolder(view);
+        // placeViewHolder.cardView.setOnClickListener(new ProductosAdapter(placeViewHolder, parent));
         return new ProductosAdapter.CharacterViewHolder(view);
     }
 
@@ -50,9 +50,18 @@ public class ProductosAdapter extends RecyclerView.Adapter<ProductosAdapter.Char
         Productos producto = productosList.get(position);
         Realm realm = Realm.getDefaultInstance();
         String marca = realm.where(Marcas.class).equalTo("id", producto.getBrand_id()).findFirst().getName();
-        String tipoProducto = realm.where(TipoProducto.class).equalTo("id", producto.getProduct_type_id()).findFirst().getName();
+        //  String tipoProducto = realm.where(TipoProducto.class).equalTo("id", producto.getProduct_type_id()).findFirst().getName();
         Inventario inventario = realm.where(Inventario.class).equalTo("product_id", producto.getId()).findFirst();
         precio = Double.parseDouble(producto.getSale_price());
+        String tipoProducto;
+        Double impuesto = producto.getIva();
+
+        if(impuesto == 0.0){
+
+            tipoProducto = "Exento";
+        }else{
+            tipoProducto = "Gravado";
+        }
 
         realm.close();
 

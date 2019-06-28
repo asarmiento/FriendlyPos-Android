@@ -49,33 +49,35 @@ public class SubirHelperProductoDevuelto {
         Log.d("tokenCliente", token + " ");
         if (isOnline()) {
             Log.d("factura1", facturaQuery + " ");
-        mAPIService.savePostProductoDevuelto(facturaQuery, token).enqueue(new Callback<Inventario>() {
+            mAPIService.savePostProductoDevuelto(facturaQuery, token).enqueue(new Callback<Inventario>() {
 
-            @Override
-            public void onResponse(Call<Inventario> call, Response<Inventario> response) {
+                @Override
+                public void onResponse(Call<Inventario> call, Response<Inventario> response) {
 
 
-                if(response.isSuccessful()) {
-                    Log.d("respPreventa",response.body().toString());
+                    if(response.isSuccessful()) {
+                        Log.d("respPreventa",response.body().toString());
 
-                    codigo = response.code();
-                    codigoS = response.body().getCode();
-                    mensajeS = response.body().getMessages();
-                    resultS= String.valueOf(response.body().isResult());
+                        codigo = response.code();
+                        codigoS = response.body().getCode();
+                        mensajeS = response.body().getMessages();
+                        resultS= String.valueOf(response.body().isResult());
 
-                    activity.codigoDeRespuestaProductoDevuelto(codigoS, mensajeS, resultS, codigo, cantidadFactura);
+                        activity.codigoDeRespuestaProductoDevuelto(codigoS, mensajeS, resultS, codigo, cantidadFactura);
+                        Log.d("codID",cantidadFactura+"");
+
+                    }
+                    else{
+                        Log.d("respPreventa", "Error");
+                    }
+
                 }
-                else{
-                    Log.d("respPreventa", "Error");
+
+                @Override
+                public void onFailure(Call<Inventario> call, Throwable t) {
+                    Log.e(TAG, "Unable to submit post to API.");
                 }
-
-            }
-
-            @Override
-            public void onFailure(Call<Inventario> call, Throwable t) {
-                Log.e(TAG, "Unable to submit post to API.");
-            }
-        });}
+            });}
         else{
             Toast.makeText(activity, "Error, por favor revisar conexión de Internet", Toast.LENGTH_SHORT).show();
         }
