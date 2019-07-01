@@ -132,7 +132,6 @@ public class RecibosClientesAdapter extends RecyclerView.Adapter<RecibosClientes
             @Override
             public void onClick(View view) {
 
-
                 int tabCliente1 = activity.getSelecClienteTabRecibos();
                 if (tabCliente1 == 1) {
 

@@ -468,22 +468,22 @@ public class PrinterFunctions {
                     e.printStackTrace();
                 }
                 String barcode = producto.getBarcode();
-                String typeId = producto.getProduct_type_id();
-                String nombreTipo = null;
 
                 double cant = Double.parseDouble(salesList1.get(i).getAmount());
 
                 double sugerido=0.0;
 
-                if (typeId.equals("1")){
+                Double impuesto = producto.getIva();
+                String nombreTipo = null;
+
+                if(impuesto == 0.0){
+                    nombreTipo = "Exento";
+                    precio = Double.parseDouble(salesList1.get(i).getPrice());
+                }else{
                     nombreTipo = "Gravado";
                     precio = Double.parseDouble(salesList1.get(i).getPrice()) / 1.13;
                 }
-                else if (typeId.equals("2")){
-                    nombreTipo = "Exento";
-                    precio = Double.parseDouble(salesList1.get(i).getPrice());
 
-                }
                 sugerido = (precio)*(precioSugerido /100) + (precio);
 
                 send += String.format("%s  %.24s ", description1, barcode) + "\r\n" +
@@ -1670,7 +1670,6 @@ public class PrinterFunctions {
                 int esBonus = salesList1.get(i).getBonus();
 
                 Productos producto = realm.where(Productos.class).equalTo("id", salesList1.get(i).getProduct_id()).findFirst();
-
                 double precioSugerido = Double.parseDouble(producto.getSuggested());
                 String description = producto.getDescription();
                 byte[] byteText = description.getBytes(Charset.forName("UTF-8"));
@@ -1682,22 +1681,24 @@ public class PrinterFunctions {
                     e.printStackTrace();
                 }
                 String barcode = producto.getBarcode();
-                String typeId = producto.getProduct_type_id();
-                String nombreTipo = null;
-
                 double cant = Double.parseDouble(salesList1.get(i).getAmount());
-
-
                 double sugerido=0.0;
 
-                if (typeId.equals("1")){
+
+                Double impuesto = producto.getIva();
+
+                String nombreTipo = null;
+
+                if(impuesto == 0.0){
+
+                    nombreTipo = "Exento";
+                    precio = Double.parseDouble(salesList1.get(i).getPrice());
+                }else{
                     nombreTipo = "Gravado";
                     precio = Double.parseDouble(salesList1.get(i).getPrice()) / 1.13;
                 }
-                else if (typeId.equals("2")){
-                    nombreTipo = "Exento";
-                    precio = Double.parseDouble(salesList1.get(i).getPrice());
-                }
+
+
                 sugerido = (precio)*(precioSugerido /100) + (precio);
 
                 if(esBonus == 1) {

@@ -118,6 +118,22 @@ public class SessionPrefes {
     }
 
 
+
+    public void guardarDatosBloquearBotonesDevolver(int numero) {
+            SharedPreferences.Editor editor = mPrefs.edit();
+            editor.putInt(PREF_PREV_NUMERO, numero);
+            editor.apply();
+    }
+
+    public int getDatosBloquearBotonesDevolver(){
+        int numero = mPrefs.getInt(PREF_PREV_NUMERO, 0);
+        return numero;
+    }
+
+
+
+
+
     public void guardarDatosUsuarioas(String userName, String passWord) {
         if (userName != null && passWord != null ) {
             //todo revisar que es PREF_USER_EXPIRES_IN

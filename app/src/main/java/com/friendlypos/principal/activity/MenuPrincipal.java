@@ -91,12 +91,21 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
     private static String POPUP_CONSTANT = "mPopup";
     private static String POPUP_FORCE_SHOW_ICON = "setForceShowIcon";
     private NetworkStateChangeReceiver networkStateChangeReceiver;
-    int bloquear = 0;
+    int bloquear;
     private FloatingActionButton but1 = null;
     private FloatingActionButton but2 = null;
     private FloatingActionButton but3 = null;
     private FloatingActionButton but4 = null;
     private FloatingActionButton but5 = null;
+
+    public int getBloquear() {
+        return bloquear;
+    }
+
+    public void setBloquear(int bloquear) {
+        this.bloquear = bloquear;
+    }
+
     @Bind(R.id.clickClientes)
     LinearLayout clickClientes;
 
@@ -143,6 +152,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
     String usuer;
     String idUsuario;
     String facturaId;
+    int facturaIdDevolver;
     String facturaIdA;
 
 
@@ -210,6 +220,12 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                         Toast.makeText(MenuPrincipal.this, "Botón no disponible", Toast.LENGTH_LONG).show();
                     }
                 }
+
+                if(session.getDatosBloquearBotonesDevolver() == 1){
+                    if (!properties.getBlockedApp()) {
+                        Toast.makeText(MenuPrincipal.this, "Botón no disponible, descargar el inventario ya que fue devuelto", Toast.LENGTH_LONG).show();
+                    }
+                }
                 else{
                     if (!properties.getBlockedApp()) {
                         Intent intent = new Intent(getApplication(), DistribucionActivity.class);
@@ -233,7 +249,13 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                     if (!properties.getBlockedApp()) {
                         Toast.makeText(MenuPrincipal.this, "Botón no disponible", Toast.LENGTH_LONG).show();
                     }
-                }else{
+                }
+                if(session.getDatosBloquearBotonesDevolver() == 1){
+                    if (!properties.getBlockedApp()) {
+                        Toast.makeText(MenuPrincipal.this, "Botón no disponible, descargar el inventario ya que fue devuelto", Toast.LENGTH_LONG).show();
+                    }
+                }
+                else{
                 if (!properties.getBlockedApp()) {
                     Intent intent = new Intent(getApplication(), VentaDirectaActivity.class);
                     startActivity(intent);
@@ -246,7 +268,14 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
         but3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!properties.getBlockedApp()) {
+
+                 if(session.getDatosBloquearBotonesDevolver() == 1){
+                    if (!properties.getBlockedApp()) {
+                        Toast.makeText(MenuPrincipal.this, "Botón no disponible, descargar el inventario ya que fue devuelto", Toast.LENGTH_LONG).show();
+                    }
+                }
+
+                else if(!properties.getBlockedApp()) {
                     Intent intent = new Intent(getApplication(), PreventaActivity.class);
                     startActivity(intent);
                 }
@@ -492,7 +521,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                 break;
 
             case R.id.btn_descargar_inventario:
-
+                session.guardarDatosBloquearBotonesDevolver(0);
                 Realm realm4 = Realm.getDefaultInstance();
 
                 RealmQuery<invoice> query4 = realm4.where(invoice.class).equalTo("subida", 1);
@@ -521,7 +550,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
 
                 Realm realm = Realm.getDefaultInstance();
 
-                RealmQuery<invoice> query = realm.where(invoice.class).equalTo("facturaDePreventa", "Distribucion").equalTo("subida", 1).or().equalTo("devolucionInvoice", 1);
+                final RealmQuery<invoice> query = realm.where(invoice.class).equalTo("facturaDePreventa", "Distribucion").equalTo("subida", 1).or().equalTo("devolucionInvoice", 1);
                 final RealmResults<invoice> invoice1 = query.findAll();
                 Log.d("qweqweq", invoice1.toString());
                 List<invoice> listaFacturas = realm.copyFromRealm(invoice1);
@@ -632,30 +661,83 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                 break;
 
             case R.id.btn_devolver_inventario:
-                Realm realmDevolver = Realm.getDefaultInstance();
 
-                RealmQuery<Inventario> queryDevolver = realmDevolver.where(Inventario.class).equalTo("devuelvo", 1);
-                final RealmResults<Inventario> invoiceDevolver = queryDevolver.findAll();
-                Log.d("qweqweq", invoiceDevolver.toString());
-                List<Inventario> listaDevolver = realmDevolver.copyFromRealm(invoiceDevolver);
-                Log.d("qweqweq1", listaDevolver + "");
-                realmDevolver.close();
+                Realm realmDevolver1 = Realm.getDefaultInstance();
+                RealmQuery<invoice> queryDevolver1 = realmDevolver1.where(invoice.class).equalTo("subida", 1);
+                final RealmResults<invoice> invoiceDevolver1  = queryDevolver1.findAll();
+                Log.d("qweqweq", invoiceDevolver1 .toString());
 
-                if(listaDevolver.size()== 0){
-                    Toast.makeText(MenuPrincipal.this,"No hay productos para devolver", Toast.LENGTH_LONG).show();
-                }else {
+                if(invoiceDevolver1 .size()== 0){
 
-                    for (int i = 0; i < listaDevolver.size(); i++) {
-                        Toast.makeText(MenuPrincipal.this, "Subiendo información...", Toast.LENGTH_SHORT).show();
 
-                        facturaIdDevuelto = listaDevolver.get(i).getId();
-                        Log.d("facturaIdCV", facturaIdDevuelto + "");
 
-                        EnviarProductoDevuelto obj = new EnviarProductoDevuelto(listaDevolver.get(i));
-                        Log.d("My App", obj + "");
-                        subirProductoDevuelto.sendPostClienteProductoDevuelto(obj, facturaIdDevuelto);
+                    Realm realmDevolver = Realm.getDefaultInstance();
+
+                    RealmQuery<Inventario> queryDevolver = realmDevolver.where(Inventario.class).equalTo("devuelvo", 1);
+                    final RealmResults<Inventario> invoiceDevolver = queryDevolver.findAll();
+                    Log.d("qweqweq", invoiceDevolver.toString());
+                    List<Inventario> listaDevolver = realmDevolver.copyFromRealm(invoiceDevolver);
+                    Log.d("qweqweq1", listaDevolver + "");
+                    realmDevolver.close();
+
+                    if(listaDevolver.size()== 0){
+                        Toast.makeText(MenuPrincipal.this,"No hay productos para devolver", Toast.LENGTH_LONG).show();
+                    }else {
+                        session.guardarDatosBloquearBotonesDevolver(1);
+                        for (int i = 0; i < listaDevolver.size(); i++) {
+                            Toast.makeText(MenuPrincipal.this, "Subiendo información...", Toast.LENGTH_SHORT).show();
+
+                            facturaIdDevuelto = listaDevolver.get(i).getId();
+                            Log.d("facturaIdCV", facturaIdDevuelto + "");
+
+                            EnviarProductoDevuelto obj = new EnviarProductoDevuelto(listaDevolver.get(i));
+                            Log.d("My App", obj + "");
+                            subirProductoDevuelto. sendPostClienteProductoDevuelto(obj, facturaIdDevuelto);
+                        }
                     }
                 }
+                else {
+                    Toast.makeText(MenuPrincipal.this,"Existen facturas pendientes de subir", Toast.LENGTH_LONG).show();
+                }
+
+
+
+
+
+/*
+             final Realm realm5 = Realm.getDefaultInstance();
+                realm5.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm5) {
+
+                        RealmQuery<invoice> queryProforma = realm5.where(invoice.class).equalTo("subida", 1);
+                        final RealmResults<invoice> invoiceProforma = queryProforma.findAll();
+                        if(invoiceProforma.size() == 0){
+
+                            RealmResults<Inventario> query1 = realm5.where(Inventario.class).notEqualTo("amount", "0")
+                                    .notEqualTo("amount", "0.0").notEqualTo("amount", "0.000")
+                                   .findAll();
+
+                            if(query1.size() == 0){
+                              //  Toast.makeText(MenuPrincipal.this,"No hay productos ", Toast.LENGTH_LONG).show();
+                            }else {
+                                for (int i = 0; i < query1.size(); i++) {
+                                    //    Toast.makeText(MenuPrincipal.this,"hay " + query1.size() , Toast.LENGTH_LONG).show();
+                                    Toast.makeText(MenuPrincipal.this,"Borrando inventario disponible" , Toast.LENGTH_LONG).show();
+                                    query1.deleteAllFromRealm();
+
+                                }
+                            }
+                        }else {
+                            Toast.makeText(MenuPrincipal.this,"Subir facturas pendientes primero", Toast.LENGTH_LONG).show();
+
+                        }
+
+                    }
+
+                });
+                realm5.close();*/
+
                 break;
 
             case R.id.btn_subir_recibos:
@@ -1021,7 +1103,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
         realm3.close();
     }
 
-    protected void actualizarInventarioDevuelto(final String factura) {
+    protected void actualizarInventarioDevuelto(final int factura) {
 
         // TRANSACCION PARA ACTUALIZAR CAMPOS DE LA TABLA VENTAS
         final Realm realm3 = Realm.getDefaultInstance();
@@ -1081,6 +1163,74 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
         if (apiConsecutivo == null){
             Toast.makeText(getApplicationContext(),"Favor descargar info de empresa",Toast.LENGTH_LONG).show();
         }
+        else if(session.getDatosBloquearBotonesDevolver()==1){
+            switch (component.getId()) {
+
+                case R.id.clickDistribucion:
+                    Toast.makeText(MenuPrincipal.this, "Botón no disponible, descargar el inventario ya que fue devuelto", Toast.LENGTH_LONG).show();
+
+                    break;
+
+                case R.id.clickVentaDirecta:
+                    Toast.makeText(MenuPrincipal.this, "Botón no disponible, descargar el inventario ya que fue devuelto", Toast.LENGTH_LONG).show();
+                    break;
+
+                case R.id.clickClientes:
+                    Intent clientes;
+                    clientes = new Intent(MenuPrincipal.this, ClientesActivity.class);
+                    startActivity(clientes);
+                    finish();
+
+                    break;
+                case R.id.clickProductos:
+                    Toast.makeText(MenuPrincipal.this, "Botón no disponible, descargar el inventario ya que fue devuelto", Toast.LENGTH_LONG).show();
+                    break;
+
+                case R.id.clickPreventa:
+                    Toast.makeText(MenuPrincipal.this, "Botón no disponible, descargar el inventario ya que fue devuelto", Toast.LENGTH_LONG).show();
+                    break;
+
+                case R.id.clickRecibos:
+                    Intent recibos;
+                    recibos = new Intent(MenuPrincipal.this, RecibosActivity.class);
+                    startActivity(recibos);
+                    finish();
+                    //  Toast.makeText(MenuPrincipal.this, "Botón no disponible", Toast.LENGTH_LONG).show();
+                    break;
+
+                case R.id.clickReimprimirVentas:
+                    Intent reimprimir;
+                    reimprimir = new Intent(MenuPrincipal.this, ReimprimirActivity.class);
+                    startActivity(reimprimir);
+                    finish();
+                    break;
+
+                case R.id.clickReimprimirPedidos:
+                    Intent reimprimirpedidos;
+                    reimprimirpedidos = new Intent(MenuPrincipal.this, ReimprimirPedidosActivity.class);
+                    startActivity(reimprimirpedidos);
+                    finish();
+                    break;
+
+                case R.id.clickGrafico:
+                    Intent graf;
+                    graf = new Intent(MenuPrincipal.this, GraficoActivity.class);
+                    startActivity(graf);
+                    finish();
+                    break;
+                case R.id.clickEmail:
+                    Intent email;
+                    email = new Intent(MenuPrincipal.this, EmailActivity.class);
+                    startActivity(email);
+                    finish();
+                    break;
+            }
+
+
+        }
+
+
+
         else if(apiConsecutivo.equals("0")){
         switch (component.getId()) {
 
@@ -1489,19 +1639,22 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
 
     public int codigoDeRespuestaProductoDevuelto(String codS, String messageS, String resultS, int cod, int idFacturaSubida){
 
-
         Realm realmPedidos = Realm.getDefaultInstance();
-        Inventario queryPedidos = realmPedidos.where(Inventario.class).equalTo("id", idFacturaSubida).equalTo("devuelvo", 1).findFirst();
 
-        if (codS.equals("1") && resultS.equals("true")) {
-            facturaId = String.valueOf(queryPedidos.getId());
-            actualizarInventarioDevuelto(facturaId);
+            Inventario queryPedidos = realmPedidos.where(Inventario.class).equalTo("id", idFacturaSubida).equalTo("devuelvo", 1).findFirst();
 
-            Toast.makeText(MenuPrincipal.this, messageS, Toast.LENGTH_LONG).show();
-        } else {
-            Toast.makeText(MenuPrincipal.this, messageS, Toast.LENGTH_LONG).show();
-        }
+            if (codS.equals("1") && resultS.equals("true")) {
+                facturaIdDevolver = queryPedidos.getId();
+                actualizarInventarioDevuelto(facturaIdDevolver);
+                Log.d("Devuelto", "Devuelto");
+                Toast.makeText(MenuPrincipal.this, messageS, Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(MenuPrincipal.this, messageS, Toast.LENGTH_LONG).show();
+            }
+
+
         return cod;
+
     }
 
 
