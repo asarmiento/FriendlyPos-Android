@@ -30,6 +30,7 @@ import com.friendlypos.distribucion.modelo.invoice;
 import com.friendlypos.distribucion.modelo.Inventario;
 import com.friendlypos.distribucion.modelo.Pivot;
 import com.friendlypos.distribucion.modelo.sale;
+import com.friendlypos.login.util.SessionPrefes;
 import com.friendlypos.principal.modelo.Clientes;
 
 import java.util.ArrayList;
@@ -38,6 +39,7 @@ import java.util.List;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
+import static io.realm.internal.SyncObjectServerFacade.getApplicationContext;
 import static java.lang.String.valueOf;
 
 public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdapter.CharacterViewHolder> {
@@ -57,12 +59,12 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
     int tabCliente;
     int activa = 0;
     String nombreMetodoPago;
-
+    SessionPrefes session;
     public DistrClientesAdapter(Context context, DistribucionActivity activity, List<sale> contentList) {
         this.contentList = contentList;
         this.activity = activity;
         this.QuickContext = context;
-
+        session = new SessionPrefes(getApplicationContext());
     }
 
     @Override
@@ -511,6 +513,7 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
                     }
                 }).create();
         dialogReturnSale.show();
+        session.guardarDatosBloquearBotonesDevolver(0);
     }
 
     @Override

@@ -26,6 +26,7 @@ import com.friendlypos.distribucion.modelo.Pivot;
 import com.friendlypos.distribucion.modelo.invoice;
 import com.friendlypos.distribucion.modelo.sale;
 import com.friendlypos.distribucion.util.Adapter;
+import com.friendlypos.login.util.SessionPrefes;
 import com.friendlypos.preventas.modelo.Numeracion;
 import com.friendlypos.principal.activity.BluetoothActivity;
 import com.friendlypos.principal.activity.MenuPrincipal;
@@ -48,7 +49,7 @@ import io.realm.RealmResults;
 import static io.realm.internal.SyncObjectServerFacade.getApplicationContext;
 
 public class VentaDirectaActivity extends BluetoothActivity {
-
+    SessionPrefes session;
     private Toolbar toolbar;
     private TabLayout tabLayout;
     private int invoiceIdPreventa;
@@ -171,7 +172,7 @@ public class VentaDirectaActivity extends BluetoothActivity {
         toolbar = (Toolbar) findViewById(R.id.toolbarVentaDirecta);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
-
+        session = new SessionPrefes(getApplicationContext());
         actionBar.setDisplayHomeAsUpEnabled(true);
         preSellInvoiceDelegate = new PreSellInvoiceDelegateVD(this);
         connectToPrinter();
@@ -663,7 +664,7 @@ public class VentaDirectaActivity extends BluetoothActivity {
             });
 
         }
-
+        session.guardarDatosBloquearBotonesDevolver(0);
         }
 
     }

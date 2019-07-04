@@ -238,6 +238,7 @@ public class VentaDirTotalizarFragment extends BaseFragment  {
                             e.printStackTrace();
 
                         }
+                        session.guardarDatosBloquearBotonesDevolver(0);
                     }
 
                 });

@@ -209,6 +209,7 @@ public class DistTotalizarFragment extends BaseFragment  {
                             e.printStackTrace();
 
                         }
+                        session.guardarDatosBloquearBotonesDevolver(0);
                     }
 
                 });

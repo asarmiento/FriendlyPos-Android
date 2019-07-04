@@ -221,7 +221,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                     }
                 }
 
-                if(session.getDatosBloquearBotonesDevolver() == 1){
+                else if(session.getDatosBloquearBotonesDevolver() == 1){
                     if (!properties.getBlockedApp()) {
                         Toast.makeText(MenuPrincipal.this, "Botón no disponible, descargar el inventario ya que fue devuelto", Toast.LENGTH_LONG).show();
                     }
@@ -242,6 +242,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
             @Override
             public void onClick(View v) {
                 consecutivoApi(idUsuario);
+                Log.d("sessionInicio", session.getDatosBloquearBotonesDevolver()+"");
                 if (apiConsecutivo == null){
                     Toast.makeText(getApplicationContext(),"Favor descargar info de empresa",Toast.LENGTH_LONG).show();
                 }
@@ -250,8 +251,10 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                         Toast.makeText(MenuPrincipal.this, "Botón no disponible", Toast.LENGTH_LONG).show();
                     }
                 }
-                if(session.getDatosBloquearBotonesDevolver() == 1){
+                else if(session.getDatosBloquearBotonesDevolver() == 1){
+                    Log.d("session", session.getDatosBloquearBotonesDevolver()+"");
                     if (!properties.getBlockedApp()) {
+                        Log.d("properties", properties.getBlockedApp()+"");
                         Toast.makeText(MenuPrincipal.this, "Botón no disponible, descargar el inventario ya que fue devuelto", Toast.LENGTH_LONG).show();
                     }
                 }
@@ -269,13 +272,13 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
             @Override
             public void onClick(View v) {
 
-                 if(session.getDatosBloquearBotonesDevolver() == 1){
+             /*    if(session.getDatosBloquearBotonesDevolver() == 1){
                     if (!properties.getBlockedApp()) {
                         Toast.makeText(MenuPrincipal.this, "Botón no disponible, descargar el inventario ya que fue devuelto", Toast.LENGTH_LONG).show();
                     }
                 }
 
-                else if(!properties.getBlockedApp()) {
+                else */if(!properties.getBlockedApp()) {
                     Intent intent = new Intent(getApplication(), PreventaActivity.class);
                     startActivity(intent);
                 }
@@ -521,7 +524,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                 break;
 
             case R.id.btn_descargar_inventario:
-                session.guardarDatosBloquearBotonesDevolver(0);
+               session.guardarDatosBloquearBotonesDevolver(0);
                 Realm realm4 = Realm.getDefaultInstance();
 
                 RealmQuery<invoice> query4 = realm4.where(invoice.class).equalTo("subida", 1);
@@ -669,8 +672,6 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
 
                 if(invoiceDevolver1 .size()== 0){
 
-
-
                     Realm realmDevolver = Realm.getDefaultInstance();
 
                     RealmQuery<Inventario> queryDevolver = realmDevolver.where(Inventario.class).equalTo("devuelvo", 1);
@@ -683,7 +684,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                     if(listaDevolver.size()== 0){
                         Toast.makeText(MenuPrincipal.this,"No hay productos para devolver", Toast.LENGTH_LONG).show();
                     }else {
-                        session.guardarDatosBloquearBotonesDevolver(1);
+                       session.guardarDatosBloquearBotonesDevolver(1);
                         for (int i = 0; i < listaDevolver.size(); i++) {
                             Toast.makeText(MenuPrincipal.this, "Subiendo información...", Toast.LENGTH_SHORT).show();
 
@@ -699,9 +700,6 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                 else {
                     Toast.makeText(MenuPrincipal.this,"Existen facturas pendientes de subir", Toast.LENGTH_LONG).show();
                 }
-
-
-
 
 
 /*
@@ -1183,11 +1181,17 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
 
                     break;
                 case R.id.clickProductos:
-                    Toast.makeText(MenuPrincipal.this, "Botón no disponible, descargar el inventario ya que fue devuelto", Toast.LENGTH_LONG).show();
+                    Intent productos;
+                    productos = new Intent(MenuPrincipal.this, ProductosActivity.class);
+                    startActivity(productos);
+                    finish();
                     break;
 
                 case R.id.clickPreventa:
-                    Toast.makeText(MenuPrincipal.this, "Botón no disponible, descargar el inventario ya que fue devuelto", Toast.LENGTH_LONG).show();
+                    Intent preventa;
+                    preventa = new Intent(MenuPrincipal.this, PreventaActivity.class);
+                    startActivity(preventa);
+                    finish();
                     break;
 
                 case R.id.clickRecibos:
