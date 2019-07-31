@@ -126,9 +126,11 @@ public class TotalizeHelperVentaDirecta {
             subGrabConImp = subGrab + (precio) * (cantidad);
             Log.d("subGrabConImp", subGrabConImp + "");
 
+            Log.d("IVA", iva + "");
+            Double ivaConvertido = (iva / 100)+1;
+            Log.d("ivaa", ivaConvertido + "");
 
-
-            subGrab = (subGrab + (precio) * (cantidad))/1.13;
+            subGrab = (subGrab + (precio) * (cantidad))/ivaConvertido;
             Log.d("subGrab", subGrab + "");
 
             subGrabm = subGrabm + ((precio) * (cantidad) - ((descuento / 100) * (precio) * (cantidad)));

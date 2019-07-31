@@ -121,8 +121,12 @@ public class TotalizeHelperPreventa {
 
         if (iva > 0.0) {
             subGrabConImp = subGrab + (precio) * (cantidad);
-            subGrab = (subGrab + (precio) * (cantidad))/1.13;
 
+            Log.d("IVA", iva + "");
+            Double ivaConvertido = (iva / 100)+1;
+            Log.d("ivaa", ivaConvertido + "");
+
+            subGrab = (subGrab + (precio) * (cantidad))/ivaConvertido;
 
             subGrabm = subGrabm + ((precio) * (cantidad) - ((descuento / 100) * (precio) * (cantidad)));
             discountBill += ((descuento / 100) * subGrab);
