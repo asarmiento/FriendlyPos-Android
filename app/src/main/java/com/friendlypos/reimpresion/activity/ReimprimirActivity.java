@@ -85,7 +85,7 @@ public class ReimprimirActivity extends BluetoothActivity {
                 int tabCliente = getSelecFacturaTab();
                 if (tabCliente == 0 && tab.getPosition() != 0) {
 
-                    Functions.CreateMessage(ReimprimirActivity.this, "Distribución", "Seleccione una factura.");
+                    Functions.CreateMessage(ReimprimirActivity.this, "Reimprimir", "Seleccione una factura.");
 
                     new Handler().postDelayed(
                             new Runnable() {

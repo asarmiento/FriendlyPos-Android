@@ -179,7 +179,7 @@ public class PreSellInvoiceDelegateVD {
                 if (devolver == 0) {
 
                     productofacturas.get(i);
-
+                    Log.d("productofacturasGet",  productofacturas.get(i)+"");
                 }
                 else {
                     productofacturas.remove(i);

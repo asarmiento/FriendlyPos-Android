@@ -59,6 +59,7 @@ import com.friendlypos.principal.helpers.SubirHelperProductoDevuelto;
 import com.friendlypos.principal.helpers.SubirHelperProforma;
 import com.friendlypos.principal.helpers.SubirHelperRecibos;
 import com.friendlypos.principal.helpers.SubirHelperVentaDirecta;
+import com.friendlypos.principal.modelo.Clientes;
 import com.friendlypos.principal.modelo.ConsecutivosNumberFe;
 import com.friendlypos.principal.modelo.EnviarClienteGPS;
 import com.friendlypos.principal.modelo.EnviarClienteNuevo;
@@ -613,10 +614,14 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
 
                 RealmQuery<invoice> queryVentaDirecta = realmVentaDirecta.where(invoice.class).equalTo("subida", 1).equalTo("facturaDePreventa", "VentaDirecta");
                 final RealmResults<invoice> invoiceVentaDirecta = queryVentaDirecta.findAll();
+
+
+
+
                 Log.d("SubFacturaInvV", invoiceVentaDirecta.toString());
                 List<invoice> listaFacturasVentaDirecta = realmVentaDirecta.copyFromRealm(invoiceVentaDirecta);
                 Log.d("SubFacturaListaV", listaFacturasVentaDirecta + "");
-                realmVentaDirecta.close();
+
 
                 if(listaFacturasVentaDirecta.size()== 0){
                     Toast.makeText(MenuPrincipal.this,"No hay facturas para subir", Toast.LENGTH_LONG).show();
@@ -626,10 +631,17 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                         Toast.makeText(MenuPrincipal.this, "Subiendo información...", Toast.LENGTH_SHORT).show();
 
                         facturaId = String.valueOf(listaFacturasVentaDirecta.get(i).getId());
+                        int size = invoiceVentaDirecta.get(i).getProductofactura().size();
+                        Log.d("pivot", size + "");
+
+                            RealmQuery<Pivot> query1 = realmVentaDirecta.where(Pivot.class).equalTo("invoice_id", facturaId);
+                            RealmResults<Pivot> result1 = query1.findAll();
+                            Log.d("pivot", result1 + "");
+
                         Log.d("facturaIdSub", facturaId + "");
                         EnviarFactura obj = new EnviarFactura(listaFacturasVentaDirecta.get(i));
                         Log.d("MyAppSub", obj + "");
-                        subirVentaDirecta.sendPostVentaDirecta(obj, facturaId);
+                      //  subirVentaDirecta.sendPostVentaDirecta(obj, facturaId);
                     }
                 }
 
