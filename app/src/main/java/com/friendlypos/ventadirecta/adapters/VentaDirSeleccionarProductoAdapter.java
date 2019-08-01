@@ -26,6 +26,7 @@ import com.friendlypos.distribucion.modelo.sale;
 import com.friendlypos.login.util.SessionPrefes;
 import com.friendlypos.preventas.modelo.Bonuses;
 import com.friendlypos.preventas.modelo.invoiceDetallePreventa;
+import com.friendlypos.preventas.modelo.visit;
 import com.friendlypos.preventas.util.TotalizeHelperPreventa;
 import com.friendlypos.principal.modelo.Clientes;
 import com.friendlypos.principal.modelo.Productos;
@@ -345,6 +346,7 @@ public class VentaDirSeleccionarProductoAdapter  extends RecyclerView.Adapter<Ve
 
     public void agregar(){
 
+
         final double precioSeleccionado = (double) spPrices.getSelectedItem();
         Log.d("precioSeleccionado", precioSeleccionado + "");
 
@@ -365,16 +367,18 @@ public class VentaDirSeleccionarProductoAdapter  extends RecyclerView.Adapter<Ve
 
         // LIMITAR SEGUN EL LIMITE DEL CREDITO
         if (totalCredito >= 0) {
+
             int numero = session.getDatosPivotVentaDirecta();
             // increment index
-            Number currentIdNum = numero;
+            Number currentIdNum1 = numero;
 
-            if (currentIdNum == null) {
+            if (currentIdNum1 == null) {
                 nextId = 1;
             }
             else {
-                nextId = currentIdNum.intValue() + 1;
+                nextId = currentIdNum1.intValue() + 1;
             }
+
 
             Pivot pivotnuevo = new Pivot(); // unmanaged
             pivotnuevo.setId(nextId);
@@ -386,10 +390,10 @@ public class VentaDirSeleccionarProductoAdapter  extends RecyclerView.Adapter<Ve
             pivotnuevo.setDelivered(String.valueOf(producto_amount_dist_add));
             pivotnuevo.setDevuelvo(0);
             pivotnuevo.setBonus(0);
-
+            Log.d("pivotnuevo", pivotnuevo + "");
             activity.insertProduct(pivotnuevo);
-            numero++;
-            session.guardarDatosPivotVentaDirecta(numero);
+          //  numero++;
+            session.guardarDatosPivotVentaDirecta(nextId);
 
             final Double nuevoAmount = d_cantidadDisponible - producto_amount_dist_add;
             Log.d("nuevoAmount", nuevoAmount + "");

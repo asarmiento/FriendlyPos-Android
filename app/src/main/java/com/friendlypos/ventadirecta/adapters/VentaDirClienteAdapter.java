@@ -26,6 +26,7 @@ import android.widget.TextView;
 
 import com.friendlypos.R;
 import com.friendlypos.application.util.Functions;
+import com.friendlypos.distribucion.modelo.Pivot;
 import com.friendlypos.distribucion.util.GPSTracker;
 import com.friendlypos.login.modelo.Usuarios;
 import com.friendlypos.login.util.SessionPrefes;
@@ -279,7 +280,24 @@ public class VentaDirClienteAdapter extends RecyclerView.Adapter<VentaDirCliente
                                                 }).start();
                                                 actualizarClienteVisitado();
                                             }
+                                            int nextId2;
+                                            final Realm realm5 = Realm.getDefaultInstance();
 
+                                            realm5.beginTransaction();
+                                            Number currentIdNum = realm5.where(Pivot.class).max("id");
+
+
+                                            if (currentIdNum == null) {
+                                                nextId2 = 0;
+                                            }
+                                            else {
+                                                nextId2 = currentIdNum.intValue();
+                                            }
+
+                                            session.guardarDatosPivotVentaDirecta(nextId2);
+                                            Log.d("currentIdNum", "" + nextId2);
+                                            realm5.commitTransaction();
+                                            realm5.close();
                                         }
 
                                     }

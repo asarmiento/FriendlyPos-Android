@@ -641,7 +641,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                         Log.d("facturaIdSub", facturaId + "");
                         EnviarFactura obj = new EnviarFactura(listaFacturasVentaDirecta.get(i));
                         Log.d("MyAppSub", obj + "");
-                      //  subirVentaDirecta.sendPostVentaDirecta(obj, facturaId);
+                        subirVentaDirecta.sendPostVentaDirecta(obj, facturaId);
                     }
                 }
 
