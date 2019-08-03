@@ -357,16 +357,19 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
 
         // LIMITAR SEGUN EL LIMITE DEL CREDITO
         if (totalCredito >= 0) {
-            int numero = session.getDatosPivotPreventa();
-            // increment indexrev
-            Number currentIdNum = numero;
 
-            if (currentIdNum == null) {
+
+            int numero = session.getDatosPivotPreventa();
+            // increment index
+            Number currentIdNum1 = numero;
+
+            if (currentIdNum1 == null) {
                 nextId = 1;
             }
             else {
-                nextId = currentIdNum.intValue() + 1;
+                nextId = currentIdNum1.intValue() + 1;
             }
+
 
             Pivot pivotnuevo = new Pivot(); // unmanaged
             pivotnuevo.setId(nextId);
@@ -381,8 +384,8 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
             pivotnuevo.setAmountSinBonus(0.0);
 
             activity.insertProduct(pivotnuevo);
-            numero++;
-            session.guardarDatosPivotPreventa(numero);
+         //   numero++;
+            session.guardarDatosPivotPreventa(nextId);
 
 
             sale ventaDetallePreventa = activity.getCurrentVenta();
@@ -451,16 +454,18 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
 
         // LIMITAR SEGUN EL LIMITE DEL CREDITO
         if (totalCredito >= 0) {
-            int numero = session.getDatosPivotPreventa();
-            // increment indexrev
-            Number currentIdNum = numero;
 
-            if (currentIdNum == null) {
+            int numero = session.getDatosPivotPreventa();
+            // increment index
+            Number currentIdNum1 = numero;
+
+            if (currentIdNum1 == null) {
                 nextId = 1;
             }
             else {
-                nextId = currentIdNum.intValue() + 1;
+                nextId = currentIdNum1.intValue() + 1;
             }
+
 
             Pivot pivotnuevo = new Pivot(); // unmanaged
             pivotnuevo.setId(nextId);
@@ -475,8 +480,8 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
             pivotnuevo.setAmountSinBonus(producto_amount_dist_add);
 
             activity.insertProduct(pivotnuevo);
-            numero++;
-            session.guardarDatosPivotPreventa(numero);
+
+            session.guardarDatosPivotPreventa(nextId);
 
             sale ventaDetallePreventa = activity.getCurrentVenta();
             ventaDetallePreventa.getInvoice_id();

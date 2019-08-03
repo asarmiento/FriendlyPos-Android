@@ -8,8 +8,8 @@ android {
         applicationId "com.friendlypos"
         minSdkVersion 21
         targetSdkVersion 26
-        versionCode 38
-        versionName "8.1.16"
+        versionCode 39
+        versionName "8.1.17"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         javaCompileOptions {

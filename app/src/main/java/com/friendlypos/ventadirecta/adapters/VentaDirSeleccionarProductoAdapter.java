@@ -480,15 +480,16 @@ public class VentaDirSeleccionarProductoAdapter  extends RecyclerView.Adapter<Ve
         // LIMITAR SEGUN EL LIMITE DEL CREDITO
         if (totalCredito >= 0) {
             int numero = session.getDatosPivotVentaDirecta();
-            // increment indexrev
-            Number currentIdNum = numero;
+            // increment index
+            Number currentIdNum1 = numero;
 
-            if (currentIdNum == null) {
+            if (currentIdNum1 == null) {
                 nextId = 1;
             }
             else {
-                nextId = currentIdNum.intValue() + 1;
+                nextId = currentIdNum1.intValue() + 1;
             }
+
 
             Pivot pivotnuevo = new Pivot(); // unmanaged
             pivotnuevo.setId(nextId);
@@ -503,8 +504,7 @@ public class VentaDirSeleccionarProductoAdapter  extends RecyclerView.Adapter<Ve
             pivotnuevo.setAmountSinBonus(producto_amount_dist_add);
 
             activity.insertProduct(pivotnuevo);
-            numero++;
-            session.guardarDatosPivotVentaDirecta(numero);
+            session.guardarDatosPivotVentaDirecta(nextId);
 
             final Double nuevoAmount = d_cantidadDisponible - producto_bonus_add;
             Log.d("nuevoAmount", nuevoAmount + "");
