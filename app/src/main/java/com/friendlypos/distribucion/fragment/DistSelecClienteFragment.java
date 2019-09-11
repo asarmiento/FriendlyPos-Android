@@ -33,6 +33,7 @@ import butterknife.ButterKnife;
 import io.realm.Realm;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
+import io.realm.Sort;
 
 import static io.realm.internal.SyncObjectServerFacade.getApplicationContext;
 
@@ -45,10 +46,6 @@ public class DistSelecClienteFragment extends BaseFragment  implements SearchVie
 
     private DistrClientesAdapter adapter;
     private DistrResumenAdapter adapter2;
-    int i;
-    String fantasyCliente;
-    String idCliente;
-
 
     public static DistSelecProductoFragment getInstance() {
         return new DistSelecProductoFragment();
@@ -89,43 +86,14 @@ public class DistSelecClienteFragment extends BaseFragment  implements SearchVie
 
         realm = Realm.getDefaultInstance();
         final RealmQuery<sale> query = realm.where(sale.class).equalTo("aplicada", 0).equalTo("devolucion", 0);
-        final RealmResults<sale> result1 = query.findAll();
-
+       // final RealmResults<sale> result1 = query.findAll();
+        final RealmResults<sale> result1 = query.findAllSorted("created_at", Sort.DESCENDING);
 
         if (result1.isEmpty()) {
 
             Toast.makeText(getApplicationContext(),"Favor descargar datos primero",Toast.LENGTH_LONG).show();
         }
 
-     /*   else {
-            for (int i = 0; i < result1.size(); i++) {
-
-                List<sale> salesList1 = realm.where(sale.class).equalTo("aplicada", 0).findAll();
-                String nombre = salesList1.get(i).getNombreCliente();
-                if (nombre == null) {
-                    String facturaId1 = salesList1.get(i).getCustomer_id();
-
-                    Clientes salesList2 = realm.where(Clientes.class).equalTo("id", facturaId1).findFirst();
-
-                    final String facturaId2 = salesList2.getId();
-                    final String desc = salesList2.getFantasyName();
-
-                    final Realm realm3 = Realm.getDefaultInstance();
-
-                    realm3.executeTransaction(new Realm.Transaction() {
-
-                        @Override
-                        public void execute(Realm realm3) {
-
-                            sale inv_actualizado = realm3.where(sale.class).equalTo("customer_id", facturaId2).findFirst();
-                            //  inv_actualizado.setProducto(new RealmList<Productos>(salesList2.toArray(new Productos[salesList2.size()])));
-                            inv_actualizado.setNombreCliente(desc);
-                            realm3.insertOrUpdate(inv_actualizado); // using insert API
-                        }
-                    });
-                }
-            }
-        }*/
         return result1;
 
     }
