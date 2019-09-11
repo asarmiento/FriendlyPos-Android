@@ -47,6 +47,7 @@ public class DistSelecClienteFragment extends BaseFragment  implements SearchVie
     private DistrClientesAdapter adapter;
     private DistrResumenAdapter adapter2;
 
+
     public static DistSelecProductoFragment getInstance() {
         return new DistSelecProductoFragment();
     }
@@ -86,7 +87,6 @@ public class DistSelecClienteFragment extends BaseFragment  implements SearchVie
 
         realm = Realm.getDefaultInstance();
         final RealmQuery<sale> query = realm.where(sale.class).equalTo("aplicada", 0).equalTo("devolucion", 0);
-       // final RealmResults<sale> result1 = query.findAll();
         final RealmResults<sale> result1 = query.findAllSorted("created_at", Sort.DESCENDING);
 
         if (result1.isEmpty()) {
@@ -102,7 +102,6 @@ public class DistSelecClienteFragment extends BaseFragment  implements SearchVie
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-       // realm.close();
     }
 
     @Override
@@ -121,15 +120,14 @@ public class DistSelecClienteFragment extends BaseFragment  implements SearchVie
                 new MenuItemCompat.OnActionExpandListener() {
                     @Override
                     public boolean onMenuItemActionCollapse(MenuItem item) {
-                        // Do something when collapsed
                         adapter.setFilter(getListClientes());
-                        return true; // Return true to collapse action view
+                        return true;
                     }
 
                     @Override
                     public boolean onMenuItemActionExpand(MenuItem item) {
-                        // Do something when expanded
-                        return true; // Return true to expand action view
+
+                        return true;
                     }
                 });
     }
