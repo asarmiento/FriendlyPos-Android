@@ -3,8 +3,10 @@ package com.friendlypos.principal.adapters;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Context;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,8 +33,9 @@ public class ProductosAdapter extends RecyclerView.Adapter<ProductosAdapter.Char
 
     private List<Productos> productosList;
     private static Double precio = 0.0;
-    public ProductosAdapter(List<Productos> productosList) {
-
+    Context ctx;
+    public ProductosAdapter(List<Productos> productosList, Context context) {
+        this.ctx = context;
         this.productosList = productosList;
     }
 
@@ -49,7 +52,18 @@ public class ProductosAdapter extends RecyclerView.Adapter<ProductosAdapter.Char
     public void onBindViewHolder(ProductosAdapter.CharacterViewHolder holder, final  int position) {
         Productos producto = productosList.get(position);
         Realm realm = Realm.getDefaultInstance();
-        String marca = realm.where(Marcas.class).equalTo("id", producto.getBrand_id()).findFirst().getName();
+        String marca="";
+        int tamaño = Math.toIntExact(realm.where(Marcas.class).count());
+
+        if (tamaño == 0)  {
+            Log.d("marca", "null" +tamaño);
+            Toast.makeText(ctx, "La marca no se ha descargado", Toast.LENGTH_SHORT).show();
+        }else{
+            marca = realm.where(Marcas.class).equalTo("id", producto.getBrand_id()).findFirst().getName();
+        }
+
+
+
         //  String tipoProducto = realm.where(TipoProducto.class).equalTo("id", producto.getProduct_type_id()).findFirst().getName();
         Inventario inventario = realm.where(Inventario.class).equalTo("product_id", producto.getId()).findFirst();
         precio = Double.parseDouble(producto.getSale_price());

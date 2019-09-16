@@ -76,7 +76,7 @@ public class ProductosActivity extends BluetoothActivity implements SearchView.O
         connectToPrinter();
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
-        adapter = new ProductosAdapter(getList());
+        adapter = new ProductosAdapter(getList(),ProductosActivity.this );
         recyclerView.setAdapter(adapter);
 
         Log.d("lista", getList() + "");
