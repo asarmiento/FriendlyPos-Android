@@ -298,6 +298,15 @@ public class ReimPedidoClientesAdapter extends RecyclerView.Adapter<ReimPedidoCl
 
                     facturaID = clickedDataItem.getInvoice_id();
                     clienteID = clickedDataItem.getCustomer_id();
+
+                    Realm realm = Realm.getDefaultInstance();
+
+                    facturaid1 = realm.where(Pivot.class).equalTo("invoice_id", facturaID).findAll();
+                    realm.close();
+
+                    Log.d("PRODUCTOSIMPRIMIR", facturaid1 + "");
+
+
                     tabCliente = 0;
                     activity.setSelecClienteTab(tabCliente);
                 }
