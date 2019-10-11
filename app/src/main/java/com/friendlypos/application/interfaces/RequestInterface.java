@@ -52,7 +52,7 @@ public interface RequestInterface {
     @POST("api/invoice-reenvio-email-fe")
     Call<SendEmailResponse> savePostSendEmail(@Body send_email_id invoice, @Header("Authorization") String token);
 
-    @GET("api/donwload-info-business")
+    @GET("api/donwload-catalogo")
     Call<ClientesResponse> getJSON(@Header("Authorization") String token);
 
     @GET("api/donwload-info-business")
@@ -61,22 +61,22 @@ public interface RequestInterface {
     @GET("api/donwload-info-business")
     Call<ConsecutivosNumberFeResponse> getConsecutivosNumber(@Header("Authorization") String token);
 
-    @GET("api/donwload-info-business")
+    @GET("api/donwload-catalogo")
     Call<ProductosResponse> getProducts(@Header("Authorization") String token);
 
-    @GET("api/donwload-info-business")
+    @GET("api/donwload-catalogo")
     Call<MarcasResponse> getMarcas(@Header("Authorization") String token);
 
-    @GET("api/donwload-info-business")
+    @GET("api/donwload-catalogo")
     Call<NumeracionResponse> getNumeracionDesc(@Header("Authorization") String token);
 
-    @GET("api/donwload-info-business")
+    @GET("api/donwload-catalogo")
     Call<BonusesResponse> getBonusesTable(@Header("Authorization") String token);
 
-    @GET("api/donwload-info-business")
+    @GET("api/donwload-catalogo")
     Call<TipoProductoResponse> getTipoProducto(@Header("Authorization") String token);
 
-    @GET("api/donwload-info-business")
+    @GET("api/donwload-catalogo")
     Call<MetodoPagoResponse> getMetodoPago(@Header("Authorization") String token);
 
     @GET("api/donwload-info-business")

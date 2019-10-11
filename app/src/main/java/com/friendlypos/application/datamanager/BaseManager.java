@@ -14,6 +14,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import io.realm.Realm;
 import io.realm.RealmObject;
@@ -57,6 +58,8 @@ public class BaseManager {
                     .create();
 
             OkHttpClient httpClient = new OkHttpClient.Builder()
+                    .readTimeout(20, TimeUnit.SECONDS)
+                    .connectTimeout(20, TimeUnit.SECONDS)
                     .addInterceptor(new Interceptor() {
                         @Override
                         public okhttp3.Response intercept(Chain chain) throws IOException {
