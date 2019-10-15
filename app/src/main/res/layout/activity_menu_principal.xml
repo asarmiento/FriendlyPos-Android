@@ -37,26 +37,26 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+              >
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="150dp"
                     android:orientation="vertical"
-                    android:background="@color/background"
+                    android:background="#FFF"
                     >
                     <ImageView
                         android:onClick="ClickNavigation"
                         android:layout_gravity="center"
                         android:gravity="center"
-                        android:drawablePadding="5dp"
-                        android:padding="10dp"
                         android:src="@mipmap/ic_logo"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="550px"
+                        android:scaleType="fitXY"
+                        android:layout_height="372px"
                         android:layout_alignParentTop="true"
                         android:layout_centerHorizontal="true"
-                        android:layout_marginTop="22dp" />
+                        android:layout_marginTop="-10dp" />
 
                     <TextView
                         android:id="@+id/txtNombreUsuario"
@@ -71,29 +71,36 @@
                         android:layout_marginBottom="10dp" />
                 </RelativeLayout>
 
-                <TextView
-                    android:id="@+id/txtConsulta"
-                    android:layout_width="wrap_content"
+
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="17dp"
-                    android:layout_marginStart="17dp"
-                    android:text="Consulta"
-                    android:textColor="@color/item_background" />
+                    android:orientation="vertical"
+                    android:background="@mipmap/fondo_menu"
+                    >
+
+                    <TextView
+                        android:id="@+id/txtConsulta"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_centerVertical="true"
+                        android:paddingLeft="17dp"
+                        android:paddingTop="5dp"
+                        android:layout_marginTop="30dp"
+                        android:background="#FFF"
+                        android:text="Consulta"
+                        android:textColor="@color/item_background" />
 
                 <LinearLayout
                     android:id="@+id/clickClientes"
                     android:onClick="onClickGo"
                     android:layout_width="match_parent"
-                    android:background="@color/divider"
                     android:layout_height="80dp"
                     android:gravity="center"
-
                     android:orientation="vertical">
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="75dp"
-                        android:background="@color/background"
                         android:layout_marginTop="2dp"
                         >
 
@@ -124,7 +131,7 @@
                     android:id="@+id/clickProductos"
                     android:onClick="onClickGo"
                     android:layout_width="match_parent"
-                    android:background="@color/divider"
+
                     android:layout_height="80dp"
                     android:gravity="center"
 
@@ -132,7 +139,6 @@
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="75dp"
-                        android:background="@color/background"
                         android:layout_marginTop="2dp"
                         >
 
@@ -162,19 +168,19 @@
 
                 <TextView
                     android:id="@+id/txtAcciones"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="17dp"
-                    android:layout_marginStart="17dp"
+                    android:paddingLeft="17dp"
+                    android:paddingTop="5dp"
                     android:text="Acciones"
+                    android:background="#FFF"
                     android:textColor="@color/item_background" />
 
                 <LinearLayout
                     android:id="@+id/clickDistribucion"
                     android:onClick="onClickGo"
                     android:layout_width="match_parent"
-                    android:background="@color/divider"
                     android:layout_height="80dp"
                     android:gravity="center"
 
@@ -182,7 +188,6 @@
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="75dp"
-                        android:background="@color/background"
                         android:layout_marginTop="2dp"
                         >
 
@@ -213,7 +218,6 @@
                 <LinearLayout
                     android:id="@+id/clickVentaDirecta"
                     android:onClick="onClickGo"
-                    android:background="@color/divider"
                     android:layout_width="match_parent"
                     android:layout_height="80dp"
                     android:gravity="center"
@@ -222,7 +226,6 @@
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="75dp"
-                        android:background="@color/background"
                         >
 
                         <ImageView
@@ -253,7 +256,6 @@
                 <LinearLayout
                     android:id="@+id/clickPreventa"
                     android:onClick="onClickGo"
-                    android:background="@color/divider"
                     android:layout_width="match_parent"
                     android:layout_height="80dp"
                     android:gravity="center"
@@ -262,7 +264,6 @@
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="75dp"
-                        android:background="@color/background"
                         >
 
                         <ImageView
@@ -294,7 +295,6 @@
                 <LinearLayout
                     android:id="@+id/clickRecibos"
                     android:onClick="onClickGo"
-                    android:background="@color/divider"
                     android:layout_width="match_parent"
                     android:layout_height="80dp"
                     android:gravity="center"
@@ -303,7 +303,6 @@
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="75dp"
-                        android:background="@color/background"
                         >
 
                         <ImageView
@@ -335,7 +334,6 @@
                 <LinearLayout
                     android:id="@+id/clickReimprimirVentas"
                     android:onClick="onClickGo"
-                    android:background="@color/divider"
                     android:layout_width="match_parent"
                     android:layout_height="80dp"
                     android:gravity="center"
@@ -344,7 +342,6 @@
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="75dp"
-                        android:background="@color/background"
                         >
 
                         <ImageView
@@ -376,7 +373,6 @@
                 <LinearLayout
                     android:id="@+id/clickReimprimirPedidos"
                     android:onClick="onClickGo"
-                    android:background="@color/divider"
                     android:layout_width="match_parent"
                     android:layout_height="80dp"
                     android:gravity="center"
@@ -385,7 +381,6 @@
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="75dp"
-                        android:background="@color/background"
                         >
 
                         <ImageView
@@ -418,7 +413,6 @@
                 <LinearLayout
                     android:id="@+id/clickGrafico"
                     android:onClick="onClickGo"
-                    android:background="@color/divider"
                     android:layout_width="match_parent"
                     android:layout_height="80dp"
                     android:gravity="center"
@@ -427,7 +421,6 @@
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="75dp"
-                        android:background="@color/background"
                         >
 
                         <ImageView
@@ -460,7 +453,6 @@
                 <LinearLayout
                     android:id="@+id/clickEmail"
                     android:onClick="onClickGo"
-                    android:background="@color/divider"
                     android:layout_width="match_parent"
                     android:layout_height="80dp"
                     android:gravity="center"
@@ -469,7 +461,6 @@
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="75dp"
-                        android:background="@color/background"
                         >
 
                         <ImageView
@@ -500,7 +491,6 @@
                 <LinearLayout
                     android:id="@+id/clickConfig"
                     android:onClick="ClickNavigation"
-                    android:background="@color/divider"
                     android:layout_width="match_parent"
                     android:layout_height="80dp"
                     android:gravity="center"
@@ -509,7 +499,6 @@
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="75dp"
-                        android:background="@color/background"
                         >
 
                         <ImageView
@@ -537,7 +526,7 @@
 
                 </LinearLayout>
 
-
+                </LinearLayout>
 
             </LinearLayout>
 
