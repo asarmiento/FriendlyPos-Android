@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
-    android:background="@color/background"
+    android:background="#2C2B7C"
     android:orientation="vertical"
     android:paddingEnd="20dp"
     android:paddingLeft="20dp"
@@ -43,8 +43,8 @@
 
         <ImageView
             android:id="@+id/image_logo"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
+            android:layout_width="702px"
+            android:layout_height="352px"
             app:srcCompat="@drawable/logo"
             android:layout_gravity="center"
             android:layout_alignParentTop="true"
