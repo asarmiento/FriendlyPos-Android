@@ -1,5 +1,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
@@ -74,7 +75,8 @@
                         android:hint="@string/your_email_hint"
                         android:inputType="text"
                         android:maxLines="1"
-
+                        android:fontFamily="@font/monse"
+                        app:fontFamily="@font/monse"
                         />
 
                 </android.support.design.widget.TextInputLayout>
@@ -95,10 +97,11 @@
                         android:imeActionId="@+id/login"
                         android:imeActionLabel="@string/action_sign_in_short"
                         android:imeOptions="actionUnspecified"
+                        android:fontFamily="@font/monse"
+                        app:fontFamily="@font/monse"
                         android:inputType="textPassword"
-
                         android:maxLines="1"
-                        />
+                        tools:ignore="InvalidImeActionId" />
 
                 </android.support.design.widget.TextInputLayout>
 
@@ -107,9 +110,13 @@
                     style="@style/MainButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_alignStart="@+id/email_login_form"
+                    android:layout_alignBottom="@+id/email_login_form"
                     android:layout_marginTop="16dp"
+                    android:fontFamily="@font/monse"
+                    android:textStyle="bold"
                     android:text="@string/Submit_button_text"
-                    />
+                    app:fontFamily="@font/monse" />
 
             </LinearLayout>
 
@@ -122,6 +129,8 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:textSize="12sp"
+        android:fontFamily="@font/monse"
+        app:fontFamily="@font/monse"
         android:textAppearance="@android:style/TextAppearance.Small"
         android:layout_alignParentBottom="true"
         />

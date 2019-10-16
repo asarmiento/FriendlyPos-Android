@@ -1,5 +1,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
@@ -72,7 +73,8 @@
                         android:hint="@string/your_email_hint"
                         android:inputType="text"
                         android:maxLines="1"
-
+                        android:fontFamily="@font/monse"
+                        app:fontFamily="@font/monse"
                         />
 
                 </android.support.design.widget.TextInputLayout>
@@ -82,6 +84,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     style="@style/TextInputLayout"
+                    android:fontFamily="@font/monse"
+                    app:fontFamily="@font/monse"
                     android:theme="@style/LoginTextField"
                     app:passwordToggleEnabled="true">
 
@@ -94,9 +98,10 @@
                         android:imeActionLabel="@string/action_sign_in_short"
                         android:imeOptions="actionUnspecified"
                         android:inputType="textPassword"
-
+                        android:fontFamily="@font/monse"
+                        app:fontFamily="@font/monse"
                         android:maxLines="1"
-                        />
+                        tools:ignore="InvalidImeActionId" />
 
                 </android.support.design.widget.TextInputLayout>
 
@@ -107,6 +112,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:text="@string/Submit_button_text"
+                    android:textStyle="bold"
+                    android:fontFamily="@font/monse"
+                    app:fontFamily="@font/monse"
                     />
 
             </LinearLayout>
@@ -120,6 +128,8 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:textSize="12sp"
+        android:fontFamily="@font/monse"
+        app:fontFamily="@font/monse"
         android:textAppearance="@android:style/TextAppearance.Small"
         android:layout_alignParentBottom="true"
         />
