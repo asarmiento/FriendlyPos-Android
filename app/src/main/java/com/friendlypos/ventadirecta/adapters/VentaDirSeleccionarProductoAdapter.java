@@ -134,15 +134,15 @@ public class VentaDirSeleccionarProductoAdapter  extends RecyclerView.Adapter<Ve
         Log.d("productosListActivo", "" + productosList);
 
         if (pivots.size() == 0) {
-            holder.cardView.setBackgroundColor(Color.parseColor("#009688"));
+            holder.cardView.setBackgroundColor(Color.parseColor("#FFFFFF"));
         } else {
 
             for (Pivot pivot : pivots) {
                 if (producto.getId().equals(pivot.getProduct_id())) {
-                    holder.cardView.setBackgroundColor(Color.parseColor("#607d8b"));
+                    holder.cardView.setBackgroundColor(Color.parseColor("#d1d3d4"));
                     return;
                 } else {
-                    holder.cardView.setBackgroundColor(Color.parseColor("#009688"));
+                    holder.cardView.setBackgroundColor(Color.parseColor("#FFFFFF"));
                 }
             }
 
