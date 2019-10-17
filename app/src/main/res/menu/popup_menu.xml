@@ -1,41 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    >
     <item
         android:id="@+id/btn_descargar_datosempresa"
-        android:icon="@mipmap/ic_config"
+        android:icon="@mipmap/ic_config_menu"
         android:title="Desc. Info. Empresa"
         app:itemTextAppearance="@style/menu_text_style"
         />
     <item
         android:id="@+id/btn_descargar_catalogo"
-        android:icon="@mipmap/ic_config"
+        android:icon="@mipmap/ic_config_menu"
         android:title="Descargar Catálogo"/>
     <item
         android:id="@+id/btn_descargar_inventario"
-        android:icon="@mipmap/ic_config"
+        android:icon="@mipmap/ic_config_menu"
         android:title="Descargar Inventario" />
 
     <item
         android:id="@+id/btn_descargar_recibos"
-        android:icon="@mipmap/ic_config"
+        android:icon="@mipmap/ic_config_menu"
         android:title="Descargar Recibos" />
 
 
     <item
         android:id="@+id/btn_imprimir_liquidacion"
-        android:icon="@mipmap/ic_config"
+        android:icon="@mipmap/ic_config_menu"
         android:title="Imprimir Liquidación"
         />
 
     <item
         android:id="@+id/btn_imprimir_orden_carga"
-        android:icon="@mipmap/ic_config"
+        android:icon="@mipmap/ic_config_menu"
         android:title="Imprimir Orden de carga" />
 
     <item
         android:id="@+id/btn_imprimir_devolucion"
-        android:icon="@mipmap/ic_config"
+        android:icon="@mipmap/ic_config_menu"
         android:title="Imprimir Devolución" />
 
 </menu>
