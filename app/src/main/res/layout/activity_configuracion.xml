@@ -4,9 +4,11 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/tools"
     android:layout_margin="5dp"
     android:id="@+id/cardview"
-    card_view:cardBackgroundColor="@color/background">
+    card_view:cardBackgroundColor="#d1d3d4"
+    app:ignore="NamespaceTypo">
 
 
     <RelativeLayout
@@ -19,6 +21,10 @@
         <TextView
             android:id="@+id/textView"
             android:layout_width="match_parent"
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:textSize="12sp"
+            android:textColor="#58595b"
             android:layout_height="wrap_content"
             android:text="@string/URL_Webservice" />
 
@@ -28,6 +34,9 @@
             android:layout_height="wrap_content"
             android:text="http://"
             android:textSize="13sp"
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:textColor="#58595b"
             android:layout_alignBaseline="@+id/txtwebservice"
             android:layout_alignBottom="@+id/txtwebservice"
             android:layout_alignParentStart="true" />
@@ -39,6 +48,9 @@
             android:layout_below="@+id/textView"
             android:layout_toEndOf="@+id/textView1"
             android:hint="@string/URl_HInt_WEBSERVICE"
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:textColor="#58595b"
             android:inputType="text"
             android:singleLine="true"
             android:textSize="13sp" />
@@ -56,6 +68,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/fab_margin"
             android:layout_marginRight="@dimen/fab_margin"
+            android:background="@color/morado"
             android:clickable="true"
             android:src="@android:drawable/ic_menu_save"
             android:layout_below="@+id/view"
