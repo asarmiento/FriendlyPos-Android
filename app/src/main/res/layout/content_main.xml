@@ -41,7 +41,7 @@
         fab:menu_shadowRadius="4dp"
         fab:menu_shadowXOffset="1dp"
         fab:menu_shadowYOffset="3dp"
-        fab:menu_colorNormal="@color/colorPrimary"
+        fab:menu_colorNormal="@color/morado"
         fab:menu_colorPressed="@color/colorPrimaryDark"
         fab:menu_colorRipple="@color/colorAccent"
         fab:menu_animationDelayPerItem="50"
@@ -72,7 +72,8 @@
         fab:menu_fab_show_animation="@anim/hide_to_bottom"
         fab:menu_fab_hide_animation="@anim/scale_up"
         app:layout_anchor="@id/viewpager"
-        app:layout_anchorGravity="bottom|right|end">
+        app:layout_anchorGravity="bottom|right|end"
+        tools:ignore="NotSibling">
 
         <com.github.clans.fab.FloatingActionButton
             style="@style/MenuButtonsSmallRed"

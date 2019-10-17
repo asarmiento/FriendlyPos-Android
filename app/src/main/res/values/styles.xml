@@ -115,9 +115,8 @@
     <style name="WhiteProgress">
         <item name="colorAccent">@android:color/white</item>
     </style>
-
     <style name="MenuButtonsSmallRed">
-        <item name="fab_colorNormal">@color/colorPrimary</item>
+        <item name="fab_colorNormal">@color/morado</item>
         <item name="fab_colorPressed">@color/colorPrimaryDark</item>
         <item name="fab_colorRipple">@color/colorAccent</item>
     </style>
@@ -139,7 +138,7 @@
     </style>
 
     <style name="ClienteNuevo2" parent="Normal_EditText">
-        <item name="android:background">@color/background</item>
+        <item name="android:background">@android:color/white</item>
         <item name="android:textSize">18sp</item>
     </style>
 

@@ -18,7 +18,7 @@
             android:layout_height="60dp"
             android:layout_margin="1dp"
             android:layout_marginBottom="10dp"
-            android:background="@color/background"
+            android:background="@color/icons"
             android:paddingLeft="5dp"
             android:orientation="vertical"
             android:id="@+id/rlIdTypeCliente"
@@ -29,6 +29,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:prompt="@string/array_spinnerIT"
+                android:fontFamily="@font/monse"
+                app:fontFamily="@font/monse"
                 android:textSize="16sp"
                 android:imeOptions="actionNext"/>
 
@@ -61,6 +63,9 @@
                     android:hint="Cédula"
                     android:inputType="phone"
                     android:digits="0123456789"
+                    android:fontFamily="@font/monse"
+                    app:fontFamily="@font/monse"
+                    android:textColor="#2c2b7c"
                     android:imeOptions="actionNext"
                     android:singleLine="true" />
 
@@ -75,7 +80,7 @@
             android:layout_height="60dp"
             android:layout_margin="1dp"
             android:layout_marginBottom="10dp"
-            android:background="@color/background"
+            android:background="@color/icons"
             android:paddingLeft="5dp"
             android:orientation="vertical"
             android:id="@+id/rlLongitudCliente"
@@ -87,6 +92,9 @@
                     android:id="@+id/cliente_longitud_nuevo"
                     style="@style/ClienteNuevo2"
                     android:hint="Longitud"
+                    android:fontFamily="@font/monse"
+                    app:fontFamily="@font/monse"
+                    android:textColor="#2c2b7c"
                     android:singleLine="true"
                     android:gravity="center_vertical"
                     android:imeOptions="actionNext"
@@ -124,6 +132,9 @@
                 android:id="@+id/cliente_latitud_nuevo"
                 style="@style/ClienteNuevo1"
                 android:hint="Latitud"
+                android:fontFamily="@font/monse"
+                app:fontFamily="@font/monse"
+                android:textColor="#2c2b7c"
                 android:singleLine="true"
                 android:gravity="center_vertical"
                 android:imeOptions="actionNext"
@@ -140,7 +151,7 @@
         android:layout_height="60dp"
         android:layout_margin="1dp"
         android:layout_marginBottom="10dp"
-        android:background="@color/background"
+        android:background="@color/icons"
         android:paddingLeft="5dp"
         android:id="@+id/rlFeCliente"
         android:layout_below="@+id/rlLatitudCliente"
@@ -150,6 +161,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:prompt="@string/array_spinnerFE"
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:textColor="#2c2b7c"
             android:textSize="16sp"
             android:imeOptions="actionNext"
    />
@@ -183,6 +197,9 @@
                     style="@style/ClienteNuevo1"
                     android:hint="Placa"
                     android:inputType="phone"
+                    android:fontFamily="@font/monse"
+                    app:fontFamily="@font/monse"
+                    android:textColor="#2c2b7c"
                     android:digits="0123456789"
                     android:singleLine="true"
                     android:imeOptions="actionNext"/>
@@ -197,7 +214,7 @@
             android:layout_height="60dp"
             android:layout_margin="1dp"
             android:layout_marginBottom="10dp"
-            android:background="@color/background"
+            android:background="@color/icons"
             android:paddingLeft="5dp"
             android:orientation="vertical"
             android:id="@+id/rlModelCliente"
@@ -213,6 +230,9 @@
                 <EditText
                     android:id="@+id/cliente_model_nuevo"
                     style="@style/ClienteNuevo2"
+                    android:fontFamily="@font/monse"
+                    app:fontFamily="@font/monse"
+                    android:textColor="#2c2b7c"
                     android:hint="Modelo"
                     android:singleLine="true"
                     android:imeOptions="actionNext"/>
@@ -245,6 +265,9 @@
                 <EditText
                     android:id="@+id/cliente_doors_nuevo"
                     style="@style/ClienteNuevo1"
+                    android:fontFamily="@font/monse"
+                    app:fontFamily="@font/monse"
+                    android:textColor="#2c2b7c"
                     android:hint="Puertas"
                     android:singleLine="true"
                     android:inputType="phone"
@@ -260,7 +283,7 @@
             android:layout_height="60dp"
             android:layout_margin="1dp"
             android:layout_marginBottom="10dp"
-            android:background="@color/background"
+            android:background="@color/icons"
             android:paddingLeft="5dp"
             android:orientation="vertical"
             android:id="@+id/rlAddressCliente"
@@ -276,6 +299,9 @@
                 <EditText
                     android:id="@+id/cliente_address_nuevo"
                     style="@style/ClienteNuevo2"
+                    android:fontFamily="@font/monse"
+                    app:fontFamily="@font/monse"
+                    android:textColor="#2c2b7c"
                     android:hint="Dirección"
                     android:singleLine="true"
                     android:imeOptions="actionNext"/>
@@ -309,6 +335,9 @@
                 <EditText
                     android:id="@+id/cliente_email_nuevo"
                     style="@style/ClienteNuevo1"
+                    android:fontFamily="@font/monse"
+                    app:fontFamily="@font/monse"
+                    android:textColor="#2c2b7c"
                     android:hint="Correo Electrónico"
                     android:inputType="textEmailAddress"
                     android:singleLine="true"
@@ -324,7 +353,7 @@
             android:layout_height="60dp"
             android:layout_margin="1dp"
             android:layout_marginBottom="10dp"
-            android:background="@color/background"
+            android:background="@color/icons"
             android:paddingLeft="5dp"
             android:orientation="vertical"
             android:id="@+id/rlFantasyNameCliente"
@@ -340,6 +369,9 @@
                 <EditText
                     android:id="@+id/cliente_fantasyname_nuevo"
                     style="@style/ClienteNuevo2"
+                    android:fontFamily="@font/monse"
+                    app:fontFamily="@font/monse"
+                    android:textColor="#2c2b7c"
                     android:hint="Nombre de Fantasía"
                     android:singleLine="true"
                     android:imeOptions="actionNext"/>
@@ -372,6 +404,9 @@
                     android:id="@+id/cliente_companyname_nuevo"
                     style="@style/ClienteNuevo1"
                     android:hint="Nombre de compañía"
+                    android:fontFamily="@font/monse"
+                    app:fontFamily="@font/monse"
+                    android:textColor="#2c2b7c"
                     android:singleLine="true"
                     android:imeOptions="actionNext"/>
 
@@ -385,7 +420,7 @@
             android:layout_height="60dp"
             android:layout_margin="1dp"
             android:layout_marginBottom="10dp"
-            android:background="@color/background"
+            android:background="@color/icons"
             android:paddingLeft="5dp"
             android:orientation="vertical"
             android:id="@+id/rlPhoneCliente"
@@ -404,6 +439,9 @@
                     android:hint="Teléfono"
                     android:imeOptions="actionNext"
                     android:inputType="phone"
+                    android:fontFamily="@font/monse"
+                    app:fontFamily="@font/monse"
+                    android:textColor="#2c2b7c"
                     android:digits="0123456789"
                     android:maxLength="8"
                     android:singleLine="true" />
@@ -437,6 +475,9 @@
                     style="@style/ClienteNuevo1"
                     android:hint="Límite de crédito"
                     android:inputType="phone"
+                    android:fontFamily="@font/monse"
+                    app:fontFamily="@font/monse"
+                    android:textColor="#2c2b7c"
                     android:digits="0123456789."
                     android:singleLine="true"
                     android:imeOptions="actionNext"/>
@@ -452,7 +493,7 @@
             android:layout_height="60dp"
             android:layout_margin="1dp"
             android:layout_marginBottom="10dp"
-            android:background="@color/background"
+            android:background="@color/icons"
             android:paddingLeft="5dp"
             android:orientation="vertical"
             android:id="@+id/rlCreditTimeCliente"
@@ -462,6 +503,9 @@
                 android:id="@+id/cliente_credittime_nuevo"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:fontFamily="@font/monse"
+                app:fontFamily="@font/monse"
+                android:textColor="#2c2b7c"
                 android:prompt="@string/array_spinnerCT"
                 android:textSize="16sp"
                 android:imeOptions="actionNext"/>
@@ -475,11 +519,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:textColor="#2c2b7c"
             android:background="@drawable/fondo_botones"
             android:onClick="onClickGo"
             android:layout_marginBottom="10dp"
             android:text="@string/crear"
-            android:textColor="@color/cardview_light_background" />
+           />
 
     </RelativeLayout>
 </android.support.design.widget.CoordinatorLayout>
