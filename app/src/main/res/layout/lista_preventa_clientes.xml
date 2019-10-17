@@ -1,10 +1,12 @@
 <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/tools"
     android:id="@+id/cardViewPreventaClientes"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="3dp"
-    card_view:cardBackgroundColor="@color/background">
+    card_view:cardBackgroundColor="#FFF"
+    app:ignore="NamespaceTypo">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -18,14 +20,20 @@
             android:layout_height="wrap_content"
             android:textStyle="bold"
             android:text="Card"
-            android:textColor="@color/icons"/>
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:textColor="#58595b"
+            android:textSize="12sp"/>
         <TextView
             android:id="@+id/txt_prev_fantasyname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Fantasy Name"
             android:textStyle="bold"
-            android:textColor="@color/icons"
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:textColor="#58595b"
+            android:textSize="12sp"
             android:layout_below="@+id/txt_prev_card"
             />
         <TextView
@@ -33,7 +41,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Company Name"
-            android:textColor="@color/icons"
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:textColor="#58595b"
+            android:textSize="12sp"
             android:textStyle="bold"
             android:layout_below="@+id/txt_prev_fantasyname"
             android:layout_alignParentStart="true" />
@@ -45,7 +56,10 @@
             android:text="Crédito:"
             android:layout_marginTop="5dp"
             android:textStyle="bold"
-            android:textColor="@color/icons"
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:textColor="#58595b"
+            android:textSize="12sp"
             android:layout_below="@+id/txt_prev_companyname"
             android:layout_alignParentStart="true" />
 
@@ -54,7 +68,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Credit Limit"
-            android:textColor="@color/icons"
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:textColor="#58595b"
+            android:textSize="12sp"
             android:layout_alignBaseline="@+id/txt_texto_prev_creditlimit"
             android:layout_alignBottom="@+id/txt_texto_prev_creditlimit"
             android:layout_toEndOf="@+id/txt_texto_prev_creditlimit"
@@ -65,7 +82,10 @@
             android:layout_height="wrap_content"
             android:text="Descuento:"
             android:textStyle="bold"
-            android:textColor="@color/icons"
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:textColor="#58595b"
+            android:textSize="12sp"
             android:layout_marginStart="35dp"
             android:layout_alignBaseline="@+id/txt_prev_creditlimit"
             android:layout_alignBottom="@+id/txt_prev_creditlimit"
@@ -75,7 +95,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Fixed descount"
-            android:textColor="@color/icons"
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:textColor="#58595b"
+            android:textSize="12sp"
             android:layout_marginLeft="5dp"
             android:layout_alignBaseline="@+id/txt_texto_prev_fixeddescount"
             android:layout_alignBottom="@+id/txt_texto_prev_fixeddescount"
@@ -87,7 +110,10 @@
             android:layout_height="wrap_content"
             android:text="Saldo:"
             android:textStyle="bold"
-            android:textColor="@color/icons"
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:textColor="#58595b"
+            android:textSize="12sp"
             android:layout_marginTop="8dp"
             android:layout_below="@+id/txt_texto_prev_creditlimit"
             android:layout_alignParentStart="true" />
@@ -98,7 +124,10 @@
             android:layout_height="wrap_content"
             android:text="Due"
             android:layout_marginTop="8dp"
-            android:textColor="@color/icons"
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:textColor="#58595b"
+            android:textSize="12sp"
             android:layout_below="@+id/txt_prev_creditlimit"
             android:layout_alignStart="@+id/txt_prev_creditlimit" />
 
@@ -109,7 +138,10 @@
             android:text="T. Limite:"
             android:textStyle="bold"
             android:layout_marginTop="8dp"
-            android:textColor="@color/icons"
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:textColor="#58595b"
+            android:textSize="12sp"
             android:layout_below="@+id/txt_texto_prev_fixeddescount"
             android:layout_alignStart="@+id/txt_texto_prev_fixeddescount" />
         <TextView
@@ -117,7 +149,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Credit time"
-            android:textColor="@color/icons"
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:textColor="#58595b"
+            android:textSize="12sp"
             android:layout_marginTop="8dp"
 
             android:layout_below="@+id/txt_prev_fixeddescount"

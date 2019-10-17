@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-android:orientation="vertical" android:layout_width="match_parent"
-android:layout_height="wrap_content"
-android:layout_marginLeft="10dp"
-android:layout_marginRight="10dp"
-android:layout_marginTop="5dp"
-android:layout_marginBottom="5dp">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:layout_marginTop="5dp"
+    android:layout_marginBottom="5dp">
 <TextView
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:id="@+id/promtSelectT"
     android:textSize="16sp"
-    android:textColor="#000000"
+    android:fontFamily="@font/monse"
+    app:fontFamily="@font/monse"
+    android:textColor="#58595b"
     android:text="Seleccione tipo de facturación"
     android:layout_alignParentTop="true"
     android:layout_centerHorizontal="true" />
@@ -30,11 +34,17 @@ android:layout_marginBottom="5dp">
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Factura de preventa"
+        android:fontFamily="@font/monse"
+        app:fontFamily="@font/monse"
+        android:textColor="#58595b"
         android:id="@+id/rbfactPrev"/>
     <RadioButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Factura de proforma"
+        android:fontFamily="@font/monse"
+        app:fontFamily="@font/monse"
+        android:textColor="#58595b"
         android:id="@+id/rbfactProf"/>
 </RadioGroup>
 
@@ -54,6 +64,9 @@ android:layout_marginBottom="5dp">
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="OK"
+        android:fontFamily="@font/monse"
+        app:fontFamily="@font/monse"
+        android:textColor="#58595b"
         android:background="@null"
         android:layout_below="@+id/rgTipo"
         android:layout_alignParentEnd="true"
@@ -65,6 +78,9 @@ android:layout_marginBottom="5dp">
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:text="Cancel"
+    android:fontFamily="@font/monse"
+    app:fontFamily="@font/monse"
+    android:textColor="#58595b"
     android:background="@null"
     android:layout_alignBaseline="@+id/btnOKProforma"
     android:layout_alignBottom="@+id/btnOKProforma"

@@ -399,17 +399,16 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
             }
         });
 
-
         if (selected_position == position) {
                 if(rbfactProf.isChecked() || rbfactPrev.isChecked()){
                     if(rbcomprado.isChecked()){
 
-            holder.cardView.setCardBackgroundColor(Color.parseColor("#607d8b"));
+             holder.cardView.setBackgroundColor(Color.parseColor("#d1d3d4"));
             }
 }
         }
         else {
-            holder.cardView.setCardBackgroundColor(Color.parseColor("#009688"));
+            holder.cardView.setBackgroundColor(Color.parseColor("#FFFFFF"));
         }
 
     }

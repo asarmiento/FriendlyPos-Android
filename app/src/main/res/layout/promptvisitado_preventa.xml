@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginLeft="10dp"
     android:layout_marginRight="10dp"
@@ -11,7 +13,9 @@
         android:layout_height="wrap_content"
         android:id="@+id/promtSelectT"
         android:textSize="16sp"
-        android:textColor="#000000"
+        android:fontFamily="@font/monse"
+        app:fontFamily="@font/monse"
+        android:textColor="#58595b"
         android:text="Seleccione"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
@@ -29,11 +33,18 @@
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/compradoBillVisitado"/>
+            android:id="@+id/compradoBillVisitado"
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:textColor="#58595b"
+            />
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Solo visitado"
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:textColor="#58595b"
             android:id="@+id/visitadoBillVisitado"/>
     </RadioGroup>
 
@@ -43,7 +54,9 @@
         android:layout_height="wrap_content"
         android:text="Observaciones:"
         android:textSize="16sp"
-        android:textColor="#000000"
+        android:fontFamily="@font/monse"
+        app:fontFamily="@font/monse"
+        android:textColor="#58595b"
         android:layout_marginTop="10dp"
         android:layout_below="@+id/rgTipoVisitado"
         android:layout_centerHorizontal="true" />
@@ -53,6 +66,9 @@
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:ems="10"
+        android:fontFamily="@font/monse"
+        app:fontFamily="@font/monse"
+        android:textColor="#58595b"
         android:inputType="textPersonName"
         android:textSize="14sp"
         android:layout_marginTop="10dp"
@@ -64,6 +80,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="OK"
+        android:fontFamily="@font/monse"
+        app:fontFamily="@font/monse"
+        android:textColor="#58595b"
         android:layout_below="@+id/txtObservaciones"
         android:layout_alignEnd="@+id/txtObservaciones"
         android:background="@null"
@@ -74,6 +93,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="OK"
+        android:fontFamily="@font/monse"
+        app:fontFamily="@font/monse"
+        android:textColor="#58595b"
         android:layout_below="@+id/txtObservaciones"
         android:layout_alignEnd="@+id/txtObservaciones"
         android:background="@null"
@@ -86,6 +108,9 @@
         android:layout_below="@+id/txtObservaciones"
         android:layout_toStartOf="@+id/btnOKV"
         android:text="Cancel"
+        android:fontFamily="@font/monse"
+        app:fontFamily="@font/monse"
+        android:textColor="#58595b"
         android:background="@null"/>
 
 

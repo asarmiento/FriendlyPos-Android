@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -7,13 +8,16 @@
     android:layout_marginRight="10dp"
     android:layout_marginTop="5dp"
     android:layout_marginBottom="5dp"
-    android:background="@color/colorPrimary">
+    android:background="#FFF">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:textSize="20sp"
+        android:textSize="18sp"
+        android:fontFamily="@font/monse"
+        app:fontFamily="@font/monse"
+        android:textColor="#58595b"
         android:text="Ingrese una cantidad, maximo de 20 Unidades, minimo 1"
         android:gravity="center"
         android:id="@+id/promtClabel"/>
@@ -23,7 +27,10 @@
         android:layout_height="wrap_content"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:gravity="center"
-        android:textSize="20sp"
+        android:textSize="18sp"
+        android:fontFamily="@font/monse"
+        app:fontFamily="@font/monse"
+        android:textColor="#58595b"
         android:textStyle="bold"
         android:layout_marginTop="5dp"
         android:id="@+id/txtBonificacion"
@@ -36,7 +43,10 @@
         android:layout_height="wrap_content"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:gravity="center"
-        android:textSize="20sp"
+        android:textSize="18sp"
+        android:fontFamily="@font/monse"
+        app:fontFamily="@font/monse"
+        android:textColor="#58595b"
         android:textStyle="bold"
         android:layout_marginTop="5dp"
         android:id="@+id/txtNombreProducto"
@@ -50,7 +60,10 @@
         android:layout_marginLeft="10dp"
         android:text="Precios: "
         android:layout_marginTop="5dp"
-        android:textSize="22sp"
+        android:textSize="20sp"
+        android:fontFamily="@font/monse"
+        app:fontFamily="@font/monse"
+        android:textColor="#58595b"
         android:textStyle="bold"
         android:layout_below="@+id/txtNombreProducto"
         android:layout_alignParentEnd="true" />
@@ -58,6 +71,9 @@
         android:layout_width="match_parent"
         android:layout_height="30dp"
         android:layout_below="@id/lblPrecios"
+        android:fontFamily="@font/monse"
+        app:fontFamily="@font/monse"
+        android:textColor="#58595b"
         android:id="@+id/spPrices"/>
 
     <EditText
@@ -67,6 +83,10 @@
         style="@style/TextAppearance.AppCompat.Medium"
         android:hint="Ingrese la cantidad"
         android:layout_height="50dp"
+        android:textSize="18sp"
+        android:fontFamily="@font/monse"
+        app:fontFamily="@font/monse"
+        android:textColor="#58595b"
         android:id="@+id/promtCtext"
         android:layout_marginRight="10dp"
         android:layout_below="@+id/spPrices"
@@ -78,6 +98,10 @@
         android:padding="10dp"
         style="@style/TextAppearance.AppCompat.Medium"
         android:hint="Ingrese el descuento"
+        android:textSize="18sp"
+        android:fontFamily="@font/monse"
+        app:fontFamily="@font/monse"
+        android:textColor="#58595b"
         android:layout_height="50dp"
         android:id="@+id/promtCDesc"
         android:layout_marginRight="10dp"

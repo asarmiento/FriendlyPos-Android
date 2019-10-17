@@ -134,7 +134,7 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
         Log.d("prodListActivoPrev", "" + productosList);
         if(pivots.size() == 0){
             Log.d("jd", "se limpia x 0");
-            holder.cardView.setBackgroundColor(Color.parseColor("#009688"));
+            holder.cardView.setBackgroundColor(Color.parseColor("#FFFFFF"));
         }
         else{
 
@@ -142,11 +142,11 @@ public class PrevSeleccionarProductoAdapter  extends RecyclerView.Adapter<PrevSe
                 /*  for (int i = 0; i <= pivots.size(); i++){*/
                 if(producto.getId().equals(pivot.getProduct_id())){
                     Log.d("jd", "seteando color x lista");
-                    holder.cardView.setBackgroundColor(Color.parseColor("#607d8b"));
+                    holder.cardView.setBackgroundColor(Color.parseColor("#d1d3d4"));
                     return;
                 }else{
                     Log.d("jd", "se limpia");
-                    holder.cardView.setBackgroundColor(Color.parseColor("#009688"));
+                    holder.cardView.setBackgroundColor(Color.parseColor("#FFFFFF"));
                 }
             }
         }
