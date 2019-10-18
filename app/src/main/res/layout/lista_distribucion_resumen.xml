@@ -16,7 +16,7 @@
 
         <TextView
             android:id="@+id/txt_resumen_factura_nombre"
-            android:layout_width="wrap_content"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:text="Nombre"
             android:fontFamily="@font/monse"

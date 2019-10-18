@@ -123,11 +123,11 @@ public class DistrSeleccionarProductosAdapter extends RecyclerView.Adapter<Distr
             for (Pivot pivot : pivots) {
                 if (producto.getId().equals(pivot.getProduct_id())) {
                     Log.d("jd", "seteando color x lista");
-                    holder.cardView.setBackgroundColor(Color.parseColor("#607d8b"));
+                    holder.cardView.setBackgroundColor(Color.parseColor("#d1d3d4"));
                     return;
                 } else {
                     Log.d("jd", "se limpia");
-                    holder.cardView.setBackgroundColor(Color.parseColor("#009688"));
+                    holder.cardView.setBackgroundColor(Color.parseColor("#FFFFFF"));
                 }
             }
         }
