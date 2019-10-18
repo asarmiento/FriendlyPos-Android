@@ -24,7 +24,7 @@
     <string name="action_settings">Settings</string>
 
     <string name="products">Productos</string>
-    <string name="clients">Clientes</string>
+    <string name="clients"><font face="@font/monse.otf">Clientes</font></string>
     <string name="recibos">Recibos</string>
     <string name="email">Reenviar Email</string>
     <string name="directsale">Venta Directa</string>
@@ -142,7 +142,7 @@
     <string name="error_incorrect_user_id">Usuario no registrado</string>
     <string name="error_network">Conexión de red no disponible</string>
     <string name="error_invalid_password">Contraseña inválida</string>
-    <string name="credits">Sistemas Amigables de Costa Rica S.A</string>
+    <string name="credits">Sistemas Amigables Latinoamérica S.A.</string>
     <string name="URL_Webservice">URL del web Service:</string>
     <string name="URl_HInt_WEBSERVICE">Escriba aca el URL</string>
 

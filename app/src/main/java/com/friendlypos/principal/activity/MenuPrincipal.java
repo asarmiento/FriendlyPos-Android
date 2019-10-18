@@ -178,6 +178,8 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
         ButterKnife.bind(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+
         networkStateChangeReceiver = new NetworkStateChangeReceiver();
         ActivityCompat.requestPermissions(MenuPrincipal.this, new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, 123);
         session = new SessionPrefes(getApplicationContext());
