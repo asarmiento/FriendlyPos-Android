@@ -5,6 +5,7 @@ import android.app.ActivityManager;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -16,6 +17,8 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.Toolbar;
+import android.text.SpannableString;
+import android.text.Spanned;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -81,6 +84,8 @@ import butterknife.ButterKnife;
 import io.realm.Realm;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
+import uk.co.chrisjenx.calligraphy.CalligraphyTypefaceSpan;
+import uk.co.chrisjenx.calligraphy.TypefaceUtils;
 
 import static com.friendlypos.R.id.btn_descargar_datosempresa;
 import static com.friendlypos.R.id.btn_descargar_recibos;
@@ -463,8 +468,27 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                     }
                 ).create();
 
-                alertDialog.setMessage("Seguro que quiere cerrar Sesion?");
+
+                String message = "¿Seguro que quiere cerrar sesión?";
+                SpannableString spannableString =  new SpannableString(message);
+
+                CalligraphyTypefaceSpan typefaceSpan = new CalligraphyTypefaceSpan(TypefaceUtils.load(getApplicationContext().getAssets(), "font/monse.otf"));
+                spannableString.setSpan(typefaceSpan, 0, message.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+
+                alertDialog.setMessage(spannableString);
                 alertDialog.show();
+
+
+/*
+                progresRing.setTitle(spannableStringTitulo);
+                progresRing.setMessage(spannableString);
+                progresRing.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                progresRing.setIndeterminate(true);
+                progresRing.setCancelable(true);
+                progresRing.show();*/
+
+
                 break;
 
             case btn_descargar_datosempresa:

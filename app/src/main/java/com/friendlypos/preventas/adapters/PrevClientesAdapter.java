@@ -8,6 +8,8 @@ import android.graphics.Color;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.text.SpannableString;
+import android.text.Spanned;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,6 +38,8 @@ import com.friendlypos.principal.modelo.Productos;
 import java.util.ArrayList;
 import java.util.List;
 import io.realm.Realm;
+import uk.co.chrisjenx.calligraphy.CalligraphyTypefaceSpan;
+import uk.co.chrisjenx.calligraphy.TypefaceUtils;
 
 public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapter.CharacterViewHolder> {
 
@@ -86,7 +90,7 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
     @Override
     public void onBindViewHolder(final PrevClientesAdapter.CharacterViewHolder holder, final int position) {
 
-        Clientes content = contentList.get(position);
+        final Clientes content = contentList.get(position);
 
         creditolimite = Double.parseDouble(content.getCreditLimit());
         descuentoFixed = Double.parseDouble(content.getFixedDiscount());
@@ -302,9 +306,30 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
                                                 activity.setInvoiceIdPreventa(nextId);
                                                 activity.setMetodoPagoClientePreventa(metodoPagoId);
 
-                                                final ProgressDialog progresRing = ProgressDialog.show(QuickContext, "Cargando",
-                                                        "Seleccionando Cliente", true);
+                                                final ProgressDialog progresRing;/* = ProgressDialog.show(QuickContext, "Cargando",
+                                                        "Seleccionando Cliente", true);*/
+
+
+                                                progresRing = new ProgressDialog(QuickContext);
+                                                String message = "Seleccionando Cliente";
+                                                String titulo = "Cargando";
+                                                SpannableString spannableString =  new SpannableString(message);
+                                                SpannableString spannableStringTitulo =  new SpannableString(titulo);
+
+                                                CalligraphyTypefaceSpan typefaceSpan = new CalligraphyTypefaceSpan(TypefaceUtils.load(QuickContext.getAssets(), "font/monse.otf"));
+                                                spannableString.setSpan(typefaceSpan, 0, message.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                                spannableStringTitulo.setSpan(typefaceSpan, 0, titulo.length(), Spanned.SPAN_PRIORITY);
+
+                                                progresRing.setTitle(spannableStringTitulo);
+                                                progresRing.setMessage(spannableString);
+                                                progresRing.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                                                progresRing.setIndeterminate(true);
                                                 progresRing.setCancelable(true);
+                                                progresRing.show();
+
+
+
+                                              //  progresRing.setCancelable(true);
                                                 new Thread(new Runnable() {
 
                                                     @Override
@@ -335,8 +360,31 @@ public class PrevClientesAdapter extends RecyclerView.Adapter<PrevClientesAdapte
                                                 activity.setInvoiceIdPreventa(nextId);
                                                 activity.setMetodoPagoClientePreventa(metodoPagoId);
 
-                                                final ProgressDialog progresRing = ProgressDialog.show(QuickContext, "Cargando", "Seleccionando Cliente", true);
+                                               /* final ProgressDialog progresRing = ProgressDialog.show(QuickContext, "Cargando", "Seleccionando Cliente", true);
+                                                progresRing.setCancelable(true);*/
+
+                                                final ProgressDialog progresRing;/* = ProgressDialog.show(QuickContext, "Cargando",
+                                                        "Seleccionando Cliente", true);*/
+
+
+                                                progresRing = new ProgressDialog(QuickContext);
+                                                String message = "Seleccionando Cliente";
+                                                String titulo = "Cargando";
+                                                SpannableString spannableString =  new SpannableString(message);
+                                                SpannableString spannableStringTitulo =  new SpannableString(titulo);
+
+                                                CalligraphyTypefaceSpan typefaceSpan = new CalligraphyTypefaceSpan(TypefaceUtils.load(QuickContext.getAssets(), "font/monse.otf"));
+                                                spannableString.setSpan(typefaceSpan, 0, message.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                                spannableStringTitulo.setSpan(typefaceSpan, 0, titulo.length(), Spanned.SPAN_PRIORITY);
+
+                                                progresRing.setTitle(spannableStringTitulo);
+                                                progresRing.setMessage(spannableString);
+                                                progresRing.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                                                progresRing.setIndeterminate(true);
                                                 progresRing.setCancelable(true);
+                                                progresRing.show();
+
+
                                                 new Thread(new Runnable() {
 
                                                     @Override

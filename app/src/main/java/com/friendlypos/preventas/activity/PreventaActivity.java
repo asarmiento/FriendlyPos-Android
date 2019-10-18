@@ -10,6 +10,8 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.text.SpannableString;
+import android.text.Spanned;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
@@ -46,6 +48,8 @@ import butterknife.ButterKnife;
 import io.realm.Realm;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
+import uk.co.chrisjenx.calligraphy.CalligraphyTypefaceSpan;
+import uk.co.chrisjenx.calligraphy.TypefaceUtils;
 
 public class PreventaActivity extends BluetoothActivity {
 
@@ -304,9 +308,19 @@ public class PreventaActivity extends BluetoothActivity {
 
                 int tabCliente = getSelecClienteTabPreventa();
                 if (tabCliente == 1) {
+                    String message = "¿Desea cancelar la factura en proceso?";
+                    String titulo = "Salir";
+                    SpannableString spannableString =  new SpannableString(message);
+                    SpannableString spannableStringTitulo =  new SpannableString(titulo);
+
+                    CalligraphyTypefaceSpan typefaceSpan = new CalligraphyTypefaceSpan(TypefaceUtils.load(getApplicationContext().getAssets(), "font/monse.otf"));
+                    spannableString.setSpan(typefaceSpan, 0, message.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    spannableStringTitulo.setSpan(typefaceSpan, 0, titulo.length(), Spanned.SPAN_PRIORITY);
+
                     AlertDialog dialogReturnSale = new AlertDialog.Builder(PreventaActivity.this)
-                            .setTitle("Salir")
-                            .setMessage("¿Desea cancelar la factura en proceso?")
+
+                            .setTitle(spannableStringTitulo)
+                            .setMessage(spannableString)
                             .setPositiveButton("OK", new DialogInterface.OnClickListener() {
 
                                 @Override
@@ -571,10 +585,19 @@ public class PreventaActivity extends BluetoothActivity {
             int tabCliente = getSelecClienteTabPreventa();
             if (tabCliente == 1) {
 
+                String message = "¿Desea cancelar la factura en proceso?";
+                String titulo = "Salir";
+                SpannableString spannableString =  new SpannableString(message);
+                SpannableString spannableStringTitulo =  new SpannableString(titulo);
+
+                CalligraphyTypefaceSpan typefaceSpan = new CalligraphyTypefaceSpan(TypefaceUtils.load(getApplicationContext().getAssets(), "font/monse.otf"));
+                spannableString.setSpan(typefaceSpan, 0, message.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                spannableStringTitulo.setSpan(typefaceSpan, 0, titulo.length(), Spanned.SPAN_PRIORITY);
 
                 AlertDialog dialogReturnSale = new AlertDialog.Builder(PreventaActivity.this)
-                        .setTitle("Salir")
-                        .setMessage("¿Desea cancelar la factura en proceso?")
+
+                        .setTitle(spannableStringTitulo)
+                        .setMessage(spannableString)
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
 
                             @Override

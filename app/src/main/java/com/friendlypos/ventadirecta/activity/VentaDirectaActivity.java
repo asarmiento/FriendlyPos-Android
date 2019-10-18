@@ -11,6 +11,8 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.text.SpannableString;
+import android.text.Spanned;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
@@ -27,6 +29,7 @@ import com.friendlypos.distribucion.modelo.invoice;
 import com.friendlypos.distribucion.modelo.sale;
 import com.friendlypos.distribucion.util.Adapter;
 import com.friendlypos.login.util.SessionPrefes;
+import com.friendlypos.preventas.activity.PreventaActivity;
 import com.friendlypos.preventas.modelo.Numeracion;
 import com.friendlypos.principal.activity.BluetoothActivity;
 import com.friendlypos.principal.activity.MenuPrincipal;
@@ -45,6 +48,8 @@ import butterknife.ButterKnife;
 import io.realm.Realm;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
+import uk.co.chrisjenx.calligraphy.CalligraphyTypefaceSpan;
+import uk.co.chrisjenx.calligraphy.TypefaceUtils;
 
 import static io.realm.internal.SyncObjectServerFacade.getApplicationContext;
 
@@ -290,9 +295,19 @@ public class VentaDirectaActivity extends BluetoothActivity {
 
 
 
+                    String message = "¿Desea cancelar la factura en proceso?";
+                    String titulo = "Salir";
+                    SpannableString spannableString =  new SpannableString(message);
+                    SpannableString spannableStringTitulo =  new SpannableString(titulo);
+
+                    CalligraphyTypefaceSpan typefaceSpan = new CalligraphyTypefaceSpan(TypefaceUtils.load(getApplicationContext().getAssets(), "font/monse.otf"));
+                    spannableString.setSpan(typefaceSpan, 0, message.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    spannableStringTitulo.setSpan(typefaceSpan, 0, titulo.length(), Spanned.SPAN_PRIORITY);
+
                     AlertDialog dialogReturnSale = new AlertDialog.Builder(VentaDirectaActivity.this)
-                            .setTitle("Salir")
-                            .setMessage("¿Desea cancelar la factura en proceso?")
+
+                            .setTitle(spannableStringTitulo)
+                            .setMessage(spannableString)
                             .setPositiveButton("OK", new DialogInterface.OnClickListener() {
 
                                 @Override
@@ -470,9 +485,19 @@ public class VentaDirectaActivity extends BluetoothActivity {
             int tabCliente = getSelecClienteTabVentaDirecta();
             if (tabCliente == 1) {
 
+                String message = "¿Desea cancelar la factura en proceso?";
+                String titulo = "Salir";
+                SpannableString spannableString =  new SpannableString(message);
+                SpannableString spannableStringTitulo =  new SpannableString(titulo);
+
+                CalligraphyTypefaceSpan typefaceSpan = new CalligraphyTypefaceSpan(TypefaceUtils.load(getApplicationContext().getAssets(), "font/monse.otf"));
+                spannableString.setSpan(typefaceSpan, 0, message.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                spannableStringTitulo.setSpan(typefaceSpan, 0, titulo.length(), Spanned.SPAN_PRIORITY);
+
                 AlertDialog dialogReturnSale = new AlertDialog.Builder(VentaDirectaActivity.this)
-                        .setTitle("Salir")
-                        .setMessage("¿Desea cancelar la factura en proceso?")
+
+                        .setTitle(spannableStringTitulo)
+                        .setMessage(spannableString)
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
 
                             @Override

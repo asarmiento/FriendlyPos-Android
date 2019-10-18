@@ -11,6 +11,8 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.text.SpannableString;
+import android.text.Spanned;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,6 +40,8 @@ import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
+import uk.co.chrisjenx.calligraphy.CalligraphyTypefaceSpan;
+import uk.co.chrisjenx.calligraphy.TypefaceUtils;
 
 import static io.realm.internal.SyncObjectServerFacade.getApplicationContext;
 import static java.lang.String.valueOf;
@@ -214,8 +218,30 @@ public class DistrClientesAdapter extends RecyclerView.Adapter<DistrClientesAdap
             public void onClick(View view) {
                 activa = 1;
 
-                final ProgressDialog progresRing = ProgressDialog.show(QuickContext, "Cargando", "Seleccionando Cliente", true);
+                /*final ProgressDialog progresRing = ProgressDialog.show(QuickContext, "Cargando", "Seleccionando Cliente", true);
+                progresRing.setCancelable(true);*/
+
+                final ProgressDialog progresRing;/* = ProgressDialog.show(QuickContext, "Cargando",
+                                                        "Seleccionando Cliente", true);*/
+
+
+                progresRing = new ProgressDialog(QuickContext);
+                String message = "Seleccionando Cliente";
+                String titulo = "Cargando";
+                SpannableString spannableString =  new SpannableString(message);
+                SpannableString spannableStringTitulo =  new SpannableString(titulo);
+
+                CalligraphyTypefaceSpan typefaceSpan = new CalligraphyTypefaceSpan(TypefaceUtils.load(QuickContext.getAssets(), "font/monse.otf"));
+                spannableString.setSpan(typefaceSpan, 0, message.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                spannableStringTitulo.setSpan(typefaceSpan, 0, titulo.length(), Spanned.SPAN_PRIORITY);
+
+                progresRing.setTitle(spannableStringTitulo);
+                progresRing.setMessage(spannableString);
+                progresRing.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                progresRing.setIndeterminate(true);
                 progresRing.setCancelable(true);
+                progresRing.show();
+
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
