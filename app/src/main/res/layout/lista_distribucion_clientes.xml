@@ -82,7 +82,7 @@
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/ic_print"
+            android:src="@mipmap/ic_print_dist"
             android:id="@+id/btnImprimirFacturaCliente"
             android:background="@null"
             android:layout_alignParentTop="true"

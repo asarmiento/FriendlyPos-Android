@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -7,7 +8,7 @@
     android:layout_marginRight="10dp"
     android:layout_marginTop="5dp"
     android:layout_marginBottom="5dp"
-    android:background="@color/colorPrimary">
+    android:background="#FFF">
 
     <TextView
         android:layout_width="match_parent"
@@ -15,6 +16,9 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:text="Ingrese una cantidad, maximo de 20 Unidades, minimo 1"
         android:gravity="center"
+        android:fontFamily="@font/monse"
+        app:fontFamily="@font/monse"
+        android:textColor="#58595b"
         android:id="@+id/promtClabelRecibosPagoTotal"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
@@ -28,6 +32,9 @@
         style="@style/TextAppearance.AppCompat.Medium"
         android:hint="Ingrese la cantidad para pagar"
         android:layout_height="50dp"
+        android:fontFamily="@font/monse"
+        app:fontFamily="@font/monse"
+        android:textColor="#58595b"
         android:id="@+id/promtCtextRecibosPagoTotal"
         android:layout_marginRight="10dp"
         android:layout_marginTop="100dp"

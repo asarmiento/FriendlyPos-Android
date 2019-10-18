@@ -97,7 +97,7 @@ public class ReimprimirFacturaAdapter extends RecyclerView.Adapter<ReimprimirFac
         holder.txt_reimprimir_factura_total.setText(String.format("%,.2f",totalFactura));
         holder.txt_reimprimir_factura_cantidad.setText((int) cantidadPivot + "");
 
-        holder.cardView.setBackgroundColor(selected_position == position ? Color.parseColor("#607d8b") : Color.parseColor("#009688"));
+        holder.cardView.setBackgroundColor(selected_position == position ? Color.parseColor("#d1d3d4") : Color.parseColor("#FFFFFF"));
 
     }
 
