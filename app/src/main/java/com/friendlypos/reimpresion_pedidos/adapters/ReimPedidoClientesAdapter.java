@@ -269,7 +269,6 @@ public class ReimPedidoClientesAdapter extends RecyclerView.Adapter<ReimPedidoCl
                 String dueCliente = clientes.getDue();
                 realm.close();
 
-                Toast.makeText(QuickContext, "You clicked " + facturaID, Toast.LENGTH_SHORT).show();
                 Log.d("PRODUCTOSFACTURATO", facturaid1 + "");
                 Log.d("metodoPago", metodoPago + "");
                 tabCliente = 1;
@@ -313,11 +312,11 @@ public class ReimPedidoClientesAdapter extends RecyclerView.Adapter<ReimPedidoCl
             }
         });
         if(selected_position==position){
-            holder.cardView.setBackgroundColor(Color.parseColor("#607d8b"));
+            holder.cardView.setBackgroundColor(Color.parseColor("#d1d3d4"));
         }
         else
         {
-            holder.cardView.setBackgroundColor(Color.parseColor("#009688"));
+            holder.cardView.setBackgroundColor(Color.parseColor("#FFFFFF"));
         }
 
         holder.btnUbicacionFacturaCliente.setOnClickListener(new View.OnClickListener() {

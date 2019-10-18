@@ -1,10 +1,12 @@
 <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/tools"
     android:id="@+id/cardViewSeleccionarProductos"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="3dp"
-    card_view:cardBackgroundColor="@color/background">
+    card_view:cardBackgroundColor="#FFF"
+    app:ignore="NamespaceTypo">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -17,9 +19,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textStyle="bold"
-            android:textSize="20sp"
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:textColor="#58595b"
+            android:textSize="18sp"
             android:text="Nombre"
-            android:textColor="@color/icons"/>
+           />
 
 
         <TextView
@@ -28,8 +33,10 @@
             android:layout_height="wrap_content"
             android:text="Marca"
             android:layout_marginTop="5dp"
-            android:textSize="20sp"
-            android:textColor="@color/icons"
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:textColor="#58595b"
+            android:textSize="18sp"
             android:layout_below="@+id/txt_producto_factura_nombre"
             android:layout_alignParentStart="true" />
 
@@ -38,8 +45,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Tipo"
-            android:textSize="20sp"
-            android:textColor="@color/icons"
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:textColor="#58595b"
+            android:textSize="18sp"
             android:layout_below="@+id/txt_producto_factura_marca"
             android:layout_alignStart="@+id/txt_producto_factura_marca" />
 
@@ -50,8 +59,10 @@
             android:textStyle="bold"
             android:text="Precio"
             android:gravity="right"
-            android:textSize="20sp"
-            android:textColor="@color/icons"
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:textColor="#58595b"
+            android:textSize="18sp"
             android:layout_below="@+id/txt_producto_factura_tipo"
             android:layout_alignParentEnd="true" />
 
@@ -62,18 +73,22 @@
             android:layout_height="wrap_content"
             android:text="Disponible"
             android:layout_marginTop="8dp"
-            android:textColor="@color/icons"
-            android:textSize="20sp"
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:textColor="#58595b"
+            android:textSize="18sp"
             android:layout_below="@+id/txt_producto_factura_precio"
             android:layout_alignParentStart="true" />
 
         <TextView
             android:id="@+id/txt_producto_factura_seleccionado"
             android:layout_width="wrap_content"
-            android:textSize="20sp"
             android:layout_height="wrap_content"
             android:text="Seleccionado"
-            android:textColor="@color/icons"
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:textColor="#58595b"
+            android:textSize="18sp"
             android:layout_alignBaseline="@+id/txt_producto_factura_disponible"
             android:layout_alignBottom="@+id/txt_producto_factura_disponible"
             android:layout_alignParentEnd="true" />

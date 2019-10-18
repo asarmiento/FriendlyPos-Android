@@ -18,7 +18,7 @@
             android:layout_height="50dp"
             android:layout_margin="10dp"
             android:layout_marginBottom="10dp"
-            android:background="@color/colorPrimary"
+            android:background="#d1d3d4"
             android:padding="5dp">
 
             <android.support.design.widget.TextInputLayout
@@ -40,7 +40,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/background"
+            android:background="#FFF"
             android:orientation="vertical">
 
 
@@ -48,6 +48,9 @@
                 android:id="@+id/client_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/monse"
+                app:fontFamily="@font/monse"
+                android:textColor="#58595b"
                 android:hint="Identificacion"
                 android:visibility="gone" />
 
@@ -56,6 +59,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Informacion de contacto"
+                android:fontFamily="@font/monse"
+                app:fontFamily="@font/monse"
+                android:textColor="#58595b"
                 android:visibility="gone" />
 
             <RelativeLayout
@@ -69,6 +75,9 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:gravity="end"
+                    android:fontFamily="@font/monse"
+                    app:fontFamily="@font/monse"
+                    android:textColor="#58595b"
                     android:text="Subtotal gravado"
                     android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -81,6 +90,9 @@
                     android:layout_alignParentRight="true"
                     android:layout_alignParentTop="true"
                     android:layout_marginLeft="5dp"
+                    android:fontFamily="@font/monse"
+                    app:fontFamily="@font/monse"
+                    android:textColor="#58595b"
                     android:layout_toEndOf="@+id/textView"
                     android:layout_toRightOf="@+id/textView"
                     android:gravity="end"
@@ -99,6 +111,9 @@
                 <TextView
                     android:id="@+id/textViewE"
                     android:layout_width="wrap_content"
+                    android:fontFamily="@font/monse"
+                    app:fontFamily="@font/monse"
+                    android:textColor="#58595b"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:gravity="end"
@@ -112,6 +127,9 @@
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
+                    android:fontFamily="@font/monse"
+                    app:fontFamily="@font/monse"
+                    android:textColor="#58595b"
                     android:layout_alignParentTop="true"
                     android:layout_marginLeft="5dp"
                     android:layout_toEndOf="@+id/textViewE"
@@ -132,6 +150,9 @@
                 <TextView
                     android:id="@+id/textViewSt"
                     android:layout_width="wrap_content"
+                    android:fontFamily="@font/monse"
+                    app:fontFamily="@font/monse"
+                    android:textColor="#58595b"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:gravity="end"
@@ -147,6 +168,9 @@
                     android:layout_alignParentRight="true"
                     android:layout_alignParentTop="true"
                     android:layout_marginLeft="5dp"
+                    android:fontFamily="@font/monse"
+                    app:fontFamily="@font/monse"
+                    android:textColor="#58595b"
                     android:layout_toEndOf="@+id/textViewSt"
                     android:layout_toRightOf="@+id/textViewSt"
                     android:gravity="end"
@@ -165,6 +189,9 @@
                 <TextView
                     android:id="@+id/textViewD"
                     android:layout_width="wrap_content"
+                    android:fontFamily="@font/monse"
+                    app:fontFamily="@font/monse"
+                    android:textColor="#58595b"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:gravity="end"
@@ -179,6 +206,9 @@
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentTop="true"
+                    android:fontFamily="@font/monse"
+                    app:fontFamily="@font/monse"
+                    android:textColor="#58595b"
                     android:layout_marginLeft="5dp"
                     android:layout_toEndOf="@+id/textViewD"
                     android:layout_toRightOf="@+id/textViewD"
@@ -201,6 +231,9 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:gravity="end"
+                    android:fontFamily="@font/monse"
+                    app:fontFamily="@font/monse"
+                    android:textColor="#58595b"
                     android:text="IVA"
                     android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -213,6 +246,9 @@
                     android:layout_alignParentRight="true"
                     android:layout_alignParentTop="true"
                     android:layout_marginLeft="5dp"
+                    android:fontFamily="@font/monse"
+                    app:fontFamily="@font/monse"
+                    android:textColor="#58595b"
                     android:layout_toEndOf="@+id/textViewI"
                     android:layout_toRightOf="@+id/textViewI"
                     android:gravity="end"
@@ -232,6 +268,9 @@
                 <TextView
                     android:id="@+id/textViewT"
                     android:layout_width="wrap_content"
+                    android:fontFamily="@font/monse"
+                    app:fontFamily="@font/monse"
+                    android:textColor="#58595b"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:gravity="end"
@@ -247,6 +286,9 @@
                     android:layout_alignParentRight="true"
                     android:layout_alignParentTop="true"
                     android:layout_marginLeft="5dp"
+                    android:fontFamily="@font/monse"
+                    app:fontFamily="@font/monse"
+                    android:textColor="#58595b"
                     android:layout_toEndOf="@+id/textViewT"
                     android:layout_toRightOf="@+id/textViewT"
                     android:gravity="end"
@@ -268,6 +310,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
             android:background="@drawable/fondo_botones"
             android:text="@string/save"
             android:textColor="@color/cardview_light_background" />
@@ -278,6 +322,8 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:background="@drawable/fondo_botones"
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
             android:text="@string/print"
             android:textColor="@color/cardview_light_background"
             android:visibility="visible" />
@@ -287,6 +333,9 @@
             android:layout_width="fill_parent"
             android:layout_height="50dp"
             android:layout_margin="10dp"
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:textColor="#58595b"
             android:hint="@string/notes" />
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>

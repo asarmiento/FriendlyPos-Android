@@ -1,10 +1,12 @@
 <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/tools"
     android:id="@+id/cardViewClientes"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="3dp"
-    card_view:cardBackgroundColor="@color/background">
+    card_view:cardBackgroundColor="#FFF"
+    app:ignore="NamespaceTypo">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -17,7 +19,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Card"
-            android:textColor="@color/icons"
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:textColor="#58595b"
+            android:textSize="12sp"
             android:textStyle="bold" />
 
         <TextView
@@ -26,7 +31,10 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/txt_cliente_card"
             android:text="Fantasy Name"
-            android:textColor="@color/icons"
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:textColor="#58595b"
+            android:textSize="12sp"
             android:textStyle="bold" />
 
         <TextView
@@ -36,7 +44,10 @@
             android:layout_alignParentStart="true"
             android:layout_below="@+id/txt_cliente_fantasyname"
             android:text="Company Name"
-            android:textColor="@color/icons"
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:textColor="#58595b"
+            android:textSize="12sp"
             android:textStyle="bold" />
 
         <TextView
@@ -46,7 +57,10 @@
             android:layout_alignParentStart="true"
             android:layout_below="@+id/txt_cliente_companyname"
             android:text="Address"
-            android:textColor="@color/icons" />
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:textColor="#58595b"
+            android:textSize="12sp" />
 
         <TextView
             android:id="@+id/txt_texto_cliente_telefono"
@@ -55,7 +69,10 @@
             android:layout_alignParentStart="true"
             android:layout_below="@+id/txt_cliente_address"
             android:text="Teléfono:"
-            android:textColor="@color/icons"
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:textColor="#58595b"
+            android:textSize="12sp"
             android:textStyle="bold" />
 
         <TextView
@@ -67,7 +84,10 @@
             android:layout_marginLeft="5dp"
             android:layout_toEndOf="@+id/txt_texto_cliente_telefono"
             android:text="Telefono"
-            android:textColor="@color/icons" />
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:textColor="#58595b"
+            android:textSize="12sp" />
 
     </RelativeLayout>
 </android.support.v7.widget.CardView>

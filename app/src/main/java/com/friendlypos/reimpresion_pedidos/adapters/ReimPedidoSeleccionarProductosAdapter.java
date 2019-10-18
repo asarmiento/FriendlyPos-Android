@@ -107,7 +107,7 @@ public class ReimPedidoSeleccionarProductosAdapter extends RecyclerView.Adapter<
         holder.txt_producto_factura_marca.setText("Marca: " + marca2);
         holder.txt_producto_factura_tipo.setText("Tipo: " + tipoProducto);
         holder.txt_producto_factura_precio.setText(precio);
-        holder.cardView.setBackgroundColor(selected_position == position ? Color.parseColor("#607d8b") : Color.parseColor("#009688"));
+        holder.cardView.setBackgroundColor(selected_position == position ? Color.parseColor("#d1d3d4") : Color.parseColor("#FFFFFF"));
         holder.fillData(producto);
     }
     //}

@@ -142,8 +142,6 @@ public class EmailClientesAdapter extends RecyclerView.Adapter<EmailClientesAdap
                 String adswd = id.getCostumer();
                 Log.d("EnviarEmaiasdasdl", adswd+ "");
 
-                Toast.makeText(QuickContext, "idCliente "+ idCliente, Toast.LENGTH_LONG).show();
-
 
 
                 if (isOnline()) {
@@ -186,7 +184,6 @@ public class EmailClientesAdapter extends RecyclerView.Adapter<EmailClientesAdap
                             else{
                            /*     RealmResults<invoices> results = realm.where(invoices.class).findAll();
                                 if (results.isEmpty()){
-                                    Toast.makeText(QuickContext, "Error de descarga, contacte al administrador", Toast.LENGTH_SHORT).show();
                                 }else{
                                     mContentsArray.addAll(results);
                                 }*/
@@ -205,7 +202,6 @@ public class EmailClientesAdapter extends RecyclerView.Adapter<EmailClientesAdap
                     tabCliente = 0;
                     activity.setSelecClienteTabEmail(tabCliente);
                     Functions.CreateMessage(activity, "Email", "Por favor revisar conexión de Internet antes de continuar");
-                   // Toast.makeText(activity, "Error, por favor revisar conexión de Internet", Toast.LENGTH_SHORT).show();
                     progresRing.dismiss();
                 }
 
@@ -244,7 +240,6 @@ public class EmailClientesAdapter extends RecyclerView.Adapter<EmailClientesAdap
                             }
 
                             showLoginError(error);}else {
-                            Toast.makeText(QuickContext, "BIEN", Toast.LENGTH_LONG).show();
 
                             Log.d("EnviarEmail", response.body() + "");
                             Log.d("EnviarEmail", response.message() + "");
@@ -269,11 +264,11 @@ public class EmailClientesAdapter extends RecyclerView.Adapter<EmailClientesAdap
             }
         });
         if(selected_position==position){
-            holder.cardView.setBackgroundColor(Color.parseColor("#607d8b"));
+            holder.cardView.setBackgroundColor(Color.parseColor("#d1d3d4"));
         }
         else
         {
-            holder.cardView.setBackgroundColor(Color.parseColor("#009688"));
+            holder.cardView.setBackgroundColor(Color.parseColor("#FFFFFF"));
         }
 
     }

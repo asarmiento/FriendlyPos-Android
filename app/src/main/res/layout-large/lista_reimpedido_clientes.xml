@@ -1,10 +1,12 @@
 <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/tools"
     android:id="@+id/cardViewDistrClientes"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="3dp"
-    card_view:cardBackgroundColor="@color/background">
+    card_view:cardBackgroundColor="#FFF"
+    app:ignore="NamespaceTypo">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -16,27 +18,33 @@
             android:id="@+id/txt_cliente_factura_card"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textStyle="bold" android:textSize="20sp"
-
+            android:textStyle="bold"
             android:text="Card"
-            android:textColor="@color/icons"/>
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:textColor="#58595b"
+            android:textSize="18sp"/>
         <TextView
             android:id="@+id/txt_cliente_factura_fantasyname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Fantasy Name"
-            android:textSize="20sp"
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:textColor="#58595b"
+            android:textSize="18sp"
             android:textStyle="bold"
-            android:textColor="@color/icons"
             android:layout_below="@+id/txt_cliente_factura_card"
             />
         <TextView
             android:id="@+id/txt_cliente_factura_companyname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:textColor="#58595b"
+            android:textSize="18sp"
             android:text="Company Name"
-            android:textColor="@color/icons"
             android:textStyle="bold"
             android:layout_below="@+id/txt_cliente_factura_fantasyname"
             android:layout_alignParentStart="true" />
@@ -45,9 +53,11 @@
             android:id="@+id/txt_cliente_factura_numeracion"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:textColor="#58595b"
+            android:textSize="18sp"
             android:text="Numeracion"
-            android:textColor="@color/icons"
             android:layout_below="@+id/txt_cliente_factura_companyname"
             android:layout_alignParentStart="true" />
 
@@ -55,7 +65,7 @@
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/ic_print"
+            android:src="@mipmap/ic_print_dist"
             android:id="@+id/btnImprimirFacturaCliente"
             android:background="@null"
             android:layout_alignParentTop="true"
