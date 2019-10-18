@@ -114,8 +114,6 @@ public class RecibosResumenAdapter extends RecyclerView.Adapter<RecibosResumenAd
                     final int resumenProductoId = clickedDataItem.getId();
                     final double cantidadProducto = Double.parseDouble(clickedDataItem.getAmount());
 
-                    Toast.makeText(view.getContext(), "Se borró el producto" , Toast.LENGTH_SHORT).show();
-
                     // TRANSACCIÓN BD PARA SELECCIONAR LOS DATOS DEL INVENTARIO
                     Realm realm3 = Realm.getDefaultInstance();
                     realm3.executeTransaction(new Realm.Transaction() {

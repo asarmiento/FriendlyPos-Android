@@ -16,7 +16,6 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.WindowManager;
-import android.widget.Toast;
 
 import com.friendlypos.R;
 import com.friendlypos.Recibos.delegate.PreSellRecibosDelegate;

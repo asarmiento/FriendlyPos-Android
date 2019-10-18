@@ -13,7 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.friendlypos.R;
 import com.friendlypos.Recibos.activity.RecibosActivity;
@@ -222,8 +221,6 @@ public class RecibosClientesAdapter extends RecyclerView.Adapter<RecibosClientes
 
                                     Log.d("totalP", totalP + "");
 
-                                    //  Toast.makeText(activity, facturaID + " " + clienteID + " ", Toast.LENGTH_LONG).show();
-
                                     tabCliente = 1;
                                     activity.setSelecClienteTabRecibos(tabCliente);
                                     activity.setClienteIdRecibos(clienteID);
@@ -268,8 +265,6 @@ public class RecibosClientesAdapter extends RecyclerView.Adapter<RecibosClientes
                     double totalP = clickedDataItem.getPorPagar();
 
                     Log.d("totalP", totalP + "");
-
-                    //  Toast.makeText(activity, facturaID + " " + clienteID + " ", Toast.LENGTH_LONG).show();
 
                     tabCliente = 1;
                     activity.setSelecClienteTabRecibos(tabCliente);

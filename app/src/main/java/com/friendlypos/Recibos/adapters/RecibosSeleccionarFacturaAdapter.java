@@ -166,15 +166,15 @@ public class RecibosSeleccionarFacturaAdapter extends RecyclerView.Adapter<Recib
 
                     if(montoPagar > debePagar){
                         montoPagar = debePagar;
-                        Toast.makeText(context, "Ajusto " + montoPagar + " " + debePagar + " ", Toast.LENGTH_LONG).show();
+                      //  Toast.makeText(context, "Ajusto " + montoPagar + " " + debePagar + " ", Toast.LENGTH_LONG).show();
                     }
                     else{
-                        Toast.makeText(context, "no ajusto " + montoPagar + " " + debePagar + " ", Toast.LENGTH_LONG).show();
+                     //   Toast.makeText(context, "no ajusto " + montoPagar + " " + debePagar + " ", Toast.LENGTH_LONG).show();
                     }
 
                     if (montoPagar <= debePagar) {
 
-                        Toast.makeText(context, "Pago " + montoPagar + " " + debePagar + " ", Toast.LENGTH_LONG).show();
+                     //   Toast.makeText(context, "Pago " + montoPagar + " " + debePagar + " ", Toast.LENGTH_LONG).show();
                         montoFaltante = totalPagado + montoPagar;
 
                         final Realm realm2 = Realm.getDefaultInstance();
@@ -303,7 +303,7 @@ public class RecibosSeleccionarFacturaAdapter extends RecyclerView.Adapter<Recib
                     debePagar = totalPago - totalPagado;
                     Log.d("debePagar",  debePagar + "");
 
-                Toast.makeText(activity, facturaID + " " + clienteID + " " + totalPago, Toast.LENGTH_LONG).show();
+            //    Toast.makeText(activity, facturaID + " " + clienteID + " " + totalPago, Toast.LENGTH_LONG).show();
                 activity.setTotalFacturaSelec(totalPago);
                 activity.setTotalizarPagado(totalPagado);
 
