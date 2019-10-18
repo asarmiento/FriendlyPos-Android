@@ -13,7 +13,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="85dp"
             android:layout_margin="10dp"
             android:layout_marginBottom="10dp"
             android:background="#d1d3d4"
@@ -21,14 +21,14 @@
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/contraseña_wrapper"
-                style="@style/TextInputLayout"
+                style="@style/TextInputLayoutTotal"
                 android:layout_alignParentBottom="true"
                 app:hintTextAppearance="@style/TextAppearence.App.TextInputLayout.Dark1">
 
                 <EditText
                     android:id="@+id/client_name"
-                    style="@style/Register_EditText1"
                     android:textSize="20sp"
+                    style="@style/Register_EditText1"
                     android:hint="Nombre de Cliente" />
 
             </android.support.design.widget.TextInputLayout>

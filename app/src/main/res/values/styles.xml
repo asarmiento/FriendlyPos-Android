@@ -46,6 +46,15 @@
         <item name="android:paddingTop">10dp</item>
     </style>
 
+    <style name="TextInputLayoutTotal">
+        <item name="android:minHeight">65dp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:clipToPadding">false</item>
+        <item name="android:gravity">bottom</item>
+        <item name="android:paddingTop">2dp</item>
+    </style>
+
     <style name="Register_EditText" parent="Normal_EditText">
         <item name="android:background">@android:color/white</item>
     </style>
@@ -53,6 +62,7 @@
     <style name="Register_EditText1" parent="Normal_EditText">
         <item name="android:background">#d1d3d4</item>
         <item name="android:fontFamily">@font/monse</item>
+        <item name="android:textSize">16sp</item>
     </style>
 
     <style name="Register_EditText2" parent="Normal_EditText">
