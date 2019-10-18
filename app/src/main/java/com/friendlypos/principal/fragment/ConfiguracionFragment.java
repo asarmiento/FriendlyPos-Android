@@ -69,7 +69,7 @@ public class ConfiguracionFragment extends PreferenceFragment implements OnShare
 
         View view = super.onCreateView(inflater, container, savedInstanceState);
         if(view !=null){
-            view.setBackgroundColor(getResources().getColor(R.color.background));
+            view.setBackgroundColor(getResources().getColor(R.color.icons));
             view.setAlpha((float) 0.8);
         }
 

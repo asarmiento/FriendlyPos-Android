@@ -279,11 +279,11 @@ public class RecibosClientesAdapter extends RecyclerView.Adapter<RecibosClientes
             }
         });
         if(selected_position==position){
-            holder.cardView.setBackgroundColor(Color.parseColor("#607d8b"));
+            holder.cardView.setBackgroundColor(Color.parseColor("#d1d3d4"));
         }
         else
         {
-            holder.cardView.setBackgroundColor(Color.parseColor("#009688"));
+            holder.cardView.setBackgroundColor(Color.parseColor("#FFFFFF"));
         }
 
     }

@@ -6,6 +6,8 @@
             android:title="Usar Impresora?"
             android:summary="Imprimir las Facturas luego de guardarlas, para entregar copias al cliente"
             android:defaultValue="true"
+            android:fontFamily="@font/monse"
+            android:textColor="#58595b"
           />
 
         <ListPreference
@@ -15,19 +17,25 @@
             android:entries="@array/listentries"
             android:entryValues="@array/listvalues"
             android:defaultValue="1"
+            android:fontFamily="@font/monse"
+            android:textColor="#58595b"
             />
 
 
         <ListPreference
             android:key="pref_conectar_bluetooth"
             android:title="Conecte la impresora por bluetooth"
-            android:dependency="pref_usar_impresora" />
+            android:dependency="pref_usar_impresora"
+            android:fontFamily="@font/monse"
+            android:textColor="#58595b"/>
 
 
         <PreferenceScreen
         android:title="Desvincular Impresora"
         android:key="pref_desvincular_impresora"
-        android:dependency="pref_usar_impresora"/>
+        android:dependency="pref_usar_impresora"
+            android:fontFamily="@font/monse"
+            android:textColor="#58595b"/>
 
 
 
