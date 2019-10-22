@@ -422,7 +422,45 @@
 
                 </LinearLayout>
 
+                    <LinearLayout
+                        android:id="@+id/clickReimprimirRecibos"
+                        android:onClick="onClickGo"
+                        android:layout_width="match_parent"
+                        android:layout_height="80dp"
+                        android:gravity="center"
+                        android:orientation="vertical">
 
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="75dp"
+                            >
+
+                            <ImageView
+                                android:tint="@color/icons"
+                                android:padding="10dp"
+                                android:src="@mipmap/ic_print"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:text="Home"
+                                android:id="@+id/imageView19" />
+
+                            <TextView
+                                android:id="@+id/textView19"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:text="Lista de recibos"
+                                android:fontFamily="@font/monse"
+                                app:fontFamily="@font/monse"
+                                android:textColor="@color/icons"
+                                android:layout_centerVertical="true"
+                                android:layout_toRightOf="@+id/imageView19"
+                                android:layout_toEndOf="@+id/imageView19"
+                                android:layout_marginLeft="17dp"
+                                android:layout_marginStart="17dp" />
+                        </RelativeLayout>
+
+                    </LinearLayout>
                 <LinearLayout
                     android:id="@+id/clickGrafico"
                     android:onClick="onClickGo"

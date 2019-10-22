@@ -19,6 +19,8 @@
         android:roundIcon="@mipmap/logo_app"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".reimprimirRecibos.activity.ReimprimirRecibosActivity"></activity>
+
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
@@ -141,7 +143,6 @@
                 android:value=".principal.activity.MenuPrincipal" />
             >
         </activity>
-
         <activity
             android:name=".reenvio_email.activity.EmailActivity"
             android:label="@string/email"
@@ -172,7 +173,7 @@
                 android:value=".principal.activity.MenuPrincipal" />
             >
         </activity>
-        <activity android:name=".reenvio_email.activityvity"></activity>
+        <activity android:name=".reenvio_email.activityvity" />
     </application>
 
 </manifest>

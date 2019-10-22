@@ -72,6 +72,7 @@ import com.friendlypos.principal.modelo.datosTotales;
 import com.friendlypos.reenvio_email.activity.EmailActivity;
 import com.friendlypos.reimpresion.activity.ReimprimirActivity;
 import com.friendlypos.reimpresion_pedidos.activity.ReimprimirPedidosActivity;
+import com.friendlypos.reimprimirRecibos.activity.ReimprimirRecibosActivity;
 import com.friendlypos.ventadirecta.activity.VentaDirectaActivity;
 import com.github.clans.fab.FloatingActionButton;
 
@@ -1402,7 +1403,12 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                     startActivity(reimprimirpedidos);
                     finish();
                     break;
-
+                case R.id.clickReimprimirRecibos:
+                    Intent reimprimirrecibos;
+                    reimprimirrecibos = new Intent(MenuPrincipal.this, ReimprimirRecibosActivity.class);
+                    startActivity(reimprimirrecibos);
+                    finish();
+                    break;
                 case R.id.clickGrafico:
                     Intent graf;
                     graf = new Intent(MenuPrincipal.this, GraficoActivity.class);
