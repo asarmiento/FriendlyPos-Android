@@ -173,35 +173,9 @@ public class VentaDirResumenAdapter extends RecyclerView.Adapter<VentaDirResumen
                         }
                     });
 
-
-
                     // TRANSACCIÓN BD PARA BORRAR EL CAMPO
 
                     activity.initProducto(pos);
-
-                  /*  final Realm realm5 = Realm.getDefaultInstance();
-                    realm5.executeTransaction(new Realm.Transaction() {
-                        @Override
-                        public void execute(Realm realm5) {
-                            Pivot inv_actualizado = realm5.where(Pivot.class).equalTo("id", resumenProductoId).findFirst();
-                            inv_actualizado.setDevuelvo(1);
-                            realm5.insertOrUpdate(inv_actualizado);
-                            realm5.close();
-                        }
-                    });*/
-
-
-             /*     final Realm realm = Realm.getDefaultInstance();
-                    realm.executeTransaction(new Realm.Transaction() {
-
-                        @Override
-                        public void execute(Realm realm) {
-                            RealmResults<Pivot> result = realm.where(Pivot.class).equalTo("id", resumenProductoId).findAll();
-                            result.deleteAllFromRealm();
-                            realm.close();
-                        }
-
-                    });*/
 
                     notifyDataSetChanged();
                     fragment.updateData();

@@ -155,6 +155,16 @@ public class PreSellInvoiceDelegate {
     }
 
 
+    public void borrarProductoPreventa(Pivot pivot) {
+
+        for (int i = 0; i < productofacturas.size(); i++) {
+            Log.d("invoiceBorrarSize", productofacturas.size() + "");
+            productofacturas.get(i).setDevuelvo(1);
+        }
+        Log.d("invoiceBorrar", productofacturas + "");
+    }
+
+
     public List<Pivot> getAllPivot() {
 
         if (productofacturas.isEmpty()) {

@@ -183,6 +183,7 @@ public class PrevSelecProductoFragment extends BaseFragment implements SearchVie
         else{
             Log.d("SelecUpdate", "No hay productos");
         }
+        adapter.updateData(getListProductos());
     }
 
     @Override

@@ -158,8 +158,10 @@ public class PreSellInvoiceDelegateVD {
 
     public void borrarProductoVentaDirecta(Pivot pivot) {
 
-        productofacturas.get(0).setDevuelvo(1);
-
+        for (int i = 0; i < productofacturas.size(); i++) {
+            Log.d("invoiceBorrarSize", productofacturas.size() + "");
+            productofacturas.get(i).setDevuelvo(1);
+        }
         Log.d("invoiceBorrar", productofacturas + "");
     }
 

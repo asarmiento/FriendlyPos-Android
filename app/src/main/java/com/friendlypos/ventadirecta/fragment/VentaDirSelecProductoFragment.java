@@ -167,7 +167,7 @@ public class VentaDirSelecProductoFragment extends BaseFragment implements Searc
         else{
             Log.d("SelecUpdate", "No hay productos");
         }
-
+        adapter.updateData(getListProductos());
     }
 
     @Override

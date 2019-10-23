@@ -164,68 +164,9 @@ public class PrevResumenAdapter extends RecyclerView.Adapter<PrevResumenAdapter.
 
                     Toast.makeText(view.getContext(), "Se borró el producto" , Toast.LENGTH_SHORT).show();
 
-                /*    // TRANSACCIÓN BD PARA SELECCIONAR LOS DATOS DEL INVENTARIO
-                    Realm realm3 = Realm.getDefaultInstance();
-                    realm3.executeTransaction(new Realm.Transaction() {
-
-                        @Override
-                        public void execute(Realm realm3) {
-
-                            Inventario inventario = realm3.where(Inventario.class).equalTo("product_id", clickedDataItem.getProduct_id()).findFirst();
-                            idInvetarioSelec = inventario.getId();
-                            amount_inventario = Double.valueOf(inventario.getAmount());
-                            realm3.close();
-                            Log.d("idinventario", idInvetarioSelec + "");
-                        }
-                    });
-
-                    // OBTENER NUEVO AMOUNT
-                    final Double nuevoAmountDevuelto = cantidadProducto + amount_inventario;
-                    Log.d("nuevoAmount", nuevoAmountDevuelto + "");
-
-                    // TRANSACCIÓN PARA ACTUALIZAR EL CAMPO AMOUNT EN EL INVENTARIO
-                    final Realm realm2 = Realm.getDefaultInstance();
-                    realm2.executeTransaction(new Realm.Transaction() {
-
-                        @Override
-                        public void execute(Realm realm2) {
-                            Inventario inv_actualizado = realm2.where(Inventario.class).equalTo("id", idInvetarioSelec).findFirst();
-                            inv_actualizado.setAmount(String.valueOf(nuevoAmountDevuelto));
-                            realm2.insertOrUpdate(inv_actualizado);
-
-                            realm2.close();
-                        }
-                    });
-
-*/
-
                     // TRANSACCIÓN BD PARA BORRAR EL CAMPO
 
                     activity.initProducto(pos);
-
-                  /*  final Realm realm5 = Realm.getDefaultInstance();
-                    realm5.executeTransaction(new Realm.Transaction() {
-                        @Override
-                        public void execute(Realm realm5) {
-                            Pivot inv_actualizado = realm5.where(Pivot.class).equalTo("id", resumenProductoId).findFirst();
-                            inv_actualizado.setDevuelvo(1);
-                            realm5.insertOrUpdate(inv_actualizado);
-                            realm5.close();
-                        }
-                    });*/
-
-
-             /*     final Realm realm = Realm.getDefaultInstance();
-                    realm.executeTransaction(new Realm.Transaction() {
-
-                        @Override
-                        public void execute(Realm realm) {
-                            RealmResults<Pivot> result = realm.where(Pivot.class).equalTo("id", resumenProductoId).findAll();
-                            result.deleteAllFromRealm();
-                            realm.close();
-                        }
-
-                    });*/
 
                     notifyDataSetChanged();
                     fragment.updateData();

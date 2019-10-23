@@ -467,6 +467,9 @@ public class PreventaActivity extends BluetoothActivity {
         preSellInvoiceDelegate.insertProduct(pivot);
     }
 
+    public void borrarProduct(Pivot pivot) {
+        preSellInvoiceDelegate.borrarProductoPreventa(pivot);
+    }
 
     public void initCurrentInvoice(String id, String branch_office_id, String numeration, double latitude, double longitude,
                                    String date, String times, String date_presale, String times_presale, String due_data,
@@ -495,6 +498,8 @@ public class PreventaActivity extends BluetoothActivity {
     public void initProducto(int pos) {
         preSellInvoiceDelegate.initProduct(pos);
     }
+
+
 
     public void cleanTotalize() {
         totalizarSubGrabado = 0.0;
