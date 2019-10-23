@@ -8,6 +8,7 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
@@ -28,12 +29,14 @@ import android.widget.TextView;
 
 import com.friendlypos.R;
 import com.friendlypos.application.util.Functions;
+import com.friendlypos.distribucion.modelo.Inventario;
 import com.friendlypos.distribucion.modelo.Pivot;
 import com.friendlypos.distribucion.util.GPSTracker;
 import com.friendlypos.login.modelo.Usuarios;
 import com.friendlypos.login.util.SessionPrefes;
 import com.friendlypos.preventas.modelo.Numeracion;
 import com.friendlypos.preventas.modelo.visit;
+import com.friendlypos.principal.activity.MenuPrincipal;
 import com.friendlypos.principal.modelo.Clientes;
 import com.friendlypos.ventadirecta.activity.VentaDirectaActivity;
 
@@ -63,6 +66,12 @@ public class VentaDirClienteAdapter extends RecyclerView.Adapter<VentaDirCliente
     String idUsuario;
     String numFactura;
 
+
+    List<Pivot> facturaid1;
+    String idFacturaSeleccionada;
+    int idInvetarioSelec;
+    Double amount_inventario = 0.0;
+
     private static Double creditolimite = 0.0;
     private static Double descuentoFixed = 0.0;
     private static Double cleintedue = 0.0;
@@ -85,7 +94,7 @@ public class VentaDirClienteAdapter extends RecyclerView.Adapter<VentaDirCliente
     }
 
     @Override
-    public void onBindViewHolder(VentaDirClienteAdapter.CharacterViewHolder holder, final int position) {
+    public void onBindViewHolder(final VentaDirClienteAdapter.CharacterViewHolder holder, final int position) {
         Clientes content = contentList.get(position);
 
         creditolimite = Double.parseDouble(content.getCreditLimit());
@@ -111,6 +120,8 @@ public class VentaDirClienteAdapter extends RecyclerView.Adapter<VentaDirCliente
 
                 int pos = position;
                 if (pos == RecyclerView.NO_POSITION) return;
+
+
 
                 notifyItemChanged(selected_position);
                 selected_position = position;
@@ -176,12 +187,14 @@ public class VentaDirClienteAdapter extends RecyclerView.Adapter<VentaDirCliente
 
                             actualizarClienteVisitado();
                             dialogInicial.dismiss();
+                            holder.cardView.setBackgroundColor(Color.parseColor("#FFFFFF"));
                         }
                         else{
                             txtObservaciones.setError("Campo requerido");
                             txtObservaciones.requestFocus();
 
                         }
+
                     }
                 });
 
@@ -273,6 +286,11 @@ public class VentaDirClienteAdapter extends RecyclerView.Adapter<VentaDirCliente
                                                 actualizarClienteVisitado();
 
                                             } else if (rbcontado.isChecked()) {
+
+                                                activity.getSelecClienteTabVentaDirecta();
+                                                int tabClienteInicio = activity.getSelecClienteTabVentaDirecta();
+                                                if (tabClienteInicio == 0) {
+
                                                 txtObservaciones.setText(" ");
                                                 observ = txtObservaciones.getText().toString();
                                                 metodoPagoId = "1";
@@ -324,6 +342,139 @@ public class VentaDirClienteAdapter extends RecyclerView.Adapter<VentaDirCliente
                                                     }
                                                 }).start();
                                                 actualizarClienteVisitado();
+                                            }
+                                                if (tabClienteInicio == 1) {
+
+                                                    String message = "¿Desea cancelar la factura en proceso?";
+                                                    String titulo = "Salir";
+                                                    SpannableString spannableString =  new SpannableString(message);
+                                                    SpannableString spannableStringTitulo =  new SpannableString(titulo);
+
+                                                    CalligraphyTypefaceSpan typefaceSpan = new CalligraphyTypefaceSpan(TypefaceUtils.load(QuickContext.getAssets(), "font/monse.otf"));
+                                                    spannableString.setSpan(typefaceSpan, 0, message.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                                    spannableStringTitulo.setSpan(typefaceSpan, 0, titulo.length(), Spanned.SPAN_PRIORITY);
+
+                                                    AlertDialog dialogReturnSale = new AlertDialog.Builder(QuickContext)
+
+                                                            .setTitle(spannableStringTitulo)
+                                                            .setMessage(spannableString)
+                                                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+                                                                @Override
+                                                                public void onClick(DialogInterface dialog, int which) {
+
+
+                                                                    final Realm realm2 = Realm.getDefaultInstance();
+
+                                                                    realm2.executeTransaction(new Realm.Transaction() {
+
+                                                                        @Override
+                                                                        public void execute(Realm realm) {
+
+                                                                            // increment index
+                                  /*  Numeracion numeracion = realm.where(Numeracion.class).equalTo("id", "3").findFirst();
+
+                                    if(numeracion.getId()){}
+*/
+
+                                                                            // TODO NUMERACION = VENTA DIRECTA :01, PREVENTA:02, DISTRIBUCION:03 Y PROFORMA: 04
+
+                                                                            Number numero = realm.where(Numeracion.class).equalTo("sale_type", "1").max("number");
+
+                                                                            if (numero == null) {
+                                                                                nextId = 1;
+                                                                            } else {
+                                                                                nextId = numero.intValue() - 1;
+                                                                            }
+
+                                                                        }
+                                                                    });
+
+
+                                                                    final Realm realm5 = Realm.getDefaultInstance();
+                                                                    realm5.executeTransaction(new Realm.Transaction() {
+                                                                        @Override
+                                                                        public void execute(Realm realm5) {
+                                                                            Numeracion numNuevo = new Numeracion(); // unmanaged
+                                                                            numNuevo.setSale_type("1");
+                                                                            numNuevo.setNumeracion_numero(nextId);
+
+                                                                            realm5.insertOrUpdate(numNuevo);
+                                                                            Log.d("VDNumNuevaAtras", numNuevo + "");
+
+
+                                                                        }
+
+                                                                    });
+                                                                    realm5.close();
+
+                                                                    devolverTodo();
+
+                                                                    txtObservaciones.setText(" ");
+                                                                    observ = txtObservaciones.getText().toString();
+                                                                    metodoPagoId = "1";
+                                                                    notifyDataSetChanged();
+                                                                    agregar();
+                                                                    tabCliente = 1;
+                                                                    activity.setSelecClienteTabVentaDirecta(tabCliente);
+                                                                    activity.setCreditoLimiteClienteVentaDirecta(creditoLimiteClienteP);
+                                                                    activity.setDueClienteVentaDirecta(dueClienteP);
+
+                                                                    //TODO MODIFICAR CON EL ID CONSECUTIVOS
+                                                                    activity.setInvoiceIdPreventa(nextId);
+                                                                    activity.setMetodoPagoClienteVentaDirecta(metodoPagoId);
+
+                                               /* final ProgressDialog progresRing = ProgressDialog.show(QuickContext, "Cargando", "Seleccionando Cliente", true);
+                                                progresRing.setCancelable(true);*/
+
+                                                                    final ProgressDialog progresRing;/* = ProgressDialog.show(QuickContext, "Cargando",
+                                                        "Seleccionando Cliente", true);*/
+
+
+                                                                    progresRing = new ProgressDialog(QuickContext);
+                                                                    String message = "Cambiando Cliente";
+                                                                    String titulo = "Cargando";
+                                                                    SpannableString spannableString =  new SpannableString(message);
+                                                                    SpannableString spannableStringTitulo =  new SpannableString(titulo);
+
+                                                                    CalligraphyTypefaceSpan typefaceSpan = new CalligraphyTypefaceSpan(TypefaceUtils.load(QuickContext.getAssets(), "font/monse.otf"));
+                                                                    spannableString.setSpan(typefaceSpan, 0, message.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                                                    spannableStringTitulo.setSpan(typefaceSpan, 0, titulo.length(), Spanned.SPAN_PRIORITY);
+
+                                                                    progresRing.setTitle(spannableStringTitulo);
+                                                                    progresRing.setMessage(spannableString);
+                                                                    progresRing.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                                                                    progresRing.setIndeterminate(true);
+                                                                    progresRing.setCancelable(true);
+                                                                    progresRing.show();
+                                                                    new Thread(new Runnable() {
+
+                                                                        @Override
+                                                                        public void run() {
+                                                                            try {
+                                                                                Thread.sleep(5000);
+                                                                            }
+                                                                            catch (Exception e) {
+
+                                                                            }
+                                                                            progresRing.dismiss();
+                                                                        }
+                                                                    }).start();
+                                                                    actualizarClienteVisitado();
+
+                                                                }
+                                                            }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+
+                                                                @Override
+                                                                public void onClick(DialogInterface dialog, int which) {
+
+                                                                    dialog.cancel();
+                                                                }
+                                                            }).create();
+                                                    dialogReturnSale.show();
+
+
+                                                }
                                             }
                                             int nextId2;
                                             final Realm realm5 = Realm.getDefaultInstance();
@@ -563,6 +714,82 @@ public class VentaDirClienteAdapter extends RecyclerView.Adapter<VentaDirCliente
     @Override
     public int getItemCount() {
         return contentList.size();
+    }
+
+    public void devolverTodo(){
+
+        facturaid1 = activity.getAllPivotDelegate();//realm.where(Pivot.class).equalTo("invoice_id", idFacturaSeleccionada).findAll();
+        Log.d("PRODUCTOSFACTURAS", facturaid1 + "");
+
+        for (int i = 0; i < facturaid1.size(); i++) {
+            final Pivot eventRealm = facturaid1.get(i);
+            final double cantidadDevolver = Double.parseDouble(eventRealm.getAmount());
+
+            Log.d("PRODUCTOSFACTURASEPA1", eventRealm + "");
+            Log.d("PRODUCTOSFACTURASEPA", cantidadDevolver + "");
+
+            final int resumenProductoId = eventRealm.getId();
+            Log.d("resumenProductoId", resumenProductoId + "");
+
+            // TRANSACCIÓN BD PARA SELECCIONAR LOS DATOS DEL INVENTARIO
+            Realm realm3 = Realm.getDefaultInstance();
+            realm3.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm3) {
+
+                    Inventario inventario = realm3.where(Inventario.class).equalTo("product_id", eventRealm.getProduct_id()).findFirst();
+
+                    if (inventario != null) {
+                        idInvetarioSelec = inventario.getId();
+                        amount_inventario = Double.valueOf(inventario.getAmount());
+                        Log.d("idinventario", idInvetarioSelec+"");
+
+                    } else {
+                        amount_inventario = 0.0;
+                        // increment index
+                        Number currentIdNum = realm3.where(Inventario.class).max("id");
+
+                        if (currentIdNum == null) {
+                            nextId = 1;
+                        } else {
+                            nextId = currentIdNum.intValue() + 1;
+                        }
+
+                        Inventario invnuevo= new Inventario(); // unmanaged
+                        invnuevo.setId(nextId);
+                        invnuevo.setProduct_id(eventRealm.getProduct_id());
+                        invnuevo.setInitial(String.valueOf("0"));
+                        invnuevo.setAmount(String.valueOf(cantidadDevolver));
+                        invnuevo.setAmount_dist(String.valueOf("0"));
+                        invnuevo.setDistributor(String.valueOf("0"));
+
+                        realm3.insertOrUpdate(invnuevo);
+                        Log.d("idinvNUEVOCREADO", invnuevo +"");
+                    }
+
+                    realm3.close();
+                }
+            });
+
+
+            // OBTENER NUEVO AMOUNT_DIST
+            final Double nuevoAmountDevuelto =  cantidadDevolver + amount_inventario;
+            Log.d("nuevoAmount",nuevoAmountDevuelto+"");
+
+            // TRANSACCIÓN PARA ACTUALIZAR EL CAMPO AMOUNT_DIST EN EL INVENTARIO
+            final Realm realm2 = Realm.getDefaultInstance();
+            realm2.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm2) {
+                    Inventario inv_actualizado = realm2.where(Inventario.class).equalTo("id", idInvetarioSelec).findFirst();
+                    inv_actualizado.setAmount(String.valueOf(nuevoAmountDevuelto));
+                    realm2.insertOrUpdate(inv_actualizado);
+                    realm2.close();
+                }
+            });
+
+        }
+        session.guardarDatosBloquearBotonesDevolver(0);
     }
 
     public class CharacterViewHolder extends RecyclerView.ViewHolder {
