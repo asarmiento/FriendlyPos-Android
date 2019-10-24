@@ -39,13 +39,21 @@ public class ReimprimirRecibosActivity extends BluetoothActivity {
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private int selecReciboTab;
-
+    private String invoiceIdReimprimirRecibo;
     public int getSelecReciboTab() {
         return selecReciboTab;
     }
 
     public void setSelecReciboTab(int selecReciboTab) {
         this.selecReciboTab = selecReciboTab;
+    }
+
+    public String getInvoiceIdReimprimirRecibo() {
+        return invoiceIdReimprimirRecibo;
+    }
+
+    public void setInvoiceIdReimprimirRecibo(String invoiceIdReimprimirRecibo) {
+        this.invoiceIdReimprimirRecibo = invoiceIdReimprimirRecibo;
     }
 
     @Override

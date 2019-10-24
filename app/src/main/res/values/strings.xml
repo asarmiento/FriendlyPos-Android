@@ -34,6 +34,7 @@
     <string name="receipts">Recibos</string>
     <string name="reprintb">Reimpresion Ventas</string>
     <string name="reprintr">Reimpresion Recibos</string>
+    <string name="reprintRecibos">Reimpresion Ventas</string>
     <string name="reports">Reportes</string>
     <string name="crear">Crear Cliente</string>
     <string name="graficos">Gráfico por Mes</string>
@@ -163,6 +164,7 @@
 
     <string name="title_activity_configuracion">Configuración</string>
     <string name="title_activity_reimprimir">Reimprimir Ventas</string>
+    <string name="title_activity_reimprimir_recibos">Reimprimir Recibos</string>
     <string name="title_activity_iniciar">Iniciar</string>
 
     <!-- PREVENTA -->

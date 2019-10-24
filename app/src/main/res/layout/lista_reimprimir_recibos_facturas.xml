@@ -15,29 +15,60 @@
         android:orientation="vertical"
         >
         <TextView
-            android:id="@+id/txt_resumen_numeracionRecibosFactura"
+            android:id="@+id/txt_cliente_factura_referenciaRecibosFactura"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textStyle="bold"
-            android:textSize="18sp"
+            android:text="Card"
             android:fontFamily="@font/monse"
             app:fontFamily="@font/monse"
             android:textColor="#58595b"
-            android:text="Numeracion"
+            android:textSize="16sp"
+
             />
 
 
         <TextView
-            android:id="@+id/txt_resumen_abonoRecibosFactura"
+            android:id="@+id/txt_resumen_numeracionRecibosFactura"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Total Abono"
-            android:layout_marginTop="5dp"
+            android:textStyle="bold"
+            android:textSize="14sp"
             android:fontFamily="@font/monse"
             app:fontFamily="@font/monse"
             android:textColor="#58595b"
+            android:layout_marginTop="15px"
+            android:text="Numeracion"
+            android:layout_below="@+id/txt_cliente_factura_referenciaRecibosFactura"
+            />
+
+
+
+        <TextView
+            android:id="@+id/txt_cliente_factura_fantasynameRecibosFactura"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Fantasy Name"
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:textColor="#58595b"
+            android:layout_marginTop="15px"
+            android:textSize="12sp"
             android:layout_below="@+id/txt_resumen_numeracionRecibosFactura"
+            />
+        <TextView
+            android:id="@+id/txt_cliente_factura_companynameRecibosFactura"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Company Name"
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:textColor="#58595b"
+            android:textSize="12sp"
+            android:layout_marginTop="15px"
+            android:layout_below="@+id/txt_cliente_factura_fantasynameRecibosFactura"
             android:layout_alignParentStart="true" />
+
 
 
     </RelativeLayout>

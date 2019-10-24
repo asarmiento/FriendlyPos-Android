@@ -73,7 +73,7 @@ public class RecibosAplicarFragment extends BaseFragment {
     int slecTAB, nextId;
     EditText txtFecha;
     String facturaId;
-    String clienteId;
+    String clienteId, receipts_ref;
     recibos recibo_actualizado;
     public HtmlTextView text;
     private static EditText observaciones;
@@ -375,6 +375,7 @@ public class RecibosAplicarFragment extends BaseFragment {
                  //   recibo_actualizado.setMostrar(0);
                     recibo_actualizado.setDate(Functions.getDate());
                     recibo_actualizado.setObservaciones(observ);
+                    recibo_actualizado.setReferencia_receipts(receipts_ref);
 
                     realm2.insertOrUpdate(recibo_actualizado);
 
@@ -417,6 +418,9 @@ public class RecibosAplicarFragment extends BaseFragment {
 
                         receipts recibo_actua = realm2.where(receipts.class).equalTo("receipts_id", receipts_id).equalTo("customer_id", clienteId).findFirst();
 
+
+
+                        receipts_ref = recibo_actua.getReference();
                         recibo_actua.setListaRecibos(new RealmList<recibos>(salesList1.toArray(new recibos[salesList1.size()])));
                         recibo_actua.setBalance(activity.getTotalizarFinal());
                         recibo_actua.setAplicado(1);
@@ -428,7 +432,6 @@ public class RecibosAplicarFragment extends BaseFragment {
                         realm2.insertOrUpdate(recibo_actua);
 
                         Log.d("ACTRECIBO", recibo_actua + "");
-                        Log.d("ACTRECIBO3",salesList1 + "");
                     }
                    realm2.close();
                     pagado= 0.0;
@@ -499,11 +502,11 @@ public class RecibosAplicarFragment extends BaseFragment {
 
         if(!observaciones.getText().toString().isEmpty()){
             observ = observaciones.getText().toString();
-            actualizarFacturaDetalles();
-          //  actualizarRecibosDetalles();
             actualizarReceiptsDetalles();
+            actualizarFacturaDetalles();
+
             actualizarDatosTotales();
-            Toast.makeText(getActivity(), "Venta realizada correctamente", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), "Recibo realizado correctamente", Toast.LENGTH_LONG).show();
 
             applyBill.setVisibility(View.GONE);
             printBill.setVisibility(View.VISIBLE);

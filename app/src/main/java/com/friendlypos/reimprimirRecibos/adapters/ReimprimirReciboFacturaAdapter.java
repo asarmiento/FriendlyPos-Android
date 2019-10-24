@@ -1,9 +1,12 @@
 package com.friendlypos.reimprimirRecibos.adapters;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.text.SpannableString;
+import android.text.Spanned;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +29,8 @@ import java.util.List;
 import io.realm.Realm;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
+import uk.co.chrisjenx.calligraphy.CalligraphyTypefaceSpan;
+import uk.co.chrisjenx.calligraphy.TypefaceUtils;
 
 /**
  * Created by Delvo on 03/12/2017.
@@ -57,31 +62,30 @@ public class ReimprimirReciboFacturaAdapter extends RecyclerView.Adapter<Reimpri
     @Override
     public void onBindViewHolder(CharacterViewHolder holder, final int position) {
 
-        final receipts sale = contentList.get(position);
+        final receipts receipt = contentList.get(position);
 
         Realm realm = Realm.getDefaultInstance();
 
         long cantidadPivot = 0;
 
-      /*  Clientes clientes = realm.where(Clientes.class).equalTo("id", sale.getCustomer_id()).findFirst();
-        final invoice invoice = realm.where(com.friendlypos.distribucion.modelo.invoice.class).equalTo("id", sale.getInvoice_id()).findFirst();
+        recibos nuevoRecibo = realm.where(recibos.class).equalTo("customer_id", receipt.getCustomer_id()).findFirst();
 
-        cantidadPivot = realm.where(Pivot.class).equalTo("invoice_id", sale.getInvoice_id()).equalTo("devuelvo", 0).count();
 
-        RealmQuery<Pivot> query1 = realm.where(Pivot.class).equalTo("invoice_id", sale.getInvoice_id());
-        RealmResults<Pivot> result1 = query1.findAll();
-        Log.d("pivot", result1 + "");*/
+        Clientes clientes = realm.where(Clientes.class).equalTo("id", receipt.getCustomer_id()).findFirst();
+        Log.d("nuevoRecibo", nuevoRecibo + "");
 
-        String numeracionFactura = sale.getNumeration();
-       /* String fantasyCliente = clientes.getFantasyName();
-        String fecha1 = invoice.getDate();
-        String hora1 = invoice.getTimes();
-        int subida = invoice.getSubida();
-        String aNombreDe = sale.getCustomer_name();*/
-        double totalFactura = sale.getMontoPagado();
+        final String cardCliente = clientes.getCard();
+        String companyCliente = clientes.getCompanyName();
+        String fantasyCliente = clientes.getFantasyName();
 
-        holder.txt_resumen_numeracionRecibosFactura.setText(numeracionFactura);
-        holder.txt_resumen_abonoRecibosFactura.setText(String.format("%,.2f",totalFactura));
+        String numeracionFactura = receipt.getNumeration();
+        double totalFactura = receipt.getMontoPagado();
+
+        holder.txt_resumen_numeracionRecibosFactura.setText("Número del Recibo: " +numeracionFactura);
+        holder.txt_cliente_factura_referenciaRecibosFactura.setText("Referencia del Recibo: " +receipt.getReference());
+
+        holder.txt_cliente_factura_fantasynameRecibosFactura.setText(fantasyCliente);
+        holder.txt_cliente_factura_companynameRecibosFactura.setText(companyCliente);
 
         holder.cardView.setBackgroundColor(selected_position == position ? Color.parseColor("#d1d3d4") : Color.parseColor("#FFFFFF"));
 
@@ -94,7 +98,8 @@ public class ReimprimirReciboFacturaAdapter extends RecyclerView.Adapter<Reimpri
 
     public class CharacterViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView txt_resumen_numeracionRecibosFactura, txt_resumen_abonoRecibosFactura;
+        private TextView txt_resumen_numeracionRecibosFactura, txt_cliente_factura_referenciaRecibosFactura, txt_cliente_factura_fantasynameRecibosFactura,
+                txt_cliente_factura_companynameRecibosFactura;
         protected CardView cardView;
 
 
@@ -102,8 +107,9 @@ public class ReimprimirReciboFacturaAdapter extends RecyclerView.Adapter<Reimpri
             super(view);
             cardView = (CardView) view.findViewById(R.id.cardViewResumenRecibosFactura);
             txt_resumen_numeracionRecibosFactura = (TextView) view.findViewById(R.id.txt_resumen_numeracionRecibosFactura);
-            txt_resumen_abonoRecibosFactura = (TextView) view.findViewById(R.id.txt_resumen_abonoRecibosFactura);
-
+            txt_cliente_factura_referenciaRecibosFactura = (TextView) view.findViewById(R.id.txt_cliente_factura_referenciaRecibosFactura);
+            txt_cliente_factura_fantasynameRecibosFactura= (TextView) view.findViewById(R.id.txt_cliente_factura_fantasynameRecibosFactura);
+            txt_cliente_factura_companynameRecibosFactura= (TextView) view.findViewById(R.id.txt_cliente_factura_companynameRecibosFactura);
 
             cardView.setOnClickListener(new View.OnClickListener() {
 
@@ -111,18 +117,57 @@ public class ReimprimirReciboFacturaAdapter extends RecyclerView.Adapter<Reimpri
                 public void onClick(View view) {
                     int pos = getAdapterPosition();
                     if (pos == RecyclerView.NO_POSITION) return;
+
+                    final ProgressDialog progresRing;/* = ProgressDialog.show(QuickContext, "Cargando",
+                                                        "Seleccionando Cliente", true);*/
+
+
+                    progresRing = new ProgressDialog(QuickContext);
+                    String message = "Seleccionando Recibo";
+                    String titulo = "Cargando";
+                    SpannableString spannableString =  new SpannableString(message);
+                    SpannableString spannableStringTitulo =  new SpannableString(titulo);
+
+                    CalligraphyTypefaceSpan typefaceSpan = new CalligraphyTypefaceSpan(TypefaceUtils.load(QuickContext.getAssets(), "font/monse.otf"));
+                    spannableString.setSpan(typefaceSpan, 0, message.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    spannableStringTitulo.setSpan(typefaceSpan, 0, titulo.length(), Spanned.SPAN_PRIORITY);
+
+                    progresRing.setTitle(spannableStringTitulo);
+                    progresRing.setMessage(spannableString);
+                    progresRing.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                    progresRing.setIndeterminate(true);
+                    progresRing.setCancelable(true);
+                    progresRing.show();
+
+
+                    new Thread(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            try {
+                                Thread.sleep(3000);
+                            }
+                            catch (Exception e) {
+
+                            }
+                            progresRing.dismiss();
+                        }
+                    }).start();
+
+
+
                     notifyItemChanged(selected_position);
                     selected_position = getAdapterPosition();
                     notifyItemChanged(selected_position);
 
                     receipts clickedDataItem = contentList.get(pos);
-                    facturaID = clickedDataItem.getReceipts_id();
+                    facturaID = clickedDataItem.getReference();
 
                     Toast.makeText(view.getContext(), "You clicked " + facturaID, Toast.LENGTH_SHORT).show();
 
                     tabCliente = 1;
                     activity.setSelecReciboTab(tabCliente);
-                   // activity.setInvoiceIdReimprimir(facturaID);
+                    activity.setInvoiceIdReimprimirRecibo(facturaID);
                     Log.d("metodoPago", facturaID + "");
 
 
