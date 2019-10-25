@@ -84,6 +84,7 @@ public class RecibosAplicarFragment extends BaseFragment {
     double totalDatosTotal2 = 0.0;
     double totalTotal = 0.0;
     datosTotales datos_actualizados;
+    static String restanteS;
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -330,7 +331,7 @@ public class RecibosAplicarFragment extends BaseFragment {
                 String pagadoS = String.format("%,.2f", pagado);
 
                 double restante = salesList1.get(i).getPorPagar();
-                String restanteS = String.format("%,.2f", restante);
+                restanteS = String.format("%,.2f", restante);
 
 
 
@@ -390,7 +391,6 @@ public class RecibosAplicarFragment extends BaseFragment {
 
 
     public void actualizarReceiptsDetalles() {
-
         final Realm realm2 = Realm.getDefaultInstance();
         realm2.executeTransaction(new Realm.Transaction() {
 
@@ -429,6 +429,7 @@ public class RecibosAplicarFragment extends BaseFragment {
                         recibo_actua.setMontoPagado(montoCancelado);
                         recibo_actua.setNumeration(numeracion);
                         recibo_actua.setMontoCanceladoPorFactura(montoCancelado);
+                        recibo_actua.setPorPagarReceipts(restanteS);
                         realm2.insertOrUpdate(recibo_actua);
 
                         Log.d("ACTRECIBO", recibo_actua + "");
@@ -470,30 +471,6 @@ public class RecibosAplicarFragment extends BaseFragment {
         realm5.close();
     }
 
-   /* public void actualizarDatosTotales() {
-
-        final Realm realm3 = Realm.getDefaultInstance();
-        realm3.executeTransaction(new Realm.Transaction() {
-
-            @Override
-            public void execute(Realm realm3) {
-                datos_actualizados = realm3.where(datosTotales.class).equalTo("nombreTotal", "Recibo").findFirst();
-
-                totalDatosTotal = datos_actualizados.getTotalRecibos();
-
-                totalDatosTotal2 = totalDatosTotal +  activity.getCanceladoPorFactura();
-
-                datos_actualizados.setTotalRecibos(totalDatosTotal2);
-                datos_actualizados.setDate(Functions.getDate());
-
-                realm3.insertOrUpdate(datos_actualizados);
-                realm3.close();
-
-                Log.d("TotalDatos", datos_actualizados + "" );
-            }
-        });
-
-    }*/
 
     protected void aplicarFactura() {
 
@@ -534,83 +511,5 @@ public class RecibosAplicarFragment extends BaseFragment {
 
 
     }
-
-
-
-/*
-
-    public static  class DatePickerFragment extends DialogFragment {
-
-        private DatePickerDialog.OnDateSetListener listener;
-
-        public static DatePickerFragment newInstance(DatePickerDialog.OnDateSetListener listener) {
-            DatePickerFragment fragment = new DatePickerFragment();
-            fragment.setListener(listener);
-            return fragment;
-        }
-
-        public void setListener(DatePickerDialog.OnDateSetListener listener) {
-            this.listener = listener;
-        }
-
-        @Override
-        @NonNull
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            // Use the current date as the default date in the picker
-            final Calendar c = Calendar.getInstance();
-            int year = c.get(Calendar.YEAR);
-            int month = c.get(Calendar.MONTH);
-            int day = c.get(Calendar.DAY_OF_MONTH);
-
-            // Create a new instance of DatePickerDialog and return it
-            return new DatePickerDialog(getActivity(), listener, year, month, day);
-        }
-
-    }
-
-    public String getCurrentDate()
-    {
-        Calendar c = Calendar.getInstance();
-        System.out.println("Current time => " + c.getTime());
-
-        SimpleDateFormat df = new SimpleDateFormat("d / M / yyyy");
-        String formattedDate = df.format(c.getTime());
-
-        return formattedDate;
-    }
-
-    private void showDatePickerDialog() {
-        DatePickerFragment newFragment = DatePickerFragment.newInstance(new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                // +1 because january is zero
-                final String selectedDate = day + " / " + (month+1) + " / " + year;
-                txtFecha.setText(selectedDate);
-            }
-        });
-        newFragment.show(getFragmentManager(), "datePicker");
-    }*/
-/*
-    public void actualizarRecibosDetalles() {
-
-
-        final receiptsDetalle invoiceDetallePreventa1 = activity.getCurrentRecibos();
-
-        invoiceDetallePreventa1.setD_sum(observ);
-
-
-
-        Log.d("actFactDetPrev", invoiceDetallePreventa1 + "");
-
-    }
-
-
-    protected void actualizarRecibo() {
-
-        final receipts receipt = activity.getReceiptsByReceiptsDetalle();
-
-        Log.d("invoicetotal", receipt + "");
-
-    }*/
 
 }

@@ -140,7 +140,8 @@ public class ReimprimirReciboResumenFragment extends BaseFragment {
                 preview += "<h5>" + "Recibos" + "</h5>";
 
                 preview += "<a><b>A nombre de:</b> " + nombreCliente + "</a><br><br>";
-                preview += "<a><b>" + padRight("# Factura", 35) + padRight("Monto total", 35)+ "</b></a><br>";
+                preview += "<a><b>" + padRight("# Referencia", 35) + padRight("# Factura", 35)+ "</b></a><br>";
+                preview += "<a><b>" + padRight("Monto total", 35)+ "</b></a><br>";
                 preview += "<a><b>" + padRight("Monto Pagado", 10) + padRight("Monto restante", 10) + "</b></a><br>";
 
                 preview += "<a>------------------------------------------------<a><br>";
@@ -191,7 +192,6 @@ public class ReimprimirReciboResumenFragment extends BaseFragment {
 
                 Log.d("getReference", salesList1.get(0).getReference());
 
-
                recibos recibos = realm1.where(recibos.class).equalTo("numeration", salesList1.get(0).getNumeration()).findFirst();
 
                 Log.d("getNumeration", recibos.getNumeration() +"");
@@ -201,24 +201,16 @@ public class ReimprimirReciboResumenFragment extends BaseFragment {
                 double pagadoReceipts =  salesList1.get(0).getMontoCanceladoPorFactura();
                 String pagadoSReceipts = String.format("%,.2f", pagadoReceipts);
 
-
-
-                String numeracion = salesList1.get(0).getNumeration();
                 double total = recibos.getTotal();
                 String totalS = String.format("%,.2f", total);
 
-                double pagado = salesList1.get(0).getMontoCanceladoPorFactura();
-                String pagadoS = String.format("%,.2f", pagado);
-                 double restante = total - pagadoReceipts;
-                String restanteS = String.format("%,.2f", restante);
+                String restanteS = salesList1.get(0).getPorPagarReceipts();
 
-               send += padRight(numeroReferenciaReceipts +" " + numeracionReceipts, 20) + padRight(totalS, 20)+ "<br>" +
-                        padRight(pagadoS, 20) + padRight(restanteS, 20)+"<br>";
+               send += padRight(numeroReferenciaReceipts, 20) + padRight(numeracionReceipts, 20)+ "<br>" +
+                       padRight(totalS, 20) + "<br>" +
+                       padRight(pagadoSReceipts, 35) + padRight(restanteS, 35)+"<br>";
 
-
-                send += padRight(numeracion, 20) + padRight(totalS, 20)+ "<br>" +
-                        padRight(pagadoSReceipts, 20) + padRight(restanteS, 20)+"<br>";
-                send += "<a>------------------------------------------------<a><br>";
+               send += "<a>------------------------------------------------<a><br>";
 
                 Log.d("FACTPRODTODFAC", send + "");
 

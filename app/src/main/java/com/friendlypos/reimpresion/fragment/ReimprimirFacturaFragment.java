@@ -22,6 +22,7 @@ import butterknife.ButterKnife;
 import io.realm.Realm;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
+import io.realm.Sort;
 
 public class ReimprimirFacturaFragment extends BaseFragment {
 
@@ -72,7 +73,7 @@ public class ReimprimirFacturaFragment extends BaseFragment {
     private List<sale> getListClientes(){
         realm = Realm.getDefaultInstance();
         RealmQuery<sale> query = realm.where(sale.class).equalTo("aplicada", 1).equalTo("facturaDePreventa", "Distribucion").or().equalTo("facturaDePreventa", "VentaDirecta");
-        RealmResults<sale> result1 = query.findAll();
+        RealmResults<sale> result1 = query.findAllSorted("id", Sort.DESCENDING);
 
         return result1;
     }
