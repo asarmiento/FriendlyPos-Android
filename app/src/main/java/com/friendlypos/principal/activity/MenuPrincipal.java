@@ -177,7 +177,7 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.activity_menu_principal);
         ButterKnife.bind(this);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
 
@@ -1254,7 +1254,12 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                     startActivity(reimprimirpedidos);
                     finish();
                     break;
-
+                case R.id.clickReimprimirRecibos:
+                    Intent reimprimirrecibos;
+                    reimprimirrecibos = new Intent(MenuPrincipal.this, ReimprimirRecibosActivity.class);
+                    startActivity(reimprimirrecibos);
+                    finish();
+                    break;
                 case R.id.clickGrafico:
                     Intent graf;
                     graf = new Intent(MenuPrincipal.this, GraficoActivity.class);
@@ -1328,7 +1333,12 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                 startActivity(reimprimirpedidos);
                 finish();
                 break;
-
+            case R.id.clickReimprimirRecibos:
+                Intent reimprimirrecibos;
+                reimprimirrecibos = new Intent(MenuPrincipal.this, ReimprimirRecibosActivity.class);
+                startActivity(reimprimirrecibos);
+                finish();
+                break;
             case R.id.clickGrafico:
                 Intent graf;
                 graf = new Intent(MenuPrincipal.this, GraficoActivity.class);

@@ -48,7 +48,7 @@ public class VentaDirSelecProductoFragment extends BaseFragment implements Searc
     int slecTAB;
     VentaDirectaActivity activity;
     List<Inventario> listaInventario;
-
+    int datosEnFiltro=0;
     public static VentaDirSelecProductoFragment getInstance() {
         return new VentaDirSelecProductoFragment();
     }
@@ -158,7 +158,15 @@ public class VentaDirSelecProductoFragment extends BaseFragment implements Searc
 
     @Override
     public void updateData() {
-
+        if(datosEnFiltro == 1){
+            Log.d("OSCARUpdate", "No actualiza xq esta en " + datosEnFiltro);
+        }
+        else{
+            datosEnFiltro = 0;
+            adapter.updateData(getListProductos());
+           // adapter2.notifyDataSetChanged();
+            Log.d("OSCARUpdate1", "Actualiza xq esta en " + datosEnFiltro);
+        }
 
         if (slecTAB == 1) {
             creditoLimiteCliente = Double.parseDouble(((VentaDirectaActivity) getActivity()).getCreditoLimiteClienteVentaDirecta());
@@ -167,7 +175,7 @@ public class VentaDirSelecProductoFragment extends BaseFragment implements Searc
         else{
             Log.d("SelecUpdate", "No hay productos");
         }
-        adapter.updateData(getListProductos());
+       // adapter.updateData(getListProductos());
     }
 
     @Override
@@ -194,7 +202,16 @@ public class VentaDirSelecProductoFragment extends BaseFragment implements Searc
 
 
     private List<Inventario> filter(List<Inventario> models, String query) {
+        if(query.isEmpty()){
+            Log.d("OSCARVAC", "esta vacio la consulta");
+            datosEnFiltro = 0;
 
+        }else{
+
+            datosEnFiltro = 1;
+
+            Log.d("OSCARLLE", "esta llena la consulta");
+        }
         query = query.toLowerCase();
 
         final List<Inventario> filteredModelList = new ArrayList<>();
