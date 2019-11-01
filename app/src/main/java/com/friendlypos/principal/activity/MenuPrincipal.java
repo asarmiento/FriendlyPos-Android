@@ -1255,10 +1255,11 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                     finish();
                     break;
                 case R.id.clickReimprimirRecibos:
-                    Intent reimprimirrecibos;
+                    Toast.makeText(MenuPrincipal.this, "Botón no disponible", Toast.LENGTH_LONG).show();
+                   /* Intent reimprimirrecibos;
                     reimprimirrecibos = new Intent(MenuPrincipal.this, ReimprimirRecibosActivity.class);
                     startActivity(reimprimirrecibos);
-                    finish();
+                    finish();*/
                     break;
                 case R.id.clickGrafico:
                     Intent graf;
@@ -1334,10 +1335,11 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                 finish();
                 break;
             case R.id.clickReimprimirRecibos:
-                Intent reimprimirrecibos;
+                Toast.makeText(MenuPrincipal.this, "Botón no disponible", Toast.LENGTH_LONG).show();
+               /* Intent reimprimirrecibos;
                 reimprimirrecibos = new Intent(MenuPrincipal.this, ReimprimirRecibosActivity.class);
                 startActivity(reimprimirrecibos);
-                finish();
+                finish();*/
                 break;
             case R.id.clickGrafico:
                 Intent graf;
@@ -1414,10 +1416,11 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                     finish();
                     break;
                 case R.id.clickReimprimirRecibos:
-                    Intent reimprimirrecibos;
+                    Toast.makeText(MenuPrincipal.this, "Botón no disponible", Toast.LENGTH_LONG).show();
+                  /*  Intent reimprimirrecibos;
                     reimprimirrecibos = new Intent(MenuPrincipal.this, ReimprimirRecibosActivity.class);
                     startActivity(reimprimirrecibos);
-                    finish();
+                    finish();*/
                     break;
                 case R.id.clickGrafico:
                     Intent graf;
