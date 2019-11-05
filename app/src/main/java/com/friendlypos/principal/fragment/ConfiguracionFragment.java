@@ -2,7 +2,6 @@ package com.friendlypos.principal.fragment;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,38 +11,25 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
-import android.preference.PreferenceScreen;
-import android.speech.tts.TextToSpeech;
-import android.speech.tts.TextToSpeech.OnInitListener;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AlertDialog;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.friendlypos.R;
-import com.friendlypos.application.bluetooth.PrinterService;
 import com.friendlypos.application.util.Functions;
-import com.friendlypos.distribucion.activity.DistribucionActivity;
-import com.friendlypos.principal.activity.MenuPrincipal;
 
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-
-import static io.realm.internal.SyncObjectServerFacade.getApplicationContext;
 
 public class ConfiguracionFragment extends PreferenceFragment implements OnSharedPreferenceChangeListener, /*OnInitListener, */Preference.OnPreferenceChangeListener, Preference.OnPreferenceClickListener {
 

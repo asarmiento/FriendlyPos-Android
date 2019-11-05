@@ -1,9 +1,9 @@
 package com.friendlypos.reenvio_email.adapters;
 
 import android.content.DialogInterface;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.RecyclerView;
+import androidx.appcompat.app.AlertDialog;
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,14 +16,10 @@ import com.friendlypos.R;
 import com.friendlypos.app.broadcastreceiver.NetworkStateChangeReceiver;
 import com.friendlypos.application.datamanager.BaseManager;
 import com.friendlypos.application.interfaces.RequestInterface;
-import com.friendlypos.distribucion.modelo.Pivot;
 import com.friendlypos.login.util.SessionPrefes;
-import com.friendlypos.principal.activity.MenuPrincipal;
 import com.friendlypos.reenvio_email.activity.EmailActivity;
 import com.friendlypos.reenvio_email.fragment.EmailSelecFacturaFragment;
-import com.friendlypos.reenvio_email.modelo.EmailResponse;
 import com.friendlypos.reenvio_email.modelo.SendEmailResponse;
-import com.friendlypos.reenvio_email.modelo.email_Id;
 import com.friendlypos.reenvio_email.modelo.invoices;
 import com.friendlypos.reenvio_email.modelo.send_email_id;
 

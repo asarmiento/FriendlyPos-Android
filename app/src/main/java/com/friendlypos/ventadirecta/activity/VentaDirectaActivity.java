@@ -6,18 +6,17 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.design.widget.TabLayout;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.Toolbar;
+import com.google.android.material.tabs.TabLayout;
+import androidx.viewpager.widget.ViewPager;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.WindowManager;
-import android.widget.Toast;
 
 import com.friendlypos.R;
 import com.friendlypos.application.bluetooth.PrinterService;
@@ -29,11 +28,9 @@ import com.friendlypos.distribucion.modelo.invoice;
 import com.friendlypos.distribucion.modelo.sale;
 import com.friendlypos.distribucion.util.Adapter;
 import com.friendlypos.login.util.SessionPrefes;
-import com.friendlypos.preventas.activity.PreventaActivity;
 import com.friendlypos.preventas.modelo.Numeracion;
 import com.friendlypos.principal.activity.BluetoothActivity;
 import com.friendlypos.principal.activity.MenuPrincipal;
-import com.friendlypos.principal.modelo.Clientes;
 import com.friendlypos.ventadirecta.delegate.PreSellInvoiceDelegateVD;
 import com.friendlypos.ventadirecta.fragment.VentaDirResumenFragment;
 import com.friendlypos.ventadirecta.fragment.VentaDirSelecClienteFragment;
@@ -50,8 +47,6 @@ import io.realm.RealmQuery;
 import io.realm.RealmResults;
 import uk.co.chrisjenx.calligraphy.CalligraphyTypefaceSpan;
 import uk.co.chrisjenx.calligraphy.TypefaceUtils;
-
-import static io.realm.internal.SyncObjectServerFacade.getApplicationContext;
 
 public class VentaDirectaActivity extends BluetoothActivity {
     SessionPrefes session;

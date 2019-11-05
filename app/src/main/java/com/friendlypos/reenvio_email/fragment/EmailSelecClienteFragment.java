@@ -1,14 +1,11 @@
 package com.friendlypos.reenvio_email.fragment;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
+import androidx.annotation.Nullable;
+import androidx.core.view.MenuItemCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -19,16 +16,10 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.friendlypos.R;
-import com.friendlypos.distribucion.activity.DistribucionActivity;
-import com.friendlypos.distribucion.adapters.DistrClientesAdapter;
-import com.friendlypos.distribucion.adapters.DistrResumenAdapter;
 import com.friendlypos.distribucion.fragment.BaseFragment;
-import com.friendlypos.distribucion.fragment.DistSelecProductoFragment;
-import com.friendlypos.distribucion.modelo.sale;
 import com.friendlypos.principal.modelo.Clientes;
 import com.friendlypos.reenvio_email.activity.EmailActivity;
 import com.friendlypos.reenvio_email.adapters.EmailClientesAdapter;
-import com.friendlypos.reimpresion_pedidos.activity.ReimprimirPedidosActivity;
 
 import java.util.ArrayList;
 import java.util.List;

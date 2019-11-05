@@ -1,16 +1,14 @@
 package com.friendlypos.reimprimirRecibos.activity;
 
-import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
-import android.support.design.widget.TabLayout;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
+import com.google.android.material.tabs.TabLayout;
+import androidx.viewpager.widget.ViewPager;
+
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
@@ -23,9 +21,6 @@ import com.friendlypos.distribucion.fragment.BaseFragment;
 import com.friendlypos.distribucion.util.Adapter;
 import com.friendlypos.principal.activity.BluetoothActivity;
 import com.friendlypos.principal.activity.MenuPrincipal;
-import com.friendlypos.reimpresion.activity.ReimprimirActivity;
-import com.friendlypos.reimpresion.fragment.ReimprimirFacturaFragment;
-import com.friendlypos.reimpresion.fragment.ReimprimirResumenFragment;
 import com.friendlypos.reimprimirRecibos.fragment.ReimprimirReciboFacturaFragment;
 import com.friendlypos.reimprimirRecibos.fragment.ReimprimirReciboResumenFragment;
 

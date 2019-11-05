@@ -2,9 +2,9 @@ package com.friendlypos.reenvio_email.fragment;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,14 +13,9 @@ import android.widget.Toast;
 
 import com.friendlypos.R;
 import com.friendlypos.distribucion.fragment.BaseFragment;
-import com.friendlypos.distribucion.modelo.Pivot;
-import com.friendlypos.principal.modelo.Clientes;
 import com.friendlypos.reenvio_email.activity.EmailActivity;
-import com.friendlypos.reenvio_email.adapters.EmailClientesAdapter;
 import com.friendlypos.reenvio_email.adapters.EmailFacturasAdapter;
 import com.friendlypos.reenvio_email.modelo.invoices;
-import com.friendlypos.reimpresion_pedidos.activity.ReimprimirPedidosActivity;
-import com.friendlypos.reimpresion_pedidos.util.TotalizeHelperReimPedido;
 
 import java.util.List;
 

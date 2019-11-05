@@ -3,8 +3,8 @@ package com.friendlypos.reimprimirRecibos.adapters;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.RecyclerView;
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.RecyclerView;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.util.Log;
@@ -17,18 +17,12 @@ import android.widget.Toast;
 import com.friendlypos.R;
 import com.friendlypos.Recibos.modelo.receipts;
 import com.friendlypos.Recibos.modelo.recibos;
-import com.friendlypos.distribucion.modelo.Pivot;
-import com.friendlypos.distribucion.modelo.invoice;
-import com.friendlypos.distribucion.modelo.sale;
 import com.friendlypos.principal.modelo.Clientes;
-import com.friendlypos.reimpresion.activity.ReimprimirActivity;
 import com.friendlypos.reimprimirRecibos.activity.ReimprimirRecibosActivity;
 
 import java.util.List;
 
 import io.realm.Realm;
-import io.realm.RealmQuery;
-import io.realm.RealmResults;
 import uk.co.chrisjenx.calligraphy.CalligraphyTypefaceSpan;
 import uk.co.chrisjenx.calligraphy.TypefaceUtils;
 

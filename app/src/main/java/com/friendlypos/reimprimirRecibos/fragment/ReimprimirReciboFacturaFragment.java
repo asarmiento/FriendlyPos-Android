@@ -1,15 +1,14 @@
 package com.friendlypos.reimprimirRecibos.fragment;
 
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.friendlypos.R;
 import com.friendlypos.Recibos.modelo.receipts;
-import com.friendlypos.Recibos.modelo.recibos;
 import com.friendlypos.distribucion.fragment.BaseFragment;
 import com.friendlypos.reimprimirRecibos.activity.ReimprimirRecibosActivity;
 import com.friendlypos.reimprimirRecibos.adapters.ReimprimirReciboFacturaAdapter;

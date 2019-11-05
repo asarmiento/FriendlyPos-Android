@@ -3,8 +3,8 @@ package com.friendlypos.crearCliente.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
-import android.text.InputFilter;
+import androidx.appcompat.widget.Toolbar;
+
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
@@ -24,7 +24,6 @@ import com.friendlypos.crearCliente.modelo.customer_new;
 import com.friendlypos.distribucion.util.GPSTracker;
 import com.friendlypos.login.activity.LoginActivity;
 import com.friendlypos.login.util.SessionPrefes;
-import com.friendlypos.preventas.modelo.visit;
 import com.friendlypos.principal.activity.BluetoothActivity;
 import com.friendlypos.principal.activity.MenuPrincipal;
 

@@ -5,9 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.design.widget.Snackbar;
-import android.support.design.widget.TextInputLayout;
-import android.support.v7.app.AppCompatActivity;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.textfield.TextInputLayout;
+import androidx.appcompat.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -32,7 +32,6 @@ import com.friendlypos.login.modelo.UserResponse;
 import com.friendlypos.login.util.Properties;
 import com.friendlypos.login.util.SessionPrefes;
 import com.friendlypos.principal.activity.MenuPrincipal;
-import com.friendlypos.principal.fragment.ConfiguracionFragment;
 import com.friendlypos.principal.helpers.DescargasHelper;
 
 import org.sufficientlysecure.htmltextview.HtmlTextView;
@@ -44,8 +43,6 @@ import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import static io.realm.internal.SyncObjectServerFacade.getApplicationContext;
 
 public class LoginActivity extends AppCompatActivity {
 

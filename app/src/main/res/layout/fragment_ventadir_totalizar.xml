@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/billFrame"
     android:layout_width="match_parent"
@@ -19,7 +19,7 @@
             android:background="#d1d3d4"
             android:padding="5dp">
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/contraseña_wrapper"
                 style="@style/TextInputLayoutTotal"
                 android:layout_alignParentBottom="true"
@@ -30,7 +30,7 @@
                     style="@style/Register_EditText1"
                     android:hint="Nombre de Cliente" />
 
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
 
         </RelativeLayout>
@@ -412,4 +412,4 @@
             android:textColor="#58595b"
             android:hint="@string/notes" />
     </LinearLayout>
-</android.support.v4.widget.NestedScrollView>
+</androidx.core.widget.NestedScrollView>

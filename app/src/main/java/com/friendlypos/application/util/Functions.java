@@ -1,40 +1,26 @@
 package com.friendlypos.application.util;
 
-import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.os.Build;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.NotificationCompat;
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.NotificationCompat;
+
 import android.text.TextUtils;
-import android.text.util.Linkify;
 import android.util.Patterns;
 import android.webkit.URLUtil;
-import android.widget.TextView;
 
 import com.friendlypos.R;
-import com.friendlypos.distribucion.modelo.Pivot;
 
 import java.net.URL;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
 import java.util.Locale;
-import java.util.TimeZone;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Functions {

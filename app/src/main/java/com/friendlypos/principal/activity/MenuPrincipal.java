@@ -5,18 +5,17 @@ import android.app.ActivityManager;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.PopupMenu;
-import android.support.v7.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.PopupMenu;
+import androidx.appcompat.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.util.Log;
@@ -62,17 +61,14 @@ import com.friendlypos.principal.helpers.SubirHelperProductoDevuelto;
 import com.friendlypos.principal.helpers.SubirHelperProforma;
 import com.friendlypos.principal.helpers.SubirHelperRecibos;
 import com.friendlypos.principal.helpers.SubirHelperVentaDirecta;
-import com.friendlypos.principal.modelo.Clientes;
 import com.friendlypos.principal.modelo.ConsecutivosNumberFe;
 import com.friendlypos.principal.modelo.EnviarClienteGPS;
 import com.friendlypos.principal.modelo.EnviarClienteNuevo;
 import com.friendlypos.principal.modelo.EnviarProductoDevuelto;
 import com.friendlypos.principal.modelo.customer_location;
-import com.friendlypos.principal.modelo.datosTotales;
 import com.friendlypos.reenvio_email.activity.EmailActivity;
 import com.friendlypos.reimpresion.activity.ReimprimirActivity;
 import com.friendlypos.reimpresion_pedidos.activity.ReimprimirPedidosActivity;
-import com.friendlypos.reimprimirRecibos.activity.ReimprimirRecibosActivity;
 import com.friendlypos.ventadirecta.activity.VentaDirectaActivity;
 import com.github.clans.fab.FloatingActionButton;
 
@@ -90,8 +86,6 @@ import uk.co.chrisjenx.calligraphy.TypefaceUtils;
 
 import static com.friendlypos.R.id.btn_descargar_datosempresa;
 import static com.friendlypos.R.id.btn_descargar_recibos;
-import static com.friendlypos.R.id.clickVentaDirecta;
-import static io.realm.internal.SyncObjectServerFacade.getApplicationContext;
 
 public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenuItemClickListener
        /* implements NavigationView.OnNavigationItemSelectedListener*/ {

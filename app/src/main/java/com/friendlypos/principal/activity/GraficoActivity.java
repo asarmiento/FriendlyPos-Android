@@ -1,9 +1,9 @@
 package com.friendlypos.principal.activity;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
@@ -13,16 +13,9 @@ import android.widget.Toast;
 
 import com.friendlypos.R;
 import com.friendlypos.application.util.Functions;
-import com.friendlypos.application.util.PrinterFunctions;
-import com.friendlypos.crearCliente.modelo.customer_new;
-import com.friendlypos.distribucion.modelo.Pivot;
-import com.friendlypos.distribucion.modelo.invoice;
 import com.friendlypos.principal.modelo.datosTotales;
-import com.friendlypos.ventadirecta.activity.VentaDirectaActivity;
 import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
@@ -33,12 +26,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import butterknife.Bind;
 import io.realm.Realm;
-import io.realm.RealmQuery;
 import io.realm.RealmResults;
-
-import static io.realm.internal.SyncObjectServerFacade.getApplicationContext;
 
 public class GraficoActivity extends AppCompatActivity {
     Toolbar toolbar;

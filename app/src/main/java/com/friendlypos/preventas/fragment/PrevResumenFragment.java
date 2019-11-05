@@ -2,16 +2,14 @@ package com.friendlypos.preventas.fragment;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.friendlypos.R;
-import com.friendlypos.distribucion.activity.DistribucionActivity;
-import com.friendlypos.distribucion.adapters.DistrResumenAdapter;
 import com.friendlypos.distribucion.fragment.BaseFragment;
 import com.friendlypos.distribucion.modelo.Pivot;
 import com.friendlypos.preventas.activity.PreventaActivity;
@@ -19,9 +17,6 @@ import com.friendlypos.preventas.adapters.PrevResumenAdapter;
 import com.friendlypos.preventas.util.TotalizeHelperPreventa;
 
 import java.util.List;
-
-import io.realm.Realm;
-import io.realm.RealmResults;
 
 
 public class PrevResumenFragment extends BaseFragment {

@@ -3,9 +3,9 @@ package com.friendlypos.Recibos.adapters;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.RecyclerView;
+import androidx.appcompat.app.AlertDialog;
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,10 +22,7 @@ import com.friendlypos.Recibos.activity.RecibosActivity;
 import com.friendlypos.Recibos.fragments.RecibosSeleccionarFacturaFragment;
 import com.friendlypos.Recibos.modelo.recibos;
 import com.friendlypos.Recibos.util.ItemClickListener;
-import com.friendlypos.preventas.modelo.Numeracion;
-import com.friendlypos.principal.modelo.datosTotales;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 

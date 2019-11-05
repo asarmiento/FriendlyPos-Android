@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/billFrame"
     android:layout_width="match_parent"
@@ -48,7 +48,7 @@
             android:layout_below="@+id/rlIdTypeCliente"
             >
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/NuevoCardCliente"
                 style="@style/TextInputLayout"
                 app:hintTextAppearance="@style/TextAppearence.App.TextInputLayout.ClienteNuevo"
@@ -69,7 +69,7 @@
                     android:imeOptions="actionNext"
                     android:singleLine="true" />
 
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
         </RelativeLayout>
 
@@ -184,7 +184,7 @@
             android:layout_below="@+id/rlFeCliente"
             >
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/NuevoPlacaCliente"
                 style="@style/TextInputLayout"
                 app:hintTextAppearance="@style/TextAppearence.App.TextInputLayout.ClienteNuevo"
@@ -205,7 +205,7 @@
                     android:imeOptions="actionNext"/>
 
 
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
         </RelativeLayout>
 
@@ -221,7 +221,7 @@
             android:layout_below="@+id/rlPlacaCliente"
             >
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/NuevoModelCliente"
                 style="@style/TextInputLayout"
                 android:layout_alignParentBottom="true"
@@ -237,7 +237,7 @@
                     android:singleLine="true"
                     android:imeOptions="actionNext"/>
 
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
         </RelativeLayout>
 
@@ -254,7 +254,7 @@
             android:layout_below="@+id/rlModelCliente"
             >
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/NuevoDoorsCliente"
                 style="@style/TextInputLayout"
                 app:hintTextAppearance="@style/TextAppearence.App.TextInputLayout.ClienteNuevo"
@@ -274,7 +274,7 @@
                     android:digits="0123456789"
                     android:imeOptions="actionNext"/>
 
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
         </RelativeLayout>
 
@@ -290,7 +290,7 @@
             android:layout_below="@+id/rlDoorsCliente"
             >
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/NuevoAddressCliente"
                 style="@style/TextInputLayout"
                 android:layout_alignParentBottom="true"
@@ -306,7 +306,7 @@
                     android:singleLine="true"
                     android:imeOptions="actionNext"/>
 
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
         </RelativeLayout>
 
@@ -324,7 +324,7 @@
             android:layout_below="@+id/rlAddressCliente"
             >
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/NuevoEmailCliente"
                 style="@style/TextInputLayout"
                 app:hintTextAppearance="@style/TextAppearence.App.TextInputLayout.ClienteNuevo"
@@ -343,7 +343,7 @@
                     android:singleLine="true"
                     android:imeOptions="actionNext"/>
 
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
         </RelativeLayout>
 
@@ -360,7 +360,7 @@
             android:layout_below="@+id/rlEmailCliente"
             >
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/NuevoFantasyNameCliente"
                 style="@style/TextInputLayout"
                 android:layout_alignParentBottom="true"
@@ -376,7 +376,7 @@
                     android:singleLine="true"
                     android:imeOptions="actionNext"/>
 
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
         </RelativeLayout>
 
@@ -392,7 +392,7 @@
             android:layout_below="@+id/rlFantasyNameCliente"
             >
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/NuevoCompanyNameCliente"
                 style="@style/TextInputLayout"
                 app:hintTextAppearance="@style/TextAppearence.App.TextInputLayout.ClienteNuevo"
@@ -410,7 +410,7 @@
                     android:singleLine="true"
                     android:imeOptions="actionNext"/>
 
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
         </RelativeLayout>
 
@@ -427,7 +427,7 @@
             android:layout_below="@+id/rlCompanyNameCliente"
             >
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/NuevoPhoneCliente"
                 style="@style/TextInputLayout"
                 android:layout_alignParentBottom="true"
@@ -446,7 +446,7 @@
                     android:maxLength="8"
                     android:singleLine="true" />
 
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
         </RelativeLayout>
 
@@ -462,7 +462,7 @@
             android:layout_below="@+id/rlPhoneCliente"
             >
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/NuevoCreditLimitCliente"
                 style="@style/TextInputLayout"
                 app:hintTextAppearance="@style/TextAppearence.App.TextInputLayout.ClienteNuevo"
@@ -482,7 +482,7 @@
                     android:singleLine="true"
                     android:imeOptions="actionNext"/>
 
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
         </RelativeLayout>
 
@@ -529,4 +529,4 @@
            />
 
     </RelativeLayout>
-</android.support.design.widget.CoordinatorLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

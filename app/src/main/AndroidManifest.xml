@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.friendlypos">
 
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -19,6 +20,7 @@
         android:roundIcon="@mipmap/logo_app"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
+        android:hardwareAccelerated="true"
       >
 
         <meta-data
@@ -159,7 +161,7 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".principal.activity.MenuPrincipal" />
-            >
+
         </activity>
         <activity
             android:name=".reenvio_email.activity.EmailActivity"
@@ -170,7 +172,7 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".principal.activity.MenuPrincipal" />
-            >
+
         </activity>
         <activity
             android:name=".crearCliente.activity.crearCliente"
@@ -181,7 +183,7 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".principal.activity.MenuPrincipal" />
-            >
+
         </activity>
         <activity
             android:name=".principal.activity.GraficoActivity"
@@ -192,7 +194,7 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".principal.activity.MenuPrincipal" />
-            >
+
         </activity>
 
         <activity
@@ -204,7 +206,7 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".principal.activity.MenuPrincipal" />
-            >
+
         </activity>
 
     </application>
