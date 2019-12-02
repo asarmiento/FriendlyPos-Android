@@ -19,6 +19,7 @@ import com.friendlypos.Recibos.modelo.receipts;
 import com.friendlypos.Recibos.modelo.recibos;
 import com.friendlypos.app.broadcastreceiver.BluetoothStateChangeReceiver;
 import com.friendlypos.application.util.Functions;
+import com.friendlypos.application.util.PrinterFunctions;
 import com.friendlypos.distribucion.fragment.BaseFragment;
 import com.friendlypos.principal.modelo.Clientes;
 import com.friendlypos.reimprimirRecibos.activity.ReimprimirRecibosActivity;
@@ -94,8 +95,8 @@ public class ReimprimirReciboResumenFragment extends BaseFragment {
 
                             String cantidadImpresiones = input.getText().toString();
 
-                           // PrinterFunctions.imprimirFacturaRecibosTotal(recibo_actualizado, getActivity(), 1, cantidadImpresiones);
-                            Toast.makeText(getActivity(), "imprimir liquidacion", Toast.LENGTH_SHORT).show();
+                            PrinterFunctions.imprimirReimpRecibosTotal(recibo_actualizado, getActivity(), 1, cantidadImpresiones);
+                            Toast.makeText(getActivity(), "Reimprimir recibo", Toast.LENGTH_SHORT).show();
                         }
                     });
                     alertDialogBuilder.setNegativeButton("Cancel",

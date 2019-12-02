@@ -69,6 +69,7 @@ import com.friendlypos.principal.modelo.customer_location;
 import com.friendlypos.reenvio_email.activity.EmailActivity;
 import com.friendlypos.reimpresion.activity.ReimprimirActivity;
 import com.friendlypos.reimpresion_pedidos.activity.ReimprimirPedidosActivity;
+import com.friendlypos.reimprimirRecibos.activity.ReimprimirRecibosActivity;
 import com.friendlypos.ventadirecta.activity.VentaDirectaActivity;
 import com.github.clans.fab.FloatingActionButton;
 
@@ -1249,11 +1250,11 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                     finish();
                     break;
                 case R.id.clickReimprimirRecibos:
-                    Toast.makeText(MenuPrincipal.this, "Botón no disponible", Toast.LENGTH_LONG).show();
-                   /* Intent reimprimirrecibos;
+                  //  Toast.makeText(MenuPrincipal.this, "Botón no disponible", Toast.LENGTH_LONG).show();
+                    Intent reimprimirrecibos;
                     reimprimirrecibos = new Intent(MenuPrincipal.this, ReimprimirRecibosActivity.class);
                     startActivity(reimprimirrecibos);
-                    finish();*/
+                    finish();
                     break;
                 case R.id.clickGrafico:
                     Intent graf;
@@ -1329,11 +1330,11 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                 finish();
                 break;
             case R.id.clickReimprimirRecibos:
-                Toast.makeText(MenuPrincipal.this, "Botón no disponible", Toast.LENGTH_LONG).show();
-               /* Intent reimprimirrecibos;
+               // Toast.makeText(MenuPrincipal.this, "Botón no disponible", Toast.LENGTH_LONG).show();
+                Intent reimprimirrecibos;
                 reimprimirrecibos = new Intent(MenuPrincipal.this, ReimprimirRecibosActivity.class);
                 startActivity(reimprimirrecibos);
-                finish();*/
+                finish();
                 break;
             case R.id.clickGrafico:
                 Intent graf;
@@ -1410,11 +1411,11 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
                     finish();
                     break;
                 case R.id.clickReimprimirRecibos:
-                    Toast.makeText(MenuPrincipal.this, "Botón no disponible", Toast.LENGTH_LONG).show();
-                  /*  Intent reimprimirrecibos;
+                   // Toast.makeText(MenuPrincipal.this, "Botón no disponible", Toast.LENGTH_LONG).show();
+                    Intent reimprimirrecibos;
                     reimprimirrecibos = new Intent(MenuPrincipal.this, ReimprimirRecibosActivity.class);
                     startActivity(reimprimirrecibos);
-                    finish();*/
+                    finish();
                     break;
                 case R.id.clickGrafico:
                     Intent graf;
