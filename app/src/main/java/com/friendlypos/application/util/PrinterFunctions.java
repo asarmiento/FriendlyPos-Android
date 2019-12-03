@@ -651,66 +651,6 @@ public class PrinterFunctions {
 
         }
 
-    private static String getPrintReimpReciboTotal(String idVenta, String referencia) {
-        String send = "";
-
-        Realm realm1 = Realm.getDefaultInstance();
-        RealmResults<receipts> result = realm1.where(receipts.class).equalTo("customer_id", idVenta).equalTo("reference",referencia).findAll();
-        Log.d("recibosresult", result+"");
-        if (result.isEmpty()) {
-            send = "No hay recibos emitidos";
-        }
-        else {
-
-            List<receipts> salesList1 = realm1.where(receipts.class).equalTo("customer_id", idVenta)
-                    .equalTo("reference",referencia).findAll();
-
-            Log.d("getReference", salesList1.get(0).getReference());
-
-            recibos recibos = realm1.where(recibos.class).equalTo("numeration", salesList1.get(0).getNumeration()).findFirst();
-
-            Log.d("getNumeration", recibos.getNumeration() +"");
-
-            String numeroReferenciaReceipts = salesList1.get(0).getReference();
-            String numeracionReceipts = salesList1.get(0).getNumeration();
-            double pagadoReceipts =  salesList1.get(0).getMontoCanceladoPorFactura();
-            String pagadoSReceipts = String.format("%,.2f", pagadoReceipts);
-
-            double total = recibos.getTotal();
-            String totalS = String.format("%,.2f", total);
-
-            String restanteS = salesList1.get(0).getPorPagarReceipts();
-
-            send += padRight(numeroReferenciaReceipts, 20) + padRight(numeracionReceipts, 20)+ "<br>" +
-                    padRight(totalS, 20) + "<br>" +
-                    padRight(pagadoSReceipts, 35) + padRight(restanteS, 35)+"<br>";
-
-            send += "<a>------------------------------------------------<a><br>";
-
-            Log.d("FACTPRODTODFAC", send + "");
-
-
-            realm1.close();
-        }
-        return send;
-    }
-
-    public static String padRight(String s, double n) {
-        String centeredString;
-        double pad = (n + 4) - s.length();
-
-        if (pad > 0) {
-            String pd = Functions.paddigTabs((int) (pad / 2.0));
-            centeredString = "\t" + s + "\t" + pd;
-            System.out.println("pad: " + "|" + centeredString + "|");
-        }
-        else {
-            centeredString = "\t" + s + "\t";
-        }
-        return centeredString;
-    }
-
-
     private static String getPrintRecibosTotal(String idVenta) {
         String send;
 
@@ -785,8 +725,49 @@ public class PrinterFunctions {
 
     //TODO imprimir REIMPRIMIR RECIBOS
 
-    // TODO IMPRIMIR RECIBOS
+    private static String getPrintReimpReciboTotal(String idVenta, String referencia) {
+        String send = "";
 
+        Realm realm1 = Realm.getDefaultInstance();
+        RealmResults<receipts> result = realm1.where(receipts.class).equalTo("customer_id", idVenta).equalTo("reference",referencia).findAll();
+        Log.d("recibosresult", result+"");
+        if (result.isEmpty()) {
+            send = "No hay recibos emitidos";
+        }
+        else {
+
+            List<receipts> salesList1 = realm1.where(receipts.class).equalTo("customer_id", idVenta)
+                    .equalTo("reference",referencia).findAll();
+
+            Log.d("getReference", salesList1.get(0).getReference());
+
+            recibos recibos = realm1.where(recibos.class).equalTo("numeration", salesList1.get(0).getNumeration()).findFirst();
+
+            Log.d("getNumeration", recibos.getNumeration() +"");
+
+            String numeroReferenciaReceipts = salesList1.get(0).getReference();
+            String numeracionReceipts = salesList1.get(0).getNumeration();
+            double pagadoReceipts =  salesList1.get(0).getMontoCanceladoPorFactura();
+            String pagadoSReceipts = String.format("%,.2f", pagadoReceipts);
+
+            double total = recibos.getTotal();
+            String totalS = String.format("%,.2f", total);
+
+            double restanteS = salesList1.get(0).getPorPagarReceipts();
+
+            send += String.format("%.50s  %20s ", numeroReferenciaReceipts, numeracionReceipts) + "\r\n" +
+                    String.format("%-12s", Functions.doubleToString1(total)) + "\r\n" +
+                    String.format("%s  %20s ", Functions.doubleToString1(pagadoReceipts), Functions.doubleToString1(restanteS)) + "\r\n";
+
+            send += "------------------------------------------------\r\n";
+
+            Log.d("FACTPRODTODFAC", send + "");
+
+
+            realm1.close();
+        }
+        return send;
+    }
     public static void datosReimpRecibosTotal(int type, final receipts sale, final Context QuickContext, int ptype, String cantidadImpresiones) {
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -818,9 +799,7 @@ public class PrinterFunctions {
             String sysCorreo = sysconf.getEmail();
 
             String nombreCliente = clientes.getFantasyName();
-          //  totalNotasRecibos = sale.getObservaciones();
             final String fecha = /*sale.getDate()*/currentDateandTime;
-            String porPagar = sale.getPorPagarReceipts();
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(QuickContext);
             String prefList = sharedPreferences.getString("pref_selec_impresora","Impresora Zebra");
 
@@ -856,15 +835,16 @@ public class PrinterFunctions {
                         "! U1 LMARGIN 0\r\n" +
                         "! U1 SETSP 0\r\n" +
                         "\r\n" +
-                        "Numeracion     Monto Total     Monto Pagado\r\n" +
+
+                        "# Referencia          # Factura \r\n" +
+                        "Monto total \r\n" +
+                        "Monto Pagado          Monto restante \r\n" +
                         "          \r\n" +
                         "------------------------------------------------\r\n" +
                         "! U1 SETLP 7 0 10\r\n" +
 
                         getPrintReimpReciboTotal(sale.getCustomer_id(), referencia) +
                         "\r\n" +
-                        "\r\n\n" + "Total: " +  Functions.doubleToString1(printRecibosTotal) + "\r\n" +
-                        "\r\n\n" + "Saldo pendiente: " + porPagar + "\r\n" +
                         "\r\n\n" + "Notas: " + totalNotasRecibos + "\r\n" +
                         "\r\n\n" + "Muchas Gracias por preferirnos, un placer atenderlo\r\n" +
                         "Mantenga el documento para reclamos ." + "\r\n" + "\r\n" +
@@ -888,13 +868,11 @@ public class PrinterFunctions {
 
                 preview += Html.fromHtml("<h1>") + "Cliente: " + nombreCliente + Html.fromHtml("</h1><br/>");
                 preview += Html.fromHtml("<h1>") + "Fecha: " + fecha + Html.fromHtml("</h1><br/>");
-                preview += Html.fromHtml("<h1>") +  "Numeracion     Monto Total     Monto Pagado" + Html.fromHtml("</h1></center><br/>");
+                preview += Html.fromHtml("<h1>") +  "# Referencia          # Factura" + Html.fromHtml("</h1></center><br/>");
+                preview += Html.fromHtml("<h1>") +  "Monto total" + Html.fromHtml("</h1></center><br/>");
+                preview += Html.fromHtml("<h1>") +  "Monto Pagado          Monto restante" + Html.fromHtml("</h1></center><br/>");
                 preview += Html.fromHtml("<h1>") +  "------------------------------------------------" + Html.fromHtml("</h1></center><br/>");
                 preview += Html.fromHtml("<h1>") +     getPrintReimpReciboTotal(sale.getCustomer_id(), referencia) + Html.fromHtml("</h1></center><br/>");
-
-                preview += Html.fromHtml("<h1>") +  "Total: " +  Functions.doubleToString1(printRecibosTotal) + Html.fromHtml("</h1></center><br/><br/><br/>");
-
-                preview += Html.fromHtml("<h1>") +  "Saldo pendiente: " + porPagar + Html.fromHtml("</h1></center><br/><br/><br/>");
                 preview += Html.fromHtml("<h1>") +  "Notas: " + totalNotasRecibos + Html.fromHtml("</h1></center><br/><br/><br/>");
                 preview += Html.fromHtml("<h1>")   + "Muchas gracias por preferirnos un placer atenderlo" +  Html.fromHtml("</h1></center><br/>");
                 preview += Html.fromHtml("<h1>")   + "Mantenga el documento para reclamos." +  Html.fromHtml("</h1></center><br/><br/>");
@@ -906,45 +884,7 @@ public class PrinterFunctions {
             Log.d("imprimeProf", preview);
 
         }
-
-        final Realm realm2 = Realm.getDefaultInstance();
-        realm2.executeTransaction(new Realm.Transaction() {
-
-            @Override
-            public void execute(Realm realm2) {
-
-                RealmResults<recibos> result = realm2.where(recibos.class).equalTo("customer_id",  sale.getCustomer_id()).equalTo("abonado", 1).findAll();
-
-                if (result.isEmpty()) {
-
-                    Toast.makeText(QuickContext, "No hay recibos emitidos", Toast.LENGTH_LONG).show();}
-
-                else{
-                    for (int i = 0; i < result.size(); i++) {
-
-                        List<recibos> salesList1 = realm2.where(recibos.class).equalTo("customer_id", sale.getCustomer_id()).equalTo("abonado", 1).findAll();
-
-                        String facturaId1 = salesList1.get(i).getInvoice_id();
-
-                        recibos recibo_actualizado = realm2.where(recibos.class).equalTo("invoice_id", facturaId1).findFirst();
-                        recibo_actualizado.setMostrar(0);
-
-                        realm2.insertOrUpdate(recibo_actualizado);
-
-                        Log.d("ACTMOSTRAR", recibo_actualizado + "");
-                    }
-                    realm2.close();
-                }
-
-            }
-        });
-
-
     }
-
-
-
-
 
     public static void imprimirReimpRecibosTotal(final receipts recibo, final Context QuickContext, final int ptype, final String cantidadImpresiones){
 
@@ -968,6 +908,7 @@ public class PrinterFunctions {
         dialogReturnSale.show();
 
     }
+
     private static void imprimirReimpRecibosTotalizar(int type, receipts recibo, Context QuickContext, int ptype, String cantidadImpresiones) {
         try {
             if (recibo != null) {

@@ -37,7 +37,7 @@ public class receipts extends RealmObject {
     String numeration;
 
     private RealmList<recibos> listaRecibos;
-    String porPagarReceipts;
+    double porPagarReceipts;
     int aplicado = 0;
     double montoPagado = 0.0;
 
@@ -113,11 +113,11 @@ public class receipts extends RealmObject {
         this.listaRecibos = listaRecibos;
     }
 
-    public String getPorPagarReceipts() {
+    public double getPorPagarReceipts() {
         return porPagarReceipts;
     }
 
-    public void setPorPagarReceipts(String porPagarReceipts) {
+    public void setPorPagarReceipts(double porPagarReceipts) {
         this.porPagarReceipts = porPagarReceipts;
     }
 

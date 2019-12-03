@@ -203,8 +203,8 @@ public class ReimprimirReciboResumenFragment extends BaseFragment {
                 double total = recibos.getTotal();
                 String totalS = String.format("%,.2f", total);
 
-                String restanteS = salesList1.get(0).getPorPagarReceipts();
-
+                double restante = salesList1.get(0).getPorPagarReceipts();
+                    String restanteS = String.format("%,.2f", restante);
                send += padRight(numeroReferenciaReceipts, 20) + padRight(numeracionReceipts, 20)+ "<br>" +
                        padRight(totalS, 20) + "<br>" +
                        padRight(pagadoSReceipts, 35) + padRight(restanteS, 35)+"<br>";

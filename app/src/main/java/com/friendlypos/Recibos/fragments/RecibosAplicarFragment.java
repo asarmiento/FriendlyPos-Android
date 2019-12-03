@@ -67,7 +67,7 @@ public class RecibosAplicarFragment extends BaseFragment {
     String observ;
     String fecha;
     double totalP;
-    double totalDatosTotal = 0.0;
+    static double restante = 0.0;
     double totalDatosTotal2 = 0.0;
     double totalTotal = 0.0;
     datosTotales datos_actualizados;
@@ -317,7 +317,7 @@ public class RecibosAplicarFragment extends BaseFragment {
                 double pagado = salesList1.get(i).getMontoCanceladoPorFactura();
                 String pagadoS = String.format("%,.2f", pagado);
 
-                double restante = salesList1.get(i).getPorPagar();
+                restante = salesList1.get(i).getPorPagar();
                 restanteS = String.format("%,.2f", restante);
 
 
@@ -416,7 +416,7 @@ public class RecibosAplicarFragment extends BaseFragment {
                         recibo_actua.setMontoPagado(montoCancelado);
                         recibo_actua.setNumeration(numeracion);
                         recibo_actua.setMontoCanceladoPorFactura(montoCancelado);
-                        recibo_actua.setPorPagarReceipts(restanteS);
+                        recibo_actua.setPorPagarReceipts(restante);
                         realm2.insertOrUpdate(recibo_actua);
 
                         Log.d("ACTRECIBO", recibo_actua + "");
