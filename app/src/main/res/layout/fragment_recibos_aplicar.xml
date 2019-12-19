@@ -24,7 +24,7 @@
         <androidx.core.widget.NestedScrollView
             android:id="@+id/nestedScrollView"
             android:layout_width="wrap_content"
-            android:layout_height="220dp"
+            android:layout_height="300dp"
             android:layout_above="@+id/btnReimprimirFactura"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"

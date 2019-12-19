@@ -139,9 +139,12 @@ public class ReimprimirReciboResumenFragment extends BaseFragment {
                 preview += "<h5>" + "Recibos" + "</h5>";
 
                 preview += "<a><b>A nombre de:</b> " + nombreCliente + "</a><br><br>";
-                preview += "<a><b>" + padRight("# Referencia", 35) + padRight("# Factura", 35)+ "</b></a><br>";
-                preview += "<a><b>" + padRight("Monto total", 35)+ "</b></a><br>";
-                preview += "<a><b>" + padRight("Monto Pagado", 10) + padRight("Monto restante", 10) + "</b></a><br>";
+             /*   preview += "<a><b>" + padRight("# Referencia", 25) + padRight("# Factura", 25)+ "</b></a><br>";
+                preview += "<a><b>" + padRight("Monto total", 25) + padRight("Monto Pagado", 25)+ "</b></a><br>";
+                preview += "<a><b>" + padRight("Total en abonos", 35) + "</b></a><br>";
+                preview += "<a><b>" + padRight("Total restante", 35) + "</b></a><br>";*/
+               /* preview += "<a><b>" + padRight("Monto total", 35)+ "</b></a><br>";
+                preview += "<a><b>" + padRight("Monto Pagado", 10) + padRight("Monto restante", 10) + "</b></a><br>";*/
 
                 preview += "<a>------------------------------------------------<a><br>";
 
@@ -205,9 +208,19 @@ public class ReimprimirReciboResumenFragment extends BaseFragment {
 
                 double restante = salesList1.get(0).getPorPagarReceipts();
                     String restanteS = String.format("%,.2f", restante);
-               send += padRight(numeroReferenciaReceipts, 20) + padRight(numeracionReceipts, 20)+ "<br>" +
-                       padRight(totalS, 20) + "<br>" +
-                       padRight(pagadoSReceipts, 35) + padRight(restanteS, 35)+"<br>";
+
+                double totalAbonos = salesList1.get(0).getBalance();
+                String totalAbonosS = String.format("%,.2f", totalAbonos);
+
+               send += /*"# Referencia" + padRight(numeroReferenciaReceipts, 20) + "# Factura" + padRight(numeracionReceipts, 20)+ "<br>" +
+                       "Monto total" + padRight(totalS, 40) + "Monto Pagado" + padRight(pagadoSReceipts, 40) + "<br>" +*/
+
+                       "<a><b>" +  padRight("# Referencia:", 20 )+"</b></a>"+ padRight(numeroReferenciaReceipts, 20) + "<br>" +
+                       "<a><b>" + padRight("# Factura:", 30 ) +"</b></a>"+ padRight(numeracionReceipts, 20) + "<br>" +
+                       "<a><b>" + padRight("Monto Pagado:", 20 ) +"</b></a>" + padRight(pagadoSReceipts, 20) + "<br>" +
+                       "<a><b>" + padRight("Monto total:", 30 ) +"</b></a>" + padRight(totalS, 20) + "<br>" +
+                       "<a><b>" + padRight("Total en abonos:", 20 ) + "</b></a>" +padRight(totalAbonosS, 20) + "<br>" +
+                        "<a><b>" + padRight("Total restante:", 25 ) +"</b></a>" + padRight(restanteS, 20)+"<br>";
 
                send += "<a>------------------------------------------------<a><br>";
 

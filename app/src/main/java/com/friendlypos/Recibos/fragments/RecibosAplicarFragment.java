@@ -257,13 +257,14 @@ public class RecibosAplicarFragment extends BaseFragment {
             if (recibo_actualizado != null) {
 
 
-                preview += "<h5>" + "recibos" + "</h5>";
+                preview += "<h5>" + "Datos del recibo" + "</h5>";
 
-                preview += "<a><b>A nombre de:</b> " + nombreCliente + "</a><br><br>";
-                preview += "<a><b>" + padRight("# Factura", 10) + padRight("Monto total", 10)+ "</b></a><br>";
-                preview += "<a><b>" + padRight("Monto Pagado", 10) + padRight("Monto restante", 10) + "</b></a><br>";
-
-                preview += "<a>------------------------------------------------<a><br>";
+              preview += "<a><b>A nombre de:</b> " + nombreCliente + "</a><br><br>";
+              /*    preview += "<a><b>" + padRight("# Factura", 35) + padRight("Monto Pagado", 35)+ "</b></a><br>";
+                preview += "<a><b>" + padRight("Monto total", 35)+ "</b></a><br>";
+                preview += "<a><b>" + padRight("Total en abonos", 35) + "</b></a><br>";
+                preview += "<a><b>" + padRight("Total restante", 35) + "</b></a><br>";
+                preview += "<a>------------------------------------------------<a><br>";*/
 
                 preview += getPrintDistTotal(recibo_actualizado.getCustomer_id());
 
@@ -320,11 +321,16 @@ public class RecibosAplicarFragment extends BaseFragment {
                 restante = salesList1.get(i).getPorPagar();
                 restanteS = String.format("%,.2f", restante);
 
+                double totalAbonos = salesList1.get(i).getPaid();
+                String totalAbonosS = String.format("%,.2f", totalAbonos);
 
 
+                send +=  "<a><b>" + padRight("# Factura:", 30 ) +"</b></a>"+ padRight(numeracion, 20) + "<br>" +
+                                "<a><b>" + padRight("Monto Pagado:", 20 ) +"</b></a>" + padRight(pagadoS, 20) + "<br>" +
+                                "<a><b>" + padRight("Monto total:", 30 ) +"</b></a>" + padRight(totalS, 20) + "<br>" +
+                                "<a><b>" + padRight("Total en abonos:", 20 ) + "</b></a>" +padRight(totalAbonosS, 20) + "<br>" +
+                                "<a><b>" + padRight("Total restante:", 25 ) +"</b></a>" + padRight(restanteS, 20)+"<br>";
 
-                send += String.format("|%-5000s|  |%10s|", numeracion, totalS) + "<br>" +
-                        String.format("|%-5000s| |%10s|",pagadoS ,restanteS) + "<br>";
                 send += "<a>------------------------------------------------<a><br>";
 
                 Log.d("FACTPRODTODFAC", send + "");
