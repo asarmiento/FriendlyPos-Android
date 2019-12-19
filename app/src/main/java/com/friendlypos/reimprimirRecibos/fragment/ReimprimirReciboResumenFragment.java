@@ -143,8 +143,7 @@ public class ReimprimirReciboResumenFragment extends BaseFragment {
                 preview += "<a><b>" + padRight("Monto total", 25) + padRight("Monto Pagado", 25)+ "</b></a><br>";
                 preview += "<a><b>" + padRight("Total en abonos", 35) + "</b></a><br>";
                 preview += "<a><b>" + padRight("Total restante", 35) + "</b></a><br>";*/
-               /* preview += "<a><b>" + padRight("Monto total", 35)+ "</b></a><br>";
-                preview += "<a><b>" + padRight("Monto Pagado", 10) + padRight("Monto restante", 10) + "</b></a><br>";*/
+
 
                 preview += "<a>------------------------------------------------<a><br>";
 
