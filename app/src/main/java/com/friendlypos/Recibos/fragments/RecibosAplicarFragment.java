@@ -326,7 +326,7 @@ public class RecibosAplicarFragment extends BaseFragment {
 
 
                 send +=  "<a><b>" + padRight("# Factura:", 30 ) +"</b></a>"+ padRight(numeracion, 20) + "<br>" +
-                                "<a><b>" + padRight("Monto Pagado:", 20 ) +"</b></a>" + padRight(pagadoS, 20) + "<br>" +
+                                "<a><b>" + padRight("Total Recibo:", 20 ) +"</b></a>" + padRight(pagadoS, 20) + "<br>" +
                                 "<a><b>" + padRight("Monto total:", 30 ) +"</b></a>" + padRight(totalS, 20) + "<br>" +
                                 "<a><b>" + padRight("Total en abonos:", 20 ) + "</b></a>" +padRight(totalAbonosS, 20) + "<br>" +
                                 "<a><b>" + padRight("Total restante:", 25 ) +"</b></a>" + padRight(restanteS, 20)+"<br>";

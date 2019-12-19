@@ -680,7 +680,7 @@ public class PrinterFunctions {
                 String totalAbonosS = String.format("%,.2f", totalAbonos);
 
                 send +=  /*"<a><b>" + */padRight("# Factura:", 30 ) /*+"</b></a>"*/+ padRight(numeracion, 20) + "\r\n" +
-                       /* "<a><b>" + */padRight("Monto Pagado:", 20 ) /*+"</b></a>"*/ + padRight(pagadoS, 20) + "\r\n" +
+                       /* "<a><b>" + */padRight("Total Recibo:", 20 ) /*+"</b></a>"*/ + padRight(pagadoS, 20) + "\r\n" +
                         "<a><b>" + padRight("Monto total:", 30 ) +"</b></a>" + padRight(totalS, 20) + "\r\n" +
                         "<a><b>" + padRight("Total en abonos:", 20 ) + "</b></a>" +padRight(totalAbonosS, 20)  + "\r\n";
 
@@ -786,7 +786,7 @@ public class PrinterFunctions {
 
             send += /*"<a><b>" +  */padRight("# Referencia:", 20 )/*+"</b></a>"*/+ padRight(numeroReferenciaReceipts, 20) + "\r\n" +
                            /* "<a><b>" + */padRight("# Factura:", 30 ) /*+"</b></a>"*/+ padRight(numeracionReceipts, 20)+ "\r\n" +
-                           /* "<a><b>" + */padRight("Monto Pagado:", 20 ) /*+"</b></a>"*/ + padRight(pagadoSReceipts, 20) + "\r\n" +
+                           /* "<a><b>" + */padRight("Total Recibo:", 20 ) /*+"</b></a>"*/ + padRight(pagadoSReceipts, 20) + "\r\n" +
                             "<a><b>" + padRight("Monto total:", 30 ) +"</b></a>" + padRight(totalS, 20) + "\r\n" +
                             "<a><b>" + padRight("Total en abonos:", 20 ) + "</b></a>" +padRight(totalAbonosS, 20) + "\r\n" +
                             "<a><b>" + padRight("Total restante:", 25 ) +"</b></a>" + padRight(restanteS, 20)+ "\r\n";

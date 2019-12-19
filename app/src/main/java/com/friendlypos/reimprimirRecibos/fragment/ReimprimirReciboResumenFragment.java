@@ -216,7 +216,7 @@ public class ReimprimirReciboResumenFragment extends BaseFragment {
 
                        "<a><b>" +  padRight("# Referencia:", 20 )+"</b></a>"+ padRight(numeroReferenciaReceipts, 20) + "<br>" +
                        "<a><b>" + padRight("# Factura:", 30 ) +"</b></a>"+ padRight(numeracionReceipts, 20) + "<br>" +
-                       "<a><b>" + padRight("Monto Pagado:", 20 ) +"</b></a>" + padRight(pagadoSReceipts, 20) + "<br>" +
+                       "<a><b>" + padRight("Total Recibo:", 20 ) +"</b></a>" + padRight(pagadoSReceipts, 20) + "<br>" +
                        "<a><b>" + padRight("Monto total:", 30 ) +"</b></a>" + padRight(totalS, 20) + "<br>" +
                        "<a><b>" + padRight("Total en abonos:", 20 ) + "</b></a>" +padRight(totalAbonosS, 20) + "<br>" +
                         "<a><b>" + padRight("Total restante:", 25 ) +"</b></a>" + padRight(restanteS, 20)+"<br>";
