@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -12,20 +14,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <!--<android.support.design.widget.NavigationView
-        android:id="@+id/nav_view"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:fitsSystemWindows="true"
-        app:headerLayout="@layout/nav_header_main"
-        app:menu="@menu/activity_main_drawer" />
--->
-
     <LinearLayout
         android:background="@color/divider"
         android:id="@+id/drawer"
-        android:layout_width="280dp"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_gravity="start"
         android:orientation="vertical">
@@ -36,34 +28,35 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+              >
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="150dp"
                     android:orientation="vertical"
-                    android:background="@color/background"
+                    android:background="#FFF"
                     >
                     <ImageView
                         android:onClick="ClickNavigation"
                         android:layout_gravity="center"
                         android:gravity="center"
-                        android:drawablePadding="5dp"
-                        android:padding="10dp"
                         android:src="@mipmap/ic_logo"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="550px"
+                        android:scaleType="fitXY"
+                        android:layout_height="372px"
                         android:layout_alignParentTop="true"
                         android:layout_centerHorizontal="true"
-                        android:layout_marginTop="22dp" />
+                        android:layout_marginTop="-10dp" />
 
                     <TextView
-                        android:id="@+id/textView2"
+                        android:id="@+id/txtNombreUsuario"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
                         android:gravity="center"
                         android:paddingTop="15dp"
-                        android:text="USUARIO"
+                        android:fontFamily="@font/monse"
+                        app:fontFamily="@font/monse"
                         android:textAppearance="?android:textAppearanceLarge"
                         android:layout_alignParentBottom="true"
                         android:layout_alignParentLeft="true"
@@ -71,36 +64,45 @@
                         android:layout_marginBottom="10dp" />
                 </RelativeLayout>
 
-                <TextView
-                    android:id="@+id/txtConsulta"
-                    android:layout_width="wrap_content"
+
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="17dp"
-                    android:layout_marginStart="17dp"
-                    android:text="Consulta"
-                    android:textColor="@color/item_background" />
+                    android:orientation="vertical"
+                    android:background="@mipmap/fondo_menu"
+                    >
+
+                    <TextView
+                        android:id="@+id/txtConsulta"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_centerVertical="true"
+                        android:paddingLeft="17dp"
+                        android:paddingTop="5dp"
+                        android:layout_marginTop="30dp"
+                        android:background="#FFF"
+                        android:text="Consulta"
+                        android:fontFamily="@font/monse"
+                        app:fontFamily="@font/monse"
+                        android:textColor="@color/item_background" />
 
                 <LinearLayout
                     android:id="@+id/clickClientes"
                     android:onClick="onClickGo"
                     android:layout_width="match_parent"
-                    android:background="@color/divider"
                     android:layout_height="80dp"
                     android:gravity="center"
-
                     android:orientation="vertical">
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="75dp"
-                        android:background="@color/background"
                         android:layout_marginTop="2dp"
                         >
 
                         <ImageView
                             android:tint="@color/icons"
                             android:padding="10dp"
-                            android:src="@mipmap/ic_trans"
+                            android:src="@mipmap/ic_clientes"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:text="Home"
@@ -112,6 +114,8 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:text="Clientes"
+                            android:fontFamily="@font/monse"
+                            app:fontFamily="@font/monse"
                             android:textColor="@color/icons"
                             android:layout_centerVertical="true"
                             android:layout_toRightOf="@+id/imageView01"
@@ -124,7 +128,7 @@
                     android:id="@+id/clickProductos"
                     android:onClick="onClickGo"
                     android:layout_width="match_parent"
-                    android:background="@color/divider"
+
                     android:layout_height="80dp"
                     android:gravity="center"
 
@@ -132,14 +136,13 @@
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="75dp"
-                        android:background="@color/background"
                         android:layout_marginTop="2dp"
                         >
 
                         <ImageView
                             android:tint="@color/icons"
                             android:padding="10dp"
-                            android:src="@mipmap/ic_trans"
+                            android:src="@mipmap/ic_productos"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:text="Home"
@@ -151,6 +154,8 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:text="Productos"
+                            android:fontFamily="@font/monse"
+                            app:fontFamily="@font/monse"
                             android:textColor="@color/icons"
                             android:layout_centerVertical="true"
                             android:layout_toRightOf="@+id/imageView02"
@@ -162,19 +167,21 @@
 
                 <TextView
                     android:id="@+id/txtAcciones"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="17dp"
-                    android:layout_marginStart="17dp"
+                    android:paddingLeft="17dp"
+                    android:paddingTop="5dp"
                     android:text="Acciones"
+                    android:fontFamily="@font/monse"
+                    app:fontFamily="@font/monse"
+                    android:background="#FFF"
                     android:textColor="@color/item_background" />
 
                 <LinearLayout
                     android:id="@+id/clickDistribucion"
-                    android:onClick="ClickNavigation"
+                    android:onClick="onClickGo"
                     android:layout_width="match_parent"
-                    android:background="@color/divider"
                     android:layout_height="80dp"
                     android:gravity="center"
 
@@ -182,7 +189,6 @@
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="75dp"
-                        android:background="@color/background"
                         android:layout_marginTop="2dp"
                         >
 
@@ -201,6 +207,8 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:text="Distribución"
+                            android:fontFamily="@font/monse"
+                            app:fontFamily="@font/monse"
                             android:textColor="@color/icons"
                             android:layout_centerVertical="true"
                             android:layout_toRightOf="@+id/imageView2"
@@ -212,8 +220,7 @@
 
                 <LinearLayout
                     android:id="@+id/clickVentaDirecta"
-                    android:onClick="ClickNavigation"
-                    android:background="@color/divider"
+                    android:onClick="onClickGo"
                     android:layout_width="match_parent"
                     android:layout_height="80dp"
                     android:gravity="center"
@@ -222,13 +229,12 @@
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="75dp"
-                        android:background="@color/background"
                         >
 
                         <ImageView
                             android:tint="@color/icons"
                             android:padding="10dp"
-                            android:src="@mipmap/ic_trans"
+                            android:src="@mipmap/ic_ventadirecta"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:text="Home"
@@ -240,6 +246,8 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:text="Venta directa"
+                            android:fontFamily="@font/monse"
+                            app:fontFamily="@font/monse"
                             android:textColor="@color/icons"
                             android:layout_centerVertical="true"
                             android:layout_toRightOf="@+id/imageView3"
@@ -252,8 +260,7 @@
 
                 <LinearLayout
                     android:id="@+id/clickPreventa"
-                    android:onClick="ClickNavigation"
-                    android:background="@color/divider"
+                    android:onClick="onClickGo"
                     android:layout_width="match_parent"
                     android:layout_height="80dp"
                     android:gravity="center"
@@ -262,16 +269,16 @@
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="75dp"
-                        android:background="@color/background"
                         >
 
                         <ImageView
                             android:tint="@color/icons"
                             android:padding="10dp"
-                            android:src="@mipmap/ic_trans"
+                            android:src="@mipmap/ic_preventa"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:text="Home"
+
                             android:id="@+id/imageView4" />
 
                         <TextView
@@ -280,6 +287,8 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:text="Preventa"
+                            android:fontFamily="@font/monse"
+                            app:fontFamily="@font/monse"
                             android:textColor="@color/icons"
                             android:layout_centerVertical="true"
                             android:layout_toRightOf="@+id/imageView4"
@@ -291,9 +300,8 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/clickReportes"
-                    android:onClick="ClickNavigation"
-                    android:background="@color/divider"
+                    android:id="@+id/clickRecibos"
+                    android:onClick="onClickGo"
                     android:layout_width="match_parent"
                     android:layout_height="80dp"
                     android:gravity="center"
@@ -302,7 +310,47 @@
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="75dp"
-                        android:background="@color/background"
+                        >
+
+                        <ImageView
+                            android:tint="@color/icons"
+                            android:padding="10dp"
+                            android:src="@mipmap/ic_recibos"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:text="Home"
+
+                            android:id="@+id/imageView13" />
+
+                        <TextView
+                            android:id="@+id/textView13"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="Recibos"
+                            android:fontFamily="@font/monse"
+                            app:fontFamily="@font/monse"
+                            android:textColor="@color/icons"
+                            android:layout_centerVertical="true"
+                            android:layout_toRightOf="@+id/imageView13"
+                            android:layout_toEndOf="@+id/imageView13"
+                            android:layout_marginLeft="17dp"
+                            android:layout_marginStart="17dp" />
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/clickReimprimirVentas"
+                    android:onClick="onClickGo"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="75dp"
                         >
 
                         <ImageView
@@ -319,7 +367,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:text="Reportes"
+                            android:text="Lista de facturas"
+                            android:fontFamily="@font/monse"
+                            app:fontFamily="@font/monse"
                             android:textColor="@color/icons"
                             android:layout_centerVertical="true"
                             android:layout_toRightOf="@+id/imageView5"
@@ -332,9 +382,8 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/clickConfig"
-                    android:onClick="ClickNavigation"
-                    android:background="@color/divider"
+                    android:id="@+id/clickReimprimirPedidos"
+                    android:onClick="onClickGo"
                     android:layout_width="match_parent"
                     android:layout_height="80dp"
                     android:gravity="center"
@@ -343,7 +392,168 @@
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="75dp"
-                        android:background="@color/background"
+                        >
+
+                        <ImageView
+                            android:tint="@color/icons"
+                            android:padding="10dp"
+                            android:src="@mipmap/ic_print"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:text="Home"
+                            android:id="@+id/imageView11" />
+
+                        <TextView
+                            android:id="@+id/textView11"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="Lista de pedidos"
+                            android:fontFamily="@font/monse"
+                            app:fontFamily="@font/monse"
+                            android:textColor="@color/icons"
+                            android:layout_centerVertical="true"
+                            android:layout_toRightOf="@+id/imageView11"
+
+                            android:layout_toEndOf="@+id/imageView11"
+                            android:layout_marginLeft="17dp"
+                            android:layout_marginStart="17dp" />
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/clickReimprimirRecibos"
+                        android:onClick="onClickGo"
+                        android:layout_width="match_parent"
+                        android:layout_height="80dp"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="75dp"
+                            >
+
+                            <ImageView
+                                android:tint="@color/icons"
+                                android:padding="10dp"
+                                android:src="@mipmap/ic_print"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:text="Home"
+                                android:id="@+id/imageView19" />
+
+                            <TextView
+                                android:id="@+id/textView19"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:text="Lista de recibos"
+                                android:fontFamily="@font/monse"
+                                app:fontFamily="@font/monse"
+                                android:textColor="@color/icons"
+                                android:layout_centerVertical="true"
+                                android:layout_toRightOf="@+id/imageView19"
+                                android:layout_toEndOf="@+id/imageView19"
+                                android:layout_marginLeft="17dp"
+                                android:layout_marginStart="17dp" />
+                        </RelativeLayout>
+
+                    </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/clickGrafico"
+                    android:onClick="onClickGo"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="75dp"
+                        >
+
+                        <ImageView
+                            android:tint="@color/icons"
+                            android:padding="10dp"
+                            android:src="@mipmap/ic_config"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:text="Home"
+                            android:id="@+id/imageView14" />
+
+                        <TextView
+                            android:id="@+id/textView14"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="Gráfico"
+                            android:fontFamily="@font/monse"
+                            app:fontFamily="@font/monse"
+                            android:textColor="@color/icons"
+                            android:layout_centerVertical="true"
+                            android:layout_toRightOf="@+id/imageView14"
+                            android:layout_toEndOf="@+id/imageView14"
+                            android:layout_marginLeft="17dp"
+                            android:layout_marginStart="17dp" />
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+
+
+                <LinearLayout
+                    android:id="@+id/clickEmail"
+                    android:onClick="onClickGo"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="75dp"
+                        >
+
+                        <ImageView
+                            android:tint="@color/icons"
+                            android:padding="10dp"
+                            android:src="@mipmap/ic_print"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:text="Home"
+                            android:id="@+id/imageView17" />
+
+                        <TextView
+                            android:id="@+id/textView17"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="Reenviar Email"
+                            android:fontFamily="@font/monse"
+                            app:fontFamily="@font/monse"
+                            android:textColor="@color/icons"
+                            android:layout_centerVertical="true"
+                            android:layout_toRightOf="@+id/imageView17"
+                            android:layout_toEndOf="@+id/imageView17"
+                            android:layout_marginLeft="17dp"
+                            android:layout_marginStart="17dp" />
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/clickConfig"
+                    android:onClick="ClickNavigation"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="75dp"
                         >
 
                         <ImageView
@@ -361,6 +571,8 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:text="Configuraciones"
+                            android:fontFamily="@font/monse"
+                            app:fontFamily="@font/monse"
                             android:textColor="@color/icons"
                             android:layout_centerVertical="true"
                             android:layout_toRightOf="@+id/imageView6"
@@ -371,10 +583,11 @@
 
                 </LinearLayout>
 
-
+                </LinearLayout>
 
             </LinearLayout>
 
         </ScrollView>
     </LinearLayout>
-</android.support.v4.widget.DrawerLayout>
+
+</androidx.drawerlayout.widget.DrawerLayout>

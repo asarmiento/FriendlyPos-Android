@@ -1,0 +1,98 @@
+<androidx.cardview.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/tools"
+    android:id="@+id/cardViewResumen"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="3dp"
+    card_view:cardBackgroundColor="#FFF"
+    app:ignore="NamespaceTypo">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="5dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/txt_resumen_factura_nombre"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:text="Nombre"
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:textSize="12sp"
+            android:textColor="#58595b"
+            android:textStyle="bold" />
+
+
+        <TextView
+            android:id="@+id/txt_resumen_factura_descuento"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/txt_resumen_factura_nombre"
+            android:layout_marginTop="10dp"
+            android:text="Descuento de"
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:textSize="12sp"
+            android:textColor="#58595b" />
+
+
+        <TextView
+            android:id="@+id/txt_resumen_factura_precio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="Precio"
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:textSize="12sp"
+            android:textColor="#58595b"
+            android:textStyle="bold"
+            android:layout_below="@+id/txt_resumen_factura_descuento"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:id="@+id/txt_resumen_factura_cantidad"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cantidad"
+            android:layout_marginTop="5dp"
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:textSize="12sp"
+            android:textColor="#58595b"
+            android:textStyle="bold"
+            android:layout_marginStart="15dp"
+            android:layout_below="@+id/txt_resumen_factura_descuento"
+            android:layout_toEndOf="@+id/txt_resumen_factura_descuento" />
+
+        <TextView
+            android:id="@+id/txt_resumen_factura_total"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Total"
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:textSize="12sp"
+            android:textColor="#58595b"
+            android:textStyle="bold"
+            android:layout_marginStart="43dp"
+            android:layout_alignBaseline="@+id/txt_resumen_factura_cantidad"
+            android:layout_alignBottom="@+id/txt_resumen_factura_cantidad"
+            android:layout_toEndOf="@+id/txt_resumen_factura_cantidad" />
+
+        <ImageButton
+            android:id="@+id/btnEliminarResumen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:background="@null"
+            card_view:srcCompat="@mipmap/ic_eliminar" />
+
+
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>

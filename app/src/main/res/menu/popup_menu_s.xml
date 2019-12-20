@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    >
+
+    <item
+        android:id="@+id/btn_subir_ventas"
+        android:icon="@mipmap/ic_config_menu"
+        android:title="Subir Ventas"/>
+
+    <item
+        android:id="@+id/btn_subir_pedidos"
+        android:icon="@mipmap/ic_config_menu"
+        android:title="Subir Pedidos"
+        />
+
+    <item
+        android:id="@+id/btn_subir_proforma"
+        android:icon="@mipmap/ic_config_menu"
+        android:title="Subir Proforma"/>
+
+    <item
+        android:id="@+id/btn_subir_ventadirecta"
+        android:icon="@mipmap/ic_config_menu"
+        android:title="Subir Venta Directa"/>
+
+    <item
+        android:id="@+id/btn_subir_recibos"
+        android:icon="@mipmap/ic_config_menu"
+        android:title="Subir Recibos"/>
+
+    <item
+        android:id="@+id/btn_subir_clienteVisitados"
+        android:icon="@mipmap/ic_config_menu"
+        android:title="Subir Clientes Visitados"/>
+
+    <item
+        android:id="@+id/btn_subir_gpscliente"
+        android:icon="@mipmap/ic_config_menu"
+        android:title="Subir Nueva GPS, Clientes"/>
+
+    <item
+        android:id="@+id/btn_subir_cliente_nuevo"
+        android:icon="@mipmap/ic_config_menu"
+        android:title="Subir Clientes Nuevos"/>
+
+    <item
+        android:id="@+id/btn_devolver_inventario"
+        android:icon="@mipmap/ic_config_menu"
+        android:title="Devolver Inventario" />
+
+
+</menu>

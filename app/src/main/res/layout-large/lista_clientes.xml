@@ -1,0 +1,223 @@
+<androidx.cardview.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/tools"
+    android:id="@+id/cardViewClientes"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="3dp"
+    card_view:cardBackgroundColor="#FFF"
+    app:ignore="NamespaceTypo">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"
+        android:orientation="vertical"
+        >
+        <TextView
+            android:id="@+id/txt_cliente_card"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:text="Card"
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:textColor="#58595b"
+            android:textSize="18sp"
+         />
+        <TextView
+            android:id="@+id/txt_cliente_fantasyname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Fantasy Name"
+            android:textStyle="bold"
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:textColor="#58595b"
+            android:textSize="18sp"
+            android:layout_below="@+id/txt_cliente_card"
+             />
+        <TextView
+            android:id="@+id/txt_cliente_companyname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Company Name"
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:textColor="#58595b"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_below="@+id/txt_cliente_fantasyname"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:id="@+id/txt_cliente_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Address"
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:textColor="#58595b"
+            android:textSize="18sp"
+            android:layout_below="@+id/txt_cliente_companyname"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:id="@+id/txt_texto_cliente_telefono"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Teléfono:"
+            android:textStyle="bold"
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:textColor="#58595b"
+            android:textSize="18sp"
+            android:layout_below="@+id/txt_cliente_address"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:id="@+id/txt_cliente_telefono"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Telefono"
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:textColor="#58595b"
+            android:textSize="18sp"
+            android:layout_alignBaseline="@+id/txt_texto_cliente_telefono"
+            android:layout_alignBottom="@+id/txt_texto_cliente_telefono"
+            android:layout_toEndOf="@+id/txt_texto_cliente_telefono"
+            android:layout_marginLeft="5dp"/>
+
+        <TextView
+            android:id="@+id/txt_texto_cliente_creditlimit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Crédito:"
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:textColor="#58595b"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginTop="5dp"
+            android:layout_below="@+id/txt_texto_cliente_telefono"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:id="@+id/txt_cliente_creditlimit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Credit Limit"
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:textColor="#58595b"
+            android:textSize="18sp"
+            android:layout_alignBaseline="@+id/txt_texto_cliente_creditlimit"
+            android:layout_alignBottom="@+id/txt_texto_cliente_creditlimit"
+            android:layout_toEndOf="@+id/txt_texto_cliente_creditlimit"
+            android:layout_marginLeft="5dp"/>
+        <TextView
+            android:id="@+id/txt_texto_cliente_fixeddescount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Descuento:"
+            android:textStyle="bold"
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:textColor="#58595b"
+            android:textSize="18sp"
+            android:layout_marginStart="35dp"
+            android:layout_alignBaseline="@+id/txt_cliente_creditlimit"
+            android:layout_alignBottom="@+id/txt_cliente_creditlimit"
+            android:layout_toEndOf="@+id/txt_cliente_creditlimit" />
+        <TextView
+            android:id="@+id/txt_cliente_fixeddescount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:textColor="#58595b"
+            android:textSize="18sp"
+            android:text="Fixed descount"
+            android:layout_marginLeft="5dp"
+            android:layout_alignBaseline="@+id/txt_texto_cliente_fixeddescount"
+            android:layout_alignBottom="@+id/txt_texto_cliente_fixeddescount"
+            android:layout_toEndOf="@+id/txt_texto_cliente_fixeddescount" />
+
+        <TextView
+            android:id="@+id/txt_texto_cliente_due"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Saldo:"
+            android:textStyle="bold"
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:textColor="#58595b"
+            android:textSize="18sp"
+            android:layout_marginTop="3dp"
+            android:layout_below="@+id/txt_texto_cliente_creditlimit"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:id="@+id/txt_cliente_due"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Due"
+            android:layout_marginTop="3dp"
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:textColor="#58595b"
+            android:textSize="18sp"
+            android:layout_below="@+id/txt_cliente_creditlimit"
+            android:layout_alignStart="@+id/txt_cliente_creditlimit" />
+
+        <TextView
+            android:id="@+id/txt_texto_cliente_credittime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="T. Limite:"
+            android:textStyle="bold"
+            android:layout_marginTop="3dp"
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:textColor="#58595b"
+            android:textSize="18sp"
+            android:layout_below="@+id/txt_texto_cliente_fixeddescount"
+            android:layout_alignStart="@+id/txt_texto_cliente_fixeddescount" />
+        <TextView
+            android:id="@+id/txt_cliente_credittime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Credit time"
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:textColor="#58595b"
+            android:textSize="18sp"
+            android:layout_marginTop="3dp"
+            android:layout_below="@+id/txt_cliente_fixeddescount"
+            android:layout_alignStart="@+id/txt_cliente_fixeddescount" />
+
+        <ImageButton
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@mipmap/ic_ubicacion"
+            android:id="@+id/btnUbicacionCliente"
+            android:background="@null"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true" />
+
+        <Button
+            android:id="@+id/btnEditarCliente"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:background="@color/colorPrimary"
+            android:capitalize="none"
+            android:text="Editar"
+            android:textAlignment="center"
+            android:textColor="@color/cardview_light_background"
+            android:layout_alignParentTop="true"
+            android:layout_toStartOf="@+id/btnUbicacionCliente"
+            android:layout_marginEnd="22dp" />
+
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>

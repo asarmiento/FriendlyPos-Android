@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:layout_marginTop="5dp"
+    android:layout_marginBottom="5dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:text="Ingrese una cantidad, maximo de 20 Unidades, minimo 1"
+        android:gravity="center"
+        android:textSize="16sp"
+        android:fontFamily="@font/monse"
+        app:fontFamily="@font/monse"
+        android:textColor="#58595b"
+        android:id="@+id/promtClabel"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="11dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:gravity="center"
+        android:textSize="18sp"
+        android:fontFamily="@font/monse"
+        app:fontFamily="@font/monse"
+        android:textColor="#58595b"
+        android:textStyle="bold"
+        android:text="latitud"
+        android:id="@+id/txtEditarLatitud"
+        android:layout_marginTop="31dp"
+        android:layout_below="@+id/btnObtenerGPS"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:gravity="center"
+        android:textSize="18sp"
+        android:fontFamily="@font/monse"
+        app:fontFamily="@font/monse"
+        android:textColor="#58595b"
+        android:textStyle="bold"
+        android:layout_marginTop="22dp"
+android:layout_marginBottom="15dp"
+        android:text="longitud"
+        android:id="@+id/txtEditarLongitud"
+        android:layout_below="@+id/txtEditarLatitud"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:id="@+id/btnObtenerGPS"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Obtener Dirección"
+        android:fontFamily="@font/monse"
+        app:fontFamily="@font/monse"
+        android:background="@drawable/fondo_botones"
+        android:textAlignment="center"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:capitalize="none"
+        android:textColor="@color/cardview_light_background"
+        android:layout_marginTop="25dp"
+        android:layout_below="@+id/promtClabel"
+        android:layout_centerHorizontal="true" />
+
+
+</RelativeLayout>

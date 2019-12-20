@@ -1,0 +1,532 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/billFrame"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="54dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingTop="5dp"
+        android:weightSum="1">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_margin="1dp"
+            android:layout_marginBottom="10dp"
+            android:background="@color/icons"
+            android:paddingLeft="5dp"
+            android:orientation="vertical"
+            android:id="@+id/rlIdTypeCliente"
+            >
+
+            <Spinner
+                android:id="@+id/cliente_idtype_nuevo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:prompt="@string/array_spinnerIT"
+                android:fontFamily="@font/monse"
+                app:fontFamily="@font/monse"
+                android:textSize="16sp"
+                android:imeOptions="actionNext"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_margin="1dp"
+            android:layout_marginBottom="10dp"
+            android:background="#d1d3d4"
+            android:paddingLeft="5dp"
+            android:orientation="vertical"
+            android:id="@+id/rlCardCliente"
+            android:layout_below="@+id/rlIdTypeCliente"
+            >
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/NuevoCardCliente"
+                style="@style/TextInputLayout"
+                app:hintTextAppearance="@style/TextAppearence.App.TextInputLayout.ClienteNuevo"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true"
+                >
+
+                <EditText
+                    android:id="@+id/cliente_card_nuevo"
+                    style="@style/ClienteNuevo1"
+                    android:hint="Cédula"
+                    android:inputType="phone"
+                    android:digits="0123456789"
+                    android:fontFamily="@font/monse"
+                    app:fontFamily="@font/monse"
+                    android:textColor="#58595b"
+                    android:imeOptions="actionNext"
+                    android:singleLine="true" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </RelativeLayout>
+
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_margin="1dp"
+            android:layout_marginBottom="10dp"
+            android:background="@color/icons"
+            android:paddingLeft="5dp"
+            android:orientation="vertical"
+            android:id="@+id/rlLongitudCliente"
+            android:layout_below="@+id/rlCardCliente"
+            >
+
+
+                <TextView
+                    android:id="@+id/cliente_longitud_nuevo"
+                    style="@style/ClienteNuevo2"
+                    android:hint="Longitud"
+                    android:fontFamily="@font/monse"
+                    app:fontFamily="@font/monse"
+                    android:textColor="#58595b"
+                    android:singleLine="true"
+                    android:gravity="center_vertical"
+                    android:imeOptions="actionNext"
+                    android:layout_width="204dp"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentStart="true" />
+
+                <ImageButton
+                    android:id="@+id/btnUbicacionCliente"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:onClick="onClickGo"
+                    android:src="@mipmap/ic_ubicacion"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentEnd="true" />
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_margin="1dp"
+            android:layout_marginBottom="10dp"
+            android:background="#d1d3d4"
+            android:paddingLeft="5dp"
+            android:orientation="vertical"
+            android:id="@+id/rlLatitudCliente"
+            android:layout_below="@+id/rlLongitudCliente"
+            >
+
+            <TextView
+                android:id="@+id/cliente_latitud_nuevo"
+                style="@style/ClienteNuevo1"
+                android:hint="Latitud"
+                android:fontFamily="@font/monse"
+                app:fontFamily="@font/monse"
+                android:textColor="#58595b"
+                android:singleLine="true"
+                android:gravity="center_vertical"
+                android:imeOptions="actionNext"
+                android:layout_width="204dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentStart="true" />
+
+        </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_margin="1dp"
+        android:layout_marginBottom="10dp"
+        android:background="@color/icons"
+        android:paddingLeft="5dp"
+        android:id="@+id/rlFeCliente"
+        android:layout_below="@+id/rlLatitudCliente"
+        >
+        <Spinner
+            android:id="@+id/cliente_fe_nuevo"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:prompt="@string/array_spinnerFE"
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:textColor="#58595b"
+            android:textSize="16sp"
+            android:imeOptions="actionNext"
+   />
+
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_margin="1dp"
+            android:layout_marginBottom="10dp"
+            android:background="#d1d3d4"
+            android:paddingLeft="5dp"
+            android:orientation="vertical"
+            android:id="@+id/rlPlacaCliente"
+            android:layout_below="@+id/rlFeCliente"
+            >
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/NuevoPlacaCliente"
+                style="@style/TextInputLayout"
+                app:hintTextAppearance="@style/TextAppearence.App.TextInputLayout.ClienteNuevo"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true">
+
+                <EditText
+                    android:id="@+id/cliente_placa_nuevo"
+                    style="@style/ClienteNuevo1"
+                    android:hint="Placa"
+                    android:inputType="phone"
+                    android:fontFamily="@font/monse"
+                    app:fontFamily="@font/monse"
+                    android:textColor="#58595b"
+                    android:digits="0123456789"
+                    android:singleLine="true"
+                    android:imeOptions="actionNext"/>
+
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_margin="1dp"
+            android:layout_marginBottom="10dp"
+            android:background="@color/icons"
+            android:paddingLeft="5dp"
+            android:orientation="vertical"
+            android:id="@+id/rlModelCliente"
+            android:layout_below="@+id/rlPlacaCliente"
+            >
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/NuevoModelCliente"
+                style="@style/TextInputLayout"
+                android:layout_alignParentBottom="true"
+                app:hintTextAppearance="@style/TextAppearence.App.TextInputLayout.ClienteNuevo">
+
+                <EditText
+                    android:id="@+id/cliente_model_nuevo"
+                    style="@style/ClienteNuevo2"
+                    android:fontFamily="@font/monse"
+                    app:fontFamily="@font/monse"
+                    android:textColor="#58595b"
+                    android:hint="Modelo"
+                    android:singleLine="true"
+                    android:imeOptions="actionNext"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_margin="1dp"
+            android:layout_marginBottom="10dp"
+            android:background="#d1d3d4"
+            android:paddingLeft="5dp"
+            android:orientation="vertical"
+            android:id="@+id/rlDoorsCliente"
+            android:layout_below="@+id/rlModelCliente"
+            >
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/NuevoDoorsCliente"
+                style="@style/TextInputLayout"
+                app:hintTextAppearance="@style/TextAppearence.App.TextInputLayout.ClienteNuevo"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true">
+
+                <EditText
+                    android:id="@+id/cliente_doors_nuevo"
+                    style="@style/ClienteNuevo1"
+                    android:fontFamily="@font/monse"
+                    app:fontFamily="@font/monse"
+                    android:textColor="#58595b"
+                    android:hint="Puertas"
+                    android:singleLine="true"
+                    android:inputType="phone"
+                    android:digits="0123456789"
+                    android:imeOptions="actionNext"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_margin="1dp"
+            android:layout_marginBottom="10dp"
+            android:background="@color/icons"
+            android:paddingLeft="5dp"
+            android:orientation="vertical"
+            android:id="@+id/rlAddressCliente"
+            android:layout_below="@+id/rlDoorsCliente"
+            >
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/NuevoAddressCliente"
+                style="@style/TextInputLayout"
+                android:layout_alignParentBottom="true"
+                app:hintTextAppearance="@style/TextAppearence.App.TextInputLayout.ClienteNuevo">
+
+                <EditText
+                    android:id="@+id/cliente_address_nuevo"
+                    style="@style/ClienteNuevo2"
+                    android:fontFamily="@font/monse"
+                    app:fontFamily="@font/monse"
+                    android:textColor="#58595b"
+                    android:hint="Dirección"
+                    android:singleLine="true"
+                    android:imeOptions="actionNext"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </RelativeLayout>
+
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_margin="1dp"
+            android:layout_marginBottom="10dp"
+            android:background="#d1d3d4"
+            android:paddingLeft="5dp"
+            android:orientation="vertical"
+            android:id="@+id/rlEmailCliente"
+            android:layout_below="@+id/rlAddressCliente"
+            >
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/NuevoEmailCliente"
+                style="@style/TextInputLayout"
+                app:hintTextAppearance="@style/TextAppearence.App.TextInputLayout.ClienteNuevo"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true">
+
+                <EditText
+                    android:id="@+id/cliente_email_nuevo"
+                    style="@style/ClienteNuevo1"
+                    android:fontFamily="@font/monse"
+                    app:fontFamily="@font/monse"
+                    android:textColor="#58595b"
+                    android:hint="Correo Electrónico"
+                    android:inputType="textEmailAddress"
+                    android:singleLine="true"
+                    android:imeOptions="actionNext"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_margin="1dp"
+            android:layout_marginBottom="10dp"
+            android:background="@color/icons"
+            android:paddingLeft="5dp"
+            android:orientation="vertical"
+            android:id="@+id/rlFantasyNameCliente"
+            android:layout_below="@+id/rlEmailCliente"
+            >
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/NuevoFantasyNameCliente"
+                style="@style/TextInputLayout"
+                android:layout_alignParentBottom="true"
+                app:hintTextAppearance="@style/TextAppearence.App.TextInputLayout.ClienteNuevo">
+
+                <EditText
+                    android:id="@+id/cliente_fantasyname_nuevo"
+                    style="@style/ClienteNuevo2"
+                    android:fontFamily="@font/monse"
+                    app:fontFamily="@font/monse"
+                    android:textColor="#58595b"
+                    android:hint="Nombre de Fantasía"
+                    android:singleLine="true"
+                    android:imeOptions="actionNext"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_margin="1dp"
+            android:layout_marginBottom="10dp"
+            android:background="#d1d3d4"
+            android:paddingLeft="5dp"
+            android:orientation="vertical"
+            android:id="@+id/rlCompanyNameCliente"
+            android:layout_below="@+id/rlFantasyNameCliente"
+            >
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/NuevoCompanyNameCliente"
+                style="@style/TextInputLayout"
+                app:hintTextAppearance="@style/TextAppearence.App.TextInputLayout.ClienteNuevo"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true">
+
+                <EditText
+                    android:id="@+id/cliente_companyname_nuevo"
+                    style="@style/ClienteNuevo1"
+                    android:hint="Nombre de compañía"
+                    android:fontFamily="@font/monse"
+                    app:fontFamily="@font/monse"
+                    android:textColor="#58595b"
+                    android:singleLine="true"
+                    android:imeOptions="actionNext"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_margin="1dp"
+            android:layout_marginBottom="10dp"
+            android:background="@color/icons"
+            android:paddingLeft="5dp"
+            android:orientation="vertical"
+            android:id="@+id/rlPhoneCliente"
+            android:layout_below="@+id/rlCompanyNameCliente"
+            >
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/NuevoPhoneCliente"
+                style="@style/TextInputLayout"
+                android:layout_alignParentBottom="true"
+                app:hintTextAppearance="@style/TextAppearence.App.TextInputLayout.ClienteNuevo">
+
+                <EditText
+                    android:id="@+id/cliente_phone_nuevo"
+                    style="@style/ClienteNuevo2"
+                    android:hint="Teléfono"
+                    android:imeOptions="actionNext"
+                    android:inputType="phone"
+                    android:fontFamily="@font/monse"
+                    app:fontFamily="@font/monse"
+                    android:textColor="#58595b"
+                    android:digits="0123456789"
+                    android:maxLength="8"
+                    android:singleLine="true" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_margin="1dp"
+            android:layout_marginBottom="10dp"
+            android:background="#d1d3d4"
+            android:paddingLeft="5dp"
+            android:orientation="vertical"
+            android:id="@+id/rlCreditLimitCliente"
+            android:layout_below="@+id/rlPhoneCliente"
+            >
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/NuevoCreditLimitCliente"
+                style="@style/TextInputLayout"
+                app:hintTextAppearance="@style/TextAppearence.App.TextInputLayout.ClienteNuevo"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true">
+
+                <EditText
+                    android:id="@+id/cliente_creditlimit_nuevo"
+                    style="@style/ClienteNuevo1"
+                    android:hint="Límite de crédito"
+                    android:inputType="phone"
+                    android:fontFamily="@font/monse"
+                    app:fontFamily="@font/monse"
+                    android:textColor="#58595b"
+                    android:digits="0123456789."
+                    android:singleLine="true"
+                    android:imeOptions="actionNext"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </RelativeLayout>
+
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_margin="1dp"
+            android:layout_marginBottom="10dp"
+            android:background="@color/icons"
+            android:paddingLeft="5dp"
+            android:orientation="vertical"
+            android:id="@+id/rlCreditTimeCliente"
+            android:layout_below="@+id/rlCreditLimitCliente"
+            >
+            <Spinner
+                android:id="@+id/cliente_credittime_nuevo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/monse"
+                app:fontFamily="@font/monse"
+                android:textColor="#58595b"
+                android:prompt="@string/array_spinnerCT"
+                android:textSize="16sp"
+                android:imeOptions="actionNext"/>
+
+
+        </RelativeLayout>
+
+        <Button
+            android:layout_below="@+id/rlCreditTimeCliente"
+            android:id="@+id/btnCrearCliente"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:textColor="@color/icons"
+            android:background="@drawable/fondo_botones"
+            android:onClick="onClickGo"
+            android:layout_marginBottom="10dp"
+            android:text="@string/crear"
+           />
+
+    </RelativeLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

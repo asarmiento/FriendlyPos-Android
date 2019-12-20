@@ -1,13 +1,14 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:itemBackground">@color/background</item>
+        <item name="android:itemBackground">#d1d3d4</item>
         <item name="android:itemTextAppearance">@style/MyActionBar.MenuTextStyle</item>
+        <item name="android:windowActionBarOverlay">true</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -22,6 +23,11 @@
 
     <style name="ActionThemeDialog" parent="AppTheme">
 
+    </style>
+
+    <style name="menu_text_style" parent="@android:style/TextAppearance.DeviceDefault.Widget.ActionBar.Menu">
+        <item name="android:textSize">22sp</item>
+        <item name="android:textAllCaps">false</item>
     </style>
 
     <style name="TextAppearence.App.TextInputLayout" parent="@android:style/TextAppearance">
@@ -40,10 +46,29 @@
         <item name="android:paddingTop">10dp</item>
     </style>
 
+    <style name="TextInputLayoutTotal">
+        <item name="android:minHeight">65dp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:clipToPadding">false</item>
+        <item name="android:gravity">bottom</item>
+        <item name="android:paddingTop">2dp</item>
+    </style>
+
     <style name="Register_EditText" parent="Normal_EditText">
         <item name="android:background">@android:color/white</item>
     </style>
 
+    <style name="Register_EditText1" parent="Normal_EditText">
+        <item name="android:background">#d1d3d4</item>
+        <item name="android:fontFamily">@font/monse</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="Register_EditText2" parent="Normal_EditText">
+        <item name="android:background">@color/background</item>
+
+    </style>
 
     <style name="Normal_EditText">
         <item name="android:layout_width">match_parent</item>
@@ -55,6 +80,11 @@
 
     <style name="TextAppearence.App.TextInputLayout.Dark" parent="TextAppearence.App.TextInputLayout">
         <item name="android:textColor">@color/hintColor</item>
+    </style>
+
+    <style name="TextAppearence.App.TextInputLayout.Dark1" parent="TextAppearence.App.TextInputLayout">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">18sp</item>
     </style>
 
     <style name="MainButton">
@@ -78,10 +108,53 @@
         <item name="android:textColor">@color/colorAccent</item>
     </style>
 
-    <style name="MyActionBar.MenuTextStyle"
-        parent="style/TextAppearance.AppCompat.Widget.ActionBar.Title">
-        <item name="android:textColor">@color/icons</item>
+    <style name="MyActionBar.MenuTextStyle" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textColor">#58595b</item>
         <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">@font/monse</item>
+    </style>
+
+    <style name="LoginTextField" parent="AppTheme">
+        <item name="colorAccent">@color/hintColor</item>
+        <item name="android:textColorHint">@color/hintColor</item>
+        <item name="colorControlNormal">@color/hintColor</item>
+        <item name="colorControlActivated">@color/hintColor</item>
+        <item name="colorControlHighlight">@color/hintColor</item>
+    </style>
+
+    <style name="WhiteProgress">
+        <item name="colorAccent">@android:color/white</item>
+    </style>
+    <style name="MenuButtonsSmallRed">
+        <item name="fab_colorNormal">@color/morado</item>
+        <item name="fab_colorPressed">@color/colorPrimaryDark</item>
+        <item name="fab_colorRipple">@color/colorAccent</item>
+    </style>
+
+    <style name="EditTextFind">
+        <item name="android:textSize">17sp</item>
+        <item name="android:padding">7dp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:background">#FFFFFF</item>
+        <item name="android:textColorHint">@color/colorPrimary</item>
+    </style>
+
+
+    <style name="ClienteNuevo1" parent="Normal_EditText">
+        <item name="android:background">#d1d3d4</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="ClienteNuevo2" parent="Normal_EditText">
+        <item name="android:background">@android:color/white</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="TextAppearence.App.TextInputLayout.ClienteNuevo" parent="TextAppearence.App.TextInputLayout">
+        <item name="android:textColor">#58595b</item>
+        <item name="android:textSize">18sp</item>
     </style>
 
 </resources>

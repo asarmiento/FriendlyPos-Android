@@ -39,7 +39,6 @@ public class BluetoothStateChangeReceiver extends BroadcastReceiver {
 
     public boolean isBluetoothAvailable() {
         BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-
         return bluetoothAdapter.isEnabled();
     }
 }

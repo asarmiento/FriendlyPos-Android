@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/billFrame"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="54dp">
+
+    <Button
+        android:id="@+id/btnPorMes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:fontFamily="@font/monse"
+        app:fontFamily="@font/monse"
+        android:background="@drawable/fondo_botones"
+        android:text="Gráfico por mes"
+        android:textColor="@color/cardview_light_background" />
+
+
+    <com.github.mikephil.charting.charts.BarChart
+        android:layout_width="match_parent"
+        android:layout_marginTop="62dp"
+        android:layout_height="450dp"
+        android:id="@+id/BarGrafico">
+
+
+
+    </com.github.mikephil.charting.charts.BarChart>
+
+    <Button
+        android:id="@+id/btnPorDia"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|right"
+        android:fontFamily="@font/monse"
+        app:fontFamily="@font/monse"
+        android:layout_margin="10dp"
+        android:background="@drawable/fondo_botones"
+        android:text="Gráfico por día"
+        android:textColor="@color/cardview_light_background" />
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

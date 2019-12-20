@@ -1,0 +1,177 @@
+<androidx.cardview.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/tools"
+    android:id="@+id/cardViewProductos"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="3dp"
+    card_view:cardBackgroundColor="#FFF"
+    app:ignore="NamespaceTypo">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"
+        android:orientation="vertical"
+        >
+        <TextView
+            android:id="@+id/txt_producto_nombre"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:text="Nombre"
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:textColor="#58595b"
+            android:textSize="18sp"
+            />
+
+        <TextView
+            android:id="@+id/txt_texto_producto_codbarras"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cod. Barra:"
+            android:textStyle="bold"
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:textColor="#58595b"
+            android:textSize="18sp"
+            android:layout_below="@+id/txt_producto_nombre"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:id="@+id/txt_producto_codbarras"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cod. barras"
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:textColor="#58595b"
+            android:textSize="18sp"
+            android:layout_alignBaseline="@+id/txt_texto_producto_codbarras"
+            android:layout_alignBottom="@+id/txt_texto_producto_codbarras"
+            android:layout_toEndOf="@+id/txt_texto_producto_codbarras"
+            android:layout_marginLeft="5dp"/>
+
+        <TextView
+            android:id="@+id/txt_texto_producto_marca"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Marca:"
+            android:textStyle="bold"
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:textColor="#58595b"
+            android:textSize="18sp"
+            android:layout_below="@+id/txt_texto_producto_codbarras"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:id="@+id/txt_producto_marca"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Marca"
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:textColor="#58595b"
+            android:textSize="18sp"
+            android:layout_below="@+id/txt_producto_codbarras"
+            android:layout_alignStart="@+id/txt_producto_codbarras" />
+
+        <TextView
+            android:id="@+id/txt_texto_producto_tipo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tipo:"
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:textColor="#58595b"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_below="@+id/txt_texto_producto_marca"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:id="@+id/txt_producto_tipo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tipo"
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:textColor="#58595b"
+            android:textSize="18sp"
+            android:layout_below="@+id/txt_producto_marca"
+            android:layout_alignStart="@+id/txt_producto_marca" />
+
+        <TextView
+            android:id="@+id/txt_producto_precio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:text="Precio"
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:textColor="#58595b"
+            android:textSize="18sp"
+            android:gravity="right"
+            android:layout_below="@+id/txt_producto_tipo"
+            android:layout_alignParentEnd="true" />
+
+
+        <TextView
+            android:id="@+id/txt_texto_producto_stock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="En stock:"
+            android:layout_marginTop="8dp"
+            android:textStyle="bold"
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:textColor="#58595b"
+            android:textSize="18sp"
+            android:layout_below="@+id/txt_producto_precio"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:id="@+id/txt_producto_stock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Stock"
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:textColor="#58595b"
+            android:textSize="18sp"
+            android:layout_alignBaseline="@+id/txt_texto_producto_stock"
+            android:layout_alignBottom="@+id/txt_texto_producto_stock"
+            android:layout_toEndOf="@+id/txt_texto_producto_stock"
+            android:layout_marginLeft="5dp"/>
+        <TextView
+            android:id="@+id/txt_texto_producto_inventario"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="En inventario:"
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:textColor="#58595b"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginStart="35dp"
+            android:layout_alignBaseline="@+id/txt_producto_stock"
+            android:layout_alignBottom="@+id/txt_producto_stock"
+            android:layout_toEndOf="@+id/txt_producto_stock" />
+        <TextView
+            android:id="@+id/txt_producto_inventario"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="inventario"
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:textColor="#58595b"
+            android:textSize="18sp"
+            android:layout_marginLeft="5dp"
+            android:layout_alignBaseline="@+id/txt_texto_producto_inventario"
+            android:layout_alignBottom="@+id/txt_texto_producto_inventario"
+            android:layout_toEndOf="@+id/txt_texto_producto_inventario" />
+
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>

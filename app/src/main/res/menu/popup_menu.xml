@@ -1,28 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    >
+    <item
+        android:id="@+id/btn_descargar_datosempresa"
+        android:icon="@mipmap/ic_config_menu"
+        android:title="Desc. Info. Empresa"
+        app:itemTextAppearance="@style/menu_text_style"
+        />
     <item
         android:id="@+id/btn_descargar_catalogo"
-        android:icon="@mipmap/ic_menu_desc_sub"
-        android:title="Descargar Catalogo"/>
+        android:icon="@mipmap/ic_config_menu"
+        android:title="Descargar Catálogo"/>
     <item
         android:id="@+id/btn_descargar_inventario"
-        android:icon="@mipmap/ic_menu_desc_sub"
+        android:icon="@mipmap/ic_config_menu"
         android:title="Descargar Inventario" />
-    <item
-        android:id="@+id/btn_descargar_deudas"
-        android:icon="@mipmap/ic_menu_desc_sub"
-        android:title="Descargar Deudas" />
 
     <item
-        android:id="@+id/btn_subir_ventas"
-        android:icon="@mipmap/ic_menu_desc_sub"
-        android:title="Subir Ventas"/>
+        android:id="@+id/btn_descargar_recibos"
+        android:icon="@mipmap/ic_config_menu"
+        android:title="Descargar Recibos" />
+
+
     <item
-        android:id="@+id/btn_subir_recibos"
-        android:icon="@mipmap/ic_menu_desc_sub"
-        android:title="Subir Recibos" />
+        android:id="@+id/btn_imprimir_liquidacion"
+        android:icon="@mipmap/ic_config_menu"
+        android:title="Imprimir Liquidación"
+        />
+
     <item
-        android:id="@+id/btn_devolver_inventario"
-        android:icon="@mipmap/ic_menu_desc_sub"
-        android:title="Devolver Inventario" />
+        android:id="@+id/btn_imprimir_orden_carga"
+        android:icon="@mipmap/ic_config_menu"
+        android:title="Imprimir Orden de carga" />
+
+    <item
+        android:id="@+id/btn_imprimir_devolucion"
+        android:icon="@mipmap/ic_config_menu"
+        android:title="Imprimir Devolución" />
+
 </menu>

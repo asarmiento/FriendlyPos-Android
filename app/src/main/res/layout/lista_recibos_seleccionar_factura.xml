@@ -1,0 +1,69 @@
+<androidx.cardview.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/tools"
+    android:id="@+id/cardViewSelecFacRecibos"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="3dp"
+    card_view:cardBackgroundColor="#FFF"
+    app:ignore="NamespaceTypo">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"
+        android:orientation="vertical"
+        >
+        <TextView
+            android:id="@+id/txt_producto_factura_numeracionRecibos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textSize="19sp"
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:textColor="#58595b"
+            android:text="Numeracion"
+       />
+
+
+        <TextView
+            android:id="@+id/txt_producto_factura_TotalRecibos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Total Factura"
+            android:textSize="18sp"
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:textColor="#58595b"
+            android:layout_marginTop="5dp"
+            android:layout_below="@+id/txt_producto_factura_numeracionRecibos"
+            android:layout_alignParentStart="true" />
+
+
+        <TextView
+            android:id="@+id/txt_producto_factura_PagoRecibos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pagado"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:textColor="#58595b"
+            android:layout_below="@+id/txt_producto_factura_TotalRecibos"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:id="@+id/txt_producto_factura_FaltanteRecibos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Restante"
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:textColor="#58595b"
+            android:layout_alignBaseline="@+id/txt_producto_factura_PagoRecibos"
+            android:layout_alignBottom="@+id/txt_producto_factura_PagoRecibos"
+            android:layout_alignParentEnd="true" />
+
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>

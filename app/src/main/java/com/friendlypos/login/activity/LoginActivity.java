@@ -1,186 +1,325 @@
 package com.friendlypos.login.activity;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.textfield.TextInputLayout;
+import androidx.appcompat.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
+import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
+
 import com.friendlypos.R;
 import com.friendlypos.app.broadcastreceiver.NetworkStateChangeReceiver;
-import com.friendlypos.login.controller.RealmController;
-import com.friendlypos.login.datamanager.DataManager;
-import com.friendlypos.login.fragment.LoginFragment;
-import com.friendlypos.login.helper.InitHelper;
-import com.friendlypos.login.interfaces.LoginListener;
-import com.friendlypos.login.interfaces.ServiceCallback;
-import com.friendlypos.login.modelo.AppResponse;
-import com.friendlypos.login.util.SecurePreferences;
+import com.friendlypos.application.datamanager.BaseManager;
+import com.friendlypos.application.interfaces.RequestInterface;
+import com.friendlypos.application.util.Functions;
+import com.friendlypos.login.modelo.User;
+import com.friendlypos.login.modelo.UserError;
+import com.friendlypos.login.modelo.UserResponse;
+import com.friendlypos.login.util.Properties;
+import com.friendlypos.login.util.SessionPrefes;
 import com.friendlypos.principal.activity.MenuPrincipal;
+import com.friendlypos.principal.helpers.DescargasHelper;
 
+import org.sufficientlysecure.htmltextview.HtmlTextView;
+
+import java.io.IOException;
+
+import butterknife.Bind;
 import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
-public class LoginActivity extends BaseActivity implements InitHelper, NetworkStateChangeReceiver.InternetStateHasChange,
-        LoginListener {
+public class LoginActivity extends AppCompatActivity {
 
-    public static final String TAG = LoginActivity.class.getSimpleName();
-
+    private RequestInterface api;
     private NetworkStateChangeReceiver networkStateChangeReceiver;
+    private ProgressDialog progress;
+    DescargasHelper download1;
+    SessionPrefes session;
+
+    @Bind(R.id.usuario)
+    EditText mUserIdView;
+
+    @Bind(R.id.contraseña)
+    EditText mPasswordView;
+
+    @Bind(R.id.image_logo)
+    ImageView mLogoView;
+
+    @Bind(R.id.float_label_user_id)
+    TextInputLayout mFloatLabelUserId;
+
+    @Bind(R.id.float_label_password)
+    TextInputLayout mFloatLabelPassword;
+
+    @Bind(R.id.login_progress)
+    View mProgressView;
+
+    @Bind(R.id.login_form)
+    View mLoginFormView;
+
+    @Bind(R.id.email_sign_in_button)
+    Button mSignInButton;
+
+    @Bind(R.id.RLLogin)
+    RelativeLayout RLLogin;
+    Properties properties;
+
+    Context context = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setContentView(R.layout.activity_login);
         super.onCreate(savedInstanceState);
-        init();
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        setContentView(R.layout.activity_login);
+        ButterKnife.bind(this);
+        context = this;
+        session = new SessionPrefes(getApplicationContext());
+        properties = new Properties(getApplicationContext());
+        download1 = new DescargasHelper(LoginActivity.this);
+        //
+        if (properties.getUrlWebsrv() == null) {
+            //if ("http://"+properties.getUrlWebsrv() == null) {
+            properties.setUrlWebsrv("friendlyaccount.com");
+          //  Toast.makeText(this, "URL: " + "http://"+properties.getUrlWebsrv() + "",Toast.LENGTH_SHORT).show();
+        } else {
+          //  Toast.makeText(this, "URL1: " + "http://"+properties.getUrlWebsrv() + "",Toast.LENGTH_SHORT).show();
+        }
+
+
+        if (session.isLoggedIn()){
+            startActivity(new Intent(this, LoginActivity.class));
+            finish();
+        }
+        initProgressbar();
+        HtmlTextView copy = (HtmlTextView) findViewById(R.id.copyright);
+        copy.setHtmlFromString("<font size=\"7sp\"><a href=\"http://www.sistemasamigables.com/\">" + Functions.getVesionNaveCode(context) + " " + context.getString(R.string.credits) + "</a></font>", new HtmlTextView.LocalImageGetter());
+
+        networkStateChangeReceiver = new NetworkStateChangeReceiver();
+
+        mLogoView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                ShowOpenSettings();
+                return false;
+            }
+        });
+
+        // Setup
+        mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+
+            @Override
+            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
+                if (id == R.id.login || id == EditorInfo.IME_NULL) {
+                    if (!isOnline()) {
+                        showLoginError(getString(R.string.error_network));
+                        return false;
+                    }
+                    attemptLogin();
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        mSignInButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                if (!isOnline()) {
+                    showLoginError(getString(R.string.error_network));
+                    return;
+                }
+
+                attemptLogin();
+
+            }
+        });
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        ButterKnife.unbind(this);
-        unregisterReceiver(networkStateChangeReceiver);
+    private void initProgressbar() {
+        progress = new ProgressDialog(this);
+        progress.setMessage("Iniciando sesión");
+        progress.setCanceledOnTouchOutside(false);
     }
 
-    @Override
-    public void init() {
-        initFrontEnd();
-        initBackEnd();
-    }
+    private void attemptLogin() {
+        progress.show();
+        // Reset errors.
+        mFloatLabelUserId.setError(null);
+        mFloatLabelPassword.setError(null);
 
-    @Override
-    public void initFrontEnd() {
-        String currentUser = getCurrentUser();
-        if (currentUser == null) {
-            replaceCurrentFragment(LoginFragment.newInstance());
+        // Store values at the time of the login attempt.
+        final String userdatos = mUserIdView.getText().toString();
+        final String userId = userdatos.trim();
+
+        final String password = mPasswordView.getText().toString();
+
+        boolean cancel = false;
+        View focusView = null;
+
+        // Check for a valid password, if the user entered one.
+        if (TextUtils.isEmpty(password)) {
+            progress.dismiss();
+            mFloatLabelPassword.setError(getString(R.string.error_field_required));
+            focusView = mFloatLabelPassword;
+            cancel = true;
+        }
+        else if (!isPasswordValid(password)) {
+            progress.dismiss();
+            mFloatLabelPassword.setError(getString(R.string.error_invalid_password));
+            focusView = mFloatLabelPassword;
+            cancel = true;
+        }
+
+        // Verificar si el ID tiene contenido.
+        if (TextUtils.isEmpty(userId)) {
+            progress.dismiss();
+            mFloatLabelUserId.setError(getString(R.string.error_field_required));
+            focusView = mFloatLabelUserId;
+            cancel = true;
+        }
+        else if (!isUserIdValid(userId)) {
+            progress.dismiss();
+            mFloatLabelUserId.setError(getString(R.string.error_invalid_user_id));
+            focusView = mFloatLabelUserId;
+            cancel = true;
+        }
+
+        if (cancel) {
+            // There was an error; don't attempt login and focus the first
+            // form field with an error.
+            focusView.requestFocus();
         }
         else {
-            goToPrincipalScreen(currentUser, false);
+            // Mostrar el indicador de carga y luego iniciar la petición asíncrona.
+
+            api = BaseManager.getApi();
+            Call<UserResponse> call = api.loginUser(new User(userId, password));
+
+            call.enqueue(new Callback<UserResponse>() {
+
+                @Override
+                public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
+                    progress.dismiss();
+                    // Procesar errores
+                    if (!response.isSuccessful()) {
+                        String error = "Ha ocurrido un error. Contacte al administrador";
+                        if (response.errorBody()
+                            .contentType()
+                            .subtype()
+                            .equals("json")) {
+                            UserError userError = UserError.fromResponseBody(response.errorBody());
+
+                            error = userError.getMessage();
+                            Log.d("LoginActivity", userError.getMessage());
+                        }
+                        else {
+                            try {
+                                // Reportar causas de error no relacionado con la API
+                                Log.d("LoginActivity", response.errorBody().string());
+                            }
+                            catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        showLoginError(error);
+
+                        return;
+                    }
+
+                    // Guardar afiliado en preferencias
+                    session.guardarDatosUsuario(response.body());
+                    Log.d("UserEntrar", response.body().getToken_type()+"");
+                    session.guardarDatosUsuarioas(userId, password);
+                    Log.d("UserEntrar1", userId + " " + password+"");
+                    download1.descargarUsuarios(context);
+                    entrarMenuPrincipal();
+
+                    //showAppointmentsScreen();
+                }
+
+                @Override
+                public void onFailure(Call<UserResponse> call, Throwable t) {
+                    progress.dismiss();
+                    showLoginError(t.getMessage());
+                }
+            });
         }
+    }final Handler handler = new Handler();
+    protected void entrarMenuPrincipal(){
+        Thread t = new Thread(){
+            public void run(){
+                try{
+                   // Thread.sleep(10000);
+                    Thread.sleep(1000);
+                }
+                catch (InterruptedException e){
+                    e.printStackTrace();
+                }
+                handler.post(irMenuPrincipal);
+            }
+        };
+        t.start();
+    }
+    final Runnable irMenuPrincipal = new Runnable() {
+        @Override
+        public void run() {
+            showAppointmentsScreen();}
+    };
+
+    private boolean isUserIdValid(String userId) {
+        return userId.length() > 10;
     }
 
-    @Override
-    public void initBackEnd() {
-        networkStateChangeReceiver = new NetworkStateChangeReceiver();
-        networkStateChangeReceiver.setInternetStateHasChange(this);
+    private boolean isPasswordValid(String password) {
+        return password.length() > 4;
     }
 
-    public boolean isNetworkAvailable() {
+    private void showAppointmentsScreen() {
+
+        startActivity(new Intent(this, MenuPrincipal.class));
+        finish();
+    }
+
+    private void showLoginError(String error) {
+        Toast.makeText(this, error, Toast.LENGTH_LONG).show();
+    }
+
+    private void ShowOpenSettings(){
+        Snackbar show = Snackbar.make(RLLogin,"Abrir Configuraciones?", Snackbar.LENGTH_INDEFINITE).setAction("Abrir",
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent i = new Intent(getApplicationContext(), ConfiguracionActivity.class);
+                        startActivity(i);
+                    }
+                });
+        View colorNoti= show.getView();
+
+        colorNoti.setBackgroundColor(context.getResources().getColor(R.color.colorPrimaryDark));
+        show.show();
+    }
+
+    private boolean isOnline() {
         return networkStateChangeReceiver.isNetworkAvailable(this);
     }
 
-    public boolean isValidPassword(String pass, EditText password) {
-        boolean result;
-        if (!TextUtils.isEmpty(pass)) {
-            password.setError(null);
-            result = true;
-        }
-        else {
-            password.setError(getString(R.string.Invalid_Password));
-            result = false;
-        }
-        return result;
-    }
-
-    public boolean isValidEmail(String email_address, EditText email) {
-        boolean result;
-        if (!TextUtils.isEmpty(email_address) && android.util.Patterns.EMAIL_ADDRESS.matcher(email_address).matches()) {
-            email.setError(null);
-            result = true;
-        }
-        else {
-            email.setError(getString(R.string.Invalid_Email_Address));
-            result = false;
-        }
-        return result;
-    }
-
-    @Override
-    public void networkChangedState(boolean isInternetAvailable) {
-        //TODO IMPLEMENT LISTENER
-    }
-
-    private void saveCurrentUser(String user, String password) {
-        SecurePreferences preferences = new SecurePreferences(this, "test", "test", true);
-        preferences.put("user", user);
-        preferences.put("pass", password);
-    }
-
-    private String getCurrentUser() {
-        SecurePreferences preferences = new SecurePreferences(this, "test", "test", true);
-        if (preferences.containsKey("user")) {
-            return preferences.getString("pass");
-        }
-        else {
-            return null;
-        }
-    }
-
-    @Override
-    public void doLogin(String user, String password, ServiceCallback callback) {
-        if (isNetworkAvailable()) {
-            new DataManager(this).login(user, password, callback);
-        }
-        else {
-            showNoInternetConnectionMessage(TAG);
-        }
-    }
-
-    @Override
-    public void onLoginSuccess(AppResponse response, String user, String pass) {
-        if (response.getError() == null) {
-            saveCurrentUser(user, pass);
-            Log.d(TAG, response.toString());
-            goToPrincipalScreen(user, true);
-        }
-        else {
-            onLoginError(response.getError());
-        }
-    }
-
-    @Override
-    public void onLoginError(String errorMessage) {
-        Toast.makeText(this, getString(R.string.error_login), Toast.LENGTH_SHORT).show();
-        Log.e(TAG, errorMessage);
-    }
-
- /*   @Override
-    public void doRegister(String email, String password, ServiceCallback callback) {
-        if (isNetworkAvailable()) {
-            new DataManager(this).register(email, password, callback);
-        }
-        else {
-            showNoInternetConnectionMessage(TAG);
-        }
-    }*/
-
-    @Override
-    public void onRegisterSuccess(AppResponse saviorResponse) {
-        if (saviorResponse.getError() == null) {
-            Log.d(TAG, saviorResponse.toString());
-            goToLoginScreen();
-        }
-        else {
-            onLoginError(saviorResponse.getError());
-        }
-    }
-
-    @Override
-    public void onRegisterError(String errorMessage) {
-        /*Toast.makeText(this, getString(R.string.error_register), Toast.LENGTH_SHORT).show();
-        Log.e(TAG, errorMessage);*/
-    }
-
-    private void goToPrincipalScreen(String user, boolean firstTime) {
-
-        Toast.makeText(this, "login success", Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(this, MenuPrincipal.class);
-        startActivity(intent);
-        finish();
-    }
-
-    private void goToLoginScreen() {
-        Intent intent = new Intent(this, LoginActivity.class);
-        startActivity(intent);
-        finish();
-    }
 }
+

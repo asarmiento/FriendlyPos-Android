@@ -1,94 +1,194 @@
 package com.friendlypos.principal.activity;
+import android.app.ActivityManager;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.core.view.MenuItemCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
-
+import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.WindowManager;
+import android.widget.Toast;
 
 import com.friendlypos.R;
-import com.friendlypos.application.datamanager.BaseManager;
+import com.friendlypos.application.bluetooth.PrinterService;
+import com.friendlypos.login.activity.LoginActivity;
+import com.friendlypos.login.util.SessionPrefes;
 import com.friendlypos.principal.adapters.ProductosAdapter;
-import com.friendlypos.principal.interfaces.RequestInterface;
 import com.friendlypos.principal.modelo.Productos;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import io.realm.Realm;
+import io.realm.RealmQuery;
+import io.realm.RealmResults;
 
-public class ProductosActivity extends AppCompatActivity {
+public class ProductosActivity extends BluetoothActivity implements SearchView.OnQueryTextListener{
 
-    private RecyclerView recyclerView;
+    @Bind(R.id.toolbar)
+    Toolbar toolbar;
+
+    @Bind(R.id.recyclerView)
+    RecyclerView recyclerView;
+
     private ProductosAdapter adapter;
-    public String mBaseUrl = "http://friendlyaccount.com/";
-
+    private Realm realm;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.activity_productos);
-        initViews();
-    }
+        ButterKnife.bind(this);
 
-    private void initViews() {
-        recyclerView = (RecyclerView) findViewById(R.id.productos_recycler_view);
+        // Redirección al Login
+        if (!SessionPrefes.get(this).isLoggedIn()) {
+            startActivity(new Intent(this, LoginActivity.class));
+            finish();
+            return;
+        }
+
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        connectToPrinter();
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-        recyclerView.setLayoutManager(layoutManager);
-        getClient();
+        adapter = new ProductosAdapter(getList(),ProductosActivity.this );
+        recyclerView.setAdapter(adapter);
+
+        Log.d("lista", getList() + "");
+    }
+
+    private List<Productos> getList(){
+        realm = Realm.getDefaultInstance();
+        RealmQuery<Productos> query = realm.where(Productos.class);
+        RealmResults<Productos> result1 = query.findAll();
+        if(result1.size() == 0){
+            Toast.makeText(getApplicationContext(),"Favor descargar datos primero",Toast.LENGTH_LONG).show();
+        }
+        return result1;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+
+                Intent intent = new Intent(ProductosActivity.this, MenuPrincipal.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                finish();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
+
+        final MenuItem item = menu.findItem(R.id.action_search);
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
+        searchView.setOnQueryTextListener(this);
+
+        MenuItemCompat.setOnActionExpandListener(item,
+                new MenuItemCompat.OnActionExpandListener() {
+                    @Override
+                    public boolean onMenuItemActionCollapse(MenuItem item) {
+                        // Do something when collapsed
+                        adapter.setFilter(getList());
+                        return true; // Return true to collapse action view
+                    }
+
+                    @Override
+                    public boolean onMenuItemActionExpand(MenuItem item) {
+                        // Do something when expanded
+                        return true; // Return true to expand action view
+                    }
+                });
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        final List<Productos> filteredModelList = filter(getList(), newText);
+        adapter.setFilter(filteredModelList);
+        return true;
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
     }
 
 
-    private void getClient() {
-      /*  Retrofit retrofit = null;
-        OkHttpClient httpClient = new OkHttpClient.Builder()
-                .addInterceptor(new Interceptor() {
-                    @Override
-                    public okhttp3.Response intercept(Chain chain) throws IOException {
-                        Request.Builder ongoing = chain.request().newBuilder();
-                        ongoing.addHeader("Accept", "application/json");
-                        ongoing.addHeader("Authorization", "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImNmNzhkZjlkY2MwMjI2ZjdkNTkzMDNiZjY0NTM0YTYxZWJjMDE5NzkzYjdmN2JhOWE3MDBhMjVkYjc2ODkyNTAwNDU0YzViMWVhNzZlMmI1In0.eyJhdWQiOiIyIiwianRpIjoiY2Y3OGRmOWRjYzAyMjZmN2Q1OTMwM2JmNjQ1MzRhNjFlYmMwMTk3OTNiN2Y3YmE5YTcwMGEyNWRiNzY4OTI1MDA0NTRjNWIxZWE3NmUyYjUiLCJpYXQiOjE1MDUzMzIwMDcsIm5iZiI6MTUwNTMzMjAwNywiZXhwIjoxNTM2ODY4MDA3LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.Bwl6qiipcwS8tWlzAwb-pw3-tPXLr54fmv3lx7jrwnCUWzyTKO9B9cGzNRw3C9mPejqw2PnOTtsCr3fVBy_3CB_wgEqWtITXYq5iiBvylJ7SjEugkgOy9bJqKomkROtmk1zC7E88g8OvZi6trgHxluLG8pVGf4VuQr89arFnAEkYB1T-P0xPnS3idX9mni5KSydxtWCvdXJmFg61Tbgs9X_KHZ64vAZWFWFbVzmEMtdL_S0Zu-u_hoksG6TA1cCa7qnY6nq_ByGMyT1RhvlVI_AA2RhtYXs6y4EbAT6XRrj39EM7kfonI9Vs1Q7vw-fY-vFdm1BC-V5ek5n7YfslcmsWfNvEW1iLAP8ezBuHdo9DHEK5Kz9Jm2DmV90Fq2JlP2bkhf78MxlhbQjCZbiOxouvhC8DuiUGvZqKJTZn-N_tOSVZAmhdT5UuikwLvZqkAZ4puvc-oNECwxyDJrcc_Q4Ll2amV9YmeOZikxXEvwc5TtCXjnvITYlvObqfmCv6ajQlH4L4OS056tDsopDPJ570DLTWbTJNLtoukiSJ4dQ5dPj7vRhjjgU4tB4o8PA9DXx2uLoKJOFYtkbYK-xxYe5pCSc-cfa586lS85GSSXBUzuoMWlRyWCFtdxeh4TWtE-aU2zEVpZzbGjy1iGR2VrvjpNPWeVowaFi4cIbQq_w"
-                        );
-                        return chain.proceed(ongoing.build());
-                    }
-                })
-                .build();
-        retrofit = new Retrofit.Builder()
-                .baseUrl("http://friendlyaccount.com/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .client(httpClient)
-                .build();
-*/
-        RequestInterface request = BaseManager.getClient(mBaseUrl).create(RequestInterface.class);
+    private List<Productos> filter(List<Productos> models, String query) {
+        query = query.toLowerCase();
 
-        /**
-         GET List Resources
-         **/
-        Call<Productos> call = request.getJSON1();
-        call.enqueue(new Callback<Productos>() {
-            @Override
-            public void onResponse(Call<Productos> call, Response<Productos> response) {
-
-
-                Log.d("TAG", response.code() + "");
-
-                Productos resource = response.body();
-
-                List<Productos.Product> datumList = resource.datosProductos;
-
-                adapter = new ProductosAdapter(datumList);
-                recyclerView.setAdapter(adapter);
-
+        final List<Productos> filteredModelList = new ArrayList<>();
+        for (Productos model : models) {
+            final String text = model.getDescription().toLowerCase();
+            if (text.contains(query)) {
+                filteredModelList.add(model);
             }
+        }
+        return filteredModelList;
+    }
 
-            @Override
-            public void onFailure(Call<Productos> call, Throwable t) {
-                call.cancel();
+    private void connectToPrinter() {
+        //if(bluetoothStateChangeReceiver.isBluetoothAvailable()) {
+        getPreferences();
+        if (printer_enabled) {
+            if (printer == null || printer.equals("")) {
+//                AlertDialog d = new AlertDialog.Builder(context)
+//                        .setTitle(getResources().getString(R.string.printer_alert))
+//                        .setMessage(getResources().getString(R.string.message_printer_not_found))
+//                        .setNegativeButton(getString(android.R.string.ok), null)
+//                        .show();
             }
-        });
+            else {
+                if (!isServiceRunning(PrinterService.CLASS_NAME)) {
+                    PrinterService.startRDService(getApplicationContext(), printer);
+                }
+            }
+        }
+    }
+    //Check if the printing service is running
+    public boolean isServiceRunning(String serviceClassName) {
+        final ActivityManager activityManager = (ActivityManager) getApplicationContext().getSystemService(Context.ACTIVITY_SERVICE);
+        final List<ActivityManager.RunningServiceInfo> services = activityManager.getRunningServices(Integer.MAX_VALUE);
 
+        for (ActivityManager.RunningServiceInfo runningServiceInfo : services) {
+            if (runningServiceInfo.service.getClassName().equals(serviceClassName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if ((keyCode == KeyEvent.KEYCODE_BACK)) {
+            Intent intent = new Intent(ProductosActivity.this, MenuPrincipal.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            finish();
+            Log.d("ATRAS", "Atras");
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#607d8b</color>
+    <color name="colorPrimary">#2c2b7c</color>
     <color name="colorPrimaryDark">#455a64</color>
     <color name="colorAccent">#BDBDBD</color>
     <color name="background">#009688</color>
@@ -10,5 +10,6 @@
     <color name="divider">#BDBDBD</color>
     <color name="item_background">#607d8b</color>
     <color name="icons">#FFFFFF</color>
-
+    <color name="adsd">#FF0000</color>
+    <color name="morado">#F15A29</color>
 </resources>

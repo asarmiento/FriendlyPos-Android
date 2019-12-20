@@ -1,57 +1,142 @@
 package com.friendlypos.principal.adapters;
 
-/**
- * Created by DelvoM on 18/09/2017.
- */
 
-import android.support.v7.widget.RecyclerView;
+import android.content.Context;
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
+import android.widget.Toast;
 
 import com.friendlypos.R;
+import com.friendlypos.distribucion.modelo.Inventario;
+import com.friendlypos.distribucion.modelo.Marcas;
 import com.friendlypos.principal.modelo.Productos;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class ProductosAdapter extends RecyclerView.Adapter<ProductosAdapter.ViewHolder> {
-    private List<Productos.Product> android;
+import io.realm.Realm;
 
-    public ProductosAdapter(List<Productos.Product> android) {
-        this.android = android;
+/**
+ * Created by DelvoM on 21/09/2017.
+ */
+
+public class ProductosAdapter extends RecyclerView.Adapter<ProductosAdapter.CharacterViewHolder> {
+
+    private List<Productos> productosList;
+    private static Double precio = 0.0;
+    Context ctx;
+    public ProductosAdapter(List<Productos> productosList, Context context) {
+        this.ctx = context;
+        this.productosList = productosList;
     }
 
     @Override
-    public ProductosAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.lista_productos, viewGroup, false);
-        return new ViewHolder(view);
+    public CharacterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.lista_productos, parent, false);
+
+        //  CharacterViewHolder placeViewHolder = new CharacterViewHolder(view);
+        // placeViewHolder.cardView.setOnClickListener(new ProductosAdapter(placeViewHolder, parent));
+        return new ProductosAdapter.CharacterViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(ProductosAdapter.ViewHolder viewHolder, int i) {
+    public void onBindViewHolder(ProductosAdapter.CharacterViewHolder holder, final  int position) {
+        Productos producto = productosList.get(position);
+        Realm realm = Realm.getDefaultInstance();
+        String marca="";
+        int tamaño = Math.toIntExact(realm.where(Marcas.class).count());
 
-        viewHolder.tv_name.setText(android.get(i).getDescription());
-        viewHolder.tv_version.setText(android.get(i).getBarcode());
-        viewHolder.tv_api_level.setText(android.get(i).getSalePrice());
+        if (tamaño == 0)  {
+            Log.d("marca", "null" +tamaño);
+            Toast.makeText(ctx, "La marca no se ha descargado", Toast.LENGTH_SHORT).show();
+        }else{
+            marca = realm.where(Marcas.class).equalTo("id", producto.getBrand_id()).findFirst().getName();
+        }
+
+
+
+        //  String tipoProducto = realm.where(TipoProducto.class).equalTo("id", producto.getProduct_type_id()).findFirst().getName();
+        Inventario inventario = realm.where(Inventario.class).equalTo("product_id", producto.getId()).findFirst();
+        precio = Double.parseDouble(producto.getSale_price());
+        String tipoProducto;
+        Double impuesto = producto.getIva();
+
+        if(impuesto == 0.0){
+
+            tipoProducto = "Exento";
+        }else{
+            tipoProducto = "Gravado";
+        }
+
+        realm.close();
+
+        holder.txt_producto_nombre.setText(producto.getDescription());
+        holder.txt_producto_codbarras.setText(producto.getBarcode());
+        holder.txt_producto_marca.setText(marca);
+        holder.txt_producto_tipo.setText(tipoProducto);
+        holder.txt_producto_stock.setText(producto.getStock_max());
+
+        if(inventario == null){
+            holder.txt_producto_inventario.setText("0.0");
+        }
+        else{
+            holder.txt_producto_inventario.setText(inventario.getAmount());
+        }
+
+
+        holder.txt_producto_precio.setText(String.format("%,.2f", precio));
+
+    }
+
+
+    @Override
+    public long getItemId(int position) {
+        return 0;
     }
 
     @Override
     public int getItemCount() {
-        return android.size();
+        return productosList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
-        private TextView tv_name,tv_version,tv_api_level;
-        public ViewHolder(View view) {
+    public void setFilter(List<Productos> countryModels){
+        productosList = new ArrayList<>();
+        productosList.addAll(countryModels);
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return 0;
+    }
+
+    public static class CharacterViewHolder extends RecyclerView.ViewHolder {
+
+        private TextView txt_producto_nombre,txt_producto_codbarras,txt_producto_marca, txt_producto_tipo, txt_producto_stock, txt_producto_inventario, txt_producto_precio;
+        protected CardView cardView;
+
+        public CharacterViewHolder(View view) {
             super(view);
-
-            tv_name = (TextView)view.findViewById(R.id.tv_name);
-            tv_version = (TextView)view.findViewById(R.id.tv_version);
-            tv_api_level = (TextView)view.findViewById(R.id.tv_api_level);
-
+            cardView = (CardView) view.findViewById(R.id.cardViewProductos);
+            txt_producto_nombre = (TextView)view.findViewById(R.id.txt_producto_nombre);
+            txt_producto_codbarras = (TextView)view.findViewById(R.id.txt_producto_codbarras);
+            txt_producto_marca = (TextView)view.findViewById(R.id.txt_producto_marca);
+            txt_producto_tipo = (TextView)view.findViewById(R.id.txt_producto_tipo);
+            txt_producto_stock = (TextView)view.findViewById(R.id.txt_producto_stock);
+            txt_producto_inventario = (TextView)view.findViewById(R.id.txt_producto_inventario);
+            txt_producto_precio = (TextView)view.findViewById(R.id.txt_producto_precio);
         }
+
     }
 
+    @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+    }
 }
+

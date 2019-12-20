@@ -1,0 +1,437 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/billFrame"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:paddingTop="5dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="85dp"
+            android:layout_margin="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="#d1d3d4"
+            android:padding="5dp">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/contraseña_wrapper"
+                style="@style/TextInputLayoutTotal"
+                android:layout_alignParentBottom="true"
+                app:hintTextAppearance="@style/TextAppearence.App.TextInputLayout.Dark1">
+
+                <EditText
+                    android:id="@+id/client_name"
+                    android:textSize="20sp"
+                    style="@style/Register_EditText1"
+                    android:hint="Nombre de Cliente" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#FFF"
+            android:orientation="vertical">
+
+
+            <EditText
+                android:id="@+id/client_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Identificacion"
+                android:textSize="18sp"
+                android:fontFamily="@font/monse"
+                app:fontFamily="@font/monse"
+                android:textColor="#58595b"
+                android:visibility="gone" />
+
+            <EditText
+                android:id="@+id/client_contact"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:fontFamily="@font/monse"
+                app:fontFamily="@font/monse"
+                android:textColor="#58595b"
+                android:hint="Informacion de contacto"
+                android:visibility="gone" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp">
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:textSize="18sp"
+                    android:fontFamily="@font/monse"
+                    app:fontFamily="@font/monse"
+                    android:textColor="#58595b"
+                    android:gravity="end"
+                    android:text="Subtotal gravado"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <TextView
+                    android:id="@+id/subGrabado"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:fontFamily="@font/monse"
+                    app:fontFamily="@font/monse"
+                    android:textColor="#58595b"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginLeft="5dp"
+                    android:layout_toEndOf="@+id/textView"
+                    android:layout_toRightOf="@+id/textView"
+                    android:gravity="end"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:text="--"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp">
+
+                <TextView
+                    android:id="@+id/textViewE"
+                    android:layout_width="wrap_content"
+                    android:textSize="18sp"
+                    android:fontFamily="@font/monse"
+                    app:fontFamily="@font/monse"
+                    android:textColor="#58595b"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:gravity="end"
+                    android:text="Subtotal exento"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <TextView
+                    android:id="@+id/subExento"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:textSize="18sp"
+                    android:fontFamily="@font/monse"
+                    app:fontFamily="@font/monse"
+                    android:textColor="#58595b"
+                    android:layout_marginLeft="5dp"
+                    android:layout_toEndOf="@+id/textViewE"
+                    android:layout_toRightOf="@+id/textViewE"
+                    android:gravity="end"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:text="--"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp">
+
+                <TextView
+                    android:id="@+id/textViewSt"
+                    android:textSize="18sp"
+                    android:fontFamily="@font/monse"
+                    app:fontFamily="@font/monse"
+                    android:textColor="#58595b"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:gravity="end"
+                    android:text="Subtotal"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <TextView
+                    android:id="@+id/subTotal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentEnd="true"
+                    android:textSize="18sp"
+                    android:fontFamily="@font/monse"
+                    app:fontFamily="@font/monse"
+                    android:textColor="#58595b"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginLeft="5dp"
+                    android:layout_toEndOf="@+id/textViewSt"
+                    android:layout_toRightOf="@+id/textViewSt"
+                    android:gravity="end"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:text="--"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp">
+
+                <TextView
+                    android:id="@+id/textViewD"
+                    android:layout_width="wrap_content"
+                    android:textSize="18sp"
+                    android:fontFamily="@font/monse"
+                    app:fontFamily="@font/monse"
+                    android:textColor="#58595b"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:gravity="end"
+                    android:text="Descuento"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <TextView
+                    android:id="@+id/Discount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentEnd="true"
+                    android:textSize="18sp"
+                    android:fontFamily="@font/monse"
+                    app:fontFamily="@font/monse"
+                    android:textColor="#58595b"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginLeft="5dp"
+                    android:layout_toEndOf="@+id/textViewD"
+                    android:layout_toRightOf="@+id/textViewD"
+                    android:gravity="end"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:text="--"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp">
+
+                <TextView
+                    android:id="@+id/textViewI"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:textSize="18sp"
+                    android:fontFamily="@font/monse"
+                    app:fontFamily="@font/monse"
+                    android:textColor="#58595b"
+                    android:gravity="end"
+                    android:text="IVA"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <TextView
+                    android:id="@+id/IvaFact"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:textSize="18sp"
+                    android:fontFamily="@font/monse"
+                    app:fontFamily="@font/monse"
+                    android:textColor="#58595b"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginLeft="5dp"
+                    android:layout_toEndOf="@+id/textViewI"
+                    android:layout_toRightOf="@+id/textViewI"
+                    android:gravity="end"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:text="--"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp">
+
+                <TextView
+                    android:id="@+id/textViewT"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:fontFamily="@font/monse"
+                    app:fontFamily="@font/monse"
+                    android:textColor="#58595b"
+                    android:layout_centerVertical="true"
+                    android:gravity="end"
+                    android:text="@string/total"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <TextView
+                    android:id="@+id/Total"
+                    android:layout_width="wrap_content"
+                    android:textSize="18sp"
+                    android:fontFamily="@font/monse"
+                    app:fontFamily="@font/monse"
+                    android:textColor="#58595b"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginLeft="5dp"
+                    android:layout_toEndOf="@+id/textViewT"
+                    android:layout_toRightOf="@+id/textViewT"
+                    android:gravity="end"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:text="--"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp">
+
+                <TextView
+                    android:id="@+id/textViewCa"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:textSize="18sp"
+                    android:fontFamily="@font/monse"
+                    app:fontFamily="@font/monse"
+                    android:textColor="#58595b"
+                    android:gravity="end"
+                    android:text="@string/paywith"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <EditText
+                    android:id="@+id/txtPaid"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginLeft="5dp"
+                    android:layout_toEndOf="@+id/textViewCa"
+                    android:textSize="18sp"
+                    android:fontFamily="@font/monse"
+                    app:fontFamily="@font/monse"
+                    android:textColor="#58595b"
+                    android:layout_toRightOf="@+id/textViewCa"
+                    android:gravity="end"
+                    android:hint="0"
+                    android:inputType="number"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp">
+
+                <TextView
+                    android:id="@+id/textViewV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:gravity="end"
+                    android:textSize="18sp"
+                    android:fontFamily="@font/monse"
+                    app:fontFamily="@font/monse"
+                    android:textColor="#58595b"
+                    android:text="Vuelto"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <TextView
+                    android:id="@+id/txtChange"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:textSize="18sp"
+                    android:fontFamily="@font/monse"
+                    app:fontFamily="@font/monse"
+                    android:textColor="#58595b"
+                    android:layout_marginLeft="5dp"
+                    android:layout_toEndOf="@+id/textViewV"
+                    android:layout_toRightOf="@+id/textViewV"
+                    android:gravity="end"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            </RelativeLayout>
+
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/applyInvoice"
+            android:layout_width="match_parent"
+            android:textSize="18sp"
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@drawable/fondo_botones"
+            android:text="@string/save"
+            android:textColor="@color/cardview_light_background" />
+
+        <Button
+            android:id="@+id/printInvoice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:layout_margin="10dp"
+            android:background="@drawable/fondo_botones"
+            android:text="@string/print"
+            android:textColor="@color/cardview_light_background"
+            android:visibility="visible" />
+
+        <EditText
+            android:id="@+id/txtNotes"
+            android:layout_width="fill_parent"
+            android:layout_height="50dp"
+            android:textSize="18sp"
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:textColor="#58595b"
+            android:layout_margin="10dp"
+            android:hint="@string/notes" />
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

@@ -1,299 +1,306 @@
 package com.friendlypos.principal.modelo;
 
-import com.google.gson.annotations.Expose;
+import com.friendlypos.distribucion.modelo.Pivot;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.ArrayList;
-import java.util.List;
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 /**
- * Created by DelvoM on 18/09/2017.
+ * Created by DelvoM on 21/09/2017.an
  */
 
-public class Productos {
+public class Productos extends RealmObject {
 
-    @SerializedName("products")
-    public List<Product> datosProductos = new ArrayList<>();
+    @PrimaryKey
+    String id;
 
-   /* @SerializedName("products")
-    @Expose
-    private List<Product> products = null;
+    String stock_min;
+    String stock_max;
+    String barcode;
+    String code;
+    String units_per_box;
+    String description;
+    String product_category_id;
+    String product_type_id;
+    String cost;
+    String suggested;
+    String bonus;
+    String utility;
+    String percentage_of_utility;
+    String sale_price;
+    double iva;
+    String sale_price2;
+    String sale_price3;
+    String sale_price4;
+    String sale_price5;
+    String brand_id;
+    String family;
+    String sub_family;
+    String type;
+    String sale_method_id;
+    String status;
+    String updated_at;
+    @SerializedName("pivot")
+    private Pivot pivot;
 
-    public List<Product> getProducts() {
-        return products;
+    public String getId() {
+        return id;
     }
 
-    public void setProducts(List<Product> products) {
-        this.products = products;
-    }*/
+    public void setId(String id) {
+        this.id = id;
+    }
 
+    public String getStock_min() {
+        return stock_min;
+    }
 
-    public class Product {
+    public void setStock_min(String stock_min) {
+        this.stock_min = stock_min;
+    }
 
-        @SerializedName("id")
-        @Expose
-        private Integer id;
-        @SerializedName("stock_min")
-        @Expose
-        private String stockMin;
-        @SerializedName("stock_max")
-        @Expose
-        private String stockMax;
-        @SerializedName("barcode")
-        @Expose
-        private String barcode;
-        @SerializedName("code")
-        @Expose
-        private String code;
-        @SerializedName("units_per_box")
-        @Expose
-        private String unitsPerBox;
-        @SerializedName("description")
-        @Expose
-        private String description;
-        @SerializedName("product_category_id")
-        @Expose
-        private String productCategoryId;
-        @SerializedName("product_type_id")
-        @Expose
-        private String productTypeId;
-        @SerializedName("cost")
-        @Expose
-        private String cost;
-        @SerializedName("utility")
-        @Expose
-        private String utility;
-        @SerializedName("percentage_of_utility")
-        @Expose
-        private String percentageOfUtility;
-        @SerializedName("sale_price")
-        @Expose
-        private String salePrice;
-        @SerializedName("sale_price2")
-        @Expose
-        private String salePrice2;
-        @SerializedName("sale_price3")
-        @Expose
-        private String salePrice3;
-        @SerializedName("sale_price4")
-        @Expose
-        private String salePrice4;
-        @SerializedName("sale_price5")
-        @Expose
-        private String salePrice5;
-        @SerializedName("brand_id")
-        @Expose
-        private String brandId;
-        @SerializedName("family")
-        @Expose
-        private String family;
-        @SerializedName("sub_family")
-        @Expose
-        private String subFamily;
-        @SerializedName("type")
-        @Expose
-        private String type;
-        @SerializedName("sale_method_id")
-        @Expose
-        private String saleMethodId;
-        @SerializedName("status")
-        @Expose
-        private String status;
-        @SerializedName("updated_at")
-        @Expose
-        private String updatedAt;
+    public String getStock_max() {
+        return stock_max;
+    }
 
-        public Integer getId() {
-            return id;
-        }
+    public void setStock_max(String stock_max) {
+        this.stock_max = stock_max;
+    }
 
-        public void setId(Integer id) {
-            this.id = id;
-        }
+    public String getBarcode() {
+        return barcode;
+    }
 
-        public String getStockMin() {
-            return stockMin;
-        }
+    public void setBarcode(String barcode) {
+        this.barcode = barcode;
+    }
 
-        public void setStockMin(String stockMin) {
-            this.stockMin = stockMin;
-        }
+    public String getCode() {
+        return code;
+    }
 
-        public String getStockMax() {
-            return stockMax;
-        }
+    public void setCode(String code) {
+        this.code = code;
+    }
 
-        public void setStockMax(String stockMax) {
-            this.stockMax = stockMax;
-        }
+    public String getUnits_per_box() {
+        return units_per_box;
+    }
 
-        public String getBarcode() {
-            return barcode;
-        }
+    public void setUnits_per_box(String units_per_box) {
+        this.units_per_box = units_per_box;
+    }
 
-        public void setBarcode(String barcode) {
-            this.barcode = barcode;
-        }
+    public String getDescription() {
+        return description;
+    }
 
-        public String getCode() {
-            return code;
-        }
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-        public void setCode(String code) {
-            this.code = code;
-        }
+    public String getProduct_category_id() {
+        return product_category_id;
+    }
 
-        public String getUnitsPerBox() {
-            return unitsPerBox;
-        }
+    public void setProduct_category_id(String product_category_id) {
+        this.product_category_id = product_category_id;
+    }
 
-        public void setUnitsPerBox(String unitsPerBox) {
-            this.unitsPerBox = unitsPerBox;
-        }
+    public String getProduct_type_id() {
+        return product_type_id;
+    }
 
-        public String getDescription() {
-            return description;
-        }
+    public void setProduct_type_id(String product_type_id) {
+        this.product_type_id = product_type_id;
+    }
 
-        public void setDescription(String description) {
-            this.description = description;
-        }
+    public String getCost() {
+        return cost;
+    }
 
-        public String getProductCategoryId() {
-            return productCategoryId;
-        }
+    public void setCost(String cost) {
+        this.cost = cost;
+    }
 
-        public void setProductCategoryId(String productCategoryId) {
-            this.productCategoryId = productCategoryId;
-        }
+    public String getSuggested() {
+        return suggested;
+    }
 
-        public String getProductTypeId() {
-            return productTypeId;
-        }
+    public void setSuggested(String suggested) {
+        this.suggested = suggested;
+    }
 
-        public void setProductTypeId(String productTypeId) {
-            this.productTypeId = productTypeId;
-        }
+    public String getBonus() {
+        return bonus;
+    }
 
-        public String getCost() {
-            return cost;
-        }
+    public void setBonus(String bonus) {
+        this.bonus = bonus;
+    }
 
-        public void setCost(String cost) {
-            this.cost = cost;
-        }
+    public String getUtility() {
+        return utility;
+    }
 
-        public String getUtility() {
-            return utility;
-        }
+    public void setUtility(String utility) {
+        this.utility = utility;
+    }
 
-        public void setUtility(String utility) {
-            this.utility = utility;
-        }
+    public String getPercentage_of_utility() {
+        return percentage_of_utility;
+    }
 
-        public String getPercentageOfUtility() {
-            return percentageOfUtility;
-        }
+    public void setPercentage_of_utility(String percentage_of_utility) {
+        this.percentage_of_utility = percentage_of_utility;
+    }
 
-        public void setPercentageOfUtility(String percentageOfUtility) {
-            this.percentageOfUtility = percentageOfUtility;
-        }
+    public String getSale_price() {
+        return sale_price;
+    }
 
-        public String getSalePrice() {
-            return salePrice;
-        }
+    public void setSale_price(String sale_price) {
+        this.sale_price = sale_price;
+    }
 
-        public void setSalePrice(String salePrice) {
-            this.salePrice = salePrice;
-        }
+    public double getIva() {
+        return iva;
+    }
 
-        public String getSalePrice2() {
-            return salePrice2;
-        }
+    public void setIva(double iva) {
+        this.iva = iva;
+    }
 
-        public void setSalePrice2(String salePrice2) {
-            this.salePrice2 = salePrice2;
-        }
+    public String getSale_price2() {
+        return sale_price2;
+    }
 
-        public String getSalePrice3() {
-            return salePrice3;
-        }
+    public void setSale_price2(String sale_price2) {
+        this.sale_price2 = sale_price2;
+    }
 
-        public void setSalePrice3(String salePrice3) {
-            this.salePrice3 = salePrice3;
-        }
+    public String getSale_price3() {
+        return sale_price3;
+    }
 
-        public String getSalePrice4() {
-            return salePrice4;
-        }
+    public void setSale_price3(String sale_price3) {
+        this.sale_price3 = sale_price3;
+    }
 
-        public void setSalePrice4(String salePrice4) {
-            this.salePrice4 = salePrice4;
-        }
+    public String getSale_price4() {
+        return sale_price4;
+    }
 
-        public String getSalePrice5() {
-            return salePrice5;
-        }
+    public void setSale_price4(String sale_price4) {
+        this.sale_price4 = sale_price4;
+    }
 
-        public void setSalePrice5(String salePrice5) {
-            this.salePrice5 = salePrice5;
-        }
+    public String getSale_price5() {
+        return sale_price5;
+    }
 
-        public String getBrandId() {
-            return brandId;
-        }
+    public void setSale_price5(String sale_price5) {
+        this.sale_price5 = sale_price5;
+    }
 
-        public void setBrandId(String brandId) {
-            this.brandId = brandId;
-        }
+    public String getBrand_id() {
+        return brand_id;
+    }
 
-        public String getFamily() {
-            return family;
-        }
+    public void setBrand_id(String brand_id) {
+        this.brand_id = brand_id;
+    }
 
-        public void setFamily(String family) {
-            this.family = family;
-        }
+    public String getFamily() {
+        return family;
+    }
 
-        public String getSubFamily() {
-            return subFamily;
-        }
+    public void setFamily(String family) {
+        this.family = family;
+    }
 
-        public void setSubFamily(String subFamily) {
-            this.subFamily = subFamily;
-        }
+    public String getSub_family() {
+        return sub_family;
+    }
 
-        public String getType() {
-            return type;
-        }
+    public void setSub_family(String sub_family) {
+        this.sub_family = sub_family;
+    }
 
-        public void setType(String type) {
-            this.type = type;
-        }
+    public String getType() {
+        return type;
+    }
 
-        public String getSaleMethodId() {
-            return saleMethodId;
-        }
+    public void setType(String type) {
+        this.type = type;
+    }
 
-        public void setSaleMethodId(String saleMethodId) {
-            this.saleMethodId = saleMethodId;
-        }
+    public String getSale_method_id() {
+        return sale_method_id;
+    }
 
-        public String getStatus() {
-            return status;
-        }
+    public void setSale_method_id(String sale_method_id) {
+        this.sale_method_id = sale_method_id;
+    }
 
-        public void setStatus(String status) {
-            this.status = status;
-        }
+    public String getStatus() {
+        return status;
+    }
 
-        public String getUpdatedAt() {
-            return updatedAt;
-        }
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
-        public void setUpdatedAt(String updatedAt) {
-            this.updatedAt = updatedAt;
-        }
+    public String getUpdated_at() {
+        return updated_at;
+    }
 
+    public void setUpdated_at(String updated_at) {
+        this.updated_at = updated_at;
+    }
+
+    public Pivot getPivot() {
+        return pivot;
+    }
+
+    public void setPivot(Pivot pivot) {
+        this.pivot = pivot;
+    }
+
+    @Override
+    public String toString() {
+        return "Productos{" +
+                "id=" + id +
+                ", stock_min='" + stock_min + '\'' +
+                ", stock_max='" + stock_max + '\'' +
+                ", barcode='" + barcode + '\'' +
+                ", code='" + code + '\'' +
+                ", units_per_box='" + units_per_box + '\'' +
+                ", description='" + description + '\'' +
+                ", product_category_id='" + product_category_id + '\'' +
+                ", product_type_id='" + product_type_id + '\'' +
+                ", cost='" + cost + '\'' +
+                ", suggested='" + suggested + '\'' +
+                ", bonus='" + bonus + '\'' +
+                ", utility='" + utility + '\'' +
+                ", percentage_of_utility='" + percentage_of_utility + '\'' +
+                ", sale_price='" + sale_price + '\'' +
+                ", iva='" + iva + '\'' +
+                ", sale_price2='" + sale_price2 + '\'' +
+                ", sale_price3='" + sale_price3 + '\'' +
+                ", sale_price4='" + sale_price4 + '\'' +
+                ", sale_price5='" + sale_price5 + '\'' +
+                ", brand_id='" + brand_id + '\'' +
+                ", family='" + family + '\'' +
+                ", sub_family='" + sub_family + '\'' +
+                ", type='" + type + '\'' +
+                ", sale_method_id='" + sale_method_id + '\'' +
+                ", status='" + status + '\'' +
+                ", updated_at='" + updated_at + '\'' +
+                ", pivot=" + pivot +
+                '}';
     }
 }
+
+

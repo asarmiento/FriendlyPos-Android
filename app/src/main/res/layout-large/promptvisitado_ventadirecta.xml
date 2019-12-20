@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:layout_marginTop="5dp"
+    android:layout_marginBottom="5dp">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/promtSelectT"
+        android:textSize="18sp"
+        android:fontFamily="@font/monse"
+        app:fontFamily="@font/monse"
+        android:textColor="#58595b"
+        android:text="Seleccione"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+
+    <RadioGroup
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/promtSelectT"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/rgTipoVisitado"
+        >
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Generar Venta"
+            android:textSize="18sp"
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:textColor="#58595b"
+            android:id="@+id/compradoBillVisitado"/>
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:textColor="#58595b"
+            android:text="Solo visitado"
+            android:id="@+id/visitadoBillVisitado"/>
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/textoObservaciones"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Observaciones:"
+        android:textSize="18sp"
+        android:fontFamily="@font/monse"
+        app:fontFamily="@font/monse"
+        android:textColor="#58595b"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/rgTipoVisitado"
+        android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:id="@+id/txtObservaciones"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:textSize="18sp"
+        android:fontFamily="@font/monse"
+        app:fontFamily="@font/monse"
+        android:textColor="#58595b"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/textoObservaciones"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:id="@+id/btnOKV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="OK"
+        android:fontFamily="@font/monse"
+        app:fontFamily="@font/monse"
+        android:textColor="#58595b"
+        android:layout_below="@+id/txtObservaciones"
+        android:layout_alignEnd="@+id/txtObservaciones"
+        android:background="@null"
+        android:visibility="invisible"/>
+
+    <Button
+        android:id="@+id/btnOKC"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="OK"
+        android:fontFamily="@font/monse"
+        app:fontFamily="@font/monse"
+        android:textColor="#58595b"
+        android:layout_below="@+id/txtObservaciones"
+        android:layout_alignEnd="@+id/txtObservaciones"
+        android:background="@null"
+        android:visibility="invisible"/>
+
+    <Button
+        android:id="@+id/btnCancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtObservaciones"
+        android:fontFamily="@font/monse"
+        app:fontFamily="@font/monse"
+        android:textColor="#58595b"
+        android:layout_toStartOf="@+id/btnOKV"
+        android:text="Cancel"
+        android:background="@null"/>
+
+
+</RelativeLayout>

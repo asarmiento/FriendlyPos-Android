@@ -1,0 +1,105 @@
+<androidx.cardview.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/tools"
+    android:id="@+id/cardViewReimprimirFactura"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="3dp"
+    card_view:cardBackgroundColor="#FFF"
+    app:ignore="NamespaceTypo">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/txt_reimprimir_factura_numeracion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Numeracion"
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:textColor="#58595b"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/txt_reimprimir_factura_fechahora"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/txt_reimprimir_factura_numeracion"
+            android:text="Fecha Hora"
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:textColor="#58595b"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/txt_reimprimir_factura_fantasyname"
+            android:layout_width="wrap_content"
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:textColor="#58595b"
+            android:textSize="18sp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/txt_reimprimir_factura_fechahora"
+            android:text="Fantasy Name"
+           />
+
+        <TextView
+            android:id="@+id/txt_reimprimir_factura_anombrede"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:textColor="#58595b"
+            android:textSize="18sp"
+            android:layout_below="@+id/txt_reimprimir_factura_fantasyname"
+            android:text="A nombre de"
+           />
+
+        <TextView
+            android:id="@+id/txt_reimprimir_factura_total"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:textColor="#58595b"
+            android:textSize="18sp"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@+id/txt_reimprimir_factura_anombrede"
+            android:gravity="right"
+            android:text="Total"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/txt_reimprimir_factura_cantidad"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@color/colorPrimaryDark"
+            android:text="20"
+            android:fontFamily="@font/monse"
+            app:fontFamily="@font/monse"
+            android:textSize="18sp"
+            android:gravity="center"
+            android:textColor="@color/cardview_light_background"
+            android:layout_alignBottom="@+id/txt_reimprimir_factura_fantasyname"
+            android:layout_alignStart="@+id/txt_reimprimir_factura_total"
+            android:layout_alignParentEnd="true" />
+
+        <TextView
+            android:id="@+id/txtSubida"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_alignParentEnd="true"
+            android:textSize="20sp"
+            android:layout_alignParentTop="true"
+            android:background="@color/colorPrimaryDark"
+           />
+
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>
