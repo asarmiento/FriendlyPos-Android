@@ -517,7 +517,7 @@ public class PrinterFunctions {
         receipts receipts = realm.where(receipts.class).equalTo("customer_id", sale.getCustomer_id()).findFirst();
 
 
-       String referencia =  receipts.getReference();
+       String referencia =  sale.getReferencia_receipts();
 
         String sysNombre = sysconf.getName();
         String sysNombreNegocio = sysconf.getBusiness_name();
@@ -530,7 +530,6 @@ public class PrinterFunctions {
         totalNotasRecibos = sale.getObservaciones();
         final String fecha = /*sale.getDate()*/currentDateandTime;
         double porPagar = sale.getPorPagar();
-        String porPagarS = String.format("%,.2f", porPagar);
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(QuickContext);
         String prefList = sharedPreferences.getString("pref_selec_impresora","Impresora Zebra");
 
@@ -573,7 +572,7 @@ public class PrinterFunctions {
 
                     getPrintRecibosTotal(sale.getCustomer_id()) +
                     "\r\n" +
-                    "\r\n\n" + "Saldo pendiente: " + porPagarS + "\r\n" +
+                    "\r\n" + "Saldo pendiente: " + Functions.doubleToString1(porPagar) + "\r\n" +
                     "\r\n\n" + "Notas: " + totalNotasRecibos + "\r\n" +
                     "\r\n\n" + "Muchas Gracias por preferirnos, un placer atenderlo\r\n" +
                     "Mantenga el documento para reclamos ." + "\r\n" + "\r\n" +
@@ -599,11 +598,9 @@ public class PrinterFunctions {
                     preview += Html.fromHtml("<h1>") + "Fecha: " + fecha + Html.fromHtml("</h1><br/><br/>");
                  //   preview += Html.fromHtml("<h1>") +  "Numeracion     Monto Total     Monto Pagado" + Html.fromHtml("</h1></center><br/>");
                  //   preview += Html.fromHtml("<h1>") +  "------------------------------------------------" + Html.fromHtml("</h1></center><br/>");
-                    preview += Html.fromHtml("<h1>") +   getPrintRecibosTotal(sale.getCustomer_id()) + Html.fromHtml("</h1></center><br/>");
+                    preview += Html.fromHtml("<h1>") +   getPrintRecibosTotal(sale.getCustomer_id()) + Html.fromHtml("</h1></center><br/><br/>");
 
-                    preview += Html.fromHtml("<h1>") +  "Total: " +  Functions.doubleToString1(printRecibosTotal) + Html.fromHtml("</h1></center><br/><br/><br/>");
-
-                    preview += Html.fromHtml("<h1>") +  "Saldo pendiente: " + porPagar + Html.fromHtml("</h1></center><br/><br/><br/>");
+                    preview += Html.fromHtml("<h1>") +  "Saldo pendiente: " +  Functions.doubleToString1(porPagar) + Html.fromHtml("</h1></center><br/><br/><br/>");
             preview += Html.fromHtml("<h1>") +  "Notas: " + totalNotasRecibos + Html.fromHtml("</h1></center><br/><br/><br/>");
                     preview += Html.fromHtml("<h1>")   + "Muchas gracias por preferirnos un placer atenderlo" +  Html.fromHtml("</h1></center><br/>");
                     preview += Html.fromHtml("<h1>")   + "Mantenga el documento para reclamos." +  Html.fromHtml("</h1></center><br/><br/>");
@@ -671,18 +668,13 @@ public class PrinterFunctions {
                 String numeracion = salesList1.get(i).getNumeration();
 
                 double total = salesList1.get(i).getTotal();
-                String totalS = String.format("%,.2f", total);
-
                 double pagado = salesList1.get(i).getMontoCanceladoPorFactura();
-                String pagadoS = String.format("%,.2f", pagado);
-
                 double totalAbonos = salesList1.get(i).getPaid();
-                String totalAbonosS = String.format("%,.2f", totalAbonos);
 
-                send +=  /*"<a><b>" + */padRight("# Factura:", 30 ) /*+"</b></a>"*/+ padRight(numeracion, 20) + "\r\n" +
-                       /* "<a><b>" + */padRight("Total Recibo:", 20 ) /*+"</b></a>"*/ + padRight(pagadoS, 20) + "\r\n" +
-                        "<a><b>" + padRight("Monto total:", 30 ) +"</b></a>" + padRight(totalS, 20) + "\r\n" +
-                        "<a><b>" + padRight("Total en abonos:", 20 ) + "</b></a>" +padRight(totalAbonosS, 20)  + "\r\n";
+                send += padRight("# Factura: ", 30 ) + padRight(numeracion, 30) + "\r\n" +
+                        padRight("Total Recibo: ", 30 ) + padRight(Functions.doubleToString1(pagado), 30) + "\r\n" +
+                         padRight("Monto total: ", 30 ) + padRight(Functions.doubleToString1(total), 30) + "\r\n" +
+                       padRight("Total en abonos: ", 30 )  +padRight(Functions.doubleToString1(totalAbonos), 30)  + "\r\n";
 
 
                // send += String.format("%-9s  %9s  %9s", numeracion, Functions.doubleToString1(total), Functions.doubleToString1(pagado) ) + "\r\n";
@@ -784,12 +776,12 @@ public class PrinterFunctions {
             double totalAbonos = salesList1.get(0).getBalance();
             String totalAbonosS = String.format("%,.2f", totalAbonos);
 
-            send += /*"<a><b>" +  */padRight("# Referencia:", 20 )/*+"</b></a>"*/+ padRight(numeroReferenciaReceipts, 20) + "\r\n" +
-                           /* "<a><b>" + */padRight("# Factura:", 30 ) /*+"</b></a>"*/+ padRight(numeracionReceipts, 20)+ "\r\n" +
-                           /* "<a><b>" + */padRight("Total Recibo:", 20 ) /*+"</b></a>"*/ + padRight(pagadoSReceipts, 20) + "\r\n" +
-                            "<a><b>" + padRight("Monto total:", 30 ) +"</b></a>" + padRight(totalS, 20) + "\r\n" +
-                            "<a><b>" + padRight("Total en abonos:", 20 ) + "</b></a>" +padRight(totalAbonosS, 20) + "\r\n" +
-                            "<a><b>" + padRight("Total restante:", 25 ) +"</b></a>" + padRight(restanteS, 20)+ "\r\n";
+            send += padRight("# Referencia:", 20 )+ padRight(numeroReferenciaReceipts, 20) + "\r\n" +
+                           padRight("# Factura:", 30 ) + padRight(numeracionReceipts, 20)+ "\r\n" +
+                           padRight("Total Recibo:", 20 )  + padRight(Functions.doubleToString1(pagadoReceipts), 20) + "\r\n" +
+                          padRight("Monto total:", 30 )  + padRight(Functions.doubleToString1(total), 20) + "\r\n" +
+                            padRight("Total en abonos:", 20 )  +padRight(Functions.doubleToString1(totalAbonos), 20) + "\r\n" +
+                           padRight("Total restante:", 25 )  + padRight(Functions.doubleToString1(restante), 20)+ "\r\n";
 
          /*   send += String.format("%.50s  %20s ", numeroReferenciaReceipts, numeracionReceipts) + "\r\n" +
                     String.format("%-12s", Functions.doubleToString1(total)) + "\r\n" +
@@ -855,8 +847,6 @@ public class PrinterFunctions {
 
                         "! U1 LMARGIN 0\r\n" +
                         "! U1 SETLP 5 0 24\r\n" +
-                        "# " + referencia + "\r\n" +
-                        "! U1 SETLP 5 0 24\r\n" +
                         sysNombre + "\r\n" +
                         "! U1 SETLP 5 1 35\r\n" +
                         sysNombreNegocio + "\r\n" +
@@ -895,7 +885,6 @@ public class PrinterFunctions {
             }
             else if(prefList.equals("2")){
                 preview += Html.fromHtml("<h1>") + String.format("%s", billptype) + Html.fromHtml("</h1><br/><br/><br/>");
-                preview += Html.fromHtml("<h1>") + "# " + referencia + Html.fromHtml("</h1><br/><br/>");
                 preview += Html.fromHtml("<h1>") + sysNombre + Html.fromHtml("</h1><br/>");
                 preview += Html.fromHtml("<h1>") + sysNombreNegocio + Html.fromHtml("</h1><br/>");
                 preview += Html.fromHtml("<h1>") + sysDireccion + Html.fromHtml("</h1><br/>");
