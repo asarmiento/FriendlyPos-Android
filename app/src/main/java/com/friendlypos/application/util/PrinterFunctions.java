@@ -676,7 +676,7 @@ public class PrinterFunctions {
                          padRight("Monto total: ", 30 ) + padRight(Functions.doubleToString1(total), 30) + "\r\n" +
                        padRight("Total en abonos: ", 30 )  +padRight(Functions.doubleToString1(totalAbonos), 30)  + "\r\n";
 
-
+                // TODO PRUEBA SUBIR
                // send += String.format("%-9s  %9s  %9s", numeracion, Functions.doubleToString1(total), Functions.doubleToString1(pagado) ) + "\r\n";
                // printRecibosTotal = printRecibosTotal + pagado;
                 send += "------------------------------------------------\r\n";
