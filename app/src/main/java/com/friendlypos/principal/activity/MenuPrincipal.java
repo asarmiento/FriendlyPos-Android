@@ -1457,14 +1457,21 @@ public class MenuPrincipal extends BluetoothActivity implements PopupMenu.OnMenu
 
         Realm realmPedidos = Realm.getDefaultInstance();
         invoice queryPedidos = realmPedidos.where(invoice.class).equalTo("id", idFacturaSubida).equalTo("subida", 1).equalTo("facturaDePreventa", "Preventa").findFirst();
-
+        String numeroFactura = queryPedidos.getNumeration();
         if (codS.equals("1") && resultS.equals("true")) {
             facturaId = String.valueOf(queryPedidos.getId());
             actualizarVenta(facturaId);
             actualizarFactura(facturaId);
             Toast.makeText(MenuPrincipal.this, messageS, Toast.LENGTH_LONG).show();
         } else {
-            Toast.makeText(MenuPrincipal.this, messageS, Toast.LENGTH_LONG).show();
+
+            if(messageS.equals("La factura ya existe en el servidor ."+numeroFactura)){
+
+                facturaId = String.valueOf(queryPedidos.getId());
+                actualizarVenta(facturaId);
+                actualizarFactura(facturaId);
+            }
+            Toast.makeText(MenuPrincipal.this,  messageS, Toast.LENGTH_LONG).show();
         }
 
       /*  Realm realmPedidos = Realm.getDefaultInstance();

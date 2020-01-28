@@ -140,6 +140,8 @@ public class PrinterFunctions {
                 + "fondos o cualquier otro medio que no sea efectivo, la validez del pago queda sujeto a su acreditacion en las cuentas "
                 + "bancarias de " + ", Por lo cual la factura original le sera entregada una vez confirme dicha acreditacion ";
 
+
+        // TODO DISTRIBUCION
         if (tipoFactura.equals("01")) {
             billptype = "Factura Electronica";
         }else if(tipoFactura.equals("04")){
@@ -689,6 +691,7 @@ public class PrinterFunctions {
         return send;
 
     }
+
     public static String padRight(String s, double n) {
         String centeredString;
         double pad = (n + 4) - s.length();
@@ -946,10 +949,6 @@ public class PrinterFunctions {
             Log.e("Error PrinterFunctions", e.getMessage());
         }
     }
-
-
-
-
 
     //TODO imprimir TOTALIZAR PREVENTA
 
@@ -1578,11 +1577,11 @@ public class PrinterFunctions {
                     + "por su representada, conforme al articulo supracitado. Si realiza pago mediante transferencia electronica de "
                     + "fondos o cualquier otro medio que no sea efectivo, la validez del pago queda sujeto a su acreditacion en las cuentas "
                     + "bancarias de " + ", Por lo cual la factura original le sera entregada una vez confirme dicha acreditacion ";
-
+            // TODO VENTA DIRECTA
             if (tipoFactura.equals("01")) {
-                billptype = "Factura Electronica";
+                billptype = "Factura electronica";
             } else if (tipoFactura.equals("04")) {
-                billptype = "Tiquete Electronico";
+                billptype = "Tiquete electronico";
             }
 
 
