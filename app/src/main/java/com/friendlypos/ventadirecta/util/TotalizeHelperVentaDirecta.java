@@ -31,28 +31,29 @@ public class TotalizeHelperVentaDirecta {
 
     private String getProductTypeByPivotId(String id) {
         Realm realm = Realm.getDefaultInstance();
-        String tipo = realm.where(Productos.class).equalTo("id", id).findFirst().getProduct_type_id();
+        String tipo = realm.where(Productos.class).equalTo("id", id).findFirst().product_type_id;
         realm.close();
         return tipo;
     }
 
     private String getProductBonusByPivotId(String id) {
         Realm realm = Realm.getDefaultInstance();
-        String bonus = realm.where(Productos.class).equalTo("id", id).findFirst().getBonus();
+        String bonus = realm.where(Productos.class).equalTo("id", id).findFirst().bonus;
         realm.close();
         return bonus;
     }
     private Double getProductIVAByPivotId(String id) {
         Realm realm = Realm.getDefaultInstance();
-        Double iva = realm.where(Productos.class).equalTo("id", id).findFirst().getIva();
+        Double iva = realm.where(Productos.class).equalTo("id", id).findFirst().iva;
         realm.close();
         return iva;
     }
     private Double getClienteFixedDescuentoByPivotId(String id) {
 
         sale ventaDetallePreventa = activity.getCurrentVenta();
-        ventaDetallePreventa.getInvoice_id();
-        customer = ventaDetallePreventa.getCustomer_id();
+        // Obtener el ID de factura
+        String invoiceId = ventaDetallePreventa.invoice_id;
+        customer = ventaDetallePreventa.customer_id;
        /* if(ventaDetallePreventa.getP_invoice_id() == id){
 
 
@@ -77,12 +78,12 @@ public class TotalizeHelperVentaDirecta {
     private void totalize(final Pivot currentPivot) {
         Double cantidad;
 
-        Double clienteFixedDescuento = getClienteFixedDescuentoByPivotId(currentPivot.getInvoice_id());
-        Double iva = getProductIVAByPivotId(currentPivot.getProduct_id());
-        double agrego = currentPivot.getAmountSinBonus();
-        String bonus = getProductBonusByPivotId(currentPivot.getProduct_id());
+        Double clienteFixedDescuento = getClienteFixedDescuentoByPivotId(currentPivot.invoice_id);
+        Double iva = getProductIVAByPivotId(currentPivot.product_id);
+        double agrego = currentPivot.amountSinBonus;
+        String bonus = getProductBonusByPivotId(currentPivot.product_id);
 
-        if (bonus.equals("1") && currentPivot.getBonus() == 1){
+        if (bonus.equals("1") && currentPivot.bonus == 1){
 
             final Realm realmBonus = Realm.getDefaultInstance();
 
@@ -91,11 +92,11 @@ public class TotalizeHelperVentaDirecta {
                 @Override
                 public void execute(Realm realmBonus) {
 
-                    Bonuses productoConBonus = realmBonus.where(Bonuses.class).equalTo("product_id", Integer.valueOf(currentPivot.getProduct_id())).findFirst();
-                    productosDelBonus = Double.parseDouble(productoConBonus.getProduct_bonus());
-                    productosParaObtenerBonus = Double.parseDouble(productoConBonus.getProduct_sale());
+                    Bonuses productoConBonus = realmBonus.where(Bonuses.class).equalTo("product_id", Integer.valueOf(currentPivot.product_id)).findFirst();
+                    productosDelBonus = Double.parseDouble(productoConBonus.product_bonus);
+                    productosParaObtenerBonus = Double.parseDouble(productoConBonus.product_sale);
 
-                    Log.d("BONIFTOTAL", productoConBonus.getProduct_id() +  " " + productosDelBonus);
+                    Log.d("BONIFTOTAL", productoConBonus.product_id +  " " + productosDelBonus);
 
                 }
             });
@@ -103,7 +104,7 @@ public class TotalizeHelperVentaDirecta {
             cantidad = agrego;
         }
         else{
-            cantidad = Double.valueOf(currentPivot.getAmount());
+            cantidad = Double.valueOf(currentPivot.amount);
         }
 
         Double subGrab = 0.0;
@@ -118,8 +119,8 @@ public class TotalizeHelperVentaDirecta {
 
         Double subGrabDesc = 0.0;
 
-        Double precio = Double.valueOf(currentPivot.getPrice());
-        Double descuento = Double.valueOf(currentPivot.getDiscount());
+        Double precio = Double.valueOf(currentPivot.price);
+        Double descuento = Double.valueOf(currentPivot.discount);
 
         //if (tipo.equals("1")) {
         if (iva > 0.0) {

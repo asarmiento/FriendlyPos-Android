@@ -29,7 +29,7 @@ public class TotalizeHelperReimPedido {
 
     private String getProductTypeByPivotId(String id) {
         Realm realm = Realm.getDefaultInstance();
-        String tipo = realm.where(Productos.class).equalTo("id", id).findFirst().getProduct_type_id();
+        String tipo = realm.where(Productos.class).equalTo("id", id).findFirst().product_type_id;
         realm.close();
         return tipo;
     }
@@ -38,7 +38,7 @@ public class TotalizeHelperReimPedido {
         Realm realm = Realm.getDefaultInstance();
 
         sale venta = realm.where(sale.class).equalTo("invoice_id", id).findFirst();
-        Double clienteFixedDescuento = Double.valueOf(realm.where(Clientes.class).equalTo("id", venta.getCustomer_id()).findFirst().getFixedDiscount());
+        Double clienteFixedDescuento = Double.valueOf(realm.where(Clientes.class).equalTo("id", venta.customer_id).findFirst().getFixedDiscount());
 
         realm.close();
         return clienteFixedDescuento;
@@ -51,8 +51,8 @@ public class TotalizeHelperReimPedido {
     }
 
     private void totalize(Pivot currentPivot) {
-        Double clienteFixedDescuento = getClienteFixedDescuentoByPivotId(currentPivot.getInvoice_id());
-        String tipo = getProductTypeByPivotId(currentPivot.getProduct_id());
+        Double clienteFixedDescuento = getClienteFixedDescuentoByPivotId(currentPivot.invoice_id);
+        String tipo = getProductTypeByPivotId(currentPivot.product_id);
 
         Double subGrab = 0.0;
         Double subGrabConImp = 0.0;
@@ -63,9 +63,9 @@ public class TotalizeHelperReimPedido {
         Double subt = 0.0;
         Double total = 0.0;
 
-        Double precio = Double.valueOf(currentPivot.getPrice());
-        Double cantidad = Double.valueOf(currentPivot.getAmount());
-        Double descuento = Double.valueOf(currentPivot.getDiscount());
+        Double precio = Double.valueOf(currentPivot.price);
+        Double cantidad = Double.valueOf(currentPivot.amount);
+        Double descuento = Double.valueOf(currentPivot.discount);
 
 
         if (tipo.equals("1")) {
