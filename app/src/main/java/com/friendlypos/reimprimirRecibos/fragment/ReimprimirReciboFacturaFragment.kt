@@ -1,4 +1,4 @@
-package com.friendlypos.reimprimirRecibos.fragment
+package com.friendlysystemgroup.friendlypos.reimprimirRecibos.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,12 +7,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
-import butterknife.ButterKnife
-import com.friendlypos.R
-import com.friendlypos.Recibos.modelo.receipts
-import com.friendlypos.distribucion.fragment.BaseFragment
-import com.friendlypos.reimprimirRecibos.activity.ReimprimirRecibosActivity
-import com.friendlypos.reimprimirRecibos.adapters.ReimprimirReciboFacturaAdapter
+
+import com.friendlysystemgroup.friendlypos.R
+import com.friendlysystemgroup.friendlypos.Recibos.modelo.receipts
+import com.friendlysystemgroup.friendlypos.distribucion.fragment.BaseFragment
+import com.friendlysystemgroup.friendlypos.ReimprimirRecibos.activity.ReimprimirRecibosActivity
+import com.friendlysystemgroup.friendlypos.ReimprimirRecibos.adapters.ReimprimirReciboFacturaAdapter
 import io.realm.Realm
 import io.realm.RealmResults
 

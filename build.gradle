@@ -2,30 +2,22 @@
 
 buildscript {
     repositories {
-        mavenCentral()
         google()
+        mavenCentral()
         maven { url 'https://plugins.gradle.org/m2/' }
         maven { url 'https://maven.fabric.io/public' }
         maven { url 'https://jitpack.io' }
     }
-    ext.kotlin_version = '1.9.22' // Versión actualizada de Kotlin
+    ext.kotlin_version = '1.9.22'
     dependencies {
         classpath 'com.android.tools.build:gradle:8.9.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath "io.realm:realm-gradle-plugin:10.15.1" // Versión más reciente de Realm
+        classpath "io.realm:realm-gradle-plugin:10.17.0"
         classpath 'com.google.gms:google-services:4.4.0'
-    }
-}
-
-allprojects {
-    repositories {
-        mavenCentral()
-        google()
-        maven { url "https://jitpack.io" }
-        maven { url "https://maven.google.com" }
     }
 }
 
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+

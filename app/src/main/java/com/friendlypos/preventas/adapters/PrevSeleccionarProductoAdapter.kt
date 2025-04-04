@@ -1,4 +1,4 @@
-package com.friendlypos.preventas.adapters
+package com.friendlysystemgroup.friendlypos.preventas.adapters
 
 import android.content.Context
 import android.graphics.Color
@@ -17,17 +17,17 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
-import com.friendlypos.R
-import com.friendlypos.distribucion.modelo.Marcas
-import com.friendlypos.distribucion.modelo.Pivot
-import com.friendlypos.login.util.SessionPrefes
-import com.friendlypos.preventas.activity.PreventaActivity
-import com.friendlypos.preventas.fragment.PrevSelecProductoFragment
-import com.friendlypos.preventas.modelo.Bonuses
-import com.friendlypos.preventas.modelo.invoiceDetallePreventa
-import com.friendlypos.preventas.util.TotalizeHelperPreventa
-import com.friendlypos.principal.modelo.Clientes
-import com.friendlypos.principal.modelo.Productos
+import com.friendlysystemgroup.friendlypos.R
+import com.friendlysystemgroup.friendlypos.distribucion.modelo.Marcas
+import com.friendlysystemgroup.friendlypos.distribucion.modelo.Pivot
+import com.friendlysystemgroup.friendlypos.login.util.SessionPrefes
+import com.friendlysystemgroup.friendlypos.preventas.activity.PreventaActivity
+import com.friendlysystemgroup.friendlypos.preventas.fragment.PrevSelecProductoFragment
+import com.friendlysystemgroup.friendlypos.preventas.modelo.Bonuses
+import com.friendlysystemgroup.friendlypos.preventas.modelo.invoiceDetallePreventa
+import com.friendlysystemgroup.friendlypos.preventas.util.TotalizeHelperPreventa
+import com.friendlysystemgroup.friendlypos.principal.modelo.Clientes
+import com.friendlysystemgroup.friendlypos.principal.modelo.Productos
 import io.realm.Realm
 import io.realm.internal.SyncObjectServerFacade
 import java.util.Calendar

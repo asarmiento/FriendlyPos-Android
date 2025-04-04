@@ -1,4 +1,4 @@
-package com.friendlypos.principal.fragment
+package com.friendlysystemgroup.friendlypos.principal.fragment
 
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
@@ -18,8 +18,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import com.friendlypos.R
-import com.friendlypos.application.util.Functions.CreateMessage
+import com.friendlysystemgroup.friendlypos.R
+import com.friendlysystemgroup.friendlypos.application.util.Functions.CreateMessage
 import java.lang.reflect.InvocationTargetException
 
 class ConfiguracionFragment : PreferenceFragment(), OnSharedPreferenceChangeListener,

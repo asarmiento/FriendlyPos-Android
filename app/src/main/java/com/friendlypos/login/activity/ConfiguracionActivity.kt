@@ -1,4 +1,4 @@
-package com.friendlypos.login.activity
+package com.friendlysystemgroup.friendlypos.login.activity
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,10 +6,10 @@ import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.friendlypos.R
-import com.friendlypos.application.util.Functions.checkURL
-import com.friendlypos.application.util.Functions.createNotification
-import com.friendlypos.login.util.Properties
+import com.friendlysystemgroup.friendlypos.R
+import com.friendlysystemgroup.friendlypos.application.util.Functions.checkURL
+import com.friendlysystemgroup.friendlypos.application.util.Functions.createNotification
+import com.friendlysystemgroup.friendlypos.login.util.Properties
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class ConfiguracionActivity : AppCompatActivity() {

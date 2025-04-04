@@ -1,4 +1,4 @@
-package com.friendlypos.principal.modelo
+package com.friendlysystemgroup.friendlypos.principal.modelo
 
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
@@ -6,7 +6,7 @@ import io.realm.annotations.PrimaryKey
 /**
  * Created by DelvoM on 04/12/2018.
  */
-class ConsecutivosNumberFe : RealmObject() {
+open class ConsecutivosNumberFe : RealmObject() {
     /*
             "id": 1,
                     "number_consecutive": 1077,

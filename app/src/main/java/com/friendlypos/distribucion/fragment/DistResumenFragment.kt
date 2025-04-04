@@ -1,4 +1,4 @@
-package com.friendlypos.distribucion.fragment
+package com.friendlysystemgroup.friendlypos.distribucion.fragment
 
 import android.app.Activity
 import android.os.Bundle
@@ -8,11 +8,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.friendlypos.R
-import com.friendlypos.distribucion.activity.DistribucionActivity
-import com.friendlypos.distribucion.adapters.DistrResumenAdapter
-import com.friendlypos.distribucion.modelo.Pivot
-import com.friendlypos.distribucion.util.TotalizeHelper
+import com.friendlysystemgroup.friendlypos.R
+import com.friendlysystemgroup.friendlypos.distribucion.activity.DistribucionActivity
+import com.friendlysystemgroup.friendlypos.distribucion.adapters.DistrResumenAdapter
+import com.friendlysystemgroup.friendlypos.distribucion.modelo.Pivot
+import com.friendlysystemgroup.friendlypos.distribucion.util.TotalizeHelper
 import io.realm.Realm
 import io.realm.RealmResults
 

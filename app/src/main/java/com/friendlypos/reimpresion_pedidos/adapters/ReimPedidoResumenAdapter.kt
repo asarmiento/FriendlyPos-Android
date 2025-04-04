@@ -1,4 +1,4 @@
-package com.friendlypos.reimpresion_pedidos.adapters
+package com.friendlysystemgroup.friendlypos.reimpresion_pedidos.adapters
 
 import android.view.LayoutInflater
 import android.view.View
@@ -8,11 +8,11 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
-import com.friendlypos.R
-import com.friendlypos.distribucion.modelo.Pivot
-import com.friendlypos.principal.modelo.Productos
-import com.friendlypos.reimpresion_pedidos.activity.ReimprimirPedidosActivity
-import com.friendlypos.reimpresion_pedidos.fragment.ReimPedidoResumenFragment
+import com.friendlysystemgroup.friendlypos.R
+import com.friendlysystemgroup.friendlypos.distribucion.modelo.Pivot
+import com.friendlysystemgroup.friendlypos.principal.modelo.Productos
+import com.friendlysystemgroup.friendlypos.Reimpresion_pedidos.activity.ReimprimirPedidosActivity
+import com.friendlysystemgroup.friendlypos.Reimpresion_pedidos.fragment.ReimPedidoResumenFragment
 import io.realm.Realm
 
 

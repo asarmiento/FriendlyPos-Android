@@ -1,4 +1,4 @@
-package com.friendlypos.reenvio_email.adapters
+package com.friendlysystemgroup.friendlypos.reenvio_email.adapters
 
 import android.app.ProgressDialog
 import android.content.ContentValues
@@ -15,18 +15,18 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
-import com.friendlypos.R
-import com.friendlypos.app.broadcastreceiver.NetworkStateChangeReceiver
-import com.friendlypos.application.datamanager.BaseManager.Companion.api
-import com.friendlypos.application.interfaces.RequestInterface
-import com.friendlypos.application.util.Functions.CreateMessage
-import com.friendlypos.login.util.SessionPrefes.Companion.get
-import com.friendlypos.principal.modelo.Clientes
-import com.friendlypos.reenvio_email.activity.EmailActivity
-import com.friendlypos.reenvio_email.modelo.EmailResponse
-import com.friendlypos.reenvio_email.modelo.customer
-import com.friendlypos.reenvio_email.modelo.email_Id
-import com.friendlypos.reenvio_email.modelo.invoices
+import com.friendlysystemgroup.friendlypos.R
+import com.friendlysystemgroup.friendlypos.app.broadcastreceiver.NetworkStateChangeReceiver
+import com.friendlysystemgroup.friendlypos.application.datamanager.BaseManager.Companion.api
+import com.friendlysystemgroup.friendlypos.application.interfaces.RequestInterface
+import com.friendlysystemgroup.friendlypos.application.util.Functions.CreateMessage
+import com.friendlysystemgroup.friendlypos.login.util.SessionPrefes.Companion.get
+import com.friendlysystemgroup.friendlypos.principal.modelo.Clientes
+import com.friendlysystemgroup.friendlypos.Reenvio_email.activity.EmailActivity
+import com.friendlysystemgroup.friendlypos.Reenvio_email.modelo.EmailResponse
+import com.friendlysystemgroup.friendlypos.Reenvio_email.modelo.customer
+import com.friendlysystemgroup.friendlypos.Reenvio_email.modelo.email_Id
+import com.friendlysystemgroup.friendlypos.Reenvio_email.modelo.invoices
 import io.realm.Realm
 import uk.co.chrisjenx.calligraphy.CalligraphyTypefaceSpan
 import uk.co.chrisjenx.calligraphy.TypefaceUtils

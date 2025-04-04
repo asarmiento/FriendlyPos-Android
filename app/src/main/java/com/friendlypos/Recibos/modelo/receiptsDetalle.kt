@@ -1,4 +1,4 @@
-package com.friendlypos.Recibos.modelo
+package com.friendlysystemgroup.friendlypos.Recibos.modelo
 
 /**
  * Created by DelvoM on 26/09/2018.

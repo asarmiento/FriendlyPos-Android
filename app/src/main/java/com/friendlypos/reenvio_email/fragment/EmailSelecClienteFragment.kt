@@ -1,4 +1,4 @@
-package com.friendlypos.reenvio_email.fragment
+package com.friendlysystemgroup.friendlypos.reenvio_email.fragment
 
 import android.os.Bundle
 import android.util.Log
@@ -14,12 +14,12 @@ import androidx.core.view.MenuItemCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
-import butterknife.ButterKnife
-import com.friendlypos.R
-import com.friendlypos.distribucion.fragment.BaseFragment
-import com.friendlypos.principal.modelo.Clientes
-import com.friendlypos.reenvio_email.activity.EmailActivity
-import com.friendlypos.reenvio_email.adapters.EmailClientesAdapter
+
+import com.friendlysystemgroup.friendlypos.R
+import com.friendlysystemgroup.friendlypos.distribucion.fragment.BaseFragment
+import com.friendlysystemgroup.friendlypos.principal.modelo.Clientes
+import com.friendlysystemgroup.friendlypos.Reenvio_email.activity.EmailActivity
+import com.friendlysystemgroup.friendlypos.Reenvio_email.adapters.EmailClientesAdapter
 import io.realm.Realm
 import io.realm.internal.SyncObjectServerFacade
 import java.util.Locale

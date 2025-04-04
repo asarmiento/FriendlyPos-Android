@@ -1,12 +1,12 @@
-package com.friendlypos.preventas.delegate
+package com.friendlysystemgroup.friendlypos.preventas.delegate
 
 import android.util.Log
-import com.friendlypos.distribucion.modelo.Pivot
-import com.friendlypos.distribucion.modelo.invoice
-import com.friendlypos.distribucion.modelo.sale
-import com.friendlypos.preventas.activity.PreventaActivity
-import com.friendlypos.preventas.modelo.invoiceDetallePreventa
-import com.friendlypos.reimpresion_pedidos.activity.ReimprimirPedidosActivity
+import com.friendlysystemgroup.friendlypos.distribucion.modelo.Pivot
+import com.friendlysystemgroup.friendlypos.distribucion.modelo.invoice
+import com.friendlysystemgroup.friendlypos.distribucion.modelo.sale
+import com.friendlysystemgroup.friendlypos.preventas.activity.PreventaActivity
+import com.friendlysystemgroup.friendlypos.preventas.modelo.invoiceDetallePreventa
+import com.friendlysystemgroup.friendlypos.Reimpresion_pedidos.activity.ReimprimirPedidosActivity
 import io.realm.RealmList
 
 class PreSellInvoiceDelegate {

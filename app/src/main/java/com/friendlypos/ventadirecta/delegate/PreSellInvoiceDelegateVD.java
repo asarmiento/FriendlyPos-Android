@@ -1,14 +1,14 @@
-package com.friendlypos.ventadirecta.delegate;
+package com.friendlysystemgroup.friendlypos.ventadirecta.delegate;
 
 import android.util.Log;
 
-import com.friendlypos.distribucion.modelo.Pivot;
-import com.friendlypos.distribucion.modelo.invoice;
-import com.friendlypos.distribucion.modelo.sale;
-import com.friendlypos.preventas.activity.PreventaActivity;
-import com.friendlypos.preventas.modelo.invoiceDetallePreventa;
-import com.friendlypos.ventadirecta.activity.VentaDirectaActivity;
-import com.friendlypos.ventadirecta.modelo.invoiceDetalleVentaDirecta;
+import com.friendlysystemgroup.friendlypos.distribucion.modelo.Pivot;
+import com.friendlysystemgroup.friendlypos.distribucion.modelo.invoice;
+import com.friendlysystemgroup.friendlypos.distribucion.modelo.sale;
+import com.friendlysystemgroup.friendlypos.preventas.activity.PreventaActivity;
+import com.friendlysystemgroup.friendlypos.preventas.modelo.invoiceDetallePreventa;
+import com.friendlysystemgroup.friendlypos.ventadirecta.activity.VentaDirectaActivity;
+import com.friendlysystemgroup.friendlypos.ventadirecta.modelo.invoiceDetalleVentaDirecta;
 
 import java.util.ArrayList;
 import java.util.List;

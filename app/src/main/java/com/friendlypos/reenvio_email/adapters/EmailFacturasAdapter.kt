@@ -1,4 +1,4 @@
-package com.friendlypos.reenvio_email.adapters
+package com.friendlysystemgroup.friendlypos.reenvio_email.adapters
 
 import android.content.ContentValues
 import android.content.DialogInterface
@@ -12,16 +12,16 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
-import com.friendlypos.R
-import com.friendlypos.app.broadcastreceiver.NetworkStateChangeReceiver
-import com.friendlypos.application.datamanager.BaseManager.Companion.api
-import com.friendlypos.application.interfaces.RequestInterface
-import com.friendlypos.login.util.SessionPrefes.Companion.get
-import com.friendlypos.reenvio_email.activity.EmailActivity
-import com.friendlypos.reenvio_email.fragment.EmailSelecFacturaFragment
-import com.friendlypos.reenvio_email.modelo.SendEmailResponse
-import com.friendlypos.reenvio_email.modelo.invoices
-import com.friendlypos.reenvio_email.modelo.send_email_id
+import com.friendlysystemgroup.friendlypos.R
+import com.friendlysystemgroup.friendlypos.app.broadcastreceiver.NetworkStateChangeReceiver
+import com.friendlysystemgroup.friendlypos.application.datamanager.BaseManager.Companion.api
+import com.friendlysystemgroup.friendlypos.application.interfaces.RequestInterface
+import com.friendlysystemgroup.friendlypos.login.util.SessionPrefes.Companion.get
+import com.friendlysystemgroup.friendlypos.Reenvio_email.activity.EmailActivity
+import com.friendlysystemgroup.friendlypos.Reenvio_email.fragment.EmailSelecFacturaFragment
+import com.friendlysystemgroup.friendlypos.Reenvio_email.modelo.SendEmailResponse
+import com.friendlysystemgroup.friendlypos.Reenvio_email.modelo.invoices
+import com.friendlysystemgroup.friendlypos.Reenvio_email.modelo.send_email_id
 
 class EmailFacturasAdapter : RecyclerView.Adapter<EmailFacturasAdapter.CharacterViewHolder> {
     private var productosList: List<invoices>? = null

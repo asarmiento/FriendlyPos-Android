@@ -1,4 +1,4 @@
-package com.friendlypos.preventas.modelo
+package com.friendlysystemgroup.friendlypos.preventas.modelo
 
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
@@ -6,7 +6,7 @@ import io.realm.annotations.PrimaryKey
 /**
  * Created by DelvoM on 24/04/2018.
  */
-class Numeracion : RealmObject() {
+open  class Numeracion : RealmObject() {
     @JvmField
     @PrimaryKey
     var sale_type: String? = null

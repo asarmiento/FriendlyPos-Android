@@ -2,11 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/FriendlyPos-Android.iml" filepath="$PROJECT_DIR$/.idea/modules/FriendlyPos-Android.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/FriendlyPos-Android.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/FriendlyPos-Android.app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/FriendlyPos-Android.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/FriendlyPos-Android.app.androidTest.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/FriendlyPos-Android.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/FriendlyPos-Android.app.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/FriendlyPos-Android.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/FriendlyPos-Android.app.unitTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/FriendlyPOS.iml" filepath="$PROJECT_DIR$/.idea/modules/FriendlyPOS.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/FriendlyPOS.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/FriendlyPOS.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/FriendlyPOS.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/FriendlyPOS.app.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/FriendlyPOS.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/FriendlyPOS.app.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/FriendlyPOS.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/FriendlyPOS.app.unitTest.iml" />
     </modules>
   </component>
 </project>

@@ -1,4 +1,4 @@
-package com.friendlypos.reenvio_email.modelo
+package com.friendlysystemgroup.friendlypos.reenvio_email.modelo
 
 class send_email_id(var invoice: String) {
     override fun toString(): String {

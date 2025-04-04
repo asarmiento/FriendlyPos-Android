@@ -1,19 +1,19 @@
-package com.friendlypos.principal.helpers
+package com.friendlysystemgroup.friendlypos.principal.helpers
 
 import android.content.ContentValues
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
-import com.friendlypos.app.broadcastreceiver.NetworkStateChangeReceiver
-import com.friendlypos.application.datamanager.BaseManager.Companion.api
-import com.friendlypos.application.interfaces.RequestInterface
-import com.friendlypos.distribucion.modelo.EnviarFactura
-import com.friendlypos.distribucion.modelo.invoice
-import com.friendlypos.distribucion.modelo.invoice.isResult
-import com.friendlypos.distribucion.modelo.invoice.message
-import com.friendlypos.distribucion.modelo.invoice.toString
-import com.friendlypos.login.util.SessionPrefes.Companion.get
-import com.friendlypos.principal.activity.MenuPrincipal
+import com.friendlysystemgroup.friendlypos.app.broadcastreceiver.NetworkStateChangeReceiver
+import com.friendlysystemgroup.friendlypos.application.datamanager.BaseManager.Companion.api
+import com.friendlysystemgroup.friendlypos.application.interfaces.RequestInterface
+import com.friendlysystemgroup.friendlypos.distribucion.modelo.EnviarFactura
+import com.friendlysystemgroup.friendlypos.distribucion.modelo.invoice
+import com.friendlysystemgroup.friendlypos.distribucion.modelo.invoice.isResult
+import com.friendlysystemgroup.friendlypos.distribucion.modelo.invoice.message
+import com.friendlysystemgroup.friendlypos.distribucion.modelo.invoice.toString
+import com.friendlysystemgroup.friendlypos.login.util.SessionPrefes.Companion.get
+import com.friendlysystemgroup.friendlypos.principal.activity.MenuPrincipal
 
 /**
  * Created by Delvo on 02/12/2017.

@@ -1,4 +1,4 @@
-package com.friendlypos.Recibos.modelo
+package com.friendlysystemgroup.friendlypos.Recibos.modelo
 
 import io.realm.RealmObject
 import io.realm.annotations.Index
@@ -7,7 +7,7 @@ import io.realm.annotations.PrimaryKey
 /**
  * Created by DelvoM on 03/09/2018.
  */
-class recibos : RealmObject() {
+open class recibos : RealmObject() {
     /*
             "invoice_id": 7983,
                 "numeration": "2702-0000002",

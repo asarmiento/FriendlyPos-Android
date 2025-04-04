@@ -1,4 +1,4 @@
-package com.friendlypos.preventas.fragment
+package com.friendlysystemgroup.friendlypos.preventas.fragment
 
 import android.os.Bundle
 import android.util.Log
@@ -14,12 +14,12 @@ import androidx.core.view.MenuItemCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
-import butterknife.ButterKnife
-import com.friendlypos.R
-import com.friendlypos.distribucion.fragment.BaseFragment
-import com.friendlypos.preventas.activity.PreventaActivity
-import com.friendlypos.preventas.adapters.PrevClientesAdapter
-import com.friendlypos.principal.modelo.Clientes
+
+import com.friendlysystemgroup.friendlypos.R
+import com.friendlysystemgroup.friendlypos.distribucion.fragment.BaseFragment
+import com.friendlysystemgroup.friendlypos.preventas.activity.PreventaActivity
+import com.friendlysystemgroup.friendlypos.preventas.adapters.PrevClientesAdapter
+import com.friendlysystemgroup.friendlypos.principal.modelo.Clientes
 import io.realm.Realm
 import io.realm.internal.SyncObjectServerFacade
 import java.util.Locale

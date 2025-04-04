@@ -1,4 +1,4 @@
-package com.friendlypos.principal.modelo
+package com.friendlysystemgroup.friendlypos.principal.modelo
 
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
@@ -6,7 +6,7 @@ import io.realm.annotations.PrimaryKey
 /**
  * Created by DelvoM on 14/11/2017.
  */
-class Sysconf : RealmObject() {
+open class Sysconf : RealmObject() {
     /*  "id": 3,
                 "identification": "3-101-692713",
                 "name": "DISTRIBUIDORA A&V",

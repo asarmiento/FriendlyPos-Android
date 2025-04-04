@@ -1,11 +1,37 @@
-package com.friendlypos.Recibos.fragments
+package com.friendlysystemgroup.friendlypos.Recibos.fragments
 
+import android.app.Activity
+import android.content.DialogInterface
+import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.Button
+import android.widget.CheckBox
+import android.widget.EditText
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import com.friendlypos.application.util.Functions
+import com.friendlysystemgroup.friendlypos.R
+import com.friendlysystemgroup.friendlypos.Recibos.activity.RecibosActivity
+import com.friendlysystemgroup.friendlypos.Recibos.modelo.receipts
+import com.friendlysystemgroup.friendlypos.Recibos.modelo.recibos
+import com.friendlysystemgroup.friendlypos.app.broadcastreceiver.BluetoothStateChangeReceiver
+import com.friendlysystemgroup.friendlypos.application.sync.SyncObjectServerFacade
+import com.friendlysystemgroup.friendlypos.application.util.Functions
+import com.friendlysystemgroup.friendlypos.application.util.LocalImageGetter
+import com.friendlysystemgroup.friendlypos.application.util.PrinterFunctions
+import com.friendlysystemgroup.friendlypos.databinding.FragmentRecibosAplicarBinding
+import com.friendlysystemgroup.friendlypos.distribucion.fragment.BaseFragment
+import com.friendlysystemgroup.friendlypos.distribucion.util.GPSTracker
+import com.friendlysystemgroup.friendlypos.login.util.SessionPrefes
+import com.friendlysystemgroup.friendlypos.principal.modelo.Clientes
+import com.friendlysystemgroup.friendlypos.principal.modelo.datosTotales
 import io.realm.Realm
+import io.realm.RealmList
+import io.realm.RealmResults
 import org.sufficientlysecure.htmltextview.HtmlTextView
 
 class RecibosAplicarFragment : BaseFragment() {
@@ -32,6 +58,11 @@ class RecibosAplicarFragment : BaseFragment() {
     var totalDatosTotal2: Double = 0.0
     var totalTotal: Double = 0.0
     var datos_actualizados: datosTotales? = null
+    
+    // ViewBinding
+    private var _binding: FragmentRecibosAplicarBinding? = null
+    private val binding get() = _binding!!
+    
     override fun onAttach(activity: Activity) {
         super.onAttach(activity)
         this.activity = activity as RecibosActivity
@@ -47,6 +78,7 @@ class RecibosAplicarFragment : BaseFragment() {
         clearAll()
         pagado = 0.0
         getActivity().unregisterReceiver(bluetoothStateChangeReceiver)
+        _binding = null
     }
 
     override fun onPause() {
@@ -64,21 +96,13 @@ class RecibosAplicarFragment : BaseFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val rootView: View = inflater.inflate(R.layout.fragment_recibos_aplicar, container, false)
+        _binding = FragmentRecibosAplicarBinding.inflate(inflater, container, false)
 
-        observaciones = rootView.findViewById<View>(R.id.txtRecibosObservaciones) as EditText
-        applyBill = rootView.findViewById<View>(R.id.aplicarRecibo) as Button
-        printBill = rootView.findViewById<View>(R.id.imprimirRecibo) as Button
-        text = rootView.findViewById<View>(R.id.html_textRecibos) as HtmlTextView
-        /*  txtFecha = (EditText) rootView.findViewById(R.id.txtFecha);
-        txtFecha.setText(getCurrentDate());
-        txtFecha.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v)
-            {
-                showDatePickerDialog();
-            }
-        });
-*/
+        observaciones = binding.txtRecibosObservaciones
+        applyBill = binding.aplicarRecibo
+        printBill = binding.imprimirRecibo
+        text = binding.htmlTextRecibos
+        
         applyBill!!.setOnClickListener {
             try {
                 val tabCliente = 0
@@ -162,7 +186,7 @@ class RecibosAplicarFragment : BaseFragment() {
                 )
             }
         }
-        return rootView
+        return binding.root
     }
 
     override fun updateData() {

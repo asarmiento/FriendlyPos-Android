@@ -1,13 +1,13 @@
-package com.friendlypos.login.activity
+package com.friendlysystemgroup.friendlypos.login.activity
 
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import com.friendlypos.R
-import com.friendlypos.login.util.SessionPrefes
-import com.friendlypos.principal.activity.MenuPrincipal
+import com.friendlysystemgroup.friendlypos.R
+import com.friendlysystemgroup.friendlypos.login.util.SessionPrefes
+import com.friendlysystemgroup.friendlypos.principal.activity.MenuPrincipal
 
 class IniciarActivity : AppCompatActivity() {
     var session: SessionPrefes? = null

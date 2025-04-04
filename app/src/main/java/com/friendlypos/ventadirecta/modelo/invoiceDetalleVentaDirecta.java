@@ -1,7 +1,7 @@
-package com.friendlypos.ventadirecta.modelo;
+package com.friendlysystemgroup.friendlypos.ventadirecta.modelo;
 
-import com.friendlypos.distribucion.modelo.Pivot;
-import com.friendlypos.distribucion.modelo.sale;
+import com.friendlysystemgroup.friendlypos.distribucion.modelo.Pivot;
+import com.friendlysystemgroup.friendlypos.distribucion.modelo.sale;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;

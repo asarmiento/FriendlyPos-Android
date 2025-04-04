@@ -1,6 +1,6 @@
-package com.friendlypos.principal.modelo
+package com.friendlysystemgroup.friendlypos.principal.modelo
 
-import com.friendlypos.distribucion.modelo.Pivot
+import com.friendlysystemgroup.friendlypos.distribucion.modelo.Pivot
 import com.google.gson.annotations.SerializedName
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
@@ -8,7 +8,7 @@ import io.realm.annotations.PrimaryKey
 /**
  * Created by DelvoM on 21/09/2017.an
  */
-class Productos : RealmObject() {
+open class Productos : RealmObject() {
     @JvmField
     @PrimaryKey
     var id: String? = null

@@ -1,4 +1,4 @@
-package com.friendlypos.app.broadcastreceiver
+package com.friendlysystemgroup.friendlypos.app.broadcastreceiver
 
 import android.bluetooth.BluetoothAdapter
 import android.content.BroadcastReceiver

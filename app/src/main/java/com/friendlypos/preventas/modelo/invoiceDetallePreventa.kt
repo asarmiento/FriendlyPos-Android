@@ -1,7 +1,7 @@
-package com.friendlypos.preventas.modelo
+package com.friendlysystemgroup.friendlypos.preventas.modelo
 
-import com.friendlypos.distribucion.modelo.Pivot
-import com.friendlypos.distribucion.modelo.sale
+import com.friendlysystemgroup.friendlypos.distribucion.modelo.Pivot
+import com.friendlysystemgroup.friendlypos.distribucion.modelo.sale
 
 /**
  * Created by DelvoM on 19/03/2018.

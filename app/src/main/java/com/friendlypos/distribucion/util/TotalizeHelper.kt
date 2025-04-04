@@ -1,11 +1,11 @@
-package com.friendlypos.distribucion.util
+package com.friendlysystemgroup.friendlypos.distribucion.util
 
 import android.util.Log
-import com.friendlypos.distribucion.activity.DistribucionActivity
-import com.friendlypos.distribucion.modelo.Pivot
-import com.friendlypos.distribucion.modelo.sale
-import com.friendlypos.principal.modelo.Clientes
-import com.friendlypos.principal.modelo.Productos
+import com.friendlysystemgroup.friendlypos.distribucion.activity.DistribucionActivity
+import com.friendlysystemgroup.friendlypos.distribucion.modelo.Pivot
+import com.friendlysystemgroup.friendlypos.distribucion.modelo.sale
+import com.friendlysystemgroup.friendlypos.principal.modelo.Clientes
+import com.friendlysystemgroup.friendlypos.principal.modelo.Productos
 import io.realm.Realm
 
 class TotalizeHelper(var activity: DistribucionActivity?) {

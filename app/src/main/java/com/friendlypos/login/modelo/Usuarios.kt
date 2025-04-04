@@ -1,4 +1,4 @@
-package com.friendlypos.login.modelo
+package com.friendlysystemgroup.friendlypos.login.modelo
 
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
@@ -6,7 +6,7 @@ import io.realm.annotations.PrimaryKey
 /**
  * Created by DelvoM on 29/11/2017.
  */
-class Usuarios : RealmObject() {
+open class Usuarios : RealmObject() {
     @JvmField
     @PrimaryKey
     var id: String? = null

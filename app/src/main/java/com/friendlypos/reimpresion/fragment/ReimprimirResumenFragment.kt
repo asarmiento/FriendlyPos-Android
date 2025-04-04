@@ -1,15 +1,16 @@
-package com.friendlypos.reimpresion.fragment
+package com.friendlysystemgroup.friendlypos.reimpresion.fragment
 
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AlertDialog
-import com.friendlypos.application.util.Functions
+import com.friendlysystemgroup.friendlypos.application.util.Functions
 import io.realm.Realm
 import org.sufficientlysecure.htmltextview.HtmlTextView
 import java.io.UnsupportedEncodingException
 import java.nio.charset.Charset
 import butterknife.BindView
-import butterknife.ButterKnife
+
+import com.friendlysystemgroup.friendlypos.preventas.fragment.BaseFragment
 
 class ReimprimirResumenFragment : BaseFragment() {
     @BindView(R.id.html_text)

@@ -1,6 +1,6 @@
-package com.friendlypos.distribucion.modelo
+package com.friendlysystemgroup.friendlypos.distribucion.modelo
 
 /**
  * Created by Delvo on 28/12/2017.
  */
-class EnviarFactura(private val invoice: invoice)
+open class EnviarFactura(private val invoice: invoice)

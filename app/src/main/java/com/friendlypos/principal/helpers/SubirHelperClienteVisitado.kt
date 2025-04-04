@@ -1,17 +1,17 @@
-package com.friendlypos.principal.helpers
+package com.friendlysystemgroup.friendlypos.principal.helpers
 
 import android.app.Activity
 import android.content.ContentValues
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
-import com.friendlypos.app.broadcastreceiver.NetworkStateChangeReceiver
-import com.friendlypos.application.datamanager.BaseManager.Companion.api
-import com.friendlypos.application.interfaces.RequestInterface
-import com.friendlypos.login.util.SessionPrefes.Companion.get
-import com.friendlypos.preventas.modelo.EnviarClienteVisitado
-import com.friendlypos.preventas.modelo.visit
-import com.friendlypos.preventas.modelo.visit.toString
+import com.friendlysystemgroup.friendlypos.app.broadcastreceiver.NetworkStateChangeReceiver
+import com.friendlysystemgroup.friendlypos.application.datamanager.BaseManager.Companion.api
+import com.friendlysystemgroup.friendlypos.application.interfaces.RequestInterface
+import com.friendlysystemgroup.friendlypos.login.util.SessionPrefes.Companion.get
+import com.friendlysystemgroup.friendlypos.preventas.modelo.EnviarClienteVisitado
+import com.friendlysystemgroup.friendlypos.preventas.modelo.visit
+import com.friendlysystemgroup.friendlypos.preventas.modelo.visit.toString
 
 /**
  * Created by Delvo on 02/12/2017.

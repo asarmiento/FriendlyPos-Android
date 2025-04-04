@@ -1,4 +1,4 @@
-package com.friendlypos.preventas.modelo
+package com.friendlysystemgroup.friendlypos.preventas.modelo
 
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
@@ -7,7 +7,7 @@ import java.util.Date
 /**
  * Created by DelvoM on 26/04/2018.
  */
-class Bonuses : RealmObject() {
+open class Bonuses : RealmObject() {
     @PrimaryKey
     var id: Int = 0
     var reference: String? = null

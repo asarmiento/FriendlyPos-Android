@@ -1,4 +1,4 @@
-package com.friendlypos.reenvio_email.modelo
+package com.friendlysystemgroup.friendlypos.reenvio_email.modelo
 
 import com.google.gson.annotations.SerializedName
 

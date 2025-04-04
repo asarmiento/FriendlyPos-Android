@@ -1,4 +1,4 @@
-package com.friendlypos.preventas.adapters
+package com.friendlysystemgroup.friendlypos.preventas.adapters
 
 import android.app.Dialog
 import android.app.ProgressDialog
@@ -21,18 +21,18 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
-import com.friendlypos.R
-import com.friendlypos.application.util.Functions.CreateMessage
-import com.friendlypos.application.util.Functions.date
-import com.friendlypos.application.util.Functions.get24Time
-import com.friendlypos.distribucion.modelo.Pivot
-import com.friendlypos.distribucion.util.GPSTracker
-import com.friendlypos.login.modelo.Usuarios
-import com.friendlypos.login.util.SessionPrefes
-import com.friendlypos.preventas.activity.PreventaActivity
-import com.friendlypos.preventas.modelo.Numeracion
-import com.friendlypos.preventas.modelo.visit
-import com.friendlypos.principal.modelo.Clientes
+import com.friendlysystemgroup.friendlypos.R
+import com.friendlysystemgroup.friendlypos.application.util.Functions.CreateMessage
+import com.friendlysystemgroup.friendlypos.application.util.Functions.date
+import com.friendlysystemgroup.friendlypos.application.util.Functions.get24Time
+import com.friendlysystemgroup.friendlypos.distribucion.modelo.Pivot
+import com.friendlysystemgroup.friendlypos.distribucion.util.GPSTracker
+import com.friendlysystemgroup.friendlypos.login.modelo.Usuarios
+import com.friendlysystemgroup.friendlypos.login.util.SessionPrefes
+import com.friendlysystemgroup.friendlypos.preventas.activity.PreventaActivity
+import com.friendlysystemgroup.friendlypos.preventas.modelo.Numeracion
+import com.friendlysystemgroup.friendlypos.preventas.modelo.visit
+import com.friendlysystemgroup.friendlypos.principal.modelo.Clientes
 import io.realm.Realm
 import uk.co.chrisjenx.calligraphy.CalligraphyTypefaceSpan
 import uk.co.chrisjenx.calligraphy.TypefaceUtils

@@ -1,4 +1,4 @@
-package com.friendlypos.distribucion.modelo
+package com.friendlysystemgroup.friendlypos.distribucion.modelo
 
 import com.google.gson.annotations.SerializedName
 import io.realm.RealmList
@@ -8,7 +8,7 @@ import io.realm.annotations.PrimaryKey
 /**
  * Created by DelvoM on 02/11/2017.
  */
-class invoice : RealmObject() {
+open class invoice : RealmObject() {
     //TODO REVISAR ESTAS KEYS
     @JvmField
     @PrimaryKey

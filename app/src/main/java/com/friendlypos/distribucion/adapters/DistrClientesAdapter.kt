@@ -1,4 +1,4 @@
-package com.friendlypos.distribucion.adapters
+package com.friendlysystemgroup.friendlypos.distribucion.adapters
 
 import android.app.ProgressDialog
 import android.content.ActivityNotFoundException
@@ -21,16 +21,16 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
-import com.friendlypos.R
-import com.friendlypos.application.util.Functions.CreateMessage
-import com.friendlypos.application.util.PrinterFunctions.imprimirProductosDistrSelecCliente
-import com.friendlypos.distribucion.activity.DistribucionActivity
-import com.friendlypos.distribucion.modelo.Inventario
-import com.friendlypos.distribucion.modelo.Pivot
-import com.friendlypos.distribucion.modelo.invoice
-import com.friendlypos.distribucion.modelo.sale
-import com.friendlypos.login.util.SessionPrefes
-import com.friendlypos.principal.modelo.Clientes
+import com.friendlysystemgroup.friendlypos.R
+import com.friendlysystemgroup.friendlypos.application.util.Functions.CreateMessage
+import com.friendlysystemgroup.friendlypos.application.util.PrinterFunctions.imprimirProductosDistrSelecCliente
+import com.friendlysystemgroup.friendlypos.distribucion.activity.DistribucionActivity
+import com.friendlysystemgroup.friendlypos.distribucion.modelo.Inventario
+import com.friendlysystemgroup.friendlypos.distribucion.modelo.Pivot
+import com.friendlysystemgroup.friendlypos.distribucion.modelo.invoice
+import com.friendlysystemgroup.friendlypos.distribucion.modelo.sale
+import com.friendlysystemgroup.friendlypos.login.util.SessionPrefes
+import com.friendlysystemgroup.friendlypos.principal.modelo.Clientes
 import io.realm.Realm
 import io.realm.RealmResults
 import io.realm.internal.SyncObjectServerFacade

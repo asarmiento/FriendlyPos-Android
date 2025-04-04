@@ -1,4 +1,4 @@
-package com.friendlypos.Recibos.activity
+package com.friendlysystemgroup.friendlypos.Recibos.activity
 
 import android.app.ActivityManager
 import android.content.Intent
@@ -15,24 +15,24 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.viewpager.widget.ViewPager
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
-import butterknife.ButterKnife
-import com.friendlypos.R
-import com.friendlypos.Recibos.delegate.PreSellRecibosDelegate
-import com.friendlypos.Recibos.fragments.RecibosAplicarFragment
-import com.friendlypos.Recibos.fragments.RecibosClientesFragment
-import com.friendlypos.Recibos.fragments.RecibosResumenFragment
-import com.friendlypos.Recibos.fragments.RecibosSeleccionarFacturaFragment
-import com.friendlypos.Recibos.modelo.receipts
-import com.friendlypos.Recibos.modelo.receiptsDetalle
-import com.friendlypos.Recibos.modelo.recibos
-import com.friendlypos.application.bluetooth.PrinterService
-import com.friendlypos.application.bluetooth.PrinterService.Companion.startRDService
-import com.friendlypos.application.util.Functions.CreateMessage
-import com.friendlypos.distribucion.fragment.BaseFragment
-import com.friendlypos.distribucion.util.Adapter
-import com.friendlypos.preventas.modelo.Numeracion
-import com.friendlypos.principal.activity.BluetoothActivity
-import com.friendlypos.principal.activity.MenuPrincipal
+
+import com.friendlysystemgroup.friendlypos.R
+import com.friendlysystemgroup.friendlypos.Recibos.delegate.PreSellRecibosDelegate
+import com.friendlysystemgroup.friendlypos.Recibos.fragments.RecibosAplicarFragment
+import com.friendlysystemgroup.friendlypos.Recibos.fragments.RecibosClientesFragment
+import com.friendlysystemgroup.friendlypos.Recibos.fragments.RecibosResumenFragment
+import com.friendlysystemgroup.friendlypos.Recibos.fragments.RecibosSeleccionarFacturaFragment
+import com.friendlysystemgroup.friendlypos.Recibos.modelo.receipts
+import com.friendlysystemgroup.friendlypos.Recibos.modelo.receiptsDetalle
+import com.friendlysystemgroup.friendlypos.Recibos.modelo.recibos
+import com.friendlysystemgroup.friendlypos.application.bluetooth.PrinterService
+import com.friendlysystemgroup.friendlypos.application.bluetooth.PrinterService.Companion.startRDService
+import com.friendlysystemgroup.friendlypos.application.util.Functions.CreateMessage
+import com.friendlysystemgroup.friendlypos.distribucion.fragment.BaseFragment
+import com.friendlysystemgroup.friendlypos.distribucion.util.Adapter
+import com.friendlysystemgroup.friendlypos.preventas.modelo.Numeracion
+import com.friendlysystemgroup.friendlypos.principal.activity.BluetoothActivity
+import com.friendlysystemgroup.friendlypos.principal.activity.MenuPrincipal
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 import com.google.android.material.tabs.TabLayout.TabLayoutOnPageChangeListener
@@ -118,7 +118,7 @@ class RecibosActivity : BluetoothActivity() {
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         setContentView(R.layout.activity_recibos)
 
-        ButterKnife.bind(this)
+
 
         toolbar = findViewById<View>(R.id.toolbarRecibos) as Toolbar
         setSupportActionBar(toolbar)

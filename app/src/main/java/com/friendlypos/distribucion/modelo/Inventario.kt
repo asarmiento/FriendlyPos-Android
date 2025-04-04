@@ -1,4 +1,4 @@
-package com.friendlypos.distribucion.modelo
+package com.friendlysystemgroup.friendlypos.distribucion.modelo
 
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
@@ -6,7 +6,7 @@ import io.realm.annotations.PrimaryKey
 /**
  * Created by DelvoM on 31/10/2017.
  */
-class Inventario : RealmObject() {
+open class Inventario : RealmObject() {
     @JvmField
     @PrimaryKey
     var id: Int = 0

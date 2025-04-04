@@ -1,4 +1,4 @@
-package com.friendlypos.reimpresion_pedidos.adapters
+package com.friendlysystemgroup.friendlypos.reimpresion_pedidos.adapters
 
 import android.content.Context
 import android.graphics.Color
@@ -15,17 +15,17 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
-import com.friendlypos.R
-import com.friendlypos.distribucion.modelo.Marcas
-import com.friendlypos.distribucion.modelo.Pivot
-import com.friendlypos.distribucion.modelo.TipoProducto
-import com.friendlypos.distribucion.modelo.sale
-import com.friendlypos.preventas.modelo.Bonuses
-import com.friendlypos.principal.modelo.Clientes
-import com.friendlypos.principal.modelo.Productos
-import com.friendlypos.reimpresion_pedidos.activity.ReimprimirPedidosActivity
-import com.friendlypos.reimpresion_pedidos.fragment.ReimPedidoSelecProductoFragment
-import com.friendlypos.reimpresion_pedidos.util.TotalizeHelperReimPedido
+import com.friendlysystemgroup.friendlypos.R
+import com.friendlysystemgroup.friendlypos.distribucion.modelo.Marcas
+import com.friendlysystemgroup.friendlypos.distribucion.modelo.Pivot
+import com.friendlysystemgroup.friendlypos.distribucion.modelo.TipoProducto
+import com.friendlysystemgroup.friendlypos.distribucion.modelo.sale
+import com.friendlysystemgroup.friendlypos.preventas.modelo.Bonuses
+import com.friendlysystemgroup.friendlypos.principal.modelo.Clientes
+import com.friendlysystemgroup.friendlypos.principal.modelo.Productos
+import com.friendlysystemgroup.friendlypos.Reimpresion_pedidos.activity.ReimprimirPedidosActivity
+import com.friendlysystemgroup.friendlypos.Reimpresion_pedidos.fragment.ReimPedidoSelecProductoFragment
+import com.friendlysystemgroup.friendlypos.Reimpresion_pedidos.util.TotalizeHelperReimPedido
 import io.realm.Realm
 import io.realm.RealmResults
 import java.util.Date

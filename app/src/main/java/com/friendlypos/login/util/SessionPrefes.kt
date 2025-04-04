@@ -1,11 +1,11 @@
-package com.friendlypos.login.util
+package com.friendlysystemgroup.friendlypos.login.util
 
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.text.TextUtils
-import com.friendlypos.login.activity.IniciarActivity
-import com.friendlypos.login.modelo.UserResponse
+import com.friendlysystemgroup.friendlypos.login.activity.IniciarActivity
+import com.friendlysystemgroup.friendlypos.login.modelo.UserResponse
 
 class SessionPrefes(var _context: Context) {
     private val mPrefs: SharedPreferences

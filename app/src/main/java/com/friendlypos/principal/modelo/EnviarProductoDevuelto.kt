@@ -1,6 +1,6 @@
-package com.friendlypos.principal.modelo
+package com.friendlysystemgroup.friendlypos.principal.modelo
 
-import com.friendlypos.distribucion.modelo.Inventario
+import com.friendlysystemgroup.friendlypos.distribucion.modelo.Inventario
 
 /**
  * Created by DelvoM on 19/11/2018.

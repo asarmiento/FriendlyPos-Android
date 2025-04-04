@@ -1,4 +1,4 @@
-package com.friendlypos.preventas.fragment
+package com.friendlysystemgroup.friendlypos.preventas.fragment
 
 import android.app.Activity
 import android.os.Bundle
@@ -8,11 +8,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.friendlypos.R
-import com.friendlypos.distribucion.fragment.BaseFragment
-import com.friendlypos.preventas.activity.PreventaActivity
-import com.friendlypos.preventas.adapters.PrevResumenAdapter
-import com.friendlypos.preventas.util.TotalizeHelperPreventa
+import com.friendlysystemgroup.friendlypos.R
+import com.friendlysystemgroup.friendlypos.distribucion.fragment.BaseFragment
+import com.friendlysystemgroup.friendlypos.preventas.activity.PreventaActivity
+import com.friendlysystemgroup.friendlypos.preventas.adapters.PrevResumenAdapter
+import com.friendlysystemgroup.friendlypos.preventas.util.TotalizeHelperPreventa
 
 class PrevResumenFragment : BaseFragment() {
     var recyclerView: RecyclerView? = null

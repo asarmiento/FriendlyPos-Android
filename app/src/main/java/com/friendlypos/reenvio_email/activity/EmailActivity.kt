@@ -1,4 +1,4 @@
-package com.friendlypos.reenvio_email.activity
+package com.friendlysystemgroup.friendlypos.reenvio_email.activity
 
 import android.app.ActivityManager
 import android.content.Intent
@@ -12,18 +12,18 @@ import android.view.WindowManager
 import androidx.appcompat.widget.Toolbar
 import androidx.viewpager.widget.ViewPager
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
-import butterknife.ButterKnife
-import com.friendlypos.R
-import com.friendlypos.app.broadcastreceiver.NetworkStateChangeReceiver
-import com.friendlypos.application.bluetooth.PrinterService
-import com.friendlypos.application.bluetooth.PrinterService.Companion.startRDService
-import com.friendlypos.application.util.Functions.CreateMessage
-import com.friendlypos.distribucion.fragment.BaseFragment
-import com.friendlypos.distribucion.util.Adapter
-import com.friendlypos.principal.activity.BluetoothActivity
-import com.friendlypos.principal.activity.MenuPrincipal
-import com.friendlypos.reenvio_email.fragment.EmailSelecClienteFragment
-import com.friendlypos.reenvio_email.fragment.EmailSelecFacturaFragment
+
+import com.friendlysystemgroup.friendlypos.R
+import com.friendlysystemgroup.friendlypos.app.broadcastreceiver.NetworkStateChangeReceiver
+import com.friendlysystemgroup.friendlypos.application.bluetooth.PrinterService
+import com.friendlysystemgroup.friendlypos.application.bluetooth.PrinterService.Companion.startRDService
+import com.friendlysystemgroup.friendlypos.application.util.Functions.CreateMessage
+import com.friendlysystemgroup.friendlypos.distribucion.fragment.BaseFragment
+import com.friendlysystemgroup.friendlypos.distribucion.util.Adapter
+import com.friendlysystemgroup.friendlypos.principal.activity.BluetoothActivity
+import com.friendlysystemgroup.friendlypos.principal.activity.MenuPrincipal
+import com.friendlysystemgroup.friendlypos.Reenvio_email.fragment.EmailSelecClienteFragment
+import com.friendlysystemgroup.friendlypos.Reenvio_email.fragment.EmailSelecFacturaFragment
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 import com.google.android.material.tabs.TabLayout.TabLayoutOnPageChangeListener

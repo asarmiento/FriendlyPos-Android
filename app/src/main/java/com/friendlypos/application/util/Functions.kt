@@ -1,4 +1,4 @@
-package com.friendlypos.application.util
+package com.friendlysystemgroup.friendlypos.application.util
 
 import android.app.Notification
 import android.app.NotificationManager
@@ -11,7 +11,7 @@ import android.util.Patterns
 import android.webkit.URLUtil
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.NotificationCompat
-import com.friendlypos.R
+import com.friendlysystemgroup.friendlypos.R
 import java.net.URL
 import java.text.DateFormat
 import java.text.SimpleDateFormat

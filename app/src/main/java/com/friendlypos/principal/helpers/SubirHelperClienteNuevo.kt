@@ -1,18 +1,18 @@
-package com.friendlypos.principal.helpers
+package com.friendlysystemgroup.friendlypos.principal.helpers
 
 import android.content.ContentValues
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
-import com.friendlypos.app.broadcastreceiver.NetworkStateChangeReceiver
-import com.friendlypos.application.datamanager.BaseManager.Companion.api
-import com.friendlypos.application.interfaces.RequestInterface
-import com.friendlypos.crearCliente.modelo.customer_new
-import com.friendlypos.crearCliente.modelo.customer_new.isResult
-import com.friendlypos.crearCliente.modelo.customer_new.toString
-import com.friendlypos.login.util.SessionPrefes.Companion.get
-import com.friendlypos.principal.activity.MenuPrincipal
-import com.friendlypos.principal.modelo.EnviarClienteNuevo
+import com.friendlysystemgroup.friendlypos.app.broadcastreceiver.NetworkStateChangeReceiver
+import com.friendlysystemgroup.friendlypos.application.datamanager.BaseManager.Companion.api
+import com.friendlysystemgroup.friendlypos.application.interfaces.RequestInterface
+import com.friendlysystemgroup.friendlypos.crearCliente.modelo.customer_new
+import com.friendlysystemgroup.friendlypos.crearCliente.modelo.customer_new.isResult
+import com.friendlysystemgroup.friendlypos.crearCliente.modelo.customer_new.toString
+import com.friendlysystemgroup.friendlypos.login.util.SessionPrefes.Companion.get
+import com.friendlysystemgroup.friendlypos.principal.activity.MenuPrincipal
+import com.friendlysystemgroup.friendlypos.principal.modelo.EnviarClienteNuevo
 
 /**
  * Created by DelvoM on 24/10/2018.

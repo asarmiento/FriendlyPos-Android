@@ -1,29 +1,49 @@
-package com.friendlypos.reimprimirRecibos.fragment
+package com.friendlysystemgroup.friendlypos.reimprimirRecibos.fragment
 
+import android.content.DialogInterface
+import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import android.view.WindowManager
+import android.widget.CheckBox
+import android.widget.EditText
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import com.friendlypos.application.util.Functions
+import com.friendlysystemgroup.friendlypos.R
+import com.friendlysystemgroup.friendlypos.Recibos.modelo.receipts
+import com.friendlysystemgroup.friendlypos.Recibos.modelo.recibos
+import com.friendlysystemgroup.friendlypos.app.broadcastreceiver.BluetoothStateChangeReceiver
+import com.friendlysystemgroup.friendlypos.application.util.Functions
+import com.friendlysystemgroup.friendlypos.application.util.LocalImageGetter
+import com.friendlysystemgroup.friendlypos.application.util.PrinterFunctions
+import com.friendlysystemgroup.friendlypos.databinding.FragmentReimprimirReciboResumenBinding
+import com.friendlysystemgroup.friendlypos.distribucion.fragment.BaseFragment
+import com.friendlysystemgroup.friendlypos.principal.modelo.Clientes
+import com.friendlysystemgroup.friendlypos.ReimprimirRecibos.activity.ReimprimirRecibosActivity
 import io.realm.Realm
+import io.realm.RealmResults
 import org.sufficientlysecure.htmltextview.HtmlTextView
-import butterknife.BindView
-import butterknife.ButterKnife
 
 class ReimprimirReciboResumenFragment : BaseFragment() {
     var text: HtmlTextView? = null
     var recibo_actualizado: receipts? = null
 
-    @BindView(R.id.btnReimprimirReciboNuevo)
-    lateinit var btnReimprimirFactura: ImageButton
+    private var _binding: FragmentReimprimirReciboResumenBinding? = null
+    private val binding get() = _binding!!
+    
     var bluetoothStateChangeReceiver: BluetoothStateChangeReceiver? = null
     var activity: ReimprimirRecibosActivity? = null
     var facturaId: String? = ""
     var slecTAB: Int = 0
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         bluetoothStateChangeReceiver = BluetoothStateChangeReceiver()
-        bluetoothStateChangeReceiver.setBluetoothStateChangeReceiver(getContext())
-        activity = ReimprimirRecibosActivity()
+        bluetoothStateChangeReceiver?.setBluetoothStateChangeReceiver(requireContext())
+        activity = getActivity() as? ReimprimirRecibosActivity
     }
 
     override fun onPause() {
@@ -32,26 +52,24 @@ class ReimprimirReciboResumenFragment : BaseFragment() {
 
     override fun onDestroy() {
         super.onDestroy()
-        getActivity().unregisterReceiver(bluetoothStateChangeReceiver)
+        requireActivity().unregisterReceiver(bluetoothStateChangeReceiver)
+        _binding = null
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        val rootView: View =
-            inflater.inflate(R.layout.fragment_reimprimir_recibo_resumen, container, false)
-        text = rootView.findViewById<View>(R.id.html_textReciboNuevo) as HtmlTextView
-        ButterKnife.bind(this, rootView)
-
-
-        btnReimprimirFactura.setOnClickListener(View.OnClickListener {
-            if (bluetoothStateChangeReceiver.isBluetoothAvailable == true) {
-                val layoutInflater: LayoutInflater = LayoutInflater.from(getActivity())
+    ): View {
+        _binding = FragmentReimprimirReciboResumenBinding.inflate(inflater, container, false)
+        text = binding.htmlTextReciboNuevo
+        
+        binding.btnReimprimirReciboNuevo.setOnClickListener {
+            if (bluetoothStateChangeReceiver?.isBluetoothAvailable == true) {
+                val layoutInflater: LayoutInflater = LayoutInflater.from(requireActivity())
                 val promptView: View =
                     layoutInflater.inflate(R.layout.prompt_imprimir_recibos, null)
 
-                val alertDialogBuilder = AlertDialog.Builder(getActivity())
+                val alertDialogBuilder = AlertDialog.Builder(requireActivity())
                 alertDialogBuilder.setView(promptView)
                 val checkbox: CheckBox =
                     promptView.findViewById<View>(R.id.checkbox) as CheckBox
@@ -72,11 +90,11 @@ class ReimprimirReciboResumenFragment : BaseFragment() {
 
                             PrinterFunctions.imprimirReimpRecibosTotal(
                                 recibo_actualizado,
-                                getActivity(),
+                                requireActivity(),
                                 1,
                                 cantidadImpresiones
                             )
-                            Toast.makeText(getActivity(), "Reimprimir recibo", Toast.LENGTH_SHORT)
+                            Toast.makeText(requireActivity(), "Reimprimir recibo", Toast.LENGTH_SHORT)
                                 .show()
                         }
                     })
@@ -91,27 +109,26 @@ class ReimprimirReciboResumenFragment : BaseFragment() {
                 val alertD = alertDialogBuilder.create()
                 alertD.window!!.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
                 alertD.show()
-            } else if (bluetoothStateChangeReceiver.isBluetoothAvailable == false) {
+            } else if (bluetoothStateChangeReceiver?.isBluetoothAvailable == false) {
                 Functions.CreateMessage(
-                    getActivity(),
+                    requireActivity(),
                     "Error",
                     "La conexión del bluetooth ha fallado, favor revisar o conectar el dispositivo"
                 )
             }
-        })
+        }
 
-        return rootView
+        return binding.root
     }
-
 
     private val htmlPreview: Unit
         get() {
             try {
                 val realm = Realm.getDefaultInstance()
-                val clientes: Clientes = realm.where<Clientes>(Clientes::class.java)
-                    .equalTo("id", recibo_actualizado.customer_id).findFirst()
+                val clientes: Clientes? = realm.where(Clientes::class.java)
+                    .equalTo("id", recibo_actualizado?.customer_id)?.findFirst()
 
-                val nombreCliente: String = clientes.fantasyName
+                val nombreCliente: String = clientes?.fantasyName ?: ""
                 Log.d("nombreCliente", nombreCliente)
                 var preview = ""
 
@@ -128,15 +145,15 @@ class ReimprimirReciboResumenFragment : BaseFragment() {
        preview += "<a><b>" + padRight("Total restante", 35) + "</b></a><br>";*/
                     preview += "<a>------------------------------------------------<a><br>"
 
-                    preview += getPrintDistTotal(recibo_actualizado.customer_id)
+                    preview += getPrintDistTotal(recibo_actualizado?.customer_id ?: "")
                 } else {
                     preview += "<center><h2>Seleccione la factura a ver</h2></center>"
                 }
-                text.setHtmlFromString(preview, LocalImageGetter())
+                text?.setHtmlFromString(preview, LocalImageGetter())
             } catch (e: Exception) {
                 val preview =
                     "<center><h2>Seleccione la factura a ver cath</h2></center>"
-                text.setHtmlFromString(preview, LocalImageGetter())
+                text?.setHtmlFromString(preview, LocalImageGetter())
                 Log.d("adsdad", e.message!!)
             }
         }
@@ -146,29 +163,29 @@ class ReimprimirReciboResumenFragment : BaseFragment() {
 
         val realm1 = Realm.getDefaultInstance()
         val result: RealmResults<receipts> =
-            realm1.where<receipts>(receipts::class.java).equalTo("customer_id", idVenta)
-                .equalTo("reference", recibo_actualizado.reference).findAll()
+            realm1.where(receipts::class.java).equalTo("customer_id", idVenta)
+                .equalTo("reference", recibo_actualizado?.reference).findAll()
         Log.d("recibosresult", result.toString() + "")
         if (result.isEmpty()) {
             send = "No hay recibos emitidos"
         } else {
             val salesList1: List<receipts> =
-                realm1.where<receipts>(receipts::class.java).equalTo("customer_id", idVenta)
-                    .equalTo("reference", recibo_actualizado.reference).findAll()
+                realm1.where(receipts::class.java).equalTo("customer_id", idVenta)
+                    .equalTo("reference", recibo_actualizado?.reference).findAll()
 
-            Log.d("getReference", salesList1[0].reference)
+            Log.d("getReference", salesList1[0].reference ?: "")
 
-            val recibos: recibos = realm1.where<recibos>(recibos::class.java)
+            val recibos: recibos? = realm1.where(recibos::class.java)
                 .equalTo("numeration", salesList1[0].numeration).findFirst()
 
-            Log.d("getNumeration", recibos.numeration + "")
+            Log.d("getNumeration", recibos?.numeration ?: "")
 
-            val numeroReferenciaReceipts: String = salesList1[0].reference
-            val numeracionReceipts: String = salesList1[0].numeration
+            val numeroReferenciaReceipts: String = salesList1[0].reference ?: ""
+            val numeracionReceipts: String = salesList1[0].numeration ?: ""
             val pagadoReceipts: Double = salesList1[0].montoCanceladoPorFactura
             val pagadoSReceipts = String.format("%,.2f", pagadoReceipts)
 
-            val total: Double = recibos.total
+            val total: Double = recibos?.total ?: 0.0
             val totalS = String.format("%,.2f", total)
 
             val restante: Double = salesList1[0].porPagarReceipts
@@ -213,22 +230,22 @@ class ReimprimirReciboResumenFragment : BaseFragment() {
     }
 
     override fun updateData() {
-        slecTAB = (getActivity() as ReimprimirRecibosActivity).selecReciboTab
+        slecTAB = (activity as? ReimprimirRecibosActivity)?.selecReciboTab ?: 0
         if (slecTAB == 1) {
-            facturaId = (getActivity() as ReimprimirRecibosActivity).invoiceIdReimprimirRecibo
+            facturaId = (activity as? ReimprimirRecibosActivity)?.invoiceIdReimprimirRecibo
 
 
             val realm3 = Realm.getDefaultInstance()
             realm3.executeTransaction { realm3 ->
                 recibo_actualizado =
-                    realm3.where<receipts>(receipts::class.java).equalTo("reference", facturaId)
+                    realm3.where(receipts::class.java).equalTo("reference", facturaId)
                         .findFirst()
                 realm3.close()
             }
 
 
             htmlPreview
-            Log.d("FACTURAIDTOTALIZAR", recibo_actualizado.customer_id + "")
+            Log.d("FACTURAIDTOTALIZAR", recibo_actualizado?.customer_id ?: "")
             Log.d("FACTURAIDTOTALIZAR", facturaId!!)
         } else {
             Log.d("nadaTotalizarupdate", "nadaTotalizarupdate")

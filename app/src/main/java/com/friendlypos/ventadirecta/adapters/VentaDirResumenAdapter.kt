@@ -1,4 +1,4 @@
-package com.friendlypos.ventadirecta.adapters
+package com.friendlysystemgroup.friendlypos.ventadirecta.adapters
 
 import android.util.Log
 import android.view.LayoutInflater
@@ -8,12 +8,12 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
-import com.friendlypos.R
-import com.friendlypos.distribucion.modelo.Inventario
-import com.friendlypos.distribucion.modelo.Pivot
-import com.friendlypos.principal.modelo.Productos
-import com.friendlypos.ventadirecta.activity.VentaDirectaActivity
-import com.friendlypos.ventadirecta.fragment.VentaDirResumenFragment
+import com.friendlysystemgroup.friendlypos.R
+import com.friendlysystemgroup.friendlypos.distribucion.modelo.Inventario
+import com.friendlysystemgroup.friendlypos.distribucion.modelo.Pivot
+import com.friendlysystemgroup.friendlypos.principal.modelo.Productos
+import com.friendlysystemgroup.friendlypos.ventadirecta.activity.VentaDirectaActivity
+import com.friendlysystemgroup.friendlypos.ventadirecta.fragment.VentaDirResumenFragment
 import io.realm.Realm
 
 

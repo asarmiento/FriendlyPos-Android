@@ -1,7 +1,7 @@
-package com.friendlypos.application.datamanager
+package com.friendlysystemgroup.friendlypos.application.datamanager
 
 import android.content.Context
-import com.friendlypos.login.util.Properties
+import com.friendlysystemgroup.friendlypos.login.util.Properties
 import com.google.gson.ExclusionStrategy
 import java.io.IOException
 import java.util.concurrent.TimeUnit

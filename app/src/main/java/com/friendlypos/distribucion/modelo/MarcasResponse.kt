@@ -1,4 +1,4 @@
-package com.friendlypos.distribucion.modelo
+package com.friendlysystemgroup.friendlypos.distribucion.modelo
 
 import com.google.gson.annotations.SerializedName
 

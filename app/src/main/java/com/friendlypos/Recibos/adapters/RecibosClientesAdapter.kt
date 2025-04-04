@@ -1,4 +1,4 @@
-package com.friendlypos.Recibos.adapters
+package com.friendlysystemgroup.friendlypos.Recibos.adapters
 
 import android.app.ProgressDialog
 import android.content.Context
@@ -15,15 +15,15 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
-import com.friendlypos.R
-import com.friendlypos.Recibos.activity.RecibosActivity
-import com.friendlypos.Recibos.modelo.receipts
-import com.friendlypos.Recibos.modelo.recibos
-import com.friendlypos.application.util.Functions.date
-import com.friendlypos.login.modelo.Usuarios
-import com.friendlypos.login.util.SessionPrefes
-import com.friendlypos.preventas.modelo.Numeracion
-import com.friendlypos.principal.modelo.Clientes
+import com.friendlysystemgroup.friendlypos.R
+import com.friendlysystemgroup.friendlypos.Recibos.activity.RecibosActivity
+import com.friendlysystemgroup.friendlypos.Recibos.modelo.receipts
+import com.friendlysystemgroup.friendlypos.Recibos.modelo.recibos
+import com.friendlysystemgroup.friendlypos.application.util.Functions.date
+import com.friendlysystemgroup.friendlypos.login.modelo.Usuarios
+import com.friendlysystemgroup.friendlypos.login.util.SessionPrefes
+import com.friendlysystemgroup.friendlypos.preventas.modelo.Numeracion
+import com.friendlysystemgroup.friendlypos.principal.modelo.Clientes
 import io.realm.Realm
 import io.realm.RealmResults
 import io.realm.Sort

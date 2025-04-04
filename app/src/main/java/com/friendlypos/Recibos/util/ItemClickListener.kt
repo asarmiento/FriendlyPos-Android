@@ -1,4 +1,4 @@
-package com.friendlypos.Recibos.util
+package com.friendlysystemgroup.friendlypos.Recibos.util
 
 import android.view.View
 

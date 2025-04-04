@@ -1,4 +1,4 @@
-package com.friendlypos.login.modelo
+package com.friendlysystemgroup.friendlypos.login.modelo
 
 /**
  * Created by DelvoM on 25/09/2017.

@@ -1,4 +1,4 @@
-package com.friendlypos.application.bluetooth
+package com.friendlysystemgroup.friendlypos.application.bluetooth
 
 /**
  * Created by Desarrollo on 3/30/2015.

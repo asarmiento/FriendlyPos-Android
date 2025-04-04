@@ -1,4 +1,4 @@
-package com.friendlypos.ventadirecta.fragment
+package com.friendlysystemgroup.friendlypos.ventadirecta.fragment
 
 import android.app.Activity
 import android.os.Bundle
@@ -14,11 +14,11 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.view.MenuItemCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.friendlypos.R
-import com.friendlypos.distribucion.fragment.BaseFragment
-import com.friendlypos.distribucion.modelo.Inventario
-import com.friendlypos.ventadirecta.activity.VentaDirectaActivity
-import com.friendlypos.ventadirecta.adapters.VentaDirSeleccionarProductoAdapter
+import com.friendlysystemgroup.friendlypos.R
+import com.friendlysystemgroup.friendlypos.distribucion.fragment.BaseFragment
+import com.friendlysystemgroup.friendlypos.distribucion.modelo.Inventario
+import com.friendlysystemgroup.friendlypos.ventadirecta.activity.VentaDirectaActivity
+import com.friendlysystemgroup.friendlypos.ventadirecta.adapters.VentaDirSeleccionarProductoAdapter
 import io.realm.Realm
 import io.realm.internal.SyncObjectServerFacade
 import java.util.Locale

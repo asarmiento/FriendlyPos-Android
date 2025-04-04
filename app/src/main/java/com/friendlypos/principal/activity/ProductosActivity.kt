@@ -1,4 +1,4 @@
-package com.friendlypos.principal.activity
+package com.friendlysystemgroup.friendlypos.principal.activity
 
 import android.app.ActivityManager
 import android.content.Intent
@@ -15,15 +15,15 @@ import androidx.core.view.MenuItemCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
-import butterknife.ButterKnife
-import com.friendlypos.R
-import com.friendlypos.application.bluetooth.PrinterService
-import com.friendlypos.application.bluetooth.PrinterService.Companion.startRDService
-import com.friendlypos.login.activity.LoginActivity
-import com.friendlypos.login.util.SessionPrefes.Companion.get
-import com.friendlypos.principal.activity.MenuPrincipal
-import com.friendlypos.principal.adapters.ProductosAdapter
-import com.friendlypos.principal.modelo.Productos
+
+import com.friendlysystemgroup.friendlypos.R
+import com.friendlysystemgroup.friendlypos.application.bluetooth.PrinterService
+import com.friendlysystemgroup.friendlypos.application.bluetooth.PrinterService.Companion.startRDService
+import com.friendlysystemgroup.friendlypos.login.activity.LoginActivity
+import com.friendlysystemgroup.friendlypos.login.util.SessionPrefes.Companion.get
+import com.friendlysystemgroup.friendlypos.principal.activity.MenuPrincipal
+import com.friendlysystemgroup.friendlypos.principal.adapters.ProductosAdapter
+import com.friendlysystemgroup.friendlypos.principal.modelo.Productos
 import io.realm.Realm
 import java.util.Locale
 

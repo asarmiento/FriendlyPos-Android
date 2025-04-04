@@ -1,4 +1,4 @@
-package com.friendlypos.Recibos.modelo
+package com.friendlysystemgroup.friendlypos.Recibos.modelo
 
 import io.realm.RealmList
 import io.realm.RealmObject
@@ -7,7 +7,7 @@ import io.realm.annotations.PrimaryKey
 /**
  * Created by DelvoM on 25/09/2018.
  */
-class receipts : RealmObject() {
+open class receipts : RealmObject() {
     /*
    "customer_id":01,
            "reference":"27-0000001",

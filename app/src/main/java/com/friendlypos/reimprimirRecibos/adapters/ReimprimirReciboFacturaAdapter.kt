@@ -1,4 +1,4 @@
-package com.friendlypos.reimprimirRecibos.adapters
+package com.friendlysystemgroup.friendlypos.reimprimirRecibos.adapters
 
 import android.app.ProgressDialog
 import android.content.Context
@@ -13,11 +13,11 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
-import com.friendlypos.R
-import com.friendlypos.Recibos.modelo.receipts
-import com.friendlypos.Recibos.modelo.recibos
-import com.friendlypos.principal.modelo.Clientes
-import com.friendlypos.reimprimirRecibos.activity.ReimprimirRecibosActivity
+import com.friendlysystemgroup.friendlypos.R
+import com.friendlysystemgroup.friendlypos.Recibos.modelo.receipts
+import com.friendlysystemgroup.friendlypos.Recibos.modelo.recibos
+import com.friendlysystemgroup.friendlypos.principal.modelo.Clientes
+import com.friendlysystemgroup.friendlypos.ReimprimirRecibos.activity.ReimprimirRecibosActivity
 import io.realm.Realm
 import uk.co.chrisjenx.calligraphy.CalligraphyTypefaceSpan
 import uk.co.chrisjenx.calligraphy.TypefaceUtils

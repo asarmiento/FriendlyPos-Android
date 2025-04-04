@@ -1,4 +1,4 @@
-package com.friendlypos.principal.adapters
+package com.friendlysystemgroup.friendlypos.principal.adapters
 
 import android.content.Context
 import android.util.Log
@@ -9,10 +9,10 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
-import com.friendlypos.R
-import com.friendlypos.distribucion.modelo.Inventario
-import com.friendlypos.distribucion.modelo.Marcas
-import com.friendlypos.principal.modelo.Productos
+import com.friendlysystemgroup.friendlypos.R
+import com.friendlysystemgroup.friendlypos.distribucion.modelo.Inventario
+import com.friendlysystemgroup.friendlypos.distribucion.modelo.Marcas
+import com.friendlysystemgroup.friendlypos.principal.modelo.Productos
 import io.realm.Realm
 
 

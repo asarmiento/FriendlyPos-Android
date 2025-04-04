@@ -1,9 +1,9 @@
-package com.friendlypos.reenvio_email.modelo
+package com.friendlysystemgroup.friendlypos.reenvio_email.modelo
 
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
 
-class customer : RealmObject() {
+open class customer : RealmObject() {
     /*  "id": 8,
                  "card": "",
                  "company_name": "ALFREDO QUINTERO QUINTERO"*/

@@ -1,13 +1,13 @@
-package com.friendlypos.distribucion.modelo
+package com.friendlysystemgroup.friendlypos.distribucion.modelo
 
-import com.friendlypos.principal.modelo.Clientes
+import com.friendlysystemgroup.friendlypos.principal.modelo.Clientes
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
 
 /**
  * Created by DelvoM on 06/11/2017.
  */
-class sale : RealmObject() {
+open class sale : RealmObject() {
     /*  "sale": {
            "id": 43,
                    "invoice_id": "43",

@@ -1,9 +1,9 @@
-package com.friendlypos.principal.modelo
+package com.friendlysystemgroup.friendlypos.principal.modelo
 
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
 
-class Clientes : RealmObject() {
+open class Clientes : RealmObject() {
     @JvmField
     @PrimaryKey
     var id: String? = null

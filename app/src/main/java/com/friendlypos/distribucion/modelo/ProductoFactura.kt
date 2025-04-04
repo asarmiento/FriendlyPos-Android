@@ -1,4 +1,4 @@
-package com.friendlypos.distribucion.modelo
+package com.friendlysystemgroup.friendlypos.distribucion.modelo
 
 import com.google.gson.annotations.SerializedName
 import io.realm.RealmObject
@@ -7,7 +7,7 @@ import io.realm.annotations.PrimaryKey
 /**
  * Created by DelvoM on 14/11/2017.
  */
-class ProductoFactura : RealmObject() {
+open class ProductoFactura : RealmObject() {
     @PrimaryKey
     var id: String? = null
 

@@ -1,18 +1,18 @@
-package com.friendlypos.principal.helpers
+package com.friendlysystemgroup.friendlypos.principal.helpers
 
 import android.content.ContentValues
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
-import com.friendlypos.app.broadcastreceiver.NetworkStateChangeReceiver
-import com.friendlypos.application.datamanager.BaseManager.Companion.api
-import com.friendlypos.application.interfaces.RequestInterface
-import com.friendlypos.distribucion.modelo.Inventario
-import com.friendlypos.distribucion.modelo.Inventario.isResult
-import com.friendlypos.distribucion.modelo.Inventario.toString
-import com.friendlypos.login.util.SessionPrefes.Companion.get
-import com.friendlypos.principal.activity.MenuPrincipal
-import com.friendlypos.principal.modelo.EnviarProductoDevuelto
+import com.friendlysystemgroup.friendlypos.app.broadcastreceiver.NetworkStateChangeReceiver
+import com.friendlysystemgroup.friendlypos.application.datamanager.BaseManager.Companion.api
+import com.friendlysystemgroup.friendlypos.application.interfaces.RequestInterface
+import com.friendlysystemgroup.friendlypos.distribucion.modelo.Inventario
+import com.friendlysystemgroup.friendlypos.distribucion.modelo.Inventario.isResult
+import com.friendlysystemgroup.friendlypos.distribucion.modelo.Inventario.toString
+import com.friendlysystemgroup.friendlypos.login.util.SessionPrefes.Companion.get
+import com.friendlysystemgroup.friendlypos.principal.activity.MenuPrincipal
+import com.friendlysystemgroup.friendlypos.principal.modelo.EnviarProductoDevuelto
 
 /**
  * Created by Delvo on 02/12/2017.

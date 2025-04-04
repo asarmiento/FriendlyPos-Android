@@ -1,4 +1,4 @@
-package com.friendlypos.Recibos.modelo
+package com.friendlysystemgroup.friendlypos.Recibos.modelo
 
 import com.google.gson.annotations.SerializedName
 

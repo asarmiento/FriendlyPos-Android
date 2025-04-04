@@ -1,3 +1,3 @@
-package com.friendlypos.Recibos.modelo
+package com.friendlysystemgroup.friendlypos.Recibos.modelo
 
 class EnviarRecibos(private val recibo: receipts)

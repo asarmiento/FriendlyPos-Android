@@ -1,4 +1,4 @@
-package com.friendlypos.preventas.modelo
+package com.friendlysystemgroup.friendlypos.preventas.modelo
 
 import com.google.gson.annotations.SerializedName
 

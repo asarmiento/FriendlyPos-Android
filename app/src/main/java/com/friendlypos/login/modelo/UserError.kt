@@ -1,4 +1,4 @@
-package com.friendlypos.login.modelo
+package com.friendlysystemgroup.friendlypos.login.modelo
 
 import com.google.gson.Gson
 import okhttp3.ResponseBody

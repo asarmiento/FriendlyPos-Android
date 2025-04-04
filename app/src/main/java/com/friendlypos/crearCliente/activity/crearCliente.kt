@@ -1,4 +1,4 @@
-package com.friendlypos.crearCliente.activity
+package com.friendlysystemgroup.friendlypos.crearCliente.activity
 
 import android.content.Intent
 import android.os.Bundle
@@ -18,14 +18,14 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import butterknife.BindView
-import butterknife.ButterKnife
-import com.friendlypos.R
-import com.friendlypos.crearCliente.modelo.customer_new
-import com.friendlypos.distribucion.util.GPSTracker
-import com.friendlypos.login.activity.LoginActivity
-import com.friendlypos.login.util.SessionPrefes
-import com.friendlypos.principal.activity.BluetoothActivity
-import com.friendlypos.principal.activity.MenuPrincipal
+
+import com.friendlysystemgroup.friendlypos.R
+import com.friendlysystemgroup.friendlypos.crearCliente.modelo.customer_new
+import com.friendlysystemgroup.friendlypos.distribucion.util.GPSTracker
+import com.friendlysystemgroup.friendlypos.login.activity.LoginActivity
+import com.friendlysystemgroup.friendlypos.login.util.SessionPrefes
+import com.friendlysystemgroup.friendlypos.principal.activity.BluetoothActivity
+import com.friendlysystemgroup.friendlypos.principal.activity.MenuPrincipal
 import io.realm.Realm
 import java.util.regex.Pattern
 

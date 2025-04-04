@@ -1,4 +1,4 @@
-package com.friendlypos.ventadirecta.adapters
+package com.friendlysystemgroup.friendlypos.ventadirecta.adapters
 
 import android.content.Context
 import android.graphics.Color
@@ -16,18 +16,18 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
-import com.friendlypos.R
-import com.friendlypos.distribucion.modelo.Inventario
-import com.friendlypos.distribucion.modelo.Marcas
-import com.friendlypos.distribucion.modelo.Pivot
-import com.friendlypos.login.util.SessionPrefes
-import com.friendlypos.preventas.modelo.Bonuses
-import com.friendlypos.principal.modelo.Clientes
-import com.friendlypos.principal.modelo.Productos
-import com.friendlypos.ventadirecta.activity.VentaDirectaActivity
-import com.friendlypos.ventadirecta.fragment.VentaDirSelecProductoFragment
-import com.friendlypos.ventadirecta.modelo.invoiceDetalleVentaDirecta
-import com.friendlypos.ventadirecta.util.TotalizeHelperVentaDirecta
+import com.friendlysystemgroup.friendlypos.R
+import com.friendlysystemgroup.friendlypos.distribucion.modelo.Inventario
+import com.friendlysystemgroup.friendlypos.distribucion.modelo.Marcas
+import com.friendlysystemgroup.friendlypos.distribucion.modelo.Pivot
+import com.friendlysystemgroup.friendlypos.login.util.SessionPrefes
+import com.friendlysystemgroup.friendlypos.preventas.modelo.Bonuses
+import com.friendlysystemgroup.friendlypos.principal.modelo.Clientes
+import com.friendlysystemgroup.friendlypos.principal.modelo.Productos
+import com.friendlysystemgroup.friendlypos.ventadirecta.activity.VentaDirectaActivity
+import com.friendlysystemgroup.friendlypos.ventadirecta.fragment.VentaDirSelecProductoFragment
+import com.friendlysystemgroup.friendlypos.ventadirecta.modelo.invoiceDetalleVentaDirecta
+import com.friendlysystemgroup.friendlypos.ventadirecta.util.TotalizeHelperVentaDirecta
 import io.realm.Realm
 import io.realm.internal.SyncObjectServerFacade
 import java.util.Calendar

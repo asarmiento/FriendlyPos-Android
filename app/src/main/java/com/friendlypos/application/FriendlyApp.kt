@@ -1,4 +1,4 @@
-package com.friendlypos.application
+package com.friendlysystemgroup.friendlypos.application
 
 import android.app.Application
 import io.realm.Realm

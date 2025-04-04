@@ -1,4 +1,4 @@
-package com.friendlypos.distribucion.util
+package com.friendlysystemgroup.friendlypos.distribucion.util
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager

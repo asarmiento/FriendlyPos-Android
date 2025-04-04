@@ -1,4 +1,4 @@
-package com.friendlypos.distribucion.fragment
+package com.friendlysystemgroup.friendlypos.distribucion.fragment
 
 import android.os.Bundle
 import android.util.Log
@@ -14,12 +14,12 @@ import androidx.core.view.MenuItemCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
-import butterknife.ButterKnife
-import com.friendlypos.R
-import com.friendlypos.distribucion.activity.DistribucionActivity
-import com.friendlypos.distribucion.adapters.DistrClientesAdapter
-import com.friendlypos.distribucion.adapters.DistrResumenAdapter
-import com.friendlypos.distribucion.modelo.sale
+
+import com.friendlysystemgroup.friendlypos.R
+import com.friendlysystemgroup.friendlypos.distribucion.activity.DistribucionActivity
+import com.friendlysystemgroup.friendlypos.distribucion.adapters.DistrClientesAdapter
+import com.friendlysystemgroup.friendlypos.distribucion.adapters.DistrResumenAdapter
+import com.friendlysystemgroup.friendlypos.distribucion.modelo.sale
 import io.realm.Realm
 import io.realm.RealmQuery
 import io.realm.RealmResults

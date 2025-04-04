@@ -1,4 +1,4 @@
-package com.friendlypos.distribucion.adapters
+package com.friendlysystemgroup.friendlypos.distribucion.adapters
 
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,12 +9,12 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
-import com.friendlypos.R
-import com.friendlypos.distribucion.activity.DistribucionActivity
-import com.friendlypos.distribucion.fragment.DistResumenFragment
-import com.friendlypos.distribucion.modelo.Inventario
-import com.friendlypos.distribucion.modelo.Pivot
-import com.friendlypos.principal.modelo.Productos
+import com.friendlysystemgroup.friendlypos.R
+import com.friendlysystemgroup.friendlypos.distribucion.activity.DistribucionActivity
+import com.friendlysystemgroup.friendlypos.distribucion.fragment.DistResumenFragment
+import com.friendlysystemgroup.friendlypos.distribucion.modelo.Inventario
+import com.friendlysystemgroup.friendlypos.distribucion.modelo.Pivot
+import com.friendlysystemgroup.friendlypos.principal.modelo.Productos
 import io.realm.Realm
 
 

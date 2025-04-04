@@ -1,4 +1,4 @@
-package com.friendlypos.reimpresion_pedidos.fragment
+package com.friendlysystemgroup.friendlypos.reimpresion_pedidos.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,13 +8,13 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
-import butterknife.ButterKnife
-import com.friendlypos.R
-import com.friendlypos.distribucion.fragment.BaseFragment
-import com.friendlypos.distribucion.fragment.DistSelecProductoFragment
-import com.friendlypos.distribucion.modelo.sale
-import com.friendlypos.reimpresion_pedidos.activity.ReimprimirPedidosActivity
-import com.friendlypos.reimpresion_pedidos.adapters.ReimPedidoClientesAdapter
+
+import com.friendlysystemgroup.friendlypos.R
+import com.friendlysystemgroup.friendlypos.distribucion.fragment.BaseFragment
+import com.friendlysystemgroup.friendlypos.distribucion.fragment.DistSelecProductoFragment
+import com.friendlysystemgroup.friendlypos.distribucion.modelo.sale
+import com.friendlysystemgroup.friendlypos.Reimpresion_pedidos.activity.ReimprimirPedidosActivity
+import com.friendlysystemgroup.friendlypos.Reimpresion_pedidos.adapters.ReimPedidoClientesAdapter
 import io.realm.Realm
 import io.realm.RealmQuery
 import io.realm.internal.SyncObjectServerFacade

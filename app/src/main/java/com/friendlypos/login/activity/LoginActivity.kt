@@ -1,20 +1,39 @@
-package com.friendlypos.login.activity
+package com.friendlysystemgroup.friendlypos.login.activity
 
+import android.app.ProgressDialog
 import android.content.Context
+import android.content.Intent
+import android.os.Bundle
 import android.os.Handler
 import android.text.TextUtils
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
-import android.widget.Button
-import android.widget.ImageView
-import com.friendlypos.application.util.Functions
-import com.friendlypos.login.modelo.User
-import com.friendlypos.login.util.Properties
+import android.view.View.OnLongClickListener
+import android.view.WindowManager
+import android.view.inputmethod.EditorInfo
+import android.widget.TextView
+import android.widget.TextView.OnEditorActionListener
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import com.friendlysystemgroup.friendlypos.R
+import com.friendlysystemgroup.friendlypos.application.util.Functions
+import com.friendlysystemgroup.friendlypos.app.broadcastreceiver.NetworkStateChangeReceiver
+import com.friendlysystemgroup.friendlypos.application.util.LocalImageGetter
+import com.friendlysystemgroup.friendlypos.databinding.ActivityLoginBinding
+import com.friendlysystemgroup.friendlypos.login.activity.ConfiguracionActivity
+import com.friendlysystemgroup.friendlypos.login.api.BaseManager
+import com.friendlysystemgroup.friendlypos.login.api.RequestInterface
+import com.friendlysystemgroup.friendlypos.login.api.UserError
+import com.friendlysystemgroup.friendlypos.login.api.UserResponse
+import com.friendlysystemgroup.friendlypos.login.modelo.User
+import com.friendlysystemgroup.friendlypos.login.util.Properties
+import com.friendlysystemgroup.friendlypos.login.util.SessionPrefes
+import com.friendlysystemgroup.friendlypos.principal.activity.MenuPrincipal
+import com.friendlysystemgroup.friendlypos.principal.helpers.DescargasHelper
+import com.google.android.material.snackbar.Snackbar
 import org.sufficientlysecure.htmltextview.HtmlTextView
 import java.io.IOException
-import butterknife.BindView
-import butterknife.ButterKnife
 
 class LoginActivity : AppCompatActivity() {
     private var api: RequestInterface? = null
@@ -22,42 +41,21 @@ class LoginActivity : AppCompatActivity() {
     private var progress: ProgressDialog? = null
     var download1: DescargasHelper? = null
     var session: SessionPrefes? = null
-
-    @BindView(R.id.usuario)
-    lateinit var mUserIdView: EditText
-
-    @BindView(R.id.contraseña)
-    lateinit var mPasswordView: EditText
-
-    @BindView(R.id.image_logo)
-    lateinit var mLogoView: ImageView
-
-    @BindView(R.id.float_label_user_id)
-    lateinit var mFloatLabelUserId: TextInputLayout
-
-    @BindView(R.id.float_label_password)
-    lateinit var mFloatLabelPassword: TextInputLayout
-
-    @BindView(R.id.login_progress)
-    lateinit var mProgressView: View
-
-    @BindView(R.id.login_form)
-    lateinit var mLoginFormView: View
-
-    @BindView(R.id.email_sign_in_button)
-    lateinit var mSignInButton: Button
-
-    @BindView(R.id.RLLogin)
-    lateinit var RLLogin: RelativeLayout
+    
+    // Reemplazar @BindView con ViewBinding
+    private lateinit var binding: ActivityLoginBinding
+    
     var properties: Properties? = null
-
     var context: Context? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        setContentView(R.layout.activity_login)
-        ButterKnife.bind(this)
+        
+        // Inicializar ViewBinding
+        binding = ActivityLoginBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        
         context = this
         session = SessionPrefes(getApplicationContext())
         properties = Properties(getApplicationContext())
@@ -86,7 +84,7 @@ class LoginActivity : AppCompatActivity() {
 
         networkStateChangeReceiver = NetworkStateChangeReceiver()
 
-        mLogoView!!.setOnLongClickListener(object : OnLongClickListener {
+        binding.imageLogo.setOnLongClickListener(object : OnLongClickListener {
             override fun onLongClick(v: View): Boolean {
                 ShowOpenSettings()
                 return false
@@ -94,7 +92,7 @@ class LoginActivity : AppCompatActivity() {
         })
 
         // Setup
-        mPasswordView.setOnEditorActionListener(object : OnEditorActionListener {
+        binding.contraseña.setOnEditorActionListener(object : OnEditorActionListener {
             override fun onEditorAction(textView: TextView, id: Int, keyEvent: KeyEvent): Boolean {
                 if (id == R.id.login || id == EditorInfo.IME_NULL) {
                     if (!this.isOnline) {
@@ -108,7 +106,7 @@ class LoginActivity : AppCompatActivity() {
             }
         })
 
-        mSignInButton!!.setOnClickListener(object : View.OnClickListener {
+        binding.emailSignInButton.setOnClickListener(object : View.OnClickListener {
             override fun onClick(view: View) {
                 if (!this.isOnline) {
                     showLoginError(getString(R.string.error_network))
@@ -129,14 +127,14 @@ class LoginActivity : AppCompatActivity() {
     private fun attemptLogin() {
         progress.show()
         // Reset errors.
-        mFloatLabelUserId.setError(null)
-        mFloatLabelPassword.setError(null)
+        binding.floatLabelUserId.setError(null)
+        binding.floatLabelPassword.setError(null)
 
         // Store values at the time of the login attempt.
-        val userdatos: String = mUserIdView.getText().toString()
+        val userdatos: String = binding.usuario.getText().toString()
         val userId = userdatos.trim { it <= ' ' }
 
-        val password: String = mPasswordView.getText().toString()
+        val password: String = binding.contraseña.getText().toString()
 
         var cancel = false
         var focusView: View? = null
@@ -144,26 +142,26 @@ class LoginActivity : AppCompatActivity() {
         // Check for a valid password, if the user entered one.
         if (TextUtils.isEmpty(password)) {
             progress.dismiss()
-            mFloatLabelPassword.setError(getString(R.string.error_field_required))
-            focusView = mFloatLabelPassword
+            binding.floatLabelPassword.setError(getString(R.string.error_field_required))
+            focusView = binding.floatLabelPassword
             cancel = true
         } else if (!isPasswordValid(password)) {
             progress.dismiss()
-            mFloatLabelPassword.setError(getString(R.string.error_invalid_password))
-            focusView = mFloatLabelPassword
+            binding.floatLabelPassword.setError(getString(R.string.error_invalid_password))
+            focusView = binding.floatLabelPassword
             cancel = true
         }
 
         // Verificar si el ID tiene contenido.
         if (TextUtils.isEmpty(userId)) {
             progress.dismiss()
-            mFloatLabelUserId.setError(getString(R.string.error_field_required))
-            focusView = mFloatLabelUserId
+            binding.floatLabelUserId.setError(getString(R.string.error_field_required))
+            focusView = binding.floatLabelUserId
             cancel = true
         } else if (!isUserIdValid(userId)) {
             progress.dismiss()
-            mFloatLabelUserId.setError(getString(R.string.error_invalid_user_id))
-            focusView = mFloatLabelUserId
+            binding.floatLabelUserId.setError(getString(R.string.error_invalid_user_id))
+            focusView = binding.floatLabelUserId
             cancel = true
         }
 
@@ -266,7 +264,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun ShowOpenSettings() {
         val show: Snackbar =
-            Snackbar.make(RLLogin, "Abrir Configuraciones?", Snackbar.LENGTH_INDEFINITE).setAction(
+            Snackbar.make(binding.RLLogin, "Abrir Configuraciones?", Snackbar.LENGTH_INDEFINITE).setAction(
                 "Abrir",
                 View.OnClickListener {
                     val i: Intent =

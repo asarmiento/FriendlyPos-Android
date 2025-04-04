@@ -1,4 +1,4 @@
-package com.friendlypos.preventas.fragment
+package com.friendlysystemgroup.friendlypos.preventas.fragment
 
 import android.app.Activity
 import android.content.Intent
@@ -12,19 +12,19 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-import com.friendlypos.R
-import com.friendlypos.app.broadcastreceiver.BluetoothStateChangeReceiver
-import com.friendlypos.application.util.Functions.date
-import com.friendlypos.application.util.Functions.get24Time
-import com.friendlypos.distribucion.fragment.BaseFragment
-import com.friendlypos.distribucion.modelo.sale
-import com.friendlypos.distribucion.util.GPSTracker
-import com.friendlypos.login.modelo.Usuarios
-import com.friendlypos.login.util.SessionPrefes
-import com.friendlypos.preventas.activity.PreventaActivity
-import com.friendlypos.preventas.modelo.Numeracion
-import com.friendlypos.principal.activity.MenuPrincipal
-import com.friendlypos.principal.modelo.datosTotales
+import com.friendlysystemgroup.friendlypos.R
+import com.friendlysystemgroup.friendlypos.app.broadcastreceiver.BluetoothStateChangeReceiver
+import com.friendlysystemgroup.friendlypos.application.util.Functions.date
+import com.friendlysystemgroup.friendlypos.application.util.Functions.get24Time
+import com.friendlysystemgroup.friendlypos.distribucion.fragment.BaseFragment
+import com.friendlysystemgroup.friendlypos.distribucion.modelo.sale
+import com.friendlysystemgroup.friendlypos.distribucion.util.GPSTracker
+import com.friendlysystemgroup.friendlypos.login.modelo.Usuarios
+import com.friendlysystemgroup.friendlypos.login.util.SessionPrefes
+import com.friendlysystemgroup.friendlypos.preventas.activity.PreventaActivity
+import com.friendlysystemgroup.friendlypos.preventas.modelo.Numeracion
+import com.friendlysystemgroup.friendlypos.principal.activity.MenuPrincipal
+import com.friendlysystemgroup.friendlypos.principal.modelo.datosTotales
 import io.realm.Realm
 import io.realm.internal.SyncObjectServerFacade
 

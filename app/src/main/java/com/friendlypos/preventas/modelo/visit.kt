@@ -1,4 +1,4 @@
-package com.friendlypos.preventas.modelo
+package com.friendlysystemgroup.friendlypos.preventas.modelo
 
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
@@ -6,7 +6,7 @@ import io.realm.annotations.PrimaryKey
 /**
  * Created by DelvoM on 16/04/2018.
  */
-class visit : RealmObject() {
+open class visit : RealmObject() {
     /* {
             "id": 1,
                 "name": "Gravado",

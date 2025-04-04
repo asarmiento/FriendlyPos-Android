@@ -1,4 +1,4 @@
-package com.friendlypos.principal.modelo
+package com.friendlysystemgroup.friendlypos.principal.modelo
 
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
@@ -6,7 +6,7 @@ import io.realm.annotations.PrimaryKey
 /**
  * Created by DelvoM on 15/11/2018.
  */
-class datosTotales : RealmObject() {
+open class datosTotales : RealmObject() {
     @JvmField
     @PrimaryKey
     var id: Int = 0

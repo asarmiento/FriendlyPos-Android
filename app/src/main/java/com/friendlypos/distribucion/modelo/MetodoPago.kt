@@ -1,4 +1,4 @@
-package com.friendlypos.distribucion.modelo
+package com.friendlysystemgroup.friendlypos.distribucion.modelo
 
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
@@ -6,7 +6,7 @@ import io.realm.annotations.PrimaryKey
 /**
  * Created by DelvoM on 30/11/2017.
  */
-class MetodoPago : RealmObject() {
+open class MetodoPago : RealmObject() {
     /* "id": 1,
                "name": "Contado",
             "created_at": "2014-12-24 13:01:26",

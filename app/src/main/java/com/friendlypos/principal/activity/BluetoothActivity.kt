@@ -1,13 +1,13 @@
-package com.friendlypos.principal.activity
+package com.friendlysystemgroup.friendlypos.principal.activity
 
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import com.friendlypos.app.broadcastreceiver.BluetoothStateChangeReceiver
-import com.friendlypos.app.broadcastreceiver.BluetoothStateChangeReceiver.BluetoothStateHasChange
-import com.friendlypos.app.broadcastreceiver.NetworkStateChangeReceiver
-import com.friendlypos.app.broadcastreceiver.NetworkStateChangeReceiver.InternetStateHasChange
+import com.friendlysystemgroup.friendlypos.app.broadcastreceiver.BluetoothStateChangeReceiver
+import com.friendlysystemgroup.friendlypos.app.broadcastreceiver.BluetoothStateChangeReceiver.BluetoothStateHasChange
+import com.friendlysystemgroup.friendlypos.app.broadcastreceiver.NetworkStateChangeReceiver
+import com.friendlysystemgroup.friendlypos.app.broadcastreceiver.NetworkStateChangeReceiver.InternetStateHasChange
 
 open class BluetoothActivity : AppCompatActivity(), InternetStateHasChange,
     BluetoothStateHasChange {

@@ -1,4 +1,4 @@
-package com.friendlypos.application.bluetooth
+package com.friendlysystemgroup.friendlypos.application.bluetooth
 
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice

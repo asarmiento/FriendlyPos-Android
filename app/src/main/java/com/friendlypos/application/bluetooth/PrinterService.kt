@@ -1,4 +1,4 @@
-package com.friendlypos.application.bluetooth
+package com.friendlysystemgroup.friendlypos.application.bluetooth
 
 import android.app.Service
 import android.bluetooth.BluetoothAdapter
@@ -12,7 +12,7 @@ import android.os.Binder
 import android.os.Handler
 import android.os.IBinder
 import android.util.Log
-import com.friendlypos.principal.activity.MenuPrincipal
+import com.friendlysystemgroup.friendlypos.principal.activity.MenuPrincipal
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream

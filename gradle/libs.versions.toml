@@ -1,0 +1,84 @@
+[versions]
+# SDK versions
+compileSdk = "34"
+minSdk = "24"
+targetSdk = "34"
+
+# Plugin versions
+agp = "8.2.2"
+kotlin = "1.9.22"
+realm = "10.17.0"
+gms = "4.4.0"
+
+# Libraries
+core-ktx = "1.12.0"
+appcompat = "1.6.1"
+material = "1.11.0"
+constraintlayout = "2.1.4"
+recyclerview = "1.3.2"
+cardview = "1.0.0"
+legacy-support = "1.0.0"
+coroutines = "1.7.3"
+butterknife = "10.2.3"
+retrofit = "2.9.0"
+okhttp = "4.12.0"
+glide = "4.16.0"
+mpandroidchart = "v3.1.0"
+htmltextview = "4.0"
+
+# Testing
+junit = "4.13.2"
+androidx-test-ext = "1.1.5"
+espresso = "3.5.1"
+
+[libraries]
+# AndroidX
+androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+androidx-recyclerview = { group = "androidx.recyclerview", name = "recyclerview", version.ref = "recyclerview" }
+androidx-cardview = { group = "androidx.cardview", name = "cardview", version.ref = "cardview" }
+androidx-legacy-support = { group = "androidx.legacy", name = "legacy-support-v4", version.ref = "legacy-support" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+
+# Kotlin
+kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib-jdk8", version.ref = "kotlin" }
+coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines" }
+coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines" }
+
+# ButterKnife (temporalmente mientras se migra)
+butterknife = { group = "com.jakewharton", name = "butterknife", version.ref = "butterknife" }
+butterknife-compiler = { group = "com.jakewharton", name = "butterknife-compiler", version.ref = "butterknife" }
+
+# Retrofit y OkHttp
+retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
+retrofit-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
+okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
+okhttp-logging = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
+
+# Glide
+glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
+glide-compiler = { group = "com.github.bumptech.glide", name = "compiler", version.ref = "glide" }
+
+# Otras dependencias
+mpandroidchart = { group = "com.github.PhilJay", name = "MPAndroidChart", version.ref = "mpandroidchart" }
+htmltextview = { group = "org.sufficientlysecure", name = "html-textview", version.ref = "htmltextview" }
+
+# Testing
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+androidx-test-ext = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-ext" }
+espresso = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso" }
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+android-library = { id = "com.android.library", version.ref = "agp" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
+realm = { id = "io.realm.kotlin", version.ref = "realm" }
+gms-google-services = { id = "com.google.gms.google-services", version.ref = "gms" }
+
+[bundles]
+androidx-ui = ["androidx-core-ktx", "androidx-appcompat", "androidx-constraintlayout", "androidx-recyclerview", "androidx-cardview", "androidx-legacy-support", "material"]
+coroutines = ["coroutines-core", "coroutines-android"]
+retrofit = ["retrofit", "retrofit-gson", "okhttp", "okhttp-logging"]
+testing = ["junit", "androidx-test-ext", "espresso"] 

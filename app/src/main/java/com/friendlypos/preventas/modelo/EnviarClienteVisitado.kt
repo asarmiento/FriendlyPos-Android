@@ -1,4 +1,4 @@
-package com.friendlypos.preventas.modelo
+package com.friendlysystemgroup.friendlypos.preventas.modelo
 
 
-class EnviarClienteVisitado(private val visit: visit)
+open class EnviarClienteVisitado(private val visit: visit)

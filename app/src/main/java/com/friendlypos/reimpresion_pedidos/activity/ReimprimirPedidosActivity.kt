@@ -1,4 +1,4 @@
-package com.friendlypos.reimpresion_pedidos.activity
+package com.friendlysystemgroup.friendlypos.reimpresion_pedidos.activity
 
 import android.app.ActivityManager
 import android.app.ProgressDialog
@@ -13,20 +13,20 @@ import android.view.WindowManager
 import androidx.appcompat.widget.Toolbar
 import androidx.viewpager.widget.ViewPager
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
-import butterknife.ButterKnife
-import com.friendlypos.R
-import com.friendlypos.application.bluetooth.PrinterService
-import com.friendlypos.application.bluetooth.PrinterService.Companion.startRDService
-import com.friendlypos.application.util.Functions.CreateMessage
-import com.friendlypos.distribucion.fragment.BaseFragment
-import com.friendlypos.distribucion.util.Adapter
-import com.friendlypos.preventas.delegate.PreSellInvoiceDelegate
-import com.friendlypos.principal.activity.BluetoothActivity
-import com.friendlypos.principal.activity.MenuPrincipal
-import com.friendlypos.reimpresion_pedidos.fragment.ReimPedidoResumenFragment
-import com.friendlypos.reimpresion_pedidos.fragment.ReimPedidoSelecClienteFragment
-import com.friendlypos.reimpresion_pedidos.fragment.ReimPedidoSelecProductoFragment
-import com.friendlypos.reimpresion_pedidos.fragment.ReimPedidoTotalizarFragment
+
+import com.friendlysystemgroup.friendlypos.R
+import com.friendlysystemgroup.friendlypos.application.bluetooth.PrinterService
+import com.friendlysystemgroup.friendlypos.application.bluetooth.PrinterService.Companion.startRDService
+import com.friendlysystemgroup.friendlypos.application.util.Functions.CreateMessage
+import com.friendlysystemgroup.friendlypos.distribucion.fragment.BaseFragment
+import com.friendlysystemgroup.friendlypos.distribucion.util.Adapter
+import com.friendlysystemgroup.friendlypos.preventas.delegate.PreSellInvoiceDelegate
+import com.friendlysystemgroup.friendlypos.principal.activity.BluetoothActivity
+import com.friendlysystemgroup.friendlypos.principal.activity.MenuPrincipal
+import com.friendlysystemgroup.friendlypos.Reimpresion_pedidos.fragment.ReimPedidoResumenFragment
+import com.friendlysystemgroup.friendlypos.Reimpresion_pedidos.fragment.ReimPedidoSelecClienteFragment
+import com.friendlysystemgroup.friendlypos.Reimpresion_pedidos.fragment.ReimPedidoSelecProductoFragment
+import com.friendlysystemgroup.friendlypos.Reimpresion_pedidos.fragment.ReimPedidoTotalizarFragment
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 import com.google.android.material.tabs.TabLayout.TabLayoutOnPageChangeListener

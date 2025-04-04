@@ -1,4 +1,4 @@
-package com.friendlypos.distribucion.fragment
+package com.friendlysystemgroup.friendlypos.distribucion.fragment
 
 import android.app.Activity
 import android.os.Bundle
@@ -14,12 +14,12 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.view.MenuItemCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.friendlypos.R
-import com.friendlypos.distribucion.activity.DistribucionActivity
-import com.friendlypos.distribucion.adapters.DistrResumenAdapter
-import com.friendlypos.distribucion.adapters.DistrSeleccionarProductosAdapter
-import com.friendlypos.distribucion.modelo.Inventario
-import com.friendlypos.distribucion.util.TotalizeHelper
+import com.friendlysystemgroup.friendlypos.R
+import com.friendlysystemgroup.friendlypos.distribucion.activity.DistribucionActivity
+import com.friendlysystemgroup.friendlypos.distribucion.adapters.DistrResumenAdapter
+import com.friendlysystemgroup.friendlypos.distribucion.adapters.DistrSeleccionarProductosAdapter
+import com.friendlysystemgroup.friendlypos.distribucion.modelo.Inventario
+import com.friendlysystemgroup.friendlypos.distribucion.util.TotalizeHelper
 import io.realm.Realm
 import io.realm.internal.SyncObjectServerFacade
 import java.util.Locale

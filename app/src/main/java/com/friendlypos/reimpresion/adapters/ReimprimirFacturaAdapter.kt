@@ -1,4 +1,4 @@
-package com.friendlypos.reimpresion.adapters
+package com.friendlysystemgroup.friendlypos.reimpresion.adapters
 
 import android.content.Context
 import android.graphics.Color
@@ -10,12 +10,12 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
-import com.friendlypos.R
-import com.friendlypos.distribucion.modelo.Pivot
-import com.friendlypos.distribucion.modelo.invoice
-import com.friendlypos.distribucion.modelo.sale
-import com.friendlypos.principal.modelo.Clientes
-import com.friendlypos.reimpresion.activity.ReimprimirActivity
+import com.friendlysystemgroup.friendlypos.R
+import com.friendlysystemgroup.friendlypos.distribucion.modelo.Pivot
+import com.friendlysystemgroup.friendlypos.distribucion.modelo.invoice
+import com.friendlysystemgroup.friendlypos.distribucion.modelo.sale
+import com.friendlysystemgroup.friendlypos.principal.modelo.Clientes
+import com.friendlysystemgroup.friendlypos.Reimpresion.activity.ReimprimirActivity
 import io.realm.Realm
 import io.realm.RealmResults
 

@@ -1,13 +1,13 @@
-package com.friendlypos.reimpresion_pedidos.util;
+package com.friendlysystemgroup.friendlypos.reimpresion_pedidos.util;
 
 import android.util.Log;
 
-import com.friendlypos.distribucion.activity.DistribucionActivity;
-import com.friendlypos.distribucion.modelo.Pivot;
-import com.friendlypos.distribucion.modelo.sale;
-import com.friendlypos.principal.modelo.Clientes;
-import com.friendlypos.principal.modelo.Productos;
-import com.friendlypos.reimpresion_pedidos.activity.ReimprimirPedidosActivity;
+import com.friendlysystemgroup.friendlypos.distribucion.activity.DistribucionActivity;
+import com.friendlysystemgroup.friendlypos.distribucion.modelo.Pivot;
+import com.friendlysystemgroup.friendlypos.distribucion.modelo.sale;
+import com.friendlysystemgroup.friendlypos.principal.modelo.Clientes;
+import com.friendlysystemgroup.friendlypos.principal.modelo.Productos;
+import com.friendlysystemgroup.friendlypos.Reimpresion_pedidos.activity.ReimprimirPedidosActivity;
 
 import java.util.List;
 

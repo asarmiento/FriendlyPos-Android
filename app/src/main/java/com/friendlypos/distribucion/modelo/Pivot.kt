@@ -1,4 +1,4 @@
-package com.friendlypos.distribucion.modelo
+package com.friendlysystemgroup.friendlypos.distribucion.modelo
 
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
@@ -13,7 +13,7 @@ import io.realm.annotations.PrimaryKey
             "delivered": "12"
             }
  */
-class Pivot : RealmObject() {
+open class Pivot : RealmObject() {
     @JvmField
     @PrimaryKey
     var id: Int = 0

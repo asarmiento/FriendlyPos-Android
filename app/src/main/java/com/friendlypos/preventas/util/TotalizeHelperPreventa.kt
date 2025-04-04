@@ -1,12 +1,12 @@
-package com.friendlypos.preventas.util
+package com.friendlysystemgroup.friendlypos.preventas.util
 
 import android.util.Log
-import com.friendlypos.distribucion.modelo.Pivot
-import com.friendlypos.login.util.SessionPrefes
-import com.friendlypos.preventas.activity.PreventaActivity
-import com.friendlypos.preventas.modelo.Bonuses
-import com.friendlypos.principal.modelo.Clientes
-import com.friendlypos.principal.modelo.Productos
+import com.friendlysystemgroup.friendlypos.distribucion.modelo.Pivot
+import com.friendlysystemgroup.friendlypos.login.util.SessionPrefes
+import com.friendlysystemgroup.friendlypos.preventas.activity.PreventaActivity
+import com.friendlysystemgroup.friendlypos.preventas.modelo.Bonuses
+import com.friendlysystemgroup.friendlypos.principal.modelo.Clientes
+import com.friendlysystemgroup.friendlypos.principal.modelo.Productos
 import io.realm.Realm
 import io.realm.internal.SyncObjectServerFacade
 

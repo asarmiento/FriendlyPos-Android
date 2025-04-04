@@ -1,4 +1,4 @@
-package com.friendlypos.Recibos.fragments
+package com.friendlysystemgroup.friendlypos.Recibos.fragments
 
 import android.app.Activity
 import android.os.Bundle
@@ -14,12 +14,12 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.friendlypos.R
-import com.friendlypos.Recibos.activity.RecibosActivity
-import com.friendlypos.Recibos.adapters.RecibosSeleccionarFacturaAdapter
-import com.friendlypos.Recibos.modelo.recibos
-import com.friendlypos.Recibos.util.TotalizeHelperRecibos
-import com.friendlypos.distribucion.fragment.BaseFragment
+import com.friendlysystemgroup.friendlypos.R
+import com.friendlysystemgroup.friendlypos.Recibos.activity.RecibosActivity
+import com.friendlysystemgroup.friendlypos.Recibos.adapters.RecibosSeleccionarFacturaAdapter
+import com.friendlysystemgroup.friendlypos.Recibos.modelo.recibos
+import com.friendlysystemgroup.friendlypos.Recibos.util.TotalizeHelperRecibos
+import com.friendlysystemgroup.friendlypos.distribucion.fragment.BaseFragment
 import io.realm.Realm
 import io.realm.RealmResults
 import io.realm.Sort

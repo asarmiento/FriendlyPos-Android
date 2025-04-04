@@ -1,4 +1,4 @@
-package com.friendlypos.principal.activity
+package com.friendlysystemgroup.friendlypos.principal.activity
 
 import android.content.Intent
 import android.os.Bundle
@@ -10,9 +10,9 @@ import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import com.friendlypos.R
-import com.friendlypos.application.util.Functions.CreateMessage
-import com.friendlypos.principal.modelo.datosTotales
+import com.friendlysystemgroup.friendlypos.R
+import com.friendlysystemgroup.friendlypos.application.util.Functions.CreateMessage
+import com.friendlysystemgroup.friendlypos.principal.modelo.datosTotales
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData

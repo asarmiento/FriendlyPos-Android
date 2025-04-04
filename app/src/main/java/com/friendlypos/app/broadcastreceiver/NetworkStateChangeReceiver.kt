@@ -1,4 +1,4 @@
-package com.friendlypos.app.broadcastreceiver
+package com.friendlysystemgroup.friendlypos.app.broadcastreceiver
 
 import android.content.BroadcastReceiver
 import android.content.Context

@@ -1,4 +1,4 @@
-package com.friendlypos.crearCliente.modelo
+package com.friendlysystemgroup.friendlypos.crearCliente.modelo
 
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
@@ -6,7 +6,7 @@ import io.realm.annotations.PrimaryKey
 /**
  * Created by DelvoM on 30/10/2018.
  */
-class customer_new : RealmObject() {
+open class customer_new : RealmObject() {
     @JvmField
     @PrimaryKey
     var id: Int = 0

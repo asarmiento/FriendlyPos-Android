@@ -1,4 +1,4 @@
-package com.friendlypos.Recibos.adapters
+package com.friendlysystemgroup.friendlypos.Recibos.adapters
 
 import android.content.Context
 import android.graphics.Color
@@ -15,11 +15,11 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
-import com.friendlypos.R
-import com.friendlypos.Recibos.activity.RecibosActivity
-import com.friendlypos.Recibos.fragments.RecibosSeleccionarFacturaFragment
-import com.friendlypos.Recibos.modelo.recibos
-import com.friendlypos.Recibos.util.ItemClickListener
+import com.friendlysystemgroup.friendlypos.R
+import com.friendlysystemgroup.friendlypos.Recibos.activity.RecibosActivity
+import com.friendlysystemgroup.friendlypos.Recibos.fragments.RecibosSeleccionarFacturaFragment
+import com.friendlysystemgroup.friendlypos.Recibos.modelo.recibos
+import com.friendlysystemgroup.friendlypos.Recibos.util.ItemClickListener
 import io.realm.Realm
 
 /**

@@ -1,4 +1,4 @@
-package com.friendlypos.Recibos.adapters
+package com.friendlysystemgroup.friendlypos.Recibos.adapters
 
 import android.view.LayoutInflater
 import android.view.View
@@ -7,10 +7,10 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
-import com.friendlypos.R
-import com.friendlypos.Recibos.activity.RecibosActivity
-import com.friendlypos.Recibos.fragments.RecibosResumenFragment
-import com.friendlypos.Recibos.modelo.recibos
+import com.friendlysystemgroup.friendlypos.R
+import com.friendlysystemgroup.friendlypos.Recibos.activity.RecibosActivity
+import com.friendlysystemgroup.friendlypos.Recibos.fragments.RecibosResumenFragment
+import com.friendlysystemgroup.friendlypos.Recibos.modelo.recibos
 
 /**
  * Created by Delvo on 19/09/2018.

@@ -1,4 +1,4 @@
-package com.friendlypos.reenvio_email.modelo
+package com.friendlysystemgroup.friendlypos.reenvio_email.modelo
 
 
 class email_Id(var costumer: String) {

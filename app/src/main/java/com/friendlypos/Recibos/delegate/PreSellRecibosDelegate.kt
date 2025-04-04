@@ -1,10 +1,10 @@
-package com.friendlypos.Recibos.delegate
+package com.friendlysystemgroup.friendlypos.Recibos.delegate
 
 import android.util.Log
-import com.friendlypos.Recibos.activity.RecibosActivity
-import com.friendlypos.Recibos.modelo.receipts
-import com.friendlypos.Recibos.modelo.receiptsDetalle
-import com.friendlypos.Recibos.modelo.recibos
+import com.friendlysystemgroup.friendlypos.Recibos.activity.RecibosActivity
+import com.friendlysystemgroup.friendlypos.Recibos.modelo.receipts
+import com.friendlysystemgroup.friendlypos.Recibos.modelo.receiptsDetalle
+import com.friendlysystemgroup.friendlypos.Recibos.modelo.recibos
 import io.realm.RealmList
 
 class PreSellRecibosDelegate(var recibosActivity: RecibosActivity?) {

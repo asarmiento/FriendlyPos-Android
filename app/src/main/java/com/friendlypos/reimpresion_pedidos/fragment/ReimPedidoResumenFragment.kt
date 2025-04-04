@@ -1,4 +1,4 @@
-package com.friendlypos.reimpresion_pedidos.fragment
+package com.friendlysystemgroup.friendlypos.reimpresion_pedidos.fragment
 
 import android.app.Activity
 import android.os.Bundle
@@ -9,12 +9,12 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.friendlypos.R
-import com.friendlypos.distribucion.fragment.BaseFragment
-import com.friendlypos.distribucion.modelo.Pivot
-import com.friendlypos.reimpresion_pedidos.activity.ReimprimirPedidosActivity
-import com.friendlypos.reimpresion_pedidos.adapters.ReimPedidoResumenAdapter
-import com.friendlypos.reimpresion_pedidos.util.TotalizeHelperReimPedido
+import com.friendlysystemgroup.friendlypos.R
+import com.friendlysystemgroup.friendlypos.distribucion.fragment.BaseFragment
+import com.friendlysystemgroup.friendlypos.distribucion.modelo.Pivot
+import com.friendlysystemgroup.friendlypos.Reimpresion_pedidos.activity.ReimprimirPedidosActivity
+import com.friendlysystemgroup.friendlypos.Reimpresion_pedidos.adapters.ReimPedidoResumenAdapter
+import com.friendlysystemgroup.friendlypos.Reimpresion_pedidos.util.TotalizeHelperReimPedido
 import io.realm.Realm
 import io.realm.RealmResults
 

@@ -1,4 +1,4 @@
-package com.friendlypos.principal.adapters
+package com.friendlysystemgroup.friendlypos.principal.adapters
 
 import android.app.ProgressDialog
 import android.content.ActivityNotFoundException
@@ -20,10 +20,10 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
-import com.friendlypos.R
-import com.friendlypos.distribucion.util.GPSTracker
-import com.friendlypos.principal.modelo.Clientes
-import com.friendlypos.principal.modelo.customer_location
+import com.friendlysystemgroup.friendlypos.R
+import com.friendlysystemgroup.friendlypos.distribucion.util.GPSTracker
+import com.friendlysystemgroup.friendlypos.principal.modelo.Clientes
+import com.friendlysystemgroup.friendlypos.principal.modelo.customer_location
 import io.realm.Realm
 import uk.co.chrisjenx.calligraphy.CalligraphyTypefaceSpan
 import uk.co.chrisjenx.calligraphy.TypefaceUtils

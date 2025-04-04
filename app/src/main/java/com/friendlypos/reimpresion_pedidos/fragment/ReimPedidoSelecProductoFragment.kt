@@ -1,4 +1,4 @@
-package com.friendlypos.reimpresion_pedidos.fragment
+package com.friendlysystemgroup.friendlypos.reimpresion_pedidos.fragment
 
 import android.app.Activity
 import android.os.Bundle
@@ -15,13 +15,13 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.view.MenuItemCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.friendlypos.R
-import com.friendlypos.distribucion.adapters.DistrResumenAdapter
-import com.friendlypos.distribucion.fragment.BaseFragment
-import com.friendlypos.distribucion.util.TotalizeHelper
-import com.friendlypos.principal.modelo.Productos
-import com.friendlypos.reimpresion_pedidos.activity.ReimprimirPedidosActivity
-import com.friendlypos.reimpresion_pedidos.adapters.ReimPedidoSeleccionarProductosAdapter
+import com.friendlysystemgroup.friendlypos.R
+import com.friendlysystemgroup.friendlypos.distribucion.adapters.DistrResumenAdapter
+import com.friendlysystemgroup.friendlypos.distribucion.fragment.BaseFragment
+import com.friendlysystemgroup.friendlypos.distribucion.util.TotalizeHelper
+import com.friendlysystemgroup.friendlypos.principal.modelo.Productos
+import com.friendlysystemgroup.friendlypos.Reimpresion_pedidos.activity.ReimprimirPedidosActivity
+import com.friendlysystemgroup.friendlypos.Reimpresion_pedidos.adapters.ReimPedidoSeleccionarProductosAdapter
 import io.realm.Realm
 import java.util.Locale
 
@@ -65,11 +65,12 @@ class ReimPedidoSelecProductoFragment : BaseFragment(), SearchView.OnQueryTextLi
         setHasOptionsMenu(true)
         recyclerView =
             rootView.findViewById<View>(R.id.recyclerViewReimPedidoSeleccProducto) as RecyclerView
-        recyclerView!!.layoutManager = LinearLayoutManager(getActivity())
+        recyclerView!!.layoutManager = LinearLayoutManager(requireActivity())
         recyclerView!!.setHasFixedSize(true)
         adapter = ReimPedidoSeleccionarProductosAdapter(
-            activity!!, this,
-            listProductos
+            activity!!,
+            this,
+            listProductos.toMutableList()
         )
         recyclerView!!.adapter = adapter
         creditoLimite = rootView.findViewById<View>(R.id.restCredit) as TextView
@@ -85,27 +86,27 @@ class ReimPedidoSelecProductoFragment : BaseFragment(), SearchView.OnQueryTextLi
     private val listProductos: List<Productos>
         get() {
             realm = Realm.getDefaultInstance()
-            val query = realm.where(Productos::class.java)
-            val result1 = query.findAll()
+            val query = realm?.where(Productos::class.java)
+            val result1 = query?.findAll() ?: emptyList()
 
             return result1
         }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        realm!!.close()
+        realm?.close()
     }
 
     fun creditoDisponible() {
-        slecTAB = activity!!.selecClienteTab
+        slecTAB = activity?.selecClienteTab ?: 0
 
         if (slecTAB == 1) {
             // creditoLimiteCliente = Double.parseDouble(((ReimprimirPedidosActivity) getActivity()).getCreditoLimiteClienteSlecc());
             //    creditoLimiteCliente = 0.0;
-            val metodoPagoCliente = activity!!.metodoPagoCliente
-            val limite = activity!!.creditoLimiteCliente
+            val metodoPagoCliente = activity?.metodoPagoCliente ?: ""
+            val limite = activity?.creditoLimiteCliente ?: ""
             // creditoLimiteCliente = Double.parseDouble(limite);
-            val dueCliente = activity!!.dueCliente
+            val dueCliente = activity?.dueCliente ?: ""
 
             Log.d("PagoProductoSelec", metodoPagoCliente + "")
             Log.d("PagoProductoSelec", creditoLimiteCliente.toString() + "")
@@ -113,14 +114,12 @@ class ReimPedidoSelecProductoFragment : BaseFragment(), SearchView.OnQueryTextLi
 
             if (metodoPagoCliente == "1") {
                 bill_type = 1
-                creditoLimite!!.visibility =
-                    View.GONE
+                creditoLimite?.visibility = View.GONE
             } else if (metodoPagoCliente == "2") {
                 bill_type = 2
                 try {
-                    creditoLimite!!.visibility =
-                        View.VISIBLE
-                    creditoLimite!!.text =
+                    creditoLimite?.visibility = View.VISIBLE
+                    creditoLimite?.text =
                         "C.Disponible: " + String.format(
                             "%,.2f",
                             creditoLimiteCliente
@@ -130,26 +129,26 @@ class ReimPedidoSelecProductoFragment : BaseFragment(), SearchView.OnQueryTextLi
                 }
             }
         } else {
-            Toast.makeText(getActivity(), "nadaSelecProducto", Toast.LENGTH_LONG).show()
+            Toast.makeText(requireActivity(), "nadaSelecProducto", Toast.LENGTH_LONG).show()
         }
     }
 
     override fun updateData() {
-        adapter!!.updateData(listProductos)
-        adapter2!!.notifyDataSetChanged()
+        adapter?.updateData(listProductos.toMutableList())
+        adapter2?.notifyDataSetChanged()
 
         /* totalizeHelper = new TotalizeHelper(activity);
         totalizeHelper.totalize(resumenFrag1.getListResumen());*/
         if (slecTAB == 1) {
-            creditoLimiteCliente =
-                (getActivity() as ReimprimirPedidosActivity).creditoLimiteCliente!!.toDouble()
-            creditoLimite!!.text =
+            val activity = requireActivity() as? ReimprimirPedidosActivity
+            creditoLimiteCliente = activity?.creditoLimiteCliente?.toDouble() ?: 0.0
+            creditoLimite?.text =
                 "C.Disponible: " + String.format(
                     "%,.2f",
                     creditoLimiteCliente
                 )
         } else {
-            Toast.makeText(getActivity(), "nadaSelecProducto", Toast.LENGTH_LONG).show()
+            Toast.makeText(requireActivity(), "nadaSelecProducto", Toast.LENGTH_LONG).show()
         }
     }
 
@@ -165,7 +164,7 @@ class ReimPedidoSelecProductoFragment : BaseFragment(), SearchView.OnQueryTextLi
             object : MenuItemCompat.OnActionExpandListener {
                 override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
                     // Do something when collapsed
-                    adapter!!.setFilter(this.listProductos)
+                    adapter?.setFilter(listProductos.toMutableList())
                     return true // Return true to collapse action view
                 }
 
@@ -178,7 +177,7 @@ class ReimPedidoSelecProductoFragment : BaseFragment(), SearchView.OnQueryTextLi
 
     override fun onQueryTextChange(newText: String): Boolean {
         val filteredModelList = filter(listProductos, newText)
-        adapter!!.setFilter(filteredModelList)
+        adapter?.setFilter(filteredModelList)
         return true
     }
 
@@ -186,14 +185,13 @@ class ReimPedidoSelecProductoFragment : BaseFragment(), SearchView.OnQueryTextLi
         return false
     }
 
-
-    private fun filter(models: List<Productos>, query: String): List<Productos> {
+    private fun filter(models: List<Productos>, query: String): MutableList<Productos> {
         var query = query
         query = query.lowercase(Locale.getDefault())
 
         val filteredModelList: MutableList<Productos> = ArrayList()
         for (model in models) {
-            val text = model.description!!.lowercase(Locale.getDefault())
+            val text = model.description?.lowercase(Locale.getDefault()) ?: ""
             Log.d("dasdad", text)
             if (text.contains(query)) {
                 filteredModelList.add(model)
@@ -201,7 +199,6 @@ class ReimPedidoSelecProductoFragment : BaseFragment(), SearchView.OnQueryTextLi
         }
         return filteredModelList
     }
-
 
     companion object {
         private var bill_type = 1

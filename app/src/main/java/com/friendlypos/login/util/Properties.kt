@@ -1,4 +1,4 @@
-package com.friendlypos.login.util
+package com.friendlysystemgroup.friendlypos.login.util
 
 import android.content.Context
 import android.content.SharedPreferences

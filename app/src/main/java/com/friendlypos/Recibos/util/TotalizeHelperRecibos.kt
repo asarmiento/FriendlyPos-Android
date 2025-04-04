@@ -1,9 +1,9 @@
-package com.friendlypos.Recibos.util
+package com.friendlysystemgroup.friendlypos.Recibos.util
 
 import android.util.Log
-import com.friendlypos.Recibos.activity.RecibosActivity
-import com.friendlypos.Recibos.modelo.recibos
-import com.friendlypos.login.util.SessionPrefes
+import com.friendlysystemgroup.friendlypos.Recibos.activity.RecibosActivity
+import com.friendlysystemgroup.friendlypos.Recibos.modelo.recibos
+import com.friendlysystemgroup.friendlypos.login.util.SessionPrefes
 import io.realm.Realm
 import io.realm.internal.SyncObjectServerFacade
 

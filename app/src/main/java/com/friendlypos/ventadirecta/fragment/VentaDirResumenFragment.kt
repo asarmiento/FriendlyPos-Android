@@ -1,4 +1,4 @@
-package com.friendlypos.ventadirecta.fragment
+package com.friendlysystemgroup.friendlypos.ventadirecta.fragment
 
 import android.app.Activity
 import android.os.Bundle
@@ -8,11 +8,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.friendlypos.R
-import com.friendlypos.distribucion.fragment.BaseFragment
-import com.friendlypos.ventadirecta.activity.VentaDirectaActivity
-import com.friendlypos.ventadirecta.adapters.VentaDirResumenAdapter
-import com.friendlypos.ventadirecta.util.TotalizeHelperVentaDirecta
+import com.friendlysystemgroup.friendlypos.R
+import com.friendlysystemgroup.friendlypos.distribucion.fragment.BaseFragment
+import com.friendlysystemgroup.friendlypos.ventadirecta.activity.VentaDirectaActivity
+import com.friendlysystemgroup.friendlypos.ventadirecta.adapters.VentaDirResumenAdapter
+import com.friendlysystemgroup.friendlypos.ventadirecta.util.TotalizeHelperVentaDirecta
 
 class VentaDirResumenFragment : BaseFragment() {
     var recyclerView: RecyclerView? = null

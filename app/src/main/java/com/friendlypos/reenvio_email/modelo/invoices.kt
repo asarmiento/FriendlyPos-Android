@@ -1,10 +1,10 @@
-package com.friendlypos.reenvio_email.modelo
+package com.friendlysystemgroup.friendlypos.reenvio_email.modelo
 
 import com.google.gson.annotations.SerializedName
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
 
-class invoices : RealmObject() {
+open class invoices : RealmObject() {
     /*
        "id": 14138,
                "numeration": "3301-0000021",

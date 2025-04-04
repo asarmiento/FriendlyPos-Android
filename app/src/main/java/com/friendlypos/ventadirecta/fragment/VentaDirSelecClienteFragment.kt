@@ -1,4 +1,4 @@
-package com.friendlypos.ventadirecta.fragment
+package com.friendlysystemgroup.friendlypos.ventadirecta.fragment
 
 import android.os.Bundle
 import android.util.Log
@@ -14,12 +14,12 @@ import androidx.core.view.MenuItemCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
-import butterknife.ButterKnife
-import com.friendlypos.R
-import com.friendlypos.distribucion.fragment.BaseFragment
-import com.friendlypos.principal.modelo.Clientes
-import com.friendlypos.ventadirecta.activity.VentaDirectaActivity
-import com.friendlypos.ventadirecta.adapters.VentaDirClienteAdapter
+
+import com.friendlysystemgroup.friendlypos.R
+import com.friendlysystemgroup.friendlypos.distribucion.fragment.BaseFragment
+import com.friendlysystemgroup.friendlypos.principal.modelo.Clientes
+import com.friendlysystemgroup.friendlypos.ventadirecta.activity.VentaDirectaActivity
+import com.friendlysystemgroup.friendlypos.ventadirecta.adapters.VentaDirClienteAdapter
 import io.realm.Realm
 import io.realm.internal.SyncObjectServerFacade
 import java.util.Locale

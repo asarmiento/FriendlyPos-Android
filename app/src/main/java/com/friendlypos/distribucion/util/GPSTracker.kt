@@ -1,4 +1,4 @@
-package com.friendlypos.distribucion.util
+package com.friendlysystemgroup.friendlypos.distribucion.util
 
 import android.Manifest
 import android.app.AlertDialog
