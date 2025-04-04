@@ -17,7 +17,7 @@ import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
-import butterknife.BindView
+
 
 import com.friendlysystemgroup.friendlypos.R
 import com.friendlysystemgroup.friendlypos.crearCliente.modelo.customer_new
@@ -125,7 +125,7 @@ class crearCliente : BluetoothActivity() {
         super.onCreate(savedInstanceState)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         setContentView(R.layout.activity_crear_cliente)
-        ButterKnife.bind(this)
+        
 
         val adapter = ArrayAdapter.createFromResource(
             this, R.array.array_spinnerIdType1,

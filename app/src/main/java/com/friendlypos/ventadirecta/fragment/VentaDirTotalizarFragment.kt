@@ -31,7 +31,6 @@ import com.friendlysystemgroup.friendlypos.principal.modelo.Sysconf
 import com.friendlysystemgroup.friendlypos.principal.modelo.datosTotales
 import com.friendlysystemgroup.friendlypos.ventadirecta.activity.VentaDirectaActivity
 import io.realm.Realm
-import io.realm.internal.SyncObjectServerFacade
 import java.util.Random
 
 class VentaDirTotalizarFragment : BaseFragment() {
@@ -93,7 +92,7 @@ class VentaDirTotalizarFragment : BaseFragment() {
         super.onCreate(savedInstanceState)
         bluetoothStateChangeReceiver = BluetoothStateChangeReceiver()
         bluetoothStateChangeReceiver!!.setBluetoothStateChangeReceiver(context!!)
-        session = SessionPrefes(SyncObjectServerFacade.getApplicationContext())
+        session = SessionPrefes(requireContext())
         Log.d("applydone", apply_done.toString() + "")
     }
 

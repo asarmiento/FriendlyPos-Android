@@ -22,7 +22,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
-import butterknife.BindView
+
 
 import com.friendlysystemgroup.friendlypos.R
 import com.friendlysystemgroup.friendlypos.R.id
@@ -156,7 +156,7 @@ class MenuPrincipal : BluetoothActivity(),
         super.onCreate(savedInstanceState)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         setContentView(R.layout.activity_menu_principal)
-        ButterKnife.bind(this)
+        
         val toolbar = findViewById<Toolbar>(id.toolbar)
         setSupportActionBar(toolbar)
 

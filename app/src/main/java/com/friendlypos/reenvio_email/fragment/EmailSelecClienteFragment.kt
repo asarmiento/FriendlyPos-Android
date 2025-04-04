@@ -13,7 +13,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.view.MenuItemCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
+
 
 import com.friendlysystemgroup.friendlypos.R
 import com.friendlysystemgroup.friendlypos.distribucion.fragment.BaseFragment
@@ -48,7 +48,7 @@ class EmailSelecClienteFragment : BaseFragment(), SearchView.OnQueryTextListener
             false
         )
         setHasOptionsMenu(true)
-        ButterKnife.bind(this, rootView)
+        //ButterKnife.bind(this, rootView)
         return rootView
     }
 

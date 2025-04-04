@@ -14,7 +14,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.MenuItemCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
+
 
 import com.friendlysystemgroup.friendlypos.R
 import com.friendlysystemgroup.friendlypos.application.bluetooth.PrinterService
@@ -41,7 +41,7 @@ class ClientesActivity : BluetoothActivity(), SearchView.OnQueryTextListener {
         super.onCreate(savedInstanceState)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         setContentView(R.layout.activity_clientes)
-        ButterKnife.bind(this)
+        
 
         // Redirección al Login
         if (!get(this).isLoggedIn) {

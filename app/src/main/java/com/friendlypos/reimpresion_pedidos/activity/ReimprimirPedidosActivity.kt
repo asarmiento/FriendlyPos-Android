@@ -122,7 +122,7 @@ class ReimprimirPedidosActivity : BluetoothActivity() {
         super.onCreate(savedInstanceState)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         setContentView(R.layout.activity_reimprimir_pedido)
-        ButterKnife.bind(this)
+        
 
         toolbar = findViewById<View>(R.id.toolbarReimprimirPedido) as Toolbar
         setSupportActionBar(toolbar)

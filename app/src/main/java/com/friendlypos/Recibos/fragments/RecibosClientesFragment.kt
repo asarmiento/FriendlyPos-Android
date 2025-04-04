@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
+
 
 import com.friendlysystemgroup.friendlypos.R
 import com.friendlysystemgroup.friendlypos.Recibos.activity.RecibosActivity
@@ -45,7 +45,7 @@ class RecibosClientesFragment : BaseFragment() {
             R.layout.fragment_recibos_clientes, container,
             false
         )
-        ButterKnife.bind(this, rootView)
+        //ButterKnife.bind(this, rootView)
         return rootView
     }
 

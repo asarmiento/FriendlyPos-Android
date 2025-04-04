@@ -76,7 +76,7 @@ class ReimPedidoTotalizarFragment : BaseFragment() {
         super.onCreate(savedInstanceState)
         bluetoothStateChangeReceiver = BluetoothStateChangeReceiver()
         bluetoothStateChangeReceiver?.setBluetoothStateChangeReceiver(requireContext())
-        session = SessionPrefes(SyncObjectServerFacade.getApplicationContext())
+        session = SessionPrefes(requireContext())
     }
 
     override fun onCreateView(

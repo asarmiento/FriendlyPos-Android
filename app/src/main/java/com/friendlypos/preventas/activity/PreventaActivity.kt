@@ -123,7 +123,7 @@ class PreventaActivity : BluetoothActivity() {
         super.onCreate(savedInstanceState)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         setContentView(R.layout.activity_preventa)
-        ButterKnife.bind(this)
+        
         toolbar = findViewById<View>(R.id.toolbarPreventa) as Toolbar
 
         setSupportActionBar(toolbar)

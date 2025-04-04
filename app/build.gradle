@@ -1,7 +1,8 @@
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-kapt'
-apply plugin: 'realm-android'
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+}
 
 android {
     namespace 'com.friendlysystemgroup.friendlypos'
@@ -60,17 +61,10 @@ android {
         main.java.srcDirs += 'src/main/kotlin'
     }
     
-    kapt {
-        correctErrorTypes = true
-        useBuildCache = false
-    }
-    
-    buildToolsVersion '35.0.0'
+
+
 }
 
-realm {
-    syncEnabled = true
-}
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -83,15 +77,15 @@ dependencies {
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.3.2'
     implementation 'com.google.android.material:material:1.11.0'
-    
+    implementation "io.realm:realm-android-library:10.11.1"
+
+
     // Kotlin y Corrutinas
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3'
     
-    // ButterKnife (mantenido temporalmente mientras se migra)
-    implementation 'com.jakewharton:butterknife:10.2.3'
-    kapt 'com.jakewharton:butterknife-compiler:10.2.3'
+
     
     // Retrofit y OkHttp
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
@@ -101,12 +95,17 @@ dependencies {
     
     // Otras dependencias
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
-    implementation 'org.sufficientlysecure:html-textview:4.0'
     implementation 'com.github.bumptech.glide:glide:4.16.0'
-    kapt 'com.github.bumptech.glide:compiler:4.16.0'
+    implementation 'com.github.clans:fab:1.6.4'
+    implementation("com.google.android.gms:play-services-base:18.2.0")
+    
+    // ButterKnife
+    implementation 'com.jakewharton:butterknife:10.2.3'
+    kapt 'com.jakewharton:butterknife-compiler:10.2.3'
     
     // Testing
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    implementation 'uk.co.chrisjenx:calligraphy:2.3.0'
 }

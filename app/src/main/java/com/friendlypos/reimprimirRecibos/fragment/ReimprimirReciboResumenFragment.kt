@@ -17,7 +17,6 @@ import com.friendlysystemgroup.friendlypos.Recibos.modelo.receipts
 import com.friendlysystemgroup.friendlypos.Recibos.modelo.recibos
 import com.friendlysystemgroup.friendlypos.app.broadcastreceiver.BluetoothStateChangeReceiver
 import com.friendlysystemgroup.friendlypos.application.util.Functions
-import com.friendlysystemgroup.friendlypos.application.util.LocalImageGetter
 import com.friendlysystemgroup.friendlypos.application.util.PrinterFunctions
 import com.friendlysystemgroup.friendlypos.databinding.FragmentReimprimirReciboResumenBinding
 import com.friendlysystemgroup.friendlypos.distribucion.fragment.BaseFragment
@@ -25,7 +24,8 @@ import com.friendlysystemgroup.friendlypos.principal.modelo.Clientes
 import com.friendlysystemgroup.friendlypos.ReimprimirRecibos.activity.ReimprimirRecibosActivity
 import io.realm.Realm
 import io.realm.RealmResults
-import org.sufficientlysecure.htmltextview.HtmlTextView
+import com.friendlypos.util.HtmlTextView
+import com.friendlypos.util.LocalImageGetter
 
 class ReimprimirReciboResumenFragment : BaseFragment() {
     var text: HtmlTextView? = null

@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
+
 
 import com.friendlysystemgroup.friendlypos.R
 import com.friendlysystemgroup.friendlypos.distribucion.fragment.BaseFragment
@@ -43,7 +43,7 @@ class ReimPedidoSelecClienteFragment : BaseFragment() {
             R.layout.fragment_reim_pedido_selec_cliente, container,
             false
         )
-        ButterKnife.bind(this, rootView)
+        //ButterKnife.bind(this, rootView)
         return rootView
     }
 
@@ -73,7 +73,7 @@ class ReimPedidoSelecClienteFragment : BaseFragment() {
             val result1 = query.findAll()
             if (result1.size == 0) {
                 Toast.makeText(
-                    SyncObjectServerFacade.getApplicationContext(),
+                    requireContext(),
                     "No hay facturas para editar",
                     Toast.LENGTH_LONG
                 ).show()

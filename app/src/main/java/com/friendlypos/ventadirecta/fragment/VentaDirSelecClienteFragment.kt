@@ -13,7 +13,6 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.view.MenuItemCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
 
 import com.friendlysystemgroup.friendlypos.R
 import com.friendlysystemgroup.friendlypos.distribucion.fragment.BaseFragment
@@ -21,7 +20,6 @@ import com.friendlysystemgroup.friendlypos.principal.modelo.Clientes
 import com.friendlysystemgroup.friendlypos.ventadirecta.activity.VentaDirectaActivity
 import com.friendlysystemgroup.friendlypos.ventadirecta.adapters.VentaDirClienteAdapter
 import io.realm.Realm
-import io.realm.internal.SyncObjectServerFacade
 import java.util.Locale
 
 /**
@@ -30,7 +28,6 @@ import java.util.Locale
 class VentaDirSelecClienteFragment : BaseFragment(), SearchView.OnQueryTextListener {
     private var realm: Realm? = null
 
-    @BindView(R.id.recyclerViewVentaDirectaCliente)
     lateinit var recyclerView: RecyclerView
 
     private var adapter: VentaDirClienteAdapter? = null
@@ -52,7 +49,7 @@ class VentaDirSelecClienteFragment : BaseFragment(), SearchView.OnQueryTextListe
             false
         )
         setHasOptionsMenu(true)
-        ButterKnife.bind(this, rootView)
+        recyclerView = rootView.findViewById(R.id.recyclerViewVentaDirectaCliente)
         return rootView
     }
 
@@ -60,8 +57,8 @@ class VentaDirSelecClienteFragment : BaseFragment(), SearchView.OnQueryTextListe
         super.onViewCreated(view, savedInstanceState)
         if (adapter == null) {
             adapter = VentaDirClienteAdapter(
-                context!!, ((activity as VentaDirectaActivity?)!!),
-                list
+                requireContext(), ((activity as VentaDirectaActivity?)!!),
+                getClientesList()
             )
         }
         recyclerView.setHasFixedSize(true)
@@ -69,25 +66,24 @@ class VentaDirSelecClienteFragment : BaseFragment(), SearchView.OnQueryTextListe
         recyclerView.adapter = adapter
     }
 
-    private val list: List<Clientes>
-        get() {
-            realm = Realm.getDefaultInstance()
-            val query = realm.where(Clientes::class.java)
-            val result1 = query.findAll()
-            if (result1.size == 0) {
-                Toast.makeText(
-                    SyncObjectServerFacade.getApplicationContext(),
-                    "Favor descargar datos primero",
-                    Toast.LENGTH_LONG
-                ).show()
-            }
-            return result1
+    private fun getClientesList(): MutableList<Clientes> {
+        realm = Realm.getDefaultInstance()
+        val query = realm!!.where(Clientes::class.java)
+        val result1 = query.findAll()
+        if (result1.size == 0) {
+            Toast.makeText(
+                requireContext(),
+                "Favor descargar datos primero",
+                Toast.LENGTH_LONG
+            ).show()
         }
+        return result1.toMutableList()
+    }
 
 
     override fun onDestroyView() {
         super.onDestroyView()
-        realm!!.close()
+        realm?.close()
     }
 
     override fun updateData() {
@@ -105,7 +101,7 @@ class VentaDirSelecClienteFragment : BaseFragment(), SearchView.OnQueryTextListe
             object : MenuItemCompat.OnActionExpandListener {
                 override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
                     // Do something when collapsed
-                    adapter!!.setFilter(this.list)
+                    adapter!!.setFilter(getClientesList())
                     return true // Return true to collapse action view
                 }
 
@@ -117,7 +113,7 @@ class VentaDirSelecClienteFragment : BaseFragment(), SearchView.OnQueryTextListe
     }
 
     override fun onQueryTextChange(newText: String): Boolean {
-        val filteredModelList = filter(list, newText)
+        val filteredModelList = filter(getClientesList(), newText)
         adapter!!.setFilter(filteredModelList)
         return true
     }

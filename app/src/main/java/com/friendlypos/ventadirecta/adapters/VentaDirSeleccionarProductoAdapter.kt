@@ -29,7 +29,6 @@ import com.friendlysystemgroup.friendlypos.ventadirecta.fragment.VentaDirSelecPr
 import com.friendlysystemgroup.friendlypos.ventadirecta.modelo.invoiceDetalleVentaDirecta
 import com.friendlysystemgroup.friendlypos.ventadirecta.util.TotalizeHelperVentaDirecta
 import io.realm.Realm
-import io.realm.internal.SyncObjectServerFacade
 import java.util.Calendar
 import java.util.Date
 
@@ -48,7 +47,7 @@ class VentaDirSeleccionarProductoAdapter(
     var idDetallesFactura: Int = 0
     var nextId: Int = 0
     var customer: String? = null
-    var session: SessionPrefes = SessionPrefes(SyncObjectServerFacade.getApplicationContext())
+    var session: SessionPrefes
     var spPrices: Spinner? = null
     var idProducto: String? = null
     var idFacturaSeleccionada: Int = 0
@@ -57,6 +56,7 @@ class VentaDirSeleccionarProductoAdapter(
 
     init {
         totalizeHelper = TotalizeHelperVentaDirecta(activity)
+        session = SessionPrefes(activity.applicationContext)
     }
 
     fun updateData(productosList: MutableList<Inventario>) {

@@ -136,7 +136,7 @@ class RecibosActivity : BluetoothActivity() {
         viewPager.addOnPageChangeListener(TabLayoutOnPageChangeListener(tabLayout))
         tabLayout!!.addOnTabSelectedListener(object : OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
-                val tabCliente: Int = this.selecClienteTabRecibos
+                val tabCliente: Int = selecClienteTabRecibos
 
                 if (tabCliente == 0 && tab.position != 0) {
                     CreateMessage(this@RecibosActivity, "Recibos", "Seleccione un cliente.")

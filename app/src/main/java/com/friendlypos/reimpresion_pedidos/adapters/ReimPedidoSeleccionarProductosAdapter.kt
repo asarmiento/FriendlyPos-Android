@@ -230,7 +230,7 @@ class ReimPedidoSeleccionarProductosAdapter(
 
                             val pivotnuevo = Pivot() // unmanaged
                             pivotnuevo.id = nextId
-                            pivotnuevo.invoice_id = idFacturaSeleccionada
+                            pivotnuevo.invoice_id = idFacturaSeleccionada.toString() as String
                             pivotnuevo.product_id = producto_id
                             pivotnuevo.price = precioSeleccionado.toString()
                             pivotnuevo.amount =
@@ -270,7 +270,7 @@ class ReimPedidoSeleccionarProductosAdapter(
                         realm4.executeTransaction(object : Realm.Transaction {
                             override fun execute(realm4: Realm) {
                                 val ventas = realm4.where(sale::class.java)
-                                    .equalTo("invoice_id", idFacturaSeleccionada).findFirst()
+                                    .equalTo("invoice_id", idFacturaSeleccionada.toString() as String).findFirst()
                                 val clientes = realm4.where(Clientes::class.java)
                                     .equalTo("id", ventas!!.customer_id).findFirst()
                                 Log.d("ads", clientes.toString() + "")

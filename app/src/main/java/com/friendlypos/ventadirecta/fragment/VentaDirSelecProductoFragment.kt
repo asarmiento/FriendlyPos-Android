@@ -20,7 +20,6 @@ import com.friendlysystemgroup.friendlypos.distribucion.modelo.Inventario
 import com.friendlysystemgroup.friendlypos.ventadirecta.activity.VentaDirectaActivity
 import com.friendlysystemgroup.friendlypos.ventadirecta.adapters.VentaDirSeleccionarProductoAdapter
 import io.realm.Realm
-import io.realm.internal.SyncObjectServerFacade
 import java.util.Locale
 
 class VentaDirSelecProductoFragment : BaseFragment(), SearchView.OnQueryTextListener {
@@ -63,48 +62,48 @@ class VentaDirSelecProductoFragment : BaseFragment(), SearchView.OnQueryTextList
 
         recyclerView =
             rootView.findViewById<View>(R.id.recyclerViewVentaDirectaSeleccProducto) as RecyclerView
-        recyclerView!!.layoutManager = LinearLayoutManager(getActivity())
+        recyclerView!!.layoutManager = LinearLayoutManager(activity)
         recyclerView!!.setHasFixedSize(true)
 
         if (adapter == null) {
             adapter = VentaDirSeleccionarProductoAdapter(
-                activity!!, this,
-                listProductos
+                activity!!,
+                this,
+                getListProductos()
             )
         }
 
         recyclerView!!.adapter = adapter
 
         creditoLimite = rootView.findViewById<View>(R.id.restCreditVentaDirecta) as TextView
-        listaInventario = listProductos
-        Log.d("listaProducto", listProductos.toString() + "")
+        listaInventario = getListProductos()
+        Log.d("listaProducto", getListProductos().toString() + "")
         creditoDisponible()
 
         return rootView
     }
 
 
-    private val listProductos: List<Inventario>
-        get() {
-            realm = Realm.getDefaultInstance()
-            val query =
-                realm.where(Inventario::class.java).notEqualTo("amount", "0")
-                    .notEqualTo("amount", "0.0").notEqualTo("amount", "0.000")
-            val result1 = query.findAll()
+    private fun getListProductos(): MutableList<Inventario> {
+        realm = Realm.getDefaultInstance()
+        val query =
+            realm!!.where(Inventario::class.java).notEqualTo("amount", "0")
+                .notEqualTo("amount", "0.0").notEqualTo("amount", "0.000")
+        val result1 = query.findAll()
 
-            if (result1.isEmpty()) {
-                Toast.makeText(
-                    SyncObjectServerFacade.getApplicationContext(),
-                    "Favor descargar datos primero",
-                    Toast.LENGTH_LONG
-                ).show()
-            }
-            return result1
+        if (result1.isEmpty()) {
+            Toast.makeText(
+                requireContext(),
+                "Favor descargar datos primero",
+                Toast.LENGTH_LONG
+            ).show()
         }
+        return result1.toMutableList()
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        realm!!.close()
+        realm?.close()
     }
 
     fun creditoDisponible() {
@@ -149,14 +148,14 @@ class VentaDirSelecProductoFragment : BaseFragment(), SearchView.OnQueryTextList
             Log.d("OSCARUpdate", "No actualiza xq esta en $datosEnFiltro")
         } else {
             datosEnFiltro = 0
-            adapter!!.updateData(listProductos)
+            adapter!!.updateData(getListProductos())
             // adapter2.notifyDataSetChanged();
             Log.d("OSCARUpdate1", "Actualiza xq esta en $datosEnFiltro")
         }
 
         if (slecTAB == 1) {
             creditoLimiteCliente =
-                (getActivity() as VentaDirectaActivity).creditoLimiteClienteVentaDirecta!!.toDouble()
+                (activity as VentaDirectaActivity).creditoLimiteClienteVentaDirecta!!.toDouble()
             creditoLimite!!.text =
                 "C.Disponible: " + String.format(
                     "%,.2f",

@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
+
 
 import com.friendlysystemgroup.friendlypos.R
 import com.friendlysystemgroup.friendlypos.distribucion.fragment.BaseFragment
@@ -47,7 +47,7 @@ class EmailSelecFacturaFragment : BaseFragment() {
             false
         )
         setHasOptionsMenu(true)
-        ButterKnife.bind(this, rootView)
+        //ButterKnife.bind(this, rootView)
         return rootView
     }
 

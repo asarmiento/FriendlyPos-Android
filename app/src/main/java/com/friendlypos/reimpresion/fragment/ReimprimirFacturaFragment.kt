@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
+
 
 import com.friendlysystemgroup.friendlypos.R
 import com.friendlysystemgroup.friendlypos.distribucion.fragment.BaseFragment
@@ -44,7 +44,7 @@ class ReimprimirFacturaFragment : BaseFragment() {
             R.layout.fragment_reimprimir_factura, container,
             false
         )
-        ButterKnife.bind(this, rootView)
+        //ButterKnife.bind(this, rootView)
         return rootView
     }
 

@@ -116,7 +116,7 @@ class DistribucionActivity : BluetoothActivity() {
         super.onCreate(savedInstanceState)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         setContentView(R.layout.activity_distribucion)
-        ButterKnife.bind(this)
+        
 
         toolbar = findViewById<View>(R.id.toolbarDistribucion) as Toolbar
         setSupportActionBar(toolbar)

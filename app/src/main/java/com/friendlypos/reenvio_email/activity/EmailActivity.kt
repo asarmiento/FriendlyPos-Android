@@ -41,7 +41,7 @@ class EmailActivity : BluetoothActivity() {
         super.onCreate(savedInstanceState)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         setContentView(R.layout.activity_email)
-        ButterKnife.bind(this)
+        
         networkStateChangeReceiver = NetworkStateChangeReceiver()
         toolbar = findViewById<View>(R.id.toolbarEmail) as Toolbar
         setSupportActionBar(toolbar)

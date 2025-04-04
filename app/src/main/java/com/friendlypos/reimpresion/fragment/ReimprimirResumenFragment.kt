@@ -5,12 +5,13 @@ import android.view.View
 import androidx.appcompat.app.AlertDialog
 import com.friendlysystemgroup.friendlypos.application.util.Functions
 import io.realm.Realm
-import org.sufficientlysecure.htmltextview.HtmlTextView
+import com.friendlypos.util.HtmlTextView
 import java.io.UnsupportedEncodingException
 import java.nio.charset.Charset
-import butterknife.BindView
+
 
 import com.friendlysystemgroup.friendlypos.preventas.fragment.BaseFragment
+import com.friendlypos.util.LocalImageGetter
 
 class ReimprimirResumenFragment : BaseFragment() {
     @BindView(R.id.html_text)
@@ -48,7 +49,7 @@ class ReimprimirResumenFragment : BaseFragment() {
         val rootView: View =
             inflater.inflate(R.layout.fragment_reimprimir_resumen, container, false)
         text = rootView.findViewById<View>(R.id.html_text) as HtmlTextView
-        ButterKnife.bind(this, rootView)
+        //ButterKnife.bind(this, rootView)
 
 
         btnReimprimirFactura.setOnClickListener(View.OnClickListener {

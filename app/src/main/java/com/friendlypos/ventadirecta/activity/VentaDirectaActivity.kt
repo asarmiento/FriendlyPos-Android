@@ -131,7 +131,7 @@ class VentaDirectaActivity : BluetoothActivity() {
         super.onCreate(savedInstanceState)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         setContentView(R.layout.activity_ventadirecta)
-        ButterKnife.bind(this)
+        
         toolbar = findViewById<View>(R.id.toolbarVentaDirecta) as Toolbar
         setSupportActionBar(toolbar)
         val actionBar = supportActionBar
@@ -537,7 +537,7 @@ class VentaDirectaActivity : BluetoothActivity() {
         get() {
             val realm = Realm.getDefaultInstance()
             val query: RealmQuery<Numeracion> =
-                realm.where(Numeracion::class.java).equalTo("sale_type", "1")
+                realm.where(Numeracion::class.java).equalTo("sale_type", "1" as String)
                     .equalTo("rec_creada", 1).equalTo("rec_aplicada", 0)
             val result1 = query.findAll()
 
@@ -549,7 +549,7 @@ class VentaDirectaActivity : BluetoothActivity() {
                 for (i in result1.indices) {
                     val salesList1: List<Numeracion> = realm.where(
                         Numeracion::class.java
-                    ).equalTo("sale_type", "1").equalTo("rec_creada", 1).equalTo("rec_aplicada", 0)
+                    ).equalTo("sale_type", "1" as String).equalTo("rec_creada", 1).equalTo("rec_aplicada", 0)
                         .findAll()
                     val numero = salesList1[i].numeracion_numero
 

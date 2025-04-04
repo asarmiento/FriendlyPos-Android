@@ -19,7 +19,6 @@ recyclerview = "1.3.2"
 cardview = "1.0.0"
 legacy-support = "1.0.0"
 coroutines = "1.7.3"
-butterknife = "10.2.3"
 retrofit = "2.9.0"
 okhttp = "4.12.0"
 glide = "4.16.0"
@@ -45,10 +44,6 @@ material = { group = "com.google.android.material", name = "material", version.r
 kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib-jdk8", version.ref = "kotlin" }
 coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines" }
 coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines" }
-
-# ButterKnife (temporalmente mientras se migra)
-butterknife = { group = "com.jakewharton", name = "butterknife", version.ref = "butterknife" }
-butterknife-compiler = { group = "com.jakewharton", name = "butterknife-compiler", version.ref = "butterknife" }
 
 # Retrofit y OkHttp
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
