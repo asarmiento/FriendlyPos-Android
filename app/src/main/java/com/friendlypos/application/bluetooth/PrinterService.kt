@@ -11,6 +11,7 @@ import android.content.IntentFilter
 import android.os.Binder
 import android.os.Handler
 import android.os.IBinder
+import android.os.Looper
 import android.util.Log
 import com.friendlysystemgroup.friendlypos.principal.activity.MenuPrincipal
 import java.io.IOException
@@ -18,28 +19,27 @@ import java.io.InputStream
 import java.io.OutputStream
 import java.util.UUID
 
-
+/**
+ * Servicio para manejar la comunicación con la impresora Bluetooth
+ */
 class PrinterService : Service() {
     private var mBluetoothAdapter: BluetoothAdapter? = null
-
-    // device
     private var mConnectThread: ConnectThread? = null
     private var mMacAddress: String? = null
-
     private var mContext: Context? = null
     private var onSocket: BluetoothSocket? = null
+    
     override fun onCreate() {
         Log.i(TAG, "Service started")
-        this.registerReceiver(onBroadcast, IntentFilter(BROADCAST_CLASS))
-
+        registerReceiver(onBroadcast, IntentFilter(BROADCAST_CLASS))
+        
         mContext = this
-        mHandler2 = Handler()
-
+        mHandler2 = Handler(Looper.getMainLooper())
+        
         super.onCreate()
     }
 
-
-    override fun onBind(intent: Intent): IBinder? {
+    override fun onBind(intent: Intent): IBinder {
         Log.d(TAG, "ONBIND")
         return mBinder
     }
@@ -49,35 +49,50 @@ class PrinterService : Service() {
             get() = this@PrinterService
     }
 
-
     private val mBinder: IBinder = LocalBinder()
 
-
-    override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         Log.d(TAG, "Onstart Command")
+        
+        // Verificar que la intent no sea nula
+        if (intent == null) {
+            Log.e(TAG, "Intent nula, deteniendo servicio")
+            stopSelf()
+            return START_NOT_STICKY
+        }
+        
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
         val chosenDevice = intent.getStringExtra(BT_DEVICE)
-        if (mBluetoothAdapter != null && chosenDevice != "") {
-            val pairedDevices = mBluetoothAdapter!!.bondedDevices
-            if (pairedDevices.size > 0) {
+        
+        if (mBluetoothAdapter != null && !chosenDevice.isNullOrEmpty()) {
+            val pairedDevices = mBluetoothAdapter?.bondedDevices ?: emptySet()
+            
+            if (pairedDevices.isNotEmpty()) {
                 for (d in pairedDevices) {
                     if (d.address == chosenDevice) device = d
                 }
             }
+            
             if (device == null) {
-                Log.d(TAG, "No device... stopping")
-                return START_STICKY_COMPATIBILITY
+                Log.d(TAG, "No se encontró el dispositivo, deteniendo servicio")
+                return START_NOT_STICKY
             }
-            deviceName = device!!.name
-            mMacAddress = device!!.address
-            if (mMacAddress != null && mMacAddress!!.length > 0) {
-                Log.d(TAG, "Connecting to: " + deviceName)
+            
+            deviceName = device?.name
+            mMacAddress = device?.address
+            
+            if (!mMacAddress.isNullOrEmpty()) {
+                Log.d(TAG, "Conectando a: $deviceName")
                 connectToDevice(mMacAddress)
             } else {
-                Log.d(TAG, "No macAddress... stopping")
+                Log.d(TAG, "No hay dirección MAC, deteniendo servicio")
                 stopSelf()
-                return START_STICKY_COMPATIBILITY
+                return START_NOT_STICKY
             }
+        } else {
+            Log.d(TAG, "No hay adaptador Bluetooth o dispositivo elegido")
+            stopSelf()
+            return START_NOT_STICKY
         }
 
         return START_STICKY
@@ -85,23 +100,30 @@ class PrinterService : Service() {
 
     @Synchronized
     private fun connectToDevice(macAddress: String?) {
-        Log.d(TAG, "Connecting... ")
-        val device = mBluetoothAdapter!!.getRemoteDevice(macAddress)
+        if (macAddress.isNullOrEmpty() || mBluetoothAdapter == null) {
+            Log.e(TAG, "Dirección MAC nula o adaptador Bluetooth no disponible")
+            return
+        }
+        
+        Log.d(TAG, "Conectando... ")
+        val device = mBluetoothAdapter?.getRemoteDevice(macAddress)
+        
+        // Cancela el hilo de conexión si está en progreso
         if (mState == STATE_CONNECTING) {
-            if (mConnectThread != null) {
-                mConnectThread!!.cancel()
-                mConnectThread = null
-            }
+            mConnectThread?.cancel()
+            mConnectThread = null
         }
 
-        // Cancel any thread currently running a connection
-        if (mConnectedThread != null) {
-            mConnectedThread!!.cancel()
-            mConnectedThread = null
+        // Cancela cualquier hilo que esté ejecutando una conexión
+        mConnectedThread?.cancel()
+        mConnectedThread = null
+        
+        // Inicia nuevo hilo de conexión
+        device?.let {
+            mConnectThread = ConnectThread(it)
+            mConnectThread?.start()
+            setState(STATE_CONNECTING)
         }
-        mConnectThread = ConnectThread(device)
-        mConnectThread!!.start()
-        setState(STATE_CONNECTING)
     }
 
     private fun setState(state: Int) {
@@ -111,101 +133,91 @@ class PrinterService : Service() {
     @Synchronized
     fun stop() {
         setState(STATE_NONE)
-        mHandler2!!.removeCallbacks(reconnect)
+        mHandler2?.removeCallbacks(reconnect)
 
-        if (mConnectThread != null) {
-            mConnectThread!!.cancel()
-            mConnectThread = null
-        }
+        mConnectThread?.cancel()
+        mConnectThread = null
 
-        if (mConnectedThread != null) {
-            mConnectedThread!!.cancel()
-            mConnectedThread = null
-        }
-        if (mBluetoothAdapter != null) {
-            mBluetoothAdapter!!.cancelDiscovery()
-        }
+        mConnectedThread?.cancel()
+        mConnectedThread = null
+        
+        mBluetoothAdapter?.cancelDiscovery()
+        
         stopSelf()
     }
 
     override fun stopService(name: Intent): Boolean {
         setState(STATE_NONE)
-        if (mConnectThread != null) {
-            mConnectThread!!.cancel()
-            mConnectThread = null
-        }
+        
+        mConnectThread?.cancel()
+        mConnectThread = null
 
-        if (mConnectedThread != null) {
-            mConnectedThread!!.cancel()
-            mConnectedThread = null
-        }
-        mBluetoothAdapter!!.cancelDiscovery()
+        mConnectedThread?.cancel()
+        mConnectedThread = null
+        
+        mBluetoothAdapter?.cancelDiscovery()
+        
         return super.stopService(name)
     }
 
     private fun connectionFailed() {
-        Log.d(TAG, "Connection Failed")
-        //RaceResultsDisplayService.this.stop();
-        // Post to UI that connection is off
+        Log.d(TAG, "Conexión fallida")
         if (mState == STATE_NONE) return
         reconnect()
     }
 
     fun connectionLost() {
-        Log.d(TAG, "Connection Lost")
-        if (mConnectThread != null) {
-            mConnectThread!!.cancel()
-            mConnectThread = null
-        }
+        Log.d(TAG, "Conexión perdida")
+        
+        mConnectThread?.cancel()
+        mConnectThread = null
 
-        if (mConnectedThread != null) {
-            mConnectedThread!!.cancel()
-            mConnectedThread = null
-        }
+        mConnectedThread?.cancel()
+        mConnectedThread = null
 
-        if (onSocket != null) {
-            try {
-                onSocket!!.close()
-                onSocket = null
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
+        try {
+            onSocket?.close()
+            onSocket = null
+        } catch (e: Exception) {
+            Log.e(TAG, "Error al cerrar socket", e)
         }
-        //RaceResultsDisplayService.this.stop();
-        // Post to UI that connection is off
+        
         reconnect()
     }
 
-    var reconnect: Runnable = Runnable { connectToDevice(mMacAddress) }
+    private val reconnect: Runnable = Runnable { 
+        connectToDevice(mMacAddress) 
+    }
 
     fun reconnect() {
         stopSelf()
-        //        Log.d(TAG, "Reconnecting in 5 seconds...");
-//        mHandler2.postDelayed(reconnect, 1000 * 60 * 2);
+        // Si se desea reconectar automáticamente después de un tiempo:
+        // mHandler2?.postDelayed(reconnect, 5000) // 5 segundos
     }
 
     @Synchronized
-    private fun connected(mmSocket: BluetoothSocket, mmDevice: BluetoothDevice) {
-        Log.d(TAG, "Connected")
-        // Cancel the thread that completed the connection
-        if (mConnectThread != null) {
-            mConnectThread!!.cancel()
-            mConnectThread = null
+    private fun connected(mmSocket: BluetoothSocket?, mmDevice: BluetoothDevice) {
+        if (mmSocket == null) {
+            Log.e(TAG, "Socket nulo en connected()")
+            connectionFailed()
+            return
         }
+        
+        Log.d(TAG, "Conectado")
+        
+        // Cancela el hilo que completó la conexión
+        mConnectThread?.cancel()
+        mConnectThread = null
 
-        // Cancel any thread currently running a connection
-        if (mConnectedThread != null) {
-            mConnectedThread!!.cancel()
-            mConnectedThread = null
-        }
+        // Cancela cualquier hilo que esté ejecutando una conexión
+        mConnectedThread?.cancel()
+        mConnectedThread = null
 
+        // Inicia el hilo para manejar la conexión
         mConnectedThread = ConnectedThread(mmSocket)
-        mConnectedThread!!.start()
+        mConnectedThread?.start()
         onSocket = mmSocket
         setState(STATE_CONNECTED)
-
-
-        // Post to UI that connection is on!
     }
 
     private inner class ConnectThread(private val mmDevice: BluetoothDevice) : Thread() {
@@ -213,171 +225,140 @@ class PrinterService : Service() {
 
         override fun run() {
             name = "ConnectThread"
-            mBluetoothAdapter!!.cancelDiscovery()
+            mBluetoothAdapter?.cancelDiscovery()
+            
             try {
-                mmSocket = device!!.createRfcommSocketToServiceRecord(UUID_SPP)
-                mmSocket.connect()
+                mmSocket = device?.createRfcommSocketToServiceRecord(UUID_SPP)
+                mmSocket?.connect()
             } catch (e: IOException) {
-                e.printStackTrace()
+                Log.e(TAG, "Error al conectar socket", e)
                 try {
-                    mmSocket!!.close()
+                    mmSocket?.close()
                 } catch (e1: IOException) {
-                    e1.printStackTrace()
+                    Log.e(TAG, "Error al cerrar socket después de fallo de conexión", e1)
                 }
                 connectionFailed()
                 return
             }
+            
             synchronized(this@PrinterService) {
                 mConnectThread = null
             }
+            
             connected(mmSocket, mmDevice)
         }
 
         fun cancel() {
             try {
-                mmSocket!!.close()
+                mmSocket?.close()
             } catch (e: IOException) {
-                Log.e(TAG, "close() of connect socket failed", e)
+                Log.e(TAG, "Error al cerrar socket de conexión", e)
             }
         }
 
         fun sendData(data: String) {
-            mConnectedThread!!.write(data.toByteArray())
+            mConnectedThread?.write(data.toByteArray())
         }
     }
 
     private inner class ConnectedThread(socket: BluetoothSocket) : Thread() {
-        //private final BluetoothSocket mmSocket;
         private val mmOutStream: OutputStream?
         private val mmInStream: InputStream?
 
-        var buffer: ByteArray = ByteArray(256)
-        var bufferLength: Int = 0
-
-        private val last_time: Long = 0
-        private val ping_sent = false
-
         init {
-            //mmSocket = socket;
             var tmpOut: OutputStream? = null
             var tmpIn: InputStream? = null
+            
             try {
                 tmpOut = socket.outputStream
                 tmpIn = socket.inputStream
             } catch (e: IOException) {
-                Log.e(TAG, "temp sockets not created", e)
+                Log.e(TAG, "Error al crear streams temporales", e)
             }
+            
             mmOutStream = tmpOut
             mmInStream = tmpIn
         }
 
         override fun run() {
-            Log.i(TAG, "BEGIN mConnectedThread")
+            Log.i(TAG, "Iniciando hilo conectado")
             val buffer = ByteArray(1024)
             var bytes: Int
 
-            // Keep listening to the InputStream while connected
+            // Escuchar el InputStream mientras esté conectado
             while (true) {
                 try {
-                    // Read from the InputStream
-                    bytes = mmInStream!!.read(buffer)
-                    // Send the obtained bytes to the UI Activity
-                    mHandler!!.obtainMessage(msgTypes.MESSAGE_READ, bytes, -1, buffer)
-                        .sendToTarget()
+                    // Leer del InputStream
+                    mmInStream?.let {
+                        bytes = it.read(buffer)
+                        // Enviar los bytes obtenidos a la actividad UI
+                        mHandler?.obtainMessage(MESSAGE_READ, bytes, -1, buffer)
+                            ?.sendToTarget()
+                    } ?: break
                 } catch (e: IOException) {
-                    Log.e(TAG, "disconnected", e)
+                    Log.e(TAG, "Desconectado", e)
                     connectionLost()
                     break
                 }
             }
         }
 
-
-        /*public void run() {
-
-            while (mState==STATE_CONNECTED) {
-
-
-                long time = System.nanoTime();
-                if (time-last_time > 10000000000L){
-                    if (ping_sent) {
-                        Log.d(TAG, "PING NOT RETURNED");
-                        connectionLost();
-                    } else {
-                        last_time = time;
-                        String ping = String.format("{\"type\":\"ping\",\"time\":%d}", time);
-                        Log.d(TAG, ping);
-                        write(ping.getBytes());
-                        ping_sent = true;
-                    }
-                }
-
-                try {
-                    if (mmInStream.available()>0){
-                        bufferLength = mmInStream.read(buffer);
-
-                        byte[] data = new byte[bufferLength];
-                        System.arraycopy(buffer, 0, data, 0, bufferLength);
-                        final String response = new String(data, "UTF-8");
-                        Log.d(TAG, "R:"+response);
-                        System.out.println("R:"+response);
-                        if (response.equals(String.format("%d", last_time))) {
-                            ping_sent = false;
-                        }
-                    }
-
-                } catch (IOException e){
-                    e.printStackTrace();
-                }
-            }
-        }*/
         fun write(buffer: ByteArray?) {
+            if (buffer == null) {
+                Log.e(TAG, "Intento de escritura con buffer nulo")
+                return
+            }
+            
             try {
-                mmOutStream!!.write(buffer)
+                mmOutStream?.write(buffer)
             } catch (e: IOException) {
-                Log.e(TAG, "Exception during write", e)
+                Log.e(TAG, "Excepción durante la escritura", e)
             }
         }
 
         fun cancel() {
             try {
-                //mmSocket.close();
                 setState(STATE_NONE)
             } catch (e: Exception) {
-                e.printStackTrace()
+                Log.e(TAG, "Error al cancelar ConnectedThread", e)
             }
         }
     }
 
     override fun onDestroy() {
-        this.unregisterReceiver(onBroadcast)
-
+        try {
+            unregisterReceiver(onBroadcast)
+        } catch (e: Exception) {
+            Log.e(TAG, "Error al desregistrar receptor", e)
+        }
 
         setState(STATE_NONE)
-
         stop()
         super.onDestroy()
     }
 
-    // Binding for Service->UI Communication
+    // Receptor para la comunicación Servicio->UI
     private val onBroadcast: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            if (intent.hasExtra(BROADCAST_CLASS + "TO_PRINT")) {
-                if (mState != STATE_CONNECTED) return
+            if (intent.hasExtra("$BROADCAST_CLASS$TO_PRINT")) {
+                if (mState != STATE_CONNECTED) {
+                    Log.d(TAG, "No conectado, ignorando mensaje para imprimir")
+                    return
+                }
 
-                val extras = intent.extras
-                println("is here " + extras.toString())
-                val data = extras!!.getString(BROADCAST_CLASS + "TO_PRINT")
-                    ?: return
+                val extras = intent.extras ?: return
+                val data = extras.getString("$BROADCAST_CLASS$TO_PRINT") ?: return
 
                 if (data == "true") {
                     try {
                         val bill = extras.getString("bill_to_print")
-                        if (bill != null) {
-                            mConnectedThread!!.write(bill.toByteArray())
+                        if (!bill.isNullOrEmpty()) {
+                            mConnectedThread?.write(bill.toByteArray())
+                        } else {
+                            Log.d(TAG, "Factura para imprimir está vacía")
                         }
                     } catch (e: Exception) {
-                        e.printStackTrace()
+                        Log.e(TAG, "Error al procesar factura para imprimir", e)
                     }
                 }
             }
@@ -385,10 +366,37 @@ class PrinterService : Service() {
     }
 
     companion object {
-        const val CLASS_NAME: String = "com.friendlypos.application.bluetooth.PrinterService"
-        const val BROADCAST_CLASS: String = "com.friendlypos.printbill"
-        private val UUID_SPP: UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB")
+        const val CLASS_NAME = "com.friendlypos.application.bluetooth.PrinterService"
+        const val BROADCAST_CLASS = "com.friendlypos.printbill"
+        private const val TO_PRINT = "TO_PRINT"
+        private val UUID_SPP = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB")
+        
+        // Constantes de estado
+        const val STATE_NONE = 0 // No haciendo nada
+        const val STATE_LISTEN = 1 // Escuchando conexiones entrantes
+        const val STATE_CONNECTING = 2 // Iniciando una conexión saliente
+        const val STATE_CONNECTED = 3 // Conectado a un dispositivo remoto
+        
+        // Tipos de mensajes
+        const val MESSAGE_READ = 1
+        
+        // Constante para el dispositivo Bluetooth
+        const val BT_DEVICE = "btdevice"
 
+        private const val TAG = "PrinterService"
+        
+        // Variables compartidas
+        private var mConnectedThread: ConnectedThread? = null
+        var mHandler: Handler? = null
+        var mHandler2: Handler? = null
+        var mState = STATE_NONE
+        var deviceName: String? = null
+        var device: BluetoothDevice? = null
+        private val syncObject = Any()
+
+        /**
+         * Detiene el servicio de impresora Bluetooth
+         */
         fun stop(context: MenuPrincipal): Boolean {
             if (context.isServiceRunning(CLASS_NAME)) {
                 val serviceIntent = Intent(context, PrinterService::class.java)
@@ -398,47 +406,44 @@ class PrinterService : Service() {
             return false
         }
 
-
-        private const val TAG = "PrintService"
-
-        const val BT_DEVICE: String = "btdevice"
-        const val STATE_NONE: Int = 0 // we're doing nothing
-        const val STATE_LISTEN: Int = 1 // now listening for incoming
-
-        // connections
-        const val STATE_CONNECTING: Int = 2 // now initiating an outgoing
-
-        // connection
-        const val STATE_CONNECTED: Int = 3 // now connected to a remote
-        private var mConnectedThread: ConnectedThread? = null
-
-        var mHandler: Handler? = null
-        var mHandler2: Handler? = null
-        var mState: Int = STATE_NONE
-        var deviceName: String? = null
-        var device: BluetoothDevice? = null
-
-        @JvmStatic
+        /**
+         * Inicia el servicio de impresora Bluetooth
+         */
         fun startRDService(context: Context, prefExternalDisplay: String?) {
-            if (prefExternalDisplay == null || prefExternalDisplay == "") return
+            if (prefExternalDisplay.isNullOrEmpty()) {
+                Log.d(TAG, "No hay dirección de impresora configurada")
+                return
+            }
 
-            val serviceIntent = Intent(context, PrinterService::class.java)
-            serviceIntent.putExtra(BT_DEVICE, prefExternalDisplay)
+            val serviceIntent = Intent(context, PrinterService::class.java).apply {
+                putExtra(BT_DEVICE, prefExternalDisplay)
+            }
             context.startService(serviceIntent)
         }
 
-        private val obj = Any()
-
+        /**
+         * Escribe datos en la impresora conectada
+         */
         fun write(out: ByteArray?) {
-            // Create temporary object
+            if (out == null) {
+                Log.e(TAG, "Intento de escritura con datos nulos")
+                return
+            }
+            
+            // Crea un objeto temporal
             val r: ConnectedThread?
-            // Synchronize a copy of the ConnectedThread
-            synchronized(obj) {
-                if (mState != STATE_CONNECTED) return
+            
+            // Sincroniza una copia del ConnectedThread
+            synchronized(syncObject) {
+                if (mState != STATE_CONNECTED) {
+                    Log.d(TAG, "No conectado, no se puede escribir")
+                    return
+                }
                 r = mConnectedThread
             }
-            // Perform the write unsynchronized
-            r!!.write(out)
+            
+            // Realiza la escritura no sincronizada
+            r?.write(out)
         }
     }
 }

@@ -57,13 +57,13 @@ class ConfiguracionFragment : PreferenceFragment(), OnSharedPreferenceChangeList
         populateExternalSeleccImpresora()
 
         prefSelecImpresora = findPreference("pref_selec_impresora")
-        prefSelecImpresora.setOnPreferenceClickListener(this)
+        prefSelecImpresora?.setOnPreferenceClickListener(this)
 
         prefConectarBluetooth = findPreference("pref_conectar_bluetooth")
-        prefConectarBluetooth.setOnPreferenceClickListener(this)
+        prefConectarBluetooth?.setOnPreferenceClickListener(this)
 
         prefDesvincularImpresora = findPreference("pref_desvincular_impresora")
-        prefDesvincularImpresora.setOnPreferenceClickListener(this)
+        prefDesvincularImpresora?.setOnPreferenceClickListener(this)
 
         // Set values
         setBTDeviceSummary("pref_conectar_bluetooth")
@@ -73,10 +73,9 @@ class ConfiguracionFragment : PreferenceFragment(), OnSharedPreferenceChangeList
         return view
     }
 
-
-    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
-        var i: Intent
-
+    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
+        if (sharedPreferences == null || key == null) return
+        
         // Update value of any list preference
         val pref = findPreference(key)
 
@@ -157,7 +156,7 @@ class ConfiguracionFragment : PreferenceFragment(), OnSharedPreferenceChangeList
         fragmentTransaction.commit()
 
         listPref = findPreference("pref_selec_impresora") as ListPreference
-        listPref!!.setDefaultValue("1")
+        listPref?.setDefaultValue("1")
 
         //linkOrUnlinkDevice(noDevicesPaired,"");
     }
@@ -189,10 +188,13 @@ class ConfiguracionFragment : PreferenceFragment(), OnSharedPreferenceChangeList
             }
         }
 
-        listPref = findPreference("pref_conectar_bluetooth") as ListPreference
-        listPref!!.entries = labels
-        listPref!!.entryValues = values
-        listPref!!.onPreferenceChangeListener = this
+        val tempListPref = findPreference("pref_conectar_bluetooth") as? ListPreference
+        tempListPref?.let {
+            it.entries = labels
+            it.entryValues = values
+            it.onPreferenceChangeListener = this
+            listPref = it
+        }
         //linkOrUnlinkDevice(noDevicesPaired,"");
     }
 
@@ -202,13 +204,15 @@ class ConfiguracionFragment : PreferenceFragment(), OnSharedPreferenceChangeList
     }
 
 
-    override fun onPreferenceChange(preference: Preference, newValue: Any): Boolean {
+    override fun onPreferenceChange(preference: Preference?, newValue: Any?): Boolean {
         Log.d("ListPreference", "OnPreferenceChange")
-        linkOrUnlinkDevice(newValue.toString(), "")
+        if (newValue != null) {
+            linkOrUnlinkDevice(newValue.toString(), "")
+        }
         return true
     }
 
-    override fun onPreferenceClick(preference: Preference): Boolean {
+    override fun onPreferenceClick(preference: Preference?): Boolean {
         if (preference === prefDesvincularImpresora) {
             desvincularImpresora()
         } else if (preference === prefConectarBluetooth) {
@@ -226,18 +230,15 @@ class ConfiguracionFragment : PreferenceFragment(), OnSharedPreferenceChangeList
         val preference = findPreference("pref_conectar_bluetooth")
         preference.editor.putString("pref_conectar_bluetooth", value).commit()
         preference.summary = getNameDevice(value)
-        listPref!!.value = value
+        listPref?.value = value
 
         if (value === "No hay dispositivos") {
             CreateMessage(activity, "Error", "No hay ninguna conexión activa")
         } else {
-            if (operation == "U") {
+            if (operation == "U" && currentDevice != null) {
                 try {
-                    val m = currentDevice!!.javaClass.getMethod(
-                        "removeBond",
-                        *null as Array<Class<*>?>?
-                    )
-                    m.invoke(currentDevice, *null as Array<Any?>?)
+                    val m = currentDevice!!.javaClass.getMethod("removeBond")
+                    m.invoke(currentDevice)
                     preference.editor.remove("pref_conectar_bluetooth").commit()
                     populateExternalDisplayDevices()
                 } catch (e: NoSuchMethodException) {
@@ -254,13 +255,13 @@ class ConfiguracionFragment : PreferenceFragment(), OnSharedPreferenceChangeList
     }
 
     private fun ImprimirRedImpresora() {
-        val labels = arrayOf<CharSequence>(noDevicesPaired)
-        val values = arrayOf<CharSequence>(noDevicesPaired)
-
-        listPref = findPreference("pref_conectar_red") as ListPreference
-        listPref.setEntries(null)
-        listPref.setEntryValues(null)
-        listPref!!.onPreferenceChangeListener = this
+        val tempListPref = findPreference("pref_conectar_red") as? ListPreference
+        tempListPref?.let {
+            it.entries = null
+            it.entryValues = null
+            it.onPreferenceChangeListener = this
+            listPref = it
+        }
 
         Toast.makeText(activity, "Botón no disponible por el momento", Toast.LENGTH_SHORT).show()
     }

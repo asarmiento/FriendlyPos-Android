@@ -1,35 +1,36 @@
 package com.friendlysystemgroup.friendlypos.application.interfaces
 
+import com.friendlysystemgroup.friendlypos.Recibos.modelo.EnviarRecibos
+import com.friendlysystemgroup.friendlypos.Recibos.modelo.RecibosResponse
+import com.friendlysystemgroup.friendlypos.Recibos.modelo.receipts
+import com.friendlysystemgroup.friendlypos.crearCliente.modelo.customer_new
+import com.friendlysystemgroup.friendlypos.distribucion.modelo.EnviarFactura
+import com.friendlysystemgroup.friendlypos.distribucion.modelo.FacturasResponse
+import com.friendlysystemgroup.friendlypos.distribucion.modelo.InventarioResponse
+import com.friendlysystemgroup.friendlypos.distribucion.modelo.Inventario
+import com.friendlysystemgroup.friendlypos.distribucion.modelo.MarcasResponse
+import com.friendlysystemgroup.friendlypos.distribucion.modelo.MetodoPagoResponse
+import com.friendlysystemgroup.friendlypos.distribucion.modelo.TipoProductoResponse
 import com.friendlysystemgroup.friendlypos.distribucion.modelo.invoice
-import com.friendlysystemgroup.friendlypos.principal.modelo.Inventario
-import com.friendlysystemgroup.friendlypos.principal.response.BonusesResponse
-import com.friendlysystemgroup.friendlypos.principal.response.ClientesResponse
-import com.friendlysystemgroup.friendlypos.principal.response.ConsecutivosNumberFeResponse
-import com.friendlysystemgroup.friendlypos.principal.response.EmailResponse
-import com.friendlysystemgroup.friendlypos.principal.response.FacturasResponse
-import com.friendlysystemgroup.friendlypos.principal.response.InventarioResponse
-import com.friendlysystemgroup.friendlypos.principal.response.MarcasResponse
-import com.friendlysystemgroup.friendlypos.principal.response.MetodoPagoResponse
-import com.friendlysystemgroup.friendlypos.principal.response.NumeracionResponse
-import com.friendlysystemgroup.friendlypos.principal.response.ProductosResponse
-import com.friendlysystemgroup.friendlypos.principal.response.RecibosResponse
-import com.friendlysystemgroup.friendlypos.principal.response.SendEmailResponse
-import com.friendlysystemgroup.friendlypos.principal.response.SysconfResponse
-import com.friendlysystemgroup.friendlypos.principal.response.TipoProductoResponse
-import com.friendlysystemgroup.friendlypos.principal.response.UserResponse
-import com.friendlysystemgroup.friendlypos.principal.response.UsuariosResponse
+import com.friendlysystemgroup.friendlypos.login.modelo.User
+import com.friendlysystemgroup.friendlypos.login.modelo.UserResponse
+import com.friendlysystemgroup.friendlypos.login.modelo.UsuariosResponse
+import com.friendlysystemgroup.friendlypos.preventas.modelo.BonusesResponse
+import com.friendlysystemgroup.friendlypos.preventas.modelo.EnviarClienteVisitado
+import com.friendlysystemgroup.friendlypos.preventas.modelo.NumeracionResponse
+import com.friendlysystemgroup.friendlypos.preventas.modelo.visit
+import com.friendlysystemgroup.friendlypos.principal.modelo.ClientesResponse
+import com.friendlysystemgroup.friendlypos.principal.modelo.ConsecutivosNumberFeResponse
+import com.friendlysystemgroup.friendlypos.principal.modelo.EnviarClienteGPS
+import com.friendlysystemgroup.friendlypos.principal.modelo.EnviarClienteNuevo
+import com.friendlysystemgroup.friendlypos.principal.modelo.EnviarProductoDevuelto
+import com.friendlysystemgroup.friendlypos.principal.modelo.ProductosResponse
+import com.friendlysystemgroup.friendlypos.principal.modelo.SysconfResponse
 import com.friendlysystemgroup.friendlypos.principal.modelo.customer_location
-import com.friendlysystemgroup.friendlypos.principal.modelo.customer_new
-import com.friendlysystemgroup.friendlypos.principal.modelo.email_Id
-import com.friendlysystemgroup.friendlypos.principal.modelo.receipts
-import com.friendlysystemgroup.friendlypos.principal.modelo.send_email_id
-import com.friendlysystemgroup.friendlypos.principal.modelo.visit
-import com.friendlysystemgroup.friendlypos.principal.helpers.EnviarClienteGPS
-import com.friendlysystemgroup.friendlypos.principal.helpers.EnviarClienteNuevo
-import com.friendlysystemgroup.friendlypos.principal.helpers.EnviarClienteVisitado
-import com.friendlysystemgroup.friendlypos.principal.helpers.EnviarFactura
-import com.friendlysystemgroup.friendlypos.principal.helpers.EnviarProductoDevuelto
-import com.friendlysystemgroup.friendlypos.principal.helpers.EnviarRecibos
+import com.friendlysystemgroup.friendlypos.reenvio_email.modelo.EmailResponse
+import com.friendlysystemgroup.friendlypos.reenvio_email.modelo.SendEmailResponse
+import com.friendlysystemgroup.friendlypos.reenvio_email.modelo.email_Id
+import com.friendlysystemgroup.friendlypos.reenvio_email.modelo.send_email_id
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -38,7 +39,7 @@ import retrofit2.http.POST
 
 interface RequestInterface {
     @POST("api/login")
-    fun loginUser(@Body user: com.friendlypos.login.modelo.User?): Call<UserResponse?>?
+    fun loginUser(@Body user: User?): Call<UserResponse?>?
 
     @POST("api/lista-facturas-lectronicas")
     fun savePostEmail(

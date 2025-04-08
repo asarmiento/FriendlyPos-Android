@@ -50,117 +50,117 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         
         // Inicializar ViewBinding
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
         
         context = this
-        session = SessionPrefes(getApplicationContext())
-        properties = Properties(getApplicationContext())
+        session = SessionPrefes(applicationContext)
+        properties = Properties(applicationContext)
         download1 = DescargasHelper(this@LoginActivity)
+        api = BaseManager.getApi()
+        
         //
-        if (properties!!.urlWebsrv == null) {
+        if (properties?.urlWebsrv == null) {
             //if ("http://"+properties.getUrlWebsrv() == null) {
-            properties!!.urlWebsrv = "friendlyaccount.com"
+            properties?.urlWebsrv = "friendlyaccount.com"
             //  Toast.makeText(this, "URL: " + "http://"+properties.getUrlWebsrv() + "",Toast.LENGTH_SHORT).show();
         } else {
             //  Toast.makeText(this, "URL1: " + "http://"+properties.getUrlWebsrv() + "",Toast.LENGTH_SHORT).show();
         }
 
-
-        if (session.isLoggedIn()) {
-            startActivity(Intent(this, LoginActivity::class.java))
-            finish()
+        session?.let {
+            if (it.isLoggedIn) {
+                startActivity(Intent(this, LoginActivity::class.java))
+                finish()
+            }
         }
+        
         initProgressbar()
-        val copy: HtmlTextView = findViewById<View>(R.id.copyright) as HtmlTextView
+        
+        val copy = findViewById<HtmlTextView>(R.id.copyright)
+        val appContext = context ?: applicationContext
         copy.setHtmlFromString(
             "<font size=\"7sp\"><a href=\"http://www.sistemasamigables.com/\">" + Functions.getVesionNaveCode(
-                context!!
-            ) + " " + context.getString(R.string.credits) + "</a></font>", LocalImageGetter()
+                appContext
+            ) + " " + appContext.getString(R.string.credits) + "</a></font>", LocalImageGetter()
         )
 
         networkStateChangeReceiver = NetworkStateChangeReceiver()
 
-        binding.imageLogo.setOnLongClickListener(object : OnLongClickListener {
-            override fun onLongClick(v: View): Boolean {
-                ShowOpenSettings()
-                return false
-            }
+        binding.imageLogo.setOnLongClickListener(OnLongClickListener { v ->
+            ShowOpenSettings()
+            false
         })
 
         // Setup
-        binding.contraseña.setOnEditorActionListener(object : OnEditorActionListener {
-            override fun onEditorAction(textView: TextView, id: Int, keyEvent: KeyEvent): Boolean {
-                if (id == R.id.login || id == EditorInfo.IME_NULL) {
-                    if (!this.isOnline) {
-                        showLoginError(getString(R.string.error_network))
-                        return false
-                    }
-                    attemptLogin()
-                    return true
-                }
-                return false
-            }
-        })
-
-        binding.emailSignInButton.setOnClickListener(object : View.OnClickListener {
-            override fun onClick(view: View) {
-                if (!this.isOnline) {
+        binding.contraseña.setOnEditorActionListener(OnEditorActionListener { textView, id, keyEvent ->
+            if (id == R.id.login || id == EditorInfo.IME_NULL) {
+                if (!isOnline) {
                     showLoginError(getString(R.string.error_network))
-                    return
+                    return@OnEditorActionListener false
                 }
-
                 attemptLogin()
+                return@OnEditorActionListener true
             }
+            false
         })
+
+        binding.emailSignInButton.setOnClickListener { view ->
+            if (!isOnline) {
+                showLoginError(getString(R.string.error_network))
+                return@setOnClickListener
+            }
+
+            attemptLogin()
+        }
     }
 
     private fun initProgressbar() {
         progress = ProgressDialog(this)
-        progress.setMessage("Iniciando sesión")
-        progress.setCanceledOnTouchOutside(false)
+        progress?.setMessage("Iniciando sesión")
+        progress?.setCanceledOnTouchOutside(false)
     }
 
     private fun attemptLogin() {
-        progress.show()
+        progress?.show()
         // Reset errors.
-        binding.floatLabelUserId.setError(null)
-        binding.floatLabelPassword.setError(null)
+        binding.floatLabelUserId.error = null
+        binding.floatLabelPassword.error = null
 
         // Store values at the time of the login attempt.
-        val userdatos: String = binding.usuario.getText().toString()
+        val userdatos: String = binding.usuario.text.toString()
         val userId = userdatos.trim { it <= ' ' }
 
-        val password: String = binding.contraseña.getText().toString()
+        val password: String = binding.contraseña.text.toString()
 
         var cancel = false
         var focusView: View? = null
 
         // Check for a valid password, if the user entered one.
         if (TextUtils.isEmpty(password)) {
-            progress.dismiss()
-            binding.floatLabelPassword.setError(getString(R.string.error_field_required))
+            progress?.dismiss()
+            binding.floatLabelPassword.error = getString(R.string.error_field_required)
             focusView = binding.floatLabelPassword
             cancel = true
         } else if (!isPasswordValid(password)) {
-            progress.dismiss()
-            binding.floatLabelPassword.setError(getString(R.string.error_invalid_password))
+            progress?.dismiss()
+            binding.floatLabelPassword.error = getString(R.string.error_invalid_password)
             focusView = binding.floatLabelPassword
             cancel = true
         }
 
         // Verificar si el ID tiene contenido.
         if (TextUtils.isEmpty(userId)) {
-            progress.dismiss()
-            binding.floatLabelUserId.setError(getString(R.string.error_field_required))
+            progress?.dismiss()
+            binding.floatLabelUserId.error = getString(R.string.error_field_required)
             focusView = binding.floatLabelUserId
             cancel = true
         } else if (!isUserIdValid(userId)) {
-            progress.dismiss()
-            binding.floatLabelUserId.setError(getString(R.string.error_invalid_user_id))
+            progress?.dismiss()
+            binding.floatLabelUserId.error = getString(R.string.error_invalid_user_id)
             focusView = binding.floatLabelUserId
             cancel = true
         }
@@ -168,62 +168,65 @@ class LoginActivity : AppCompatActivity() {
         if (cancel) {
             // There was an error; don't attempt login and focus the first
             // form field with an error.
-            focusView!!.requestFocus()
+            focusView?.requestFocus()
         } else {
             // Mostrar el indicador de carga y luego iniciar la petición asíncrona.
+            api?.let { apiInstance ->
+                val user = User(userId, password)
+                val call: retrofit2.Call<UserResponse?>? = apiInstance.loginUser(user)
 
-            api = BaseManager.api
-            val call: retrofit2.Call<UserResponse> = api.loginUser(User(userId, password))
+                call?.enqueue(object : retrofit2.Callback<UserResponse?> {
+                    override fun onResponse(
+                        call: retrofit2.Call<UserResponse?>?,
+                        response: retrofit2.Response<UserResponse?>
+                    ) {
+                        progress?.dismiss()
+                        // Procesar errores
+                        if (!response.isSuccessful()) {
+                            var error = "Ha ocurrido un error. Contacte al administrador"
+                            if (response.errorBody()
+                                    .contentType()
+                                    .subtype()
+                                == "json"
+                            ) {
+                                val userError: UserError =
+                                    UserError.fromResponseBody(response.errorBody())
 
-            call.enqueue(object : retrofit2.Callback<UserResponse?> {
-                override fun onResponse(
-                    call: retrofit2.Call<UserResponse?>?,
-                    response: retrofit2.Response<UserResponse?>
-                ) {
-                    progress.dismiss()
-                    // Procesar errores
-                    if (!response.isSuccessful()) {
-                        var error = "Ha ocurrido un error. Contacte al administrador"
-                        if (response.errorBody()
-                                .contentType()
-                                .subtype()
-                            == "json"
-                        ) {
-                            val userError: UserError =
-                                UserError.fromResponseBody(response.errorBody())
-
-                            error = userError.getMessage()
-                            Log.d("LoginActivity", userError.getMessage())
-                        } else {
-                            try {
-                                // Reportar causas de error no relacionado con la API
-                                Log.d("LoginActivity", response.errorBody().string())
-                            } catch (e: IOException) {
-                                e.printStackTrace()
+                                error = userError.getMessage()
+                                Log.d("LoginActivity", userError.getMessage())
+                            } else {
+                                try {
+                                    // Reportar causas de error no relacionado con la API
+                                    Log.d("LoginActivity", response.errorBody().string())
+                                } catch (e: IOException) {
+                                    e.printStackTrace()
+                                }
                             }
+
+                            showLoginError(error)
+
+                            return
                         }
 
-                        showLoginError(error)
+                        // Guardar afiliado en preferencias
+                        response.body()?.let { body ->
+                            session?.guardarDatosUsuario(body)
+                            Log.d("UserEntrar", body.getToken_type() + "")
+                            session?.guardarDatosUsuarioas(userId, password)
+                            Log.d("UserEntrar1", "$userId $password")
+                            download1?.descargarUsuarios(context ?: this@LoginActivity)
+                            entrarMenuPrincipal()
+                        }
 
-                        return
+                        //showAppointmentsScreen();
                     }
 
-                    // Guardar afiliado en preferencias
-                    session.guardarDatosUsuario(response.body())
-                    Log.d("UserEntrar", response.body().getToken_type() + "")
-                    session.guardarDatosUsuarioas(userId, password)
-                    Log.d("UserEntrar1", "$userId $password")
-                    download1.descargarUsuarios(context)
-                    entrarMenuPrincipal()
-
-                    //showAppointmentsScreen();
-                }
-
-                override fun onFailure(call: retrofit2.Call<UserResponse?>?, t: Throwable) {
-                    progress.dismiss()
-                    showLoginError(t.message)
-                }
-            })
+                    override fun onFailure(call: retrofit2.Call<UserResponse?>?, t: Throwable) {
+                        progress?.dismiss()
+                        showLoginError(t.message)
+                    }
+                })
+            }
         }
     }
 
@@ -264,20 +267,18 @@ class LoginActivity : AppCompatActivity() {
 
     private fun ShowOpenSettings() {
         val show: Snackbar =
-            Snackbar.make(binding.RLLogin, "Abrir Configuraciones?", Snackbar.LENGTH_INDEFINITE).setAction(
-                "Abrir",
-                View.OnClickListener {
-                    val i: Intent =
-                        Intent(getApplicationContext(), ConfiguracionActivity::class.java)
+            Snackbar.make(binding.RLLogin, "Abrir Configuraciones?", Snackbar.LENGTH_INDEFINITE)
+                .setAction("Abrir") {
+                    val i = Intent(applicationContext, ConfiguracionActivity::class.java)
                     startActivity(i)
-                })
-        val colorNoti: View = show.getView()
-
-        colorNoti.setBackgroundColor(context!!.resources.getColor(R.color.colorPrimaryDark))
+                }
+        val colorNoti: View = show.view
+        val safeContext = context ?: this
+        colorNoti.setBackgroundColor(safeContext.resources.getColor(R.color.colorPrimaryDark))
         show.show()
     }
 
     private val isOnline: Boolean
-        get() = networkStateChangeReceiver.isNetworkAvailable(this)
+        get() = networkStateChangeReceiver?.isNetworkAvailable(this) ?: false
 }
 

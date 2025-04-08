@@ -15,16 +15,19 @@ import androidx.core.view.MenuItemCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.friendlysystemgroup.friendlypos.R
+import com.friendlysystemgroup.friendlypos.databinding.FragmentDistSelecProductoBinding
 import com.friendlysystemgroup.friendlypos.distribucion.activity.DistribucionActivity
 import com.friendlysystemgroup.friendlypos.distribucion.adapters.DistrResumenAdapter
 import com.friendlysystemgroup.friendlypos.distribucion.adapters.DistrSeleccionarProductosAdapter
 import com.friendlysystemgroup.friendlypos.distribucion.modelo.Inventario
 import com.friendlysystemgroup.friendlypos.distribucion.util.TotalizeHelper
+import com.friendlysystemgroup.friendlypos.modelos.Producto
 import io.realm.Realm
-import io.realm.internal.SyncObjectServerFacade
+import io.realm.RealmResults
 import java.util.Locale
 
-class DistSelecProductoFragment : BaseFragment(), SearchView.OnQueryTextListener {
+class DistSelecProductoFragment : BaseFragment() {
+    private var binding: FragmentDistSelecProductoBinding? = null
     private var realm: Realm? = null
     var recyclerView: RecyclerView? = null
     private var adapter: DistrSeleccionarProductosAdapter? = null
@@ -34,11 +37,10 @@ class DistSelecProductoFragment : BaseFragment(), SearchView.OnQueryTextListener
     var activity: DistribucionActivity? = null
     var totalizeHelper: TotalizeHelper? = null
     var datosEnFiltro: Int = 0
+    private var productos: List<Producto> = listOf()
+    private val productosFilter: MutableList<Producto> = mutableListOf()
 
-    override fun onDestroy() {
-        super.onDestroy()
-    }
-
+    @Suppress("DEPRECATION")
     override fun onAttach(activity: Activity) {
         super.onAttach(activity)
         this.activity = activity as DistribucionActivity
@@ -57,98 +59,69 @@ class DistSelecProductoFragment : BaseFragment(), SearchView.OnQueryTextListener
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-
-        val rootView = inflater.inflate(
-            R.layout.fragment_distribucion_selecproduct, container,
-            false
-        )
-        setHasOptionsMenu(true)
-        recyclerView =
-            rootView.findViewById<View>(R.id.recyclerViewDistrSeleccProducto) as RecyclerView
-        recyclerView!!.layoutManager = LinearLayoutManager(getActivity())
-        recyclerView!!.setHasFixedSize(true)
-
-        if (adapter == null) {
-            adapter = DistrSeleccionarProductosAdapter(
-                activity!!, this,
-                listProductos
-            )
-        }
-        recyclerView!!.adapter = adapter
-        creditoLimite = rootView.findViewById<View>(R.id.restCredit) as TextView
-
-        Log.d("listaProducto", listProductos.toString() + "")
-        adapter2 = DistrResumenAdapter()
-        creditoDisponible()
-
-        return rootView
+        binding = FragmentDistSelecProductoBinding.inflate(inflater, container, false)
+        return binding?.root
     }
 
-    private val listProductos: List<Inventario>
-        get() {
-            realm = Realm.getDefaultInstance()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        
+        setupViews()
+    }
 
+    private fun setupViews() {
+        binding?.apply {
+            recyclerViewDistProductos?.layoutManager = LinearLayoutManager(context)
+            
+            productos = listaProductos
+            productosFilter.clear()
+            productosFilter.addAll(productos)
+            
+            adapter = DistrSeleccionarProductosAdapter(
+                context,
+                this@DistSelecProductoFragment.activity,
+                productosFilter
+            )
+            recyclerViewDistProductos?.adapter = adapter
+            
+            searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String): Boolean {
+                    return false
+                }
 
-            val query1 =
-                realm.where(Inventario::class.java).notEqualTo("amount", "0")
-                    .notEqualTo("amount", "0.0").notEqualTo("amount", "0.000")
-            val result2 = query1.findAll()
-
-            if (result2.isEmpty()) {
-                Toast.makeText(
-                    SyncObjectServerFacade.getApplicationContext(),
-                    "Favor descargar datos primero",
-                    Toast.LENGTH_LONG
-                ).show()
-            }
-
-            /*  else{
-          for (int i = 0; i < result2.size(); i++) {
-
-              List<Inventario> salesList1 = realm.where(Inventario.class).notEqualTo("amount", "0").notEqualTo("amount", "0.0").notEqualTo("amount", "0.000").findAll();
-              String nombre = salesList1.get(i).getNombre_producto();
-              if (nombre == null){
-                  String facturaId1 = salesList1.get(i).getProduct_id();
-
-                  Productos salesList2 = realm.where(Productos.class).equalTo("id", facturaId1).findFirst();
-
-                  final String facturaId2 = salesList2.getId();
-                  final String desc = salesList2.getDescription();
-
-                  final Realm realm3 = Realm.getDefaultInstance();
-
-                  realm3.executeTransactionAsync(new Realm.Transaction() {
-                      @Override
-                      public void execute(Realm bgRealm) {
-                          Inventario inv_actualizado = realm3.where(Inventario.class).equalTo("product_id", facturaId2).findFirst();
-                          //  inv_actualizado.setProducto(new RealmList<Productos>(salesList2.toArray(new Productos[salesList2.size()])));
-                          inv_actualizado.setNombre_producto(desc);
-                          realm3.insertOrUpdate(inv_actualizado); // using insert API
-                      }
-                  }, new Realm.Transaction.OnSuccess() {
-                      @Override
-                      public void onSuccess() {
-                          realm3.close();
-                      }
-                  }, new Realm.Transaction.OnError() {
-                      @Override
-                      public void onError(Throwable error) {
-                          realm3.close();
-                      }
-                  });
-
-
-              }
-          }
-
-      }*/
-            return result2
+                override fun onQueryTextChange(newText: String): Boolean {
+                    filterList(newText)
+                    return true
+                }
+            })
         }
+    }
+
+    private fun filterList(filterText: String) {
+        productosFilter.clear()
+        
+        if (filterText.isEmpty()) {
+            productosFilter.addAll(productos)
+        } else {
+            val lowerCaseFilter = filterText.lowercase(Locale.getDefault())
+            
+            productos.forEach { producto ->
+                val nombre = producto.nombre?.lowercase(Locale.getDefault()) ?: ""
+                val codigo = producto.codigo?.lowercase(Locale.getDefault()) ?: ""
+                
+                if (nombre.contains(lowerCaseFilter) || codigo.contains(lowerCaseFilter)) {
+                    productosFilter.add(producto)
+                }
+            }
+        }
+        
+        adapter?.notifyDataSetChanged()
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        realm!!.close()
+        binding = null
+        realm?.close()
     }
 
     fun creditoDisponible() {
@@ -256,6 +229,19 @@ class DistSelecProductoFragment : BaseFragment(), SearchView.OnQueryTextListener
         return filteredModelList
     }
 
+    val listaProductos: List<Producto>
+        get() {
+            val realm = Realm.getDefaultInstance()
+            try {
+                val productos: RealmResults<Producto> = realm.where(Producto::class.java)
+                    .equalTo("isVisible", true)
+                    .findAll()
+                
+                return realm.copyFromRealm(productos)
+            } finally {
+                realm.close()
+            }
+        }
 
     companion object {
         private var bill_type = 1

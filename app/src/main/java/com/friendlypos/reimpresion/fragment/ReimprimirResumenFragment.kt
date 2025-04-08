@@ -1,480 +1,514 @@
 package com.friendlysystemgroup.friendlypos.reimpresion.fragment
 
+import android.content.Intent
+import android.content.IntentFilter
+import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import android.view.WindowManager
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import com.friendlysystemgroup.friendlypos.R
 import com.friendlysystemgroup.friendlypos.application.util.Functions
+import com.friendlysystemgroup.friendlypos.app.broadcastreceiver.BluetoothStateChangeReceiver
+import com.friendlysystemgroup.friendlypos.databinding.FragmentReimprimirResumenBinding
+import com.friendlysystemgroup.friendlypos.databinding.PromptImprimirRecibosBinding
+import com.friendlysystemgroup.friendlypos.distribucion.fragment.BaseFragment
+import com.friendlysystemgroup.friendlypos.distribucion.modelo.Pivot
+import com.friendlysystemgroup.friendlypos.distribucion.modelo.invoice
+import com.friendlysystemgroup.friendlypos.distribucion.modelo.sale
+import com.friendlysystemgroup.friendlypos.principal.modelo.Clientes
+import com.friendlysystemgroup.friendlypos.principal.modelo.Productos
+import com.friendlysystemgroup.friendlypos.principal.modelo.Sysconf
+import com.friendlysystemgroup.friendlypos.principal.modelo.Usuarios
+import com.friendlysystemgroup.friendlypos.principal.util.PrinterFunctions
+import com.friendlysystemgroup.friendlypos.reimpresion.activity.ReimprimirActivity
+import com.friendlypos.util.LocalImageGetter
 import io.realm.Realm
-import com.friendlypos.util.HtmlTextView
-import java.io.UnsupportedEncodingException
+import io.realm.RealmResults
 import java.nio.charset.Charset
 
-
-import com.friendlysystemgroup.friendlypos.preventas.fragment.BaseFragment
-import com.friendlypos.util.LocalImageGetter
-
+/**
+ * Fragmento para mostrar el resumen de una factura seleccionada para reimprimir
+ */
 class ReimprimirResumenFragment : BaseFragment() {
-    @BindView(R.id.html_text)
-    lateinit var text: HtmlTextView
-
-    @BindView(R.id.btnReimprimirFactura)
-    lateinit var btnReimprimirFactura: ImageButton
-    var bluetoothStateChangeReceiver: BluetoothStateChangeReceiver? = null
-    var activity: VentaDirectaActivity? = null
-    var sale_actualizada: sale? = null
-    var facturaId: String? = ""
-    var nombreMetodoPago: String? = null
-    var slecTAB: Int = 0
-    var tipoFacturacion: String? = null
+    private var _binding: FragmentReimprimirResumenBinding? = null
+    private val binding get() = _binding!!
+    
+    private var bluetoothStateChangeReceiver: BluetoothStateChangeReceiver? = null
+    private var facturaSeleccionada: sale? = null
+    private var facturaId: String? = null
+    private var nombreMetodoPago: String? = null
+    private var tabSeleccionado: Int = 0
+    private var tipoFacturacion: String? = null
+    
+    companion object {
+        private const val TAG = "ReimprimirResumenFrag"
+        
+        /**
+         * Crea una nueva instancia del fragmento
+         */
+        fun newInstance(): ReimprimirResumenFragment = ReimprimirResumenFragment()
+        
+        /**
+         * Formatea texto con relleno para impresión
+         */
+        private fun padRight(texto: String, espacios: Double): String {
+            val pad = (espacios + 4) - texto.length
+            
+            return if (pad > 0) {
+                val relleno = Functions.paddigTabs((pad / 2.0).toInt().toLong())
+                "\t$texto\t$relleno"
+            } else {
+                "\t$texto\t"
+            }
+        }
+        
+        /**
+         * Obtiene un string formateado con los productos de la factura
+         */
+        private fun obtenerDetalleProductos(idFactura: String): String {
+            val realm = Realm.getDefaultInstance()
+            var resultado = ""
+            
+            try {
+                val productos: RealmResults<Pivot> = realm.where(Pivot::class.java)
+                    .equalTo("invoice_id", idFactura)
+                    .equalTo("devuelvo", 0)
+                    .findAll()
+                
+                if (productos.isEmpty()) {
+                    resultado = "No hay productos en esta factura"
+                } else {
+                    for (pivot in productos) {
+                        val producto = realm.where(Productos::class.java)
+                            .equalTo("id", pivot.product_id)
+                            .findFirst()
+                        
+                        producto?.let { p ->
+                            // Datos del producto
+                            val precioSugerido = p.suggested?.toDoubleOrNull() ?: 0.0
+                            val descripcion = p.description ?: ""
+                            val codigoBarras = p.barcode ?: ""
+                            val tipoProducto = p.product_type_id ?: ""
+                            
+                            // Descripción con codificación correcta
+                            val descripcionFormateada = try {
+                                val bytes = descripcion.toByteArray(Charset.forName("UTF-8"))
+                                String(bytes, charset("UTF-8"))
+                            } catch (e: Exception) {
+                                descripcion
+                            }
+                            
+                            // Nombre del tipo de producto
+                            val nombreTipo = when (tipoProducto) {
+                                "1" -> "Gravado"
+                                "2" -> "Exento"
+                                else -> ""
+                            }
+                            
+                            // Cálculos de precios
+                            val cantidad = pivot.amount?.toDoubleOrNull() ?: 0.0
+                            val precio = pivot.price?.toDoubleOrNull() ?: 0.0
+                            val precioSugeridoCalculado = when (tipoProducto) {
+                                "1" -> (precio / 1.13) * (precioSugerido / 100) + (precio * 0.13) + (precio / 1.13)
+                                "2" -> precio * (precioSugerido / 100) + precio
+                                else -> 0.0
+                            }
+                            
+                            // Formato de impresión
+                            resultado += String.format("%s  %.24s ", descripcionFormateada, codigoBarras) + 
+                                    "<br>" + String.format("%-12s %-10s %-12s %.10s",
+                                    cantidad,
+                                    Functions.doubleToString1(precio),
+                                    Functions.doubleToString1(precioSugeridoCalculado),
+                                    Functions.doubleToString1(cantidad * precio)) + 
+                                    "<br>" + String.format("%.10s", nombreTipo) + "<br>"
+                            resultado += "<a>------------------------------------------------<a><br>"
+                        }
+                    }
+                }
+            } finally {
+                realm.close()
+            }
+            
+            return resultado
+        }
+    }
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        bluetoothStateChangeReceiver = BluetoothStateChangeReceiver()
-        bluetoothStateChangeReceiver.setBluetoothStateChangeReceiver(getContext())
-        activity = VentaDirectaActivity()
+        
+        // Configurar receptor de cambios en Bluetooth
+        bluetoothStateChangeReceiver = BluetoothStateChangeReceiver().apply {
+            setBluetoothStateChangeReceiver(context)
+        }
     }
-
-    override fun onPause() {
-        super.onPause()
+    
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentReimprimirResumenBinding.inflate(inflater, container, false)
+        return binding.root
     }
-
+    
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        
+        // Configurar botón de reimprimir
+        binding.btnReimprimirFactura.setOnClickListener {
+            onReimprimirButtonClicked()
+        }
+    }
+    
+    /**
+     * Maneja el click en el botón de reimprimir
+     */
+    private fun onReimprimirButtonClicked() {
+        val isBluetoothActive = bluetoothStateChangeReceiver?.isBluetoothAvailable ?: false
+        
+        facturaSeleccionada?.let { factura ->
+            tipoFacturacion = factura.facturaDePreventa
+            
+            if (isBluetoothActive) {
+                when (tipoFacturacion) {
+                    "Distribucion" -> mostrarDialogoImpresion(false)
+                    "VentaDirecta" -> mostrarDialogoImpresion(true)
+                    else -> mostrarErrorTipoFactura()
+                }
+            } else {
+                mostrarErrorBluetooth()
+            }
+        } ?: mostrarErrorSeleccionFactura()
+    }
+    
+    /**
+     * Muestra diálogo para seleccionar cantidad de impresiones
+     */
+    private fun mostrarDialogoImpresion(esVentaDirecta: Boolean) {
+        val dialogBinding = PromptImprimirRecibosBinding.inflate(layoutInflater)
+        
+        val alertDialogBuilder = AlertDialog.Builder(requireActivity()).apply {
+            setView(dialogBinding.root)
+            setCancelable(false)
+            
+            // Configurar etiqueta
+            dialogBinding.promtClabelRecibosImp.text = 
+                "Escriba el número de impresiones requeridas"
+            
+            // Configurar botones
+            setPositiveButton("Imprimir") { dialog, _ ->
+                val cantidadImpresiones = dialogBinding.promtCtextRecibosImp.text.toString()
+                imprimirFactura(esVentaDirecta, cantidadImpresiones)
+            }
+            
+            setNegativeButton("Cancelar") { dialog, _ ->
+                dialog.cancel()
+            }
+        }
+        
+        val alertDialog = alertDialogBuilder.create()
+        alertDialog.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
+        alertDialog.show()
+    }
+    
+    /**
+     * Imprime la factura según el tipo
+     */
+    private fun imprimirFactura(esVentaDirecta: Boolean, cantidadImpresiones: String) {
+        facturaSeleccionada?.let { factura ->
+            if (esVentaDirecta) {
+                PrinterFunctions.imprimirFacturaVentaDirectaTotal(
+                    factura, requireActivity(), 3, cantidadImpresiones
+                )
+                Toast.makeText(requireContext(), 
+                    "Imprimiendo factura de venta directa", 
+                    Toast.LENGTH_SHORT).show()
+            } else {
+                PrinterFunctions.imprimirFacturaDistrTotal(
+                    factura, requireActivity(), 1, cantidadImpresiones
+                )
+                Toast.makeText(requireContext(), 
+                    "Imprimiendo factura de distribución", 
+                    Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+    
+    /**
+     * Muestra mensajes de error
+     */
+    private fun mostrarErrorBluetooth() {
+        Functions.CreateMessage(
+            requireActivity(),
+            "Error de conexión",
+            "La conexión del bluetooth ha fallado, favor revisar o conectar el dispositivo"
+        )
+    }
+    
+    private fun mostrarErrorTipoFactura() {
+        Functions.CreateMessage(
+            requireActivity(),
+            "Error de tipo",
+            "Tipo de factura no soportado: $tipoFacturacion"
+        )
+    }
+    
+    private fun mostrarErrorSeleccionFactura() {
+        Functions.CreateMessage(
+            requireActivity(),
+            "Error",
+            "Debe seleccionar una factura primero"
+        )
+    }
+    
+    /**
+     * Renderiza la vista previa HTML de la factura
+     */
+    private fun renderizarVistaPrevia() {
+        try {
+            val realm = Realm.getDefaultInstance()
+            
+            try {
+                // Obtener información del sistema
+                val configuracionSistema = realm.where(Sysconf::class.java).findFirst()
+                
+                facturaSeleccionada?.let { factura ->
+                    // Obtener datos del cliente
+                    val cliente = realm.where(Clientes::class.java)
+                        .equalTo("id", factura.customer_id)
+                        .findFirst()
+                    
+                    // Obtener datos de la factura
+                    val datosFactura = realm.where(invoice::class.java)
+                        .equalTo("id", factura.invoice_id)
+                        .findFirst()
+                    
+                    // Productos de la factura
+                    val productos = realm.where(Pivot::class.java)
+                        .equalTo("invoice_id", factura.invoice_id)
+                        .findAll()
+                    
+                    // Datos del usuario
+                    val idUsuario = datosFactura?.user_id ?: ""
+                    val usuario = realm.where(Usuarios::class.java)
+                        .equalTo("id", idUsuario)
+                        .findFirst()
+                    
+                    // Generar contenido HTML
+                    val html = construirContenidoHtml(
+                        factura,
+                        datosFactura,
+                        cliente,
+                        configuracionSistema,
+                        usuario
+                    )
+                    
+                    // Mostrar en el visor HTML
+                    binding.htmlText.setHtmlFromString(html, LocalImageGetter())
+                    
+                } ?: mostrarMensajeSeleccionFactura()
+            } finally {
+                realm.close()
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Error al renderizar vista previa: ${e.message}", e)
+            mostrarMensajeError(e)
+        }
+    }
+    
+    /**
+     * Muestra un mensaje cuando no hay factura seleccionada
+     */
+    private fun mostrarMensajeSeleccionFactura() {
+        val mensaje = "<center><h2>Seleccione una factura para ver su detalle</h2></center>"
+        binding.htmlText.setHtmlFromString(mensaje, LocalImageGetter())
+    }
+    
+    /**
+     * Muestra un mensaje de error
+     */
+    private fun mostrarMensajeError(e: Exception) {
+        val mensaje = "<center><h2>Error al cargar la factura</h2><p>${e.message}</p></center>"
+        binding.htmlText.setHtmlFromString(mensaje, LocalImageGetter())
+    }
+    
+    /**
+     * Construye el contenido HTML para la vista previa
+     */
+    private fun construirContenidoHtml(
+        factura: sale,
+        datosFactura: invoice?,
+        cliente: Clientes?,
+        configuracionSistema: Sysconf?,
+        usuario: Usuarios?
+    ): String {
+        // Extraer datos necesarios
+        val fechaHora = factura.updated_at ?: ""
+        val nombreCliente = factura.customer_name ?: ""
+        
+        // Datos del cliente
+        val idCliente = cliente?.card ?: ""
+        val nombreEmpresa = cliente?.companyName ?: ""
+        val nombreFantasia = cliente?.fantasyName ?: ""
+        
+        // Datos de la factura
+        val numeroFactura = datosFactura?.numeration ?: ""
+        val metodoPago = datosFactura?.payment_method_id ?: ""
+        
+        // Definir tipo de método de pago
+        nombreMetodoPago = when (metodoPago) {
+            "1" -> "Contado"
+            "2" -> "Crédito"
+            else -> "Desconocido"
+        }
+        
+        // Calcular totales
+        val totalGravado = Functions.doubleToString1(datosFactura?.subtotal_taxed?.toDoubleOrNull() ?: 0.0)
+        val totalExento = Functions.doubleToString1(datosFactura?.subtotal_exempt?.toDoubleOrNull() ?: 0.0)
+        val totalSubtotal = Functions.doubleToString1(datosFactura?.subtotal?.toDoubleOrNull() ?: 0.0)
+        val totalDescuento = Functions.doubleToString1(datosFactura?.discount?.toDoubleOrNull() ?: 0.0)
+        val totalImpuesto = Functions.doubleToString1(datosFactura?.tax?.toDoubleOrNull() ?: 0.0)
+        val totalTotal = Functions.doubleToString1(datosFactura?.total?.toDoubleOrNull() ?: 0.0)
+        val totalCancelado = Functions.doubleToString1(datosFactura?.paid?.toDoubleOrNull() ?: 0.0)
+        val totalVuelto = Functions.doubleToString1(datosFactura?.changing?.toDoubleOrNull() ?: 0.0)
+        val notas = datosFactura?.note ?: ""
+        
+        // Datos del sistema
+        val nombreSistema = configuracionSistema?.name ?: ""
+        val nombreEmpresaSistema = configuracionSistema?.business_name ?: ""
+        val direccionSistema = configuracionSistema?.direction ?: ""
+        val identificacionSistema = configuracionSistema?.identification ?: ""
+        val telefonoSistema = configuracionSistema?.phone ?: ""
+        val correoSistema = configuracionSistema?.email ?: ""
+        val nombreUsuario = usuario?.username ?: ""
+        
+        // Texto legal para facturas a crédito
+        val condicionesCredito = """
+            Esta factura constituye titulo ejecutivo al tenor del articulo 460 del codigo de comercio.
+            El deudor renuncia a los requerimientos de pago, domicilio y tramites del juicio ejecutivo.
+            El suscrito da fe, bajo la gravedad de juramento que se encuentra facultado y autorizado para
+            firmar esta factura, por su representada, conforme al articulo supracitado. Si realiza pago
+            mediante transferencia electronica de fondos o cualquier otro medio que no sea efectivo, la
+            validez del pago queda sujeto a su acreditacion en las cuentas bancarias de $nombreSistema,
+            Por lo cual la factura original le sera entregada una vez confirme dicha acreditacion
+        """.trimIndent()
+        
+        // Determinando tipo de documento
+        val tipoDocumento = when (factura.sale_type) {
+            "1", "2" -> "Factura"
+            "3" -> "Proforma"
+            else -> "Factura"
+        }
+        
+        // Construir HTML
+        val html = StringBuilder()
+        
+        // Encabezado
+        html.append("<center><h2>$tipoDocumento a $nombreMetodoPago</h2>")
+        html.append("<h5>$tipoDocumento #$numeroFactura</h3>")
+        html.append("<center><h2>$nombreSistema</h2></center>")
+        html.append("<center><h4>$nombreEmpresaSistema</h4></center>")
+        html.append("<h6>$direccionSistema</h2></center>")
+        html.append("<a><b>Tel:</b> $telefonoSistema</a><br>")
+        html.append("<a><b>E-mail:</b> $correoSistema</a><br>")
+        html.append("<a><b>Cedula Juridica:</b> $identificacionSistema</a><br>")
+        html.append("<a><b>Fecha:</b> $fechaHora</a><br>")
+        html.append("<a><b>Fecha de impresión:</b> ${Functions.date} ${Functions.get24Time()}</a><br><br>")
+        html.append("<a><b>Vendedor:</b> $nombreUsuario</a><br>")
+        html.append("<a><b>ID Cliente:</b> $idCliente</a><br>")
+        html.append("<a><b>Cliente:</b> $nombreEmpresa</a><br>")
+        html.append("<a><b>A nombre de:</b> $nombreCliente</a><br><br>")
+        
+        // Encabezados de productos
+        html.append("<a><b>${padRight("Descripcion", 10.0)}\t\t${padRight("Codigo", 10.0)}</b></a><br>")
+        html.append("<a><b>${padRight("Cantidad", 10.0)}${padRight("Precio", 10.0)}${padRight("P.Sug", 10.0)}${padRight("Total", 10.0)}</b></a><br>")
+        html.append("<a><b>${padRight("Tipo", 10.0)}</b></a><br>")
+        html.append("<a>------------------------------------------------<a><br>")
+        
+        // Detalle de productos
+        html.append(obtenerDetalleProductos(factura.invoice_id ?: ""))
+        
+        // Totales
+        html.append("<center><a>${String.format("%20s %-20s", "Subtotal Gravado", totalGravado)}</a><br>")
+        html.append("<a>${String.format("%20s %-20s", "Subtotal Exento", totalExento)}</a><br>")
+        html.append("<a>${String.format("%20s %-20s", "Subtotal", totalSubtotal)}</a><br>")
+        html.append("<a>${String.format("%20s %-20s", "IVA", totalImpuesto)}</a><br>")
+        html.append("<a>${String.format("%20s %-20s", "Descuento", totalDescuento)}</a><br>")
+        html.append("<a>${String.format("%20s %-20s", "Total", totalTotal)}</a><br><br></center>")
+        
+        // Notas y firma
+        html.append("<a><b>Notas:</b> $notas</a><br>")
+        html.append("<a><b>Firma y Cedula:_______________________________</b></a><br>")
+        
+        // Condiciones para crédito
+        if (metodoPago == "2") {
+            html.append("<br><br><font size=\"7\"><p>$condicionesCredito</p></font>")
+        }
+        
+        // Pie de página
+        html.append("<a>Autorizado mediante oficio <br>N° : 11-1997 de la D.G.T.D </a>")
+        
+        return html.toString()
+    }
+    
+    override fun updateData() {
+        // Obtener actividad y datos de la factura seleccionada
+        (activity as? ReimprimirActivity)?.let { actividad ->
+            tabSeleccionado = actividad.selecFacturaTab
+            
+            if (tabSeleccionado == 1) {
+                facturaId = actividad.invoiceIdReimprimir
+                facturaId?.let { id ->
+                    Log.d(TAG, "Factura seleccionada ID: $id")
+                    cargarFactura(id)
+                }
+            } else {
+                Log.d(TAG, "No hay factura seleccionada")
+            }
+        }
+    }
+    
+    /**
+     * Carga los datos de una factura desde Realm
+     */
+    private fun cargarFactura(id: String) {
+        val realm = Realm.getDefaultInstance()
+        try {
+            realm.executeTransaction { r ->
+                facturaSeleccionada = r.where(sale::class.java)
+                    .equalTo("invoice_id", id)
+                    .findFirst()
+            }
+            
+            facturaSeleccionada?.let { factura ->
+                Log.d(TAG, "Factura cargada: ${factura.invoice_id}")
+                renderizarVistaPrevia()
+            }
+        } finally {
+            realm.close()
+        }
+    }
+    
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+    
     override fun onDestroy() {
         super.onDestroy()
-        getActivity().unregisterReceiver(bluetoothStateChangeReceiver)
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        val rootView: View =
-            inflater.inflate(R.layout.fragment_reimprimir_resumen, container, false)
-        text = rootView.findViewById<View>(R.id.html_text) as HtmlTextView
-        //ButterKnife.bind(this, rootView)
-
-
-        btnReimprimirFactura.setOnClickListener(View.OnClickListener {
-            var a = "1"
-            if (sale_actualizada.sale_type === "2") {
-                a = "2"
-            }
-            if (bluetoothStateChangeReceiver.isBluetoothAvailable == true) {
-                tipoFacturacion = sale_actualizada.facturaDePreventa
-
-                if (tipoFacturacion == "Distribucion") {
-                    val layoutInflater: LayoutInflater = LayoutInflater.from(getActivity())
-                    val promptView: View =
-                        layoutInflater.inflate(R.layout.prompt_imprimir_recibos, null)
-
-                    val alertDialogBuilder =
-                        AlertDialog.Builder(getActivity())
-                    alertDialogBuilder.setView(promptView)
-                    val checkbox: CheckBox =
-                        promptView.findViewById<View>(R.id.checkbox) as CheckBox
-
-                    val label: TextView =
-                        promptView.findViewById<View>(R.id.promtClabelRecibosImp) as TextView
-                    label.setText("Escriba el número de impresiones requeridas")
-
-                    val input: EditText =
-                        promptView.findViewById<View>(R.id.promtCtextRecibosImp) as EditText
-
-                    alertDialogBuilder.setCancelable(false)
-                    alertDialogBuilder.setPositiveButton(
-                        "OK",
-                        object : DialogInterface.OnClickListener {
-                            override fun onClick(dialog: DialogInterface, id: Int) {
-                                val cantidadImpresiones: String = input.getText().toString()
-
-                                PrinterFunctions.imprimirFacturaDistrTotal(
-                                    sale_actualizada,
-                                    getActivity(),
-                                    1,
-                                    cantidadImpresiones
-                                )
-                                Toast.makeText(
-                                    getActivity(),
-                                    "imprimir Totalizar Dist",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-                        })
-                    alertDialogBuilder.setNegativeButton(
-                        "Cancel",
-                        object : DialogInterface.OnClickListener {
-                            override fun onClick(dialog: DialogInterface, id: Int) {
-                                dialog.cancel()
-                            }
-                        })
-
-                    val alertD = alertDialogBuilder.create()
-                    alertD.window!!.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
-                    alertD.show()
-                } else if (tipoFacturacion == "VentaDirecta") {
-                    val layoutInflater: LayoutInflater = LayoutInflater.from(getActivity())
-                    val promptView: View =
-                        layoutInflater.inflate(R.layout.prompt_imprimir_recibos, null)
-
-                    val alertDialogBuilder =
-                        AlertDialog.Builder(getActivity())
-                    alertDialogBuilder.setView(promptView)
-                    val checkbox: CheckBox =
-                        promptView.findViewById<View>(R.id.checkbox) as CheckBox
-
-                    val label: TextView =
-                        promptView.findViewById<View>(R.id.promtClabelRecibosImp) as TextView
-                    label.setText("Escriba el número de impresiones requeridas")
-
-                    val input: EditText =
-                        promptView.findViewById<View>(R.id.promtCtextRecibosImp) as EditText
-
-                    alertDialogBuilder.setCancelable(false)
-                    alertDialogBuilder.setPositiveButton(
-                        "OK",
-                        object : DialogInterface.OnClickListener {
-                            override fun onClick(dialog: DialogInterface, id: Int) {
-                                val cantidadImpresiones: String = input.getText().toString()
-
-
-                                PrinterFunctions.imprimirFacturaVentaDirectaTotal(
-                                    sale_actualizada,
-                                    getActivity(),
-                                    3,
-                                    cantidadImpresiones
-                                )
-                                Toast.makeText(
-                                    getActivity(),
-                                    "imprimir Totalizar VentaD",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-                        })
-                    alertDialogBuilder.setNegativeButton(
-                        "Cancel",
-                        object : DialogInterface.OnClickListener {
-                            override fun onClick(dialog: DialogInterface, id: Int) {
-                                dialog.cancel()
-                            }
-                        })
-
-                    val alertD = alertDialogBuilder.create()
-                    alertD.window!!.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
-                    alertD.show()
-                }
-            } else if (bluetoothStateChangeReceiver.isBluetoothAvailable == false) {
-                Functions.CreateMessage(
-                    getActivity(),
-                    "Error",
-                    "La conexión del bluetooth ha fallado, favor revisar o conectar el dispositivo"
-                )
-            }
-        })
-
-        return rootView
-    }
-
-
-    private val htmlPreview: Unit
-        get() {
+        bluetoothStateChangeReceiver?.let { receiver ->
             try {
-                val realm = Realm.getDefaultInstance()
-                val sysconf: Sysconf = realm.where<Sysconf>(Sysconf::class.java).findFirst()
-                val clientes: Clientes = realm.where<Clientes>(Clientes::class.java)
-                    .equalTo("id", sale_actualizada.customer_id).findFirst()
-                val invoice: invoice = realm.where<invoice>(invoice::class.java)
-                    .equalTo("id", sale_actualizada.invoice_id).findFirst()
-                val result: RealmResults<Pivot> = realm.where<Pivot>(Pivot::class.java)
-                    .equalTo("invoice_id", sale_actualizada.invoice_id).findAll()
-
-                val idUsuario: String = invoice.user_id
-
-                val usuarios: Usuarios =
-                    realm.where<Usuarios>(Usuarios::class.java).equalTo("id", idUsuario).findFirst()
-
-                val nombreUsuario: String = usuarios.username
-
-                // VARIABLES VENTA
-                val fechayhora: String = sale_actualizada.updated_at
-                val nombreCliente: String = sale_actualizada.customer_name
-
-                // VARIABLES CLIENTES
-                val cardCliente: String = clientes.card
-                val companyCliente: String = clientes.companyName
-                val fantasyCliente: String = clientes.fantasyName
-                val telefonoCliente: String = clientes.phone
-                val descuentoCliente: Double = clientes.fixedDiscount.toDouble()
-
-                // VARIABLES FACTURA
-                val fechaFactura: String = invoice.due_date
-                val numeracionFactura: String = invoice.numeration
-                val metodoPago: String = invoice.payment_method_id
-
-                if (metodoPago == "1") {
-                    nombreMetodoPago = "Contado"
-                } else if (metodoPago == "2") {
-                    nombreMetodoPago = "Crédito"
-                }
-
-                val totalGrabado =
-                    Functions.doubleToString1(invoice.subtotal_taxed.toDouble())
-                val totalExento =
-                    Functions.doubleToString1(invoice.subtotal_exempt.toDouble())
-                val totalSubtotal =
-                    Functions.doubleToString1(invoice.subtotal.toDouble())
-                val totalDescuento =
-                    Functions.doubleToString1(invoice.discount.toDouble())
-                val totalImpuesto =
-                    Functions.doubleToString1(invoice.tax.toDouble())
-                val totalTotal =
-                    Functions.doubleToString1(invoice.total.toDouble())
-                val totalCancelado =
-                    Functions.doubleToString1(invoice.paid.toDouble())
-                val totalVuelto =
-                    Functions.doubleToString1(invoice.changing.toDouble())
-                val totalNotas: String = invoice.note
-
-
-                // VARIABLES SYSCONF
-                val sysNombre: String = sysconf.name
-                val sysNombreNegocio: String = sysconf.business_name
-                val sysDireccion: String = sysconf.direction
-                val sysIdentificacion: String = sysconf.identification
-                val sysTelefono: String = sysconf.phone
-                val sysCorreo: String = sysconf.email
-                realm.close()
-
-                var preview = ""
-                val condition =
-                    ("Esta factura constituye titulo ejecutivo al tenor del articulo 460 del codigo de comercio. "
-                            + "El deudor renuncia a los requerimientos de pago, domicilio y tramites del juicio ejecutivo. "
-                            + "El suscrito da fe, bajo la gravedad de juramento que se encuentra facultado y autorizado para firmar esta factura, "
-                            + "por su representada, conforme al articulo supracitado. Si realiza pago mediante transferencia electronica de "
-                            + "fondos o cualquier otro medio que no sea efectivo, la validez del pago queda sujeto a su acreditacion en las cuentas "
-                            + "bancarias de " + sysNombre + ", Por lo cual la factura original le sera entregada una vez confirme dicha acreditacion ")
-
-                if (sale_actualizada != null) {
-                    var billString = ""
-                    if (sale_actualizada.sale_type == "1") {
-                        billString = "Factura"
-                    } else if (sale_actualizada.sale_type == "2") {
-                        billString = "Factura"
-                    } else if (sale_actualizada.sale_type == "3") {
-                        billString = "Proforma"
-                    }
-
-
-                    preview += "<center><h2>$billString a $nombreMetodoPago</h2>"
-                    preview += "<h5>$billString #$numeracionFactura</h3>"
-                    preview += "<center><h2>$sysNombre</h2></center>"
-                    preview += "<center><h4>$sysNombreNegocio</h4></center>"
-                    preview += "<h6>$sysDireccion</h2></center>"
-                    preview += "<a><b>Tel:</b> $sysTelefono</a><br>"
-                    preview += "<a><b>E-mail:</b> $sysCorreo</a><br>"
-                    preview += "<a><b>Cedula Juridica:</b> $sysIdentificacion</a><br>"
-                    preview += "<a><b>Fecha:</b> $fechayhora</a><br>"
-                    preview += "<a><b>Fecha de impresión:</b> " + Functions.date + " " + Functions.get24Time() + "</a><br><br>"
-                    preview += "<a><b>Vendedor:</b> $nombreUsuario</a><br>"
-                    preview += "<a><b>ID Cliente:</b> $cardCliente</a><br>"
-                    preview += "<a><b>Cliente:</b> $companyCliente</a><br>"
-                    preview += "<a><b>A nombre de:</b> $nombreCliente</a><br><br>"
-                    /*   preview += Html.fromHtml("<h1>") +  "Descripcion           Codigo" + Html.fromHtml("</h1></center><br/>");
-       preview += Html.fromHtml("<h1>") +   "Cantidad      Precio       P.Sug       Total" + Html.fromHtml("</h1></center><br/>");
-       preview += Html.fromHtml("<h1>") +   "Tipo " + Html.fromHtml("</h1></center><br/>");
-*/
-                    preview += "<a><b>" + padRight(
-                        "Descripcion",
-                        10.0
-                    ) + "\t\t" + padRight(
-                        "Codigo",
-                        10.0
-                    ) + "</b></a><br>"
-                    preview += "<a><b>" + padRight(
-                        "Cantidad",
-                        10.0
-                    ) + padRight(
-                        "Precio",
-                        10.0
-                    ) + padRight(
-                        "P.Sug",
-                        10.0
-                    ) + padRight("Total", 10.0) + "</b></a><br>"
-                    preview += "<a><b>" + padRight(
-                        "Tipo",
-                        10.0
-                    ) + "</b></a><br>"
-                    preview += "<a>------------------------------------------------<a><br>"
-
-                    preview += getPrintDistTotal(
-                        sale_actualizada.invoice_id
-                    )
-                    preview += "<center><a>" + String.format(
-                        "%20s %-20s",
-                        "Subtotal Gravado",
-                        totalGrabado
-                    ) + "</a><br>"
-                    preview += "<a> " + String.format(
-                        "%20s %-20s",
-                        "Subtotal Exento",
-                        totalExento
-                    ) + "</a><br>"
-                    preview += "<a> " + String.format(
-                        "%20s %-20s",
-                        "Subtotal",
-                        totalSubtotal
-                    ) + "</a><br>"
-                    preview += "<a> " + String.format(
-                        "%20s %-20s",
-                        "IVA",
-                        totalImpuesto
-                    ) + "</a><br>"
-                    preview += "<a> " + String.format(
-                        "%20s %-20s",
-                        "Descuento",
-                        totalDescuento
-                    ) + "</a><br>"
-                    preview += "<a> " + String.format(
-                        "%20s %-20s",
-                        "Total",
-                        totalTotal
-                    ) + "</a><br><br></center>"
-                    preview += "<a><b>Notas:</b> $totalNotas</a><br>"
-                    preview += "<a><b>Firma y Cedula:_______________________________</b></a><br>"
-                    if (metodoPago === "2") {
-                        preview += "<br><br><font size=\"7\"><p>$condition</p></font>"
-                    }
-
-                    preview += "<a>" +
-                            " Autorizado mediante oficio <br>" +
-                            "N° : 11-1997 de la D.G.T.D  </a>"
-                } else {
-                    preview += "<center><h2>Seleccione la factura a ver</h2></center>"
-                }
-                //HtmlTextView.
-                text.setHtmlFromString(preview, LocalImageGetter())
+                activity?.unregisterReceiver(receiver)
             } catch (e: Exception) {
-                val preview =
-                    "<center><h2>Seleccione la factura a ver cath</h2></center>"
-                text.setHtmlFromString(preview, LocalImageGetter())
-                Log.d("adsdad", e.message!!)
+                Log.e(TAG, "Error al desregistrar receptor: ${e.message}")
             }
         }
-
-    override fun updateData() {
-        slecTAB = (getActivity() as ReimprimirActivity).selecFacturaTab
-
-        if (slecTAB == 1) {
-            facturaId = (getActivity() as ReimprimirActivity).invoiceIdReimprimir
-            if (facturaId != null) {
-                Log.d("FACTURAIDReim", facturaId!!)
-            }
-
-            // TRANSACCION PARA ACTUALIZAR CAMPOS DE LA TABLA VENTAS
-            val realm3 = Realm.getDefaultInstance()
-            realm3.executeTransaction { realm3 ->
-                sale_actualizada =
-                    realm3.where<sale>(sale::class.java).equalTo("invoice_id", facturaId)
-                        .findFirst()
-                realm3.close()
-            }
-
-            var a = "1"
-            if (sale_actualizada.sale_type === "2") {
-                a = "2"
-            }
-            htmlPreview
-            // PrinterFunctions.imprimirFacturaDistrTotal(sale_actualizada, getActivity(), Integer.parseInt(a));
-        } else {
-            Toast.makeText(getActivity(), "nadaSelecProducto", Toast.LENGTH_LONG).show()
-        }
-    }
-
-    companion object {
-        fun padRight(s: String, n: Double): String {
-            val centeredString: String
-            val pad = (n + 4) - s.length
-
-            if (pad > 0) {
-                val pd = Functions.paddigTabs((pad / 2.0).toInt().toLong())
-                centeredString = "\t" + s + "\t" + pd
-                println("pad: |$centeredString|")
-            } else {
-                centeredString = "\t" + s + "\t"
-            }
-            return centeredString
-        }
-
-        private fun getPrintDistTotal(idVenta: String): String {
-            var send = ""
-
-            val realm1 = Realm.getDefaultInstance()
-            val result: RealmResults<Pivot> =
-                realm1.where<Pivot>(Pivot::class.java).equalTo("invoice_id", idVenta)
-                    .equalTo("devuelvo", 0).findAll()
-
-            if (result.isEmpty()) {
-                send = "No hay invoice emitidas"
-            } else {
-                // printSalesCashTotal= 0.0;
-                for (i in result.indices) {
-                    val salesList1: List<Pivot> =
-                        realm1.where<Pivot>(Pivot::class.java).equalTo("invoice_id", idVenta)
-                            .equalTo("devuelvo", 0).findAll()
-                    val producto: Productos = realm1.where<Productos>(Productos::class.java)
-                        .equalTo("id", salesList1[i].product_id).findFirst()
-
-                    val precioSugerido: Double = producto.suggested.toDouble()
-                    val description: String = producto.description
-                    val byteText = description.toByteArray(Charset.forName("UTF-8"))
-                    var description1: String? = null
-                    try {
-                        description1 = String(byteText, charset("UTF-8"))
-                    } catch (e: UnsupportedEncodingException) {
-                        e.printStackTrace()
-                    }
-                    val barcode: String = producto.barcode
-                    val typeId: String = producto.product_type_id
-                    var nombreTipo: String? = null
-
-                    val cant: Double = salesList1[i].amount.toDouble()
-                    val precio: Double = salesList1[i].price.toDouble()
-
-                    var sugerido = 0.0
-
-                    // gravado Sugerido =( (preciode venta/1.13)*(suggested /100) )+ (preciode venta* 0.13)+(preciode venta/1.13);
-                    // en caso de exento Sugerido =( (preciode venta)*(suggested /100)) + (preciode venta);
-                    if (typeId == "1") {
-                        nombreTipo = "Gravado"
-                        sugerido =
-                            (precio / 1.13) * (precioSugerido / 100) + (precio * 0.13) + (precio / 1.13)
-                    } else if (typeId == "2") {
-                        nombreTipo = "Exento"
-                        sugerido = (precio) * (precioSugerido / 100) + (precio)
-                    }
-
-                    /*  String factFecha = salesList1.get(i).getDate();
-                double factTotal = Functions.sGetDecimalStringAnyLocaleAsDouble(salesList1.get(i).getTotal());*/
-                    send += String.format(
-                        "%s  %.24s ",
-                        description1,
-                        barcode
-                    ) + "<br>" + String.format(
-                        "%-12s %-10s %-12s %.10s",
-                        cant,
-                        Functions.doubleToString1(precio),
-                        Functions.doubleToString1(sugerido),
-                        Functions.doubleToString1(cant * precio)
-                    ) + "<br>" + String.format("%.10s", nombreTipo) + "<br>"
-                    send += "<a>------------------------------------------------<a><br>"
-
-
-                    /*  send += String.format("%s  %.24s ", description, barcode) + "<br>" +
-                    String.format("%-5s %-10s %-10s %-15s %.1s", cant / *bill.amount, precio, precio, Functions.doubleToString(cant * precio), typeId) + "<br>";
-                send += "<a>------------------------------------------------<a><br>";*/
-                    Log.d("FACTPRODTODFAC", send + "")
-                }
-                realm1.close()
-            }
-            return send
-        }
+        bluetoothStateChangeReceiver = null
     }
 }
 

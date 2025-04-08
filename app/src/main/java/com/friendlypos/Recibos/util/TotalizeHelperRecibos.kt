@@ -1,64 +1,98 @@
 package com.friendlysystemgroup.friendlypos.Recibos.util
 
+import android.content.Context
 import android.util.Log
 import com.friendlysystemgroup.friendlypos.Recibos.activity.RecibosActivity
 import com.friendlysystemgroup.friendlypos.Recibos.modelo.recibos
 import com.friendlysystemgroup.friendlypos.login.util.SessionPrefes
 import io.realm.Realm
-import io.realm.internal.SyncObjectServerFacade
 
-class TotalizeHelperRecibos(var activity: RecibosActivity?) {
-    var customer: String? = null
-    var session: SessionPrefes = SessionPrefes(SyncObjectServerFacade.getApplicationContext())
-    var facturaId: String? = null
+/**
+ * Clase auxiliar para totalizar recibos
+ */
+class TotalizeHelperRecibos(
+    private var activity: RecibosActivity?,
+    context: Context
+) {
+    private var customer: String? = null
+    private var facturaId: String? = null
+    private val session: SessionPrefes = SessionPrefes(context)
 
+    /**
+     * Libera recursos cuando ya no se necesita la instancia
+     */
     fun destroy() {
         activity = null
     }
 
-
+    /**
+     * Totaliza una lista de recibos
+     * @param pivotList Lista de recibos a totalizar
+     */
     fun totalizeRecibos(pivotList: List<recibos>) {
-        for (p in pivotList) {
-            totalize(p)
+        if (pivotList.isEmpty()) {
+            Log.d("TotalizeHelper", "No hay recibos para totalizar")
+            return
+        }
+        
+        // Totalizar cada recibo individualmente
+        pivotList.forEach { recibo ->
+            totalize(recibo)
         }
 
-        val realm2 = Realm.getDefaultInstance()
-        val finalTotalPagar = activity!!.getTotalizarCancelado()
-
-        realm2.executeTransaction { realm2 ->
-            val recibo_actualizado =
-                realm2.where(recibos::class.java).equalTo("invoice_id", facturaId)
+        // Actualizar el monto por pagar en la base de datos
+        actualizarMontoPorPagar()
+    }
+    
+    /**
+     * Actualiza el monto por pagar en la base de datos
+     */
+    private fun actualizarMontoPorPagar() {
+        if (facturaId.isNullOrEmpty()) {
+            Log.e("TotalizeHelper", "ID de factura no disponible para actualización")
+            return
+        }
+        
+        val finalTotalPagar = activity?.getTotalizarCancelado() ?: 0.0
+        
+        val realm = Realm.getDefaultInstance()
+        try {
+            realm.executeTransaction { r ->
+                val reciboActualizado = r.where(recibos::class.java)
+                    .equalTo("invoice_id", facturaId)
                     .findFirst()
-            recibo_actualizado!!.porPagar = finalTotalPagar
-
-            realm2.insertOrUpdate(recibo_actualizado)
-            realm2.close()
-            Log.d("ACTRECIBOPAGAR", recibo_actualizado.toString() + "")
+                    
+                reciboActualizado?.let {
+                    it.porPagar = finalTotalPagar
+                    r.insertOrUpdate(it)
+                    Log.d("ReciboActualizado", "Recibo con ID $facturaId actualizado: ${it.porPagar}")
+                } ?: Log.e("TotalizeHelper", "No se encontró el recibo con ID $facturaId")
+            }
+        } finally {
+            realm.close()
         }
     }
 
+    /**
+     * Totaliza un recibo individual
+     * @param currentPivot Recibo a totalizar
+     */
     private fun totalize(currentPivot: recibos) {
         val totalPago = currentPivot.total
-
-        var total = 0.0
-        total = totalPago
-
-
         val totalPagado = currentPivot.paid
+        val totalPagar = totalPago - totalPagado
 
-        var totalPagar = 0.0
-        totalPagar = totalPago - totalPagado
+        Log.d("Totalizando", "Total: $totalPago, Pagado: $totalPagado, Por pagar: $totalPagar")
 
-        Log.d("TOTALTODOS", total.toString() + "")
-
-        activity!!.setTotalizarTotal(total)
-        activity!!.setTotalizarCancelado(totalPagar)
+        activity?.apply {
+            setTotalizarTotal(totalPago)
+            setTotalizarCancelado(totalPagar)
+        }
 
         facturaId = currentPivot.invoice_id
     }
 
     companion object {
         private const val IVA = 13.0
-        private const val productosDelBonus = 0.0
     }
 }

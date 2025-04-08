@@ -1,17 +1,12 @@
 package com.friendlysystemgroup.friendlypos.Recibos.fragments
 
-import android.app.Activity
-import android.content.DialogInterface
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import android.widget.Button
-import android.widget.CheckBox
-import android.widget.EditText
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.friendlysystemgroup.friendlypos.R
@@ -32,63 +27,57 @@ import com.friendlysystemgroup.friendlypos.principal.modelo.datosTotales
 import io.realm.Realm
 import io.realm.RealmList
 import io.realm.RealmResults
-import org.sufficientlysecure.htmltextview.HtmlTextView
 
 class RecibosAplicarFragment : BaseFragment() {
-    var activity: RecibosActivity? = null
-    var pagado: Double = 0.0
-    var montoCancelado: Double = 0.0
-    var numeracion: String? = null
-    var gps: GPSTracker? = null
-    var bluetoothStateChangeReceiver: BluetoothStateChangeReceiver? = null
-    var session: SessionPrefes? = null
-    var latitude: Double = 0.0
-    var longitude: Double = 0.0
-    var slecTAB: Int = 0
-    var nextId: Int = 0
-    var txtFecha: EditText? = null
-    var facturaId: String? = null
-    var clienteId: String? = null
-    var receipts_ref: String? = null
-    var recibo_actualizado: recibos? = null
-    var text: HtmlTextView? = null
-    var observ: String? = null
-    var fecha: String? = null
-    var totalP: Double = 0.0
-    var totalDatosTotal2: Double = 0.0
-    var totalTotal: Double = 0.0
-    var datos_actualizados: datosTotales? = null
+    private var recibosActivity: RecibosActivity? = null
+    private var pagado: Double = 0.0
+    private var montoCancelado: Double = 0.0
+    private var numeracion: String? = null
+    private var gps: GPSTracker? = null
+    private var bluetoothStateChangeReceiver: BluetoothStateChangeReceiver? = null
+    private var session: SessionPrefes? = null
+    private var latitude: Double = 0.0
+    private var longitude: Double = 0.0
+    private var slecTAB: Int = 0
+    private var nextId: Int = 0
+    private var facturaId: String? = null
+    private var clienteId: String? = null
+    private var receipts_ref: String? = null
+    private var recibo_actualizado: recibos? = null
+    private var observ: String? = null
+    private var fecha: String? = null
+    private var totalP: Double = 0.0
+    private var totalDatosTotal2: Double = 0.0
+    private var totalTotal: Double = 0.0
+    private var datos_actualizados: datosTotales? = null
     
     // ViewBinding
-    private var _binding: FragmentRecibosAplicarBinding? = null
-    private val binding get() = _binding!!
+    private var binding: FragmentRecibosAplicarBinding? = null
+    private var apply_done = 0
     
-    override fun onAttach(activity: Activity) {
-        super.onAttach(activity)
-        this.activity = activity as RecibosActivity
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is RecibosActivity) {
+            recibosActivity = context
+        }
     }
 
     override fun onDetach() {
         super.onDetach()
-        activity = null
+        recibosActivity = null
     }
 
     override fun onDestroy() {
         super.onDestroy()
         clearAll()
         pagado = 0.0
-        getActivity().unregisterReceiver(bluetoothStateChangeReceiver)
-        _binding = null
-    }
-
-    override fun onPause() {
-        super.onPause()
+        activity?.unregisterReceiver(bluetoothStateChangeReceiver)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         bluetoothStateChangeReceiver = BluetoothStateChangeReceiver()
-        bluetoothStateChangeReceiver.setBluetoothStateChangeReceiver(activity)
+        bluetoothStateChangeReceiver?.setBluetoothStateChangeReceiver(context)
         session = SessionPrefes(SyncObjectServerFacade.getApplicationContext())
     }
 
@@ -96,299 +85,287 @@ class RecibosAplicarFragment : BaseFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentRecibosAplicarBinding.inflate(inflater, container, false)
-
-        observaciones = binding.txtRecibosObservaciones
-        applyBill = binding.aplicarRecibo
-        printBill = binding.imprimirRecibo
-        text = binding.htmlTextRecibos
+        binding = FragmentRecibosAplicarBinding.inflate(inflater, container, false)
+        return binding?.root
+    }
+    
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         
-        applyBill!!.setOnClickListener {
+        setupListeners()
+    }
+    
+    private fun setupListeners() {
+        binding?.aplicarRecibo?.setOnClickListener {
             try {
-                val tabCliente = 0
-                (getActivity() as RecibosActivity).selecClienteTabRecibos = tabCliente
+                recibosActivity?.selecClienteTabRecibos = 0
                 aplicarFactura()
-                //  actualizarRecibo();
             } catch (e: Exception) {
-                Toast.makeText(getActivity(), e.message, Toast.LENGTH_LONG).show()
+                context?.let {
+                    Toast.makeText(it, e.message, Toast.LENGTH_LONG).show()
+                }
                 e.printStackTrace()
             }
         }
 
-
-        printBill!!.setOnClickListener {
+        binding?.imprimirRecibo?.setOnClickListener {
             try {
-                if (bluetoothStateChangeReceiver.isBluetoothAvailable == true) {
-                    val layoutInflater: LayoutInflater = LayoutInflater.from(getActivity())
-                    val promptView: View =
-                        layoutInflater.inflate(R.layout.prompt_imprimir_recibos, null)
-
-                    val alertDialogBuilder =
-                        AlertDialog.Builder(getActivity())
-                    alertDialogBuilder.setView(promptView)
-                    val checkbox: CheckBox =
-                        promptView.findViewById<View>(R.id.checkbox) as CheckBox
-
-                    val label: TextView =
-                        promptView.findViewById<View>(R.id.promtClabelRecibosImp) as TextView
-                    label.setText("Escriba el número de impresiones requeridas")
-
-                    val input: EditText =
-                        promptView.findViewById<View>(R.id.promtCtextRecibosImp) as EditText
-
-                    alertDialogBuilder.setCancelable(false)
-                    alertDialogBuilder.setPositiveButton(
-                        "OK",
-                        object : DialogInterface.OnClickListener {
-                            override fun onClick(dialog: DialogInterface, id: Int) {
-                                val cantidadImpresiones: String =
-                                    input.getText().toString()
-
-                                PrinterFunctions.imprimirFacturaRecibosTotal(
-                                    recibo_actualizado,
-                                    getActivity(),
-                                    1,
-                                    cantidadImpresiones
-                                )
-                                Toast.makeText(
-                                    getActivity(),
-                                    "imprimir liquidacion",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-                        })
-                    alertDialogBuilder.setNegativeButton(
-                        "Cancel",
-                        object : DialogInterface.OnClickListener {
-                            override fun onClick(dialog: DialogInterface, id: Int) {
-                                dialog.cancel()
-                            }
-                        })
-
-                    val alertD = alertDialogBuilder.create()
-                    alertD.window!!.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
-                    alertD.show()
-                } else if (bluetoothStateChangeReceiver.isBluetoothAvailable == false) {
-                    Functions.CreateMessage(
-                        getActivity(),
-                        "Error",
-                        "La conexión del bluetooth ha fallado, favor revisar o conectar el dispositivo"
-                    )
+                if (bluetoothStateChangeReceiver?.isBluetoothAvailable == true) {
+                    showImprimirDialog()
+                } else {
+                    context?.let {
+                        Functions.CreateMessage(
+                            requireActivity(),
+                            "Error",
+                            "La conexión del bluetooth ha fallado, favor revisar o conectar el dispositivo"
+                        )
+                    }
                 }
             } catch (e: Exception) {
                 Functions.CreateMessage(
-                    getActivity(),
+                    requireActivity(),
                     "Error",
-                    """
-                        ${e.message}
-                        ${e.stackTrace}
-                        """.trimIndent()
+                    "${e.message}\n${e.stackTrace.joinToString("\n")}"
                 )
             }
         }
-        return binding.root
+    }
+    
+    private fun showImprimirDialog() {
+        val layoutInflater = LayoutInflater.from(requireActivity())
+        val promptView = layoutInflater.inflate(R.layout.prompt_imprimir_recibos, null)
+
+        val alertDialogBuilder = AlertDialog.Builder(requireActivity())
+        alertDialogBuilder.setView(promptView)
+        
+        val checkbox = promptView.findViewById<android.widget.CheckBox>(R.id.checkbox)
+        val label = promptView.findViewById<android.widget.TextView>(R.id.promtClabelRecibosImp)
+        label.text = "Escriba el número de impresiones requeridas"
+
+        val input = promptView.findViewById<android.widget.EditText>(R.id.promtCtextRecibosImp)
+
+        alertDialogBuilder.setCancelable(false)
+        alertDialogBuilder.setPositiveButton("OK") { _, _ ->
+            val cantidadImpresiones = input.text.toString()
+
+            recibo_actualizado?.let { recibo ->
+                PrinterFunctions.imprimirFacturaRecibosTotal(
+                    recibo,
+                    requireActivity(),
+                    1,
+                    cantidadImpresiones
+                )
+                context?.let {
+                    Toast.makeText(it, "Imprimir liquidación", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+        
+        alertDialogBuilder.setNegativeButton("Cancel") { dialog, _ -> dialog.cancel() }
+
+        val alertD = alertDialogBuilder.create()
+        alertD.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
+        alertD.show()
     }
 
     override fun updateData() {
-        slecTAB = activity.selecClienteTabRecibos
-        if (slecTAB == 1) {
-            facturaId = activity.invoiceIdRecibos
-            clienteId = activity.clienteIdRecibos
-            totalP = activity.getTotalizarCancelado()
+        recibosActivity?.let { activity ->
+            slecTAB = activity.selecClienteTabRecibos
+            if (slecTAB == 1) {
+                facturaId = activity.invoiceIdRecibos
+                clienteId = activity.clienteIdRecibos
+                totalP = activity.getTotalizarCancelado()
 
-            val realm3 = Realm.getDefaultInstance()
-            realm3.executeTransaction { realm3 ->
-                recibo_actualizado =
-                    realm3.where<recibos>(recibos::class.java).equalTo("customer_id", clienteId)
+                val realm = Realm.getDefaultInstance()
+                realm.executeTransaction { r ->
+                    recibo_actualizado = r.where(recibos::class.java)
+                        .equalTo("customer_id", clienteId)
                         .findFirst()
-                realm3.close()
+                }
+                realm.close()
+
+                updateHtmlPreview()
+                Log.d("FACTURAIDTOTALIZAR", clienteId ?: "")
+            } else {
+                Log.d("nadaTotalizarupdate", "nadaTotalizarupdate")
             }
-
-
-            htmlPreview
-
-            Log.d("FACTURAIDTOTALIZAR", clienteId!!)
-        } else {
-            Log.d("nadaTotalizarupdate", "nadaTotalizarupdate")
         }
     }
 
-    private val htmlPreview: Unit
-        get() {
-            try {
-                val realm = Realm.getDefaultInstance()
-                val clientes: Clientes = realm.where<Clientes>(Clientes::class.java)
-                    .equalTo("id", recibo_actualizado.getCustomer_id()).findFirst()
+    private fun updateHtmlPreview() {
+        try {
+            val realm = Realm.getDefaultInstance()
+            
+            recibo_actualizado?.let { recibo ->
+                val clientes = realm.where(Clientes::class.java)
+                    .equalTo("id", recibo.customer_id)
+                    .findFirst()
 
-                val nombreCliente: String = clientes.fantasyName
-
+                val nombreCliente = clientes?.fantasyName ?: ""
                 var preview = ""
 
-
-                if (recibo_actualizado != null) {
-                    preview += "<h5>" + "Datos del recibo" + "</h5>"
-
-                    preview += "<a><b>A nombre de:</b> $nombreCliente</a><br><br>"
-
-                    /*    preview += "<a><b>" + padRight("# Factura", 35) + padRight("Monto Pagado", 35)+ "</b></a><br>";
-      preview += "<a><b>" + padRight("Monto total", 35)+ "</b></a><br>";
-      preview += "<a><b>" + padRight("Total en abonos", 35) + "</b></a><br>";
-      preview += "<a><b>" + padRight("Total restante", 35) + "</b></a><br>";
-      preview += "<a>------------------------------------------------<a><br>";*/
-                    preview += getPrintDistTotal(recibo_actualizado.getCustomer_id())
-                } else {
-                    preview += "<center><h2>Seleccione la factura a ver</h2></center>"
-                }
-                text.setHtmlFromString(preview, LocalImageGetter())
-            } catch (e: Exception) {
-                val preview =
-                    "<center><h2>Seleccione la factura a ver cath</h2></center>"
-                text.setHtmlFromString(preview, LocalImageGetter())
-                Log.d("adsdad", e.message!!)
+                preview += "<h5>Datos del recibo</h5>"
+                preview += "<a><b>A nombre de:</b> $nombreCliente</a><br><br>"
+                preview += getPrintDistTotal(recibo.customer_id)
+                
+                binding?.htmlTextRecibos?.setHtmlFromString(preview, LocalImageGetter())
+            } ?: run {
+                val preview = "<center><h2>Seleccione la factura a ver</h2></center>"
+                binding?.htmlTextRecibos?.setHtmlFromString(preview, LocalImageGetter())
             }
-        }
-
-    fun actualizarFacturaDetalles() {
-        val realm2 = Realm.getDefaultInstance()
-        realm2.executeTransaction { realm2 ->
-            val result: RealmResults<recibos> =
-                realm2.where<recibos>(recibos::class.java).equalTo("customer_id", clienteId)
-                    .equalTo("abonado", 1).findAll()
-            if (result.isEmpty()) {
-                Toast.makeText(getActivity(), "No hay recibos emitidos", Toast.LENGTH_LONG).show()
-            } else {
-                for (i in result.indices) {
-                    val salesList1: List<recibos> = realm2.where<recibos>(
-                        recibos::class.java
-                    ).equalTo("customer_id", clienteId).equalTo("abonado", 1).findAll()
-
-                    val facturaId1: String = salesList1[i].getInvoice_id()
-
-                    val recibo_actualizado: recibos =
-                        realm2.where<recibos>(recibos::class.java).equalTo("invoice_id", facturaId1)
-                            .findFirst()
-                    //   recibo_actualizado.setMostrar(0);
-                    recibo_actualizado.setDate(Functions.date)
-                    recibo_actualizado.setObservaciones(observ)
-                    recibo_actualizado.setReferencia_receipts(receipts_ref)
-
-                    realm2.insertOrUpdate(recibo_actualizado)
-
-                    Log.d("ACT RECIBO", recibo_actualizado.toString() + "")
-                }
-                realm2.close()
-            }
+            
+            realm.close()
+        } catch (e: Exception) {
+            val preview = "<center><h2>Seleccione la factura a ver cath</h2></center>"
+            binding?.htmlTextRecibos?.setHtmlFromString(preview, LocalImageGetter())
+            Log.d("adsdad", e.message ?: "Unknown error")
         }
     }
 
-
-    fun actualizarReceiptsDetalles() {
-        val realm2 = Realm.getDefaultInstance()
-        realm2.executeTransaction { realm2 ->
-            val result: RealmResults<recibos> =
-                realm2.where<recibos>(recibos::class.java).equalTo("customer_id", clienteId)
-                    .equalTo("abonado", 1).findAll()
+    private fun actualizarFacturaDetalles() {
+        val realm = Realm.getDefaultInstance()
+        realm.executeTransaction { r ->
+            val result: RealmResults<recibos> = r.where(recibos::class.java)
+                .equalTo("customer_id", clienteId)
+                .equalTo("abonado", 1)
+                .findAll()
+                
             if (result.isEmpty()) {
-                Toast.makeText(getActivity(), "No hay recibos emitidos", Toast.LENGTH_LONG).show()
+                context?.let {
+                    Toast.makeText(it, "No hay recibos emitidos", Toast.LENGTH_LONG).show()
+                }
             } else {
                 for (i in result.indices) {
-                    val salesList1: List<recibos> = realm2.where<recibos>(
-                        recibos::class.java
-                    ).equalTo("customer_id", clienteId).equalTo("abonado", 1).findAll()
-                    numeracion = salesList1[i].getNumeration()
-                    pagado = salesList1[i].getPaid()
-                    activity.totalizarFinal = pagado
+                    val salesList = r.where(recibos::class.java)
+                        .equalTo("customer_id", clienteId)
+                        .equalTo("abonado", 1)
+                        .findAll()
 
-                    val receipts_id: String = activity.receipts_id_num
-                    montoCancelado = salesList1[i].getMontoCanceladoPorFactura()
-                    activity.canceladoPorFactura = montoCancelado
+                    val facturaId1 = salesList[i]?.invoice_id ?: continue
+                    val recibo_actualizado = r.where(recibos::class.java)
+                        .equalTo("invoice_id", facturaId1)
+                        .findFirst() ?: continue
+                        
+                    recibo_actualizado.date = Functions.date
+                    recibo_actualizado.observaciones = observ
+                    recibo_actualizado.referencia_receipts = receipts_ref
 
-
-                    val recibo_actua: receipts = realm2.where<receipts>(receipts::class.java)
-                        .equalTo("receipts_id", receipts_id).equalTo("customer_id", clienteId)
-                        .findFirst()
-
-
-
-                    receipts_ref = recibo_actua.getReference()
-                    recibo_actua.setListaRecibos(RealmList<recibos>(*salesList1.toTypedArray<recibos>()))
-                    recibo_actua.setBalance(activity.totalizarFinal)
-                    recibo_actua.setAplicado(1)
-                    recibo_actua.setSum(observ)
-                    recibo_actua.setNotes(observ)
-                    recibo_actua.setMontoPagado(montoCancelado)
-                    recibo_actua.setNumeration(numeracion)
-                    recibo_actua.setMontoCanceladoPorFactura(montoCancelado)
-                    recibo_actua.setPorPagarReceipts(restante)
-                    realm2.insertOrUpdate(recibo_actua)
-
-                    Log.d("ACTRECIBO", recibo_actua.toString() + "")
+                    r.insertOrUpdate(recibo_actualizado)
+                    Log.d("ACT RECIBO", recibo_actualizado.toString())
                 }
-                realm2.close()
+            }
+        }
+        realm.close()
+    }
+
+    private fun actualizarReceiptsDetalles() {
+        val realm = Realm.getDefaultInstance()
+        realm.executeTransaction { r ->
+            val result: RealmResults<recibos> = r.where(recibos::class.java)
+                .equalTo("customer_id", clienteId)
+                .equalTo("abonado", 1)
+                .findAll()
+                
+            if (result.isEmpty()) {
+                context?.let {
+                    Toast.makeText(it, "No hay recibos emitidos", Toast.LENGTH_LONG).show()
+                }
+            } else {
+                for (i in result.indices) {
+                    val salesList = r.where(recibos::class.java)
+                        .equalTo("customer_id", clienteId)
+                        .equalTo("abonado", 1)
+                        .findAll()
+                        
+                    salesList[i]?.let { recibo ->
+                        numeracion = recibo.numeration
+                        pagado = recibo.paid
+                        recibosActivity?.totalizarFinal = pagado
+
+                        val receipts_id = recibosActivity?.receipts_id_num ?: ""
+                        montoCancelado = recibo.montoCanceladoPorFactura
+                        recibosActivity?.canceladoPorFactura = montoCancelado
+
+                        val recibo_actua = r.where(receipts::class.java)
+                            .equalTo("receipts_id", receipts_id)
+                            .equalTo("customer_id", clienteId)
+                            .findFirst() ?: return@let
+
+                        receipts_ref = recibo_actua.reference
+                        recibo_actua.listaRecibos = RealmList(*salesList.toTypedArray())
+                        recibo_actua.balance = recibosActivity?.totalizarFinal ?: 0.0
+                        recibo_actua.aplicado = 1
+                        recibo_actua.sum = observ
+                        recibo_actua.notes = observ
+                        recibo_actua.montoPagado = montoCancelado
+                        recibo_actua.numeration = numeracion
+                        recibo_actua.montoCanceladoPorFactura = montoCancelado
+                        recibo_actua.porPagarReceipts = restante
+                        
+                        r.insertOrUpdate(recibo_actua)
+                        Log.d("ACTRECIBO", recibo_actua.toString())
+                    }
+                }
                 pagado = 0.0
             }
         }
+        realm.close()
     }
 
-    protected fun actualizarDatosTotales() {
-        val realm5 = Realm.getDefaultInstance()
+    private fun actualizarDatosTotales() {
+        val realm = Realm.getDefaultInstance()
 
-        realm5.beginTransaction()
-        val currentIdNum: Number = realm5.where<datosTotales>(datosTotales::class.java).max("id")
+        realm.beginTransaction()
+        val currentIdNum: Number? = realm.where(datosTotales::class.java).max("id")
+        nextId = currentIdNum?.toInt()?.plus(1) ?: 1
 
-        nextId = if (currentIdNum == null) {
-            1
-        } else {
-            currentIdNum.toInt() + 1
-        }
-
-
-        val datos_actualizados: datosTotales = datosTotales()
-
+        val datos_actualizados = datosTotales()
         datos_actualizados.id = nextId
         datos_actualizados.idTotal = 5
         datos_actualizados.nombreTotal = "Recibo"
-        datos_actualizados.totalRecibos = activity.canceladoPorFactura
+        datos_actualizados.totalRecibos = recibosActivity?.canceladoPorFactura ?: 0.0
         datos_actualizados.date = Functions.date
 
-        realm5.copyToRealmOrUpdate<datosTotales>(datos_actualizados)
-        realm5.commitTransaction()
-        Log.d("datosTotalesRec", datos_actualizados.toString() + "")
-        realm5.close()
+        realm.copyToRealmOrUpdate(datos_actualizados)
+        realm.commitTransaction()
+        Log.d("datosTotalesRec", datos_actualizados.toString())
+        realm.close()
     }
 
-
-    protected fun aplicarFactura() {
-        //  fecha = txtFecha.getText().toString();
-
-        observaciones.getText().toString()
-
-        if (!observaciones.getText().toString().isEmpty()) {
-            observ = observaciones.getText().toString()
+    private fun aplicarFactura() {
+        val observacionesText = binding?.txtRecibosObservaciones?.text.toString()
+        
+        if (observacionesText.isNotEmpty()) {
+            observ = observacionesText
             actualizarReceiptsDetalles()
             actualizarFacturaDetalles()
-
             actualizarDatosTotales()
-            Toast.makeText(getActivity(), "Recibo realizado correctamente", Toast.LENGTH_LONG)
-                .show()
+            
+            context?.let {
+                Toast.makeText(it, "Recibo realizado correctamente", Toast.LENGTH_LONG).show()
+            }
 
-            applyBill!!.visibility = View.GONE
-            printBill!!.visibility = View.VISIBLE
+            binding?.aplicarRecibo?.visibility = View.GONE
+            binding?.imprimirRecibo?.visibility = View.VISIBLE
             apply_done = 1
         } else {
-            observaciones.setError("Campo requerido")
-            observaciones.requestFocus()
+            binding?.txtRecibosObservaciones?.error = "Campo requerido"
+            binding?.txtRecibosObservaciones?.requestFocus()
         }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding = null
+    }
+
     companion object {
-        private var applyBill: Button? = null
-        private var printBill: Button? = null
-        private var apply_done = 0
         var pagadoMostrarS: String? = null
-        private var observaciones: EditText? = null
         var restante: Double = 0.0
         var restanteS: String? = null
+        
+        fun newInstance(): RecibosAplicarFragment = RecibosAplicarFragment()
+        
         fun padRight(s: String, n: Double): String {
             val centeredString: String
             val pad = (n + 4) - s.length
@@ -403,75 +380,74 @@ class RecibosAplicarFragment : BaseFragment() {
             return centeredString
         }
 
-        private fun getPrintDistTotal(idVenta: String): String {
+        private fun getPrintDistTotal(idVenta: String?): String {
+            if (idVenta == null) return "No hay recibos emitidos"
+            
             var send = ""
+            val realm = Realm.getDefaultInstance()
+            
+            try {
+                val result: RealmResults<recibos> = realm.where(recibos::class.java)
+                    .equalTo("customer_id", idVenta)
+                    .equalTo("abonado", 1)
+                    .equalTo("mostrar", 1)
+                    .findAll()
 
-            val realm1 = Realm.getDefaultInstance()
-            val result: RealmResults<recibos> =
-                realm1.where<recibos>(recibos::class.java).equalTo("customer_id", idVenta)
-                    .equalTo("abonado", 1).equalTo("mostrar", 1).findAll()
+                if (result.isEmpty()) {
+                    send = "No hay recibos emitidos"
+                } else {
+                    for (i in result.indices) {
+                        val salesList = realm.where(recibos::class.java)
+                            .equalTo("customer_id", idVenta)
+                            .equalTo("abonado", 1)
+                            .equalTo("mostrar", 1)
+                            .findAll()
 
-            if (result.isEmpty()) {
-                send = "No hay recibos emitidos"
-            } else {
-                for (i in result.indices) {
-                    val salesList1: List<recibos> =
-                        realm1.where<recibos>(recibos::class.java).equalTo("customer_id", idVenta)
-                            .equalTo("abonado", 1).equalTo("mostrar", 1).findAll()
+                        salesList[i]?.let { recibo ->
+                            val numeracion = recibo.numeration ?: ""
+                            val total = recibo.total
+                            val totalS = String.format("%,.2f", total)
 
+                            val pagado = recibo.montoCanceladoPorFactura
+                            val pagadoS = String.format("%,.2f", pagado)
 
-                    val numeracion: String = salesList1[i].getNumeration()
-                    val total: Double = salesList1[i].getTotal()
-                    val totalS = String.format("%,.2f", total)
+                            restante = recibo.porPagar
+                            restanteS = String.format("%,.2f", restante)
 
-                    val pagado: Double = salesList1[i].getMontoCanceladoPorFactura()
-                    val pagadoS = String.format("%,.2f", pagado)
+                            val totalAbonos = recibo.paid
+                            val totalAbonosS = String.format("%,.2f", totalAbonos)
 
-                    restante = salesList1[i].getPorPagar()
-                    restanteS = String.format("%,.2f", restante)
+                            send += "<a><b>" + padRight("# Factura:", 30.0) + "</b></a>" + 
+                                    padRight(numeracion, 20.0) + "<br>" +
+                                    "<a><b>" + padRight("Total Recibo:", 20.0) + "</b></a>" + 
+                                    padRight(pagadoS, 20.0) + "<br>" +
+                                    "<a><b>" + padRight("Monto total:", 30.0) + "</b></a>" + 
+                                    padRight(totalS, 20.0) + "<br>" +
+                                    "<a><b>" + padRight("Total en abonos:", 20.0) + "</b></a>" + 
+                                    padRight(totalAbonosS, 20.0) + "<br>" +
+                                    "<a><b>" + padRight("Total restante:", 25.0) + "</b></a>" + 
+                                    padRight(restanteS ?: "0.00", 20.0) + "<br>"
 
-                    val totalAbonos: Double = salesList1[i].getPaid()
-                    val totalAbonosS = String.format("%,.2f", totalAbonos)
-
-
-                    send += "<a><b>" + padRight("# Factura:", 30.0) + "</b></a>" + padRight(
-                        numeracion,
-                        20.0
-                    ) + "<br>" +
-                            "<a><b>" + padRight("Total Recibo:", 20.0) + "</b></a>" + padRight(
-                        pagadoS,
-                        20.0
-                    ) + "<br>" +
-                            "<a><b>" + padRight(
-                        "Monto total:",
-                        30.0
-                    ) + "</b></a>" + padRight(totalS, 20.0) + "<br>" +
-                            "<a><b>" + padRight("Total en abonos:", 20.0) + "</b></a>" + padRight(
-                        totalAbonosS,
-                        20.0
-                    ) + "<br>" +
-                            "<a><b>" + padRight("Total restante:", 25.0) + "</b></a>" + padRight(
-                        restanteS!!, 20.0
-                    ) + "<br>"
-
-                    send += "<a>------------------------------------------------<a><br>"
-
-                    Log.d("FACTPRODTODFAC", send + "")
+                            send += "<a>------------------------------------------------<a><br>"
+                            Log.d("FACTPRODTODFAC", send)
+                        }
+                    }
                 }
-                realm1.close()
+            } finally {
+                realm.close()
             }
+            
             return send
         }
-
 
         fun clearAll() {
             if (apply_done == 1) {
                 apply_done = 0
-                // paid.getText().clear();
             }
             try {
                 System.gc()
             } catch (e: Exception) {
+                // No action needed
             }
         }
     }

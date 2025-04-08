@@ -5,11 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-
-
-import com.friendlysystemgroup.friendlypos.R
 import com.friendlysystemgroup.friendlypos.Recibos.modelo.receipts
+import com.friendlysystemgroup.friendlypos.databinding.FragmentReimprimirReciboFacturaBinding
 import com.friendlysystemgroup.friendlypos.distribucion.fragment.BaseFragment
 import com.friendlysystemgroup.friendlypos.ReimprimirRecibos.activity.ReimprimirRecibosActivity
 import com.friendlysystemgroup.friendlypos.ReimprimirRecibos.adapters.ReimprimirReciboFacturaAdapter
@@ -17,13 +14,9 @@ import io.realm.Realm
 import io.realm.RealmResults
 
 class ReimprimirReciboFacturaFragment : BaseFragment() {
-    @BindView(R.id.recyclerViewReimprimirReciboFactura)
-    lateinit var recyclerView: RecyclerView
-
+    private var binding: FragmentReimprimirReciboFacturaBinding? = null
     private var adapter: ReimprimirReciboFacturaAdapter? = null
-
-    var result1: RealmResults<receipts>? = null
-    var realm: Realm? = null
+    private var realm: Realm? = null
 
     override fun onDestroy() {
         super.onDestroy()
@@ -33,52 +26,60 @@ class ReimprimirReciboFacturaFragment : BaseFragment() {
         super.onResume()
     }
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val rootView = inflater.inflate(
-            R.layout.fragment_reimprimir_recibo_factura, container,
-            false
-        )
-        //ButterKnife.bind(this, rootView)
-        return rootView
+        binding = FragmentReimprimirReciboFacturaBinding.inflate(inflater, container, false)
+        return binding?.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        adapter = ReimprimirReciboFacturaAdapter(
-            context, ((activity as ReimprimirRecibosActivity?)!!),
-            listClientes
-        )
-        recyclerView.setHasFixedSize(true)
-        recyclerView.layoutManager = LinearLayoutManager(activity)
-        recyclerView.adapter = adapter
+        setupRecyclerView()
     }
 
-    private val listClientes: List<receipts>
+    private fun setupRecyclerView() {
+        context?.let { ctx ->
+            (activity as? ReimprimirRecibosActivity)?.let { act ->
+                val recibos = listRecibos
+                
+                adapter = ReimprimirReciboFacturaAdapter(ctx, act, recibos)
+                
+                binding?.recyclerViewReimprimirReciboFactura?.apply {
+                    setHasFixedSize(true)
+                    layoutManager = LinearLayoutManager(ctx)
+                    adapter = this@ReimprimirReciboFacturaFragment.adapter
+                }
+            }
+        }
+    }
+
+    private val listRecibos: List<receipts>
         get() {
-            realm = Realm.getDefaultInstance()
-
-            //  RealmQuery<recibos> query = realm.where(recibos.class).equalTo("aplicada", 1).equalTo("facturaDePreventa", "Distribucion").or().equalTo("facturaDePreventa", "VentaDirecta");
-            val query = realm.where(receipts::class.java)
-            val result1 = query.findAll()
-
-            return result1
+            val realmInstance = Realm.getDefaultInstance()
+            try {
+                val result: RealmResults<receipts> = realmInstance.where(receipts::class.java).findAll()
+                return realmInstance.copyFromRealm(result)
+            } finally {
+                // No cerramos aquí el realm para mantenerlo abierto durante el ciclo de vida del fragmento
+                // Se cierra en onDestroyView
+                realm = realmInstance
+            }
         }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        realm!!.close()
+        realm?.close()
+        realm = null
+        binding = null
     }
 
     override fun updateData() {
+        adapter?.notifyDataSetChanged()
     }
 
     companion object {
-        val instance: ReimprimirReciboFacturaFragment
-            get() = ReimprimirReciboFacturaFragment()
+        fun newInstance(): ReimprimirReciboFacturaFragment = ReimprimirReciboFacturaFragment()
     }
 }

@@ -4,203 +4,179 @@ import android.app.ActivityManager
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.KeyEvent
 import android.view.MenuItem
-import android.view.View
 import android.view.WindowManager
-import androidx.appcompat.widget.Toolbar
 import androidx.viewpager.widget.ViewPager
-import androidx.viewpager.widget.ViewPager.OnPageChangeListener
-import com.friendlysystemgroup.friendlypos.R
 import com.friendlysystemgroup.friendlypos.application.bluetooth.PrinterService
-import com.friendlysystemgroup.friendlypos.application.bluetooth.PrinterService.Companion.startRDService
 import com.friendlysystemgroup.friendlypos.application.util.Functions.CreateMessage
+import com.friendlysystemgroup.friendlypos.databinding.ActivityReimprimirBinding
 import com.friendlysystemgroup.friendlypos.distribucion.fragment.BaseFragment
 import com.friendlysystemgroup.friendlypos.distribucion.util.Adapter
 import com.friendlysystemgroup.friendlypos.principal.activity.BluetoothActivity
 import com.friendlysystemgroup.friendlypos.principal.activity.MenuPrincipal
-import com.friendlysystemgroup.friendlypos.Reimpresion.fragment.ReimprimirFacturaFragment
-import com.friendlysystemgroup.friendlypos.Reimpresion.fragment.ReimprimirResumenFragment
+import com.friendlysystemgroup.friendlypos.reimpresion.fragment.ReimprimirFacturaFragment
+import com.friendlysystemgroup.friendlypos.reimpresion.fragment.ReimprimirResumenFragment
 import com.google.android.material.tabs.TabLayout
-import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 import com.google.android.material.tabs.TabLayout.TabLayoutOnPageChangeListener
 
+/**
+ * Actividad para la reimpresión de facturas
+ */
 class ReimprimirActivity : BluetoothActivity() {
-    private var toolbar: Toolbar? = null
-    private var tabLayout: TabLayout? = null
-    private var viewPager: ViewPager? = null
-
-    @JvmField
+    private lateinit var binding: ActivityReimprimirBinding
+    
+    // Identificadores de la factura y estado de selección
     var invoiceIdReimprimir: String? = null
-    @JvmField
-    var selecFacturaTab: Int = 0
+        private set
+    private var selecFacturaTab: Int = 0
+    
+    // Lista de fragmentos
+    private lateinit var fragmentList: List<BaseFragment>
+    
+    companion object {
+        private const val TAG = "ReimprimirActivity"
+        private const val TAB_DELAY_MS = 100L
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        setContentView(R.layout.activity_reimprimir)
-        toolbar = findViewById<View>(R.id.toolbarReimprimir) as Toolbar
-        setSupportActionBar(toolbar)
-        supportActionBar!!.setDisplayShowHomeEnabled(true)
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-
-        viewPager = findViewById<View>(R.id.viewpagerReimprimir) as ViewPager
-        setupViewPager(viewPager!!)
+        
+        binding = ActivityReimprimirBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        
+        setupToolbar()
+        setupViewPager()
+        setupTabs()
         connectToPrinter()
-        tabLayout = findViewById<View>(R.id.tabsReimprimir) as TabLayout
-        tabLayout!!.setupWithViewPager(viewPager)
-        tabLayout!!.tabMode = TabLayout.MODE_FIXED
-
-        viewPager!!.addOnPageChangeListener(TabLayoutOnPageChangeListener(tabLayout))
-        tabLayout!!.addOnTabSelectedListener(object : OnTabSelectedListener {
-            override fun onTabSelected(tab: TabLayout.Tab) {
-                val tabCliente: Int = this.selecFacturaTab
-                if (tabCliente == 0 && tab.position != 0) {
-                    CreateMessage(
-                        this@ReimprimirActivity,
-                        "Distribución",
-                        "Seleccione una factura."
-                    )
-
-                    Handler().postDelayed(
-                        { tabLayout!!.getTabAt(0)!!.select() }, 100
-                    )
-                } else {
-                }
-            }
-
-            override fun onTabUnselected(tab: TabLayout.Tab) {
-            }
-
-            override fun onTabReselected(tab: TabLayout.Tab) {
-            }
-        })
-
-        /* tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-
-            @Override
-           public void onTabSelected(TabLayout.Tab tab) {
-                if (tab.getPosition() != 0) {
-
-                    Functions.CreateMessage(DistribucionActivity.this, "Distribución", "Seleccione una factura.");
-
-                    new Handler().postDelayed(
-                            new Runnable() {
-
-                                @Override
-                                public void run() {
-                                    tabLayout.getTabAt(0).select();
-                                }
-                            }, 100);
-                }
-                else {
-
-                }
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });*/
+        
+        Log.d(TAG, "Actividad creada correctamente")
+    }
+    
+    private fun setupToolbar() {
+        setSupportActionBar(binding.toolbarReimprimir)
+        supportActionBar?.apply {
+            setDisplayShowHomeEnabled(true)
+            setDisplayHomeAsUpEnabled(true)
+        }
     }
 
-    /*  private void setupViewPager(ViewPager viewPager) {
-        Adapter adapter = new Adapter(getSupportFragmentManager());
-        adapter.addFragment(new ReimprimirFacturaFragment(), "SELECCIONE LA FACTURA");
-        adapter.addFragment(new ReimprimirResumenFragment(), "RESUMEN");
-        //adapter.addFragment(new quickSaleTotalFragment(), "TOTALIZAR");
-        viewPager.setAdapter(adapter);
-    }*/
-    private fun setupViewPager(viewPager: ViewPager) {
-        val adapter = Adapter(
-            supportFragmentManager
+    private fun setupViewPager() {
+        val adapter = Adapter(supportFragmentManager)
+        fragmentList = listOf(
+            ReimprimirFacturaFragment.newInstance(),
+            ReimprimirResumenFragment.newInstance()
         )
-        val list: MutableList<BaseFragment> = ArrayList()
-        list.add(ReimprimirFacturaFragment())
-        list.add(ReimprimirResumenFragment())
+        
+        adapter.addFragment(fragmentList[0], "Seleccionar Factura")
+        adapter.addFragment(fragmentList[1], "Resumen")
 
-        adapter.addFragment(list[0], "Seleccionar Factura")
-        adapter.addFragment(list[1], "Resumen")
+        binding.viewpagerReimprimir.apply {
+            this.adapter = adapter
+            addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+                override fun onPageScrolled(
+                    position: Int,
+                    positionOffset: Float,
+                    positionOffsetPixels: Int
+                ) { /* No se requiere acción */ }
 
-        viewPager.adapter = adapter
-        viewPager.addOnPageChangeListener(object : OnPageChangeListener {
-            override fun onPageScrolled(
-                position: Int,
-                positionOffset: Float,
-                positionOffsetPixels: Int
-            ) {
-            }
+                override fun onPageSelected(position: Int) {
+                    fragmentList[position].updateData()
+                }
 
-            override fun onPageSelected(position: Int) {
-                list[position].updateData()
-            }
+                override fun onPageScrollStateChanged(state: Int) {
+                    /* No se requiere acción */
+                }
+            })
+        }
+    }
+    
+    private fun setupTabs() {
+        binding.apply {
+            tabsReimprimir.setupWithViewPager(viewpagerReimprimir)
+            tabsReimprimir.tabMode = TabLayout.MODE_FIXED
+            
+            viewpagerReimprimir.addOnPageChangeListener(
+                TabLayoutOnPageChangeListener(tabsReimprimir)
+            )
+            
+            tabsReimprimir.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+                override fun onTabSelected(tab: TabLayout.Tab) {
+                    if (selecFacturaTab == 0 && tab.position != 0) {
+                        mostrarMensajeSeleccioneFactura()
+                    }
+                }
 
-            override fun onPageScrollStateChanged(state: Int) {
-            }
-        })
+                override fun onTabUnselected(tab: TabLayout.Tab) {
+                    /* No se requiere acción */
+                }
+
+                override fun onTabReselected(tab: TabLayout.Tab) {
+                    /* No se requiere acción */
+                }
+            })
+        }
+    }
+    
+    private fun mostrarMensajeSeleccioneFactura() {
+        CreateMessage(
+            this,
+            "Reimpresión",
+            "Seleccione una factura."
+        )
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            binding.tabsReimprimir.getTabAt(0)?.select()
+        }, TAB_DELAY_MS)
     }
 
     private fun connectToPrinter() {
-        //if(bluetoothStateChangeReceiver.isBluetoothAvailable()) {
-        preferences
         if (printer_enabled) {
-            if (printer == null || printer == "") {
-//                AlertDialog d = new AlertDialog.Builder(context)
-//                        .setTitle(getResources().getString(R.string.printer_alert))
-//                        .setMessage(getResources().getString(R.string.message_printer_not_found))
-//                        .setNegativeButton(getString(android.R.string.ok), null)
-//                        .show();
-            } else {
+            printer?.takeIf { it.isNotEmpty() }?.let { printerAddress ->
                 if (!isServiceRunning(PrinterService.CLASS_NAME)) {
-                    startRDService(applicationContext, printer)
+                    PrinterService.startRDService(applicationContext, printerAddress)
                 }
             }
         }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
+        return when (item.itemId) {
             android.R.id.home -> {
-                val intent = Intent(this@ReimprimirActivity, MenuPrincipal::class.java)
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-                startActivity(intent)
-                finish()
-                return true
+                navigateToMainMenu()
+                true
             }
-
-            else -> return super.onOptionsItemSelected(item)
+            else -> super.onOptionsItemSelected(item)
         }
     }
 
-    //Check if the printing service is running
-    fun isServiceRunning(serviceClassName: String): Boolean {
-        val activityManager =
-            applicationContext.getSystemService(ACTIVITY_SERVICE) as ActivityManager
-        val services = activityManager.getRunningServices(Int.MAX_VALUE)
-
-        for (runningServiceInfo in services) {
-            if (runningServiceInfo.service.className == serviceClassName) {
-                return true
-            }
+    private fun navigateToMainMenu() {
+        Intent(this, MenuPrincipal::class.java).apply {
+            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(this)
         }
-        return false
+        finish()
+    }
+
+    private fun isServiceRunning(serviceClassName: String): Boolean {
+        val activityManager = getSystemService(ACTIVITY_SERVICE) as ActivityManager
+        val services = activityManager.getRunningServices(Int.MAX_VALUE)
+        return services.any { it.service.className == serviceClassName }
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
-        if ((keyCode == KeyEvent.KEYCODE_BACK)) {
-            val intent = Intent(this@ReimprimirActivity, MenuPrincipal::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-            startActivity(intent)
-            finish()
-            Log.d("ATRAS", "Atras")
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            navigateToMainMenu()
+            return true
         }
         return super.onKeyDown(keyCode, event)
+    }
+    
+    fun setSelectedInvoice(invoiceId: String) {
+        invoiceIdReimprimir = invoiceId
+        selecFacturaTab = 1
     }
 }

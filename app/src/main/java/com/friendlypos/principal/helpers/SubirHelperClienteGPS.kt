@@ -29,30 +29,34 @@ class SubirHelperClienteGPS(private val activity: MenuPrincipal) {
     var resultS: String? = null
 
     fun sendPostClienteGPS(facturaQuery: EnviarClienteGPS) {
-        val token = "Bearer " + get(mContext).token
-        Log.d("tokenCliente", "$token ")
+        val token = "Bearer ${get(mContext).token}"
+        Log.d("tokenCliente", token)
+        
         if (isOnline) {
-            Log.d("factura1", "$facturaQuery ")
-            mAPIService!!.savePostClienteGPS(facturaQuery, token)
-                .enqueue(object : retrofit2.Callback<customer_location?> {
+            Log.d("factura1", "$facturaQuery")
+            
+            mAPIService?.savePostClienteGPS(facturaQuery, token)
+                ?.enqueue(object : retrofit2.Callback<customer_location?> {
                     override fun onResponse(
                         call: retrofit2.Call<customer_location?>?,
                         response: retrofit2.Response<customer_location?>
                     ) {
-                        if (response.isSuccessful()) {
-                            // showResponse(response.body().toString());
-                            Log.d("respVentaDirecta", response.body().toString())
-                            codigo = response.code()
-                            codigoS = response.body().getCode()
-                            mensajeS = response.body().getMessage()
-                            resultS = response.body().isResult().toString()
+                        if (response.isSuccessful) {
+                            response.body()?.let { body ->
+                                Log.d("respVentaDirecta", body.toString())
+                                
+                                codigo = response.code()
+                                codigoS = body.code
+                                mensajeS = body.message
+                                resultS = body.isResult.toString()
 
-                            activity.codigoDeRespuestaClienteGPS(
-                                codigoS!!,
-                                mensajeS,
-                                resultS!!,
-                                codigo
-                            )
+                                activity.codigoDeRespuestaClienteGPS(
+                                    codigoS ?: "",
+                                    mensajeS,
+                                    resultS ?: "",
+                                    codigo
+                                )
+                            }
                         } else {
                             Toast.makeText(mContext, "ERRRRROOOORRRR", Toast.LENGTH_SHORT).show()
                         }

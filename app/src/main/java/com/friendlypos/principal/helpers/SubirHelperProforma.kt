@@ -31,27 +31,35 @@ class SubirHelperProforma(private val activity: MenuPrincipal) {
     var codigo: Int = 0
 
     fun sendPostProforma(facturaQuery: EnviarFactura, cantidadFactura: String?) {
-        val token = "Bearer " + get(mContext).token
-        Log.d("tokenCliente", "$token ")
+        val token = "Bearer ${get(mContext).token}"
+        Log.d("tokenCliente", token)
+        
         if (isOnline) {
-            Log.d("factura1", "$facturaQuery ")
-            mAPIService!!.savePostProforma(facturaQuery, token)
-                .enqueue(object : retrofit2.Callback<invoice?> {
+            Log.d("factura1", "$facturaQuery")
+            
+            mAPIService?.savePostProforma(facturaQuery, token)
+                ?.enqueue(object : retrofit2.Callback<invoice?> {
                     override fun onResponse(
                         call: retrofit2.Call<invoice?>?,
                         response: retrofit2.Response<invoice?>
                     ) {
-                        if (response.isSuccessful()) {
-                            Log.d("respProforma", response.body().toString())
-                            codigo = response.code()
-                            codigoS = response.body().code
-                            mensajeS = response.body().message
-                            resultS = response.body().isResult.toString()
-                            activity.codigoDeRespuestaProforma(
-                                codigoS!!, mensajeS,
-                                resultS!!, codigo, cantidadFactura
-                            )
-                        } else {
+                        if (response.isSuccessful) {
+                            response.body()?.let { body ->
+                                Log.d("respProforma", body.toString())
+                                
+                                codigo = response.code()
+                                codigoS = body.code
+                                mensajeS = body.message
+                                resultS = body.isResult.toString()
+                                
+                                activity.codigoDeRespuestaProforma(
+                                    codigoS ?: "", 
+                                    mensajeS,
+                                    resultS ?: "", 
+                                    codigo, 
+                                    cantidadFactura
+                                )
+                            }
                         }
                     }
 

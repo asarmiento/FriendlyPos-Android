@@ -68,20 +68,23 @@ import com.friendlysystemgroup.friendlypos.principal.modelo.EnviarClienteGPS
 import com.friendlysystemgroup.friendlypos.principal.modelo.EnviarClienteNuevo
 import com.friendlysystemgroup.friendlypos.principal.modelo.EnviarProductoDevuelto
 import com.friendlysystemgroup.friendlypos.principal.modelo.customer_location
-import com.friendlysystemgroup.friendlypos.Reenvio_email.activity.EmailActivity
-import com.friendlysystemgroup.friendlypos.Reimpresion.activity.ReimprimirActivity
-import com.friendlysystemgroup.friendlypos.Reimpresion_pedidos.activity.ReimprimirPedidosActivity
-import com.friendlysystemgroup.friendlypos.ReimprimirRecibos.activity.ReimprimirRecibosActivity
+import com.friendlysystemgroup.friendlypos.reenvio_email.activity.EmailActivity
+import com.friendlysystemgroup.friendlypos.reimpresion.activity.ReimprimirActivity
+import com.friendlysystemgroup.friendlypos.reimpresion_pedidos.activity.ReimprimirPedidosActivity
+import com.friendlysystemgroup.friendlypos.reimprimirRecibos.activity.ReimprimirRecibosActivity
 import com.friendlysystemgroup.friendlypos.ventadirecta.activity.VentaDirectaActivity
+import com.friendlysystemgroup.friendlypos.databinding.ActivityMenuPrincipalBinding
 import com.github.clans.fab.FloatingActionButton
 import io.realm.Realm
+import io.realm.RealmList
 import io.realm.RealmQuery
 import uk.co.chrisjenx.calligraphy.CalligraphyTypefaceSpan
 import uk.co.chrisjenx.calligraphy.TypefaceUtils
 
 class MenuPrincipal : BluetoothActivity(),
     PopupMenu.OnMenuItemClickListener /* implements NavigationView.OnNavigationItemSelectedListener*/ {
-    override var networkStateChangeReceiver: NetworkStateChangeReceiver? = null
+    // No se puede sobreescribir networkStateChangeReceiver ya que es final, usaremos otro nombre
+    var mNetworkStateChangeReceiver: NetworkStateChangeReceiver? = null
     var bloquear: Int = 0
     private var but1: FloatingActionButton? = null
     private var but2: FloatingActionButton? = null
@@ -89,37 +92,10 @@ class MenuPrincipal : BluetoothActivity(),
     private var but4: FloatingActionButton? = null
     private var but5: FloatingActionButton? = null
 
-    @BindView(id.clickClientes)
-    lateinit var clickClientes: LinearLayout
-
-    @BindView(id.clickProductos)
-    lateinit var clickProductos: LinearLayout
-
-    @BindView(id.clickDistribucion)
-    lateinit var clickDistribucion: LinearLayout
-
-    @BindView(id.clickVentaDirecta)
-    lateinit var clickVentaDirecta: LinearLayout
-
-    @BindView(id.clickPreventa)
-    lateinit var clickPreventa: LinearLayout
-
-    @BindView(id.clickRecibos)
-    lateinit var clickRecibos: LinearLayout
-
-    @BindView(id.clickReimprimirVentas)
-    lateinit var clickReimprimirVentas: LinearLayout
-
-    @BindView(id.clickReimprimirPedidos)
-    lateinit var clickReimprimirPedidos: LinearLayout
-
-    @BindView(id.clickConfig)
-    lateinit var clickConfig: LinearLayout
+    // Implementar ViewBinding en lugar de ButterKnife
+    private lateinit var binding: ActivityMenuPrincipalBinding
 
     var drawer: DrawerLayout? = null
-
-    @BindView(id.txtNombreUsuario)
-    lateinit var txtNombreUsuario: TextView
 
     var session: SessionPrefes? = null
     var download1: DescargasHelper? = null
@@ -155,13 +131,16 @@ class MenuPrincipal : BluetoothActivity(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        setContentView(R.layout.activity_menu_principal)
+        
+        // Inicializar ViewBinding
+        binding = ActivityMenuPrincipalBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         
         val toolbar = findViewById<Toolbar>(id.toolbar)
         setSupportActionBar(toolbar)
 
 
-        networkStateChangeReceiver = NetworkStateChangeReceiver()
+        mNetworkStateChangeReceiver = NetworkStateChangeReceiver()
         ActivityCompat.requestPermissions(
             this@MenuPrincipal,
             arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
@@ -188,12 +167,12 @@ class MenuPrincipal : BluetoothActivity(),
         connectToPrinter()
 
         // Redirección al Login
-        if (!session!!.isLoggedIn) {
+        if (session?.isLoggedIn != true) {
             startActivity(Intent(this, LoginActivity::class.java))
             finish()
         } else {
             usuer = session!!.usuarioPrefs
-            Log.d("userasd", usuer!!)
+            Log.d("userasd", usuer ?: "")
 
             consecutivoApi1()
         }
@@ -209,15 +188,15 @@ class MenuPrincipal : BluetoothActivity(),
                     Toast.LENGTH_LONG
                 ).show()
             } else if (apiConsecutivo == "0") {
-                if (!properties!!.blockedApp) {
+                if (properties?.blockedApp != true) {
                     Toast.makeText(
                         this@MenuPrincipal,
                         "Botón no disponible",
                         Toast.LENGTH_LONG
                     ).show()
                 }
-            } else if (session!!.datosBloquearBotonesDevolver == 1) {
-                if (!properties!!.blockedApp) {
+            } else if (session?.datosBloquearBotonesDevolver == 1) {
+                if (properties?.blockedApp != true) {
                     Toast.makeText(
                         this@MenuPrincipal,
                         "Botón no disponible, descargar el inventario ya que fue devuelto",
@@ -225,7 +204,7 @@ class MenuPrincipal : BluetoothActivity(),
                     ).show()
                 }
             } else {
-                if (!properties!!.blockedApp) {
+                if (properties?.blockedApp != true) {
                     val intent = Intent(application, DistribucionActivity::class.java)
                     startActivity(intent)
                 }
@@ -238,7 +217,7 @@ class MenuPrincipal : BluetoothActivity(),
             consecutivoApi(idUsuario)
             Log.d(
                 "sessionInicio",
-                session!!.datosBloquearBotonesDevolver.toString() + ""
+                session?.datosBloquearBotonesDevolver.toString() + ""
             )
             if (apiConsecutivo == null) {
                 Toast.makeText(
@@ -247,20 +226,20 @@ class MenuPrincipal : BluetoothActivity(),
                     Toast.LENGTH_LONG
                 ).show()
             } else if (apiConsecutivo == "0") {
-                if (!properties!!.blockedApp) {
+                if (properties?.blockedApp != true) {
                     Toast.makeText(
                         this@MenuPrincipal,
                         "Botón no disponible",
                         Toast.LENGTH_LONG
                     ).show()
                 }
-            } else if (session!!.datosBloquearBotonesDevolver == 1) {
+            } else if (session?.datosBloquearBotonesDevolver == 1) {
                 Log.d(
                     "session",
-                    session!!.datosBloquearBotonesDevolver.toString() + ""
+                    session?.datosBloquearBotonesDevolver.toString() + ""
                 )
-                if (!properties!!.blockedApp) {
-                    Log.d("properties", properties!!.blockedApp.toString() + "")
+                if (properties?.blockedApp != true) {
+                    Log.d("properties", properties?.blockedApp.toString() + "")
                     Toast.makeText(
                         this@MenuPrincipal,
                         "Botón no disponible, descargar el inventario ya que fue devuelto",
@@ -268,7 +247,7 @@ class MenuPrincipal : BluetoothActivity(),
                     ).show()
                 }
             } else {
-                if (!properties!!.blockedApp) {
+                if (properties?.blockedApp != true) {
                     val intent = Intent(application, VentaDirectaActivity::class.java)
                     startActivity(intent)
                 }
@@ -284,7 +263,7 @@ class MenuPrincipal : BluetoothActivity(),
                     }
     
                     else */
-            if (!properties!!.blockedApp) {
+            if (properties?.blockedApp != true) {
                 val intent = Intent(application, PreventaActivity::class.java)
                 startActivity(intent)
             }
@@ -293,7 +272,7 @@ class MenuPrincipal : BluetoothActivity(),
         but4 = findViewById<View>(id.nav_recibos) as FloatingActionButton
 
         but4!!.setOnClickListener {
-            if (!properties!!.blockedApp) {
+            if (properties?.blockedApp != true) {
                 val intent = Intent(application, RecibosActivity::class.java)
                 startActivity(intent)
                 // Toast.makeText(MenuPrincipal.this, "Botón no disponible", Toast.LENGTH_LONG).show();
@@ -303,41 +282,65 @@ class MenuPrincipal : BluetoothActivity(),
         but5 = findViewById<View>(id.nav_email) as FloatingActionButton
 
         but5!!.setOnClickListener {
-            if (!properties!!.blockedApp) {
+            if (properties?.blockedApp != true) {
                 val intent = Intent(application, EmailActivity::class.java)
                 startActivity(intent)
                 // Toast.makeText(MenuPrincipal.this, "Botón no disponible", Toast.LENGTH_LONG).show();
             }
         }
+        
+        // Configurar referencias ViewBinding
+        setupViewBindingReferences()
+    }
+    
+    // Método para configurar las referencias de ViewBinding
+    private fun setupViewBindingReferences() {
+        // Reemplazar @BindView con referencias directas de binding
+        binding.clickClientes.setOnClickListener { onClickGo(it) }
+        binding.clickProductos.setOnClickListener { onClickGo(it) }
+        binding.clickDistribucion.setOnClickListener { onClickGo(it) }
+        binding.clickVentaDirecta.setOnClickListener { onClickGo(it) }
+        binding.clickPreventa.setOnClickListener { onClickGo(it) }
+        binding.clickRecibos.setOnClickListener { onClickGo(it) }
+        binding.clickReimprimirVentas.setOnClickListener { onClickGo(it) }
+        binding.clickReimprimirPedidos.setOnClickListener { onClickGo(it) }
+        binding.clickConfig.setOnClickListener { onClickGo(it) }
+        
+        // Asignar el TextView del nombre de usuario
+        binding.txtNombreUsuario?.let { txtNombreUsuario = it }
     }
 
     fun consecutivoApi1() {
         val realm = Realm.getDefaultInstance()
-        val usuarios = realm.where(Usuarios::class.java).equalTo("email", usuer).findFirst()
+        val usuarios = realm.where(Usuarios::class.java)
+            .equalTo("email", usuer ?: "")
+            .findFirst()
+            
         if (usuarios == null) {
-            txtNombreUsuario.text = usuer
+            binding.txtNombreUsuario.text = usuer
         } else {
             val nombreUsuario = usuarios.username
             idUsuario = usuarios.id
-            Log.d("userasd", nombreUsuario!!)
-            txtNombreUsuario.text = nombreUsuario
+            Log.d("userasd", nombreUsuario ?: "")
+            binding.txtNombreUsuario.text = nombreUsuario
         }
         realm.close()
     }
 
     fun consecutivoApi(idUsuario: String?) {
         if (idUsuario == null) {
+            return
         } else {
             val realm5 = Realm.getDefaultInstance()
-            val numNuevo = realm5.where(
-                ConsecutivosNumberFe::class.java
-            ).equalTo("user_id", idUsuario).findFirst()
+            val numNuevo = realm5.where(ConsecutivosNumberFe::class.java)
+                .equalTo("user_id", idUsuario)
+                .findFirst()
 
             if (numNuevo == null) {
                 Log.d("conse", "conse")
             } else {
                 apiConsecutivo = numNuevo.api
-                Log.d("apiConsecutivo", apiConsecutivo)
+                Log.d("apiConsecutivo", apiConsecutivo ?: "")
             }
             realm5.close()
         }
@@ -805,10 +808,10 @@ class MenuPrincipal : BluetoothActivity(),
                 Log.d("qweqweq1", listaRecibos.toString() + "")
                 realmRecibos.close()
 
-                if (listaRecibos.size == 0) {
+                if (listaRecibos.isEmpty()) {
                     Toast.makeText(
                         this@MenuPrincipal,
-                        "No hay facturas para subir",
+                        "No hay más facturas para subir",
                         Toast.LENGTH_LONG
                     ).show()
                 } else {
@@ -1032,17 +1035,18 @@ class MenuPrincipal : BluetoothActivity(),
     }
 
     protected fun actualizarClienteNuevo(factura: Int) {
-        // TRANSACCION PARA ACTUALIZAR CAMPOS DE LA TABLA VENTAS
-
         val realm3 = Realm.getDefaultInstance()
 
         try {
             realm3.executeTransaction { realm3 ->
-                val sale_actualizada =
-                    realm3.where(customer_new::class.java).equalTo("id", factura)
-                        .findFirst()
-                sale_actualizada!!.subidaNuevo = 0
-                realm3.insertOrUpdate(sale_actualizada)
+                val sale_actualizada = realm3.where(customer_new::class.java)
+                    .equalTo("id", factura)
+                    .findFirst()
+                    
+                sale_actualizada?.let {
+                    it.subidaNuevo = 0
+                    realm3.insertOrUpdate(it)
+                }
             }
         } catch (e: Exception) {
             Log.e("error", "error", e)
@@ -1090,16 +1094,20 @@ class MenuPrincipal : BluetoothActivity(),
     }
 
     protected fun actualizarAplicadoRecibo(factura: String?) {
-        // TRANSACCION PARA ACTUALIZAR CAMPOS DE LA TABLA VENTAS
-
+        if (factura == null) return
+        
         val realmRecibos = Realm.getDefaultInstance()
 
         try {
             realmRecibos.executeTransaction {
                 val sale_actualizada = realmRecibos.where(receipts::class.java)
-                    .equalTo("customer_id", factura).findFirst()
-                sale_actualizada!!.aplicado = 0
-                realmRecibos.insertOrUpdate(sale_actualizada)
+                    .equalTo("customer_id", factura)
+                    .findFirst()
+                    
+                sale_actualizada?.let {
+                    it.aplicado = 0
+                    realmRecibos.insertOrUpdate(it)
+                }
             }
         } catch (e: Exception) {
             Log.e("error", "error", e)
@@ -1155,13 +1163,13 @@ class MenuPrincipal : BluetoothActivity(),
 
         when (view.id) {
             id.clickConfig -> fragmentClass = ConfiguracionFragment::class.java
-
         }
+        
         try {
             fragment = fragmentClass.newInstance() as Fragment
         } catch (e: Exception) {
             e.printStackTrace()
-        } // Insert the fragment by replacing any existing fragment
+        }
 
         val fragmentManager = fragmentManager
         val mFragmentTransaction = fragmentManager.beginTransaction()
@@ -1178,7 +1186,7 @@ class MenuPrincipal : BluetoothActivity(),
         if (apiConsecutivo == null) {
             Toast.makeText(applicationContext, "Favor descargar info de empresa", Toast.LENGTH_LONG)
                 .show()
-        } else if (session!!.datosBloquearBotonesDevolver == 1) {
+        } else if (session?.datosBloquearBotonesDevolver == 1) {
             when (component.id) {
                 id.clickDistribucion -> Toast.makeText(
                     this@MenuPrincipal,
@@ -1236,7 +1244,6 @@ class MenuPrincipal : BluetoothActivity(),
                 }
 
                 id.clickReimprimirRecibos -> {
-                    //  Toast.makeText(MenuPrincipal.this, "Botón no disponible", Toast.LENGTH_LONG).show();
                     val reimprimirrecibos = Intent(
                         this@MenuPrincipal,
                         ReimprimirRecibosActivity::class.java
@@ -1315,7 +1322,6 @@ class MenuPrincipal : BluetoothActivity(),
                 }
 
                 id.clickReimprimirRecibos -> {
-                    // Toast.makeText(MenuPrincipal.this, "Botón no disponible", Toast.LENGTH_LONG).show();
                     val reimprimirrecibos = Intent(
                         this@MenuPrincipal,
                         ReimprimirRecibosActivity::class.java
@@ -1394,7 +1400,6 @@ class MenuPrincipal : BluetoothActivity(),
                 }
 
                 id.clickReimprimirRecibos -> {
-                    // Toast.makeText(MenuPrincipal.this, "Botón no disponible", Toast.LENGTH_LONG).show();
                     val reimprimirrecibos = Intent(
                         this@MenuPrincipal,
                         ReimprimirRecibosActivity::class.java
@@ -1434,7 +1439,7 @@ class MenuPrincipal : BluetoothActivity(),
     }
 
     private val isOnline: Boolean
-        get() = networkStateChangeReceiver!!.isNetworkAvailable(this)
+        get() = mNetworkStateChangeReceiver?.isNetworkAvailable(this) ?: false
 
     fun codigoDeRespuestaPreventa(
         codS: String,
@@ -1558,15 +1563,15 @@ class MenuPrincipal : BluetoothActivity(),
         cod: Int
     ): Int {
         val realmPedidos = Realm.getDefaultInstance()
-        val queryPedidos: RealmQuery<customer_new> =
-            realmPedidos.where(customer_new::class.java).equalTo("subidaNuevo", 1)
+        val queryPedidos = realmPedidos.where(customer_new::class.java)
+            .equalTo("subidaNuevo", 1)
         val invoicePedidos = queryPedidos.findAll()
         Log.d("SubFacturaInvP", invoicePedidos.toString())
         val listaFacturasPedidos = realmPedidos.copyFromRealm(invoicePedidos)
         Log.d("SubFacturaListaP", listaFacturasPedidos.toString() + "")
         realmPedidos.close()
 
-        if (listaFacturasPedidos.size == 0) {
+        if (listaFacturasPedidos.isEmpty()) {
             Toast.makeText(this@MenuPrincipal, "No hay más facturas para subir", Toast.LENGTH_LONG)
                 .show()
         } else {
@@ -1644,15 +1649,15 @@ class MenuPrincipal : BluetoothActivity(),
 
     fun codigoDeRespuestaRecibos(codS: String, messageS: String?, resultS: String, cod: Int): Int {
         val realmRecibos = Realm.getDefaultInstance()
-        val queryRecibos: RealmQuery<receipts> =
-            realmRecibos.where(receipts::class.java).equalTo("aplicado", 1)
+        val queryRecibos = realmRecibos.where(receipts::class.java)
+            .equalTo("aplicado", 1)
         val invoiceRecibos = queryRecibos.findAll()
         Log.d("SubFacturaInvP", invoiceRecibos.toString())
         val listaRecibos = realmRecibos.copyFromRealm(invoiceRecibos)
         Log.d("qweqweq1", listaRecibos.toString() + "")
         realmRecibos.close()
 
-        if (listaRecibos.size == 0) {
+        if (listaRecibos.isEmpty()) {
             Toast.makeText(this@MenuPrincipal, "No hay más facturas para subir", Toast.LENGTH_LONG)
                 .show()
         } else {
@@ -1661,8 +1666,7 @@ class MenuPrincipal : BluetoothActivity(),
 
                 facturaId = listaRecibos[i].customer_id.toString()
 
-                val listaRecibosa: List<recibos> = listaRecibos[i].listaRecibos
-
+                val listaRecibosa = listaRecibos[i].listaRecibos?.toList() ?: emptyList()
 
                 if (codS == "1" && resultS == "true") {
                     actualizarAplicadoRecibo(facturaCostumer)

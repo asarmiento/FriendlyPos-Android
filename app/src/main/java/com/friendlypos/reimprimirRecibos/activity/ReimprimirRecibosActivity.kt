@@ -7,16 +7,14 @@ import android.os.Handler
 import android.util.Log
 import android.view.KeyEvent
 import android.view.MenuItem
-import android.view.View
 import android.view.WindowManager
-import androidx.appcompat.widget.Toolbar
 import androidx.viewpager.widget.ViewPager
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 
-import com.friendlysystemgroup.friendlypos.R
 import com.friendlysystemgroup.friendlypos.application.bluetooth.PrinterService
 import com.friendlysystemgroup.friendlypos.application.bluetooth.PrinterService.Companion.startRDService
 import com.friendlysystemgroup.friendlypos.application.util.Functions.CreateMessage
+import com.friendlysystemgroup.friendlypos.databinding.ActivityReimprimirRecibosBinding
 import com.friendlysystemgroup.friendlypos.distribucion.fragment.BaseFragment
 import com.friendlysystemgroup.friendlypos.distribucion.util.Adapter
 import com.friendlysystemgroup.friendlypos.principal.activity.BluetoothActivity
@@ -28,9 +26,8 @@ import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 import com.google.android.material.tabs.TabLayout.TabLayoutOnPageChangeListener
 
 class ReimprimirRecibosActivity : BluetoothActivity() {
-    private var toolbar: Toolbar? = null
-    private var tabLayout: TabLayout? = null
-    private var viewPager: ViewPager? = null
+    private lateinit var binding: ActivityReimprimirRecibosBinding
+    
     @JvmField
     var selecReciboTab: Int = 0
     @JvmField
@@ -39,26 +36,27 @@ class ReimprimirRecibosActivity : BluetoothActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        setContentView(R.layout.activity_reimprimir_recibos)
-
         
+        binding = ActivityReimprimirRecibosBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        toolbar = findViewById<View>(R.id.toolbarReimprimirRecibo) as Toolbar
-        setSupportActionBar(toolbar)
-        supportActionBar!!.setDisplayShowHomeEnabled(true)
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        setSupportActionBar(binding.toolbarReimprimirRecibo)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        viewPager = findViewById<View>(R.id.viewpagerReimprimirRecibo) as ViewPager
-        setupViewPager(viewPager!!)
+        setupViewPager(binding.viewpagerReimprimirRecibo)
         connectToPrinter()
-        tabLayout = findViewById<View>(R.id.tabsReimprimirRecibo) as TabLayout
-        tabLayout!!.setupWithViewPager(viewPager)
-        tabLayout!!.tabMode = TabLayout.MODE_FIXED
+        
+        binding.tabsReimprimirRecibo.setupWithViewPager(binding.viewpagerReimprimirRecibo)
+        binding.tabsReimprimirRecibo.tabMode = TabLayout.MODE_FIXED
 
-        viewPager!!.addOnPageChangeListener(TabLayoutOnPageChangeListener(tabLayout))
-        tabLayout!!.addOnTabSelectedListener(object : OnTabSelectedListener {
+        binding.viewpagerReimprimirRecibo.addOnPageChangeListener(
+            TabLayoutOnPageChangeListener(binding.tabsReimprimirRecibo)
+        )
+        
+        binding.tabsReimprimirRecibo.addOnTabSelectedListener(object : OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
-                val tabCliente: Int = this.selecReciboTab
+                val tabCliente: Int = this@ReimprimirRecibosActivity.selecReciboTab
                 if (tabCliente == 0 && tab.position != 0) {
                     CreateMessage(
                         this@ReimprimirRecibosActivity,
@@ -67,25 +65,25 @@ class ReimprimirRecibosActivity : BluetoothActivity() {
                     )
 
                     Handler().postDelayed(
-                        { tabLayout!!.getTabAt(0)!!.select() }, 100
+                        { binding.tabsReimprimirRecibo.getTabAt(0)?.select() }, 100
                     )
-                } else {
                 }
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab) {
+                // No action needed
             }
 
             override fun onTabReselected(tab: TabLayout.Tab) {
+                // No action needed
             }
         })
     }
 
     private fun setupViewPager(viewPager: ViewPager) {
-        val adapter = Adapter(
-            supportFragmentManager
-        )
+        val adapter = Adapter(supportFragmentManager)
         val list: MutableList<BaseFragment> = ArrayList()
+        
         list.add(ReimprimirReciboFacturaFragment())
         list.add(ReimprimirReciboResumenFragment())
 
@@ -99,6 +97,7 @@ class ReimprimirRecibosActivity : BluetoothActivity() {
                 positionOffset: Float,
                 positionOffsetPixels: Int
             ) {
+                // No action needed
             }
 
             override fun onPageSelected(position: Int) {
@@ -106,6 +105,7 @@ class ReimprimirRecibosActivity : BluetoothActivity() {
             }
 
             override fun onPageScrollStateChanged(state: Int) {
+                // No action needed
             }
         })
     }
@@ -114,12 +114,8 @@ class ReimprimirRecibosActivity : BluetoothActivity() {
         //if(bluetoothStateChangeReceiver.isBluetoothAvailable()) {
         preferences
         if (printer_enabled) {
-            if (printer == null || printer == "") {
-//                AlertDialog d = new AlertDialog.Builder(context)
-//                        .setTitle(getResources().getString(R.string.printer_alert))
-//                        .setMessage(getResources().getString(R.string.message_printer_not_found))
-//                        .setNegativeButton(getString(android.R.string.ok), null)
-//                        .show();
+            if (printer.isNullOrEmpty()) {
+                // AlertDialog logic commented out in original code
             } else {
                 if (!isServiceRunning(PrinterService.CLASS_NAME)) {
                     startRDService(applicationContext, printer)

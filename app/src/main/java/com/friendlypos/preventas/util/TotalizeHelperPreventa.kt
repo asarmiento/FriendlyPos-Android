@@ -8,11 +8,10 @@ import com.friendlysystemgroup.friendlypos.preventas.modelo.Bonuses
 import com.friendlysystemgroup.friendlypos.principal.modelo.Clientes
 import com.friendlysystemgroup.friendlypos.principal.modelo.Productos
 import io.realm.Realm
-import io.realm.internal.SyncObjectServerFacade
 
 class TotalizeHelperPreventa(var activity: PreventaActivity?) {
     var customer: String? = null
-    var session: SessionPrefes = SessionPrefes(SyncObjectServerFacade.getApplicationContext())
+    var session: SessionPrefes = SessionPrefes(activity?.applicationContext!!)
 
     fun destroy() {
         activity = null
@@ -20,27 +19,24 @@ class TotalizeHelperPreventa(var activity: PreventaActivity?) {
 
     private fun getProductTypeByPivotId(id: String): String {
         val realm = Realm.getDefaultInstance()
-        val tipo = realm.where(Productos::class.java).equalTo("id", id)
-            .findFirst()!!
-            .product_type_id
+        val producto = realm.where(Productos::class.java).equalTo("id", id).findFirst()
+        val tipo = producto?.product_type_id ?: ""
         realm.close()
         return tipo
     }
 
     private fun getProductBonusByPivotId(id: String?): String {
         val realm = Realm.getDefaultInstance()
-        val bonus = realm.where(Productos::class.java).equalTo("id", id)
-            .findFirst()!!
-            .bonus
+        val producto = realm.where(Productos::class.java).equalTo("id", id).findFirst()
+        val bonus = producto?.bonus ?: "0"
         realm.close()
         return bonus
     }
 
     private fun getProductIVAByPivotId(id: String?): Double {
         val realm = Realm.getDefaultInstance()
-        val iva = realm.where(Productos::class.java).equalTo("id", id)
-            .findFirst()!!
-            .iva
+        val producto = realm.where(Productos::class.java).equalTo("id", id).findFirst()
+        val iva = producto?.iva ?: 0.0
         realm.close()
         return iva
     }
@@ -51,11 +47,10 @@ class TotalizeHelperPreventa(var activity: PreventaActivity?) {
         customer = ventaDetallePreventa.customer_id
 
         val realm = Realm.getDefaultInstance()
-
-        val clienteFixedDescuento = realm.where(Clientes::class.java)
-            .equalTo("id", customer).findFirst()!!
-            .fixedDiscount.toDouble()
-
+        val cliente = realm.where(Clientes::class.java)
+            .equalTo("id", customer).findFirst()
+            
+        val clienteFixedDescuento = cliente?.fixedDiscount?.toDouble() ?: 0.0
         realm.close()
         return clienteFixedDescuento
     }
@@ -80,18 +75,18 @@ class TotalizeHelperPreventa(var activity: PreventaActivity?) {
 
             realmBonus.executeTransactionAsync { realmBonus ->
                 val productoConBonus = realmBonus.where(Bonuses::class.java)
-                    .equalTo("product_id", currentPivot.product_id!!.toInt()).findFirst()
+                    .equalTo("product_id", currentPivot.product_id?.toIntOrNull() ?: 0).findFirst()
                 productosDelBonus =
-                    productoConBonus!!.product_bonus!!.toDouble()
+                    productoConBonus?.product_bonus?.toDoubleOrNull() ?: 0.0
                 Log.d(
                     "BONIFTOTAL",
-                    productoConBonus.product_id.toString() + " " + productosDelBonus
+                    "${productoConBonus?.product_id} $productosDelBonus"
                 )
             }
 
             cantidad = agrego
         } else {
-            cantidad = currentPivot.amount!!.toDouble()
+            cantidad = currentPivot.amount?.toDoubleOrNull() ?: 0.0
         }
 
         var subGrab = 0.0
@@ -103,8 +98,8 @@ class TotalizeHelperPreventa(var activity: PreventaActivity?) {
         var subt = 0.0
         var total = 0.0
 
-        val precio = currentPivot.price!!.toDouble()
-        val descuento = currentPivot.discount!!.toDouble()
+        val precio = currentPivot.price?.toDoubleOrNull() ?: 0.0
+        val descuento = currentPivot.discount?.toDoubleOrNull() ?: 0.0
         var subGrabDesc = 0.0
 
         if (iva > 0.0) {
@@ -152,13 +147,13 @@ class TotalizeHelperPreventa(var activity: PreventaActivity?) {
 
         // Total = String.format("%,.2f", total);
         // Log.d("total", total + "");
-        activity!!.setTotalizarSubGrabado(subGrab)
-        activity!!.setTotalizarSubExento(subExen)
-        activity!!.setTotalizarSubTotal(subt)
-        activity!!.setTotalizarDescuento(discountBill)
+        activity?.setTotalizarSubGrabado(subGrab)
+        activity?.setTotalizarSubExento(subExen)
+        activity?.setTotalizarSubTotal(subt)
+        activity?.setTotalizarDescuento(discountBill)
 
-        activity!!.setTotalizarImpuestoIVA(IvaT)
-        activity!!.setTotalizarTotal(total)
+        activity?.setTotalizarImpuestoIVA(IvaT)
+        activity?.setTotalizarTotal(total)
 
         //  activity.setTotalizarTotalDouble(total);
     }

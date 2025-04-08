@@ -8,16 +8,14 @@ import android.os.Handler
 import android.util.Log
 import android.view.KeyEvent
 import android.view.MenuItem
-import android.view.View
 import android.view.WindowManager
-import androidx.appcompat.widget.Toolbar
 import androidx.viewpager.widget.ViewPager
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 
-import com.friendlysystemgroup.friendlypos.R
 import com.friendlysystemgroup.friendlypos.application.bluetooth.PrinterService
 import com.friendlysystemgroup.friendlypos.application.bluetooth.PrinterService.Companion.startRDService
 import com.friendlysystemgroup.friendlypos.application.util.Functions.CreateMessage
+import com.friendlysystemgroup.friendlypos.databinding.ActivityReimprimirPedidoBinding
 import com.friendlysystemgroup.friendlypos.distribucion.fragment.BaseFragment
 import com.friendlysystemgroup.friendlypos.distribucion.util.Adapter
 import com.friendlysystemgroup.friendlypos.preventas.delegate.PreSellInvoiceDelegate
@@ -32,9 +30,9 @@ import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 import com.google.android.material.tabs.TabLayout.TabLayoutOnPageChangeListener
 
 class ReimprimirPedidosActivity : BluetoothActivity() {
-    private var toolbar: Toolbar? = null
-    private var tabLayout: TabLayout? = null
+    private lateinit var binding: ActivityReimprimirPedidoBinding
     private var preSellInvoiceDelegate: PreSellInvoiceDelegate? = null
+    
     @JvmField
     var invoiceId: String? = null
     @JvmField
@@ -121,33 +119,27 @@ class ReimprimirPedidosActivity : BluetoothActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        setContentView(R.layout.activity_reimprimir_pedido)
         
-
-        toolbar = findViewById<View>(R.id.toolbarReimprimirPedido) as Toolbar
-        setSupportActionBar(toolbar)
-        val actionBar = supportActionBar
+        binding = ActivityReimprimirPedidoBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        
+        setSupportActionBar(binding.toolbarReimprimirPedido)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        
         preSellInvoiceDelegate = PreSellInvoiceDelegate(this)
-        actionBar!!.setDisplayHomeAsUpEnabled(true)
         connectToPrinter()
 
-        /*toolbar = (Toolbar) findViewById(R.id.toolbarDistribucion);
+        setupViewPager(binding.viewpagerReimprimirPedido)
 
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);*/
-        val viewPager = findViewById<View>(R.id.viewpagerReimprimirPedido) as ViewPager
-        if (viewPager != null) {
-            setupViewPager(viewPager)
-        }
+        binding.tabsReimprimirPedido.setupWithViewPager(binding.viewpagerReimprimirPedido)
 
-        tabLayout = findViewById<View>(R.id.tabsReimprimirPedido) as TabLayout
-        tabLayout!!.setupWithViewPager(viewPager)
-
-        viewPager.addOnPageChangeListener(TabLayoutOnPageChangeListener(tabLayout))
-        tabLayout!!.addOnTabSelectedListener(object : OnTabSelectedListener {
+        binding.viewpagerReimprimirPedido.addOnPageChangeListener(
+            TabLayoutOnPageChangeListener(binding.tabsReimprimirPedido)
+        )
+        
+        binding.tabsReimprimirPedido.addOnTabSelectedListener(object : OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
-                val tabCliente: Int = this.selecClienteTab
+                val tabCliente: Int = this@ReimprimirPedidosActivity.selecClienteTab
                 if (tabCliente == 0 && tab.position != 0) {
                     CreateMessage(
                         this@ReimprimirPedidosActivity,
@@ -156,31 +148,27 @@ class ReimprimirPedidosActivity : BluetoothActivity() {
                     )
 
                     Handler().postDelayed(
-                        { tabLayout!!.getTabAt(0)!!.select() }, 100
+                        { binding.tabsReimprimirPedido.getTabAt(0)?.select() }, 100
                     )
-                } else {
                 }
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab) {
+                // No action needed
             }
 
             override fun onTabReselected(tab: TabLayout.Tab) {
+                // No action needed
             }
         })
     }
 
 
     private fun connectToPrinter() {
-        //if(bluetoothStateChangeReceiver.isBluetoothAvailable()) {
         preferences
         if (printer_enabled) {
-            if (printer == null || printer == "") {
-//                AlertDialog d = new AlertDialog.Builder(context)
-//                        .setTitle(getResources().getString(R.string.printer_alert))
-//                        .setMessage(getResources().getString(R.string.message_printer_not_found))
-//                        .setNegativeButton(getString(android.R.string.ok), null)
-//                        .show();
+            if (printer.isNullOrEmpty()) {
+                // AlertDialog logic commented out in original code
             } else {
                 if (!isServiceRunning(PrinterService.CLASS_NAME)) {
                     startRDService(applicationContext, printer)
@@ -190,18 +178,19 @@ class ReimprimirPedidosActivity : BluetoothActivity() {
     }
 
     private fun setupViewPager(viewPager: ViewPager) {
-        val adapter = Adapter(
-            supportFragmentManager
-        )
+        val adapter = Adapter(supportFragmentManager)
         val list: MutableList<BaseFragment> = ArrayList()
+        
         list.add(ReimPedidoSelecClienteFragment())
         list.add(ReimPedidoResumenFragment())
         list.add(ReimPedidoSelecProductoFragment())
         list.add(ReimPedidoTotalizarFragment())
+        
         adapter.addFragment(list[0], "Seleccionar Cliente")
         adapter.addFragment(list[1], "Resumen")
         adapter.addFragment(list[2], "Seleccionar productos")
         adapter.addFragment(list[3], "Totalizar")
+        
         viewPager.adapter = adapter
         viewPager.addOnPageChangeListener(object : OnPageChangeListener {
             override fun onPageScrolled(
@@ -209,6 +198,7 @@ class ReimprimirPedidosActivity : BluetoothActivity() {
                 positionOffset: Float,
                 positionOffsetPixels: Int
             ) {
+                // No action needed
             }
 
             override fun onPageSelected(position: Int) {
@@ -216,6 +206,7 @@ class ReimprimirPedidosActivity : BluetoothActivity() {
             }
 
             override fun onPageScrollStateChanged(state: Int) {
+                // No action needed
             }
         })
     }
@@ -263,7 +254,7 @@ class ReimprimirPedidosActivity : BluetoothActivity() {
     }
 
     fun initProducto(pos: Int) {
-        preSellInvoiceDelegate!!.initProduct(pos)
+        preSellInvoiceDelegate?.initProduct(pos)
     }
 }
 

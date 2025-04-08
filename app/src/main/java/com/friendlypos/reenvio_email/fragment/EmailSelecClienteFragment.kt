@@ -12,24 +12,22 @@ import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.MenuItemCompat
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-
-
 import com.friendlysystemgroup.friendlypos.R
+import com.friendlysystemgroup.friendlypos.databinding.FragmentEmailSelecClienteBinding
 import com.friendlysystemgroup.friendlypos.distribucion.fragment.BaseFragment
 import com.friendlysystemgroup.friendlypos.principal.modelo.Clientes
 import com.friendlysystemgroup.friendlypos.Reenvio_email.activity.EmailActivity
 import com.friendlysystemgroup.friendlypos.Reenvio_email.adapters.EmailClientesAdapter
 import io.realm.Realm
-import io.realm.internal.SyncObjectServerFacade
+import io.realm.RealmResults
 import java.util.Locale
 
 class EmailSelecClienteFragment : BaseFragment(), SearchView.OnQueryTextListener {
+    private var binding: FragmentEmailSelecClienteBinding? = null
     private var realm: Realm? = null
-
-    @BindView(R.id.recyclerViewEmailCliente)
-    lateinit var recyclerView: RecyclerView
     private var adapter: EmailClientesAdapter? = null
+    private var clientes: List<Clientes> = listOf()
+    private val clientesFilter: MutableList<Clientes> = mutableListOf()
 
     override fun onDestroy() {
         super.onDestroy()
@@ -43,51 +41,66 @@ class EmailSelecClienteFragment : BaseFragment(), SearchView.OnQueryTextListener
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val rootView = inflater.inflate(
-            R.layout.fragment_email_selec_cliente, container,
-            false
-        )
+        binding = FragmentEmailSelecClienteBinding.inflate(inflater, container, false)
         setHasOptionsMenu(true)
-        //ButterKnife.bind(this, rootView)
-        return rootView
+        return binding?.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if (adapter == null) {
+        setupRecyclerView()
+    }
+
+    private fun setupRecyclerView() {
+        binding?.recyclerViewEmailCliente?.apply {
+            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(activity)
+            
+            clientes = listClientes
+            clientesFilter.clear()
+            clientesFilter.addAll(clientes)
+            
             adapter = EmailClientesAdapter(
-                context, ((activity as EmailActivity?)!!),
-                listClientes
-            )
-            //adapter2 = new DistrResumenAdapter();
+                context, 
+                activity as EmailActivity?,
+                clientesFilter
+            ).also {
+                this@EmailSelecClienteFragment.adapter = it
+            }
         }
-        recyclerView.setHasFixedSize(true)
-        recyclerView.layoutManager = LinearLayoutManager(activity)
-        recyclerView.adapter = adapter
-        Log.d("listadeClientes", listClientes.toString() + "")
+        
+        Log.d("listadeClientes", "Clientes cargados: ${clientes.size}")
     }
 
     private val listClientes: List<Clientes>
         get() {
-            realm = Realm.getDefaultInstance()
-            val query = realm.where(Clientes::class.java)
-            val result1 = query.findAll()
-            if (result1.size == 0) {
-                Toast.makeText(
-                    SyncObjectServerFacade.getApplicationContext(),
-                    "Favor descargar datos primero",
-                    Toast.LENGTH_LONG
-                ).show()
+            val realm = Realm.getDefaultInstance()
+            try {
+                val result: RealmResults<Clientes> = realm.where(Clientes::class.java).findAll()
+                
+                if (result.isEmpty()) {
+                    Toast.makeText(
+                        context,
+                        "Favor descargar datos primero",
+                        Toast.LENGTH_LONG
+                    ).show()
+                    return emptyList()
+                }
+                
+                return realm.copyFromRealm(result)
+            } finally {
+                realm.close()
             }
-            return result1
         }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        realm!!.close()
+        realm?.close()
+        binding = null
     }
 
     override fun updateData() {
+        // Implementar si es necesario
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -101,21 +114,18 @@ class EmailSelecClienteFragment : BaseFragment(), SearchView.OnQueryTextListener
             item,
             object : MenuItemCompat.OnActionExpandListener {
                 override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
-                    // Do something when collapsed
-                    adapter!!.setFilter(this.listClientes)
-                    return true // Return true to collapse action view
+                    adapter?.setFilter(listClientes)
+                    return true
                 }
 
                 override fun onMenuItemActionExpand(item: MenuItem): Boolean {
-                    // Do something when expanded
-                    return true // Return true to expand action view
+                    return true
                 }
             })
     }
 
     override fun onQueryTextChange(newText: String): Boolean {
-        val filteredModelList = filter(listClientes, newText)
-        adapter!!.setFilter(filteredModelList)
+        filterList(newText)
         return true
     }
 
@@ -123,19 +133,23 @@ class EmailSelecClienteFragment : BaseFragment(), SearchView.OnQueryTextListener
         return false
     }
 
-
-    private fun filter(models: List<Clientes>, query: String): List<Clientes> {
-        var query = query
-        query = query.lowercase(Locale.getDefault())
-
-        val filteredModelList: MutableList<Clientes> = ArrayList()
-        for (model in models) {
-            val text = model.fantasyName!!.lowercase(Locale.getDefault())
-            Log.d("FiltroEmail", text)
-            if (text.contains(query)) {
-                filteredModelList.add(model)
+    private fun filterList(query: String) {
+        clientesFilter.clear()
+        
+        if (query.isEmpty()) {
+            clientesFilter.addAll(clientes)
+        } else {
+            val lowerCaseQuery = query.lowercase(Locale.getDefault())
+            
+            clientes.forEach { cliente ->
+                cliente.fantasyName?.let { name ->
+                    if (name.lowercase(Locale.getDefault()).contains(lowerCaseQuery)) {
+                        clientesFilter.add(cliente)
+                    }
+                }
             }
         }
-        return filteredModelList
+        
+        adapter?.setFilter(clientesFilter)
     }
 }

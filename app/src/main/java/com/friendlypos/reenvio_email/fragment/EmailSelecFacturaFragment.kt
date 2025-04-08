@@ -1,6 +1,7 @@
 package com.friendlysystemgroup.friendlypos.reenvio_email.fragment
 
 import android.app.Activity
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -8,80 +9,77 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-
-
-import com.friendlysystemgroup.friendlypos.R
+import com.friendlysystemgroup.friendlypos.databinding.FragmentEmailSelecFacturaBinding
 import com.friendlysystemgroup.friendlypos.distribucion.fragment.BaseFragment
 import com.friendlysystemgroup.friendlypos.Reenvio_email.activity.EmailActivity
 import com.friendlysystemgroup.friendlypos.Reenvio_email.adapters.EmailFacturasAdapter
 import com.friendlysystemgroup.friendlypos.Reenvio_email.modelo.invoices
 import io.realm.Realm
-import io.realm.internal.SyncObjectServerFacade
+import io.realm.RealmResults
 
 class EmailSelecFacturaFragment : BaseFragment() {
-    private var realm: Realm? = null
-
-    @BindView(R.id.recyclerViewEmailFactura)
-    lateinit var recyclerView: RecyclerView
-
+    private var binding: FragmentEmailSelecFacturaBinding? = null
     private var adapter: EmailFacturasAdapter? = null
-
-    var slecTAB: Int = 0
-    var activity: EmailActivity? = null
-
-    override fun onDestroy() {
-        super.onDestroy()
-    }
-
-    override fun onResume() {
-        super.onResume()
-    }
-
+    private var activity: EmailActivity? = null
+    
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val rootView = inflater.inflate(
-            R.layout.fragment_email_selec_factura, container,
-            false
-        )
-        setHasOptionsMenu(true)
-        //ButterKnife.bind(this, rootView)
-        return rootView
+        binding = FragmentEmailSelecFacturaBinding.inflate(inflater, container, false)
+        return binding?.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        recyclerView.layoutManager = LinearLayoutManager(getActivity())
-
-        //List<invoices> list = ;
-        adapter = EmailFacturasAdapter(activity, this, listClientes)
-        //adapter2 = new DistrResumenAdapter();
-        recyclerView.setHasFixedSize(true)
-        recyclerView.adapter = adapter
-
-        Log.d("listaProducto", listClientes.toString() + "")
+        setupRecyclerView()
+    }
+    
+    private fun setupRecyclerView() {
+        binding?.recyclerViewEmailFactura?.apply {
+            layoutManager = LinearLayoutManager(context)
+            setHasFixedSize(true)
+            
+            val facturas = listFacturas
+            
+            adapter = EmailFacturasAdapter(
+                this@EmailSelecFacturaFragment.activity, 
+                this@EmailSelecFacturaFragment, 
+                facturas
+            ).also {
+                this@EmailSelecFacturaFragment.adapter = it
+            }
+            
+            Log.d("listaFacturas", "Facturas cargadas: ${facturas.size}")
+        }
     }
 
-    private val listClientes: List<invoices>
+    private val listFacturas: List<invoices>
         get() {
-            realm = Realm.getDefaultInstance()
-            val query = realm.where(invoices::class.java)
-            val result1 = query.findAll()
-            if (result1.size == 0) {
-                Toast.makeText(
-                    SyncObjectServerFacade.getApplicationContext(),
-                    "Favor descargar datos primero",
-                    Toast.LENGTH_LONG
-                ).show()
+            val realm = Realm.getDefaultInstance()
+            try {
+                val result: RealmResults<invoices> = realm.where(invoices::class.java).findAll()
+                
+                if (result.isEmpty()) {
+                    Toast.makeText(
+                        context,
+                        "Favor descargar datos primero",
+                        Toast.LENGTH_LONG
+                    ).show()
+                    return emptyList()
+                }
+                
+                return realm.copyFromRealm(result)
+            } finally {
+                realm.close()
             }
-            return result1
         }
 
-    override fun onAttach(activity: Activity) {
-        super.onAttach(activity)
-        this.activity = activity as EmailActivity
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is EmailActivity) {
+            activity = context
+        }
     }
 
     override fun onDetach() {
@@ -91,17 +89,18 @@ class EmailSelecFacturaFragment : BaseFragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        // realm.close();
+        binding = null
     }
 
     override fun updateData() {
-        slecTAB = activity!!.selecClienteTabEmail
-        if (slecTAB == 1) {
-            // List<invoices> list = ;
-
-            adapter!!.updateData(listClientes)
-        } else {
-            Toast.makeText(getActivity(), "nadaresumenUpdate", Toast.LENGTH_LONG).show()
+        activity?.let { act ->
+            if (act.selecClienteTabEmail == 1) {
+                adapter?.updateData(listFacturas)
+            } else {
+                context?.let {
+                    Toast.makeText(it, "No hay datos para actualizar", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
     }
 }

@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.friendlysystemgroup.friendlypos.R
 import com.friendlysystemgroup.friendlypos.application.bluetooth.PrinterService
 import com.friendlysystemgroup.friendlypos.application.bluetooth.PrinterService.Companion.startRDService
+import com.friendlysystemgroup.friendlypos.databinding.ActivityProductosBinding
 import com.friendlysystemgroup.friendlypos.login.activity.LoginActivity
 import com.friendlysystemgroup.friendlypos.login.util.SessionPrefes.Companion.get
 import com.friendlysystemgroup.friendlypos.principal.activity.MenuPrincipal
@@ -27,40 +28,41 @@ import com.friendlysystemgroup.friendlypos.principal.modelo.Productos
 import io.realm.Realm
 import java.util.Locale
 
-class ProductosActivity : BluetoothActivity(), SearchView.OnQueryTextListener {
-    @BindView(R.id.toolbar)
-    lateinit var toolbar: Toolbar
 
-    @BindView(R.id.recyclerView)
-    lateinit var recyclerView: RecyclerView
+class ProductosActivity : BluetoothActivity(), SearchView.OnQueryTextListener {
+    private lateinit var binding: ActivityProductosBinding
 
     private var adapter: ProductosAdapter? = null
     private var realm: Realm? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        setContentView(R.layout.activity_productos)
-        
+        binding = ActivityProductosBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        // Redirección al Login
         if (!get(this).isLoggedIn) {
             startActivity(Intent(this, LoginActivity::class.java))
             finish()
             return
         }
 
-        setSupportActionBar(toolbar)
+        setSupportActionBar(binding.toolbar)
         supportActionBar!!.setDisplayShowHomeEnabled(true)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         connectToPrinter()
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.setHasFixedSize(true)
-        adapter = ProductosAdapter(list, this@ProductosActivity)
-        recyclerView.adapter = adapter
+
+        binding.recyclerView.apply {
+            layoutManager = LinearLayoutManager(this@ProductosActivity)
+            setHasFixedSize(true)
+            adapter = ProductosAdapter(list, this@ProductosActivity).also {
+                this@ProductosActivity.adapter = it
+            }
+        }
 
         Log.d("lista", list.toString() + "")
     }
+    // ... rest of the code remains the same
+
 
     private val list: List<Productos>
         get() {

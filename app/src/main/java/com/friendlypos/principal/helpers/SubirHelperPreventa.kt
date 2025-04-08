@@ -30,33 +30,36 @@ class SubirHelperPreventa(private val activity: MenuPrincipal) {
     var resultS: String? = null
 
     fun sendPostPreventa(facturaQuery: EnviarFactura, cantidadFactura: String?) {
-        val token = "Bearer " + get(mContext).token
-        Log.d("tokenCliente", "$token ")
+        val token = "Bearer ${get(mContext).token}"
+        Log.d("tokenCliente", token)
+        
         if (isOnline) {
-            Log.d("factura1", "$facturaQuery ")
+            Log.d("factura1", "$facturaQuery")
 
-            mAPIService!!.savePostPreventa(facturaQuery, token)
-                .enqueue(object : retrofit2.Callback<invoice?> {
+            mAPIService?.savePostPreventa(facturaQuery, token)
+                ?.enqueue(object : retrofit2.Callback<invoice?> {
                     override fun onResponse(
                         call: retrofit2.Call<invoice?>?,
                         response: retrofit2.Response<invoice?>
                     ) {
-                        if (response.isSuccessful()) {
-                            Log.d("respPreventa", response.body().toString())
+                        if (response.isSuccessful) {
+                            response.body()?.let { body ->
+                                Log.d("respPreventa", body.toString())
 
-                            codigo = response.code()
-                            codigoS = response.body().code
-                            mensajeS = response.body().message
-                            resultS = response.body().isResult.toString()
+                                codigo = response.code()
+                                codigoS = body.code
+                                mensajeS = body.message
+                                resultS = body.isResult.toString()
 
-                            activity.codigoDeRespuestaPreventa(
-                                codigoS!!,
-                                mensajeS!!, resultS!!, codigo, cantidadFactura
-                            )
-                        } else {
+                                activity.codigoDeRespuestaPreventa(
+                                    codigoS ?: "",
+                                    mensajeS ?: "", 
+                                    resultS ?: "", 
+                                    codigo, 
+                                    cantidadFactura
+                                )
+                            }
                         }
-
-                        //setCodigoServer(codigo);
                     }
 
                     override fun onFailure(call: retrofit2.Call<invoice?>?, t: Throwable?) {
@@ -71,7 +74,6 @@ class SubirHelperPreventa(private val activity: MenuPrincipal) {
             ).show()
         }
     }
-
 
     private val isOnline: Boolean
         get() = networkStateChangeReceiver.isNetworkAvailable(mContext)

@@ -27,32 +27,34 @@ class SubirHelperRecibos(private val activity: MenuPrincipal) {
     var resultS: String? = null
 
     fun sendPostRecibos(facturaQuery: EnviarRecibos) {
-        val token = "Bearer " + get(mContext).token
-        Log.d("tokenCliente", "$token ")
+        val token = "Bearer ${get(mContext).token}"
+        Log.d("tokenCliente", token)
+        
         if (isOnline) {
-            Log.d("factura1", "$facturaQuery ")
+            Log.d("factura1", "$facturaQuery")
 
-            mAPIService!!.savePostRecibos(facturaQuery, token)
-                .enqueue(object : retrofit2.Callback<receipts?> {
+            mAPIService?.savePostRecibos(facturaQuery, token)
+                ?.enqueue(object : retrofit2.Callback<receipts?> {
                     override fun onResponse(
                         call: retrofit2.Call<receipts?>?,
                         response: retrofit2.Response<receipts?>
                     ) {
-                        if (response.isSuccessful()) {
-                            Log.d("respRecibos", response.body().toString())
+                        if (response.isSuccessful) {
+                            response.body()?.let { body ->
+                                Log.d("respRecibos", body.toString())
 
-                            codigo = response.code()
-                            codigoS = response.body().getCode()
-                            mensajeS = response.body().getMessage()
-                            resultS = response.body().isResult().toString()
+                                codigo = response.code()
+                                codigoS = body.code
+                                mensajeS = body.message
+                                resultS = body.isResult.toString()
 
-                            activity.codigoDeRespuestaRecibos(
-                                codigoS!!,
-                                mensajeS,
-                                resultS!!,
-                                codigo
-                            )
-                        } else {
+                                activity.codigoDeRespuestaRecibos(
+                                    codigoS ?: "",
+                                    mensajeS,
+                                    resultS ?: "",
+                                    codigo
+                                )
+                            }
                         }
                     }
 

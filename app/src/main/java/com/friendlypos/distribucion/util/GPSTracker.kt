@@ -43,63 +43,76 @@ class GPSTracker(private val mContext: Context) : Service(), LocationListener {
                 .getSystemService(LOCATION_SERVICE) as LocationManager
 
             // getting GPS status
-            isGPSEnabled = locationManager
-                .isProviderEnabled(LocationManager.GPS_PROVIDER)
+            locationManager?.let { locManager ->
+                // getting GPS status
+                isGPSEnabled = locManager
+                    .isProviderEnabled(LocationManager.GPS_PROVIDER)
 
-            // getting network status
-            isNetworkEnabled = locationManager
-                .isProviderEnabled(LocationManager.NETWORK_PROVIDER)
+                // getting network status
+                isNetworkEnabled = locManager
+                    .isProviderEnabled(LocationManager.NETWORK_PROVIDER)
 
-            if (!isGPSEnabled && !isNetworkEnabled) {
-                // no network provider is enabled
-            } else {
-                this.canGetLocation = true
-                if (isNetworkEnabled) {
-                    if (ActivityCompat.checkSelfPermission(
-                            mContext,
-                            Manifest.permission.ACCESS_FINE_LOCATION
-                        ) != PackageManager.PERMISSION_GRANTED
-                        && ActivityCompat.checkSelfPermission(
-                            mContext,
-                            Manifest.permission.ACCESS_COARSE_LOCATION
-                        ) != PackageManager.PERMISSION_GRANTED
-                    ) {
-                        Toast.makeText(
-                            mContext,
-                            "Primero habilita el GPS para la aplicación.",
-                            Toast.LENGTH_LONG
-                        ).show()
-                    }
-                    locationManager!!.requestLocationUpdates(
-                        LocationManager.NETWORK_PROVIDER,
-                        MIN_TIME_BW_UPDATES,
-                        MIN_DISTANCE_CHANGE_FOR_UPDATES.toFloat(), this
-                    )
-                    Log.d("Red", "Red")
-                    if (locationManager != null) {
-                        location = locationManager!!
-                            .getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
-                        if (location != null) {
-                            latitude = location!!.latitude
-                            longitude = location!!.longitude
+                if (!isGPSEnabled && !isNetworkEnabled) {
+                    // no network provider is enabled
+                } else {
+                    this.canGetLocation = true
+                    if (isNetworkEnabled) {
+                        if (ActivityCompat.checkSelfPermission(
+                                mContext,
+                                Manifest.permission.ACCESS_FINE_LOCATION
+                            ) != PackageManager.PERMISSION_GRANTED
+                            && ActivityCompat.checkSelfPermission(
+                                mContext,
+                                Manifest.permission.ACCESS_COARSE_LOCATION
+                            ) != PackageManager.PERMISSION_GRANTED
+                        ) {
+                            Toast.makeText(
+                                mContext,
+                                "Primero habilita el GPS para la aplicación.",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        } else {
+                            locManager.requestLocationUpdates(
+                                LocationManager.NETWORK_PROVIDER,
+                                MIN_TIME_BW_UPDATES,
+                                MIN_DISTANCE_CHANGE_FOR_UPDATES.toFloat(), this
+                            )
+                            Log.d("Red", "Red")
+                            
+                            location = locManager
+                                .getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
+                            location?.let { loc ->
+                                latitude = loc.latitude
+                                longitude = loc.longitude
+                            }
                         }
                     }
-                }
-                // if GPS Enabled get lat/long using GPS Services
-                if (isGPSEnabled) {
-                    if (location == null) {
-                        locationManager!!.requestLocationUpdates(
-                            LocationManager.GPS_PROVIDER,
-                            MIN_TIME_BW_UPDATES,
-                            MIN_DISTANCE_CHANGE_FOR_UPDATES.toFloat(), this
-                        )
-                        Log.d("GPS habilitadp", "GPS habilitadp")
-                        if (locationManager != null) {
-                            location = locationManager!!
-                                .getLastKnownLocation(LocationManager.GPS_PROVIDER)
-                            if (location != null) {
-                                latitude = location!!.latitude
-                                longitude = location!!.longitude
+                    
+                    // if GPS Enabled get lat/long using GPS Services
+                    if (isGPSEnabled) {
+                        if (location == null) {
+                            if (ActivityCompat.checkSelfPermission(
+                                    mContext,
+                                    Manifest.permission.ACCESS_FINE_LOCATION
+                                ) == PackageManager.PERMISSION_GRANTED
+                                || ActivityCompat.checkSelfPermission(
+                                    mContext,
+                                    Manifest.permission.ACCESS_COARSE_LOCATION
+                                ) == PackageManager.PERMISSION_GRANTED
+                            ) {
+                                locManager.requestLocationUpdates(
+                                    LocationManager.GPS_PROVIDER,
+                                    MIN_TIME_BW_UPDATES,
+                                    MIN_DISTANCE_CHANGE_FOR_UPDATES.toFloat(), this
+                                )
+                                Log.d("GPS habilitadp", "GPS habilitadp")
+                                
+                                location = locManager
+                                    .getLastKnownLocation(LocationManager.GPS_PROVIDER)
+                                location?.let { loc ->
+                                    latitude = loc.latitude
+                                    longitude = loc.longitude
+                                }
                             }
                         }
                     }
@@ -113,42 +126,35 @@ class GPSTracker(private val mContext: Context) : Service(), LocationListener {
     }
 
     fun getLatitude(): Double {
-        if (location != null) {
-            latitude = location!!.latitude
+        location?.let { loc ->
+            latitude = loc.latitude
         }
-
 
         // return latitude
         return latitude
     }
 
     fun getLongitude(): Double {
-        if (location != null) {
-            longitude = location!!.longitude
+        location?.let { loc ->
+            longitude = loc.longitude
         }
-
 
         // return longitude
         return longitude
     }
 
-
     fun canGetLocation(): Boolean {
         return this.canGetLocation
     }
 
-
     fun showSettingsAlert() {
         val alertDialog = AlertDialog.Builder(mContext)
-
 
         // Setting Dialog Title
         alertDialog.setTitle("Configuración de GPS")
 
-
         // Setting Dialog Message
         alertDialog.setMessage("El GPS no esta habilitado. Quiere ir a la configuración?")
-
 
         // On pressing Settings button
         alertDialog.setPositiveButton(
@@ -158,12 +164,10 @@ class GPSTracker(private val mContext: Context) : Service(), LocationListener {
             mContext.startActivity(intent)
         }
 
-
         // on pressing cancel button
         alertDialog.setNegativeButton(
             "Cancelar"
         ) { dialog, which -> dialog.cancel() }
-
 
         // Showing Alert Message
         alertDialog.show()

@@ -9,9 +9,6 @@ import com.friendlysystemgroup.friendlypos.application.datamanager.BaseManager.C
 import com.friendlysystemgroup.friendlypos.application.interfaces.RequestInterface
 import com.friendlysystemgroup.friendlypos.distribucion.modelo.EnviarFactura
 import com.friendlysystemgroup.friendlypos.distribucion.modelo.invoice
-import com.friendlysystemgroup.friendlypos.distribucion.modelo.invoice.isResult
-import com.friendlysystemgroup.friendlypos.distribucion.modelo.invoice.message
-import com.friendlysystemgroup.friendlypos.distribucion.modelo.invoice.toString
 import com.friendlysystemgroup.friendlypos.login.util.SessionPrefes.Companion.get
 import com.friendlysystemgroup.friendlypos.principal.activity.MenuPrincipal
 
@@ -19,8 +16,7 @@ import com.friendlysystemgroup.friendlypos.principal.activity.MenuPrincipal
  * Created by Delvo on 02/12/2017.
  */
 class SubirHelperVentaDirecta(private val activity: MenuPrincipal) {
-    private val networkStateChangeReceiver =
-        NetworkStateChangeReceiver()
+    private val networkStateChangeReceiver = NetworkStateChangeReceiver()
 
     private val mContext: Context = activity
     private val mAPIService: RequestInterface? = api
@@ -33,33 +29,38 @@ class SubirHelperVentaDirecta(private val activity: MenuPrincipal) {
     var codigoServer: Int = 0
 
     fun sendPostVentaDirecta(facturaQuery: EnviarFactura, cantidadFactura: String?) {
-        val token = "Bearer " + get(mContext).token
-        Log.d("tokenCliente", "$token ")
+        val token = "Bearer ${get(mContext).token}"
+        Log.d("tokenCliente", token)
+        
         if (isOnline) {
-            Log.d("factura1", "$facturaQuery ")
+            Log.d("factura1", "$facturaQuery")
 
-            mAPIService!!.savePostVentaDirecta(facturaQuery, token)
-                .enqueue(object : retrofit2.Callback<invoice?> {
+            mAPIService?.savePostVentaDirecta(facturaQuery, token)
+                ?.enqueue(object : retrofit2.Callback<invoice?> {
                     override fun onResponse(
                         call: retrofit2.Call<invoice?>?,
                         response: retrofit2.Response<invoice?>
                     ) {
-                        if (response.isSuccessful()) {
-                            idFacturaSubida = response.body().id
-                            // showResponse(response.body().toString());
-                            Log.d("respVentaDirecta", response.body().toString())
-                            codigo = response.code()
-                            codigoS = response.body().code
-                            mensajeS = response.body().message
-                            resultS = response.body().isResult.toString()
+                        if (response.isSuccessful) {
+                            response.body()?.let { body ->
+                                idFacturaSubida = body.id
+                                Log.d("respVentaDirecta", body.toString())
+                                
+                                codigo = response.code()
+                                codigoS = body.code
+                                mensajeS = body.message
+                                resultS = body.isResult.toString()
 
-                            activity.codigoDeRespuestaVD(
-                                codigoS!!,
-                                mensajeS!!, resultS!!, codigo, cantidadFactura
-                            )
+                                activity.codigoDeRespuestaVD(
+                                    codigoS ?: "",
+                                    mensajeS ?: "", 
+                                    resultS ?: "", 
+                                    codigo, 
+                                    cantidadFactura
+                                )
 
-                            Log.d("respVentaDirecta", response.body().toString())
-                        } else {
+                                Log.d("respVentaDirecta", body.toString())
+                            }
                         }
                     }
 
